@@ -1,31 +1,37 @@
+//----------------------------------------------------------------------------
+// ObjectComponents
+// Copyright (c) 1994, 1996 by Borland International, All Rights Reserved
 //
-//**************************************************************************
-// 
-// BOleCMan.h --   Declares an IBClassMgr "factory" which can create Bolero
-//                 helper objects. 
+// $Revision:   2.3  $
 //
-//                 Since callers of BOleClassManager don't have the class 
-//                 definition, they can't call operator new to create a
-//                 helper object.
+//  Declares an IBClassMgr "factory" which can create Bolero helper objects.
 //
-//                 BOleClassMgr has a pointer to the service, so you need a
-//                 BOleClassMgr for every Bolero connection you maintain.
+//    Since callers of BOleClassManager don't have the class
+//    definition, they can't call operator new to create a
+//    helper object.
 //
-// Copyright (c) 1993,94 by Borland International, Inc. All rights reserved
-//
-//**************************************************************************
-
+//    BOleClassMgr has a pointer to the service, so you need a
+//    BOleClassMgr for every Bolero connection you maintain.
+//----------------------------------------------------------------------------
 #ifndef BOLECMAN_H
 #define BOLECMAN_H
 
+#ifndef _BOLECOMP_H
 #include "BOleComp.h"
+#endif
+
+#ifndef _BOLESVC_H
 #include "BOleSvc.h"
+#endif
+
+class _ICLASS BOleFontObj;
 
 class BOleClassManager : public BOleComponent, public IBClassMgr
 {
 
 private:
 	BOleService *pSvc;
+	BOleFontObj *pFont;  // font cache storage
 	int nServerCount;
 
 public:
@@ -50,11 +56,12 @@ public:
 	{ *ppInfo = NULLP; return ResultFromScode(E_NOTIMPL); }
 
 	int _IFUNC ServerCount (int nDelta = 0);
-	BOleService * GetService()	{return pSvc;}
+	BOleService * GetService()	{return pSvc;};
+	BOleFontObj * GetFontCache()	{return pFont;};
+	void          SetFontCache(BOleFontObj *pFont);
 	
 	BOleClassManager(IBUnknownMain *pObj);
 	~BOleClassManager();
 };
 
 #endif
-

@@ -1,9 +1,11 @@
 //----------------------------------------------------------------------------
 // ObjectWindows
-// (C) Copyright 1991, 1994 by Borland International, All Rights Reserved
+// Copyright (c) 1991, 1996 by Borland International, All Rights Reserved
 //
-//   Definition of class TListBox and TlistBoxData.  This defines the
-//   basic behavior of all list box controls.
+//$Revision:   10.4  $
+//
+// Definition of class TListBox and TlistBoxData.  This defines the basic
+// behavior of all list box controls.
 //----------------------------------------------------------------------------
 #if !defined(OWL_LISTBOX_H)
 #define OWL_LISTBOX_H
@@ -11,14 +13,17 @@
 #if !defined(OWL_CONTROL_H)
 # include <owl/control.h>
 #endif
-#if !defined(CLASSLIB_ARRAYS_H)
-# include <classlib/arrays.h>
+#if !defined(OWL_CONTAIN_H)
+# include <owl/contain.h>
 #endif
 
+// Generic definitions/compiler options (eg. alignment) preceeding the
+// definition of classes
+#include <services/preclass.h>
+
 //
-//  class TListBox
-//  ----- --------
-//
+// class TListBox
+// ~~~~~ ~~~~~~~~
 class _OWLCLASS TListBox : public TControl {
   public:
     TListBox(TWindow*        parent,
@@ -28,24 +33,22 @@ class _OWLCLASS TListBox : public TControl {
 
     TListBox(TWindow* parent, int resourceId, TModule*   module = 0);
 
-    //
-    // list box attributes
+    // List box attributes
     //
     virtual int   GetCount() const;
     virtual int   FindString(const char far* str, int index) const;
     int           FindExactString(const char far* str, int searchIndex) const;
-    int           GetTopIndex() const;
-    int           SetTopIndex(int index);
+    virtual int   GetTopIndex() const;
+    virtual int   SetTopIndex(int index);
     bool          SetTabStops(int numTabs, int far* tabs);
 
-    int           GetHorizontalExtent() const;
-    void          SetHorizontalExtent(int horzExtent);
+    virtual int   GetHorizontalExtent() const;
+    virtual void  SetHorizontalExtent(int horzExtent);
     void          SetColumnWidth(int width);
     int           GetCaretIndex() const;
     int           SetCaretIndex(int index, bool partScrollOk);
 
-    //
-    // query individual list items
+    // Query individual list items
     //
     virtual int   GetStringLen(int index) const;
     virtual int   GetString(char far* str, int index) const;
@@ -56,29 +59,25 @@ class _OWLCLASS TListBox : public TControl {
     virtual int   GetItemHeight(int index) const;
     virtual int   SetItemHeight(int index, int height);
 
-    //
-    // operations on the list box itself
+    // Operations on the list box itself
     //
     virtual void  ClearList();
     virtual int   DirectoryList(uint attrs, const char far* fileSpec);
 
-    //
-    // operations on individual list box items
+    // Operations on individual list box items
     //
     virtual int   AddString(const char far* str);
     virtual int   InsertString(const char far* str, int index);
     virtual int   DeleteString(int index);
 
-    //
-    // single selection list boxes only (combos overload these)
+    // Single selection list boxes only (combos overload these)
     //
     virtual int   GetSelIndex() const;
     virtual int   SetSelIndex(int index);
             int   GetSelString(char far* str, int maxChars) const;
             int   SetSelString(const char far* str, int searchIndex);
 
-    //
-    // multiple selection list boxes only
+    // Multiple selection list boxes only
     //
     int           GetSelCount() const;
     int           GetSelStrings(char far** strs, int maxCount,
@@ -91,20 +90,21 @@ class _OWLCLASS TListBox : public TControl {
     int           SetSel(int index, bool select);
     int           SetSelItemRange(bool select, int first, int last);
 
-    //
+#if defined(BI_PLAT_WIN32)
+    uint32        ItemFromPoint(TPoint& p);
+#endif
+
     // Override TWindow virtual member functions
     //
-    uint          Transfer(void *buffer, TTransferDirection direction);
+    uint          Transfer(void* buffer, TTransferDirection direction);
 
   protected:
-    //
     // Override TWindow virtual member functions
     //
-    char far     *GetClassName();
+    char far*     GetClassName();
 
   private:
-    //
-    // hidden to prevent accidental copying or assignment
+    // Hidden to prevent accidental copying or assignment
     //
     TListBox(const TListBox&);
     TListBox& operator =(const TListBox&);
@@ -113,7 +113,7 @@ class _OWLCLASS TListBox : public TControl {
 };
 
 //
-// list box notification macros. methods are: void method()
+// List box notification macros. methods are: void method()
 //
 // EV_LBN_DBLCLK(id, method)
 // EV_LBN_ERRSPACE(id, method)
@@ -123,261 +123,177 @@ class _OWLCLASS TListBox : public TControl {
 // EV_LBN_SETFOCUS(id, method)
 
 //
-//  Container classes
-//  --------- -------
-//
-
-class _OWLCLASS TStringArray {
-  public:
-    typedef void (*IterFunc)(string&, void*);
-    typedef int  (*CondFunc)(const string&, void*);
-
-    TStringArray(int upper, int lower, int delta);
-    int LowerBound() const;
-    int UpperBound() const;
-    unsigned ArraySize() const;
-    int IsFull() const;
-    int IsEmpty() const;
-    unsigned GetItemsInContainer() const;
-    int Add(const string& t);
-    int Detach(const string& t);
-    int Detach(int loc);
-    int Destroy(const string& t);
-    int Destroy(int loc);
-    int HasMember(const string& t) const;
-    int Find(const string& t) const;
-    string& operator [](int loc);
-    string& operator [](int loc) const;
-    void ForEach(IterFunc iter, void* args);
-    string* FirstThat(CondFunc cond, void* args) const;
-    string* LastThat(CondFunc cond, void* args) const;
-    void Flush();
-
-  private:
-    TArrayAsVector<string> Data;
-
-  friend class TStringArrayIterator;
-};
-
-class TStringArrayIterator : public TArrayAsVectorIterator<string> {
-  public:
-    TStringArrayIterator(const TStringArray& array)
-        : TArrayAsVectorIterator<string>(array.Data) {}
-};
-
-struct TInt {
-  int i;
-  TInt() {}
-  TInt(int _i) {i = _i;}
-  operator int() const {return i;}
-};
-
-class _OWLCLASS TIntArray {
-  public:
-    typedef void (*IterFunc)(TInt&, void*);
-    typedef int  (*CondFunc)(const TInt&, void*);
-
-    TIntArray(int upper, int lower, int delta);
-    int LowerBound() const;
-    int UpperBound() const;
-    unsigned ArraySize() const;
-    int IsFull() const;
-    int IsEmpty() const;
-    unsigned GetItemsInContainer() const;
-    int Add(const TInt& t);
-    int Detach(const TInt& t);
-    int Detach(int loc);
-    int Destroy(const TInt& t);
-    int Destroy(int loc);
-    int HasMember(const TInt& t) const;
-    int Find(const TInt& t) const;
-    TInt& operator [](int loc);
-    TInt& operator [](int loc) const;
-    void ForEach(IterFunc iter, void* args);
-    TInt* FirstThat(CondFunc cond, void* args) const;
-    TInt* LastThat(CondFunc cond, void* args) const;
-    void Flush();
-
-  private:
-    TArrayAsVector<TInt> Data;
-
-  friend class TIntArrayIterator;
-};
-
-class TIntArrayIterator : public TArrayAsVectorIterator<TInt> {
-  public:
-    TIntArrayIterator(const TIntArray& array)
-        : TArrayAsVectorIterator<TInt>(array.Data) {}
-};
-
-class _OWLCLASS TDwordArray {
-  public:
-    typedef void (*IterFunc)(uint32&, void*);
-    typedef int  (*CondFunc)(const uint32&, void*);
-
-    TDwordArray(int upper, int lower, int delta);
-    int LowerBound() const;
-    int UpperBound() const;
-    unsigned ArraySize() const;
-    int IsFull() const;
-    int IsEmpty() const;
-    unsigned GetItemsInContainer() const;
-    int Add(const uint32& t);
-    int Detach(const uint32& t);
-    int Detach(int loc);
-    int Destroy(const uint32& t);
-    int Destroy(int loc);
-    int HasMember(const uint32& t) const;
-    int Find(const uint32& t) const;
-    uint32& operator [](int loc);
-    uint32& operator [](int loc) const;
-    void ForEach(IterFunc iter, void* args);
-    uint32* FirstThat(CondFunc cond, void* args) const;
-    uint32* LastThat(CondFunc cond, void* args) const;
-    void Flush();
-
-  private:
-    TArrayAsVector<uint32> Data;
-
-  friend class TDwordArrayIterator;
-};
-
-class TDwordArrayIterator : public TArrayAsVectorIterator<uint32> {
-  public:
-    TDwordArrayIterator(const TDwordArray& array)
-        : TArrayAsVectorIterator<uint32>(array.Data) {}
-};
-
-//
-//  class TListBoxData
-//  ----- ------------
-//
+// class TListBoxData
+// ~~~~~ ~~~~~~~~~~~~
 class _OWLCLASS TListBoxData {
   public:
     TListBoxData();
    ~TListBoxData();
 
-    TStringArray&   GetStrings() {return Strings;}
-    TDwordArray&    GetItemDatas() {return ItemDatas;}
-    TIntArray&      GetSelIndices() {return SelIndices;}
+    TStringArray&   GetStrings();
+    TUint32Array&   GetItemDatas();
+    TIntArray&      GetSelIndices();
 
     void    AddString(const char* str, bool isSelected = false);
     void    AddStringItem(const char* str, uint32 itemData, bool isSelected = false);
-    void    Clear() {Strings.Flush(); ItemDatas.Flush(); ResetSelections();}
+    void    Clear();
 
     void    Select(int index);
     void    SelectString(const char far* str);
-    int     GetSelCount() const {return SelIndices.GetItemsInContainer();}
-    void    ResetSelections() {SelIndices.Flush();}
+    int     GetSelCount() const;
+    void    ResetSelections();
     int     GetSelStringLength(int index = 0) const;
     void    GetSelString(char far* buffer, int bufferSize, int index=0) const;
     void    GetSelString(string& str, int index=0) const;
 
-  protected:
+  protected_data:
     TStringArray  Strings;     // Contains all strings in listbox
-    TDwordArray   ItemDatas;   // Contains all item data uint32 in listbox
+    TUint32Array  ItemDatas;   // Contains all uint32 item datas in listbox
     TIntArray     SelIndices;  // Contains all selection indices
 };
 
+// Generic definitions/compiler options (eg. alignment) following the
+// definition of classes
+#include <services/posclass.h>
 
-//----------------------------------------------------------------------------
-// Inlines
-//----------------------------------------------------------------------------
+// --------------------------------------------------------------------------
+// Inline implementations
+//
 
+//
 inline int TListBox::GetTopIndex() const {
-  return (int)CONST_CAST(TListBox*,this)->HandleMessage(LB_GETTOPINDEX);
+  PRECONDITION(GetHandle());
+  return (int)CONST_CAST(TListBox*,this)->SendMessage(LB_GETTOPINDEX);
 }
 
+//
 inline int TListBox::SetTopIndex(int index) {
-  return (int)HandleMessage(LB_SETTOPINDEX, index);
+  PRECONDITION(GetHandle());
+  return (int)SendMessage(LB_SETTOPINDEX, index);
 }
 
+//
 inline bool TListBox::SetTabStops(int numTabs, int far* tabs) {
-  return (bool)HandleMessage(LB_SETTABSTOPS, numTabs, (LPARAM)tabs);
+  PRECONDITION(GetHandle());
+  return (bool)SendMessage(LB_SETTABSTOPS, numTabs, TParam2(tabs));
 }
 
+//
 inline int TListBox::GetHorizontalExtent() const {
-  return (int)CONST_CAST(TListBox*,this)->HandleMessage(LB_GETHORIZONTALEXTENT);
+  PRECONDITION(GetHandle());
+  return (int)CONST_CAST(TListBox*,this)->SendMessage(LB_GETHORIZONTALEXTENT);
 }
 
+//
 inline void TListBox::SetHorizontalExtent(int horzExtent) {
-  HandleMessage(LB_SETHORIZONTALEXTENT, horzExtent);
+  PRECONDITION(GetHandle());
+  SendMessage(LB_SETHORIZONTALEXTENT, horzExtent);
 }
 
+//
 inline void TListBox::SetColumnWidth(int width) {
-  HandleMessage(LB_SETCOLUMNWIDTH, width);
+  PRECONDITION(GetHandle());
+  SendMessage(LB_SETCOLUMNWIDTH, width);
 }
 
+//
 inline int TListBox::GetCaretIndex() const {
-  return (int)CONST_CAST(TListBox*,this)->HandleMessage(LB_GETCARETINDEX);
+  PRECONDITION(GetHandle());
+  return (int)CONST_CAST(TListBox*,this)->SendMessage(LB_GETCARETINDEX);
 }
 
+//
 inline int TListBox::SetCaretIndex(int index, bool partScrollOk) {
-  return (int)HandleMessage(LB_SETCARETINDEX, index, MAKELPARAM(partScrollOk,0));
+  PRECONDITION(GetHandle());
+  return (int)SendMessage(LB_SETCARETINDEX, index, MkParam2(partScrollOk,0));
 }
 
+//
 inline uint32 TListBox::GetItemData(int index) const {
-  return CONST_CAST(TListBox*,this)->HandleMessage(LB_GETITEMDATA, index);
+  PRECONDITION(GetHandle());
+  return CONST_CAST(TListBox*,this)->SendMessage(LB_GETITEMDATA, index);
 }
 
+//
 inline int TListBox::SetItemData(int index, uint32 itemData) {
-  return (int)HandleMessage(LB_SETITEMDATA, index, itemData);
+  PRECONDITION(GetHandle());
+  return (int)SendMessage(LB_SETITEMDATA, index, itemData);
 }
 
+//
 inline int TListBox::GetItemRect(int index, TRect& rect) const {
+  PRECONDITION(GetHandle());
   return (int)CONST_CAST(TListBox*,this)->
-           HandleMessage(LB_GETITEMRECT, index, (LPARAM)(TRect FAR*)&rect);
+           SendMessage(LB_GETITEMRECT, index, TParam2((TRect FAR*)&rect));
 }
 
+//
 inline int TListBox::GetItemHeight(int index) const {
+  PRECONDITION(GetHandle());
   return (int)CONST_CAST(TListBox*,this)->
-           HandleMessage(LB_GETITEMHEIGHT, index);
+           SendMessage(LB_GETITEMHEIGHT, index);
 }
 
+//
 inline int TListBox::SetItemHeight(int index, int height) {
-  return (int)HandleMessage(LB_SETITEMHEIGHT, index, MAKELPARAM(height, 0));
+  PRECONDITION(GetHandle());
+  return (int)SendMessage(LB_SETITEMHEIGHT, index, MkParam2(height, 0));
 }
 
+//
 inline int TListBox::DirectoryList(uint attrs, const char far* fileSpec) {
-  return (int)HandleMessage(LB_DIR, attrs, (LPARAM)fileSpec);
+  PRECONDITION(GetHandle());
+  return (int)SendMessage(LB_DIR, attrs, TParam2(fileSpec));
 }
 
+//
 // Adds a string to an associated listbox
 // Returns index of the string in the list(the first entry is at index 0),
 // a negative if an error occurs.
 //
 inline int TListBox::AddString(const char far* str) {
-  return (int)HandleMessage(LB_ADDSTRING, 0, (LPARAM)str);
+  PRECONDITION(GetHandle());
+  return (int)SendMessage(LB_ADDSTRING, 0, TParam2(str));
 }
 
+//
 // Inserts a string in the associated listbox at the passed index,
 // returns the index of the string in the list, a negative if an error occurs
 //
 inline int TListBox::InsertString(const char far* str, int index) {
-  return (int)HandleMessage(LB_INSERTSTRING, index, (LPARAM)str);
+  PRECONDITION(GetHandle());
+  return (int)SendMessage(LB_INSERTSTRING, index, TParam2(str));
 }
 
+//
 // Deletes the string at the passed index in the associated listbox
 // Returns a count of the entries remaining in the list, a negative
 // value if an error occurs
 //
 inline int TListBox::DeleteString(int index) {
-  return (int)HandleMessage(LB_DELETESTRING, index);
+  PRECONDITION(GetHandle());
+  return (int)SendMessage(LB_DELETESTRING, index);
 }
 
+//
 // Clears all the entries in the associated listbox
 //
 inline void TListBox::ClearList() {
-  HandleMessage(LB_RESETCONTENT);
+  PRECONDITION(GetHandle());
+  SendMessage(LB_RESETCONTENT);
 }
 
+//
 // Returns the number of entries in the associated listbox, a negative
 // value if an error occurs
 //
+//
 inline int TListBox::GetCount() const {
-  return (int)CONST_CAST(TListBox*,this)->HandleMessage(LB_GETCOUNT);
+  PRECONDITION(GetHandle());
+  return (int)CONST_CAST(TListBox*,this)->SendMessage(LB_GETCOUNT);
 }
 
+//
 // Returns the index of the first string in the associated listbox which
 // begins with the passed string
 //
@@ -391,10 +307,12 @@ inline int TListBox::GetCount() const {
 // Returns the index of the selected string, a negative if an error occurs
 //
 inline int TListBox::FindString(const char far* find, int indexStart) const {
+  PRECONDITION(GetHandle());
   return (int)CONST_CAST(TListBox*,this)->
-           HandleMessage(LB_FINDSTRING, indexStart, (LPARAM)find);
+           SendMessage(LB_FINDSTRING, indexStart, TParam2(find));
 }
 
+//
 // Retrieves the contents of the string at the passed index of the
 // associated listbox. Returns the length of the string (in bytes
 // excluding the terminating 0),  a negative if the passed index is not valid
@@ -402,34 +320,83 @@ inline int TListBox::FindString(const char far* find, int indexStart) const {
 // The buffer must be large enough for the string and the terminating 0
 //
 inline int TListBox::GetString(char far* str, int index) const {
+  PRECONDITION(GetHandle());
   return (int)CONST_CAST(TListBox*,this)->
-           HandleMessage(LB_GETTEXT, index, (LPARAM)str);
+           SendMessage(LB_GETTEXT, index, TParam2(str));
 }
 
+//
 // Returns the length of the string at the passed index in the associated
 // listbox excluding the terminating 0, a negative if an error occurs
 //
 inline int TListBox::GetStringLen(int index) const {
-  return (int)CONST_CAST(TListBox*,this)->HandleMessage(LB_GETTEXTLEN, index);
+  PRECONDITION(GetHandle());
+  return (int)CONST_CAST(TListBox*,this)->SendMessage(LB_GETTEXTLEN, index);
 }
 
 //
 // Get the selection state (true/false) of a particular item at 'index'
 //
 inline bool TListBox::GetSel(int index) const {
-  return (bool)CONST_CAST(TListBox*,this)->HandleMessage(LB_GETSEL, index);
+  PRECONDITION(GetHandle());
+  return (bool)CONST_CAST(TListBox*,this)->SendMessage(LB_GETSEL, index);
 }
 
 //
 // Set the selection state (true/false) of a particular item at 'index',
 // or all items if index is -1
 //
+//
 inline int TListBox::SetSel(int index, bool select) {
-  return (int)HandleMessage(LB_SETSEL, select, MAKELPARAM(index, 0));
+  PRECONDITION(GetHandle());
+  return (int)SendMessage(LB_SETSEL, select, MkParam2(index, 0));
 }
 
+//
 inline int TListBox::SetSelItemRange(bool select, int first, int last) {
-  return (int)HandleMessage(LB_SELITEMRANGE, select, MAKELPARAM(first, last));
+  PRECONDITION(GetHandle());
+  return (int)SendMessage(LB_SELITEMRANGE, select, MkParam2(first, last));
+}
+
+#if defined(BI_PLAT_WIN32)
+//
+inline uint32 TListBox::ItemFromPoint(TPoint& p)
+{
+  PRECONDITION(GetHandle());
+  return (uint32)SendMessage(LB_ITEMFROMPOINT, 0, MkParam2(p.x, p.y));
+}
+#endif
+
+//
+inline TStringArray& TListBoxData::GetStrings() {
+  return Strings;
+}
+
+//
+inline TUint32Array& TListBoxData::GetItemDatas() {
+  return ItemDatas;
+}
+
+//
+inline TIntArray& TListBoxData::GetSelIndices() {
+  return SelIndices;
+}
+
+//
+inline void TListBoxData::Clear() {
+  Strings.Flush();
+  ItemDatas.Flush();
+  ResetSelections();
+}
+
+//
+inline int TListBoxData::GetSelCount() const {
+  return SelIndices.GetItemsInContainer();
+}
+
+//
+inline void TListBoxData::ResetSelections() {
+  SelIndices.Flush();
 }
 
 #endif  // OWL_LISTBOX_H

@@ -6,9 +6,9 @@
  *-----------------------------------------------------------------------*/
 
 /*
- *      C/C++ Run Time Library - Version 1.5
+ *      C/C++ Run Time Library - Version 2.0
  *
- *      Copyright (c) 1991, 1994 by Borland International
+ *      Copyright (c) 1991, 1996 by Borland International
  *      All Rights Reserved.
  *
  */
@@ -48,6 +48,7 @@ int _RTLENTRYF __close (int handle)
     if (CloseHandle((HANDLE)_handles[handle]) == TRUE)  /* success */
     {
         _openfd [handle] = 0;
+	_handles[handle] = (unsigned long) INVALID_HANDLE_VALUE;
         _unlock_handle(handle);
         return (0);
     }

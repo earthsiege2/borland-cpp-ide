@@ -1,7 +1,9 @@
-//--------------------------------------------------------------------------
-//  Turbo Meteor -- Copyright (c) 1995, Borland International
-//--------------------------------------------------------------------------
-#include <owl/owlpch.h>     // all of OWL
+//----------------------------------------------------------------------------
+// Object Windows
+// Copyright (c) 1995, 1996 by Borland International, All Rights Reserved
+//  Turbo Meteor
+//----------------------------------------------------------------------------
+#include <owl/pch.h>     // all of OWL
 
 #include "sprite.h"
 #include "meteor.rh"
@@ -11,61 +13,69 @@ const char IniFilename[] = "METEOR.INI";
 
 // MeteorsWindow -- the game window
 //
-class MeteorWindow: public TWindow {
+class MeteorWindow : public TWindow {
+  public:
+    MeteorWindow( TWindow* parent );
+   ~MeteorWindow() {}
 
-  uint UseCompatibleBitmap, // settings read from the INI file
-       width,height;
+    void SetupWindow();
+    void CleanupWindow() {
+      KillTimer(1);
+      delete gameField;
+      TWindow::CleanupWindow();
+    }
 
-  SpriteList sprites;       // list of all the sprites on the screen
+    // don't let windows paint our window, or it will flicker
+    //
+    bool EvEraseBkgnd( HDC ) { return true; }
 
-  Ship       *ship;         // a seperate pointer to the ship, so we can adjust
-                            // it's speed, etc.  the ship is also inserted into
-                            // the sprite list
+    void Paint( TDC& dc, bool erase, TRect& rect );
+    void EvTimer( UINT id );
+    void EvKeyDown( uint key, uint repeatCount, uint flags );
+    void EvKeyUp( uint key, uint repeatCount, uint flags );
 
-  Message    *scoreDisplay; // pointer to the score object, so we can update it
+  private:
+    uint UseCompatibleBitmap; // settings read from the INI file
+    uint width;
+    uint height;
 
-  TMemoryDC  *gameField;    // this is where the objects draw to, then it is
-                            // BitBlt'ed to the window
+    SpriteList sprites;      // list of all the sprites on the screen
 
-  bool       rotateLeft,    // flags set when the player presses keys
-             rotateRight,
-             thrust,
-             fire;
+    Ship*      ship;         // a seperate pointer to the ship, so we can adjust
+                             // it's speed, etc.  the ship is also inserted into
+                             // the sprite list
 
-  long       score;
-  int        shipsLeft;
-  int        newShipCountdown;    // countdown to new player ship appearing
-  bool       gameOver;
+    Message*   scoreDisplay; // pointer to the score object, so we can update it
 
-  uint shotDelay,shotDelayReset;  // used to limit how many shots can be fired
+    TMemoryDC* gameField;    // this is where the objects draw to, then it is
+                             // BitBlt'ed to the window
 
-public:
-  MeteorWindow( TWindow* parent );
-  void SetupWindow();
-  void CleanupWindow() {
-    KillTimer(1);
-  }
+    bool       rotateLeft;    // flags set when the player presses keys
+    bool       rotateRight;
+    bool       thrust;
+    bool       fire;
 
-  // don't let windows paint our window, or it will flicker
-  //
-  BOOL EvEraseBkgnd( HDC ) {
-    return true;
-  }
-  void Paint( TDC& dc, BOOL erase, TRect& rect );
-  void EvTimer( UINT id );
-  void EvKeyDown( uint key, uint repeatCount, uint flags );
-  void EvKeyUp( uint key, uint repeatCount, uint flags );
+    long       score;
+    int        shipsLeft;
+    int        newShipCountdown;    // countdown to new player ship appearing
+    bool       gameOver;
+
+    uint       shotDelay;
+    uint       shotDelayReset;  // used to limit how many shots can be fired
+
   DECLARE_RESPONSE_TABLE( MeteorWindow );
 };
+
 DEFINE_RESPONSE_TABLE1( MeteorWindow, TWindow )
   EV_WM_TIMER,
   EV_WM_KEYDOWN,
   EV_WM_KEYUP,
 END_RESPONSE_TABLE;
 
-MeteorWindow::MeteorWindow( TWindow* parent ):
-  TWindow( parent ) {
-
+MeteorWindow::MeteorWindow( TWindow* parent )
+:
+  TWindow( parent )
+{
   width = GetPrivateProfileInt( "Display", "Width", 600, IniFilename );
   height = GetPrivateProfileInt( "Display", "Height", 400, IniFilename );
   UseCompatibleBitmap = GetPrivateProfileInt( "Display", "UseCompatibleBitmap",
@@ -85,7 +95,8 @@ MeteorWindow::MeteorWindow( TWindow* parent ):
   rotateLeft = rotateRight = thrust = fire = false;
 }
 
-void MeteorWindow::SetupWindow() {
+void MeteorWindow::SetupWindow()
+{
   TWindow::SetupWindow();
 
   // create a memory DC that we will copy the sprites to
@@ -120,7 +131,8 @@ void MeteorWindow::SetupWindow() {
 // EvKeyDown/EvKeyUp -- sets/resets the appropriate flag to indicate that
 // the player is holding a key down
 //
-void MeteorWindow::EvKeyDown( uint key, uint, uint ) {
+void MeteorWindow::EvKeyDown( uint key, uint, uint )
+{
   switch (key) {
     case VK_LEFT:
       rotateLeft = true;
@@ -137,7 +149,8 @@ void MeteorWindow::EvKeyDown( uint key, uint, uint ) {
   }
 }
 
-void MeteorWindow::EvKeyUp( uint key, uint, uint ) {
+void MeteorWindow::EvKeyUp( uint key, uint, uint )
+{
   switch (key) {
     case VK_LEFT:
       rotateLeft = false;
@@ -158,7 +171,8 @@ void MeteorWindow::EvKeyUp( uint key, uint, uint ) {
 // EvTimer -- this is the heart of the game.  Every timer tick, we update
 // all the sprites on the screen, check for collisions, and redraw everything
 //
-void MeteorWindow::EvTimer( UINT ) {
+void MeteorWindow::EvTimer( uint )
+{
   char temp[20];
   int points;
 
@@ -220,17 +234,13 @@ void MeteorWindow::EvTimer( UINT ) {
   }
 
   // update the score display
-
   if (points) {
     score+=points;
-    wsprintf(temp,"%8ld",score);
-    temp[8]=' ';
-    for (int i=0;i<shipsLeft;i++)
-      temp[9+i]='*';
-    temp[9+shipsLeft]=0;
+    wsprintf(temp,"%8ld ",score);
+    for (int i=0; i < shipsLeft; i++)
+      strcat(temp, "*");
     scoreDisplay->SetText(temp);
   }
-
   // bit-blit the memory DC to our windows DC
 
   TClientDC( HWindow ).BitBlt( GetClientRect(), /*0, 0, width, height,*/
@@ -240,40 +250,40 @@ void MeteorWindow::EvTimer( UINT ) {
 // Paint -- in case we ever need to repaint (because another window was
 // blocking us, etc), just bitblit the memory DC back to our window.
 //
-void MeteorWindow::Paint( TDC& dc, BOOL, TRect& ) {
+void MeteorWindow::Paint( TDC& dc, bool, TRect& )
+{
   dc.BitBlt( GetClientRect(), *gameField, TPoint(0,0) );
 }
 
 // MeteorApp -- our application
 //
 class MeteorApp: public TApplication {
-public:
-  void InitMainWindow() {
-    int width,height;
-    TFrameWindow *fw = new TFrameWindow( 0, "Turbo Meteors",
-													  new MeteorWindow(0), true );
+  public:
+    void InitMainWindow() {
+      int width,height;
+      TFrameWindow *fw = new TFrameWindow( 0, "Turbo Meteors",
+  													  new MeteorWindow(0), true );
 
-    // to center our window in the middle of the screen, get the screen
-    // resolution, and adjust our position accordingly
+      // to center our window in the middle of the screen, get the screen
+      // resolution, and adjust our position accordingly
 
-    width = TScreenDC().GetDeviceCaps( HORZRES );
-    height = TScreenDC().GetDeviceCaps( VERTRES );
+      width = TScreenDC().GetDeviceCaps( HORZRES );
+      height = TScreenDC().GetDeviceCaps( VERTRES );
 
-    fw->Attr.Style = WS_OVERLAPPED | WS_CAPTION | WS_SYSMENU | WS_MINIMIZEBOX;
-    fw->Attr.X = (width-600)/2;
-    fw->Attr.Y = (height-400)/2-20;
-    fw->SetIcon( this, ICON_1 );
-    fw->AssignMenu( MENU_1 );
-    SetMainWindow( fw );
-  }
-  void AboutBox() {
-	 TDialog( GetMainWindow(), ABOUT_BOX ).Execute();
-  }
-  void Exit() {
-	 GetMainWindow()->CloseWindow();
-  }
+      fw->Attr.Style = WS_OVERLAPPED | WS_CAPTION | WS_SYSMENU | WS_MINIMIZEBOX;
+      fw->Attr.X = (width-600)/2;
+      fw->Attr.Y = (height-400)/2-20;
+      fw->SetIcon( this, ICON_1 );
+      fw->AssignMenu( MENU_1 );
+      SetMainWindow( fw );
+    }
+
+    void AboutBox() { TDialog( GetMainWindow(), ABOUT_BOX ).Execute(); }
+    void Exit() { GetMainWindow()->CloseWindow(); }
+
   DECLARE_RESPONSE_TABLE( MeteorApp );
 };
+
 DEFINE_RESPONSE_TABLE1( MeteorApp, TApplication )
   EV_COMMAND( CM_HELPABOUT, AboutBox ),
   EV_COMMAND( CM_GAME_EXIT, Exit ),

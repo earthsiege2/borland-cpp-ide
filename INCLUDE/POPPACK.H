@@ -21,24 +21,22 @@ Abstract:
 --*/
 
 /*
- *      C/C++ Run Time Library - Version 6.5
+ *      C/C++ Run Time Library - Version 7.0
  *
- *      Copyright (c) 1994 by Borland International
+ *      Copyright (c) 1994, 1996 by Borland International
  *      All Rights Reserved.
  *
  */
 #pragma nopackwarning
 
 #if ! (defined(lint) || defined(_lint))
-#  if ( _MSC_VER >= 800 ) || (defined(__BORLANDC__) && defined(__FLAT__))
+#  if ( _MSC_VER >= 800 ) || (defined(__BORLANDC__))
 #    pragma warning(disable:4103)
 #    if !(defined( MIDL_PASS )) || defined( __midl )
 #      pragma pack(pop)
 #    else
 #      pragma pack()
 #    endif
-#  elif defined(__BORLANDC__) && !defined(__FLAT__)
-#    pragma option -a.
 #  else
 #    pragma pack()
 #  endif

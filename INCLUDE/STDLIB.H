@@ -5,9 +5,9 @@
 */
 
 /*
- *      C/C++ Run Time Library - Version 6.5
+ *      C/C++ Run Time Library - Version 7.0
  *
- *      Copyright (c) 1987, 1994 by Borland International
+ *      Copyright (c) 1987, 1996 by Borland International
  *      All Rights Reserved.
  *
  */
@@ -30,7 +30,7 @@
 #pragma warn -nak
 #endif
 
-#pragma option -a-
+#pragma pack(push, 1)
 
 #endif  /* !RC_INVOKED */
 
@@ -57,8 +57,9 @@ typedef struct {
 #endif
 
 #ifndef __cplusplus
-#ifndef _WCHAR_T
+#if !defined(_WCHAR_T) && !defined(_WCHAR_T_DEFINED)
 #define _WCHAR_T
+#define _WCHAR_T_DEFINED  /* For WINDOWS.H */
 typedef unsigned short wchar_t;
 #endif
 #endif
@@ -109,7 +110,7 @@ int         _RTLENTRYF atoi(const char _FAR *__s);
 long        _RTLENTRYF atol(const char _FAR *__s);
 void _FAR * _RTLENTRYF bsearch(const void _FAR *__key, const void _FAR *__base,
                            size_t __nelem, size_t __width,
-                           int (_USERENTRY *fcmp)(const void _FAR *,
+                           int (_USERENTRYF *fcmp)(const void _FAR *,
                            const void _FAR *));
 void _FAR * _RTLENTRY  calloc(size_t __nitems, size_t __size);
 div_t       _RTLENTRY  div(int __numer, int __denom);
@@ -124,7 +125,7 @@ size_t      _RTLENTRYF _EXPFUNC mbstowcs(wchar_t _FAR *__pwcs, const char _FAR *
                                     size_t __n);
 int         _RTLENTRYF _EXPFUNC mbtowc(wchar_t _FAR *__pwc, const char _FAR *__s, size_t __n);
 void        _RTLENTRYF _EXPFUNC qsort(void _FAR *__base, size_t __nelem, size_t __width,
-                       int _USERENTRY (*_EXPFUNC __fcmp)(const void _FAR *, const void _FAR *));
+                       int _USERENTRYF (*_EXPFUNC __fcmp)(const void _FAR *, const void _FAR *));
 int         _RTLENTRY  rand(void);
 void  _FAR *_RTLENTRY  realloc(void _FAR *__block, size_t __size);
 void        _RTLENTRY  srand(unsigned __seed);
@@ -155,7 +156,7 @@ extern  unsigned char   _RTLENTRY _osmajor;
 extern  unsigned char   _RTLENTRY _osminor;
 extern  unsigned int    _RTLENTRY _version;
 
-#if !__STDC__
+#if !defined(__STDC__)
 #define sys_nerr     _sys_nerr
 #define sys_errlist  _sys_errlist
 #endif
@@ -180,7 +181,7 @@ extern  int             _RTLENTRY _sys_nerr;
 #endif
 
 
-#if !defined(__STDC__)
+#if !defined(__STDC__) && !defined(__CODEGUARD__)
 #if defined(__cplusplus)
 inline int  _RTLENTRY atoi(const char _FAR *__s) { return (int) atol(__s); }
 #else
@@ -215,7 +216,7 @@ char   _FAR   *_RTLENTRY   gcvt(double __value, int __ndec, char _FAR *__buf);
 char   _FAR   *_RTLENTRYF  _EXPFUNC itoa(int __value, char _FAR *__string, int __radix);
 void   _FAR   *_RTLENTRY   _EXPFUNC lfind(const void _FAR *__key, const void _FAR *__base,
                                  size_t _FAR *__num, size_t __width,
-                                 int _USERENTRY(*_EXPFUNC __fcmp)(const void _FAR *,
+                                 int _USERENTRY (*_EXPFUNC __fcmp)(const void _FAR *,
                                  const void _FAR *));
 unsigned long  _RTLENTRY   _lrotl(unsigned long __val, int __count);
 unsigned long  _RTLENTRY   _lrotr(unsigned long __val, int __count);
@@ -400,7 +401,7 @@ extern  unsigned char   _RTLENTRY _EXPDATA _osminor;
 extern  unsigned char   _RTLENTRY _EXPDATA _osmode;
 extern  unsigned int    _RTLENTRY _EXPDATA _osversion;
 
-#if !defined(__STDC__)
+#if !defined(__STDC__) && !defined(__CODEGUARD__)
 #ifdef __cplusplus
    inline int _RTLENTRY atoi(const char *__s) { return (int)atol(__s); }
 #else
@@ -408,7 +409,7 @@ extern  unsigned int    _RTLENTRY _EXPDATA _osversion;
 #endif
 #endif
 
-#if !__STDC__
+#if !defined(__STDC__)
 #define sys_nerr     _sys_nerr
 #define sys_errlist  _sys_errlist
 #endif
@@ -530,6 +531,41 @@ extern "C" long _RTLENTRY _EXPFUNC time(long _FAR *);
 /* Need prototype of time() for C++ randomize() */
 inline void _RTLENTRY randomize(void) { srand((unsigned) time(NULL)); }
 
+#if defined(__MFC_COMPAT__)
+#if !defined( __MINMAX_DEFINED)
+#define __MINMAX_DEFINED
+#define max(a,b)    (((a) > (b)) ? (a) : (b))
+#define min(a,b)    (((a) < (b)) ? (a) : (b))
+#define __max       max
+#define __min       min
+#endif /*__MINMAX_DEFINED */
+
+inline char * _RTLENTRY  _ecvt(double __value, int __ndig, int * __dec,
+                         int * __sign)
+                         { return ecvt (__value, __ndig, __dec, __sign); }
+inline char * _RTLENTRY  _fcvt(double __value, int __ndig, int * __dec,
+                         int * __sign)
+                         { return fcvt (__value, __ndig, __dec, __sign); }
+inline char * _RTLENTRY  _gcvt(double __value, int __ndec,
+                         char * __buf)
+                         { return gcvt(__value, __ndec, __buf); }
+inline char * _RTLENTRYF _itoa(int __value, char * __string,
+                         int __radix)
+                         { return itoa(__value, __string, __radix); }
+inline char * _RTLENTRYF _ltoa(long __value, char * __string,
+                         int __radix)
+                         { return ltoa(__value, __string, __radix); }
+inline char * _RTLENTRYF _ultoa(unsigned long __value, char * __string,
+                         int __radix)
+                         { return ultoa(__value, __string, __radix); }
+inline int    _RTLENTRY  _putenv(const char * __name) {return putenv(__name);}
+inline void   _RTLENTRY  _swab(char * __from, char * __to, int __nbytes)
+                         { swab (__from, __to, __nbytes); }
+#if !defined(__DLL__)
+extern  int           _RTLENTRY __argc;
+extern  char        **_RTLENTRY __argv;
+#endif  /* __DLL__ */
+#else   /* __MFC_COMPAT__ */
 #if !defined( __MINMAX_DEFINED) && defined(__cplusplus)
 #define __MINMAX_DEFINED
 template <class T> inline const T _FAR &min( const T _FAR &t1, const T _FAR &t2 )
@@ -548,26 +584,29 @@ template <class T> inline const T _FAR &max( const T _FAR &t1, const T _FAR &t2 
         return t2;
 }
 #endif
+#endif /* __MFC_COMPAT__ */
 
 #else /* __cplusplus */
 
 #define randomize() srand((unsigned)time(NULL))
 #define max(a,b)    (((a) > (b)) ? (a) : (b))
 #define min(a,b)    (((a) < (b)) ? (a) : (b))
-#endif
+#endif /* __cplusplus */
+
 
 #define  MB_CUR_MAX              1
 
 #endif /* __STDC__ */
 
-#if defined(__MSC)
+#if defined(__MSC) && !defined(__MFC_COMPAT__)
 #define _itoa(__value, __string, __radix) itoa(__value, __string, __radix)
 #endif
 
 
 #if !defined(RC_INVOKED)
 
-#pragma option -a.  /* restore default packing */
+/* restore default packing */
+#pragma pack(pop)
 
 #if defined(__STDC__)
 #pragma warn .nak

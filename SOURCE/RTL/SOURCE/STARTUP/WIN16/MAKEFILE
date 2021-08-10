@@ -21,12 +21,14 @@
 #############################################################################
 !if $(OS) != DPMI16
     AUXOBJS =            \
+            cgquiet.obj  \
             libmain.obj  \
             wep.obj      \
             winmain.obj
 
 !   if $(MODEL) == l
-        OBJS = lockdll.obj
+        OBJS = lockdll.obj \
+	       cginit.obj  
 !   endif
 !   if $d(DLL)
         IMPOBJS = $(AUXOBJS)
@@ -61,7 +63,7 @@ ASM = $(ASM) -m -mx -q -t -I$(INCLBASE)\rtlinc\common16
 $(LIBDIR)\c0ws.obj : c0w.asm
         if exist tasm.cfg del tasm.cfg
         copy &&|
-        -d__SMALL__   -d__WINDOWS__ 
+        -d__SMALL__   -d__WINDOWS__
 |       tasm.cfg
         $(ASM) $**, $(OBJDIR)\$.
         copy $(OBJDIR)\$. $(LIBDIR)
@@ -93,7 +95,7 @@ $(LIBDIR)\c0wl.obj : c0w.asm
 $(LIBDIR)\c0ds.obj : c0d.asm
         if exist tasm.cfg del tasm.cfg
         copy &&|
-        -d__SMALL__   -d__WINDOWS__ 
+        -d__SMALL__   -d__WINDOWS__
 |       tasm.cfg
         $(ASM) $**, $(OBJDIR)\$.
         copy $(OBJDIR)\$. $(LIBDIR)
@@ -101,7 +103,7 @@ $(LIBDIR)\c0ds.obj : c0d.asm
 $(LIBDIR)\c0dc.obj : c0d.asm
         if exist tasm.cfg del tasm.cfg
         copy &&|
-         -d__COMPACT__ -d__WINDOWS__ 
+         -d__COMPACT__ -d__WINDOWS__
 |       tasm.cfg
         $(ASM) $**, $(OBJDIR)\$.
         copy $(OBJDIR)\$. $(LIBDIR)
@@ -109,7 +111,7 @@ $(LIBDIR)\c0dc.obj : c0d.asm
 $(LIBDIR)\c0dm.obj : c0d.asm
         if exist tasm.cfg del tasm.cfg
         copy &&|
-         -d__MEDIUM__  -d__WINDOWS__ 
+         -d__MEDIUM__  -d__WINDOWS__
 |       tasm.cfg
         $(ASM) $**, $(OBJDIR)\$.
         copy $(OBJDIR)\$. $(LIBDIR)

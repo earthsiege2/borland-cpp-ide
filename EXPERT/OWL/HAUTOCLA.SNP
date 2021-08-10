@@ -7,6 +7,6 @@
 ##Search1 == TRUE
 ##YPos() [[ClassDefLine]]
 ##? " {" [[Search2]]
-##((Search2 == TRUE) && (ClassDefLine == YPos()))
+## ((Search2 == TRUE) && (ClassDefLine == YPos()))
 ##:     InsertText(", TAutoBase")
 ##*

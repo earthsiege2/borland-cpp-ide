@@ -1,11 +1,8 @@
-#if !defined( __TODOLIST_H )
-#define __TODOLIST_H
-
 //---------------------------------------------------------------------
 //
 //  TODOLIST.H
 //
-//      Copyright (c) 1991, 1993 by Borland International
+//      Copyright (c) 1991, 1995 by Borland International
 //      All Rights Reserved.
 //
 //  Defines the following classes, used in implementing the Todo list:
@@ -22,22 +19,20 @@
 //                    list box.
 //
 //---------------------------------------------------------------------
+#if !defined(TODOLIST_H)
+#define TODOLIST_H
 
-#if !defined( STRICT )
-#define STRICT
-#endif
-
-#include <windows.h>
+#include <winsys/wsysinc.h>
+#include <classlib/date.h>
+#include <classlib/vectimp.h>
+#include <classlib/objstrm.h>
+#include <classlib/stdtempl.h>
+#include <services/except.h>
+#include <services/cstring.h>
 #include <iostream.h>
-#include <except.h>
 #include <string.h>
-#include <cstring.h>
 #include <dir.h>
 
-#include "classlib\date.h"
-#include "classlib\vectimp.h"
-#include "classlib\objstrm.h"
-#include "classlib\stdtempl.h"
 #include "todowin.h"
 
 //---------------------------------------------------------------------

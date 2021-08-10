@@ -1,27 +1,26 @@
 //----------------------------------------------------------------------------
-// (C) Copyright 1994 by Borland International, All rights 
+// Borland WinSys Library
+// Copyright (c) 1994, 1996 by Borland International, All rights 
 //
-//   TXBase class implementation.
+//$Revision:   5.4  $
 //
+// TXBase class implementation.
 //----------------------------------------------------------------------------
-
-#if !defined(_Windows)
-# define _Windows      // pretend we are in windows to get the headers we need
-#endif
-
-#include <osl/defs.h>
-#include <osl/except.h>
+#include <winsys/pch.h>
+#include <winsys/exbase.h>
 
 int TXBase::InstanceCount = 0;
 
 TXBase::TXBase(const string& msg)
- : xmsg(msg)
+:
+  xmsg(msg)
 {
   InstanceCount++;
 }
 
 TXBase::TXBase(const TXBase& src)
- : xmsg(src)
+:
+  xmsg(src)
 {
   InstanceCount++;
 }
@@ -41,4 +40,13 @@ void
 TXBase::Throw()
 {
   THROW( *this );
+}
+
+//
+// Construct a TXBase exception from scratch, and throw it
+//
+void
+TXBase::Raise(const string& msg)
+{
+  TXBase(msg).Throw();
 }

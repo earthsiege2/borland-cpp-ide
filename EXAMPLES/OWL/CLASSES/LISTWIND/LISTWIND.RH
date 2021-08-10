@@ -1,0 +1,5 @@
+#define IDM_VIEW          900
+#define CM_VIEWLARGEICON  101
+#define CM_VIEWSMALLICON  102
+#define CM_VIEWLIST       103
+#define CM_VIEWDETAIL     104

@@ -1,0 +1,27 @@
+/*:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+
+   Copyright (c) 1987, 1996 Borland International Inc.  All Rights Reserved.
+   $Revision:   1.10  $
+
+:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/ 
+#ifndef __ITX_UID
+#define __ITX_UID
+
+// {707240C3-4B4B-11CF-9D40-444553540000}
+// {707240C4-4B4B-11CF-9D40-444553540000}
+// {707240C5-4B4B-11CF-9D40-444553540000}
+// {707240C6-4B4B-11CF-9D40-444553540000}
+
+DEFINE_GUID(IID_TARAGET_PROPERTY_PAGE, 0x707240C3L,
+0x4B4B, 0x11CF, 0x9D, 0x40, 0x44, 0x45, 0x53, 0x54, 0x00, 0x00 );
+
+DEFINE_GUID(IID_TARAGET_TYPE, 0x707240C4L,
+0x4B4B, 0x11CF, 0x9D, 0x40, 0x44, 0x45, 0x53, 0x54, 0x00, 0x00 );
+
+DEFINE_GUID(IID_TARAGET_MANAGER, 0x707240C5L,
+0x4B4B, 0x11CF, 0x9D, 0x40, 0x44, 0x45, 0x53, 0x54, 0x00, 0x00 );
+
+DEFINE_GUID(IID_TARAGET_MANAGER_PROPERTY_DIALOG, 0x707240C6L,
+0x4B4B, 0x11CF, 0x9D, 0x40, 0x44, 0x45, 0x53, 0x54, 0x00, 0x00 );
+
+#endif // __ITX_UID

@@ -2,32 +2,17 @@
 /*                                                                        */
 /*  TESTDIR.CPP                                                           */
 /*                                                                        */
-/*  Copyright (c) 1991, 1993 Borland International                        */
+/*  Copyright (c) 1991, 1995 Borland International                        */
 /*  All Rights Reserved.                                                  */
 /*                                                                        */
 /*  Sorted container example source file                                  */
 /*                                                                        */
 /*------------------------------------------------------------------------*/
-
-#if !defined( __DIR_H )
+#include <classlib/arrays.h>
 #include <dir.h>
-#endif  // __DIR_H
-
-#ifndef __STDLIB_H
 #include <stdlib.h>
-#endif
-
-#ifndef __IOSTREAM_H
 #include <iostream.h>
-#endif
-
-#if !defined( __CLASSLIB_ARRAYS_H )
-#include <classlib\arrays.h>
-#endif
-
-#ifndef __FILEDATA_H
 #include "filedata.h"
-#endif
 
 template <class T> class Directory
 {
@@ -97,7 +82,7 @@ int main( int argc, char *argv[] )
 {
     if( argc < 2 || argc > 3 )
         {
-        cerr << "Usage:  directry [options] filespec" << endl << endl;
+        cerr << "Usage:  directory [options] filespec" << endl << endl;
         cerr << "Options:" << endl;
         cerr << "\t-sd\tsort by date" << endl;
         cerr << "\t-sn\tsort by name" << endl;
@@ -107,7 +92,7 @@ int main( int argc, char *argv[] )
 
     if( argc != 3 )
         SortByName( argv[1] );
-    else 
+    else
         {
         if( strcmp( argv[1], "-sn" ) == 0 )
             SortByName( argv[2] );

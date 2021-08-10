@@ -1,4 +1,4 @@
-// Borland C++ - (C) Copyright 1991, 1992 by Borland International
+// Borland C++ - (C) Copyright 1991, 1995 by Borland International
 
 //*******************************************************************
 //
@@ -23,6 +23,10 @@
 #include "ffind.h"
 
 #define MAX_QRT_LEN 100
+
+#ifndef __FLAT__          // 16-bit applications are limited to the old
+#define MAX_PATH MAXPATH  // path length limit of 80
+#endif
 
 // data initialized by first instance
 typedef struct tagSETUPDATA
@@ -543,6 +547,10 @@ BOOL CALLBACK _export MainDlgBoxProc(HWND hDlg, UINT message,
 
             // Install fixed fonts for those controls that need it.
             SendMessage(GetDlgItem(hDlg, QX_3), WM_SETFONT, (WPARAM)hnewsfont, FALSE);
+            SendMessage(GetDlgItem(hDlg, QX_4), WM_SETFONT, (WPARAM)hnewsfont, FALSE);
+            SendMessage(GetDlgItem(hDlg, QX_5), WM_SETFONT, (WPARAM)hnewsfont, FALSE);
+            SendMessage(GetDlgItem(hDlg, QX_6), WM_SETFONT, (WPARAM)hnewsfont, FALSE);
+            SendMessage(GetDlgItem(hDlg, QX_7), WM_SETFONT, (WPARAM)hnewsfont, FALSE);
             SendMessage(GetDlgItem(hDlg, QX_LIST), WM_SETFONT, (WPARAM)hnewsfont, FALSE);
             SendMessage(GetDlgItem(hDlg, QX_COUNT), WM_SETFONT, (WPARAM)hnewsfont, FALSE);
             break;
@@ -734,9 +742,9 @@ long FindFile(char *drives, char *pattern)
 //*******************************************************************
 int DoADir(char *patternp, char *patternn, char *include)
 {
-    char          patternw[80];
-    char          npatternp[64];
-    char          buf[128];
+    char          patternw[MAX_PATH];
+    char          npatternp[MAX_PATH];
+    char          buf[256];
     int           mfiles;
     int           have_subs;
     int           nfiles;
@@ -896,13 +904,17 @@ FnMatch(char *pat, char *name)
         switch (*cpp)
         {
             case '*':
-                // skip to . or end of pat
-                while (*cpp && *cpp != '.')
-                    cpp++;
+                // skip to next letter
+                cpp++;
 
-                // skip to . or end of name
-                while (*cpn && *cpn != '.')
-                    cpn++;
+                // skip to next letter
+                cpn = strchr(cpn, *cpp);
+                if (cpn == NULL)
+                {
+                    cpn = name;
+                    while (*cpn)
+                         cpn++;
+                }
                 break;
 
             case '?':
@@ -953,11 +965,12 @@ char *FmtEntry(char *buf, char *name, char *patternp,
                unsigned time, unsigned date, long size)
 {
     char   *cp;
-    char    xname[10];
-    char    xext[10];
+    char    xname[256];
+    char    xext[256];
     int     mo, dd, yy, hh, mi, ss;
 
-    cp = strchr(name, '.');
+    cp = strrchr(name, '.');
+
     if (cp)
     {
         *cp = 0;
@@ -970,6 +983,11 @@ char *FmtEntry(char *buf, char *name, char *patternp,
         strcpy(xext, "");
     }
 
+    // Truncate extremely long filenames
+    if (strlen(xname) > 16)
+        strcpy(xname+13, "...");
+
+
     mo = (date >> 5) & 0x0f;
     dd = date & 0x1f;
     yy = ((date >> 9) & 0x7f) + 80;
@@ -977,7 +995,7 @@ char *FmtEntry(char *buf, char *name, char *patternp,
     mi = (time >> 5) & 0x3f;
     ss = (time & 0x1f) * 2;
 
-    sprintf(buf, "%-8s.%-3s %7ld %02d/%02d/%02d %02d:%02d:%02d %s",
+    sprintf(buf, "%-20s.%-3s %7ld %02d/%02d/%02d %02d:%02d:%02d %s",
                   xname,
                   xext,
                   size,
@@ -989,4 +1007,5 @@ char *FmtEntry(char *buf, char *name, char *patternp,
 }
 
 //*******************************************************************
-
+
+

@@ -3,7 +3,7 @@
 //   Tutorial application -- step16dv.cpp
 //   Automation Server example
 //----------------------------------------------------------------------------
-#include <owl/owlpch.h>
+#include <owl/pch.h>
 #include <owl/dc.h>
 #include <owl/inputdia.h>
 #include <owl/chooseco.h>
@@ -17,6 +17,7 @@
 #include <owl/oledoc.h>
 #include <owl/oleview.h>
 #include <ocf/automacr.h>
+#include <owl/edit.rh>
 #include "step16dv.h"
 #include "step16.h"
 #include "step16dv.rc"

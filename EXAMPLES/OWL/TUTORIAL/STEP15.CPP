@@ -3,7 +3,7 @@
 //   Tutorial application -- step15.cpp
 //   Embed/Linking Server example
 //----------------------------------------------------------------------------
-#include <owl/owlpch.h>
+#include <owl/pch.h>
 #include <owl/applicat.h>
 #include <owl/dialog.h>
 #include <owl/controlb.h>

@@ -1,15 +1,19 @@
+//----------------------------------------------------------------------------
+// ObjectComponents
+// Copyright (c) 1994, 1996 by Borland International, All Rights Reserved
 //
-//**************************************************************************
-// 
-// BOleData.h --   Declares a data cache object which is used for delayed
-//                 rendering.
+// $Revision:   2.1  $
 //
-// Copyright (c) 1993,94 by Borland International, Inc. All rights reserved
+// Implements a data cache object which is used for delayed rendering.
 //
-//**************************************************************************
-
+//  Bolero customers aren't required to use this object (or delayed rendering 
+//  at all) but when we cut/copy an embedded object (i.e. embed from 
+//  embedding) we need the data cache to avoid getting changes to the 
+//  original object when the user expects a snapshot (the usual delayed 
+//  rendering problem).
+//----------------------------------------------------------------------------
 #ifndef _BOLEDATA_H
-#define _BOLEDATA_H 1
+#define _BOLEDATA_H 
 
 #include "BOle.h"
 #include "BOleComp.h"
@@ -24,9 +28,6 @@ typedef struct FAR tagBOleDataItem {
 
 // BOleData -- Provides a data cache object for use when copying from
 //             an embedding.
-//
-//
-//
 //
 class _ICLASS BOleData : public BOleComponent, 
                          public IDataObject
@@ -142,5 +143,4 @@ class _ICLASS BOleShadowData : public BOleComponent, public IDataObject
 };
 
 #endif
-
 

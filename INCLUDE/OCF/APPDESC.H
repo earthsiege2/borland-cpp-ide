@@ -1,7 +1,6 @@
-//
 //----------------------------------------------------------------------------
 // ObjectComponents
-// (C) Copyright 1994 by Borland International, All Rights Reserved
+// Copyright (c) 1994, 1996 by Borland International, All Rights Reserved
 //
 //   TAppDescriptor - OLE application descriptor definitions
 //----------------------------------------------------------------------------
@@ -12,15 +11,15 @@
 # include <ocf/autodefs.h>
 #endif
 
-//____________________________________________________________________________
-//
+//----------------------------------------------------------------------------
 // TAppDescriptor - application registration and browsing facilities
-//____________________________________________________________________________
+//
 
+class         TServedObjectCreator;
 class _ICLASS TServedObject;
 class _ICLASS TTypeLibrary;
 class _ICLASS TCoClassInfo;
-class _BIDSCLASS TRegLink;
+class _WSYSCLASS TRegLink;
 
 typedef IUnknown*
 (*TComponentFactory)(IUnknown* outer, uint32 options, uint32 id = 0);
@@ -31,12 +30,14 @@ class _ICLASS TAppDescriptor : public IClassFactory {
                    string& cmdLine, HINSTANCE hInst = _hInstance,
                    const TRegLink* regLink = 0);
    ~TAppDescriptor();
+
     operator IUnknown*() {return this;}
     bool IsAutomated() const {return ClassCount > 0;}
     TComponentFactory GetFactory() const {return FactoryCallback;}
     const TRegLink* GetRegLinkHead() const {return LinkHead;}
 
     // Command line options accessors
+    //
     bool IsOptionSet(uint32 option) const {return ToBool(Options&option);}
     uint32 GetOptions() const {return Options;}
     void SetOption(uint32 bit, bool state) {if (state) Options |= bit; else Options &= ~bit;}
@@ -44,6 +45,7 @@ class _ICLASS TAppDescriptor : public IClassFactory {
     void SetLangId(TLangId prevLang, const char* langIdStr);
 
     // Registration management functions
+    //
     void RegisterClass();
     void UnregisterClass();
     bool RegisterObject(TObjectDescriptor app);
@@ -54,9 +56,11 @@ class _ICLASS TAppDescriptor : public IClassFactory {
     void MakeTypeLib(TLangId lang, const char* = 0);
 
     // TAutoClass management functions
+    //
     void MergeAutoClasses();
 
     // TypeLibrary management functions
+    //
     ITypeLib*   GetTypeLibrary();  // caller MUST do a Release()
     ITypeInfo*  CreateITypeInfo(TAutoClass& cls);  // caller must release
     int         GetClassCount() {return ClassCount;}
@@ -73,6 +77,7 @@ class _ICLASS TAppDescriptor : public IClassFactory {
     void        WriteTypeLibrary(TLangId lang, const char far* file);
 
     // TServedObject management functions
+    //
     TUnknown*      CreateAutoApp(TObjectDescriptor app, uint32 options,
                                  IUnknown* outer=0);
     void           ReleaseAutoApp(TObjectDescriptor app);
@@ -97,6 +102,7 @@ class _ICLASS TAppDescriptor : public IClassFactory {
     void           Init(IMalloc* alloc = 0);  // called only from constructor
     TServedObject* ServedList;   // list of outstanding IDispatch/ITypeInfo objs
     TServedObject* ActiveObject;   // currently registered active object
+    TServedObjectCreator* Creator; // Served Object creator class
     TRegList&      RegInfo;        // registration list for application
     const char*    Version;        // library version, stored as text string
     TLocaleString* AppProgId;      // progid of application
@@ -121,12 +127,13 @@ class _ICLASS TAppDescriptor : public IClassFactory {
     unsigned long  RegObjectHdl;   // for unregistration
     uint32         Options;        // Command line option bit flags
 
-    // for EXE or DLL component main, provide direct access for destructors
-    // for auxilliary DLLs, a table must be maintained of AppDesc vs. task Id
+    // For EXE or DLL component main, provide direct access for destructors
+    // For auxilliary DLLs, a table must be maintained of AppDesc vs. task Id
     //
     static TAppDescriptor* This; // set by constructor to component instance
 
     // IUnknown interface
+    //
     HRESULT _IFUNC QueryInterface(const IID far& iid, void far* far* retIface);
     unsigned long _IFUNC AddRef();
     unsigned long _IFUNC Release();
@@ -134,9 +141,10 @@ class _ICLASS TAppDescriptor : public IClassFactory {
   public:
 
     // IClassFactory interface
+    //
     HRESULT _IFUNC CreateInstance(IUnknown* outer, const IID FAR& iid,
                                   void far* far* retObject);
-    HRESULT _IFUNC LockServer(BOOL lock);
+    HRESULT _IFUNC LockServer(int lock);
 
   friend class _ICLASS TTypeLibrary;
   friend class _ICLASS TCoClassInfo;
@@ -144,8 +152,8 @@ class _ICLASS TAppDescriptor : public IClassFactory {
 };
 
 //
-// for EXE and DLL component main module, provide direct access to descriptor
-// for auxilliary DLLs, must use table of app descriptor vs. task Id
+// For EXE and DLL component main module, provide direct access to descriptor
+// For auxilliary DLLs, must use table of app descriptor vs. task Id
 //
 inline TAppDescriptor* GetAppDescriptor() {return TAppDescriptor::This;}
 
@@ -153,7 +161,9 @@ class _ICLASS TTypeLibrary : public ITypeLib {
   public:
     TTypeLibrary(TAppDescriptor& appDesc, TLangId lang);
    ~TTypeLibrary();
-    operator IUnknown&() {return *this;}
+
+//    operator IUnknown&() {return *this;}  
+
     ITypeInfo*  CreateCoClassInfo();// component typeinfo, caller must release
 
   private:
@@ -164,11 +174,13 @@ class _ICLASS TTypeLibrary : public ITypeLib {
     int             CoClassImplCount;  // number of interfaces in coclass
 
     // IUnknown interface
+    //
     HRESULT _IFUNC QueryInterface(const IID far& iid, void far* far* retIface);
     unsigned long _IFUNC AddRef();
     unsigned long _IFUNC Release();
 
     // ITypeLib interface
+    //
     unsigned int _IFUNC GetTypeInfoCount();
     HRESULT _IFUNC GetTypeInfo(unsigned index, ITypeInfo* far* retInfo);
     HRESULT _IFUNC GetTypeInfoType(unsigned index, TYPEKIND far* retKind);
@@ -192,23 +204,26 @@ class _ICLASS TCoClassInfo : public ITypeInfo {
   public:
     TCoClassInfo(TAppDescriptor& appDesc, uint16 typeFlags, int implCount);
    ~TCoClassInfo();
-    operator IUnknown&() {return *this;}
+
+//    operator IUnknown&() {return *this;}  
 
   private:
     TAppDescriptor& AppDesc;
     unsigned long   RefCnt;
     uint16          TypeFlags;   // type flags combined from autoclasses
     int             ImplCount;   // number of interfaces in coclass
-    unsigned*       ImplList;    // array of indices to autoclasses        
+    unsigned*       ImplList;    // array of indices to autoclasses
     int             Default;     // interface marked as default
     int             DefaultEvent;// event interface marked as default,source
 
     // IUnknown interface
+    //
     HRESULT _IFUNC QueryInterface(const IID far& iid, void far* far* retIface);
     unsigned long _IFUNC AddRef();
     unsigned long _IFUNC Release();
 
     // ITypeInfo implementation
+    //
     HRESULT _IFUNC GetTypeAttr(TYPEATTR far* far* pptypeattr);
     HRESULT _IFUNC GetTypeComp(ITypeComp* far* pptcomp);
     HRESULT _IFUNC GetFuncDesc(unsigned int index, FUNCDESC far* far* ppfuncdesc);

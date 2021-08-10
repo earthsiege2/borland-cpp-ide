@@ -244,8 +244,11 @@ fdiv_main_routine	ENDP
 
 	public	__fdiv
 __fdiv	PROC	NEAR
+	push	eax
 	sub	esp, STACK_SIZE
 	fdivp_sti 1 0
+	; Macro cleans up stack
+	pop	eax
 	ret
 __fdiv	ENDP
 

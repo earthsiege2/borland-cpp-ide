@@ -1,13 +1,13 @@
 #----------------------------------------------------------------------------
 # ObjectComponents
-# (C) Copyright 1994 by Borland International, All Rights Reserved
+# (C) Copyright 1994, 1996 by Borland International, All Rights Reserved
 #----------------------------------------------------------------------------
 !if !$d(MODEL)
 MODEL = s
 !endif
 MODELS = sml
 EXERES = guidgen
-DOSSTUB= wrw.stb
+#DOSSTUB= wrw.stb
 USERLIBS = $(BCROOT)\LIB\ole2w16
 
 !include $(BCEXAMPLEDIR)\makefile.gen

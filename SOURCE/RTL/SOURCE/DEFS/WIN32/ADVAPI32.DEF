@@ -1,287 +1,305 @@
-LIBRARY     ADVAPI32.DLL
+    LIBRARY ADVAPI32
+    EXPORTS
 
-EXPORTS
-    AbortSystemShutdownA           @1
-    AbortSystemShutdownW           @2
-    AccessCheck                    @3
-    AccessCheckAndAuditAlarmA      @4
-    AccessCheckAndAuditAlarmW      @5
-    AddAccessAllowedAce            @6
-    AddAccessDeniedAce             @7
-    AddAce                         @8
-    AddAuditAccessAce              @9
-    AdjustTokenGroups              @10
-    AdjustTokenPrivileges          @11
-    AllocateAndInitializeSid       @12
-    AllocateLocallyUniqueId        @13
-    AreAllAccessesGranted          @14
-    AreAnyAccessesGranted          @15
-    BackupEventLogA                @16
-    BackupEventLogW                @17
-    ChangeServiceConfigA           @18
-    ChangeServiceConfigW           @19
-    ClearEventLogA                 @20
-    ClearEventLogW                 @21
-    CloseEventLog                  @22
-    CloseServiceHandle             @23
-    ControlService                 @24
-    CopySid                        @25
-    CreatePrivateObjectSecurity    @26
-    CreateServiceA                 @27
-    CreateServiceW                 @28
-    DeleteAce                      @29
-    DeleteService                  @30
-    DeregisterEventSource          @31
-    DestroyPrivateObjectSecurity   @32
-    DuplicateToken                 @33
-    ElfBackupEventLogFileA         @34
-    ElfBackupEventLogFileW         @35
-    ElfChangeNotify                @36
-    ElfClearEventLogFileA          @37
-    ElfClearEventLogFileW          @38
-    ElfCloseEventLog               @39
-    ElfDeregisterEventSource       @40
-    ElfNumberOfRecords             @41
-    ElfOldestRecord                @42
-    ElfOpenBackupEventLogA         @43
-    ElfOpenBackupEventLogW         @44
-    ElfOpenEventLogA               @45
-    ElfOpenEventLogW               @46
-    ElfReadEventLogA               @47
-    ElfReadEventLogW               @48
-    ElfRegisterEventSourceA        @49
-    ElfRegisterEventSourceW        @50
-    ElfReportEventA                @51
-    ElfReportEventW                @52
-    EnumDependentServicesA         @53
-    EnumDependentServicesW         @54
-    EnumServicesStatusA            @55
-    EnumServicesStatusW            @56
-    EqualPrefixSid                 @57
-    EqualSid                       @58
-    FindFirstFreeAce               @59
-    FreeSid                        @60
-    GetAce                         @61
-    GetAclInformation              @62
-    GetFileSecurityA               @63
-    GetFileSecurityW               @64
-    GetKernelObjectSecurity        @65
-    GetLengthSid                   @66
-    GetNumberOfEventLogRecords     @67
-    GetOldestEventLogRecord        @68
-    GetPrivateObjectSecurity       @69
-    GetSecurityDescriptorControl   @70
-    GetSecurityDescriptorDacl      @71
-    GetSecurityDescriptorGroup     @72
-    GetSecurityDescriptorLength    @73
-    GetSecurityDescriptorOwner     @74
-    GetSecurityDescriptorSacl      @75
-    GetServiceDisplayNameA         @76
-    GetServiceDisplayNameW         @77
-    GetServiceKeyNameA             @78
-    GetServiceKeyNameW             @79
-    GetSidIdentifierAuthority      @80
-    GetSidLengthRequired           @81
-    GetSidSubAuthority             @82
-    GetSidSubAuthorityCount        @83
-    GetTokenInformation            @84
-    GetUserNameA                   @85
-    GetUserNameW                   @86
-    I_ScSetServiceBitsA            @87
-    I_ScSetServiceBitsW            @88
-    ImpersonateNamedPipeClient     @89
-    ImpersonateSelf                @90
-    InitializeAcl                  @91
-    InitializeSecurityDescriptor   @92
-    InitializeSid                  @93
-    InitiateSystemShutdownA        @94
-    InitiateSystemShutdownW        @95
-    IsTextUnicode                  @96
-    IsValidAcl                     @97
-    IsValidSecurityDescriptor      @98
-    IsValidSid                     @99
-    LockServiceDatabase            @100
-    LookupAccountNameA             @101
-    LookupAccountNameW             @102
-    LookupAccountSidA              @103
-    LookupAccountSidW              @104
-    LookupPrivilegeDisplayNameA    @105
-    LookupPrivilegeDisplayNameW    @106
-    LookupPrivilegeNameA           @107
-    LookupPrivilegeNameW           @108
-    LookupPrivilegeValueA          @109
-    LookupPrivilegeValueW          @110
-    LsaAddPrivilegesToAccount      @111
-    LsaClearAuditLog               @112
-    LsaClose                       @113
-    LsaCreateAccount               @114
-    LsaCreateSecret                @115
-    LsaCreateTrustedDomain         @116
-    LsaDelete                      @117
-    LsaEnumerateAccounts           @118
-    LsaEnumeratePrivileges         @119
-    LsaEnumeratePrivilegesOfAccount @120
-    LsaEnumerateTrustedDomains     @121
-    LsaFreeMemory                  @122
-    LsaGetQuotasForAccount         @123
-    LsaGetSystemAccessAccount      @124
-    LsaICLookupNames               @125
-    LsaICLookupSids                @126
-    LsaLookupNames                 @127
-    LsaLookupPrivilegeDisplayName  @128
-    LsaLookupPrivilegeName         @129
-    LsaLookupPrivilegeValue        @130
-    LsaLookupSids                  @131
-    LsaOpenAccount                 @132
-    LsaOpenPolicy                  @133
-    LsaOpenSecret                  @134
-    LsaOpenTrustedDomain           @135
-    LsaQueryInfoTrustedDomain      @136
-    LsaQueryInformationPolicy      @137
-    LsaQuerySecret                 @138
-    LsaQuerySecurityObject         @139
-    LsaRemovePrivilegesFromAccount @140
-    LsaSetInformationPolicy        @141
-    LsaSetInformationTrustedDomain @142
-    LsaSetQuotasForAccount         @143
-    LsaSetSecret                   @144
-    LsaSetSecurityObject           @145
-    LsaSetSystemAccessAccount      @146
-    MakeAbsoluteSD                 @147
-    MakeSelfRelativeSD             @148
-    MapGenericMask                 @149
-    NotifyBootConfigStatus         @150
-    NotifyChangeEventLog           @151
-    ObjectCloseAuditAlarmA         @152
-    ObjectCloseAuditAlarmW         @153
-    ObjectOpenAuditAlarmA          @154
-    ObjectOpenAuditAlarmW          @155
-    ObjectPrivilegeAuditAlarmA     @156
-    ObjectPrivilegeAuditAlarmW     @157
-    OpenBackupEventLogA            @158
-    OpenBackupEventLogW            @159
-    OpenEventLogA                  @160
-    OpenEventLogW                  @161
-    OpenProcessToken               @162
-    OpenSCManagerA                 @163
-    OpenSCManagerW                 @164
-    OpenServiceA                   @165
-    OpenServiceW                   @166
-    OpenThreadToken                @167
-    PrivilegeCheck                 @168
-    PrivilegedServiceAuditAlarmA   @169
-    PrivilegedServiceAuditAlarmW   @170
-    QueryServiceConfigA            @171
-    QueryServiceConfigW            @172
-    QueryServiceLockStatusA        @173
-    QueryServiceLockStatusW        @174
-    QueryServiceObjectSecurity     @175
-    QueryServiceStatus             @176
-    QueryWindows31FilesMigration   @177
-    ReadEventLogA                  @178
-    ReadEventLogW                  @179
-    RegCloseKey                    @180
-    RegConnectRegistryA            @181
-    RegConnectRegistryW            @182
-    RegCreateKeyA                  @183
-    RegCreateKeyExA                @184
-    RegCreateKeyExW                @185
-    RegCreateKeyW                  @186
-    RegDeleteKeyA                  @187
-    RegDeleteKeyW                  @188
-    RegDeleteValueA                @189
-    RegDeleteValueW                @190
-    RegEnumKeyA                    @191
-    RegEnumKeyExA                  @192
-    RegEnumKeyExW                  @193
-    RegEnumKeyW                    @194
-    RegEnumValueA                  @195
-    RegEnumValueW                  @196
-    RegFlushKey                    @197
-    RegGetKeySecurity              @198
-    RegLoadKeyA                    @199
-    RegLoadKeyW                    @200
-    RegNotifyChangeKeyValue        @201
-    RegOpenKeyA                    @202
-    RegOpenKeyExA                  @203
-    RegOpenKeyExW                  @204
-    RegOpenKeyW                    @205
-    RegQueryInfoKeyA               @206
-    RegQueryInfoKeyW               @207
-    RegQueryValueA                 @208
-    RegQueryValueExA               @209
-    RegQueryValueExW               @210
-    RegQueryValueW                 @211
-    RegReplaceKeyA                 @212
-    RegReplaceKeyW                 @213
-    RegRestoreKeyA                 @214
-    RegRestoreKeyW                 @215
-    RegSaveKeyA                    @216
-    RegSaveKeyW                    @217
-    RegSetKeySecurity              @218
-    RegSetValueA                   @219
-    RegSetValueExA                 @220
-    RegSetValueExW                 @221
-    RegSetValueW                   @222
-    RegUnLoadKeyA                  @223
-    RegUnLoadKeyW                  @224
-    RegisterEventSourceA           @225
-    RegisterEventSourceW           @226
-    RegisterServiceCtrlHandlerA    @227
-    RegisterServiceCtrlHandlerW    @228
-    ReportEventA                   @229
-    ReportEventW                   @230
-    RevertToSelf                   @231
-    SetAclInformation              @232
-    SetFileSecurityA               @233
-    SetFileSecurityW               @234
-    SetKernelObjectSecurity        @235
-    SetPrivateObjectSecurity       @236
-    SetSecurityDescriptorDacl      @237
-    SetSecurityDescriptorGroup     @238
-    SetSecurityDescriptorOwner     @239
-    SetSecurityDescriptorSacl      @240
-    SetServiceBits                 @241
-    SetServiceObjectSecurity       @242
-    SetServiceStatus               @243
-    SetThreadToken                 @244
-    SetTokenInformation            @245
-    StartServiceA                  @246
-    StartServiceCtrlDispatcherA    @247
-    StartServiceCtrlDispatcherW    @248
-    StartServiceW                  @249
-    SynchronizeWindows31FilesAndWindowsNTRegistry @250
-    SystemFunction001              @251
-    SystemFunction002              @252
-    SystemFunction003              @253
-    SystemFunction004              @254
-    SystemFunction005              @255
-    SystemFunction006              @256
-    SystemFunction007              @257
-    SystemFunction008              @258
-    SystemFunction009              @259
-    SystemFunction010              @260
-    SystemFunction011              @261
-    SystemFunction012              @262
-    SystemFunction013              @263
-    SystemFunction014              @264
-    SystemFunction015              @265
-    SystemFunction016              @266
-    SystemFunction017              @267
-    SystemFunction018              @268
-    SystemFunction019              @269
-    SystemFunction020              @270
-    SystemFunction021              @271
-    SystemFunction022              @272
-    SystemFunction023              @273
-    SystemFunction024              @274
-    SystemFunction025              @275
-    SystemFunction026              @276
-    SystemFunction027              @277
-    SystemFunction028              @278
-    SystemFunction029              @279
-    SystemFunction030              @280
-    SystemFunction031              @281
-    SystemFunction032              @282
-    SystemFunction033              @283
-    UnlockServiceDatabase          @284
+        AbortSystemShutdownA
+        AbortSystemShutdownW
+        AccessCheck
+        AccessCheckAndAuditAlarmA
+        AccessCheckAndAuditAlarmW
+        AddAccessAllowedAce
+        AddAccessDeniedAce
+        AddAce
+        AddAuditAccessAce
+        AdjustTokenGroups
+        AdjustTokenPrivileges
+        AllocateAndInitializeSid
+        AllocateLocallyUniqueId
+        AreAllAccessesGranted
+        AreAnyAccessesGranted
+        BackupEventLogA
+        BackupEventLogW
+        ChangeServiceConfigA
+        ChangeServiceConfigW
+        ClearEventLogA
+        ClearEventLogW
+        CloseEventLog
+        CloseServiceHandle
+        ControlService
+        CopySid
+        CreatePrivateObjectSecurity
+	CreateProcessAsUserA
+	CreateProcessAsUserW
+        CreateServiceA
+        CreateServiceW
+        DeleteAce
+        DeleteService
+        DeregisterEventSource
+        DestroyPrivateObjectSecurity
+        DuplicateToken
+        ElfBackupEventLogFileA
+        ElfBackupEventLogFileW
+        ElfChangeNotify
+        ElfClearEventLogFileA
+        ElfClearEventLogFileW
+        ElfCloseEventLog
+        ElfDeregisterEventSource
+        ElfNumberOfRecords
+        ElfOldestRecord
+        ElfOpenBackupEventLogA
+        ElfOpenBackupEventLogW
+        ElfOpenEventLogA
+        ElfOpenEventLogW
+        ElfReadEventLogA
+        ElfReadEventLogW
+        ElfRegisterEventSourceA
+        ElfRegisterEventSourceW
+        ElfReportEventA
+        ElfReportEventW
+        EnumDependentServicesA
+        EnumDependentServicesW
+        EnumServicesStatusA
+        EnumServicesStatusW
+        EqualPrefixSid
+        EqualSid
+        FindFirstFreeAce
+        FreeSid
+        GetAce
+        GetAclInformation
+        GetFileSecurityA
+        GetFileSecurityW
+        GetKernelObjectSecurity
+        GetLengthSid
+        GetNumberOfEventLogRecords
+        GetOldestEventLogRecord
+        GetPrivateObjectSecurity
+        GetSecurityDescriptorControl
+        GetSecurityDescriptorDacl
+        GetSecurityDescriptorGroup
+        GetSecurityDescriptorLength
+        GetSecurityDescriptorOwner
+        GetSecurityDescriptorSacl
+        GetServiceDisplayNameA
+        GetServiceDisplayNameW
+        GetServiceKeyNameA
+        GetServiceKeyNameW
+        GetSidIdentifierAuthority
+        GetSidLengthRequired
+        GetSidSubAuthority
+        GetSidSubAuthorityCount
+        GetTokenInformation
+        GetUserNameA
+        GetUserNameW
+        I_ScSetServiceBitsA
+        I_ScSetServiceBitsW
+	ImpersonateLoggedOnUser
+        ImpersonateNamedPipeClient
+        ImpersonateSelf
+        InitializeAcl
+        InitializeSecurityDescriptor
+        InitializeSid
+        InitiateSystemShutdownA
+        InitiateSystemShutdownW
+        IsTextUnicode
+        IsValidAcl
+        IsValidSecurityDescriptor
+        IsValidSid
+        LockServiceDatabase
+	LogonUserA
+	LogonUserW
+        LookupAccountNameA
+        LookupAccountNameW
+        LookupAccountSidA
+        LookupAccountSidW
+        LookupPrivilegeDisplayNameA
+        LookupPrivilegeDisplayNameW
+        LookupPrivilegeNameA
+        LookupPrivilegeNameW
+        LookupPrivilegeValueA
+        LookupPrivilegeValueW
+	LsaAddAccountRights
+        LsaAddPrivilegesToAccount
+        LsaClearAuditLog
+        LsaClose
+        LsaCreateAccount
+        LsaCreateSecret
+        LsaCreateTrustedDomain
+        LsaDelete
+	LsaDeleteTrustedDomain
+	LsaEnumerateAccountRights
+        LsaEnumerateAccounts
+	LsaEnumerateAccountsWithUserRight
+        LsaEnumeratePrivileges
+        LsaEnumeratePrivilegesOfAccount
+        LsaEnumerateTrustedDomains
+        LsaFreeMemory
+        LsaGetQuotasForAccount
+        LsaGetSystemAccessAccount
+        LsaICLookupNames
+        LsaICLookupSids
+        LsaLookupNames
+        LsaLookupPrivilegeDisplayName
+        LsaLookupPrivilegeName
+        LsaLookupPrivilegeValue
+        LsaLookupSids
+	LsaNtStatusToWinError
+        LsaOpenAccount
+        LsaOpenPolicy
+        LsaOpenSecret
+        LsaOpenTrustedDomain
+        LsaQueryInfoTrustedDomain
+        LsaQueryInformationPolicy
+        LsaQuerySecret
+        LsaQuerySecurityObject
+	LsaQueryTrustedDomainInfo
+	LsaRemoveAccountRights
+        LsaRemovePrivilegesFromAccount
+	LsaRetrievePrivateData
+        LsaSetInformationPolicy
+        LsaSetInformationTrustedDomain
+        LsaSetQuotasForAccount
+        LsaSetSecret
+        LsaSetSecurityObject
+        LsaSetSystemAccessAccount
+	LsaSetTrustedDomainInformation
+	LsaStorePrivateData
+        MakeAbsoluteSD
+        MakeSelfRelativeSD
+        MapGenericMask
+        NotifyBootConfigStatus
+        NotifyChangeEventLog
+        ObjectCloseAuditAlarmA
+        ObjectCloseAuditAlarmW
+        ObjectOpenAuditAlarmA
+        ObjectOpenAuditAlarmW
+        ObjectPrivilegeAuditAlarmA
+        ObjectPrivilegeAuditAlarmW
+        OpenBackupEventLogA
+        OpenBackupEventLogW
+        OpenEventLogA
+        OpenEventLogW
+        OpenProcessToken
+        OpenSCManagerA
+        OpenSCManagerW
+        OpenServiceA
+        OpenServiceW
+        OpenThreadToken
+        PrivilegeCheck
+        PrivilegedServiceAuditAlarmA
+        PrivilegedServiceAuditAlarmW
+        QueryServiceConfigA
+        QueryServiceConfigW
+        QueryServiceLockStatusA
+        QueryServiceLockStatusW
+        QueryServiceObjectSecurity
+        QueryServiceStatus
+        QueryWindows31FilesMigration
+        ReadEventLogA
+        ReadEventLogW
+        RegCloseKey
+        RegConnectRegistryA
+        RegConnectRegistryW
+        RegCreateKeyA
+        RegCreateKeyExA
+        RegCreateKeyExW
+        RegCreateKeyW
+        RegDeleteKeyA
+        RegDeleteKeyW
+        RegDeleteValueA
+        RegDeleteValueW
+        RegEnumKeyA
+        RegEnumKeyExA
+        RegEnumKeyExW
+        RegEnumKeyW
+        RegEnumValueA
+        RegEnumValueW
+        RegFlushKey
+        RegGetKeySecurity
+        RegLoadKeyA
+        RegLoadKeyW
+        RegNotifyChangeKeyValue
+        RegOpenKeyA
+        RegOpenKeyExA
+        RegOpenKeyExW
+        RegOpenKeyW
+        RegQueryInfoKeyA
+        RegQueryInfoKeyW
+	RegQueryMultipleValuesA
+	RegQueryMultipleValuesW
+        RegQueryValueA
+        RegQueryValueExA
+        RegQueryValueExW
+        RegQueryValueW
+        RegReplaceKeyA
+        RegReplaceKeyW
+        RegRestoreKeyA
+        RegRestoreKeyW
+        RegSaveKeyA
+        RegSaveKeyW
+        RegSetKeySecurity
+        RegSetValueA
+        RegSetValueExA
+        RegSetValueExW
+        RegSetValueW
+        RegUnLoadKeyA
+        RegUnLoadKeyW
+        RegisterEventSourceA
+        RegisterEventSourceW
+        RegisterServiceCtrlHandlerA
+        RegisterServiceCtrlHandlerW
+        ReportEventA
+        ReportEventW
+        RevertToSelf
+        SetAclInformation
+        SetFileSecurityA
+        SetFileSecurityW
+        SetKernelObjectSecurity
+        SetPrivateObjectSecurity
+        SetSecurityDescriptorDacl
+        SetSecurityDescriptorGroup
+        SetSecurityDescriptorOwner
+        SetSecurityDescriptorSacl
+        SetServiceBits
+        SetServiceObjectSecurity
+        SetServiceStatus
+        SetThreadToken
+        SetTokenInformation
+        StartServiceA
+        StartServiceCtrlDispatcherA
+        StartServiceCtrlDispatcherW
+        StartServiceW
+        SynchronizeWindows31FilesAndWindowsNTRegistry
+        SystemFunction001
+        SystemFunction002
+        SystemFunction003
+        SystemFunction004
+        SystemFunction005
+        SystemFunction006
+        SystemFunction007
+        SystemFunction008
+        SystemFunction009
+        SystemFunction010
+        SystemFunction011
+        SystemFunction012
+        SystemFunction013
+        SystemFunction014
+        SystemFunction015
+        SystemFunction016
+        SystemFunction017
+        SystemFunction018
+        SystemFunction019
+        SystemFunction020
+        SystemFunction021
+        SystemFunction022
+        SystemFunction023
+        SystemFunction024
+        SystemFunction025
+        SystemFunction026
+        SystemFunction027
+        SystemFunction028
+        SystemFunction029
+        SystemFunction030
+        SystemFunction031
+        SystemFunction032
+        SystemFunction033
+        UnlockServiceDatabase
+

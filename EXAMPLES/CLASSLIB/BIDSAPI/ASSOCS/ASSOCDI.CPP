@@ -1,14 +1,14 @@
 // ---------------------------------------------------------------------------
 // Copyright (C) 1994 Borland International
 // assocdi.cpp
-//    Must link with myclass.cpp.   
+//    Must link with myclass.cpp.
 // ---------------------------------------------------------------------------
 
 #include <classlib/assoc.h>
 #include <classlib/dict.h>
 #include <iostream.h>
 #include <strstrea.h>
-#include "../myclass.h" 
+#include "../myclass.h"
 
 typedef TDIAssociation<MyClass, MyValue> AssociationType;
 typedef TDictionaryAsHashTable<AssociationType> ContainerType;
@@ -54,12 +54,13 @@ int main()
 {
     ContainerType container(MaxItems);
     AddItems(container, MaxItems);
-  
+
     cout << "--- Starting ForEach" << endl;
     container.ForEach(ForEachCallBack, (void*)"FE ");
-  
+
     cout << "--- Starting Iterator (forward)" << endl;
     UseForwardIterator(container);
-  
+
+    container.Flush();
     return 0;
 }

@@ -1,7 +1,11 @@
 //----------------------------------------------------------------------------
 // ObjectWindows
-// (C) Copyright 1992, 1994 by Borland International, All Rights Reserved
+// Copyright (c) 1992, 1996 by Borland International, All Rights Reserved
 //
+//$Revision:   10.2  $
+//
+// Mixin class TClipboardViewer that allows a TWindow derived class to hook in
+// on the clipboard notification chain.
 //----------------------------------------------------------------------------
 #if !defined(OWL_CLIPVIEW_H)
 #define OWL_CLIPVIEW_H
@@ -10,13 +14,16 @@
 # include <owl/window.h>
 #endif
 
+// Generic definitions/compiler options (eg. alignment) preceeding the 
+// definition of classes
+#include <services/preclass.h>
+
 //
-//  class TClipboardViewer
-//  ----- ----------------
-//
-//  Mix-in class that registers as a clipboard viewer when the user interface
-//  element is created and removes itself from the clipboard-viewer chain when
-//  it is destroyed
+// class TClipboardViewer
+// ~~~~~ ~~~~~~~~~~~~~~~~
+// Mix-in class that registers as a clipboard viewer when the user interface
+// element is created and removes itself from the clipboard-viewer chain when
+// it is destroyed
 //
 class _OWLCLASS TClipboardViewer : virtual public TWindow {
   protected:
@@ -27,24 +34,24 @@ class _OWLCLASS TClipboardViewer : virtual public TWindow {
     TEventStatus DoDestroy();
     TEventStatus DoDrawClipboard();  // pass to next window in clipboard-viewer chain
 
-  protected:
-    HWND  HWndNext;  // next window in clipboard-viewer chain
-
-    //
-    // override method defined by TWindow
+    // Override method defined by TWindow
     //
     void   SetupWindow();
 
-    //
-    // message response functions
+    // Message response functions
     //
     void   EvChangeCBChain(HWND hWndRemoved, HWND hWndNext);
     void   EvDestroy();
     void   EvDrawClipboard();  // pass to next window in clipboard-viewer chain
 
+    HWND  GetNextWindow() const;
+    void  SetNextWindow(HWND hwndnext);
+
+  protected_data:
+    THandle  HWndNext;  // Next window in clipboard-viewer chain 
+
   private:
-    //
-    // hidden to prevent accidental copying or assignment
+    // Hidden to prevent accidental copying or assignment
     //
     TClipboardViewer(const TClipboardViewer&);
     TClipboardViewer& operator =(const TClipboardViewer&);
@@ -53,4 +60,21 @@ class _OWLCLASS TClipboardViewer : virtual public TWindow {
   DECLARE_CASTABLE;
 };
 
+// Generic definitions/compiler options (eg. alignment) following the 
+// definition of classes
+#include <services/posclass.h>
+
+//
+// Inline implementations
+//
+
+//
+inline HWND  TClipboardViewer::GetNextWindow() const {
+  return HWndNext;
+}
+
+//
+inline void  TClipboardViewer::SetNextWindow(HWND hwndnext) {
+  HWndNext = hwndnext;
+}
 #endif  // OWL_CLIPVIEW_H

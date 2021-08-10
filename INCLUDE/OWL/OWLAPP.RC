@@ -1,8 +1,10 @@
 //----------------------------------------------------------------------------
 // ObjectWindows
-// (C) Copyright 1992, 1994 by Borland International, All Rights Reserved
+// Copyright (c) 1992, 1996 by Borland International, All Rights Reserved
 //
-//   Default OWL application icon
+//$Revision:   10.2  $
+//
+// Default ObjectWindows application icon
 //----------------------------------------------------------------------------
 
 #include <owl/window.rh>
@@ -77,4 +79,28 @@ IDI_OWLAPP ICON
  '00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00'
  '00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00'
  '00 00 00 00 00 03 00 00 00 03 FF FF FF FF'
+}
+
+IDI_OWLAPPSM ICON 
+{
+ '00 00 01 00 01 00 10 10 10 00 00 00 00 00 28 01'
+ '00 00 16 00 00 00 28 00 00 00 10 00 00 00 20 00'
+ '00 00 01 00 04 00 00 00 00 00 C0 00 00 00 00 00'
+ '00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00'
+ '00 00 00 00 80 00 00 80 00 00 00 80 80 00 80 00'
+ '00 00 80 00 80 00 80 80 00 00 C0 C0 C0 00 80 80'
+ '80 00 00 00 FF 00 00 FF 00 00 00 FF FF 00 FF 00'
+ '00 00 FF 00 FF 00 FF FF 00 00 FF FF FF 00 08 88'
+ '88 88 88 88 88 88 00 00 00 00 00 00 00 08 0F FF'
+ 'FF FF FF FF FF 08 0F 00 00 FF FF FF FF 08 0F 0C'
+ 'C0 F0 00 00 0F 08 0F 0C C0 FF 09 90 FF 08 0F 00'
+ '00 FF 09 90 FF 08 0F FF FF FF F0 0F FF 08 0F FF'
+ 'F0 0F F0 FF FF 08 0F FF 0B B0 FF FF FF 08 0F FF'
+ '0B B0 FF FF FF 08 0F FF F0 0F FF FF FF 08 0F FF'
+ 'FF FF FF FF FF 08 00 00 00 00 00 00 00 08 0F 04'
+ '44 44 44 40 70 08 00 00 00 00 00 00 00 00 80 00'
+ '10 13 00 00 FF FF 00 00 FF FF 00 00 FF FF 00 00'
+ '02 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00'
+ '00 00 00 00 00 FF 00 00 FF FF 00 00 FF FF 00 00'
+ 'FF FF 00 00 03 00 00 00 06 00 00 01 06 00'
 }

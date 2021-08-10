@@ -9,9 +9,9 @@
  *-----------------------------------------------------------------------*/
 
 /*
- *      C/C++ Run Time Library - Version 1.5
+ *      C/C++ Run Time Library - Version 2.0
  *
- *      Copyright (c) 1991, 1994 by Borland International
+ *      Copyright (c) 1991, 1996 by Borland International
  *      All Rights Reserved.
  *
  */
@@ -92,7 +92,7 @@ Return value    If _virt_commit is successful, it returns 1; otherwise
 int _virt_commit(void *base, unsigned long size)
 {
     void *origbase = base;
-                   
+
     /* Do it a page at a time, because we may be crossing a
      * section boundary.
      */
@@ -131,17 +131,10 @@ Return value    If _virt_commit is successful, it returns 1; otherwise
 
 int _virt_decommit(void *base, unsigned long size)
 {
-    /* Do it a page at a time, because we may be crossing a
-     * section boundary.
-     */
-    while (size != 0)
-    {
-        if (VirtualFree(base, PAGE_SIZE, MEM_DECOMMIT) != TRUE)
-            return (0);     /* failure */
-        base = (void *)((char *)base + PAGE_SIZE);
-        size -= PAGE_SIZE;
-    }
-    return (1);             /* success */
+    if (VirtualFree(base, size, MEM_DECOMMIT) != TRUE)
+	return (0);     /* failure */
+    else
+	return (1);     /* success */
 }
 
 

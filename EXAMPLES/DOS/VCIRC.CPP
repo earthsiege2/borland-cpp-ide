@@ -1,6 +1,6 @@
 // Borland C++ - (C) Copyright 1991 by Borland International
 
-/* VCIRC.CPP--Example from Getting Started */
+// VCIRC.CPP
 
 // A Circle class derived from Point
 
@@ -47,7 +47,7 @@ void Circle::Hide()
 
 void Circle::Expand(int ExpandBy)
 {
-   Boolean vis = Visible;  // is current circle visible?
+   bool vis = Visible;  // is current circle visible?
    if (vis) Hide();        // if so, hide it
    Radius += ExpandBy;     // expand radius
    if (Radius < 0)         // avoid negative radius
@@ -80,4 +80,4 @@ main()                        // test the functions
    return 0;
 }
 
-
+

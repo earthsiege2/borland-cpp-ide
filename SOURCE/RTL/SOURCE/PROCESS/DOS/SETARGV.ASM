@@ -3,9 +3,9 @@
 ;[]-----------------------------------------------------------------[]
 
 ;
-;       C/C++ Run Time Library - Version 6.5
+;       C/C++ Run Time Library - Version 7.0
 ; 
-;       Copyright (c) 1987, 1994 by Borland International
+;       Copyright (c) 1987, 1996 by Borland International
 ;       All Rights Reserved.
 ; 
 
@@ -13,6 +13,7 @@
 
 ;       Segment and Group declarations
 
+JUMPS
 Header@
 
 ;       External references
@@ -23,7 +24,7 @@ ExtSym@         _psp,           WORD,   __CDECL__
 ExtSym@         _envseg,        WORD,   __CDECL__
 ExtSym@         _envLng,        WORD,   __CDECL__
 ExtSym@         _osmajor,       BYTE,   __CDECL__
-ExtProc@        abort,                  __CDECL__
+ExtProc@        _abort,                 __CDECL__
 
 _DATA           segment
 ifdef   WILD
@@ -67,7 +68,7 @@ ifdef   WILD
 ; Not enough space on stack for the program name.
 ;
 BadProgName     label   near
-                jmp     abort@
+                jmp     _abort@
 
                 public  __wildargv
 __wildargv      proc near
@@ -303,7 +304,7 @@ ArgCopyLoop:    call    ArgPushChar             ; store character in destination
 ArgComplete:    call    ProcessArg              ; copy or expand argument
                 jmp     SHORT NewArg
 
-NoSbrkSpace:    jmp     abort@                  ; error jump
+NoSbrkSpace:    jmp     _abort@                  ; error jump
 
 ;
 ; Here if quoted argument.
@@ -528,7 +529,7 @@ ArgPushChar     endp
 ;
 ; Not enough space to process the command line .... abort.
 ;
-NoArgSpace:     jmp     abort@
+NoArgSpace:     jmp     _abort@
 
 ;------------------------------------------------------------------------------
 ;
@@ -627,7 +628,7 @@ ENDIF
                 mov     ds, SavedDS
 
 ;==============================================================================
-else
+else            ;       ifdef WILD
 ;==============================================================================
 
                 mov     ds, bp
@@ -678,7 +679,7 @@ NextChar0       label   near
                 lodsb
                 dec     cx
                 sub     al, '"'
-                jz      NextChar2       ; Quote found --> AL = 0 and ZF ON
+                jz      NextChar3       ; Quote found --> AL = 0 and ZF ON
                 add     al, '"'
                 cmp     al,'\'
                 jne     NextChar1       ; It is not a \
@@ -690,12 +691,30 @@ NextChar1       label   near
                 or      si, si          ; Be sure both CF & ZF are OFF
 NextChar2       label   near
                 ret
+
+; This code (NextChar3 and NextChar4) checks for a double quote on the
+; command line and adds a dummy parameter to argv[].  From BUG#CO8016
+NextChar3       label   near
+                pushf                   ; Save ZF
+                cmp     byte ptr ds:[si], '"' ; Have we found "" on cmd line?
+                je      NextChar4       ; If not...
+                popf                    ; Restore ZF
+                ret                     ; ...then return
+
+NextChar4       label   near
+                popf                    ; Align the stack
+                inc     si              ; Skip past the second "
+                dec     cx              ; Adjust for the second "
+                mov     ax, 0100h       ; Code to accept a blank param
+                jmp     short NextChar1 ; Continue
+
+
 NextChar        ENDP
 
 ;       Invalid program name
 
 BadProgName     label   near
-                jmp     abort@
+                jmp     _abort@
 
 ;       Now, build the argv array
 

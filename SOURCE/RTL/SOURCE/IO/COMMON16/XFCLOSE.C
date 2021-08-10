@@ -6,9 +6,9 @@
  *-----------------------------------------------------------------------*/
 
 /*
- *      C/C++ Run Time Library - Version 6.5
+ *      C/C++ Run Time Library - Version 7.0
  *
- *      Copyright (c) 1987, 1994 by Borland International
+ *      Copyright (c) 1987, 1996 by Borland International
  *      All Rights Reserved.
  *
  */
@@ -27,16 +27,20 @@ Description     called at exit to close open streams
 
 *---------------------------------------------------------------------*/
 void _FARFUNC _xfclose( void )
-  {
-  register FILE *fp;
-  register int  i;
-  _QRTLDataBlock;
+{
+    register FILE *fp;
+    register int  i;
+    _QRTLDataBlock;
 
-  for( i = 0, fp = _QRTLInstanceData(_streams);
-       i < _QRTLInstanceData(_nfile);
-       fp++, i++ )
+    for( i = 0, fp = _QRTLInstanceData(_streams);
+         i < _QRTLInstanceData(_nfile);
+         fp++, i++ )
     {
-    if( fp->flags & _F_RDWR )
-        fclose( fp );
+        /* Only close temp files.  Leave the others open so CG has a crack
+           at them.  This is so that CG can detect when the user has failed
+           to close a file he opened.
+        */
+        if( (fp->flags & _F_RDWR) && (fp->istemp))
+            fclose( fp );
     }
-  }
+}

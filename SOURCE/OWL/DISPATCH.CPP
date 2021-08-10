@@ -1,12 +1,15 @@
 //----------------------------------------------------------------------------
 // ObjectWindows
-// (C) Copyright 1992, 1994 by Borland International, All Rights Reserved
+// Copyright (c) 1992, 1996 by Borland International, All Rights Reserved
 //
-//   Implementation of dispatcher functions
+//$Revision:   10.7  $
+//
+// Implementation of OWL message dispatcher functions
 //----------------------------------------------------------------------------
-#include <owl/owlpch.h>
-#include <owl/point.h>
-#include <owl/dispatch.h>
+#include <owl/pch.h>
+#if !defined(OWL_DISPATCH_H)
+# include <owl/dispatch.h>
+#endif
 
 //----------------------------------------------------------------------------
 
@@ -14,18 +17,36 @@ int32 _OWLFUNC
 i_LPARAM_Dispatch(GENERIC& generic,
                   int     (GENERIC::*pmf)(int32),
                   uint,
-                  int32    lParam)
+                  int32    param2)
 {
-  return (generic.*pmf)(lParam);
+  return (generic.*pmf)(param2);
 }
 
 int32 _OWLFUNC
 i_WPARAM_Dispatch(GENERIC& generic,
                   int     (GENERIC::*pmf)(uint),
-                  uint     wParam,
+                  uint     param1,
                   int32)
 {
-  return (generic.*pmf)(wParam);
+  return (generic.*pmf)(param1);
+}
+
+int32 _OWLFUNC
+B_WPARAM_Dispatch(GENERIC& generic,
+                  bool     (GENERIC::*pmf)(uint),
+                  uint     param1,
+                  int32)
+{
+  return (generic.*pmf)(param1);
+}
+
+int32 _OWLFUNC
+B_B_Dispatch(GENERIC& generic,
+             bool     (GENERIC::*pmf)(bool),
+             uint     param1,
+             int32)
+{
+  return (generic.*pmf)((bool)param1);
 }
 
 //----------------------------------------------------------------------------
@@ -43,38 +64,49 @@ int32 _OWLFUNC
 I32_LPARAM_Dispatch(GENERIC& generic,
                     int32  (GENERIC::*pmf)(int32),
                     uint,
-                    int32    lParam)
+                    int32    param2)
 {
-  return (generic.*pmf)(lParam);
+  return (generic.*pmf)(param2);
 }
 
 //
-// passes lParam as a uint and returns an int32 result
+// Passes param2 as a uint and returns an int32 result
 //
 int32 _OWLFUNC
 I32_U_Dispatch(GENERIC& generic,
                int32   (GENERIC::*pmf)(uint),
                uint,
-               int32    lParam)
+               int32    param2)
 {
-  return (generic.*pmf)((uint)lParam);
+  return (generic.*pmf)((uint)param2);
 }
 
+//
+// Passes param2 as an int and returns bool
+//
+int32 _OWLFUNC
+B_I2_Dispatch(GENERIC& generic,
+               bool  (GENERIC::*pmf)(int),
+               uint,
+               int32    param2)
+{
+  return (generic.*pmf)((int)param2);
+}
 
 int32 _OWLFUNC
 I32_WPARAM_LPARAM_Dispatch(GENERIC& generic,
                            int32   (GENERIC::*pmf)(uint, int32),
-                           uint     wParam,
-                           int32    lParam)
+                           uint     param1,
+                           int32    param2)
 {
-  return (generic.*pmf)(wParam, lParam);
+  return (generic.*pmf)(param1, param2);
 }
 
 //----------------------------------------------------------------------------
 
 int32 _OWLFUNC
 U_Dispatch(GENERIC& generic,
-           uint(GENERIC::*pmf)(),
+           uint  (GENERIC::*pmf)(),
            uint,
            int32)
 {
@@ -82,24 +114,51 @@ U_Dispatch(GENERIC& generic,
 }
 
 int32 _OWLFUNC
+U32_Dispatch(GENERIC& generic,
+             uint32  (GENERIC::*pmf)(),
+             uint,
+             int32)
+{
+  return (generic.*pmf)();
+}
+
+int32 _OWLFUNC
+B_Dispatch(GENERIC& generic,
+           bool(GENERIC::*pmf)(),
+           uint,
+           int32)
+{
+  return (generic.*pmf)();
+}
+
+int32 _OWLFUNC
+B_LPARAM_Dispatch(GENERIC& generic,
+                  bool    (GENERIC::*pmf)(int32),
+                  uint,
+                  int32    param2)
+{
+  return (generic.*pmf)(param2) != false;
+}
+
+int32 _OWLFUNC
 U_LPARAM_Dispatch(GENERIC& generic,
                   uint    (GENERIC::*pmf)(int32),
                   uint,
-                  int32    lParam)
+                  int32    param2)
 {
-  return (generic.*pmf)(lParam);
+  return (generic.*pmf)(param2);
 }
 
 int32 _OWLFUNC
 U_POINT_Dispatch(GENERIC& generic,
                  uint    (GENERIC::*pmf)(TPoint&),
                  uint,
-                 int32    lParam)
+                 int32    param2)
 {
 #if defined(BI_PLAT_WIN32)
-  return (generic.*pmf)(TPoint(lParam));
+  return (generic.*pmf)(TPoint(param2));
 #else
-  return (generic.*pmf)(*(TPoint*)&lParam);  // 16-bit cast trick
+  return (generic.*pmf)(*(TPoint*)&param2);  // 16-bit cast trick
 #endif
 }
 
@@ -107,36 +166,149 @@ int32 _OWLFUNC
 U_POINTER_Dispatch(GENERIC& generic,
                    uint    (GENERIC::*pmf)(void*),
                    uint,
-                   int32    lParam)
+                   int32    param2)
 {
-  return (generic.*pmf)((void*)lParam);
+  return (generic.*pmf)((void*)param2);
+}
+
+int32 _OWLFUNC
+B_POINTER_Dispatch(GENERIC& generic,
+                   bool    (GENERIC::*pmf)(void*),
+                   uint,
+                   int32    param2)
+{
+  return (generic.*pmf)((void*)param2);
 }
 
 int32 _OWLFUNC
 U_U_Dispatch(GENERIC& generic,
              uint    (GENERIC::*pmf)(uint),
-             uint,
-             int32    lParam)
+             uint     param1,
+             int32)
 {
-  return (generic.*pmf)((uint)lParam);
+  return (generic.*pmf)((uint)param1);
+}
+
+int32 _OWLFUNC
+U_B_Dispatch(GENERIC& generic,
+             uint    (GENERIC::*pmf)(bool),
+             uint     param1,
+             int32)
+{
+  return (generic.*pmf)((bool)param1);
+}
+
+int32 _OWLFUNC
+B_B_U_Dispatch(GENERIC& generic,
+             bool    (GENERIC::*pmf)(bool, uint),
+             uint     param1,
+             int32    param2)
+{
+  return (generic.*pmf)((bool)param1, (uint)param2);
+}
+
+int32 _OWLFUNC
+U_U_RECT_Dispatch(GENERIC& generic,
+                  uint    (GENERIC::*pmf)(uint, TRect&),
+                  uint     param1,
+                  int32    param2)
+{
+#if defined(BI_DATA_NEAR)
+  TRect rect(*(RECT far*)param2);
+  uint i = (generic.*pmf)(param1, rect);
+  *(RECT far*)param2 = rect;
+  return i;
+#else
+  return (generic.*pmf)(param1, *(TRect*)param2);
+#endif
+}
+
+int32 _OWLFUNC
+B_U_RECT_Dispatch(GENERIC& generic,
+                  bool    (GENERIC::*pmf)(uint, TRect&),
+                  uint     param1,
+                  int32    param2)
+{
+#if defined(BI_DATA_NEAR)
+  TRect rect(*(RECT far*)param2);
+  bool b = (generic.*pmf)(param1, rect);
+  *(RECT far*)param2 = rect;
+  return b;
+#else
+  return (generic.*pmf)(param1, *(TRect*)param2);
+#endif
 }
 
 int32 _OWLFUNC
 U_U_U_U_Dispatch(GENERIC& generic,
                  uint    (GENERIC::*pmf)(uint, uint, uint),
-                 uint     wParam,
-                 int32    lParam)
+                 uint     param1,
+                 int32    param2)
 {
-  return (generic.*pmf)(wParam, LOWORD(lParam), HIWORD(lParam));
+  return (generic.*pmf)(param1, LoUint16(param2), HiUint16(param2));
+}
+
+int32 _OWLFUNC
+U_U_U_Dispatch(GENERIC& generic,
+               uint    (GENERIC::*pmf)(uint, uint),
+               uint     wParam,
+               int32    lParam)
+{
+  return (generic.*pmf)(wParam, uint(lParam));
+}
+
+int32 _OWLFUNC
+U_B_U_Dispatch(GENERIC& generic,
+               uint    (GENERIC::*pmf)(bool, uint),
+               uint     wParam,
+               int32    lParam)
+{
+  return (generic.*pmf)((bool)wParam, uint(lParam));
+}
+
+int32 _OWLFUNC
+B_U_U_Dispatch(GENERIC& generic,
+               bool    (GENERIC::*pmf)(uint, uint),
+               uint     wParam,
+               int32    lParam)
+{
+  return (generic.*pmf)(wParam, (uint)lParam); //cast for 16-bit compatability
+}
+
+int32 _OWLFUNC
+B_U_U_U_Dispatch(GENERIC& generic,
+                 bool    (GENERIC::*pmf)(uint, uint, uint),
+                 uint     param1,
+                 int32    param2)
+{
+  return (generic.*pmf)(param1, LoUint16(param2), HiUint16(param2));
 }
 
 int32 _OWLFUNC
 U_WPARAM_LPARAM_Dispatch(GENERIC& generic,
                          uint    (GENERIC::*pmf)(uint, int32),
-                         uint     wParam,
-                         int32    lParam)
+                         uint     param1,
+                         int32    param2)
 {
-  return (generic.*pmf)(wParam, lParam);
+  return (generic.*pmf)(param1, param2);
+}
+
+int32 _OWLFUNC
+B_WPARAM_LPARAM_Dispatch(GENERIC& generic,
+                         bool    (GENERIC::*pmf)(uint, int32),
+                         uint     param1,
+                         int32    param2)
+{
+  return (generic.*pmf)(param1, param2);
+}
+
+int32 _OWLFUNC
+U_B_LPARAM_Dispatch(GENERIC& generic,
+                    uint    (GENERIC::*pmf)(bool, int32),
+                    uint     param1,
+                    int32    param2)
+{
+  return (generic.*pmf)((bool)param1, param2);
 }
 
 //----------------------------------------------------------------------------
@@ -155,9 +327,9 @@ int32 _OWLFUNC
 v_LPARAM_Dispatch(GENERIC& generic,
                   void    (GENERIC::*pmf)(int32),
                   uint,
-                  int32    lParam)
+                  int32    param2)
 {
-  (generic.*pmf)(lParam);
+  (generic.*pmf)(param2);
   return 0;
 }
 
@@ -165,12 +337,12 @@ int32 _OWLFUNC
 v_POINT_Dispatch(GENERIC& generic,
                  void    (GENERIC::*pmf)(TPoint&),
                  uint,
-                 int32    lParam)
+                 int32    param2)
 {
 #if defined(BI_PLAT_WIN32)
-  (generic.*pmf)(TPoint(lParam));
+  (generic.*pmf)(TPoint(param2));
 #else
-  (generic.*pmf)(*(TPoint*)&lParam);  // 16-bit cast trick
+  (generic.*pmf)(*(TPoint*)&param2);  // 16-bit cast trick
 #endif
   return 0;
 }
@@ -179,9 +351,9 @@ int32 _OWLFUNC
 v_POINTER_Dispatch(GENERIC& generic,
                    void    (GENERIC::*pmf)(void*),
                    uint,
-                   int32    lParam)
+                   int32    param2)
 {
-  (generic.*pmf)((void*)lParam);
+  (generic.*pmf)((void*)param2);
   return 0;
 }
 
@@ -189,22 +361,22 @@ int32 _OWLFUNC
 v_U_Dispatch(GENERIC& generic,
              void    (GENERIC::*pmf)(uint),
              uint,
-             int32    lParam)
+             int32    param2)
 {
-  (generic.*pmf)((uint)lParam);
+  (generic.*pmf)((uint)param2);
   return 0;
 }
 
 int32 _OWLFUNC
 v_U_POINT_Dispatch(GENERIC& generic,
                    void    (GENERIC::*pmf)(uint, TPoint&),
-                   uint     wParam,
-                   int32    lParam)
+                   uint     param1,
+                   int32    param2)
 {
 #if defined(BI_PLAT_WIN32)
-  (generic.*pmf)(wParam, TPoint(lParam));
+  (generic.*pmf)(param1, TPoint(param2));
 #else
-  (generic.*pmf)(wParam, *(TPoint*)&lParam);  // 16-bit cast trick
+  (generic.*pmf)(param1, *(TPoint*)&param2);  // 16-bit cast trick
 #endif
   return 0;
 }
@@ -212,40 +384,112 @@ v_U_POINT_Dispatch(GENERIC& generic,
 int32 _OWLFUNC
 v_U_U_Dispatch(GENERIC& generic,
                void    (GENERIC::*pmf)(uint, uint),
-               uint     wParam,
-               int32    lParam)
+               uint     param1,
+               int32    param2)
 {
-  (generic.*pmf)(wParam, (uint)lParam);
+  (generic.*pmf)(param1, (uint)param2);
+  return 0;
+}
+
+int32 _OWLFUNC
+v_U_B_Dispatch(GENERIC& generic,
+               void    (GENERIC::*pmf)(uint, bool),
+               uint     param1,
+               int32    param2)
+{
+  (generic.*pmf)(param1, (bool)param2);
+  return 0;
+}
+
+int32 _OWLFUNC
+v_B_U_Dispatch(GENERIC& generic,
+               void    (GENERIC::*pmf)(bool, uint),
+               uint     param1,
+               int32    param2)
+{
+  (generic.*pmf)((bool)param1, (uint)param2);
   return 0;
 }
 
 int32 _OWLFUNC
 v_U_U_U_Dispatch(GENERIC& generic,
                  void    (GENERIC::*pmf)(uint, uint, uint),
-                 uint     wParam,
-                 int32    lParam)
+                 uint     param1,
+                 int32    param2)
 {
-  (generic.*pmf)(wParam, LOWORD(lParam), HIWORD(lParam));
+  (generic.*pmf)(param1, LoUint16(param2), HiUint16(param2));
+  return 0;
+}
+
+int32 _OWLFUNC
+v_B_U_U_Dispatch(GENERIC& generic,
+                 void    (GENERIC::*pmf)(bool, uint, uint),
+                 uint     param1,
+                 int32    param2)
+{
+  (generic.*pmf)((bool)param1, LoUint16(param2), HiUint16(param2));
+  return 0;
+}
+
+int32 _OWLFUNC
+v_U_U_B_Dispatch(GENERIC& generic,
+                 void    (GENERIC::*pmf)(uint, uint, bool),
+                 uint     param1,
+                 int32    param2)
+{
+  (generic.*pmf)(param1, LoUint16(param2), (bool)HiUint16(param2));
   return 0;
 }
 
 int32 _OWLFUNC
 v_WPARAM_Dispatch(GENERIC& generic,
                   void    (GENERIC::*pmf)(uint),
-                  uint     wParam,
+                  uint     param1,
                   int32)
 {
-  (generic.*pmf)(wParam);
+  (generic.*pmf)(param1);
   return 0;
 }
 
 int32 _OWLFUNC
+v_B_Dispatch(GENERIC& generic,
+                  void    (GENERIC::*pmf)(bool),
+                  uint     param1,
+                  int32)
+{
+  (generic.*pmf)((bool)param1);
+  return 0;
+}
+
+int32 _OWLFUNC
+v_B_B_Dispatch(GENERIC& generic,
+                  void    (GENERIC::*pmf)(bool, bool),
+                  uint     param1,
+                  int32    param2)
+{
+  (generic.*pmf)((bool)param1, (bool)param2);
+  return 0;
+}
+
+#if defined(BI_PLAT_WIN32)
+int32 _OWLFUNC
+v_HWND_PCOPYDATASTRUCT_Dispatch(GENERIC& generic,
+                         void    (GENERIC::*pmf)(HWND, COPYDATASTRUCT*),
+                         uint     param1,
+                         int32    param2)
+{
+  (generic.*pmf)((HWND)param1, (COPYDATASTRUCT*)param2);
+  return true;
+}
+#endif
+
+int32 _OWLFUNC
 v_WPARAM_LPARAM_Dispatch(GENERIC& generic,
                          void    (GENERIC::*pmf)(uint, int32),
-                         uint     wParam,
-                         int32    lParam)
+                         uint     param1,
+                         int32    param2)
 {
-  (generic.*pmf)(wParam, lParam);
+  (generic.*pmf)(param1, param2);
   return 0;
 }
 
@@ -256,26 +500,26 @@ v_WPARAM_LPARAM_Dispatch(GENERIC& generic,
 int32 _OWLFUNC
 i_U_W_U_Dispatch(GENERIC& generic,
                  int     (GENERIC::*pmf)(uint, uint, uint),
-                 uint     wParam,
-                 int32    lParam)
+                 uint     param1,
+                 int32    param2)
 {
 #if defined(BI_PLAT_WIN32)
-  return (generic.*pmf)(LOWORD(wParam), lParam, HIWORD(wParam));
+  return (generic.*pmf)(LoUint16(param1), param2, HiUint16(param1));
 #else
-  return (generic.*pmf)(wParam, LOWORD(lParam), HIWORD(lParam));
+  return (generic.*pmf)(param1, LoUint16(param2), HiUint16(param2));
 #endif
 }
 
 int32 _OWLFUNC
 v_U_U_W_Dispatch(GENERIC& generic,
                  void    (GENERIC::*pmf)(uint, uint, uint),
-                 uint     wParam,
-                 int32    lParam)
+                 uint     param1,
+                 int32    param2)
 {
 #if defined(BI_PLAT_WIN32)
-  (generic.*pmf)(LOWORD(wParam), HIWORD(wParam), lParam);
+  (generic.*pmf)(LoUint16(param1), HiUint16(param1), param2);
 #else
-  (generic.*pmf)(wParam, LOWORD(lParam), HIWORD(lParam));
+  (generic.*pmf)(param1, LoUint16(param2), HiUint16(param2));
 #endif
   return 0;
 }
@@ -287,14 +531,14 @@ v_U_U_W_Dispatch(GENERIC& generic,
 
 int32 _OWLFUNC
 v_Activate_Dispatch(GENERIC& generic,
-                    void    (GENERIC::*pmf)(uint, uint, uint),
-                    uint     wParam,
-                    int32    lParam)
+                    void    (GENERIC::*pmf)(uint, bool, uint),
+                    uint     param1,
+                    int32    param2)
 {
 #if defined(BI_PLAT_WIN32)
-  (generic.*pmf)(LOWORD(wParam), HIWORD(wParam), lParam);
+  (generic.*pmf)(LoUint16(param1), (bool)HiUint16(param1), param2);
 #else
-  (generic.*pmf)(wParam, HIWORD(lParam), LOWORD(lParam));
+  (generic.*pmf)(param1, (bool)HiUint16(param2), LoUint16(param2));
 #endif
   return 0;
 }
@@ -302,13 +546,13 @@ v_Activate_Dispatch(GENERIC& generic,
 int32 _OWLFUNC
 v_MdiActivate_Dispatch(GENERIC& generic,
                        void    (GENERIC::*pmf)(uint, uint),
-                       uint     wParam,
-                       int32    lParam)
+                       uint     param1,
+                       int32    param2)
 {
 #if defined(BI_PLAT_WIN32)
-  (generic.*pmf)(lParam, wParam);
+  (generic.*pmf)(param2, param1);
 #else
-  (generic.*pmf)(LOWORD(lParam), lParam ? HIWORD(lParam) : wParam);
+  (generic.*pmf)(LoUint16(param2), param2 ? HiUint16(param2) : param1);
 #endif
   return 0;
 }
@@ -316,29 +560,29 @@ v_MdiActivate_Dispatch(GENERIC& generic,
 int32 _OWLFUNC
 I32_MenuChar_Dispatch(GENERIC& generic,
                       int32   (GENERIC::*pmf)(uint, uint, uint),
-                      uint     wParam,
-                      int32    lParam)
+                      uint     param1,
+                      int32    param2)
 {
 #if defined(BI_PLAT_WIN32)
-  return (generic.*pmf)(LOWORD(wParam), HIWORD(wParam), lParam);
+  return (generic.*pmf)(LoUint16(param1), HiUint16(param1), param2);
 #else
-  return (generic.*pmf)(wParam, LOWORD(lParam), HIWORD(lParam));
+  return (generic.*pmf)(param1, LoUint16(param2), HiUint16(param2));
 #endif
 }
 
 int32 _OWLFUNC
 v_ParentNotify_Dispatch(GENERIC& generic,
                         void    (GENERIC::*pmf)(uint, uint, uint),
-                        uint     wParam,
-                        int32    lParam)
+                        uint     param1,
+                        int32    param2)
 {
 #if defined(BI_PLAT_WIN32)
-  if (LOWORD(wParam) >= WM_MOUSEFIRST && LOWORD(wParam) <= WM_MOUSELAST)
-    (generic.*pmf)(wParam, LOWORD(lParam), HIWORD(lParam));
+  if (LoUint16(param1) >= WM_MOUSEFIRST && LoUint16(param1) <= WM_MOUSELAST)
+    (generic.*pmf)(param1, LoUint16(param2), HiUint16(param2));
   else
-    (generic.*pmf)(LOWORD(wParam), lParam, HIWORD(wParam));
+    (generic.*pmf)(LoUint16(param1), param2, HiUint16(param1));
 #else
-  (generic.*pmf)(wParam, LOWORD(lParam), HIWORD(lParam));
+  (generic.*pmf)(param1, LoUint16(param2), HiUint16(param2));
 #endif
   return 0;
 }

@@ -1,15 +1,17 @@
-// $Header:   N:\admin\ocf\source\bocole\utils.cpv   2.0.1.0   10 Apr 1995 18:06:48   CQUINN  $
-//**************************************************************************
+//----------------------------------------------------------------------------
+// ObjectComponents
+// Copyright (c) 1991, 1996 by Borland International, All Rights Reserved
 //
-// Utils.h -- Contains some functions to make 32-bit bocole work under WIN95.
+// $Revision:   2.3  $
 //
-// Copyright (c) 1995 by Borland International, Inc. All rights reserved
-//
-//**************************************************************************
+// Contains some functions to make 32-bit bocole work under WIN95.
+//----------------------------------------------------------------------------
+#ifdef WIN32
+#ifndef UNICODE
+
 #include "BOle.h"
 #include "Utils.h"
 
-#ifdef ANSI
 LPWSTR lstrcpyW2(LPWSTR lpString1, LPCWSTR lpString2)
 {
   while (*lpString1++ = *lpString2++)
@@ -42,4 +44,18 @@ int lstrlenW2(LPCWSTR lpString)
 
   return count;
 }
+
+int lstrcmpW2 (LPWSTR lpString1, LPCWSTR lpString2)
+{
+  while (*lpString1++) {
+    if (*lpString1 != *lpString2)
+      return -1;
+  }
+  if (*lpString2 != '\0')
+    return -1;
+  return 0;
+}
+ 
 #endif
+#endif
+

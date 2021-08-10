@@ -1,2 +1,5 @@
-// All items moved to wingdi.h
-
+#ifdef __FLAT__
+  #include <win32\drivinit.h>
+#else
+  #include <win16\drivinit.h>
+#endif

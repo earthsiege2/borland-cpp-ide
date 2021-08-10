@@ -65,14 +65,14 @@ bool TDrawApp::GetVisible()
 {
   AUTONAMES0("Visible")
   AUTOARGS0()
-  AUTOCALL_PROP_CONV(TAutoBool)
+  AUTOCALL_PROP_CONV(TBool)
 }
 
 void TDrawApp::SetVisible(bool val) 
 {
   AUTONAMES0("Visible")
   AUTOARGS0()
-  AUTOCALL_PROP_SET(TAutoBool(val))
+  AUTOCALL_PROP_SET(TBool(val))
 }
 
 void TDrawApp::NewDocument(TDrawDoc& obj) 

@@ -1,0 +1,14 @@
+//----------------------------------------------------------------------------
+// ObjectWindows
+// Copyright (c) 1995, 1995 by Borland International, All Rights Reserved
+//----------------------------------------------------------------------------
+#include <owl/owlapp.rc>
+#include <owl/picklist.rc>
+#include "picklist.rh"
+
+IDM_MAINMENU MENU
+{
+  MENUITEM "Pick from &Popup...", CM_PICKPOPITEM
+  MENUITEM "Pick from &Dialog...", CM_PICKITEM
+}
+

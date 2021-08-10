@@ -1,11 +1,12 @@
-//
 //----------------------------------------------------------------------------
 // ObjectComponents
-// (C) Copyright 1994 by Borland International, All Rights Reserved
+// Copyright (c) 1994, 1996 by Borland International, All Rights Reserved
 //
-//   Implementation of TOcView Class
+// $Revision:   2.11  $
+//
+// Implementation of TOcView Class
 //----------------------------------------------------------------------------
-#include <ocf/ocfpch.h>
+#include <ocf/pch.h>
 #include <ocf/ocstorag.h>
 #include <ocf/ocview.h>
 #include <ocf/ocremvie.h>
@@ -13,18 +14,23 @@
 #include <ocf/ocpart.h>
 #include <ocf/ocdata.h>
 #include <ocf/autodefs.h>
-#include <osl/locale.h>
-#include <osl/geometry.h>
+#include <services/memory.h>
+#include <winsys/lclstrng.h>
+#include <winsys/geometry.h>
 
 DIAG_DECLARE_GROUP(OcRefCount);
 
 const char  DocContent[] = "All";
 
+//
+// Compatibility constructor
+//
 TOcView::TOcView(TOcDocument& doc, TRegList* regList, IUnknown* outer)
 :
   OcApp(doc.OcApp),
-  Win(0),
   OcDocument(doc),
+  ContainerHost(new TOcContainerHostMsg),
+  ServerHost(new TOcServerHostMsg),
   ActivePart(0),
   LinkFormat(-1),
   RegList(regList),
@@ -35,17 +41,16 @@ TOcView::TOcView(TOcDocument& doc, TRegList* regList, IUnknown* outer)
   Origin(*new TPoint(0,0)),
   Extent(*new TSize(0,0)),
   FormatList(*new TOcFormatList),
-  OrgTitle(*new TString)
+  OrgTitle(*new TString),
 #else
   Origin(0,0),
-  Extent(0,0)
+  Extent(0,0),
 #endif
+  BContainer(0),
+  BDocumentI(0),
+  BDocument(0),
+  BLDocumentI(0)
 {
-  BContainer  = 0;
-  BDocumentI  = 0;
-  BDocument   = 0;
-  BLDocumentI = 0;
-
   SetOuter(outer);
   AddRef();    // TUnknown defaults to 0, we need 1
   if (regList)
@@ -77,6 +82,70 @@ TOcView::TOcView(TOcDocument& doc, TRegList* regList, IUnknown* outer)
   TRACEX(OcRefCount, 1, "TOcView() @" << (void*)this);
 }
 
+//
+// New, interface constructor
+//
+TOcView::TOcView(TOcDocument& doc, TOcContainerHost* ch, TOcServerHost* sh,
+                 TRegList* regList, IUnknown* outer)
+:
+  OcApp(doc.OcApp),
+  OcDocument(doc),
+  ContainerHost(ch),
+  ServerHost(sh),
+  ActivePart(0),
+  LinkFormat(-1),
+  RegList(regList),
+  OcData(0),
+  Options(0),
+#if defined(BI_DATA_NEAR)
+  WinTitle(*new string),
+  Origin(*new TPoint(0,0)),
+  Extent(*new TSize(0,0)),
+  FormatList(*new TOcFormatList),
+  OrgTitle(*new TString),
+#else
+  Origin(0,0),
+  Extent(0,0),
+#endif
+  BContainer(0),
+  BDocumentI(0),
+  BDocument(0),
+  BLDocumentI(0)
+{
+  SetOuter(outer);
+  AddRef();    // TUnknown defaults to 0, we need 1
+  if (regList)
+    RegisterClipFormats(*regList);
+
+  // Necessary to initialize TOcPart for linking
+  //
+  OcDocument.SetActiveView(this);
+
+  if (SUCCEEDED(OcApp.BOleComponentCreate(&BDocument,
+                (IUnknown*)(IBContainer*)this, cidBOleDocument))) {
+    BDocument->QueryInterface(IID_IBDocument, &(LPVOID)BDocumentI);
+    Release();
+  }
+
+  if (SUCCEEDED(OcApp.BOleComponentCreate(&BContainer,
+                (IUnknown*)(IBContainer*)this, cidBOleContainer))) {
+    if (regList) {
+      const char* progid = regList->Lookup(OcApp.IsOptionSet(amDebug) ?
+                                           "debugprogid" : "progid");
+      if (progid &&
+          SUCCEEDED(BContainer->QueryInterface(IID_IBRootLinkable, &(LPVOID)BLDocumentI))) {
+        Release();
+        BLDocumentI->Init((TOcView*)this, OleStr(progid));
+      }
+    }
+  }
+
+  TRACEX(OcRefCount, 1, "TOcView() @" << (void*)this);
+}
+
+//
+//
+//
 TOcView::~TOcView()
 {
   Shutdown();
@@ -90,7 +159,8 @@ TOcView::~TOcView()
 }
 
 //
-// called from destructor of this class or of derived class to release helpers
+// Called from destructor of this class or of derived class to release helpers
+// & host interfaces
 //
 void
 TOcView::Shutdown()
@@ -103,16 +173,32 @@ TOcView::Shutdown()
     BDocument->Release();
     BDocument = 0;
   }
+  if (ContainerHost) {
+    ContainerHost->ReleaseOcObject();
+    ContainerHost = 0;
+  }
+  if (ServerHost) {
+    ServerHost->ReleaseOcObject();
+    ServerHost = 0;
+  }
 }
 
 //
-// Should only be called by the owner/creator of this object
+// Should only be called by the owner/creator of this object. Releases host
+// interfaces & this.
 //
 void
 TOcView::ReleaseObject()
 {
+  if (ContainerHost) {
+    ContainerHost->ReleaseOcObject();
+    ContainerHost = 0;
+  }
+  if (ServerHost) {
+    ServerHost->ReleaseOcObject();
+    ServerHost = 0;
+  }
   Release();
-  Win = 0;
 }
 
 //
@@ -142,7 +228,7 @@ TOcView::QueryObject(const IID far& iid, void far* far* iface)
   //
 
   if (hr == HR_NOINTERFACE && iid == IID_IDataObject) {
-    TOcLinkView* view = GetDocLink();
+    TOcLinkView* view = GetDocLink(0);
     if (view)
       hr = view->QueryInterface(iid, iface);
   }
@@ -152,6 +238,9 @@ TOcView::QueryObject(const IID far& iid, void far* far* iface)
 
 //----------------------------------------------------------------------------
 
+//
+//
+//
 void
 TOcView::SetupWindow(HWND hWin, bool embedded)
 {
@@ -160,7 +249,10 @@ TOcView::SetupWindow(HWND hWin, bool embedded)
   // up in this case. Keep Win==0 while initing BDocumentI. OcRemView will init
   // later.
   //
-  Win = embedded ? 0 : hWin;
+  if (!embedded) {
+    ContainerHost->SetWindow(hWin);
+    ServerHost->SetWindow(hWin);
+  }
 
   // Make sure at least the BDocument gets its container & application ptrs
   // setup
@@ -168,36 +260,61 @@ TOcView::SetupWindow(HWND hWin, bool embedded)
   if (BDocumentI)
     BDocumentI->Init(this);
 
-  if (Win)
+  if (!embedded)
     Rename();
-  Win = hWin;
 
-  EvActivate(true);    // default to being the active view on creation
+  // Now keep window handle if embedded
+  //
+  if (embedded) {
+    ContainerHost->SetWindow(hWin);
+    ServerHost->SetWindow(hWin);
+  }
+
+  EvActivate(true);    // Default to being the active view on creation
 }
 
-// Obtain a TOcLinkView representing the whole document
+//
+// Obtain a TOcLinkView representing a moniker, the whole document by default
 //
 TOcLinkView*
-TOcView::GetDocLink()
+TOcView::GetDocLink(const char far* name)
 {
+  // Default to the whole document contents
+  //
+  if (!name)
+    name = DocContent;
+
+  TOcViewCollection& views = OcDocument.GetViews();
+
   // Ask the document whether an TOcLinkView corresponding to the item name
   // already exists
   //
-  TOcLinkView* ocLinkView = OcDocument.GetViews().Find(DocContent);
+  TOcLinkView* ocLinkView = views.Find(name);
 
-  // If not, Create an TOcLinkView for the linked doc/item
-  // the TOcLinkView should remember the moniker
+  // If not, Create an TOcLinkView for the linked doc/item the TOcLinkView
+  // should remember the moniker. If the host does not accept the link,
+  // then get rid of the linkview & return nothing.
   //
   if (!ocLinkView) {
     ocLinkView = new TOcLinkView(this, RegList);
-    OcDocument.GetViews().Add(ocLinkView);
-    ocLinkView->SetMoniker(OleStr(DocContent));
+    views.Add(ocLinkView);
+
+    ocLinkView->SetMoniker(OleStr(name));
     ocLinkView->GetLinkRect();
+
+    CHECK(ServerHost);
+    if (!ServerHost->EvOcViewSetLink(*ocLinkView)) {
+      views.Detach(ocLinkView, true);
+      return 0;
+    }
   }
 
   return ocLinkView;
 }
 
+//
+//
+//
 void
 TOcView::EvResize()
 {
@@ -256,6 +373,9 @@ TOcView::EvSetFocus(bool set)
   return OcApp.EvSetFocus(set);
 }
 
+//
+//
+//
 bool
 TOcView::EnumLinks(IBLinkInfo far* far* linkInfo)
 {
@@ -264,18 +384,27 @@ TOcView::EnumLinks(IBLinkInfo far* far* linkInfo)
   return BDocumentI ? HRSucceeded(BDocumentI->EnumLinks(linkInfo)) : false;
 }
 
+//
+//
+//
 bool
 TOcView::BrowseLinks()
 {
   return BDocumentI ? HRSucceeded(BDocumentI->BrowseLinks()) : false;
 }
 
+//
+//
+//
 bool
 TOcView::UpdateLinks()
 {
   return BDocumentI ? HRSucceeded(BDocumentI->UpdateLinks()) : false;
 }
 
+//
+//
+//
 void
 TOcView::Rename()
 {
@@ -315,8 +444,11 @@ void
 TOcView::InvalidatePart(TOcPartChangeInfo& changeInfo)
 {
   if (changeInfo.GetPart()) {
-    if (!ForwardEvent(OC_VIEWPARTINVALID, &changeInfo))
-      ::InvalidateRect(GetWindow(), &(changeInfo.GetPart()->GetRect() - *(TSize*)&GetOrigin()), true);
+    CHECK(ContainerHost);
+    if (!ContainerHost->EvOcPartInvalid(changeInfo))
+      ::InvalidateRect(GetWindow(),
+                       &(changeInfo.GetPart()->GetRect() - *(TSize*)&GetOrigin()),
+                       true);
   }
 }
 
@@ -341,32 +473,41 @@ TOcView::ActivatePart(TOcPart* part)
   return true;
 }
 
+/*
+//
+//
+//
 uint32
 TOcView::ForwardEvent(int eventId, const void far* param)
 {
   return ::SendMessage(GetWindow(), WM_OCEVENT, eventId, (LPARAM)param);
 }
 
+//
+//
+//
 uint32
 TOcView::ForwardEvent(int eventId, uint32 param)
 {
   return ::SendMessage(GetWindow(), WM_OCEVENT, eventId, param);
 }
+*/
 
 //----------------------------------------------------------------------------
 // IBContains implementation
 
 //
-// Ask the container to load document named
+// Ask the container to load document named 'path'
 //
 HRESULT _IFUNC
 TOcView::Init(LPCOLESTR path)
 {
-  bool result = (bool)ForwardEvent(OC_VIEWOPENDOC, (const char far*)OleStr(path));
+  CHECK(ContainerHost);
+  bool result = ContainerHost->EvOcViewOpenDoc(OleStr(path));
   if (result) {
-    // register this document in running object table
-    //
 
+    // Register this document in running object table
+    //
     OcDocument.SetName(string(OleStr(path)));
     Rename();
   }
@@ -374,6 +515,9 @@ TOcView::Init(LPCOLESTR path)
   return HRFailIfZero(result);
 }
 
+//
+//
+//
 HRESULT _IFUNC
 TOcView::GetPart(IBPart far* far* bpart, LPCOLESTR name)
 {
@@ -382,38 +526,23 @@ TOcView::GetPart(IBPart far* far* bpart, LPCOLESTR name)
   for (TOcPartCollectionIter i(OcDocument.GetParts()); i; i++) {
     TOcPart* ocPart = (TOcPart*)i.Current();
     if (ocPart && strcmp(ocPart->GetName(), OleStr(name)) == 0) {
-      ocPart->FinishLoading(); // In case the part hasn't been loaded
+      ocPart->FinishLoading();  // In case the part hasn't been loaded
       if (SUCCEEDED(ocPart->QueryInterface(IID_IBPart, (LPVOID*)bpart))) {
-        return HR_NOERROR; // now there is one more refcount on ocPart
+        return HR_NOERROR;      // Now there is one more refcount on ocPart
       }
     }
   }
 
   // Ask the document whether an TOcLinkView corresponding to the item name
-  // already exists
+  // already exists. Create one automatically if needed & let host know.
   //
-  TOcLinkView* ocLinkView = OcDocument.GetViews().Find(name);
+  TOcLinkView* ocLinkView = GetDocLink(OleStr(name));
+
   if (ocLinkView) {
-    if (SUCCEEDED(ocLinkView->QueryInterface(IID_IBPart, (LPVOID*)bpart))) {
-      return HR_NOERROR; // now there is one more refcount on ocRemView
-    }
+    if (SUCCEEDED(ocLinkView->QueryInterface(IID_IBPart, (LPVOID*)bpart)))
+      return HR_NOERROR; // Now there is one more refcount on ocRemView 
     else
-      return HR_FAIL;
-  }
-
-  // If not, Create an TOcLinkView for the linked doc/item
-  // the TOcLinkView should remember the moniker
-  //
-  if (!ocLinkView) {
-    ocLinkView = new TOcLinkView(this, RegList);
-    OcDocument.GetViews().Add(ocLinkView);
-  }
-
-  ocLinkView->SetMoniker(OleStr(name));
-  ocLinkView->GetLinkRect();
-  if (SUCCEEDED(ocLinkView->QueryInterface(IID_IBPart, (LPVOID*)bpart)) &&
-    ForwardEvent(OC_VIEWSETLINK, ocLinkView)) {
-      return HR_NOERROR; // now there is one more refcount on ocRemView
+      return HR_FAIL;  // This should never happen--its our own link view...
   }
 
   return HR_FAIL;
@@ -451,12 +580,18 @@ TOcView::GetFormat(uint index, TOcFormatInfo far* fmt)
 //----------------------------------------------------------------------------
 // IBWindow implementation
 
+//
+//
+//
 HWND _IFUNC
 TOcView::GetWindow()
 {
-  return Win;
+  return ContainerHost->EvOcGetWindow();
 }
 
+//
+//
+//
 HRESULT _IFUNC
 TOcView::GetWindowRect(TRect far* r)
 {
@@ -466,12 +601,15 @@ TOcView::GetWindowRect(TRect far* r)
   return HR_NOERROR;
 }
 
+//
+//
+//
 LPCOLESTR _IFUNC
 TOcView::GetWindowTitle()
 {
   // Delegate to app's view window to get its title
   //
-  OrgTitle = (const char far*)ForwardEvent(OC_VIEWTITLE);
+  OrgTitle = ContainerHost->EvOcViewTitle();
   return (LPCOLESTR)OrgTitle;
 }
 
@@ -488,15 +626,22 @@ TOcView::AppendWindowTitle(LPCOLESTR title)
   string newTitle = (const char far*)OleStr(title);
   newTitle += in;
   newTitle += WinTitle;
-  ForwardEvent(OC_VIEWSETTITLE, newTitle.c_str());
+
+  ContainerHost->EvOcViewSetTitle(newTitle.c_str());
 }
 
+//
+//
+//
 HRESULT _IFUNC
 TOcView::SetStatusText(LPCOLESTR /*text*/)
 {
-  return HR_FAIL;
+  return HR_FAIL;  // Not called on BOle sites
 }
 
+//
+//
+//
 HRESULT _IFUNC
 TOcView::RequestBorderSpace(const TRect far* space)
 {
@@ -504,9 +649,12 @@ TOcView::RequestBorderSpace(const TRect far* space)
 
   // Let individual views decide this
   //
-  return HRFailIfZero((bool)ForwardEvent(OC_VIEWBORDERSPACEREQ, space));
+  return HRFailIfZero(ContainerHost->EvOcViewBorderSpaceReq(space));
 }
 
+//
+//
+//
 HRESULT _IFUNC
 TOcView::SetBorderSpace(const TRect far* space)
 {
@@ -514,19 +662,25 @@ TOcView::SetBorderSpace(const TRect far* space)
 
   // Let individual views do this
   //
-  return HRFailIfZero((bool)ForwardEvent(OC_VIEWBORDERSPACESET, space));
+  return HRFailIfZero(ContainerHost->EvOcViewBorderSpaceSet(space));
 }
 
+//
+//
+//
 HRESULT _IFUNC
 TOcView::InsertContainerMenus(HMENU, TOcMenuWidths far*)
 {
-  return HR_FAIL;
+  return HR_FAIL;  
 }
 
+//
+//
+//
 HRESULT _IFUNC
 TOcView::SetFrameMenu(HMENU)
 {
-  return HR_FAIL;
+  return HR_FAIL;  
 }
 
 //
@@ -535,19 +689,25 @@ TOcView::SetFrameMenu(HMENU)
 void _IFUNC
 TOcView::RestoreUI()
 {
-  ForwardEvent(OC_VIEWSETTITLE, WinTitle.c_str());
+  ContainerHost->EvOcViewSetTitle(WinTitle.c_str());
 }
 
+//
+//
+//
 HRESULT _IFUNC
 TOcView::Accelerator(MSG far*)
 {
-  return HR_FAIL;
+  return HR_FAIL;  
 }
 
+//
+//
+//
 HRESULT _IFUNC
 TOcView::GetAccelerators(HACCEL far*, int far*)
 {
-  return HR_FAIL;
+  return HR_FAIL;  
 }
 
 //----------------------------------------------------------------------------
@@ -574,7 +734,7 @@ TOcView::Drop(TOcInitInfo far* initInfo, TPoint far* where, const TRect far* obj
 
   // Make sure that the view will accept this drop
   //
-  if (!ForwardEvent(OC_VIEWDROP, &dd))
+  if (!ContainerHost->EvOcViewDrop(dd))
    return HR_FAIL;
 
   // Create part now that view approved. BDocument calls AddSite on all views.
@@ -602,7 +762,8 @@ TOcView::DragFeedback(TPoint far* where, const TRect far* objPos, TOcMouseAction
   TPoint awhere(*where);
   TRect  aobjPos(*objPos);
   TOcDragDrop dd = { 0, &awhere, &aobjPos };
-  hr = HRFailIfZero((int)ForwardEvent(OC_VIEWDRAG, &dd));
+
+  hr = HRFailIfZero(ContainerHost->EvOcViewDrag(dd));
 }
 
 //
@@ -614,11 +775,14 @@ TOcView::Scroll(TOcScrollDir scrollDir)
 {
   // Have the real view do the work here.
   //
-  if (!ForwardEvent(OC_VIEWSCROLL, scrollDir))
+  if (!ContainerHost->EvOcViewScroll(scrollDir))
     return HR_FALSE;
   return HR_NOERROR;
 }
 
+//
+//
+//
 HRESULT _IFUNC
 TOcView::GetScrollRect(TRect far*)
 {
@@ -639,6 +803,9 @@ TOcView::FindDropDest(TPoint far*, IBDropDest far* far* dropDest)
   return HR_NOERROR;
 }
 
+//
+//
+//
 HRESULT _IFUNC
 TOcView::BringToFront()
 {
@@ -662,15 +829,18 @@ TOcView::BringToFront()
   // that this view is on top & visible
   //
   ::SetWindowPos(OcApp.GetWindow(), HWND_TOP, 0, 0, 0, 0,
-                 SWP_NOMOVE|SWP_NOSIZE|SWP_SHOWWINDOW);
+                 SWP_NOMOVE|SWP_NOSIZE | SWP_SHOWWINDOW);
   ::SetFocus(OcApp.GetWindow());
   ::ShowWindow(GetWindow(), SW_SHOWNORMAL);
   ::SetWindowPos(GetWindow(), HWND_TOP, 0, 0, 0, 0,
-                 SWP_NOMOVE|SWP_NOSIZE|SWP_SHOWWINDOW);
+                 SWP_NOMOVE|SWP_NOSIZE | SWP_SHOWWINDOW); // why force a show window?
 
   return HR_NOERROR;
 }
 
+//
+//
+//
 HRESULT _IFUNC
 TOcView::AllowInPlace()
 {
@@ -765,6 +935,9 @@ TOcView::RegisterClipFormats(TRegList& regList)
   return succ;
 }
 
+//
+//
+//
 bool
 TOcView::BrowseClipboard(TOcInitInfo& initInfo)
 {
@@ -778,14 +951,14 @@ bool
 TOcView::PasteNative(TOcInitInfo& init, TPoint far* where)
 {
   bool result = false;
-  if ((init.Where == iwHandle) && (init.How == ihEmbed)) { // could be native data
+  if (init.Where == iwHandle && init.How == ihEmbed) {  // Could be native data
     TOcFormat* format = FormatList.Find(init.Handle.DataFormat);
     if (!format) {
-      return false; // not my native data
+      return false;  // Not my native data
     }
 
     TOcFormatData formatData(*format, 0, init.Handle.Data, true, where);
-    result = (bool)ForwardEvent(OC_VIEWCLIPDATA, &formatData);
+    result = ServerHost->EvOcViewClipData(formatData);
     if (result)
       init.ReleaseDataObject();
   }
@@ -793,17 +966,20 @@ TOcView::PasteNative(TOcInitInfo& init, TPoint far* where)
   return result;
 }
 
+//
+//
+//
 bool
 TOcView::Paste(bool linking)
 {
-  LinkFormat = linking ? 0 : -1;
+  LinkFormat = linking ? 0 : -1;  // Whether or not to accept a link format
   TOcInitInfo init(this);
   bool result = OcApp.Paste(init);
 
   if (result) {
     result = PasteNative(init);
     if (!result)
-      result = (bool)ForwardEvent(OC_VIEWPASTEOBJECT, &init);
+      result = ContainerHost->EvOcViewPasteObject(init);
   }
 
   return result;
@@ -813,6 +989,9 @@ TOcView::Paste(bool linking)
 // TOcFormat
 //
 
+//
+//
+//
 TOcFormat::TOcFormat()
 {
   char fstr[] = "%s";
@@ -827,6 +1006,9 @@ TOcFormat::TOcFormat()
   Direction  = 1;  // get
 }
 
+//
+//
+//
 TOcFormat::TOcFormat(uint id, char far* name, char far* resultName,
                      uint medium, bool isLinkable,
                      uint aspect, uint direction)
@@ -842,6 +1024,9 @@ TOcFormat::TOcFormat(uint id, char far* name, char far* resultName,
   strcpy(ResultName, resultName);
 }
 
+//
+//
+//
 void
 TOcFormat::operator =(const TOcFormatInfo& f)
 {
@@ -852,6 +1037,9 @@ TOcFormat::operator =(const TOcFormatInfo& f)
   IsLinkable = f.IsLinkable;
 }
 
+//
+//
+//
 void
 TOcFormat::GetFormatInfo(TOcFormatInfo far& f)
 {
@@ -869,6 +1057,9 @@ TOcFormat::GetFormatInfo(TOcFormatInfo far& f)
   f.IsLinkable = (BOOL)IsLinkable;
 }
 
+//
+//
+//
 void
 TOcFormat::SetFormatName(char far* name, TOcApp& ocApp)
 {
@@ -881,6 +1072,9 @@ TOcFormat::SetFormatName(char far* name, TOcApp& ocApp)
   strcpy(ResultName, formatName->GetResultName());
 }
 
+//
+//
+//
 void
 TOcFormat::SetFormatName(uint id, TOcApp& ocApp)
 {
@@ -897,22 +1091,32 @@ TOcFormat::SetFormatName(uint id, TOcApp& ocApp)
 // TOcFormatList
 //
 
+//
+//
+//
 TOcFormatList::TOcFormatList()
-  : TICVectorImp<TOcFormat>(10, 0)
+:
+  TICVectorImp<TOcFormat>(10, 0)
 {
 }
 
+//
+//
+//
 TOcFormatList::~TOcFormatList()
 {
   Clear();
 }
 
+//
+//
+//
 TOcFormat*
 TOcFormatList::Find(uint const id) const
 {
   for (TOcFormatListIter j(*this); j; j++) {
     TOcFormat* format = (TOcFormat*)j.Current();
-    if (format && (format->GetFormatId() == id)) {
+    if (format && format->GetFormatId() == id) {
       return format;
     }
   }
@@ -922,9 +1126,28 @@ TOcFormatList::Find(uint const id) const
 
 
 //----------------------------------------------------------------------------
+// TOcSiteRect
+//
+
+TOcSiteRect::TOcSiteRect()
+:
+  Rect(0,0,0,0), Part(0)
+{
+}
+
+TOcSiteRect::TOcSiteRect(TOcPart *part, const TRect& rect)
+:
+  Rect(rect), Part(part)
+{
+}
+
+//----------------------------------------------------------------------------
 // TOcScaleFactor
 //
 
+//
+//
+//
 TOcScaleFactor::TOcScaleFactor()
 :
   SiteSize(1, 1),
@@ -932,6 +1155,9 @@ TOcScaleFactor::TOcScaleFactor()
 {
 }
 
+//
+//
+//
 TOcScaleFactor::TOcScaleFactor(const TRect& siteRect, const TSize& partSize)
 {
   SiteSize.cx = siteRect.Width();
@@ -940,6 +1166,9 @@ TOcScaleFactor::TOcScaleFactor(const TRect& siteRect, const TSize& partSize)
   PartSize = partSize;
 }
 
+//
+//
+//
 TOcScaleFactor::TOcScaleFactor(const TOcScaleInfo far& scale)
 {
   *this = scale;
@@ -1021,3 +1250,234 @@ TOcScaleFactor::Reset()
   SiteSize.cx = SiteSize.cy = 1;
 }
 
+//----------------------------------------------------------------------------
+
+bool
+TOcContainerHostMsg::EvOcViewOpenDoc(const char far* path)
+{
+  return (bool)ForwardEvent(OC_VIEWOPENDOC, path);
+}
+
+const char far*
+TOcContainerHostMsg::EvOcViewTitle()
+{
+  return (const char far*)ForwardEvent(OC_VIEWTITLE);
+}
+
+void
+TOcContainerHostMsg::EvOcViewSetTitle(const char far* title)
+{
+  ForwardEvent(OC_VIEWSETTITLE, title);
+}
+
+bool
+TOcContainerHostMsg::EvOcViewBorderSpaceReq(const TRect far* space)
+{
+  return (bool)ForwardEvent(OC_VIEWBORDERSPACEREQ, space);
+}
+
+bool
+TOcContainerHostMsg::EvOcViewBorderSpaceSet(const TRect far* space)
+{
+  return (bool)ForwardEvent(OC_VIEWBORDERSPACESET, space);
+}
+
+bool
+TOcContainerHostMsg::EvOcViewDrag(TOcDragDrop far& ddInfo)
+{
+  return (bool)ForwardEvent(OC_VIEWDRAG, &ddInfo);
+}
+
+bool
+TOcContainerHostMsg::EvOcViewDrop(TOcDragDrop far& ddInfo)
+{
+  return (bool)ForwardEvent(OC_VIEWDROP, &ddInfo);
+}
+
+bool
+TOcContainerHostMsg::EvOcViewScroll(TOcScrollDir scrollDir)
+{
+  return (bool)ForwardEvent(OC_VIEWSCROLL, scrollDir);
+}
+
+bool
+TOcContainerHostMsg::EvOcPartInvalid(TOcPartChangeInfo& changeInfo)
+{
+  return (bool)ForwardEvent(OC_VIEWPARTINVALID, &changeInfo);
+}
+
+bool
+TOcContainerHostMsg::EvOcViewPasteObject(TOcInitInfo& init)
+{
+  return (bool)ForwardEvent(OC_VIEWPASTEOBJECT, &init);
+}
+
+bool
+TOcContainerHostMsg::EvOcViewGetSiteRect(TOcSiteRect& sr)
+{
+  return (bool)ForwardEvent(OC_VIEWGETSITERECT, &sr);
+}
+
+bool
+TOcContainerHostMsg::EvOcViewSetSiteRect(TOcSiteRect& sr)
+{
+  return (bool)ForwardEvent(OC_VIEWSETSITERECT, &sr);
+}
+
+bool
+TOcContainerHostMsg::EvOcViewPartActivate(TOcPart& ocPart)
+{
+  return (bool)ForwardEvent(OC_VIEWPARTACTIVATE, &ocPart);
+}
+
+bool
+TOcContainerHostMsg::EvOcViewGetScale(TOcScaleFactor& scaleFactor)
+{
+  return (bool)ForwardEvent(OC_VIEWGETSCALE, &scaleFactor);
+}
+
+//
+//
+//
+uint32
+TOcContainerHostMsg::ForwardEvent(int eventId, const void far* param)
+{
+  return ::SendMessage(EvOcGetWindow(), WM_OCEVENT, eventId, (LPARAM)param);
+}
+
+//
+//
+//
+uint32
+TOcContainerHostMsg::ForwardEvent(int eventId, uint32 param)
+{
+  return ::SendMessage(EvOcGetWindow(), WM_OCEVENT, eventId, param);
+}
+
+//----------------------------------------------------------------------------
+
+bool
+TOcServerHostMsg::EvOcViewGetItemName(TOcItemName& item)
+{
+  return (bool)ForwardEvent(OC_VIEWGETITEMNAME, &item);
+}
+
+bool
+TOcServerHostMsg::EvOcViewClipData(TOcFormatData far& formatData)
+{
+  return (bool)ForwardEvent(OC_VIEWCLIPDATA, &formatData);
+}
+
+bool
+TOcServerHostMsg::EvOcViewSetData(TOcFormatData far& formatData)
+{
+  return (bool)ForwardEvent(OC_VIEWSETDATA, &formatData);
+}
+
+bool
+TOcServerHostMsg::EvOcViewPartSize(TOcPartSize far& ps)
+{
+  return (bool)ForwardEvent(OC_VIEWPARTSIZE, &ps);
+}
+
+bool
+TOcServerHostMsg::EvOcViewSavePart(TOcSaveLoad far& ocSave)
+{
+  return (bool)ForwardEvent(OC_VIEWSAVEPART, &ocSave);
+}
+
+bool
+TOcServerHostMsg::EvOcViewPaint(TOcViewPaint far& vp)
+{
+  return (bool)ForwardEvent(OC_VIEWPAINT, &vp);
+}
+
+bool
+TOcServerHostMsg::EvOcViewAttachWindow(bool attach)
+{
+  return (bool)ForwardEvent(OC_VIEWATTACHWINDOW, attach);
+}
+
+void
+TOcServerHostMsg::EvOcViewSetTitle(const char far* title)
+{
+  ForwardEvent(OC_VIEWSETTITLE, title);
+}
+
+bool
+TOcServerHostMsg::EvOcViewDrag(TOcDragDrop far& ddInfo)
+{
+  return (bool)ForwardEvent(OC_VIEWDRAG, &ddInfo);
+}
+
+bool
+TOcServerHostMsg::EvOcViewSetLink(TOcLinkView& linkView)
+{
+  return (bool)ForwardEvent(OC_VIEWSETLINK, &linkView);
+}
+
+bool
+TOcServerHostMsg::EvOcViewBreakLink(TOcLinkView& linkView)
+{
+  return (bool)ForwardEvent(OC_VIEWBREAKLINK, &linkView);
+}
+
+bool
+TOcServerHostMsg::EvOcViewGetPalette(LOGPALETTE far* far* palette)
+{
+  return (bool)ForwardEvent(OC_VIEWGETPALETTE, palette);
+}
+
+bool
+TOcServerHostMsg::EvOcViewLoadPart(TOcSaveLoad far& ocLoad)
+{
+  return (bool)ForwardEvent(OC_VIEWLOADPART, &ocLoad);
+}
+
+bool
+TOcServerHostMsg::EvOcViewInsMenus(TOcMenuDescr far& sharedMenu)
+{
+  return (bool)ForwardEvent(OC_VIEWINSMENUS, &sharedMenu);
+}
+
+bool
+TOcServerHostMsg::EvOcViewShowTools(TOcToolBarInfo far& tbi)
+{
+  return (bool)ForwardEvent(OC_VIEWSHOWTOOLS, &tbi);
+}
+
+bool
+TOcServerHostMsg::EvOcViewClose()
+{
+  return (bool)ForwardEvent(OC_VIEWCLOSE);
+}
+
+bool
+TOcServerHostMsg::EvOcViewSetScale(TOcScaleFactor& scaleFactor)
+{
+  return (bool)ForwardEvent(OC_VIEWSETSCALE, &scaleFactor);
+}
+
+bool
+TOcServerHostMsg::EvOcViewDoVerb(uint verb)
+{
+  return (bool)ForwardEvent(OC_VIEWDOVERB, verb);
+}
+
+//
+//
+//
+uint32
+TOcServerHostMsg::ForwardEvent(int eventId, const void far* param)
+{
+  return ::SendMessage(EvOcGetWindow(), WM_OCEVENT, eventId, (LPARAM)param);
+}
+
+//
+//
+//
+uint32
+TOcServerHostMsg::ForwardEvent(int eventId, uint32 param)
+{
+  return ::SendMessage(EvOcGetWindow(), WM_OCEVENT, eventId, param);
+}

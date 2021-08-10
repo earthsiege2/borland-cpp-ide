@@ -1,21 +1,17 @@
+//----------------------------------------------------------------------------
+// ObjectComponents
+// Copyright (c) 1994, 1996 by Borland International, All Rights Reserved
 //
-//**************************************************************************
+// $Revision:   2.4  $
 //
-// BOleData.cpp --   Implements a data cache object which is used for delayed
-//                   rendering.
+// Implements a data cache object which is used for delayed rendering.
 //
-//                   Bolero customers aren't required to use this object (or
-//                   delayed rendering at all) but when we cut/copy an
-//                   embedded object (i.e. embed from embedding) we need the
-//                   data cache to avoid getting changes to the original
-//                   object when the user expects a snapshot (the usual
-//                   delayed rendering problem).
-//
-// Copyright (c) 1993,94 by Borland International, Inc. All rights reserved
-//
-//**************************************************************************
-
-#include <windows.h>
+//  Bolero customers aren't required to use this object (or delayed rendering 
+//  at all) but when we cut/copy an embedded object (i.e. embed from 
+//  embedding) we need the data cache to avoid getting changes to the 
+//  original object when the user expects a snapshot (the usual delayed 
+//  rendering problem).
+//----------------------------------------------------------------------------
 #include "BOleData.h"
 #include "BOleCman.h"
 #include "BOleDoc.h"
@@ -45,17 +41,19 @@ class StgWatcher : public IUnknown, public STATSTG {
 	ULONG	nRef;
 };
 
-StgWatcher::StgWatcher( IUnknown *data, IStorage *stg ) : nRef( 1 ), Data( data ), Stg( stg ){
-	stg->Stat( this, 0 );
-	OLECHAR tmp[80];
-	wsprintf( tmp, TEXT("Stg \"%s\" created\n\r" ), pwcsName );
-	OutputDebugString( tmp );
+StgWatcher::StgWatcher( IUnknown *data, IStorage *stg ) : nRef( 1 ), Data( data ), Stg( stg )
+{
+	stg->Stat (this, 0 );
+	TCHAR tmp[80];
+	wsprintf (tmp, TEXT("Stg \"%s\" created\n\r" ), pwcsName );
+	OutputDebugString (tmp);
 }
-StgWatcher::~StgWatcher(){
+
+StgWatcher::~StgWatcher (){
 	LPMALLOC pMalloc;
-	CoGetMalloc( MEMCTX_TASK, &pMalloc );
-	pMalloc->Free( pwcsName );
-	pMalloc->Release();
+	CoGetMalloc (MEMCTX_TASK, &pMalloc );
+	pMalloc->Free (pwcsName );
+	pMalloc->Release ();
 }
 
 HRESULT _IFUNC StgWatcher::QueryInterface(REFIID iid, void FAR* FAR* pif){
@@ -64,14 +62,14 @@ HRESULT _IFUNC StgWatcher::QueryInterface(REFIID iid, void FAR* FAR* pif){
 }
 ULONG _IFUNC StgWatcher::AddRef(){
 	nRef++;
-	OLECHAR tmp[80];
-	wsprintf( tmp, TEXT("Stg \"%s\" AddRef to %d\n\r" ), pwcsName, nRef );
-	OutputDebugString( tmp );
+	TCHAR tmp[80];
+	wsprintf (tmp, TEXT("Stg \"%s\" AddRef to %d\n\r" ), pwcsName, nRef );
+	OutputDebugString (tmp);
 	return nRef;
 }
 ULONG _IFUNC StgWatcher::Release(){
 	nRef--;
-	OLECHAR tmp[80];
+	TCHAR tmp[80];
 	wsprintf( tmp, TEXT("Stg \"%s\" Release to %d\n\r" ), pwcsName, nRef );
 	OutputDebugString( tmp );
 	if( nRef == 0 ){
@@ -95,7 +93,7 @@ BOleData::BOleData (BOleClassManager *pCM, PIBUnknownMain pOuter) :
 {
 	#ifdef _DEBUG
 	{
-		OLECHAR b[ 80 ];
+		TCHAR b[ 80 ];
 		wsprintf( b, TEXT("BOleData %04x:%04x created\n\r"),
 			HIWORD( ( DWORD )this ), LOWORD( ( DWORD )this ) );
 		OutputDebugString( b );
@@ -107,7 +105,7 @@ BOleData::~BOleData ()
 {
 	#ifdef _DEBUG
 	{
-		OLECHAR b[ 80 ];
+		TCHAR b[ 80 ];
 		wsprintf( b, TEXT("BOleData %04x:%04x deleted\n\r"),
 			HIWORD( ( DWORD )this ), LOWORD( ( DWORD )this ) );
 		OutputDebugString( b );
@@ -173,7 +171,7 @@ HRESULT _IFUNC BOleData::GetData (LPFORMATETC pformatetcIn,
 		return ResultFromScode (E_FAIL);
 
 #ifdef _DEBUG
-	OLECHAR name[32];
+	TCHAR name[32];
 	GetClipboardFormatName (pformatetcIn->cfFormat, name, sizeof(name));
 #endif
 
@@ -283,7 +281,7 @@ HRESULT _IFUNC BOleData::SetData (LPFORMATETC pformatetc,
 	if (!pTmp)
 		return ResultFromScode (E_OUTOFMEMORY);
 	else
-		_fmemset (pTmp, 0, sizeof(BOleDataItem));
+		memset (pTmp, 0, sizeof(BOleDataItem));
 
 
 	// Insert formats onto the back of the list. Minimizes list traversal and
@@ -405,7 +403,7 @@ HRESULT _IFUNC BOleEnumFormatEtc::Next (ULONG celt,
 	if (pceltFetched)
 		*pceltFetched = 0;
 	if (rgelt)
-		_fmemset (rgelt, 0, sizeof(FORMATETC) * celt);
+		memset (rgelt, 0, sizeof(FORMATETC) * celt);
 
 	// Error on output parameter
 	//
@@ -504,7 +502,7 @@ HRESULT _IFUNC BOleEnumFormatEtc::Clone (LPENUMFORMATETC FAR* ppEnum)
 	// not necessarily the whole data cache
 	//
 
-	_fmemcpy (pClone, this, sizeof(BOleEnumFormatEtc));
+	memcpy (pClone, this, sizeof(BOleEnumFormatEtc));
 	*ppEnum = pClone;
 
 	return NOERROR;
@@ -610,5 +608,4 @@ HRESULT _IFUNC BOleShadowData::EnumDAdvise (LPENUMSTATDATA FAR* ppenumAdvise)
 {
 	return pDelegate->EnumDAdvise (ppenumAdvise);
 }
-
 

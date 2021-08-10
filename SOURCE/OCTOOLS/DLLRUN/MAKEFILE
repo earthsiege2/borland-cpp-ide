@@ -1,12 +1,19 @@
 #----------------------------------------------------------------------------
 # ObjectComponents
-# (C) Copyright 1994 by Borland International, All Rights Reserved
+# Copyright (c) 1994, 1996 by Borland International, All Rights Reserved
 #----------------------------------------------------------------------------
-!if !$d(MODEL)
-MODEL = s
-!endif
-EXE    = dllrun  
-DOSSTUB= wrw.stb
 
-USERLIBS = $(BCLIBDIR)\ole2w16.lib
+!if !$d(MODEL)
+MODEL = l
+!endif
+
+!if !$d(SYSTEM) && !defined(WIN32)
+SYSTEM = WIN16
+!endif
+
+EXE     = dllrun
+#DOSSTUB= wrw.stb    #//!BB Where does this stub come from??
+
+USERLIBS = $(BCLIBDIR)\ole2w16.lib $(BCLIBDIR)\bidsl.lib
+
 !include $(BCEXAMPLEDIR)\makefile.gen

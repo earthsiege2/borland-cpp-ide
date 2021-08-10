@@ -22,7 +22,6 @@ the techniques discussed here.
 ===================================================================
 1. When source debugging isn't enough
 ===================================================================
-
 Sometimes, however, you can gain insight into a problem by looking
 at the exact instructions that the compiler generated, the contents
 of the CPU registers, and the contents of the stack. To do this,
@@ -52,7 +51,6 @@ instructions display symbolic addresses.
 ===================================================================
 2. The assembler
 ===================================================================
-
 If you use the Assemble command in the Code pane local menu, Turbo
 Debugger lets you assemble instructions for the 8086, 80186, 80286,
 80386, and 80486 processors, and also for the 8087, 80287, and 80387
@@ -74,7 +72,6 @@ assembler.
 
 Operand address size overrides
 ==============================
-
 For the call (CALL), jump (JMP), and conditional jump (JNE, JL, and
 so forth) instructions, the assembler automatically generates the
 smallest instruction that can reach the destination address. You
@@ -87,7 +84,6 @@ to assemble the instruction with a specific size. For example,
 
 Memory and immediate operands
 -----------------------------
-
 When you use a symbol from your program as an instruction operand,
 you must tell the built-in assembler whether you mean the contents
 of the symbol or the address of the symbol. If you use just the
@@ -114,7 +110,6 @@ To refer to the address of the variable, use the OFFSET operator:
 
 Operand data size overrides
 ===========================
-
 For some instructions, you must specify the operand size using one
 of the following expressions before the operand:
 
@@ -142,7 +137,6 @@ Here are some examples using these overrides:
 
 String instructions
 ===================
-
 When you assemble a string instruction, you must include the size
 (byte or word) as part of the instruction mnemonic. The assembler
 does not accept the form of the string instructions that uses a
@@ -153,7 +147,6 @@ example, use STOSW rather than STOS WORD PTR[di].
 =========================================
 3. Assembler-specific bugs
 =========================================
-
 This section, which covers some of the common pitfalls of assembly
 language programming, is intended for people who have Turbo Assembler
 or use inline assembler in C++ programs. You should refer to the
@@ -162,7 +155,6 @@ often encountered errors--and tips on how to avoid them.
 
 Forgetting to return to DOS
 ===========================
-
 In C++, a program ends automatically when there is no more code to
 execute, even if no explicit termination command was written into the
 program. Not so in assembly language, where only those actions that
@@ -174,7 +166,6 @@ adjacent memory.
 
 Forgetting a RET instruction
 ============================
-
 The proper invocation of a subroutine consists of a call to the subroutine
 from another section of code, execution of the subroutine, and a return
 from the subroutine to the calling code. Remember to insert a RET
@@ -185,7 +176,6 @@ up with an error.
 
 Generating the wrong type of return
 ===================================
-
 The PROC directive has two effects. First, it defines a name by which a
 procedure can be called. Second, it controls whether the procedure is a near
 or far procedure.
@@ -202,7 +192,6 @@ individual subroutines.
 
 Reversing operands
 ==================
-
 To many people, the order of instruction operands in 8086 assembly language
 seems backward (and there is certainly some justification for this
 viewpoint). If the line
@@ -219,7 +208,6 @@ us, the line means "move BX to AX," and that can sometimes cause confusion.
 
 Forgetting the stack or reserving a too-small stack
 ===================================================
-
 In most cases, you're treading on thin ice if you don't explicitly allocate
 space for a stack. Programs without an allocated stack sometimes run, but
 there is no assurance that these programs will run under all circumstances.
@@ -230,7 +218,6 @@ deepest stack the program can use.
 
 Calling a subroutine that wipes out registers
 =============================================
-
 When you're writing assembler code, it's easy to think of the registers
 as local variables, dedicated to the use of the procedure you're working
 on at the moment. In particular, there's a tendency to assume that
@@ -241,7 +228,6 @@ destroy any or all registers.
 
 Using the wrong sense for a conditional jump
 ============================================
-
 The profusion of conditional jumps in assembly language (JE, JNE, JC,
 JNC, JA, JB, JG, and so on) allows tremendous flexibility in writing
 code--and also makes it easy to select the wrong jump for a given purpose.
@@ -254,7 +240,6 @@ condition-handling in C++.
 
 Forgetting about REP string overrun
 ===================================
-
 String instructions have a curious property: After they're executed, the
 pointers they use wind up pointing to an address 1 byte away (or 2 bytes
 for a word instruction) from the last address processed. This can cause
@@ -264,7 +249,6 @@ REP CMPS.
 
 Relying on a zero CX to cover a whole segment
 =============================================
-
 Any repeated string instruction executed with CX equal to zero does nothing.
 This can be convenient in that there's no need to check for the zero
 case before executing a repeated string instruction; on the other hand,
@@ -274,7 +258,6 @@ instruction.
 
 Using incorrect direction flag settings
 =======================================
-
 When a string instruction is executed, its associated pointer or pointers--
 SI or DI or both--increment or decrement. It all depends on the state of the
 direction flag.
@@ -292,7 +275,6 @@ behavior of string instructions to depend on code that executed much earlier.
 
 Using the wrong sense for a repeated string comparison
 ======================================================
-
 The CMPS instruction compares two areas of memory; the SCAS instruction
 compares the accumulator to an area of memory. Prefixed by REPE, either
 of these instructions can perform a comparison until either CX becomes
@@ -302,7 +284,6 @@ confused about which of the REP prefixes does what.
 
 Forgetting about string segment defaults
 ========================================
-
 Each of the string instructions defaults to using a source segment (if any)
 of DS, and a destination segment (if any) of ES. It's easy to forget this
 and try to perform, say, a STOSB to the data segment, since that's where
@@ -311,7 +292,6 @@ all the data you're processing with non-string instructions normally resides.
 
 Converting incorrectly from byte to word operations
 ===================================================
-
 In general, it's desirable to use the largest possible data size (usually
 word, but dword on an 80386) for a string instruction, since string
 instructions with larger data sizes often run faster.
@@ -330,14 +310,12 @@ and cause problems of all sorts.
 
 Using multiple prefixes
 =======================
-
 String instructions with multiple prefixes are error-prone and should
 generally be avoided.
 
 
 Relying on the operand(s) to a string instruction
 =================================================
-
 The optional operand or operands to a string instruction are used for data
 sizing and segment overrides only, and do not guarantee that the memory
 location referenced is accessed.
@@ -345,7 +323,6 @@ location referenced is accessed.
 
 Wiping out a register with multiplication
 =========================================
-
 Multiplication--whether 8 bit by 8 bit, 16 bit by 16 bit, or 32 bit by 32
 bit--always destroys the contents of at least one register other than the
 portion of the accumulator used as a source operand.
@@ -353,7 +330,6 @@ portion of the accumulator used as a source operand.
 
 Forgetting that string instructions alter several registers
 ===========================================================
-
 The string instructions, MOVS, STOS, LODS, CMPS, and SCAS, can affect several
 of the flags and as many as three registers during execution of a single
 instruction. When you use string instructions, remember that SI, DI, or
@@ -365,14 +341,12 @@ a REP prefix is used.
 
 Expecting certain instructions to alter the carry flag
 ======================================================
-
 While some instructions affect registers or flags unexpectedly, other
 instructions don't even affect all the flags you might expect them to.
 
 
 Waiting too long to use flags
 =============================
-
 Flags last only until the next instruction that alters them, which is
 usually not very long. It's a good practice to act on flags as soon as
 possible after they're set, thereby avoiding all sorts of potential bugs.
@@ -380,7 +354,6 @@ possible after they're set, thereby avoiding all sorts of potential bugs.
 
 Confusing memory and immediate operands
 =======================================
-
 An assembler program may refer either to the offset of a memory variable or
 to the value stored in that memory variable. Unfortunately, assembly language
 is neither strict nor intuitive about the ways in which these two types of
@@ -390,7 +363,6 @@ memory variable are often confused.
 
 Failing to preserve everything in an interrupt handler
 ======================================================
-
 Every interrupt handler should explicitly preserve the contents of all
 registers. While it is valid to preserve explicitly only those registers
 that the handler modifies, it's good insurance just to push all registers
@@ -399,7 +371,6 @@ on entry to an interrupt handler and pop all registers on exit.
 
 Forgetting group overrides in operands and data tables
 ======================================================
-
 Segment groups let you partition data logically into a number of areas
 without having to load a segment register every time you want to switch
 from one of those logical data areas to another.
@@ -410,10 +381,8 @@ from one of those logical data areas to another.
 4. Inline assembler tips
 =========================================
 
-
 Looking at raw hex data
 =======================
-
 You can use the Data|Add Watch and Data| Evaluate/Modify commands with
 a format modifier to look at raw data dumps. For example, if your
 language is Assembler,
@@ -426,7 +395,6 @@ pointed to by the ES:DI register pair.
 
 Source-level debugging
 ======================
-
 You can step through your assembler code using a Module window just as
 with any of the high-level languages. If you want to see the register
 values, you can put a Registers window to the right of the Module window.
@@ -440,7 +408,6 @@ if you want to see the machine code bytes.
 
 Examining and changing registers
 ================================
-
 The obvious way to change registers is to highlight a register in either
 a CPU window or Registers window. A quick way to change a register is to
 choose Data|Evaluate/Modify. You can enter an assignment expression that
@@ -460,7 +427,6 @@ shows you the value of the AX register.
 =========================================
 5. Inline assembler keywords
 =========================================
-
 This section lists the instruction mnemonics and other special symbols that
 you use when entering instructions with the inline assembler. The keywords
 presented here are the same as those used by Turbo Assembler.
@@ -578,11 +544,11 @@ ____________________________________________________
   FDECSTP    FISTP      FPREM      FWAIT
   FDISI      FISUB      FPTAN      FXAM
   FDIV       FISUBR     FRNDINT    FXCH
-  FDIVP      FLD        FRSTOR     FXTRACT
-  FDIVR      FLDCWR     FSAVENT    FYL2X
-  FDIVRP     FLDENV     FSCALE     FYL2XPI
-  FENI       FLDLG2     FSETPM*    F2XM1
-  FFREE      FLDLN2     FSQRT
+  FDIVP      FLD        FSAVENT    FXTRACT
+  FDIVR      FLDCWR     FSCALE     FYL2X
+  FDIVRP     FLDENV     FSETPM*    FYL2XPI
+  FENI       FLDLG2     FSQRT      F2XM1
+  FFREE      FLDLN2     
 _____________________________________________________
 
 * Available only when running on the 287 numeric coprocessor.
@@ -602,7 +568,6 @@ _________________________________________
 
 The 80x87 coprocessor chip and emulator
 =======================================
-
 This section is for programmers who are familiar with the operation
 if the 80x87 math coprocessor. If your program uses floating-point
 numbers, Turbo Debugger lets you examine and change the state of the numeric
@@ -620,7 +585,6 @@ bits, and the control bits.
 
 The 80x87 chip vs. the emulator
 ===============================
-
 TDW automatically detects whether your program is using the math chip or the
 emulator and adjusts its behavior accordingly.
 
@@ -633,7 +597,6 @@ reports on the emulator only.
 =========================================
 6. The Numeric Processor window
 =========================================
-
 You create a Numeric Processor window by choosing the View|Numeric Processor
 command from the menu bar. The line at the top of the window shows the
 current instruction pointer, opcode, and data pointer. The instruction
@@ -684,7 +647,7 @@ The Register pane
     ___________
    | Zero      |
    | Empty     |
-   | Change...  |
+   | Change... |
    |___________|
 
     To bring up the Register pane local menu, press Alt-F10, or use the Ctrl
@@ -693,19 +656,16 @@ The Register pane
 
     Zero
     ----
-
     Sets the value of the currently highlighted register to zero.
 
     Empty
     -----
-
     Sets the value of the currently highlighted register to empty. This is a
     special status that indicates that the register no longer contains valid
     data.
 
     Change
     ------
-
     Loads a new value into the currently highlighted register. You are
     prompted for the value to load. You can enter an integer or floating-
     point value, using the current language's expression parser. The value
@@ -753,7 +713,6 @@ _________________________________________
 
     Toggle
     ------
-
     Cycles through the values that the currently highlighted control flag
     can be set to. Most flags can only be set or cleared (0 or 1), so this
     command just toggles the flag to the other value. Some other flags have
@@ -800,7 +759,6 @@ ____________________________________
 
     Toggle
     ------
-
     Cycles through the values that the currently highlighted status flag
     can be set to. Most flags can only be set or cleared (0 or 1), so this
     command just toggles the flag to the other value. Some other flags have

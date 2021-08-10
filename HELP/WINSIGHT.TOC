@@ -1,0 +1,40 @@
+:BASE winsight.hlp
+1 WinSight User's Guide
+2 Getting Started = GettingStarted
+2 Using WinSight = UseWinSight
+2 Basics = Essentials
+2 Tasks = Tasks
+2 Using the Mouse with WinSight = UseMouse
+2 Using the keyboard with WinSight = UseKeyboard
+2 Find Window Mode = FindWindows
+2 Tracing Messages = MTOMessagesToTraceCBoxes
+2 WinSight views
+3 WinSight Views = WinSightViews
+4 Window Tree View = WindowTreeView
+4 Message Trace View = MessageTraceView
+4 Class List View = ClassListView
+4 Detail Window = DetailWindow
+2 Winsight menus
+3 WinSight menu commands = Commands
+3 Spy Menu
+4 Spy Menu = MSpy
+3 View menu
+4 View Menu = MView
+5 View | Class List = VClassList
+5 View | Window Tree = VWindowTree
+5 View | Message Trace = VMessageTrace
+5 View | Split Horizontal = VSplitHorizontal
+5 View | Split Vertical = VSplitVertical
+3 Tree menu
+4 Tree Menu = MTree
+5 Tree | Expand One Level (+) = TExpandOneLevel
+5 Tree | Expand Branch (*) = TExpandBranch
+5 Tree | Expand All (Ctrl+*) = TExpandAll
+5 Tree | Collapse Branch (-) = TCollapseBranch
+3 Messages menu
+4 Messages menu = MMessages
+4 Messages WinSight Tracks = MessageGroups
+3 Start!/Stop! menu
+4 Stop! and Start! menu = MStopStart
+3 Help menu
+4 Help menu = MHelp

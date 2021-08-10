@@ -1,301 +1,157 @@
-/*------------------------------------------------------------------------*/
-/*                                                                        */
-/*  CLASSLIB/DEFS.H                                                       */
-/*                                                                        */
-/*  Copyright (c) 1993, 1994 Borland International                        */
-/*  All Rights Reserved                                                   */
-/*                                                                        */
-/*------------------------------------------------------------------------*/
-
-#if !defined( CLASSLIB_DEFS_H )
+//----------------------------------------------------------------------------
+// Borland Class Library
+// Copyright (c) 1993, 1996 by Borland International, All Rights Reserved
+//
+//$Revision:   5.6  $
+//
+//----------------------------------------------------------------------------
+#if !defined(CLASSLIB_DEFS_H)
 #define CLASSLIB_DEFS_H
 
-#if !defined( CLASSLIB_COMPILER_H )
-#include <classlib/compiler.h>
+#if !defined(__cplusplus)
+# error Must compile Borland Class Library as C++
 #endif
 
-#if !defined( CLASSLIB_RESOURCE_H )
-#include <classlib/resource.h>
-#endif
-
-//------------------------------------------------
+//----------------------------------------------------------------------------
+// We must use all libraries in DLLs if we are using BIDS in a DLL
 //
-//  To restore the old BIDS naming convention of data and function
-//  names beginning with lowercase letters, in addition to the
-//  new convention of uppercase letters, remove the // from the
-//  #define below. The libraries do not need to be rebuilt.
+// Define _BIDSDLL with -WSE (-WE for 32bit) to use BIDS & RTL in dlls.
 //
-
-//  #define BI_OLDNAMES         // add names with initial lowercase
-
-/*------------------------------------------------------------------------*/
-/*                                                                        */
-/*  OS-specific flags.                                                    */
-/*                                                                        */
-/*------------------------------------------------------------------------*/
-
+// Be sure _BUILDBIDSDLL is defined when building an actual BIDS dll
 //
-//  Need to do some special stuff when the OS doesn't support
-//  per-instance data in DLLs.
-//
-#if defined(BI_PLAT_WIN16)
-#define BI_NO_PER_INSTANCE_DATA
+#if defined(_BIDSDLL) || defined(_CLASSDLL) || defined(_BUILDBIDSDLL)
+# if !defined(_BIDSDLL)
+#   define _BIDSDLL
+# endif
+# if !defined(_SVCSDLL)
+#   define _SVCSDLL
+# endif
+# if !defined(_RTLDLL)
+#   define _RTLDLL
+# endif
 #endif
 
 //
-//  Sometimes we need to know if we're building for Windows 3.0.
+// Get core services definitions and the windowing system headers
 //
-#if defined(BI_PLAT_WIN16) && defined(WINVER) && WINVER < 0x030A
-#define BI_IS_WIN30
+#if !defined(SERVICES_DEFS_H)
+# include <services/defs.h>
 #endif
 
+//----------------------------------------------------------------------------
 //
-//  Windows 3.1 provides functions to read and write huge buffers.
+//  To restore the old BIDS naming convention of data and function names
+//  beginning with lowercase letters, in addition to the new convention of
+//  uppercase letters, remove the // from the #define below or define on the
+//  cmd line. The libraries do not need to be rebuilt.
 //
-#if defined(BI_PTR_16_16) && !defined(BI_IS_WIN30)
-#define BI_HAS_HREADWRITE
-#endif
 
+//#define BI_OLDNAMES         // add names with initial lowercase
+
+//----------------------------------------------------------------------------
 //
-//  Under Windows 3.0 WEPs are seriously broken.
+//  Common definitions for pointer size and calling conventions.
 //
-#if defined(BI_IS_WIN30)
-#define BI_WINDOWS_WEP_BUG
-#endif
+//  Calling conventions:
+//
+//  _BIDSENTRY      Specifies the calling convention used by BIDS.
+//
+//
+//  Export (and size for DOS) information:
+//
+//  _BIDSCLASS      Exports class if building DLL version of library.
+//                  For DOS16 also provides size information.
+//
+//  _BIDSDATA       Exports data if building DLL version of library.
+//
+//  _BIDSFUNC       Exports function if building DLL version of library.
+//                  For DOS16 also provides size information
+//
+//  _BIDSFAR        Promotes data pointers to far in DLLs (DOS16 only).
+//
+//  _BIDSFARDATA    Forces data pointer to be far.
+//
+//  _BIDSFARFUNC    Forces function to be far.
+//
+//  _BIDSFARCLASS   Forces class to be far.
+//
+//  _BIDSNEARDATA   Forces data to be near.
+//
+//  _BIDSNEARFUNC   Forces function to be near.
+//
+//  _BIDSNEARCLASS  Forces class to be near.
+//
+//----------------------------------------------------------------------------
 
-/*------------------------------------------------------------------------*/
-/*                                                                        */
-/*  _RTTI provides a convenient macro for switching on Borland's __rtti   */
-/*  keyword for finer grained control over generation of runtime type     */
-/*  information.                                                          */
-/*                                                                        */
-/*------------------------------------------------------------------------*/
-
-#define _RTTI __rtti
-
-/*------------------------------------------------------------------------*/
-/*                                                                        */
-/*  These CAST macros encapsulate the new cast syntax in the ANSI/ISO     */
-/*  working paper. Note that TYPESAFE_DOWNCAST isn't as general as        */
-/*  dynamic_cast -- it only works on pointers.                            */
-/*                                                                        */
-/*  Usage:                                                                */
-/*                                                                        */
-/*  TYPESAFE_DOWNCAST(object,toClass)                                     */
-/*      Converts the pointer referred to by 'object' into a pointer to    */
-/*      an object of type 'toClass'. Note that the macro parameters to    */
-/*      TYPESAFE_DOWNCAST are in the opposite order from the rest of      */
-/*      the macros here. When using a compiler that supports new style    */
-/*      casts and runtime type information this is done with              */
-/*      dynamic_cast<> and will return 0 if the cast cannot be done.      */
-/*      When using a compiler that does not support new style casts and   */
-/*      runtime type information this is done with fake runtime type      */
-/*      information generated by the IMPLEMENT_CASTABLE macro.            */
-/*                                                                        */
-/*  STATIC_CAST(targetType,object)                                        */
-/*      Converts the data object referred to by 'object' into the type    */
-/*      referred to by 'targetType'. When using a compiler that supports  */
-/*      new style casts, this is done with static_cast<> and will fail    */
-/*      if the cast cannot be done without runtime type information.      */
-/*      When using a compiler that does not support new style casts, this */
-/*      is done with an old style dangerous cast.                         */
-/*                                                                        */
-/*  CONST_CAST(targetType,object)                                         */
-/*      Converts the data object referred to by 'object' into the type    */
-/*      referred to by 'targetType'. When using a compiler that supports  */
-/*      new style casts, this is done with const_cast<> and will fail     */
-/*      if the cast changes the type of the object in any way other than  */
-/*      adding or removing const and volatile qualifiers.                 */
-/*      When using a compiler that does not support new style casts, this */
-/*      is done with an old style dangerous cast.                         */
-/*                                                                        */
-/*  REINTERPRET_CAST(targetType,object)                                   */
-/*      Converts the data object referred to by 'object' into the type    */
-/*      referred to by 'targetType'. When using a compiler that supports  */
-/*      new style casts, this is done with reinterpret_cast<>.            */
-/*      When using a compiler that does not support new style casts, this */
-/*      is done with an old style dangerous cast.                         */
-/*                                                                        */
-/*------------------------------------------------------------------------*/
-
-#if defined( BI_NO_NEW_CASTS )
-#   define TYPESAFE_DOWNCAST(object,toClass)\
-        (object ?(toClass *)(object)->FindBase(#toClass) : 0)
-#   define STATIC_CAST(targetType,object)   \
-        ((targetType)(object))
-#   define CONST_CAST(targetType,object)    \
-        ((targetType)(object))
-#   define REINTERPRET_CAST(targetType,object) \
-        (*(targetType*)(void *)&(object))
+#define _BIDSENTRY _CALLCNVN
+#if defined(BI_COMP_MSC)
+# define _BIDSCTOR
 #else
-#   define TYPESAFE_DOWNCAST(object,toClass)\
-        dynamic_cast<toClass *>(object)
-#   define STATIC_CAST(targetType,object)   \
-        static_cast<targetType>(object)
-#   define CONST_CAST(targetType,object)    \
-        const_cast<targetType>(object)
-#   define REINTERPRET_CAST(targetType,object) \
-        reinterpret_cast<targetType>(object)
-#endif
-
-/*------------------------------------------------------------------------*/
-/*                                                                        */
-/*  Provide expansions for mutable and bool when appropriate.             */
-/*                                                                        */
-/*------------------------------------------------------------------------*/
-
-#if defined( BI_NO_MUTABLE )
-#define mutable
-#endif
-
-#if defined( BI_NO_BOOL )
-enum TBool
-{
-    false,
-    true
-};
-#   if defined( EMULATE_BOOL )
-        typedef TBool bool;
-#       define BI_UNIQUE_BOOL
-#   else
-        typedef int bool;
-#       undef BI_UNIQUE_BOOL
-#   endif
-#else
-    typedef bool TBool;
-#   define BI_UNIQUE_BOOL
-#endif
-
-/*------------------------------------------------------------------------*/
-/*                                                                        */
-/*  Common definitions for pointer size and calling conventions.          */
-/*                                                                        */
-/*  Calling conventions:                                                  */
-/*                                                                        */
-/*  _BIDSENTRY      Specifies the calling convention used by BIDS.        */
-/*                                                                        */
-/*                                                                        */
-/*  Export (and size for DOS) information:                                */
-/*                                                                        */
-/*  _BIDSCLASS      Exports class if building DLL version of library.     */
-/*                  For DOS16 also provides size information.             */
-/*                                                                        */
-/*  _BIDSDATA       Exports data if building DLL version of library.      */
-/*                                                                        */
-/*  _BIDSFUNC       Exports function if building DLL version of library.  */
-/*                  For DOS16 also provides size information              */
-/*                                                                        */
-/*  _BIDSFAR        Promotes data pointers to far in DLLs (DOS16 only).   */
-/*                                                                        */
-/*  _BIDSFARDATA    Forces data pointer to be far.                        */
-/*                                                                        */
-/*  _BIDSFARFUNC    Forces function to be far.                            */
-/*                                                                        */
-/*  _BIDSFARCLASS   Forces class to be far.                               */
-/*                                                                        */
-/*  _BIDSNEARDATA   Forces data to be near.                               */
-/*                                                                        */
-/*  _BIDSNEARFUNC   Forces function to be near.                           */
-/*                                                                        */
-/*  _BIDSNEARCLASS  Forces class to be near.                              */
-/*                                                                        */
-/*------------------------------------------------------------------------*/
-
-#if defined(BI_PLAT_OS2)
-#    define _BIDSENTRY  __stdcall
-#else
-#    define _BIDSENTRY  __cdecl
+# define _BIDSCTOR _BIDSENTRY
 #endif
 
 #if defined(BI_PTR_0_32)
-#   define _BIDSFAR
-#   define _BIDSFARDATA
-#   define _BIDSFARFUNC
-#   define _BIDSFARCLASS
-#   define _BIDSNEARDATA
-#   define _BIDSNEARFUNC
-#   define _BIDSNEARCLASS
-#   if defined(_BUILDBIDSDLL)
-#       define _BIDSCLASS  __export
-#       define _BIDSDATA   __export
-#       define _BIDSFUNC   __export
-#   elif defined(_BIDSDLL) && !defined(BI_PLAT_OS2)
-#       define _BIDSCLASS  __import
-#       define _BIDSDATA   __import
-#       define _BIDSFUNC   __import
-#   else
-#       define _BIDSCLASS
-#       define _BIDSDATA
-#       define _BIDSFUNC
-#   endif
-#   define _BIDSCLASS_RTL _BIDSCLASS
-#else
-#   if defined(BI_APP_DLL)
-#       if defined(_BUILDBIDSDLL)
-#           define _BIDSCLASS __export
-#       elif defined(_BIDSDLL) || defined(_CLASSDLL)
-#           define _BIDSCLASS __export
-#       elif defined(_BIDSFARVTABLE)
-#           define _BIDSCLASS     __huge
-#       else
-#           define _BIDSCLASS __far
-#       endif
-#       define _BIDSFAR __far
-#       define _BIDSFARDATA __far
-#       define _BIDSFARFUNC __far
-#       define _BIDSFARCLASS __far
-#       define _BIDSNEARDATA __near
-#       define _BIDSNEARFUNC __near
-#       define _BIDSNEARCLASS __near
-#   elif defined(_BIDSDLL) || defined(_CLASSDLL)
-#       define _BIDSCLASS __export
-#       define _BIDSFAR __far
-#       define _BIDSFARDATA __far
-#       define _BIDSFARFUNC __far
-#       define _BIDSFARCLASS __far
-#       define _BIDSNEARDATA __near
-#       define _BIDSNEARFUNC __near
-#       define _BIDSNEARCLASS __near
-#   else
-#       if   defined(BI_MODEL_TINY) || defined(BI_MODEL_SMALL) || defined(BI_MODEL_MEDIUM)
-#           if defined(_BIDSFARVTABLE)
-#               define _BIDSCLASS  __huge
-#           else
-#               define _BIDSCLASS  __near
-#           endif
-#       elif defined(BI_MODEL_COMPACT) || defined(BI_MODEL_LARGE)
-#           if defined(_BIDSFARVTABLE)
-#               define _BIDSCLASS  __huge
-#           else
-#               define _BIDSCLASS  __far
-#           endif
-#       else
-#           define _BIDSCLASS  __huge
-#       endif
-#       define _BIDSFAR
-#       define _BIDSFARDATA __far
-#       define _BIDSFARFUNC __far
-#       define _BIDSFARCLASS __far
-#       define _BIDSNEARDATA __near
-#       define _BIDSNEARFUNC __near
-#       define _BIDSNEARCLASS __near
-#   endif
-#   if defined(_BUILDBIDSDLL)
-#       define _BIDSFUNC __export
-#   else
-#       if defined(_BIDSDLL) || defined(_CLASSDLL)
-#           define _BIDSFUNC __far
-#       else
-#           define _BIDSFUNC
-#       endif
-#   endif
+# define _BIDSFARDATA
+# define _BIDSFARFUNC
+# define _BIDSFARCLASS
+# define _BIDSNEARDATA
+# define _BIDSNEARFUNC
+# define _BIDSNEARCLASS
+# if defined(_BUILDBIDSDLL)
+#   define _BIDSCLASS     __export _CALLCNVN
+#   define _BIDSCLASS_RTL __export _CALLCNVN
+#   define _BIDSTEMPL     __export
+#   define _BIDSDATA      __export
+#   define _BIDSFUNC      __export
+# elif defined(_BIDSDLL) && !defined(BI_PLAT_OS2)
+#   define _BIDSCLASS     __import _CALLCNVN
+#   define _BIDSCLASS_RTL __import _CALLCNVN
+#   define _BIDSTEMPL     __import
+#   define _BIDSDATA      __import
+#   define _BIDSFUNC      __import
+# else
+#   define _BIDSCLASS     _CALLCNVN
+#   define _BIDSCLASS_RTL _CALLCNVN
+#   define _BIDSTEMPL
 #   define _BIDSDATA
-#   if defined(_BIDSFARVTABLE)
-#       define _BIDSCLASS_RTL _EXPCLASS
+#   define _BIDSFUNC
+# endif
+#else  // 16bit
+# if defined(_BIDSDLL)
+#   define _BIDSCLASS     __export _CALLCNVN
+#   define _BIDSTEMPL     __export
+# elif defined(_BIDSFARVTABLE) || defined(BI_DATA_HUGE)
+#   define _BIDSCLASS     __huge _CALLCNVN
+#   define _BIDSTEMPL     __huge
+# elif defined(BI_DATA_FAR)
+#   define _BIDSCLASS     __far _CALLCNVN
+#   define _BIDSTEMPL     __far
+# else
+#   define _BIDSCLASS     __near _CALLCNVN
+#   define _BIDSTEMPL     __near
+# endif
+# define _BIDSFARDATA     __far
+# define _BIDSFARFUNC     __far
+# define _BIDSFARCLASS    __far _CALLCNVN
+# define _BIDSNEARDATA    __near
+# define _BIDSNEARFUNC    __near
+# define _BIDSNEARCLASS   __near _CALLCNVN
+# if defined(_BUILDBIDSDLL)
+#   define _BIDSFUNC      __export
+# else
+#   if defined(_BIDSDLL)
+#     define _BIDSFUNC    __far
 #   else
-#       define _BIDSCLASS_RTL _BIDSCLASS
+#     define _BIDSFUNC
 #   endif
+# endif
+# define _BIDSDATA
+# if defined(_BIDSFARVTABLE)
+#   define _BIDSCLASS_RTL _EXPCLASS
+# else
+#   define _BIDSCLASS_RTL _BIDSCLASS
+# endif
 #endif
+#define _BIDSFAR
 
 #endif  // CLASSLIB_DEFS_H
-

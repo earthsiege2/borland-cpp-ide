@@ -6,9 +6,9 @@
  *--------------------------------------------------------------------------*/
 
 /*
- *      C/C++ Run Time Library - Version 1.5
+ *      C/C++ Run Time Library - Version 2.0
  *
- *      Copyright (c) 1991, 1994 by Borland International
+ *      Copyright (c) 1991, 1996 by Borland International
  *      All Rights Reserved.
  *
  */
@@ -16,7 +16,8 @@
 #include <ntbc.h>
 
 #include <_io.h>
-#include <dir.h>
+#include <stdlib.h>
+#include <ctype.h>
 
 /*--------------------------------------------------------------------------*
 
@@ -37,37 +38,36 @@ Return value    success : 0
 
 int _RTLENTRYF _EXPFUNC chdir(const char *pathP)
 {
-#if 0
-    char buf[4];
+    char buffer[_MAX_PATH];
+    char envname[4];
     char drive;
 
-    /* If the path specifies a drive, set the current directory for
-     * that drive, but don't change the current directory.
+    /* No drive was specified, so let's change the current
+     * directory for the current drive.
      */
-    drive = pathP[0];
-    if (drive >= 'a' && drive <= 'z')
-        drive = drive - 'a' + 'A';
-    if (drive >= 'A' && drive <= 'Z' && pathP[1] == ':')
+
+    if (SetCurrentDirectory((char *)pathP) != TRUE)
+	return (__NTerror());
+
+    if (GetCurrentDirectory(sizeof(buffer), buffer) == 0)
+	return (__NTerror());
+
+    /* If the path specifies a drive, set the current directory for
+     * that drive.
+     */
+    drive = toupper(buffer[0]);
+    if (drive >= 'A' && drive <= 'Z' && buffer[1] == ':')
     {
-        /* On NT, you set the current directory for a given drive by
-         * setting the magic environment variable =N:, where N is the
-         * drive letter.
-         */
-        buf[0] = '=';
-        buf[1] = drive;
-        buf[2] = ':';
-        buf[3] = '\0';
-        if (SetEnvironmentVariable(buf, (char *)pathP) != TRUE)
-            return (__NTerror());
-    }
-    else
-#endif
-    {
-        /* No drive was specified, so let's change the current
-         * directory for the current drive.
-         */
-        if (SetCurrentDirectory((char *)pathP) != TRUE)
-            return (__NTerror());
+	/* On NT, you set the current directory for a given drive by
+	 * setting the magic environment variable =N:, where N is the
+	 * drive letter.
+	 */
+	envname[0] = '=';
+	envname[1] = drive;
+	envname[2] = ':';
+	envname[3] = '\0';
+	if (SetEnvironmentVariable(envname, buffer) != TRUE)
+	    return (__NTerror());
     }
     return(0);
 }

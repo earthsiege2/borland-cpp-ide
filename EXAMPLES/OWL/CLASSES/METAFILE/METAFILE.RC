@@ -1,0 +1,18 @@
+//----------------------------------------------------------------------------
+// ObjectWindows
+// Copyright (c) 1995, 1996 by Borland International, All Rights Reserved
+//----------------------------------------------------------------------------
+#include <owl/owlapp.rc>
+#include <owl/except.rc>
+#include <owl/editfile.rh>
+
+MAINMENU MENU
+{
+  POPUP "&File"
+  {
+    MenuItem "&Open...",    CM_FILEOPEN
+    MenuItem SEPARATOR
+    MenuItem "E&xit",       CM_EXIT
+  }
+}
+

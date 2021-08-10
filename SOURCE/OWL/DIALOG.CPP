@@ -1,15 +1,25 @@
 //----------------------------------------------------------------------------
 // ObjectWindows
-// (C) Copyright 1991, 1994 by Borland International, All Rights Reserved
+// Copyright (c) 1991, 1996 by Borland International, All Rights Reserved
 //
-//   Defines type TDialog.  This defines the basic behavior of all dialogs.
+//$Revision:   10.11  $
+//
+// Implementation of class TDialog. TDialogs are the base for any type of
+// modal or modeless window that loads itself from resource.
 //----------------------------------------------------------------------------
 #pragma hdrignore SECTION
-#include <owl/owlpch.h>
-#include <owl/dialog.h>
-#include <owl/applicat.h>
-#include <string.h>
-#include <bwcc.h>
+#include <owl/pch.h>
+#if !defined(OWL_DIALOG_H)
+# include <owl/dialog.h>
+#endif
+#if !defined(OWL_APPLICAT_H)
+# include <owl/applicat.h>
+#endif
+# include <string.h>
+
+#if defined(BI_COMP_BORLANDC)
+# include <bwcc.h>           // Currently only available with Borland C++
+#endif
 
 DIAG_DECLARE_GROUP(OwlMsg);  // diagnostic group for message tracing
 DIAG_DECLARE_GROUP(OwlWin);  // diagnostic group for windows
@@ -20,59 +30,61 @@ DIAG_DECLARE_GROUP(OwlWin);  // diagnostic group for windows
 # define RT_DLGINIT       MAKEINTRESOURCE(240)
 #endif
 
-extern uint _OWLDATA GetWindowPtrMsgId; // in applicat.cpp
+//
+// Global message id for GetWindowPtr call defined in applicat.cpp
+//
+extern uint _OWLDATA GetWindowPtrMsgId;
 
 //
-// Our exported dialog proc & its proc instance
+// Public so derived classes can create  
 //
-bool CALLBACK __export StdDlgProc(HWND, uint, WPARAM, LPARAM);
-TProcInstance StdDlgProcInstance((FARPROC)StdDlgProc);
-
-TDialog* _OWLDATA DlgCreationWindow = 0;  // public so derived classes can create
+TDialog* _OWLDATA DlgCreationWindow = 0;
 
 DEFINE_RESPONSE_TABLE1(TDialog, TWindow)
   EV_WM_CLOSE,
   EV_WM_PAINT,
   EV_WM_CTLCOLOR,
   EV_WM_SETFONT,
+  EV_DM_GETDEFID,
+  EV_DM_SETDEFID,
+#if defined(BI_PLAT_WIN32)
+  EV_DM_REPOSITION,
+#endif
   EV_COMMAND(IDOK, CmOk),
   EV_COMMAND(IDCANCEL, CmCancel),
 END_RESPONSE_TABLE;
 
 //
-// constructor for a TDialog object
+// Constructor for a TDialog object
 //
-// takes an TResId for its template name or numeric Id
+// Takes an TResId for its template name or numeric Id
 //
 TDialog::TDialog(TWindow* parent, TResId resId, TModule* module)
 {
-  //
   // Initialize virtual base, in case the derived-most used default ctor
   //
   TWindow::Init(parent, 0, module);
 
   DisableAutoCreate();
-  if (HIWORD(Title))
-    delete [] Title;
+  if (HiUint16(uint32(Title)))
+    delete[] Title;
   Title = (LPSTR)MAKEINTRESOURCE(0xFFFF); // Title setting--"don't-change"
 
   SetFlag(wfFromResource);
   ClearFlag(wfDeleteOnClose);
 
-  Attr.Param = 0;
+  DialogAttr.Param = 0;
   IsModal = false;
-  Attr.Name = resId.IsString() ? strnewdup(resId) : (char far*)resId;
+  DialogAttr.Name = resId.IsString() ? strnewdup(resId) : (char far*)resId;
 }
 
 //
-// destructor for a TDialog
-//
-// ~TWindow frees the instance thunk
+// Destructor for a TDialog
 //
 TDialog::~TDialog()
 {
-  if (HIWORD(Attr.Name))
-    delete [] Attr.Name;
+  if (HiUint16(uint32(DialogAttr.Name)))
+    delete[] DialogAttr.Name;
 }
 
 //
@@ -82,58 +94,72 @@ TDialog::~TDialog()
 bool
 TDialog::PreProcessMsg(MSG& msg)
 {
-  // processed any accelerators associated with this window
+  // Processed any accelerators associated with this window
   //
   if (TWindow::PreProcessMsg(msg))
     return true;
 
   // See if we are in an mdi child, & try mdi accelerator translation if so
   //
-  HWND child;
-  HWND client;
-  if ((child = GetParent()) != 0 &&
+  THandle child;
+  THandle client;
+  if ((child = GetParentH()) != 0 &&
       (client = ::GetParent(child)) != 0 &&
-      child == (HWND)::SendMessage(client, WM_MDIGETACTIVE, 0, 0) &&
+      child == (THandle)::SendMessage(client, WM_MDIGETACTIVE, 0, 0) &&
       ::TranslateMDISysAccel(client, &msg))
     return true;
 
   // Do dialog accelerator translation last, since it tends to eat other
   // accelerators
   //
-  return ::IsDialogMessage(HWindow, &msg);
+  return ::IsDialogMessage(GetHandle(), &msg);
 }
 
+//
+// Override TWindow virtual in order to supply the classname for Windows class
+// registration. Handles BWCC and native dialog classnames.
+//
 char far*
 TDialog::GetClassName()
 {
+#if defined(BI_COMP_BORLANDC)
   if (GetApplication()->BWCCEnabled())
     return BORDLGCLASS;
   else
+#endif
     return (char far*)WC_DIALOG;
 }
 
+//
+// Override TWindow virtual in order to fill in the appropriate information
+// in the WNDCLASS structure. Handles BWCC and native dialogs, retrieving the
+// default class information from those existing classes.
+//
 void
 TDialog::GetWindowClass(WNDCLASS& wndClass)
 {
   TResId dlgClass;
 
+#if defined(BI_COMP_BORLANDC)
   if (GetApplication()->BWCCEnabled()) {
-    bool FAR PASCAL(*bwccRegister)(HINSTANCE);
-    (FARPROC)bwccRegister = GetApplication()->GetBWCCModule()->GetProcAddress("BWCCRegister");
-    if (bwccRegister)
-      (*bwccRegister)(*GetModule());
-
+    GetApplication()->GetBWCCModule()->Register(*GetModule());
     dlgClass = BORDLGCLASS;
   }
   else
+#endif
     dlgClass = WC_DIALOG;
 
-  if (!::GetClassInfo(0, dlgClass, &wndClass))
+  if (!TUser::GetClassInfo(0, dlgClass, &wndClass))
     GetModule()->GetClassInfo(dlgClass, &wndClass);
 
   wndClass.lpszClassName = GetClassName();
+  wndClass.hInstance = *GetModule();   
 }
 
+//
+// Handler for WM_SETFONT, is dispatched from DialogFunction() once
+// during dialog creation. Subsequent dispatched are done normally.
+//
 void
 TDialog::EvSetFont(HFONT /*hFont*/, bool /*redraw*/)
 {
@@ -141,10 +167,14 @@ TDialog::EvSetFont(HFONT /*hFont*/, bool /*redraw*/)
     DefaultProcessing();
 }
 
+//
+// Handler for WM_PAINT. Rerout this message back to the underlying dialog to
+// keep TWindow::EvPaint from eating it.
+//
 void
 TDialog::EvPaint()
 {
-  DefaultProcessing();  // don't call TWindow::EvPaint()
+  DefaultProcessing();
 }
 
 //
@@ -152,27 +182,52 @@ TDialog::EvPaint()
 // ctl3d.dll since it needs to handle that & we don't let it autosubclass
 //
 HBRUSH
-TDialog::EvCtlColor(HDC hDC, HWND hWndChild, uint ctlType)
+TDialog::EvCtlColor(HDC hDC, THandle hChild, uint ctlType)
 {
   if (GetApplication()->Ctl3dEnabled()) {
-    HBRUSH FAR PASCAL(*ctl3dCtlColorEx)(uint, WPARAM, LPARAM) = 0;
-    if (!ctl3dCtlColorEx)
-      (FARPROC)ctl3dCtlColorEx = GetApplication()->GetCtl3dModule()->
-                                   GetProcAddress("Ctl3dCtlColorEx");
-
-    HBRUSH hBr = 0;
-    if (ctl3dCtlColorEx)
-      #if defined(BI_PLAT_WIN32)
-        hBr = ctl3dCtlColorEx(WM_CTLCOLORMSGBOX+ctlType, WPARAM(hDC), LPARAM(hWndChild));
-      #else
-        hBr = ctl3dCtlColorEx(WM_CTLCOLOR, WPARAM(hDC), MAKELPARAM(hWndChild, ctlType));
-      #endif
+#if defined(BI_PLAT_WIN32)
+    HBRUSH hBr = GetApplication()->GetCtl3dModule()->
+          CtlColorEx(WM_CTLCOLORMSGBOX+ctlType, TParam1(hDC), TParam2(hChild));
+#else
+    HBRUSH hBr = GetApplication()->GetCtl3dModule()->
+          CtlColorEx(WM_CTLCOLOR, TParam1(hDC), MkParam2(uint16(hChild), ctlType));
+#endif
 
     if (hBr)
       return hBr;
   }
-  return TWindow::EvCtlColor(hDC, hWndChild, ctlType);
+  return TWindow::EvCtlColor(hDC, hChild, ctlType);
 }
+
+//
+// Return the default Id.
+// High word must be DC_HASDEFID.
+//
+uint32
+TDialog::EvGetDefId()
+{
+  return DefaultProcessing();
+}
+
+//
+// Set the pushbutton with identifier id the default button for the dialog.
+//
+bool
+TDialog::EvSetDefId(int /*id*/)
+{
+  return (bool)DefaultProcessing();
+}
+
+#if defined(BI_PLAT_WIN32)
+//
+// Reposition the dialog so that it fits within the desktop area
+//
+void
+TDialog::EvReposition()
+{
+  DefaultProcessing();
+}
+#endif
 
 //
 // The default dialog function. Handles the two mesages, WM_INITDIALOG and
@@ -183,7 +238,7 @@ TDialog::EvCtlColor(HDC hDC, HWND hWndChild, uint ctlType)
 // to.
 //
 bool
-TDialog::DialogFunction(uint msg, WPARAM wParam, LPARAM lParam)
+TDialog::DialogFunction(uint msg, TParam1 param1, TParam2 param2)
 {
   TRACEX(OwlMsg, 2, MsgName(msg) << "(DlgFcn)=> " << *this);
 
@@ -193,7 +248,7 @@ TDialog::DialogFunction(uint msg, WPARAM wParam, LPARAM lParam)
     // used. This is not generally overriden, and only arrives once.
     //
     case WM_INITDIALOG:
-      return EvInitDialog((HWND)wParam);
+      return EvInitDialog((THandle)param1);
 
     // Dispatch WM_SETFONT only for the first, non-sent occurance. Subsequent
     // WM_SETFONTs will be dispatched normally in TWindow.
@@ -201,8 +256,9 @@ TDialog::DialogFunction(uint msg, WPARAM wParam, LPARAM lParam)
     case WM_SETFONT:
       if (!IsFlagSet(wfFullyCreated)) {
         TEventInfo  eventInfo(msg);
-        if (Find(eventInfo))
-          return (bool)Dispatch(eventInfo, wParam, lParam);
+        if (Find(eventInfo)) {
+          return Dispatch(eventInfo, param1, param2) == 0;
+        }
       }
       return true;
 
@@ -213,29 +269,24 @@ TDialog::DialogFunction(uint msg, WPARAM wParam, LPARAM lParam)
     case WM_NCPAINT:
     case WM_NCACTIVATE:
       if (GetApplication()->Ctl3dEnabled()) {
-        bool FAR PASCAL(*ctl3dDlgFramePaint)(HWND, uint, WPARAM, LPARAM) = 0;
-        if (!ctl3dDlgFramePaint)
-          (FARPROC)ctl3dDlgFramePaint = GetApplication()->GetCtl3dModule()->
-                                          GetProcAddress("Ctl3dDlgFramePaint");
-        if (ctl3dDlgFramePaint) {
-          SetWindowLong(DWL_MSGRESULT, (*ctl3dDlgFramePaint)(HWindow, msg, wParam, lParam));
-          return true;
-        }
+        SetMsgResult(GetApplication()->GetCtl3dModule()->
+          DlgFramePaint(GetHandle(), msg, param1, param2));
       }
       break;
   }
-  return false;  // not handled
+  return false;  // Not handled
 }
 
 //
 // Handles messages that comes from WC_DIALOG's wndProc
+//
 // If DlgCreationWindow is not 0, then msg is destined for DlgCreationWindow.
-// Setup DlgCreationWindow's HWindow, subclass the WC_DIALOG class's window
+// Setup DlgCreationWindow's GetHandle(), subclass the WC_DIALOG class's window
 // function. Calls the virtual DialogFunction() to handle specific messages,
 // mostly for startup sequence.
 //
-bool CALLBACK __export
-StdDlgProc(HWND hDlg, uint msg, WPARAM wParam, LPARAM lParam)
+/*OWL_EXPORT*/ int CALLBACK OWL_EXPORT16
+TDialog::StdDlgProc(THandle hDlg, uint msg, TParam1 param1, TParam2 param2)
 {
   // Thunk on first message to a non-thunked window & thats not one sent to
   // parent dialogs.
@@ -245,12 +296,12 @@ StdDlgProc(HWND hDlg, uint msg, WPARAM wParam, LPARAM lParam)
 
   // Get the window ptr using the global version since there is no other
   // context.
-  // 
+  //
   TWindow*  w = ::GetWindowPtr(hDlg);
   TDialog*  dialog = TYPESAFE_DOWNCAST(w, TDialog);
 
   if (DlgCreationWindow && !dialog && msg != WM_CANCELMODE && msg != WM_ENABLE) {
-    DlgCreationWindow->HWindow = hDlg;
+    DlgCreationWindow->SetHandle(hDlg);
 
     DlgCreationWindow->SubclassWindowFunction();
     dialog = DlgCreationWindow;
@@ -263,13 +314,12 @@ StdDlgProc(HWND hDlg, uint msg, WPARAM wParam, LPARAM lParam)
   // Call the virtual DialogFunction() to handle specific messages
   //
 #if defined(BI_PLAT_WIN32)
-  static bool exceptionOK =
-                !(::GetVersion()&0x80000000) || (::GetVersion()&0xFF) >= 4;
-  if (exceptionOK)
-    return dialog->DialogFunction(msg, wParam, lParam);
+  if (TSystem::SupportsExceptions())
+    return dialog->DialogFunction(msg, param1, param2);
 #endif
+#if defined(BI_PLAT_WIN16) || defined(WIN32S_SUPPORT)
   TRY {
-    return dialog->DialogFunction(msg, wParam, lParam);
+    return dialog->DialogFunction(msg, param1, param2);
   }
   CATCH( (TXOwl& x) {
     w->GetApplication()->SuspendThrow(x);
@@ -280,22 +330,25 @@ StdDlgProc(HWND hDlg, uint msg, WPARAM wParam, LPARAM lParam)
   CATCH( (xmsg& x) {
     w->GetApplication()->SuspendThrow(x);
   })
+#if !defined(BI_NO_NEW_CASTS)
   CATCH( (Bad_cast) {
     w->GetApplication()->SuspendThrow(TApplication::xsBadCast);
   })
   CATCH( (Bad_typeid) {
     w->GetApplication()->SuspendThrow(TApplication::xsBadTypeid);
   })
+#endif
   CATCH( (...) {
     w->GetApplication()->SuspendThrow(TApplication::xsUnknown);
   })
+#endif
 
   // When exceptions are disabled CATCH is defined as empty, so the only code
   // is the TRY block, making this return unreachable
   //
-  #pragma warn -rch
+#pragma warn -rch
   return true;  // default value returned when exception caught
-  #pragma warn .rch
+#pragma warn .rch
 }
 
 static bool
@@ -305,47 +358,52 @@ RegisterFails(TWindow* win, void*)
 }
 
 //
-// creates an MS-Windows modeless dialog and associates the modeless
-// dialog interface element with the TDialog
+// Creates an Windows modeless dialog and associates the modeless dialog
+// interface element with the TDialog
 //
 bool
 TDialog::Create()
 {
-  PRECONDITION(HWindow == 0);
+  PRECONDITION(GetHandle() == 0);
 
   IsModal = false;
 
   if (!Register())
-    THROW( TXWindow(this, IDS_CLASSREGISTERFAIL) );
+    TXWindow::Raise(this, IDS_CLASSREGISTERFAIL);
 
   DlgCreationWindow = this;
 
   LoadAcceleratorTable();
 
-  //
-  // register all the dialog's child objects (for custom control support)
+  // Register all the dialog's child objects (for custom control support)
   //
   if (FirstThat(RegisterFails))
-    THROW( TWindow::TXWindow(this, IDS_CHILDREGISTERFAIL) );
+    TXWindow::Raise(this, IDS_CHILDREGISTERFAIL);
 
-  HWindow = DoCreate();
+  SetHandle(DoCreate());
   GetApplication()->ResumeThrow();
-  if (!HWindow)
-    THROW( TWindow::TXWindow(this, IDS_WINDOWCREATEFAIL) );
+  if (!GetHandle())
+    TXWindow::Raise(this, IDS_WINDOWCREATEFAIL);
 
   GetHWndState();
   return true;
 }
 
-HWND
+//
+// Overriden TWindow virtual to create & return the actual Handle for this
+// dialog.
+//
+TWindow::THandle
 TDialog::DoCreate()
 {
-  return CreateDialogParam(*GetModule(), Attr.Name, Parent? Parent->HWindow : 0,
-                           (DLGPROC)(FARPROC)StdDlgProcInstance, Attr.Param);
+  return ::CreateDialogParam(*GetModule(), DialogAttr.Name,
+                             Parent? Parent->GetHandle() : 0,
+                             (DLGPROC)StdDlgProc,
+                             DialogAttr.Param);
 }
 
 //
-// creates an modal dialog and associates the modal dialog interface
+// Creates an modal dialog and associates the modal dialog interface
 // element with the TDialog.  Registers all the dialog's child objects
 // (for custom control support).  If this registering fails, throws TXWindow
 // exception.  If the dialog fails to execute, throw a TXWindow exception.
@@ -354,50 +412,64 @@ TDialog::DoCreate()
 int
 TDialog::Execute()
 {
-  PRECONDITION(HWindow == 0);
+  PRECONDITION(GetHandle() == 0);
 
   IsModal = true;
 
   if (!Register())
-    THROW( TXWindow(this, IDS_CLASSREGISTERFAIL) );
+    TXWindow::Raise(this, IDS_CLASSREGISTERFAIL);
 
   DlgCreationWindow = this;
 
-  //
-  // register all the dialog's child objects (for custom control support)
+  // Register all the dialog's child objects (for custom control support)
   //
   if (FirstThat(RegisterFails))
-    THROW( TXWindow(0, IDS_CHILDREGISTERFAIL) );   // unspecified child window
+    TXWindow::Raise(0, IDS_CHILDREGISTERFAIL);   // Unspecified child window
 
   int retValue = DoExecute();
   GetApplication()->ResumeThrow();
 
-  //
-  // -1 if the function cannot create the dialog box
+  // DoEcecute returns -1 if it could not create the dialog box
   //
   if (retValue == -1)
-    THROW( TXWindow(this, IDS_WINDOWEXECUTEFAIL) );
+    TXWindow::Raise(this, IDS_WINDOWEXECUTEFAIL);
 
   return retValue;
 }
 
+//
+//
+// Overriden TWindow virtual to modaly execute this dialog & return the result.
+//
 int
 TDialog::DoExecute()
 {
-  return DialogBoxParam(*GetModule(), Attr.Name, Parent ? Parent->HWindow : 0,
-                        (DLGPROC)(FARPROC)StdDlgProcInstance, Attr.Param);
+  return ::DialogBoxParam(*GetModule(), DialogAttr.Name,
+                          Parent ? Parent->GetHandle() : 0,
+                          (DLGPROC)StdDlgProc,
+                          DialogAttr.Param);
 }
 
+//
+// Perform resource directed initialization of controls. Uses RT_DLGINIT
+// resource with an id matching this dialog's as structured message packets
+// to send to controls.
+//
+// Returns true if successful, or nothing to be done.
+//
 bool
 TDialog::PerformDlgInit()
 {
-  int rslt = (int)SendMessage(WM_VBXINITFORM, WPARAM(HWindow), LPARAM(Attr.Name));
+  int rslt = (int)SendMessage(WM_VBXINITFORM, TParam1(GetHandle()),
+                              TParam2(DialogAttr.Name));
   if (rslt)
     return rslt > 0;
 
   bool ok = true;
-  if (Attr.Name) {
-    HRSRC hRes = GetModule()->FindResource(Attr.Name, RT_DLGINIT);
+
+#if defined(BI_COMP_BORLANDC)
+  if (DialogAttr.Name) {
+    HRSRC hRes = GetModule()->FindResource(DialogAttr.Name, RT_DLGINIT);
     if (hRes) {
       HGLOBAL hDat = GetModule()->LoadResource(hRes);
       if (hDat) {
@@ -408,78 +480,72 @@ TDialog::PerformDlgInit()
             uint16 msg = *((uint16 far*)res)++;
             uint32 len = *((uint32 far*)res)++;
 
-            if (SendDlgItemMessage(idCtl, msg, 0, LPARAM(res)) == -1)
+            if (SendDlgItemMessage(idCtl, msg, 0, TParam2(res)) == -1)
               ok = false;
             res += len;
           }
-          #if !defined(BI_PLAT_WIN32)
-            ::UnlockResource(hDat);
-          #endif
+#if !defined(BI_PLAT_WIN32)
+          ::UnlockResource(hDat);
+#endif
         }
-        #if !defined(BI_PLAT_WIN32)
-          ::FreeResource(hDat);
-        #endif
+#if !defined(BI_PLAT_WIN32)
+        ::FreeResource(hDat);
+#endif
         GetApplication()->ResumeThrow();
       }
     }
   }
+#endif
   return ok;
 }
 
 //
-// responds to an incoming WM_INITDIALOG message
+// Virtual handler for WM_INITDIALOG message, called from DialogFunction()
 //
-// this message is sent after an MS-Windows dialog is created and before
-// the dialog is displayed
+// This message is sent after an Windows dialog is created and before the
+// dialog is displayed
 //
-// calls SetupWindow() to perform setup for the dialog
+// Calls SetupWindow() to perform setup for the dialog
 //
 bool
-TDialog::EvInitDialog(HWND /*hWndFocus*/)
+TDialog::EvInitDialog(THandle /*hFocus*/)
 {
   GetHWndState();
   PerformDlgInit();
   SetupWindow();
   SetFlag(wfFullyCreated);
-  return true;  // have Windows set focus to "hWndFocus"
+  return true;  // have Windows set focus to "hFocus"
 }
 
 //
-// sets up the dialog box by calling setting up ctl3d if enabled, then
+// Sets up the dialog box by calling setting up Ctl3d if enabled, then
 // calling SetCaption() and then TWindow::SetupWindow()
 //
-// calling SetCaption() here allows us to override the dialog caption
+// Calling SetCaption() here allows us to override the dialog caption
 // (specified in the dialog resource) by setting Title prior to this point
 //
 void
 TDialog::SetupWindow()
 {
-  //
   // If this app is using Ctl3d, tell it to explicitly subclass this dialog's
   // controls (CTL3D_ALL). Its better to do this here than enable
   // autosubclassing since that requires a CBT hook set all the time which
   // slows the app considerably.
   //
-  if (GetApplication()->Ctl3dEnabled()) {
-    bool FAR PASCAL(*ctl3dSubclassDlg)(HWND, uint16) = 0;
-    if (!ctl3dSubclassDlg)
-     (FARPROC)ctl3dSubclassDlg = GetApplication()->GetCtl3dModule()->
-                                   GetProcAddress("Ctl3dSubclassDlg");
-    if (ctl3dSubclassDlg)
-      ctl3dSubclassDlg(*this, 0xFFFF);
-  }
+  if (GetApplication()->Ctl3dEnabled())
+    GetApplication()->GetCtl3dModule()->SubclassDlg(*this, 0xFFFF);
 
   SetCaption(Title);
   TWindow::SetupWindow();
 }
 
 //
-// conditionally shuts down the dialog box
+// Conditionally shuts down the dialog box
 //
-// if this is a modal dialog calls CanClose() and, if CanClose() returns true,
+// If this is a modal dialog calls CanClose() and, if CanClose() returns true,
 // transfers its data and shuts down, passing retValue (default IDCANCEL)
 //
-// calls TWindow::CloseWindow(retValue) if this is a modeless dialog
+// Calls TWindow::CloseWindow(retValue) if this is a modeless dialog
 //
 void
 TDialog::CloseWindow(int retValue)
@@ -496,14 +562,14 @@ TDialog::CloseWindow(int retValue)
 }
 
 //
-// destroys the MS-Windows dialog associated with the TDialog
+// Destroys the Handle associated with the TDialog
 //
 void
 TDialog::Destroy(int retValue)
 {
-  if (IsModal && HWindow) {
+  if (IsModal && GetHandle()) {
     ForEach(DoEnableAutoCreate);
-    ::EndDialog(HWindow, retValue);
+    ::EndDialog(GetHandle(), retValue);
   }
   else {
     TWindow::Destroy(retValue);
@@ -511,18 +577,18 @@ TDialog::Destroy(int retValue)
 }
 
 //
-// set Dialog's Title data member and Caption. This is non-virtual, but is
-// always called with a TDialog or more specific pointer.
+// Set Dialog's Title data member and Caption. This is non-virtual, but is
+// always called with a TDialog or more derived pointer.
 //
 void
 TDialog::SetCaption(const char far* title)
 {
-  if (HIWORD(title) && LOWORD(title) != 0xFFFF)
+  if (HiUint16(uint32(title)) && LoUint16(uint32(title)) != 0xFFFF)
     TWindow::SetCaption(title);
 }
 
 //
-// responds to an incoming notification message from a button with
+// Responds to an incoming notification message from a button with
 // an Id equal to IDOK
 //
 void
@@ -530,12 +596,12 @@ TDialog::CmOk()
 {
   CloseWindow(IDOK);
 
-  if (!IsModal  && !HWindow && IsFlagSet(wfDeleteOnClose))
-    GetApplication()->Condemn(this);  
+  if (!IsModal  && !GetHandle() && IsFlagSet(wfDeleteOnClose))
+    GetApplication()->Condemn(this);
 }
 
 //
-// responds to an incoming notification message from a button with
+// Responds to an incoming notification message from a button with
 // an Id equal to IDCANCEL. Unconditionally destroy the window.
 //
 void
@@ -545,7 +611,7 @@ TDialog::CmCancel()
 }
 
 //
-// message response function for WM_CLOSE by unconditionally closing
+// Message response function for WM_CLOSE by unconditionally closing
 // the window.
 //
 void
@@ -553,37 +619,129 @@ TDialog::EvClose()
 {
   Destroy(IDCANCEL);
 
-  if (!IsModal  && !HWindow && IsFlagSet(wfDeleteOnClose)) 
-    GetApplication()->Condemn(this);  
+  if (!IsModal && !GetHandle() && IsFlagSet(wfDeleteOnClose))
+    GetApplication()->Condemn(this);
 }
+
+
+//
+// Initialize the base class
+//
+TControlEnabler::TControlEnabler(uint id, HWND hWndReceiver)
+:
+  TCommandEnabler(id, hWndReceiver)
+{
+}
+
+//
+// Enable/Disable the control
+//
+void
+TControlEnabler::Enable(bool enable)
+{
+  ::EnableWindow(GetReceiver(), enable);
+  TCommandEnabler::Enable(enable);
+}
+
+//
+// Set the text of the control
+//
+void
+TControlEnabler::SetText(const char far* text)
+{
+  ::SetWindowText(GetReceiver(), text);
+}
+
+//
+// Use with only buttons!
+//
+void
+TControlEnabler::SetCheck(int check)
+{
+  ::SendMessage(GetReceiver(), BM_SETCHECK, check, 0);
+}
+
+//
+// Iterate over each child control and routes the command enabler.
+// Does not rely on an OWL interface object to work.
+//
+bool
+TDialog::IdleAction(long idleCount)
+{
+  TWindow::IdleAction(idleCount);
+
+  if (idleCount == 0) {
+    HWND child = GetWindow(GW_CHILD);
+    while (::IsWindow(child)) {
+#if defined(BI_PLAT_WIN32)
+      int id = ::GetWindowLong(child, GWL_ID);
+#else
+      int id = ::GetWindowWord(child, GWW_ID);
+#endif
+      TControlEnabler ce(id, child);
+      RouteCommandEnable(*this, ce);
+      child = ::GetWindow(child, GW_HWNDNEXT);
+    }
+  }
+  return true;
+}
+
+//
+// Set focus within a dialog to a specific control.
+//
+void
+TDialog::SetControlFocus(HWND hwnd)
+{
+  CHECK(hwnd);
+  SendMessage(WM_NEXTDLGCTL, TParam1(hwnd), 1);
+}
+
+//
+// Set the focus to either the previous control with WS_TABSTOP or
+// the next control with WS_TABSTOP.
+//
+void
+TDialog::SetControlFocus(THow how)
+{
+  SendMessage(WM_NEXTDLGCTL, (how == Next) ? 1 : 0, 0);
+}
+
 
 #endif
 #if !defined(SECTION) || SECTION == 2
 
 IMPLEMENT_STREAMABLE1(TDialog, TWindow);
 
+#if !defined(BI_NO_OBJ_STREAMING)
+
 //
-// reads an instance of TDialog from the passed ipstream
+// Reads an instance of TDialog from the passed ipstream
 //
 void*
 TDialog::Streamer::Read(ipstream& is, uint32 /*version*/) const
 {
   ReadBaseObject((TWindow*)GetObject(), is);
 
-  is >> (TResId&)GetObject()->Attr.Name;
+  is >> (TResId&)GetObject()->DialogAttr.Name;
   is >> GetObject()->IsModal;
   return GetObject();
 }
 
+#if !defined(BI_NO_OBJ_STREAMING)
+
 //
-// writes the TDialog to the passed opstream
+// Writes the TDialog to the passed opstream
 //
 void
 TDialog::Streamer::Write(opstream& os) const
 {
   WriteBaseObject((TWindow*)GetObject(), os);
 
-  os << TResId(GetObject()->Attr.Name);
+  os << TResId(GetObject()->DialogAttr.Name);
   os << GetObject()->IsModal;
 }
+#endif  // if !defined(BI_NO_OBJ_STREAMING)
+
+#endif  // if !defined(BI_NO_OBJ_STREAMING)
+
 #endif

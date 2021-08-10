@@ -1,12 +1,14 @@
-//
 //----------------------------------------------------------------------------
 // ObjectComponents
-// (C) Copyright 1994 by Borland International, All Rights Reserved
+// Copyright (c) 1994, 1996 by Borland International, All Rights Reserved
+//
+// $Revision:   2.3  $
 //
 // OLE Automation Client Implementation
 //----------------------------------------------------------------------------
-#include <ocf/ocfpch.h>
+#include <ocf/pch.h>
 #include <ocf/autodefs.h>
+#include <services/memory.h>
 
 TAutoProxyArgs::~TAutoProxyArgs()
 {
@@ -104,7 +106,8 @@ void TAutoProxy::Lookup(const char far* names, long* ids, unsigned count)
 
 #if defined(BI_OLECHAR_WIDE)
   const char far* pc = names;
-  for (int i = 0; i < count; i++) {
+  int i;
+  for (i = 0; i < count; i++) {
     pc += strlen(pc) + 1;
   }
   wchar_t* wnames = TUString::ConvertAtoW(names, pc-names-1);
@@ -125,7 +128,8 @@ void TAutoProxy::Lookup(const char far* names, long* ids, unsigned count)
   }
   HRESULT stat = That->GetIDsOfNames(IID_NULL, args, count, Lang, ids);
 #endif
-  delete [] args;
+
+  delete[] args;
   if (stat) {
     int bad = 0;
     if ((stat = HR_DISP_UNKNOWNNAME) != HR_NOERROR)
@@ -209,5 +213,4 @@ bool TAutoEnumeratorBase::Step()
     return true;
   return false;
 }
-
 

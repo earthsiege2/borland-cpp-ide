@@ -2,10 +2,10 @@
 // Copyright (C) 1994 Borland International
 // CppOcf0.cpp
 // ---------------------------------------------------------------------------
-#include <ocf/ocfpch.h>
-#include <ocf/ocdefs.h>
+#include <ocf/pch.h>
+#include <ocf/defs.h>
 #include <windowsx.h>
-#include "CppOcf0.h"
+#include "cppocf0.h"
 
 // Starting point of all Windows programs
 //

@@ -6,9 +6,9 @@
  *-----------------------------------------------------------------------*/
 
 /*
- *      C/C++ Run Time Library - Version 1.5
+ *      C/C++ Run Time Library - Version 2.0
  *
- *      Copyright (c) 1987, 1994 by Borland International
+ *      Copyright (c) 1987, 1996 by Borland International
  *      All Rights Reserved.
  *
  */
@@ -32,7 +32,7 @@ void _xfflush(void)
     int    i;
 
     _lock_all_streams();
-    for (i = 0, fp = _streams; i < 3; i++, fp++)
+    for (i = 0, fp = _streams; i < _nfile; i++, fp++)
         if (fp->flags & _F_RDWR)
             fflush(fp);
     _unlock_all_streams();

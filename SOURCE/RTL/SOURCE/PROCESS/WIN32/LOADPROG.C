@@ -6,9 +6,9 @@
  *-----------------------------------------------------------------------*/
 
 /*
- *      C/C++ Run Time Library - Version 1.5
+ *      C/C++ Run Time Library - Version 2.0
  *
- *      Copyright (c) 1991, 1994 by Borland International
+ *      Copyright (c) 1991, 1996 by Borland International
  *      All Rights Reserved.
  *
  */
@@ -23,6 +23,7 @@
 #include <process.h>
 #include <stdlib.h>
 #include <string.h>
+
 
 /*-----------------------------------------------------------------------
  * _add_pid_ptr - pointer to function to add process to table
@@ -297,20 +298,24 @@ int _LoadProg(int mode, const char *pathP, const char * const *argP,
         UsePath = 0;
 
     /* Check if the program exists.  If no extension is given,
-     * try .EXE and then .BAT.
+     * try .EXE and then .BAT, and finally .CMD.
      */
     batch = 0;
     if ((ext = strrchr(pathP,'.')) != NULL) /* file has an extension */
     {
         if ((found = search(pathP, fullname, "", UsePath)) != 0)
-            if (stricmp(ext,".BAT") == 0)   /* is it a batch file? */
+            /* is it a batch file? */
+            if ((stricmp(ext,".BAT") == 0) || (stricmp(ext,".CMD") == 0))
                 batch = 1;
     }
     else                                    /* file has no extension */
     {
         if ((found = search(pathP, fullname, ".EXE", UsePath)) == 0)
-            if ((found = search(pathP, fullname, ".BAT", UsePath)) != 0)
-                batch = 1;                  /* use shell to run .BAT */
+            if ((batch=found = search(pathP, fullname, ".BAT", UsePath)) == 0)
+                batch=found = search(pathP, fullname, ".CMD", UsePath);
+                /* use shell to run .BAT
+                 * or .CMD files
+                 */
     }
     if (!found || (batch && (comspec = getenv("COMSPEC")) == NULL))
     {
@@ -358,7 +363,22 @@ memerr:
     if (_fileinfo)                      /* file info passing enabled? */
     {
         start.cbReserved2 = (*_cfinfo_get)(NULL);       /* get length */
-        if ((start.lpReserved2 = malloc((int)start.cbReserved2)) == NULL)
+
+        /* Because this block of memory is used in the called .EXE's
+           startup code, we can't really free it here, since the .EXE
+           could still be running when we exit.  Therefore we allocate
+           it using the internal malloc name: __org_malloc, which
+           codeguard does not track.  This way no one knows that we
+           haven't freed it.  (fear not, the OS will free it for us)
+        */
+        if ((start.lpReserved2 =
+#if defined(_BUILDRTLDLL)
+        malloc
+#else
+        __org_malloc
+#endif
+
+        ((int)start.cbReserved2)) == NULL)
             goto memerr;
         (*_cfinfo_get)((char *)start.lpReserved2);      /* copy file info */
     }
@@ -434,7 +454,12 @@ memerr:
                 break;
 
             case P_OVERLAY :
-                _exit(0);
+                free(envP);   /* free this stuff so codeguard is happy */
+                free(cmdP);
+                exit(0);      /* exit() will call all start/exit routines
+                                 and close all streams and handles, so that
+                                 codeguard is happy.
+                              */
 
             default :
                 rc = -1;

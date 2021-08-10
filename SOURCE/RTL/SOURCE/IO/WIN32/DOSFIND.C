@@ -7,9 +7,9 @@
  *--------------------------------------------------------------------------*/
 
 /*
- *      C/C++ Run Time Library - Version 1.5
+ *      C/C++ Run Time Library - Version 2.0
  *
- *      Copyright (c) 1991, 1994 by Borland International
+ *      Copyright (c) 1991, 1996 by Borland International
  *      All Rights Reserved.
  *
  */
@@ -23,7 +23,7 @@
 #include <errno.h>
 #include <stdlib.h>
 #include <string.h>
-
+#include <dir.h>
 #define SPECIAL_BITS (_A_SUBDIR|_A_HIDDEN|_A_SYSTEM)
 
 /*----------------------------------------------------------------------
@@ -47,6 +47,34 @@ typedef struct handle_rec
 } HANDLE_REC;
 
 static HANDLE_REC *handle_list;
+
+/*---------------------------------------------------------------------*
+
+Name            _handle_done - Cleans up the handle list
+
+Usage           void _handle_done(void);
+
+Prototype in
+
+Description     This helper function is called from the exit code to
+                clean up the list of directory handles.
+
+Return value    None.
+
+*---------------------------------------------------------------------*/
+
+static void _handle_done (void)
+{
+#pragma exit _handle_done 1
+    HANDLE_REC * r;
+    while (handle_list)
+    {
+        r = handle_list->next;
+        free (handle_list);
+        handle_list = r;
+    }
+
+}
 
 /*---------------------------------------------------------------------*
 
@@ -189,6 +217,31 @@ _dos_findfirst (const char *pathname, unsigned attrib, struct find_t *fileinfo)
     return (_dos_findnext(fileinfo));
 }
 
+/*--------------------------------------------------------------------------*
+
+Name            GetVol - Gets the drive volume from the specified path
+
+Usage           char *GetVol (char *path)
+
+Return value    ASCIIZ volume string
+                or
+                NULL if an error occured
+*---------------------------------------------------------------------------*/
+
+static char *GetVol (char *s)
+{
+    static char buf[256];
+    char drive[7];
+
+    _fullpath (buf, s, 255);
+    fnsplit (buf, drive, NULL, NULL, NULL);
+    strcat (drive,"\\");
+    buf[0] = 0;
+    if (GetVolumeInformation (drive, buf, 255, NULL, NULL, NULL, NULL, 0))
+        return buf;
+
+  return NULL;
+}
 
 /*--------------------------------------------------------------------------*
 
@@ -212,19 +265,41 @@ Return value    success : 0
                         ENMFILE No more files
 
 *---------------------------------------------------------------------------*/
-
 unsigned _RTLENTRY _EXPFUNC _dos_findnext(struct find_t *fileinfo)
 {
     WIN32_FIND_DATA ff;
     HANDLE_REC *hr;
     FILETIME local;
     BOOL found;
+    char *ptr;
 
     hr = (HANDLE_REC *)fileinfo->reserved;
+
+    /* If requested attributes word has the Volume ID bit set,
+     * get and return the volume label entry (only on first call).
+     */
+    if ((hr->attr & _A_VOLID) && hr->handle == (HANDLE)-1)
+    {
+        fileinfo->attrib = _A_VOLID;
+        ptr = GetVol (hr->name);
+        if (ptr)
+        {
+            strcpy(fileinfo->name, ptr);
+            hr->handle = (HANDLE)-2;      /* note that the volume has been
+                                           * returned
+                                           */
+            return 0;
+        }
+        else
+            return (__DOSerror());
+    }
+
     for (;;)
     {
-        if (hr->handle == (HANDLE)-1)
+        if ((hr->handle == (HANDLE)-1) || (hr->handle == (HANDLE)-2))
         {
+            hr->handle = (HANDLE)-1;      /* in case it's -2
+                                           */
             hr->handle = FindFirstFile(hr->name, &ff);
             found = hr->handle != (HANDLE)-1;
         }
@@ -232,12 +307,6 @@ unsigned _RTLENTRY _EXPFUNC _dos_findnext(struct find_t *fileinfo)
             found = FindNextFile(hr->handle, &ff);
         if (!found)
             return (__DOSerror());
-
-        /* If requested attributes word has the Volume ID bit set,
-         * include only volume label entries.
-         */
-        if ((hr->attr & _A_VOLID) && (ff.dwFileAttributes & _A_VOLID))
-            break;
 
         /* If requested attribute word includes hidden, system, or
          * subdirectory bits, return normal files AND those with

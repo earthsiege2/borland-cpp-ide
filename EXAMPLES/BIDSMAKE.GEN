@@ -1,10 +1,14 @@
 #----------------------------------------------------------------------------
-# (C) Copyright 1993 by Borland International
-#   examples\bidsmake.gen
+# Borland Class Library
+# Copyright (c) 1993, 1995 by Borland International, All Rights Reserved
+#
+# $Revision:   10.1  $
+#
+# Extensions to makefile.gen, adding Classlib definitions and libraries
 #----------------------------------------------------------------------------
 
 !ifndef SYSTEMS
-SYSTEMS = WIN16 DOS16 CON32
+SYSTEMS = WIN16 DOS16 CON32 WIN32
 !endif
 
 #
@@ -17,11 +21,16 @@ SYSTEM  = CON32
 ! endif
 !endif
 
+!if "$(MODEL)"=="t"
+SYSTEM = CON32
+MT = 1
+!endif
+
 #
 # If no model has been specified, use large so we don't default to DLL
 # which doesn't work with easywin apps
 #
-!if !$d(MODEL)
+!if !$d(MODEL) && !$d(CON32) && !$d(WIN32) && "$(SYSTEM)" != "CON32" && "$(SYSTEM)" != "WIN32"
 MODEL=l
 !endif
 
@@ -54,9 +63,17 @@ CFLAGS = $(CFLAGS) -D_BIDSDLL
 #
 !if $(_32BIT_)
 ! ifdef USEDLL
+!  ifdef MT
+_SFX_ = ti
+!  else
 _SFX_ = fi
+!  endif
 ! else
+!  ifdef MT
+_SFX_ = t
+!  else
 _SFX_ = f
+!  endif
 ! endif
 !else #WIN16 or DOS16
 ! ifdef USEDLL

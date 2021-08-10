@@ -7,9 +7,9 @@
 */
 
 /*
- *      C/C++ Run Time Library - Version 6.5
+ *      C/C++ Run Time Library - Version 7.0
  *
- *      Copyright (c) 1987, 1994 by Borland International
+ *      Copyright (c) 1987, 1996 by Borland International
  *      All Rights Reserved.
  *
  */
@@ -108,7 +108,7 @@ char * _CType _FARFUNC _lsetlocale( int category, const char *locale )
         /* initialize dynamic locale */
         if ( __initialize_locale() == LOCALE_ERROR )
             return( NULL );
-    }            
+    }
 
     if ( locale != NULL )
 
@@ -117,7 +117,18 @@ char * _CType _FARFUNC _lsetlocale( int category, const char *locale )
         if ( ( strcmp( locale, C_LOCALE_FULL_STR ) == 0 ) ||
              ( strcmp( locale, C_LOCALE_SHORT_STR ) == 0 ) )
 
+        {
+            if ( _QRTLInstanceData(_pLocale)->LocaleHdr.ObjAllocType == _DYNAMIC )
+            {
+                /* Delete the existing locale memory before setting it back
+                   to _STATIC (free the memory and satisfy CG)
+                */
+                int _CType _FARFUNC __uninitialize_locale( void );
+                __uninitialize_locale();
+            }
+
             return( __set_c_locale( category ) );
+        }
     }
 
     /*
@@ -131,7 +142,7 @@ char * _CType _FARFUNC _lsetlocale( int category, const char *locale )
     {
         switch( category )
         {
- 
+
         case LC_ALL:
             ReturnPtr = _QRTLInstanceData(_pLocale)->LocaleString;
             break;
@@ -166,10 +177,10 @@ char * _CType _FARFUNC _lsetlocale( int category, const char *locale )
 
         default:
             ReturnPtr = NULL;
-        }            
+        }
 
         return( ReturnPtr );
-    }            
+    }
 
     /*
         if locale is a null string get appropriate environmental locale info.
@@ -177,7 +188,7 @@ char * _CType _FARFUNC _lsetlocale( int category, const char *locale )
 
     if ( *locale == '\0' )
         return( __read_localeenv( category ) );
-                
+
     /* is locale a full locale string? */
     if ( _ISLOCALESTRING( locale ) )
 
@@ -222,7 +233,7 @@ char * _CType _FARFUNC _lsetlocale( int category, const char *locale )
     if ( __open_localelib( &LibStatus ) != OSFILE_NO_ERROR )
     {
         return( NULL );
-    }        
+    }
 
     /* open requested locale */
     if ( __open_locale( &LibStatus ) != OSFILE_NO_ERROR )
@@ -244,7 +255,7 @@ char * _CType _FARFUNC _lsetlocale( int category, const char *locale )
         __delete_locale( &LibStatus.ptmplocale );
 
         return( NULL );
-    }    
+    }
 
     i = category;
 
@@ -290,7 +301,7 @@ char * _CType _FARFUNC _lsetlocale( int category, const char *locale )
             if ( pClass == NULL )
 
             {
-                /* file handle, mem to dealloc */ 
+                /* file handle, mem to dealloc */
                 __locale_error( &LibStatus, NULL );
                 return( NULL );
             }
@@ -304,9 +315,9 @@ char * _CType _FARFUNC _lsetlocale( int category, const char *locale )
                     ( SBCS_COLLATELEVEL_BSIZE *
                     _QRTLInstanceData(_pLocale)->CollationCat.CollateInfo.nLevels ) ),
                     (unsigned int *) &nbytes ) != OSFILE_NO_ERROR )
-        
+
             {
-                /* file handle, mem to dealloc */ 
+                /* file handle, mem to dealloc */
                 __locale_error( &LibStatus, pClass );
                 return( NULL );
             }
@@ -327,9 +338,9 @@ char * _CType _FARFUNC _lsetlocale( int category, const char *locale )
                     (void *) &Temp16,
                     sizeof( short ),
                     (unsigned int *) &nbytes ) != OSFILE_NO_ERROR )
-    
+
             {
-                /* file handle, mem to dealloc */ 
+                /* file handle, mem to dealloc */
                 __locale_error( &LibStatus, pClass );
                 return( NULL );
             }
@@ -348,7 +359,7 @@ char * _CType _FARFUNC _lsetlocale( int category, const char *locale )
                         (unsigned int *) &nbytes ) != OSFILE_NO_ERROR )
 
                 {
-                    /* file handle, mem to dealloc */ 
+                    /* file handle, mem to dealloc */
                     __locale_error( &LibStatus, pClass );
                     return( NULL );
                 }
@@ -370,9 +381,9 @@ char * _CType _FARFUNC _lsetlocale( int category, const char *locale )
                     (void *) &Temp16,
                     sizeof( short ),
                     (unsigned int *) &nbytes ) != OSFILE_NO_ERROR )
-    
+
             {
-                /* file handle, mem to dealloc */ 
+                /* file handle, mem to dealloc */
                 __locale_error( &LibStatus, pClass );
                 return( NULL );
             }
@@ -392,7 +403,7 @@ char * _CType _FARFUNC _lsetlocale( int category, const char *locale )
                         ( sizeof( struct Compression ) * Temp16 ),
                         (unsigned int *) &nbytes ) != OSFILE_NO_ERROR )
                 {
-                    /* file handle, mem to dealloc */ 
+                    /* file handle, mem to dealloc */
                     __locale_error( &LibStatus, pClass );
                     return( NULL );
                 }
@@ -413,9 +424,9 @@ char * _CType _FARFUNC _lsetlocale( int category, const char *locale )
                     (void *) &Temp16,
                     sizeof( short ),
                     (unsigned int *) &nbytes ) != OSFILE_NO_ERROR )
-    
+
             {
-                /* file handle, mem to dealloc */ 
+                /* file handle, mem to dealloc */
                 __locale_error( &LibStatus, pClass );
                 return( NULL );
             }
@@ -437,7 +448,7 @@ char * _CType _FARFUNC _lsetlocale( int category, const char *locale )
                         (unsigned int *) &nbytes ) != OSFILE_NO_ERROR )
 
                 {
-                    /* file handle, mem to dealloc */ 
+                    /* file handle, mem to dealloc */
                     __locale_error( &LibStatus, pClass );
                     return( NULL );
                 }
@@ -463,7 +474,7 @@ char * _CType _FARFUNC _lsetlocale( int category, const char *locale )
             _QRTLInstanceData(_pLocale)->pExpandTbl       = (struct Expansion    *) pExpansion;
             _QRTLInstanceData(_pLocale)->pCompressTbl     = (struct Compression  *) pCompression;
             _QRTLInstanceData(_pLocale)->pSubstitutionTbl = (struct Substitution *) pSubstitution;
-    
+
             ReturnPtr = _QRTLInstanceData(_pLocale)->CollationCat.Header.CategoryName;
 
             break;
@@ -480,41 +491,41 @@ char * _CType _FARFUNC _lsetlocale( int category, const char *locale )
 
             ReturnPtr = _QRTLInstanceData(_pLocale)->CtypeCat.Header.CategoryName;
 
-            break;        
+            break;
 
         case LC_MONETARY:
 
             ReturnPtr = _QRTLInstanceData(_pLocale)->MonetaryCat.Header.CategoryName;
 
-            break;        
+            break;
 
         case LC_NUMERIC:
 
             ReturnPtr = _QRTLInstanceData(_pLocale)->NumericCat.Header.CategoryName;
 
-            break;        
+            break;
 
         case LC_TIME:
 
             ReturnPtr = _QRTLInstanceData(_pLocale)->TimeCat.Header.CategoryName;
 
             break;
-    
+
         case LC_MESSAGES:
 
             ReturnPtr = _QRTLInstanceData(_pLocale)->MessagesCat.Header.CategoryName;
 
-            break;                            
+            break;
 
         case LC_userdef:
 
             /* has a memory address been set for this category? */
             if ( _QRTLInstanceData(_pLocale)->UserCat.UserInfo == NULL )
-                break;                            
+                break;
 
             ReturnPtr = _QRTLInstanceData(_pLocale)->UserCat.Header.CategoryName;
 
-            break;                            
+            break;
 
         default:
 
@@ -523,11 +534,11 @@ char * _CType _FARFUNC _lsetlocale( int category, const char *locale )
             break;
 
         } /* switch */
-    
+
     } /* while */
 
     /* close locale library */
-    _OSFILECLOSE( LibStatus.Lhandle );    
+    _OSFILECLOSE( LibStatus.Lhandle );
 
     /* update the full locale string */
     sprintf(
@@ -540,7 +551,7 @@ char * _CType _FARFUNC _lsetlocale( int category, const char *locale )
         _QRTLInstanceData(_pLocale)->TimeCat.Header.CategoryName,
         _QRTLInstanceData(_pLocale)->MessagesCat.Header.CategoryName,
         _QRTLInstanceData(_pLocale)->UserCat.Header.CategoryName );
- 
+
     if ( category == LC_ALL )
         ReturnPtr = _QRTLInstanceData(_pLocale)->LocaleString;
 
@@ -566,20 +577,20 @@ int __open_localelib( struct LocaleLibraryStatus *LibStatus )
     /* find the locale library file */
     if ( __find_localelib( _QRTLInstanceData(_LocaleLibName) ) == OSFILE_ERROR )
         return( OSFILE_ERROR );
-    
+
     /* open locale library */
-    if ( 
+    if (
         _OSFILEOPEN(
             _QRTLInstanceData(_LocaleLibName),
             (unsigned int) ( O_BINARY | O_RDONLY ),
             (int *) &LibStatus->Lhandle ) != OSFILE_NO_ERROR )
 
     {
-        /* file handle, mem to dealloc */ 
+        /* file handle, mem to dealloc */
         __locale_error( LibStatus, NULL );
         return( OSFILE_ERROR );
     }
-        
+
     /* read locale library header */
      if (
         _OSFILEREAD(
@@ -589,7 +600,7 @@ int __open_localelib( struct LocaleLibraryStatus *LibStatus )
             &nbytes ) != OSFILE_NO_ERROR )
 
     {
-        /* file handle, mem to dealloc */ 
+        /* file handle, mem to dealloc */
         __locale_error( LibStatus, NULL );
         return( OSFILE_ERROR );
     }
@@ -597,7 +608,7 @@ int __open_localelib( struct LocaleLibraryStatus *LibStatus )
     if ( _CHECKVERSION( LibStatus->LibHdr.LocaleLibraryVersion ) == LOCALE_ERROR )
 
     {
-        /* file handle, mem to dealloc */ 
+        /* file handle, mem to dealloc */
         __locale_error( LibStatus, NULL );
         return( OSFILE_ERROR );
     }
@@ -606,7 +617,7 @@ int __open_localelib( struct LocaleLibraryStatus *LibStatus )
     if ( LibStatus->LibHdr.nLocales == 0 )
 
     {
-        /* file handle, mem to dealloc */ 
+        /* file handle, mem to dealloc */
         __locale_error( LibStatus, NULL );
         return( OSFILE_ERROR );
     }
@@ -638,7 +649,7 @@ int __open_locale( struct LocaleLibraryStatus *LibStatus )
               (unsigned int *) &nbytes ) != OSFILE_NO_ERROR )
 
         {
-            /* file handle, mem to dealloc */ 
+            /* file handle, mem to dealloc */
             __locale_error( LibStatus, NULL );
             return( LOCALE_ERROR );
         }
@@ -647,7 +658,7 @@ int __open_locale( struct LocaleLibraryStatus *LibStatus )
         if ( ( match = strncmp( LibStatus->plocalename, LibStatus->Location.LocaleName, LibStatus->localename_len ) ) == 0 )
             break;
     }
-        
+
     if ( match != 0 )
     {
         __locale_error( LibStatus, NULL );
@@ -662,7 +673,7 @@ int __open_locale( struct LocaleLibraryStatus *LibStatus )
             SEEK_SET ) == OSFILE_ERROR )
 
     {
-        /* file handle, mem to dealloc */ 
+        /* file handle, mem to dealloc */
         __locale_error( LibStatus, NULL );
         return( LOCALE_ERROR );
     }
@@ -676,7 +687,7 @@ int __open_locale( struct LocaleLibraryStatus *LibStatus )
          (unsigned int *) &nbytes ) != OSFILE_NO_ERROR )
 
     {
-        /* file handle, mem to dealloc */ 
+        /* file handle, mem to dealloc */
         __locale_error( LibStatus, NULL );
         return( LOCALE_ERROR );
     }
@@ -703,13 +714,13 @@ int __find_localecat( struct LocaleLibraryStatus *LibStatus )
             (void *) &Temp16,
             sizeof( short ),
             (unsigned int *) &nbytes ) != OSFILE_NO_ERROR )
-    
+
         {
-            /* file handle, mem to dealloc */ 
+            /* file handle, mem to dealloc */
             __locale_error( LibStatus, NULL );
             return( LOCALE_ERROR );
         }
-        
+
 
     for ( i = 0; i < Temp16; i++ ) {
 
@@ -722,7 +733,7 @@ int __find_localecat( struct LocaleLibraryStatus *LibStatus )
                 (unsigned int *) &nbytes ) != OSFILE_NO_ERROR )
 
         {
-            /* file handle, mem to dealloc */ 
+            /* file handle, mem to dealloc */
             __locale_error( LibStatus, NULL );
             return( LOCALE_ERROR );
         }
@@ -741,7 +752,7 @@ int __find_localecat( struct LocaleLibraryStatus *LibStatus )
                     return( LOCALE_NO_ERROR );
 
         }
-    
+
         else
 
         /* searching for full category name */
@@ -759,7 +770,7 @@ int __find_localecat( struct LocaleLibraryStatus *LibStatus )
                 SEEK_CUR ) == OSFILE_ERROR )
 
         {
-            /* file handle, mem to dealloc */ 
+            /* file handle, mem to dealloc */
             __locale_error( LibStatus, NULL );
             return( LOCALE_ERROR );
         }
@@ -840,7 +851,7 @@ void __locale_error( struct LocaleLibraryStatus *LibStatus, void *MemPtr )
     if ( MemPtr != NULL )
         _OSMEMFREE( MemPtr );
 
-    /* get current global locale */ 
+    /* get current global locale */
     porglocale = _QRTLInstanceData(_pLocale);
 
     if ( LibStatus->ptmplocale != NULL )
@@ -896,7 +907,7 @@ int __read_localecat( struct LocaleLibraryStatus *LibStatus, int category )
         cat_hdr = (void *) &_QRTLInstanceData(_pLocale)->CtypeCat.Header;
 
         break;
- 
+
     case LC_MONETARY:
 
         cat_mask = __LC_MONETARY;
@@ -961,7 +972,7 @@ int __read_localecat( struct LocaleLibraryStatus *LibStatus, int category )
 
         if ( _QRTLInstanceData(_pLocale)->UserCat.UserInfo == NULL )
             return( LOCALE_ERROR );
-        
+
         cat_info = (void *) _QRTLInstanceData(_pLocale)->UserCat.UserInfo;
 
         /* size is unknown at this point */
@@ -986,7 +997,7 @@ int __read_localecat( struct LocaleLibraryStatus *LibStatus, int category )
         SEEK_SET ) == OSFILE_ERROR )
 
         {
-            /* file handle, mem to dealloc */ 
+            /* file handle, mem to dealloc */
             __locale_error( LibStatus, NULL );
             return( LOCALE_ERROR );
         }
@@ -1013,7 +1024,7 @@ int __read_localecat( struct LocaleLibraryStatus *LibStatus, int category )
             (unsigned int *) &nbytes ) != OSFILE_NO_ERROR )
 
             {
-                /* file handle, mem to dealloc */ 
+                /* file handle, mem to dealloc */
                 __locale_error( LibStatus, NULL );
                 return( LOCALE_ERROR );
             }
@@ -1064,7 +1075,7 @@ char * __read_localeenv( int category )
 *
 * search for specified 'localelib' filename in following sequence:
 *
-* 1: default directory if 'localelib' is simple file name 
+* 1: default directory if 'localelib' is simple file name
 *    or if 'localelib' specifies a full pathname.
 *
 * 2: directory where application executed from.
@@ -1126,7 +1137,7 @@ int __find_localelib( char *localelib )
         pathspec1._dir_,
         pathspec2._name_,
         pathspec2._ext_ );
-        
+
     /* is file there? */
     if ( findfirst( tmp_pathname, &fileblock, 0 ) == 0 )
     {
@@ -1143,7 +1154,7 @@ int __find_localelib( char *localelib )
 
     /* cannot find the specified locale library */
     return( OSFILE_ERROR );
-}        
+}
 
 
 /*
@@ -1160,12 +1171,12 @@ int __delete_locale( struct LOCALEOBJECT **pdeletelocale )
     if ( (*pdeletelocale)->pClass )
         _OSMEMFREE( (*pdeletelocale)->pClass );
 
-    if ( (*pdeletelocale)->pCtype ) 
+    if ( (*pdeletelocale)->pCtype )
         _OSMEMFREE( (*pdeletelocale)->pCtype );
 
     if ( (*pdeletelocale) )
         _OSMEMFREE( *pdeletelocale );
- 
+
     *pdeletelocale = NULL;
 
     return( 1 );
@@ -1205,7 +1216,7 @@ int __dup_locale( struct LOCALEOBJECT **pdstlocale, struct LOCALEOBJECT **psrclo
     {
 
         (*pdstlocale)->pClass =
-                _OSMEMALLOC( 
+                _OSMEMALLOC(
                     (*psrclocale)->CollationCat.CollateInfo.nTableSize, 1 );
 
         if ( (*pdstlocale)->pClass == NULL )
@@ -1225,18 +1236,20 @@ int __dup_locale( struct LOCALEOBJECT **pdstlocale, struct LOCALEOBJECT **psrclo
             (*pdstlocale)->pExpandTbl = (struct Expansion*)
                 &( (*pdstlocale)->pClass ) +
                 (unsigned)(((*psrclocale)->pExpandTbl - (*psrclocale)->pClass));
- 
+
         if ( (*psrclocale)->pCompressTbl != NULL )
             (*pdstlocale)->pCompressTbl = (struct Compression *)
                 &( (*pdstlocale)->pCompressTbl ) +
                 (unsigned)(((*psrclocale)->pCompressTbl - (*psrclocale)->pClass));
- 
+
         if ( (*psrclocale)->pSubstitutionTbl != NULL )
             (*pdstlocale)->pSubstitutionTbl = (struct Substitution *)
                 &( (*pdstlocale)->pSubstitutionTbl ) +
                 (unsigned)(((*psrclocale)->pSubstitutionTbl - (*psrclocale)->pClass));
 
     }
+    else
+	(*pdstlocale)->pClass = NULL;
 
      /* allocate ctype and case conversion tables space */
     (*pdstlocale)->pCtype =

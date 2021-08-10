@@ -4,9 +4,9 @@
 */
 
 /*
- *      C/C++ Run Time Library - Version 6.5
+ *      C/C++ Run Time Library - Version 7.0
  *
- *      Copyright (c) 1987, 1994 by Borland International
+ *      Copyright (c) 1987, 1996 by Borland International
  *      All Rights Reserved.
  *
  */
@@ -25,7 +25,7 @@
 #pragma warn -nak
 #endif
 
-#pragma option -a-
+#pragma pack(push, 1)
 
 #endif  /* !RC_INVOKED */
 
@@ -171,7 +171,7 @@ unsigned        _RTLENTRY  __outportw__(unsigned __portid, unsigned __value);
 
 /* MSC-compatible macros for port I/O */
 #define inp(__portid)               __inportb__ (__portid)
-#define outp(__portid, __value)     __outportb__(__portid, (unsigned char)__value)
+#define outp(__portid, __value)     __outportb__(__portid, (unsigned char)(__value))
 #define inpw(__portid)              __inportw__ (__portid)
 #define outpw(__portid, __value)    __outportw__(__portid, __value)
 
@@ -244,6 +244,7 @@ enum text_modes
 
 #if !defined(__STDC__)  /*  NON-ANSI  */
 #define directvideo  _directvideo
+#define _getch       getch             /* for MSC compatibility */
 #endif
 
 extern   int _RTLENTRY _EXPDATA _directvideo;
@@ -301,7 +302,8 @@ int         _RTLENTRY _EXPFUNC wherey( void );
 
 #if !defined(RC_INVOKED)
 
-#pragma option -a.
+/* restore default packing */
+#pragma pack(pop)
 
 #if defined(__STDC__)
 #pragma warn .nak

@@ -7,9 +7,9 @@
  *--------------------------------------------------------------------------*/
 
 /*
- *      C/C++ Run Time Library - Version 1.5
+ *      C/C++ Run Time Library - Version 2.0
  *
- *      Copyright (c) 1991, 1994 by Borland International
+ *      Copyright (c) 1991, 1996 by Borland International
  *      All Rights Reserved.
  *
  */
@@ -34,17 +34,24 @@ Description     Convert the specified time and date in NT format to
                 The current timezone and daylight savings time are
                 used to adjust the time.
 
-Return value    The date and time converted to a POSIX calendar time.
+Return value    The date and time converted to a POSIX calendar time in UTC.
 
 *---------------------------------------------------------------------------*/
 
 static time_t _posixtime(FILETIME *ft)
 {
     SYSTEMTIME st;
+    FILETIME loc;
 
-    if (FileTimeToSystemTime(ft, &st) != TRUE)
+    /* Convert the Win32 UTC based filetime to local time. */
+    if (FileTimeToLocalFileTime (ft, &loc) != TRUE)
         return 0;
 
+    /* Convert the filetime format into a systemtime format. */
+    if (FileTimeToSystemTime(&loc, &st) != TRUE)
+        return 0;
+
+    /* Return the number of seconds since 1-1-1970 in UTC. */
     return (_totalsec(st.wYear-1900, st.wMonth-1, st.wDay-1,
                       st.wHour, st.wMinute, st.wSecond));
 }
@@ -53,7 +60,7 @@ static time_t _posixtime(FILETIME *ft)
 
 Name            _statcvt - convert NT file information to struct tm
 
-Usage           void _statcvt(struct stat *bufP, DWORD attr,
+Usage           void _statcvt(struct stat *bufP, DWORD attr, FILETIME *ctime
                     FILETIME *atime, FILETIME *wtime, DWORD fsize);
 
 Prototype in    none
@@ -83,6 +90,7 @@ Return value    none
 void _statcvt(
     struct stat *bufP,      /* stat structure to be filled in */
     DWORD attr,             /* NT file attributes */
+    FILETIME *ctime,        /* NT time of file creation */
     FILETIME *atime,        /* NT time of last access */
     FILETIME *wtime,        /* NT time of last write */
     DWORD fsize)            /* NT low word of file size */
@@ -91,13 +99,13 @@ void _statcvt(
 
     /* Convert the NT file times to their POSIX equivalent.
      * POSIX doesn't support the NT notion of creation time,
-     * so we ignore it.  NT doesn't support the POSIX notion of
-     * file status time, so we just set it to the modification time.
+     * and NT doesn't support the POSIX notion of file status time,
+     * so we just set it to the NT file creation time.
      * The FAT file system supports only the modification time.
      */
     bufP->st_atime = _posixtime(atime);     /* access time */
     bufP->st_mtime = _posixtime(wtime);     /* write time */
-    bufP->st_ctime = bufP->st_mtime;        /* file status time */
+    bufP->st_ctime = _posixtime(ctime);     /* creation time */
 
     /* Convert the NT file attributes.  Currently we always set S_IEXEC;
      * we should find some way to determine if the file really is executable.

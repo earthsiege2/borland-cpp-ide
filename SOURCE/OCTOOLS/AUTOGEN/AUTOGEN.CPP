@@ -1,5 +1,6 @@
 //----------------------------------------------------------------------------
-// ObjectConnections - (C) Copyright 1994 by Borland International
+// ObjectComponents
+// Copyright (c) 1994, 1996 by Borland International, All Rights Reserved
 //
 // This program reads type libraries (*.OLB; *.TLB) and emits C++ source files
 // A typelib filename on the command line forces non-interactive operation.
@@ -7,17 +8,17 @@
 // A C++ compatible .HPP file can be generated using the entire type library
 // by selecting the dialog box option, or by use of the command line options.
 //----------------------------------------------------------------------------
-#include <ocf/ocdefs.h>  // TComRef
-#include <osl/except.h>  // TXBase
-#include <olenls.h>      // LANGIDFROMCLSID
+#include <ocf/defs.h>      // TComRef
+#include <ocf/oleutil.h>   // TComRef
+#include <winsys/exbase.h> // TXBase
+#include <olenls.h>        // LANGIDFROMCLSID
 #include <iostream.h>
-#include <commdlg.h>     // GetFileTitle
+#include <commdlg.h>       // GetFileTitle
 #include "autogen.rh"
 
-//____________________________________________________________________________
-//
+//----------------------------------------------------------------------------
 // ITypeInfo and ITypeLib encapsulations
-//____________________________________________________________________________
+//
 
 class TComRef<ITypeInfo> : public TComRefBase<ITypeInfo> {
   public:
@@ -39,42 +40,53 @@ class TComRef<ITypeInfo> : public TComRefBase<ITypeInfo> {
     VARDESC  far* VarDesc;
     BSTR Name;
     BSTR Doc;
+
   private:
     void ClearData();
 };
+
 inline void TComRef<ITypeInfo>::ClearData()
 {
   memset((char*)this  + sizeof(TComRefBase<ITypeInfo>), 0,
         sizeof(*this) - sizeof(TComRefBase<ITypeInfo>) );
-};
+}
+
 TComRef<ITypeInfo>::TComRef() : TComRefBase<ITypeInfo>()
 {
   ClearData();
 }
+
 TComRef<ITypeInfo>::TComRef(ITypeInfo* i) : TComRefBase<ITypeInfo>(i)
 {
   ClearData();
 }
+
 TComRef<ITypeInfo>::TComRef(const TComRef<ITypeInfo>& i)
-                  : TComRefBase<ITypeInfo>(i)
+:
+  TComRefBase<ITypeInfo>(i)
 {
   ClearData();
 }
+
 TComRef<ITypeInfo>::~TComRef()
 {
-  if (Attr) I->ReleaseTypeAttr(Attr);
-  if (FuncDesc) I->ReleaseFuncDesc(FuncDesc);
-  if (VarDesc)  I->ReleaseVarDesc(VarDesc);
+  if (Attr)
+    I->ReleaseTypeAttr(Attr);
+  if (FuncDesc)
+    I->ReleaseFuncDesc(FuncDesc);
+  if (VarDesc)
+    I->ReleaseVarDesc(VarDesc);
   ::SysFreeString(Name);
   ::SysFreeString(Doc);
 }
-inline ITypeInfo*
-TComRef<ITypeInfo>::operator =(ITypeInfo* iface)
+
+inline ITypeInfo* TComRef<ITypeInfo>::operator =(ITypeInfo* iface)
 {
   TComRef<ITypeInfo>::~TComRef();
   ClearData();
   return I = iface;
 }
+
 inline TComRef<ITypeInfo>&
 TComRef<ITypeInfo>::operator =(const TComRef<ITypeInfo>& i)
 {
@@ -83,29 +95,34 @@ TComRef<ITypeInfo>::operator =(const TComRef<ITypeInfo>& i)
   I = i.I;
   return *this;
 }
+
 inline
 TComRef<ITypeInfo>::operator ITypeInfo* far*()
-{ 
+{
   TComRef<ITypeInfo>::~TComRef();
   ClearData();
   return &I;
 }
+
 void TComRef<ITypeInfo>::GetDocumentation(MEMBERID memberid)
 {
   ::SysFreeString(Name);
   ::SysFreeString(Doc);
   OLECALL(I->GetDocumentation(memberid, &Name, &Doc, 0, 0),"TypeInfo::GetDoc");
 }
+
 void TComRef<ITypeInfo>::GetAttr()
 {
   if (Attr) I->ReleaseTypeAttr(Attr);
   OLECALL(I->GetTypeAttr(&Attr),"TypeInfo::GetTypeAttr");
 }
+
 void TComRef<ITypeInfo>::GetFuncDesc(unsigned int index)
 {
   if (FuncDesc) I->ReleaseFuncDesc(FuncDesc);
   OLECALL(I->GetFuncDesc(index, &FuncDesc),"TypeInfo::GetFuncDesc");
 }
+
 void TComRef<ITypeInfo>::GetVarDesc( unsigned int index)
 {
   if (VarDesc)  I->ReleaseVarDesc(VarDesc);
@@ -118,8 +135,8 @@ class TComRef<ITypeLib> : public TComRefBase<ITypeLib> {
     TComRef(ITypeLib* iface);
     TComRef(const TComRef<ITypeLib>& i);
    ~TComRef();
-    ITypeLib* operator =(ITypeLib* iface) {if(I)I->Release(); return I = iface;}
-    ITypeLib* operator =(const TComRef<ITypeLib>& i){if(I)I->Release(); return I=i.I;}
+    ITypeLib* operator =(ITypeLib* iface) {if (I) I->Release(); return I=iface;}
+    ITypeLib* operator =(const TComRef<ITypeLib>& i){if (I) I->Release(); return I=i.I;}
     ITypeLib* operator->() {return I;}
     void GetAttr();
     void GetDocumentation(int index = -1);
@@ -127,34 +144,40 @@ class TComRef<ITypeLib> : public TComRefBase<ITypeLib> {
     BSTR Name;
     BSTR Doc;
 };
+
 TComRef<ITypeLib>::TComRef() : TComRefBase<ITypeLib>(),
                                Name(0), Doc(0), Attr(0){}
+
 TComRef<ITypeLib>::TComRef(ITypeLib* i) : TComRefBase<ITypeLib>(i),
                                Name(0), Doc(0), Attr(0){}
+
 TComRef<ITypeLib>::TComRef(const TComRef<ITypeLib>& i) : TComRefBase<ITypeLib>(i),
                                Name(0), Doc(0), Attr(0){}
+
 TComRef<ITypeLib>::~TComRef()
 {
-  if (Attr) I->ReleaseTLibAttr(Attr);
+  if (Attr)
+    I->ReleaseTLibAttr(Attr);
   ::SysFreeString(Name);
   ::SysFreeString(Doc);
 }
+
 void TComRef<ITypeLib>::GetDocumentation(int index)
 {
   ::SysFreeString(Name);
   ::SysFreeString(Doc);
   OLECALL(I->GetDocumentation(index, &Name, &Doc, 0, 0),"TypeLib::GetDoc");
 }
+
 void TComRef<ITypeLib>::GetAttr()
 {
   if (Attr) I->ReleaseTLibAttr(Attr);
   OLECALL(I->GetLibAttr(&Attr),"TypeLib::GetAttr");
 }
 
-//____________________________________________________________________________
-//
+//----------------------------------------------------------------------------
 // Error handling facility using local exception object
-//____________________________________________________________________________
+//
 
 struct TLocalError {   // local exception object for this program
   TLocalError(const char* title, const char* message)
@@ -173,24 +196,26 @@ static inline void ErrorIf(int error, const char* title, int resId)
   if (error)
     Error(title, (char*)resId);
 }
+
 static inline void ErrorIf(int error, int resId, const char* message)
 {
   if (error)
     Error((char*)resId, message);
 }
+
 static inline void ErrorIf(int error, const char* title, const char* message)
 {
   if (error)
     Error(title,message);
 }
 
-//____________________________________________________________________________
-//
+//----------------------------------------------------------------------------
 // ITypeInfo iterator, emits C++ code
-//____________________________________________________________________________
+//
 
+//
 // TypeInfo/TypeLib processing flags
-
+//
 const int tfEnum      = 1<<TKIND_ENUM;
 const int tfRecord    = 1<<TKIND_RECORD;
 const int tfModule    = 1<<TKIND_MODULE;
@@ -206,8 +231,9 @@ const int tfDispHeader= 1<<13;
 const int tfDispImpl  = 1<<12;
 const int tfBoolType  = 1<<11;  // OR into libMode[1] if compiler bool support
 
-char* infoKind[] = 
-  {"ENUM","RECORD","MODULE","INTERFACE","DISPATCH","COCLASS","ALIAS","UNION"};
+char* infoKind[] = {
+  "ENUM","RECORD","MODULE","INTERFACE","DISPATCH","COCLASS","ALIAS","UNION"
+};
 
 char* typeFlagText[] = {
   "appobject",     // 1   TYPEFLAG_FAPPOBJECT
@@ -222,7 +248,7 @@ char* typeFlagText[] = {
   "TYPEFLAG256",
   "TYPEFLAG512",
 };
-const int typeFlagCount = sizeof(typeFlagText)/sizeof(char*);
+const int typeFlagCount = COUNTOF(typeFlagText);
 
 char* implFlagText[] = {
   "default",       // 1 IMPLTYPEFLAG_FDEFAULT
@@ -232,7 +258,7 @@ char* implFlagText[] = {
   "IMPLTYPEFLAG16",
   "IMPLTYPEFLAG32",
 };
-const int implFlagCount = sizeof(implFlagText)/sizeof(char*);
+const int implFlagCount = COUNTOF(implFlagText);
 
 char* memberFlagText[] = {
   "restricted",   // 1   FUNCFLAG_FRESTRICTED (VARFLAG_FREADONLY->invokeKind)
@@ -245,7 +271,7 @@ char* memberFlagText[] = {
   "FUNCFLAG128",
   "FUNCFLAG256",
 };
-const int memberFlagCount = sizeof(memberFlagText)/sizeof(char*);
+const int memberFlagCount = COUNTOF(memberFlagText);
 
 char* infoCpp[] =     // add delimiting space after identifier as needed
   {"enum ","struct ","","class _ICLASS ","class ","//","typedef ","union "};
@@ -257,7 +283,7 @@ char* invokeKind[] = {
   "prop r/o",      // 3 VAR_DISPATH + VARFLAG_FREADONLY
   "propset",       // 4 INVOKE_PROPERTYPUT
   "?"       ,      // 5
-  "propgetset",    // 6 
+  "propgetset",    // 6
   "prop r/w",      // 7 VAR_DISPATCH
   "propputref",    // 8 INVOKE_PROPERTYPUTREF
   "?",             // 9
@@ -311,9 +337,9 @@ char* autoType[] = {
   "TAutoDate",     //  7 datetime as double
   "TAutoString",   //  8 char far* global mem with int size before
 };
-const int autoTypeCount = sizeof(autoType)/sizeof(char*);
+const int autoTypeCount = COUNTOF(autoType);
 
-  char foldName[256+1] = {
+char foldName[256+1] = {
   "_\0_\0_\0f\0_\0_\0_\0_\0_\0_\0S\0_\0OE_\0_\0_\0"
   "_\0_\0_\0_\0_\0_\0_\0_\0_\0TMs\0_\0oe_\0_\0Y\0"
   "_\0_\0c\0L\0_\0Y\0_\0_\0_\0c\0a\0_\0_\0_\0r\0_\0"
@@ -331,6 +357,9 @@ const int fnClassName   = 8;  // add classname:: before identifier
 const int fnAutoTypes   = 16; // translate types to wrappered TAuto...
 const int fnIterator    = 32; // emit TAutoIterator<type>&
 
+//
+//
+//
 bool IsDispObject(ITypeInfo* typeInfo, TYPEDESC far& typeDesc)
 {
   if (typeDesc.vt != VT_USERDEFINED)
@@ -343,16 +372,22 @@ bool IsDispObject(ITypeInfo* typeInfo, TYPEDESC far& typeDesc)
 
 char* ClassName = 0;   // will become member variable
 
+//
+//
+//
 bool FormatTypeName(ITypeInfo* typeInfo, TYPEDESC far& typeDescRef,
-                   char far* name, ostream& out, int flags = 0)
+                    char far* name, ostream& out, int flags = 0)
 {
   bool isDispObject = false;
   TYPEDESC far* typeDesc = &typeDescRef;
   ARRAYDESC far* arrayDesc = 0;
   if (flags & fnIterator)
     out << "TAutoEnumerator<";
-  for (int derefCount = 0; typeDesc->vt == VT_PTR; derefCount++)
+
+  int derefCount = 0;
+  for (; typeDesc->vt == VT_PTR; derefCount++)
     typeDesc = typeDesc->lptdesc;
+
   if (typeDesc->vt == VT_USERDEFINED) {
     TComRef<ITypeInfo> refTypeInfo;
     OLECALL(typeInfo->GetRefTypeInfo(typeDesc->hreftype,refTypeInfo),"TypeInfo::GetRefTypeInfo");
@@ -362,11 +397,14 @@ bool FormatTypeName(ITypeInfo* typeInfo, TYPEDESC far& typeDescRef,
     if (flags & fnObjectByRef && refTypeInfo.Attr->typekind==TKIND_DISPATCH &&
         !(flags & fnIterator)){
       out << '&';    // need reference for automation proxy class
-    } isDispObject = true;
-  } else if (typeDesc->vt == VT_CARRAY) {
+    }
+    isDispObject = true;  //!CQ should this be within the prev if block?
+  }
+  else if (typeDesc->vt == VT_CARRAY) {
     arrayDesc = typeDesc->lpadesc;
     FormatTypeName(typeInfo, arrayDesc->tdescElem, 0, out);
-  } else {
+  }
+  else {
     if ((flags & fnAutoTypes) && (typeDesc->vt & 31) < autoTypeCount)
       out << autoType[typeDesc->vt & 31];
     else
@@ -374,10 +412,12 @@ bool FormatTypeName(ITypeInfo* typeInfo, TYPEDESC far& typeDescRef,
   }
   if (typeDesc->vt & VT_BYREF)  // should never happen
     derefCount++;
+
   while (derefCount--)
     out << " far*";
   if (flags & fnIterator)
     out << ">&";
+
   if (name) {
     char* buf;
     int len = lstrlen(name);
@@ -385,6 +425,7 @@ bool FormatTypeName(ITypeInfo* typeInfo, TYPEDESC far& typeDescRef,
     for (unsigned char far* pc = (unsigned char far*)name; *pc; pc++)
       if (*pc >= 128)
         nonascii++;
+
     if (nonascii) {
       unsigned char far* pn = (unsigned char far*)name;
       buf = new char[nonascii + len + 1];
@@ -394,7 +435,8 @@ bool FormatTypeName(ITypeInfo* typeInfo, TYPEDESC far& typeDescRef,
         c = *pn++;
         if (c < 128) {
           *buf++ = c;
-        } else {
+        }
+        else {
           char* px = foldName + (c-128)*2;
           *buf++ = *px++;
           if (*px)
@@ -402,6 +444,7 @@ bool FormatTypeName(ITypeInfo* typeInfo, TYPEDESC far& typeDescRef,
         }
       } while (c);
     }
+
     out << ' ';
     if (ClassName && (flags & fnClassName))
       out << ClassName << "::";
@@ -410,6 +453,7 @@ bool FormatTypeName(ITypeInfo* typeInfo, TYPEDESC far& typeDescRef,
     if (flags & fnPrefixSet)
       out << "Set";
     out << name;
+
     if (nonascii)
       delete name;
   }
@@ -419,13 +463,18 @@ bool FormatTypeName(ITypeInfo* typeInfo, TYPEDESC far& typeDescRef,
   return isDispObject;
 }
 
+//
+//
+//
 void FormatGuidLang(GUID far& guid, LCID locale, ostream& out)
 {
-  char guidBuf[38+1] = "{NULL}"; 
+  char guidBuf[38+1] = "{NULL}";
   int notNull = 0;
   int far* pg = (int far*)&guid;
+
   for (int i = sizeof(GUID)/sizeof(int); i--; pg++)
     notNull |= *pg;
+
   if (notNull)
     wsprintf(guidBuf, "{%08lX-%04X-%04X-%02X%02X-%02X%02X%02X%02X%02X%02X}",
              guid.Data1, guid.Data2, guid.Data3,
@@ -434,12 +483,18 @@ void FormatGuidLang(GUID far& guid, LCID locale, ostream& out)
   out << ' ' << guidBuf << '\\' << hex << LANGIDFROMLCID(locale) << dec;
 }
 
+//
+//
+//
 void FormatVers(int major, int minor, ostream& out)
 {
   if (major)
     out << ' ' << major << '.' << minor;
 }
 
+//
+//
+//
 void FormatDispId(DISPID id, int invKind, uint16 flags, ostream& out)
 {
   out << "[id(";
@@ -450,6 +505,7 @@ void FormatDispId(DISPID id, int invKind, uint16 flags, ostream& out)
   out << ')';
   if (invKind)
     out << ", " << invokeKind[invKind];
+
   for (int i = 0; flags; i++, flags >>= 1) {
     if (flags & 1)
       out << ", " << memberFlagText[i];
@@ -457,23 +513,26 @@ void FormatDispId(DISPID id, int invKind, uint16 flags, ostream& out)
   out << ']';
 }
 
+//
 // assumed that caller of this function called GetDocumenation() on typeInfo
-
+//
 void FormatTypeInfo(TComRef<ITypeInfo>& typeInfo, int mode, ostream& out)
 {
 //typeInfo.GetDocumentation();
   typeInfo.GetAttr();
   int kind = typeInfo.Attr->typekind;
+
   if (typeInfo.Attr->typekind != TKIND_ALIAS) {
     out << "\n// TKIND_" << infoKind[kind] << ": " << typeInfo.Name;
     FormatVers(typeInfo.Attr->wMajorVerNum,typeInfo.Attr->wMinorVerNum,out);
     FormatGuidLang(typeInfo.Attr->guid, typeInfo.Attr->lcid, out);
     out << ' ' << typeInfo.Doc << '\n';
+
     int typeFlags = typeInfo.Attr->wTypeFlags;
     if (typeFlags && !(mode & (tfDispHeader | tfDispImpl))) {
       char* delim = "//  [";
       for (int tflag = 0; tflag < implFlagCount; tflag++, typeFlags >>= 1)
-        if (typeFlags & 1) {  
+        if (typeFlags & 1) {
           out << delim << typeFlagText[tflag];
           delim = ", ";
       }
@@ -483,6 +542,7 @@ void FormatTypeInfo(TComRef<ITypeInfo>& typeInfo, int mode, ostream& out)
     if (!(mode & tfDispImpl))
       out << infoCpp[kind];
   }
+
   switch (kind) {
     case TKIND_MODULE: {
       for (int varIndex = 0; varIndex < typeInfo.Attr->cVars; varIndex++) {
@@ -504,7 +564,7 @@ void FormatTypeInfo(TComRef<ITypeInfo>& typeInfo, int mode, ostream& out)
         TBSTR argName[35];      // max. arg count + 1, minimum 35 for MSWord6
         unsigned int nameCount;
         OLECALL(typeInfo->GetNames(typeInfo.FuncDesc->memid, argName[0],
-                                   sizeof(argName)/sizeof(TBSTR), &nameCount),"TKIND_INTERFACE GetNames");
+                                   COUNTOF(argName), &nameCount), "TKIND_INTERFACE GetNames");
         if (typeInfo.Doc)
           out << "    // " << typeInfo.Doc << '\n';
         out << "    ";
@@ -569,7 +629,7 @@ void FormatTypeInfo(TComRef<ITypeInfo>& typeInfo, int mode, ostream& out)
         HREFTYPE hrefType;
         OLECALL(typeInfo->GetRefTypeOfImplType(baseIndex, &hrefType),"TKIND_INTERFACE GetRefTypeofImplType");
         TComRef<ITypeInfo> refTypeInfo;
-        OLECALL(typeInfo->GetRefTypeInfo(hrefType, refTypeInfo),"TKIND_INTERFACE GetRefTypeInfo"); 
+        OLECALL(typeInfo->GetRefTypeInfo(hrefType, refTypeInfo),"TKIND_INTERFACE GetRefTypeInfo");
         refTypeInfo.GetDocumentation();
         out << refTypeInfo.Name;
       }
@@ -616,7 +676,8 @@ void FormatTypeInfo(TComRef<ITypeInfo>& typeInfo, int mode, ostream& out)
         ClassName = new char[lstrlen(typeInfo.Name)+1];
         lstrcpy(ClassName, typeInfo.Name);
         semi = ' ';
-      } else {
+      }
+      else {
         semi = ';';
         out << typeInfo.Name;
         if (mode & tfDispHeader)
@@ -647,13 +708,14 @@ void FormatTypeInfo(TComRef<ITypeInfo>& typeInfo, int mode, ostream& out)
           char* argName = 0;
           if (!(mode & tfDispImpl))
             out << "    ";
-          if (formatFlags == 0 || 
+          if (formatFlags == 0 ||
              !((formatFlags & fnPrefixSet) || isDispObject)){
             FormatTypeName(typeInfo, typeDesc, typeInfo.Name, out, formatFlags);
             if (formatFlags & fnPrefixGet)
               out << "()";
             out << semi << "    ";
-          } else {
+          }
+          else {
             FormatTypeName(typeInfo,typeDescVoid,typeInfo.Name,out,formatFlags);
             if (mode & tfDispImpl)
               argName = isDispObject ? "obj" : "val";
@@ -670,21 +732,22 @@ void FormatTypeInfo(TComRef<ITypeInfo>& typeInfo, int mode, ostream& out)
             else if (isDispObject)
               out << "REF";
             else if (boolProp)
-              out << "CONV(TAutoBool)";
+              out << "CONV(TBool)";
             else if (boolRef)
-              out << "CONV(TAutoBoolRef)";
+              out << "CONV(TBool&)";
             else
               out << "GET";
             if (argName) {
               if (boolProp)
-                out << "(TAutoBool(" << argName << "))";
+                out << "(TBool(" << argName << "))";
               else if (boolRef)
-                out << "(TAutoBoolRef(" << argName << "))";
+                out << "(TBool&(" << argName << "))";
               else
                 out << '(' << argName << ')';
             }
             /*{*/ out << "\n}\n";
-          } else {
+          }
+          else {
             out << " // ";
             FormatDispId(typeInfo.VarDesc->memid, invKind,
                          typeInfo.VarDesc->wVarFlags & ~VARFLAG_FREADONLY, out);
@@ -728,16 +791,20 @@ void FormatTypeInfo(TComRef<ITypeInfo>& typeInfo, int mode, ostream& out)
           TYPEDESC far* typeDesc = &typeInfo.FuncDesc->elemdescFunc.tdesc;
           if (argIndex >= 0)  {        // processing an argument
             typeDesc = &typeInfo.FuncDesc->lprgelemdescParam[argIndex].tdesc;
-          } else if (outParam == 0 && (mode & (tfDispHeader | tfDispImpl)) &&
+          }
+          else if (outParam == 0 && (mode & (tfDispHeader | tfDispImpl)) &&
                      (IsDispObject(typeInfo, *typeDesc) || isIterator)) {
             typeDesc = &typeDescVoid;
             argIndex--;           // reprocess return as first arg
             isObject = true;
-          } else if (typeDesc->vt == VT_VOID || typeDesc->vt == VT_EMPTY) {
+          }
+          else if (typeDesc->vt == VT_VOID || typeDesc->vt == VT_EMPTY) {
             voidRet = true;
-          } else if (!(mode & tfBoolType) && typeDesc->vt == VT_BOOL) {
+          }
+          else if (!(mode & tfBoolType) && typeDesc->vt == VT_BOOL) {
             boolRet = true;
-          } else if (!(mode & tfBoolType) && typeDesc->vt == VT_PTR
+          }
+          else if (!(mode & tfBoolType) && typeDesc->vt == VT_PTR
                                  && typeDesc->lptdesc->vt == VT_BOOL) {
             boolRetRef = true;
           }
@@ -748,14 +815,18 @@ void FormatTypeInfo(TComRef<ITypeInfo>& typeInfo, int mode, ostream& out)
               name = "obj";
             if (isIterator)
               formatFlags |= fnIterator;
-          } else if (argIndex==0 && typeInfo.FuncDesc->invkind>=INVOKE_PROPERTYPUT) {
+          }
+          else if (argIndex==0 && typeInfo.FuncDesc->invkind>=INVOKE_PROPERTYPUT) {
             if (mode & tfDispImpl)
               name = "val";
-          } else if (nameIndex >= nameCount) {
+          }
+          else if (nameIndex >= nameCount) {
             if (mode & tfDispImpl)
               wsprintf(name = argName, "arg%d", argIndex+1);
-          } else
+          }
+          else
             name = argNames[nameIndex++];
+
           if (outParam == 0 && (mode & (tfDispHeader | tfDispImpl))) {
             if (typeInfo.FuncDesc->invkind>=INVOKE_PROPERTYPUT)
               formatFlags |= fnPrefixSet;  // must differentiate from get
@@ -795,9 +866,9 @@ void FormatTypeInfo(TComRef<ITypeInfo>& typeInfo, int mode, ostream& out)
             bool boolRef = !(mode & tfBoolType) && typeDesc.vt == VT_PTR
                                        && typeDesc.lptdesc->vt == VT_BOOL;
             if (boolArg)
-              out << "TAutoBool(";
+              out << "TBool(";
             else if (boolRef)
-              out << "TAutoBoolRef(";
+              out << "TBool&(";
             if (argIndex < nameCount)
               out << argNames[argIndex];
             else
@@ -811,23 +882,26 @@ void FormatTypeInfo(TComRef<ITypeInfo>& typeInfo, int mode, ostream& out)
               out << "PROP_REF(obj)";
             else
               out << "PROP_GET";
-          } else if (typeInfo.FuncDesc->invkind==INVOKE_PROPERTYPUT) {
+          }
+          else if (typeInfo.FuncDesc->invkind==INVOKE_PROPERTYPUT) {
             out << "PROP_SET(val)";
-          } else {
+          }
+          else {
             out << "METHOD_";
             if (isObject)
               out << "REF(obj)";
             else if (voidRet)
               out << "VOID";
             else if (boolRet)
-              out << "CONV(TAutoBool)";
+              out << "CONV(TBool)";
             else if (boolRetRef)
-              out << "CONV(TAutoBoolRef)";
+              out << "CONV(TBool&)";
             else
               out << "RET";
           }
           /*{*/ out << "\n}\n";  //(for editor brace check)
-        } else {
+        }
+        else {
           out << " // ";
           FormatDispId(typeInfo.FuncDesc->memid,
                        typeInfo.FuncDesc->invkind,
@@ -846,7 +920,7 @@ void FormatTypeInfo(TComRef<ITypeInfo>& typeInfo, int mode, ostream& out)
         int typeFlags;
         OLECALL(typeInfo->GetImplTypeFlags(cindex, &typeFlags), "GetImplTypeFlags");
         TComRef<ITypeInfo> refTypeInfo;
-        OLECALL(typeInfo->GetRefTypeInfo(hrefType, refTypeInfo),"TKIND_COCLASS GetRefTypeInfo"); 
+        OLECALL(typeInfo->GetRefTypeInfo(hrefType, refTypeInfo),"TKIND_COCLASS GetRefTypeInfo");
         refTypeInfo.GetDocumentation();
         out << "\n//  " << refTypeInfo.Name;
         char* delim = "  [";
@@ -867,10 +941,9 @@ void FormatTypeInfo(TComRef<ITypeInfo>& typeInfo, int mode, ostream& out)
   ClassName = 0;
 }
 
-//____________________________________________________________________________
-//
+//----------------------------------------------------------------------------
 // Local class to hold selection and iterator information for type library
-//____________________________________________________________________________
+//
 
 class TLogTypeInfo {
   public:
@@ -901,26 +974,30 @@ class TLogTypeInfo {
     HWND   Window;      // window to receive data
     TCall  Proc;        // callback function to display data
 };
+
 inline TLogTypeInfo::TLogTypeInfo(HWND hWnd)
                     : Window(hWnd), SelectList(0), Proc(0)
 {
   ClearLists();  // SelectList must be 0 to prevent delete of garbage
 }
+
 inline void TLogTypeInfo::ClearLists()
 {
-  if(!ReqNames)
+  if (!ReqNames)
     delete SelectList;
   ReqNames = 0;
   SelectList = 0;
   SelectCount = 0;
   ReqCount = 0;
 }
+
 inline void TLogTypeInfo::SetSelectList(int count, int* list)
 {
   ClearLists();
   SelectCount = count;
   SelectList = list;
 }
+
 inline void TLogTypeInfo::SetRequestList(int count, int* list, char** names)
 {
   ClearLists();
@@ -928,10 +1005,12 @@ inline void TLogTypeInfo::SetRequestList(int count, int* list, char** names)
   ReqNames = names;
   SelectList = list;
 }
+
 inline bool TLogTypeInfo::Report()
 {
   return Proc ? Proc(*this) : MatchRequest();
 }
+
 bool TLogTypeInfo::MatchRequest()
 {
   if (!ReqCount)
@@ -943,9 +1022,10 @@ bool TLogTypeInfo::MatchRequest()
         memcpy(&ReqNames[i],&ReqNames[i+1],(ReqCount-i)*sizeof(int));
       return ReqCount != 0;
     }
-  }  
+  }
   return true;  // keep going
 }
+
 char* TLogTypeInfo::ExtractRequest()
 {
   if (!ReqCount)
@@ -956,10 +1036,9 @@ char* TLogTypeInfo::ExtractRequest()
   return name;
 }
 
-//____________________________________________________________________________
-//
+//----------------------------------------------------------------------------
 // ITypeLib iterator, emits file header info, calls ITypeInfo iterator
-//____________________________________________________________________________
+//
 
 void ReadTypeLib(char* libName, char* incName, int mode, ostream& out,
                  TLogTypeInfo& log)
@@ -1038,10 +1117,9 @@ void ReadTypeLib(char* libName, char* incName, int mode, ostream& out,
   }
 }
 
-//____________________________________________________________________________
-//
+//----------------------------------------------------------------------------
 // Command line and UI processing, creates streams
-//____________________________________________________________________________
+//
 
 #include <stdio.h>
 #include <conio.h>
@@ -1049,8 +1127,9 @@ void ReadTypeLib(char* libName, char* incName, int mode, ostream& out,
 #include <fstream.h>
 #include <strstrea.h>
 
+//
 // Command line token extraction class
-
+//
 class TCmdLine {
   public:
     enum Kind {Null, Name, Option, Value};
@@ -1096,7 +1175,8 @@ TCmdLine::Kind TCmdLine::NextToken()
         Type = Name;
         Token--;
     }
-  } else {   // must have stopped on a delimiter
+  }
+  else {   // must have stopped on a delimiter
     Type = NextType;
     if (Type == Null)
       return Type;
@@ -1121,15 +1201,16 @@ TCmdLine::Kind TCmdLine::NextToken()
   return Type;
 }
 
+//
 // File name processing
-
+//
 enum  fileKind    { fkDispHdr, fkDispSrc, fkFullCpp,      fkCount };
 char* optText[] = { "Header",  "Code",    "Definitions" };
 char* fileExt[] = { "HXX",     "CXX",     "HPP" };
 int   libMode[] = { tfEnum|tfAlias|tfDispatch|tfLibHeader|tfDispHeader,
                     tfDispatch|tfDispImpl, tfAllKinds|tfLibHeader };
 char* stdFile[] = { ".HXX",    ".CXX",    0 };     // OC controller proxy code
-char* cppFile[] = { 0,         0,         ".HPP" };// standard C++ defs       
+char* cppFile[] = { 0,         0,         ".HPP" };// standard C++ defs
 
 
 int GenerateFiles(char* libName, char** outFiles, TLogTypeInfo& log)
@@ -1181,7 +1262,8 @@ int GenerateFiles(char* libName, char** outFiles, TLogTypeInfo& log)
       int  selectCount= log.GetSelectCount();
       if (!selectList) {
         ::SendDlgItemMessage(log.GetWindow(), IDC_INFOLIST, LB_SETSEL, 1, -1);
-      } else if (outCount != 0) {
+      }
+      else if (outCount != 0) {
         for (int i = 0; i < selectCount; i++)
           ::SendDlgItemMessage(log.GetWindow(), IDC_INFOLIST, LB_SETSEL, 1,
                                (LPARAM)(unsigned)selectList[i]);
@@ -1204,7 +1286,10 @@ HelpProc(HWND hDlg, UINT msg, WPARAM /*wParam*/, LPARAM /*lParam*/)
   return true;
 }
 
-bool CALLBACK __export
+//
+//
+//
+int CALLBACK __export
 SelectProc(HWND hDlg, UINT msg, WPARAM wParam, LPARAM /*lParam*/)
 {
   if (msg == WM_INITDIALOG) {
@@ -1212,10 +1297,11 @@ SelectProc(HWND hDlg, UINT msg, WPARAM wParam, LPARAM /*lParam*/)
     ::SendDlgItemMessage(hDlg, IDC_INFOLIST, LB_SETTABSTOPS, 1, (LPARAM)&tabs);
     ::SendDlgItemMessage(hDlg, IDC_AUTOCODE, BM_SETCHECK, 1, 0);
     return 1;
-  } else if (msg == WM_COMMAND) {
+  }
+  else if (msg == WM_COMMAND) {
     switch (wParam) {
       case IDOK:
-      case IDCANCEL:    
+      case IDCANCEL:
         ::PostMessage(hDlg, WM_USERSTAT, wParam, 0);
         return 1;
       case IDC_SELECTALL:
@@ -1224,7 +1310,8 @@ SelectProc(HWND hDlg, UINT msg, WPARAM wParam, LPARAM /*lParam*/)
                              wParam==IDC_SELECTALL, -1);
         return 1;
     }
-  } else if (msg == WM_CLOSE) {
+  }
+  else if (msg == WM_CLOSE) {
     ::PostMessage(hDlg, WM_USERSTAT, IDABORT, 0);
   }
   return 0;
@@ -1282,13 +1369,19 @@ WinMain(HINSTANCE hInst, HINSTANCE/*hPrev*/, char far* cmdLine, int/*show*/)
       libName[0] = 0;
       HWND hWnd = ::CreateDialogParam(hInst, MAKEINTRESOURCE(IDD_SELECT), 0,
                                       (DLGPROC)SelectProc, 0);
-      OPENFILENAME ofn = {sizeof(OPENFILENAME), hWnd, hInst,
-                          "TypeLib\0*.TLB;*.OLB\0",0,0,0,
-                          libName, sizeof(libName), 0, 0,
-                          0, "AUTOGEN - TypeLib to C++ Conversion",
-                          OFN_HIDEREADONLY | OFN_FILEMUSTEXIST,
-                          0,0,0,0,0,0 };
-      while(::GetOpenFileName(&ofn)) {
+
+      char title[100];
+      ::LoadString(hInst, IDS_TITLE, title, sizeof(title));
+      OPENFILENAME ofn = {
+        sizeof(OPENFILENAME), hWnd, hInst,
+        "TypeLib\0*.TLB;*.OLB\0",0,0,0,
+        libName, sizeof libName, 0, 0,
+        0, title,
+        OFN_HIDEREADONLY | OFN_FILEMUSTEXIST,
+        0,0,0,0,0,0
+      };
+
+      while (::GetOpenFileName(&ofn)) {
         ::SetDlgItemText(hWnd, IDC_LIBFILE, (char far*)libName);
         ::ShowWindow(hWnd, SW_SHOW);
         TLogTypeInfo fillInfo(hWnd);
@@ -1300,7 +1393,7 @@ WinMain(HINSTANCE hInst, HINSTANCE/*hPrev*/, char far* cmdLine, int/*show*/)
         while ( !stat && ::GetMessage(&msg, 0, 0, 0)) {
           if (msg.message == WM_USERSTAT)
             stat = msg.wParam;
-          else 
+          else
             ::IsDialogMessage(hWnd, &msg);
         }
         if (stat == IDABORT)
@@ -1357,11 +1450,13 @@ WinMain(HINSTANCE hInst, HINSTANCE/*hPrev*/, char far* cmdLine, int/*show*/)
           ErrorIf(optIndex == fkCount, IDS_UNKNOWNOPT, cmd.Token);
           outFiles[optIndex] = "";
           optFound++;
-        } else if (cmd.Type == TCmdLine::Value) {
+        }
+        else if (cmd.Type == TCmdLine::Value) {
           ErrorIf(optIndex == -1, IDS_MISSINGOPT, cmd.Token);
           outFiles[optIndex] = cmd.Token;
           optIndex = -1;
-        } else {  // TCmdLine::Name  should be a class name to select
+        }
+        else {  // TCmdLine::Name  should be a class name to select
           ErrorIf(reqCount == MaxReqTypes, cmd.Token, IDS_TOOMANYTYPES);
           reqTypes[reqCount++] = cmd.Token;
         }
@@ -1378,7 +1473,8 @@ WinMain(HINSTANCE hInst, HINSTANCE/*hPrev*/, char far* cmdLine, int/*show*/)
       }
       silentInfo.SetCallback(SilentYield);
       stat = GenerateFiles(libName, outFiles, silentInfo);
-    } else {
+    }
+    else {
       //
       //  If first command line arg is an option flag, show help dialog
       //
@@ -1389,8 +1485,8 @@ WinMain(HINSTANCE hInst, HINSTANCE/*hPrev*/, char far* cmdLine, int/*show*/)
   catch (TLocalError& xcpt) {
     char msgbuf[80];
     const char ** pmsg;
-    if ( *(pmsg = &xcpt.Message) <= (const char*)IDS_MAX ||
-         *(pmsg = &xcpt.Title)   <= (const char*)IDS_MAX) {
+    if (*(pmsg = &xcpt.Message) <= (const char*)IDS_MAX ||
+        *(pmsg = &xcpt.Title)   <= (const char*)IDS_MAX) {
       ::LoadString(hInst, *(unsigned*)pmsg, msgbuf, sizeof(msgbuf));
       *pmsg = msgbuf;
     }

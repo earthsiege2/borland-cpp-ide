@@ -6,15 +6,12 @@
     purpose - a Windows program to demo True Type fonts.
 
 
-    This program shows off two features of Windows 3.1: True Type
-fonts, and common dialogs.
-
     True Type fonts are scalable fonts supplied by the system.  This
 program demonstrates resizing and rotation of True Type characters
 within a window, and allows the user to select the True Type font to
 be used.
 
-    The dialog used in selecting the font is a Windows 3.1 "common
+    The dialog used in selecting the font is a Windows "common
 dialog."  By including commdlg.h, a series of common dialogs becomes
 available to the program.  To invoke the font dialog, a CHOOSEFONTS
 structure is filled out, and ChooseFont() is called.  This system
@@ -362,6 +359,9 @@ BOOL CALLBACK _export DlgBoxProc(HWND hDlg, UINT message,
 
     switch (message)
     {
+  case WM_INITDIALOG:
+      return TRUE;
+
   case WM_SYSCOMMAND:
       // Pass WM_SYSCOMMAND messages on to main window so both
       // main window and dialog box get iconized, minimized etc.
@@ -679,20 +679,23 @@ void cmAlignmentMarks(void)
 // cmAbout -- invoke the "About" dialog.  Its return code is ignored, since
 // the About dialog doesn't return anything to the program.
 //*************************************************************************
-#pragma warn -eff
 void cmAbout(void)
 {
     lpDlgProc = (DLGPROC) MakeProcInstance( (FARPROC) DlgBoxProc, hInst);
     DialogBox(hInst, "About", hwnd, lpDlgProc);
+
+#ifndef __FLAT__
+    // required for 16-bit applications only
     FreeProcInstance ( (FARPROC) lpDlgProc );
+#endif
+
 }  // end of cmAbout()
-#pragma warn .eff
 
 
 //*************************************************************************
 // cmFonts -- use the Choose Fonts common dialog to get a new font spec
 // from the user.  To do this, we fill out a CHOOSEFONTS structure and
-// pass it to the ChooseFonts routine.  Windows 3.1 takes care of the rest!
+// pass it to the ChooseFonts routine.  Windows takes care of the rest!
 //*************************************************************************
 void cmFonts(HWND hWnd)
 {

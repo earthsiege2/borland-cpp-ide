@@ -1,6 +1,7 @@
 //--------------------------------------------------------------------------
 // Turbo Meteor -- Copyright (c) 1995, Borland International
 //--------------------------------------------------------------------------
+#include <owl/pch.h>
 #include "sprite.h"
 
 // adjust - value to convert degrees to radians
@@ -16,14 +17,18 @@ const double adjust = atan(1)/45;
 double sinTable[360];
 double cosTable[360];
 
-double sind( int angle ) {
+double sind( int angle )
+{
   return sinTable[(angle+360)%360];
 }
-double cosd( int angle ) {
+
+double cosd( int angle )
+{
   return cosTable[(angle+360)%360];
 }
 
-void InitSinCosTables() {
+void InitSinCosTables()
+{
   int i;
   for (i=0;i<360;i++) {
     sinTable[i] = sin(adjust*i);
@@ -33,45 +38,58 @@ void InitSinCosTables() {
 
 #pragma startup InitSinCosTables
 
-void SpriteList::Add( Sprite* sprite ) {
-  count++;
-  if (root==0) {
-    root = sprite;
-    sprite->next = 0;
-    sprite->owner = this;
-    return;
+Sprite::~Sprite()
+{
+}
+
+SpriteList::~SpriteList()
+{
+  Sprite* chase = root;
+  while (chase) {
+    Sprite* next = chase->next;
+    delete chase;
+    chase = next;
   }
+}
+
+void SpriteList::Add( Sprite* sprite )
+{
+  count++;
   sprite->next = root;
   sprite->owner = this;
   root = sprite;
 }
 
-void SpriteList::DrawAll( TMemoryDC& dc ) {
+void SpriteList::DrawAll( TMemoryDC& dc )
+{
   Sprite *temp = root;
   while (temp!=0) {
-    temp->Draw( dc );
+    if (!(temp->condemned))
+      temp->Draw( dc );
     temp=temp->next;
   }
 }
 
-int SpriteList::UpdateAll() {
-  Sprite *previous,
-         *current = root;
+int SpriteList::UpdateAll()
+{
   int    points = 0;
+  Sprite *previous = 0;
+  Sprite *current = root;
 
-  previous = 0;
-  while (current!=0) {
-  // if the object is not condemned, call it's update
-  // function
+  while (current != 0) {
+    // if the object is not condemned, call it's update function
+    //
     if (!(current->condemned)) {
-      points+=current->Update();
+      Sprite* next = current->next;
       previous = current;
-      current=current->next;
+      current = next;
+      points += previous->Update();
     }
-  // if the object is condemned, delete it from the
-  // list
+    // if the object is condemned, delete it from the list
+    //
     else {
       // special case if we're deleting the root node
+      //
       if (previous==0) {
         root = current->next;
         delete current;
@@ -80,18 +98,18 @@ int SpriteList::UpdateAll() {
       }
       else {
         previous->next = current->next;
+        Sprite* temp = current->next;
         delete current;
+        current = temp;
         count--;
-        current=current->next;
       }
     }
   }
   return points;
 }
 
-// *BBK* should convert this over to use RTTI, this is cheezy
-
-Sprite* SpriteList::CheckForHitMeteor( TPoint& p ) {
+Sprite* SpriteList::CheckForHitMeteor( TPoint& p )
+{
   Sprite *temp = root;
   while (temp!=0) {
     if ((strncmp(temp->DebugInfo(),"Meteor",6)==0) &&  // *BBK* cheezy
@@ -102,8 +120,10 @@ Sprite* SpriteList::CheckForHitMeteor( TPoint& p ) {
   return 0;
 }
 
-Meteor::Meteor( TPoint& aOrigin, TSize& aMomentum, int aSize, int aSpawnCount ):
-  Sprite( TSize( 600,400 ) ) {
+Meteor::Meteor( TPoint& aOrigin, TSize& aMomentum, int aSize, int aSpawnCount )
+:
+  Sprite( TSize( 600,400 ) )
+{
   origin = aOrigin;
   mx = aMomentum.cx;
   my = aMomentum.cy;
@@ -118,43 +138,42 @@ Meteor::Meteor( TPoint& aOrigin, TSize& aMomentum, int aSize, int aSpawnCount ):
   count = count1;
 }
 
-void Meteor::Hit() {
-  size--;
-  if (size>0) {
-    for (int i=0;i<spawnCount;i++)
-      owner->Add( new Meteor( origin, TSize( random(10)-5, random(10)-5 ),
-                              size, size ) );
+void Meteor::Hit()
+{
+  if (size > 1) {
+    int newSize = size - 1;
+    for (int i=0; i<spawnCount; i++)
+      owner->Add( new Meteor( origin, TSize( random(10)-4, random(10)-4 ),
+                              newSize, newSize ) );
   }
   condemned=true;
 }
 
-
-void Meteor::Draw( TMemoryDC& dc ) {
+void Meteor::Draw( TMemoryDC& dc )
+{
   TPoint temp;
   TPoint points[10];
   int i;
-
 
   temp =TPoint( radius[0]*sind(angle[0]+currentAngle),
                 radius[0]*cosd(angle[0]+currentAngle) );
   ResetBoundingRect();
   ExpandBoundingRect( temp+origin );
   points[0]=temp+origin;
-//  dc.MoveTo( origin+temp );
   for (i=1;i<=count;i++) {
     temp = TPoint( radius[i%count]*sind(angle[i%count]+currentAngle),
                    radius[i%count]*cosd(angle[i%count]+currentAngle) );
     ExpandBoundingRect( temp+origin );
     points[i] = temp+origin;
-//    dc.LineTo( origin+temp );
   }
   points[count]=points[0];
   dc.Polyline( points, count+1 );
 }
 
-int Shot::Update() {
+int Shot::Update()
+{
   // shots die after a fixed amount of time
-
+  //
   if (timeToDie>0) {
     origin+=TPoint(mx,my);
     timeToDie--;
@@ -172,134 +191,58 @@ int Shot::Update() {
   // if so, tell the meteor it was hit, and mark ourself for
   // deletion
 
-  if (meteor) {
-    ((Meteor*)meteor)->Hit();
+  Meteor* m = TYPESAFE_DOWNCAST(meteor, Meteor);
+  if (m) {
+    int size = m->GetSize();
     condemned = true;
-    int size = ((Meteor*)meteor)->GetSize();
+    m->Hit();
     switch (size) {
-      case 0:
-        return 500;
       case 1:
-        return 50;
+        return 500;
       case 2:
+        return 50;
+      case 3:
         return 5;
     }
   }
   return 0;
 }
 
-const char *Meteor::DebugInfo() {
+const char *Meteor::DebugInfo()
+{
   static char temp[100];
   wsprintf(temp,"Meteor(%d)",size);
   return temp;
 }
 
-const char *Message::DebugInfo() {
+const char *Message::DebugInfo()
+{
   static char temp[100];
   wsprintf(temp,"Message '%s'",text);
   return temp;
 }
 
-Message::Message( TPoint& aOrigin, int aBufferLen ):
-  Sprite( TSize(600,400) ) {
-  text = new char[ aBufferLen ];
+Message::Message( TPoint& aOrigin, int aBufferLen )
+:
+  Sprite( TSize(600,400) )
+{
+  text = new char[ aBufferLen+1 ];
   bufferLen = aBufferLen;
   origin = aOrigin;
 }
 
-void Message::Draw( TMemoryDC& dc ) {
-  const tw = 6;          // text width
-  const th = 10;         // text height
+void Message::Draw( TMemoryDC& dc )
+{
   TPoint temp = origin;
-  int i;
-  for (i=0;i<strlen(text);i++) {
-    switch (text[i]) {
-      case '0':
-        dc.MoveTo(temp);
-        dc.LineTo(temp+TPoint(tw,0));
-        dc.LineTo(temp+TPoint(tw,th));
-        dc.LineTo(temp+TPoint(0,th));
-        dc.LineTo(temp);
-        break;
-      case '1':
-        dc.MoveTo(temp+TPoint(tw/2,0));
-        dc.LineTo(temp+TPoint(tw/2,th+1));
-        break;
-      case '2':
-        dc.MoveTo(temp);
-        dc.LineTo(temp+TPoint(tw,0));
-        dc.LineTo(temp+TPoint(tw,th/2));
-        dc.LineTo(temp+TPoint(0,th/2));
-        dc.LineTo(temp+TPoint(0,th));
-        dc.LineTo(temp+TPoint(tw+1,th));
-        break;
-      case '3':
-        dc.MoveTo(temp);
-        dc.LineTo(temp+TPoint(tw,0));
-        dc.LineTo(temp+TPoint(tw,th));
-        dc.LineTo(temp+TPoint(0-1,th));
-        dc.MoveTo(temp+TPoint(tw,th/2));
-        dc.LineTo(temp+TPoint(0-1,th/2));
-        break;
-      case '4':
-        dc.MoveTo(temp);
-        dc.LineTo(temp+TPoint(0,th/2));
-        dc.LineTo(temp+TPoint(tw,th/2));
-        dc.MoveTo(temp+TPoint(tw,0));
-        dc.LineTo(temp+TPoint(tw,th+1));
-        break;
-      case '5':
-        dc.MoveTo(temp+TPoint(tw,0));
-        dc.LineTo(temp);
-        dc.LineTo(temp+TPoint(0,th/2));
-        dc.LineTo(temp+TPoint(tw,th/2));
-        dc.LineTo(temp+TPoint(tw,th));
-        dc.LineTo(temp+TPoint(0-1,th));
-        break;
-      case '6':
-        dc.MoveTo(temp+TPoint(tw,0));
-        dc.LineTo(temp);
-        dc.LineTo(temp+TPoint(0,th));
-        dc.LineTo(temp+TPoint(tw,th));
-        dc.LineTo(temp+TPoint(tw,th/2));
-        dc.LineTo(temp+TPoint(0-1,th/2));
-        break;
-      case '7':
-        dc.MoveTo(temp);
-        dc.LineTo(temp+TPoint(tw,0));
-        dc.LineTo(temp+TPoint(tw,th+1));
-        break;
-      case '8':
-        dc.MoveTo(temp);
-        dc.LineTo(temp+TPoint(tw,0));
-        dc.LineTo(temp+TPoint(tw,th));
-        dc.LineTo(temp+TPoint(0,th));
-        dc.LineTo(temp+TPoint(0,0));
-        dc.MoveTo(temp+TPoint(0,th/2));
-        dc.LineTo(temp+TPoint(tw,th/2));
-        break;
-      case '9':
-        dc.MoveTo(temp+TPoint(0,th));
-        dc.LineTo(temp+TPoint(tw,th));
-        dc.LineTo(temp+TPoint(tw,0));
-        dc.LineTo(temp+TPoint(0,0));
-        dc.LineTo(temp+TPoint(0,th/2));
-        dc.LineTo(temp+TPoint(tw,th/2));
-        break;
-      case '*':  // ship
-        dc.MoveTo(temp+TPoint(tw/2,0));
-        dc.LineTo(temp+TPoint(tw,th));
-        dc.LineTo(temp+TPoint(tw/2,th-(th/4)));
-        dc.LineTo(temp+TPoint(0,th));
-        dc.LineTo(temp+TPoint(tw/2,0));
-        break;
-    }
-    temp+=TPoint(tw+tw/2,0);
-  }
+  dc.SaveDC();
+  dc.SetTextColor(TColor(255, 255, 255));
+  dc.TextOut(temp, text);
+  dc.RestoreDC();
 }
 
-Message::~Message() {
-    delete [] text;
+Message::~Message()
+{
+  delete [] text;
 }
 
 // values used to initialize meteors.  these values are randomly

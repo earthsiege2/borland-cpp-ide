@@ -58,21 +58,22 @@ int main()
 {
     ContainerType container;
     AddItems(container, MaxItems);
-  
+
     cout << "--- Starting ForEach" << endl;
     container.ForEach(ForEachCallBack, (void*)"FE ");
-  
+
     cout << "--- Starting Iterator (forward)" << endl;
     UseForwardIterator(container);
-  
+
     MyClass test("3 hello");
     cout << "--- Deleting '" << test << "'" << endl;
-    container.Detach(&test);  // detach and delete
+    container.Detach(&test, 1);  // detach and delete
     cout << endl;
-  
+
     cout << "--- Starting Iterator (backward)" << endl;
     UseBackwardIterator(container);
-  
+
+    container.Flush(1);
     return 0;
 }
 

@@ -1,0 +1,69 @@
+//----------------------------------------------------------------------------
+// ObjectWindows
+// Copyright (c) 1993, 1996 by Borland International, All Rights Reserved
+//----------------------------------------------------------------------------
+#if !defined(WORKSHOP_INVOKED)
+# include <windows.h>
+#endif
+
+#define   IDM_MAINMENU        200
+#define   CM_EMPINPUT         201
+
+#define   IDD_EMPLOYEEINFO    1000
+#define   IDC_NAME            101
+#define   IDC_SS              102
+#define   IDC_EMPID           103
+#define   IDC_DEPT            104
+#define   IDC_SECURITY        105
+#define   IDC_FTIME           106
+#define   IDC_PERMANENT       107
+#define   IDC_EXEMPT          108
+#define   IDC_EDIT1           109
+#define   IDC_CUSTOM          110
+#define   IDC_EDIT2           111
+
+#if defined(RC_INVOKED)
+
+#include <owl/window.rh>
+#include <owl/validate.rh>
+#include <owl/validate.rc>
+#include <owl/except.rc>
+#include <owl/owlapp.rc>         
+
+
+IDM_MAINMENU MENU
+{
+  POPUP "&Input"
+  {
+    MENUITEM "&Employee", CM_EMPINPUT
+    MENUITEM SEPARATOR
+    MENUITEM "E&xit", CM_EXIT
+  }
+}
+
+IDD_EMPLOYEEINFO DIALOG 65, 36, 174, 130
+STYLE DS_MODALFRAME | DS_3DLOOK | WS_POPUP | WS_CAPTION | WS_SYSMENU
+FONT 8, "MS Sans Serif"
+{
+ RTEXT "&Name:", -1, 6, 8, 29, 9, SS_RIGHT | NOT WS_GROUP
+ EDITTEXT IDC_NAME, 36, 6, 129, 12
+ RTEXT "&SS#:", -1, 6, 26, 29, 9, SS_RIGHT | NOT WS_GROUP
+ EDITTEXT IDC_SS, 36, 24, 48, 12
+ RTEXT "Emp. &ID:", -1, 105, 26, 32, 9, SS_RIGHT | WS_CHILD | WS_VISIBLE
+ EDITTEXT IDC_EMPID, 138, 24, 27, 12
+ RTEXT "&Dept:", -1, 6, 44, 29, 9, SS_RIGHT | NOT WS_GROUP
+ EDITTEXT IDC_DEPT, 36, 42, 48, 12, ES_LEFT | WS_CHILD | WS_VISIBLE | WS_BORDER | WS_TABSTOP
+ RTEXT "Se&curity:", -1, 6, 62, 29, 9, SS_RIGHT | NOT WS_GROUP
+ EDITTEXT IDC_SECURITY, 36, 60, 48, 12, ES_LEFT | WS_CHILD | WS_VISIBLE | WS_BORDER | WS_TABSTOP
+ CONTROL "&Full Time", IDC_FTIME, "BUTTON", BS_AUTOCHECKBOX | WS_CHILD | WS_VISIBLE | WS_TABSTOP, 110, 45, 50, 10
+ CONTROL "&Permanent", IDC_PERMANENT, "BUTTON", BS_AUTOCHECKBOX | WS_CHILD | WS_VISIBLE | WS_TABSTOP, 110, 57, 50, 10
+ CONTROL "&Exempt", IDC_EXEMPT, "BUTTON", BS_AUTOCHECKBOX | WS_CHILD | WS_VISIBLE | WS_TABSTOP, 110, 69, 50, 10
+ DEFPUSHBUTTON "OK", IDOK, 36, 112, 48, 14
+ PUSHBUTTON "Cancel", IDCANCEL, 90, 112, 48, 14
+ EDITTEXT IDC_EDIT1, 5, 90, 77, 12
+ EDITTEXT IDC_EDIT2, 98, 90, 67, 12
+ PUSHBUTTON "->", IDC_CUSTOM, 84, 90, 12, 12
+ GROUPBOX "", -1, 103, 38, 60, 44, BS_GROUPBOX
+}
+
+#endif  // RC_INVOKED

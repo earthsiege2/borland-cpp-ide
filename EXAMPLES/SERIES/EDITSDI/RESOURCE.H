@@ -1,0 +1,26 @@
+#define IDS_APPNAME                     1
+#define IDS_DESCRIPTION                 2
+#define IDS_FILTERSTRING                3
+#define IDD_VERFIRST                    100
+#define IDI_APPICON                     101
+#define IDD_VERLAST                     104
+#define IDC_EDIT                        401
+#define IDC_FILENAME                    402
+#define IDM_FILENEW                     1000
+#define IDM_FILEOPEN                    1001
+#define IDM_FILESAVE                    1002
+#define IDM_FILESAVEAS                  1003
+#define IDM_FILEPRINT                   1004
+#define IDM_FILEPRINTSU                 1005
+#define IDM_EXIT                        1006
+#define IDM_UNDO                        1100
+#define IDM_CUT                         1101
+#define IDM_COPY                        1102
+#define IDM_PASTE                       1103
+#define IDM_CLEAR                       1104
+#define IDM_FIND                        1200
+#define IDM_FINDNEXT                    1201
+#define IDM_FINDPREV                    1202
+#define IDM_REPLACE                     1203
+#define IDM_ABOUT                       1300
+

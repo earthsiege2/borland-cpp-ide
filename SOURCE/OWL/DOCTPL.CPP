@@ -1,18 +1,26 @@
 //----------------------------------------------------------------------------
 // ObjectWindows
-// (C) Copyright 1993, 1994 by Borland International, All Rights Reserved
+// Copyright (c) 1993, 1996 by Borland International, All Rights Reserved
 //
-//   Implementation of class TDocTemplate
+//$Revision:   10.5  $
+//
+// Implementation of class TDocTemplate
 //----------------------------------------------------------------------------
 #pragma hdrignore SECTION
-#include <owl/owlpch.h>
-#include <owl/owldefs.h>
-#include <owl/doctpl.h>
-
-//#define TemplatesSeized ((TDocTemplate*)1)  // template list taken by doc mgr
+#include <owl/pch.h>
+#if !defined(OWL_DEFS_H)
+# include <owl/defs.h>
+#endif
+#if !defined(OWL_DOCTPL_H)
+# include <owl/doctpl.h>
+#endif
+#include <stdio.h>
 
 #if !defined(SECTION) || SECTION == 1
 
+//
+// Construct a Doc/View template from the specified parameters.
+//
 TDocTemplate::TDocTemplate(TRegList& regList, TModule*& module,
                            TDocTemplate*& rptpl)
 :
@@ -20,35 +28,29 @@ TDocTemplate::TDocTemplate(TRegList& regList, TModule*& module,
   Directory(0),
   ModulePtr(&module)
 {
-  RefCnt = module ? 1 : 0x8001;  // static if contructed before Module
+  RefCnt = module ? 1 : 0x8001;  // static if constructed before Module
   Flags = atol((*RegList)["docflags"]);
 }
 
+//
+//
+//
 void TDocTemplate::SetFlag(long flag)
 {
   Flags = GetFlags() | flag;
 }
 
+//
+//
+//
 void TDocTemplate::ClearFlag(long flag)
 {
   Flags = GetFlags() & ~flag;
 }
 
-const char far* TDocTemplate::GetFileFilter() const
-{
-  return (*RegList)["docfilter"];
-}
-
-const char far* TDocTemplate::GetDescription() const
-{
-  return (*RegList)["description"];
-}
-
-const char far* TDocTemplate::GetDefaultExt() const
-{
-  return (*RegList)["extension"];
-}
-
+//
+//
+//
 const char far* TDocTemplate::GetDirectory() const
 {
   if (Directory)
@@ -56,17 +58,23 @@ const char far* TDocTemplate::GetDirectory() const
   return (*RegList)["directory"];
 }
 
+//
+//
+//
 void TDocTemplate::SetDirectory(const char far* txt)
 {
-  delete [] Directory;
+  delete[] Directory;
   Directory = 0;
   if (txt)
     Directory = strnewdup(txt);
 }
 
+//
+//
+//
 void TDocTemplate::SetDirectory(const char far* txt, int len)
 {
-  delete [] Directory;
+  delete[] Directory;
   Directory = 0;
   if (txt && len > 0) {
     Directory = strnewdup(txt, len);
@@ -83,22 +91,43 @@ TDocTemplate::~TDocTemplate()
     delete RegList;
     RegList = 0;
   }
-  delete [] Directory;
+  delete[] Directory;
 }
 
 //----------------------------------------------------------------------------
 // Backward compatibility with old style doc templates
 //
+#if defined(OWL2_COMPAT)
+
+//
+const char far* TDocTemplate::GetFileFilter() const
+{
+  return (*RegList)["docfilter"];
+}
+
+//
+const char far* TDocTemplate::GetDescription() const
+{
+  return (*RegList)["description"];
+}
+
+//
+const char far* TDocTemplate::GetDefaultExt() const
+{
+  return (*RegList)["extension"];
+}
+
+//
 // The following three function vectors get reset by TDocManager constructor
 //
-static bool       SelectSaveX(TDocTemplate*, TDocument&) {return false;}
-static TView*     InitViewX(TView*) {return 0;}
-static TDocument* InitDocX(TDocTemplate&, TDocument*, const char far*, long)
+static bool       _CALLCNVN SelectSaveX(TDocTemplate*, TDocument&) {return false;}
+static TView*     _CALLCNVN InitViewX(TView*) {return 0;}
+static TDocument* _CALLCNVN InitDocX(TDocTemplate&, TDocument*, const char far*, long)
                                     {return 0;}
 
-bool       (*TDocTemplate::SelectSave_)(TDocTemplate*,TDocument&) = SelectSaveX;
-TView*     (*TDocTemplate::InitView_)(TView*) = InitViewX;
-TDocument* (*TDocTemplate::InitDoc_)(TDocTemplate&, TDocument*,
+bool       _CALLCNVN (*TDocTemplate::SelectSave_)(TDocTemplate*,TDocument&) = SelectSaveX;
+TView*     _CALLCNVN (*TDocTemplate::InitView_)(TView*) = InitViewX;
+TDocument* _CALLCNVN (*TDocTemplate::InitDoc_)(TDocTemplate&, TDocument*,
                                      const char far*, long) = InitDocX;
 
 //
@@ -112,6 +141,9 @@ class TRegListOldDocTemplate : public TRegList {
     char FlagBuf[12];  // for string representation of doc template flags
 };
 
+//
+//
+//
 TRegListOldDocTemplate::TRegListOldDocTemplate(const char* desc,
                                                const char* filt,
                                                const char* dir,
@@ -120,7 +152,7 @@ TRegListOldDocTemplate::TRegListOldDocTemplate(const char* desc,
 :
   TRegList(List)
 {
-  wsprintf(FlagBuf,"0x%lX",flags);
+  sprintf(FlagBuf,"0x%lX",flags);
   List[0].Key = "description";
   List[0].Value = desc;
   List[1].Key = "docfilter";
@@ -134,12 +166,19 @@ TRegListOldDocTemplate::TRegListOldDocTemplate(const char* desc,
   List[5].Key = 0;
 }
 
+//
+// Construct a Doc/View template from the description, filter, directory, 
+// file extension, 'dt' flags, module and template head parameters.
+// This constructor is primarily for backward compatibility with earlier
+// implementation of ObjectWindows' Doc/View subsystem.
+//
 TDocTemplate::TDocTemplate(const char* desc, const char* filt,
                            const char* dir, const char* ext,
                            long flags, TModule*& module,
                            TDocTemplate*& rphead)
 :
   TRegLink(),
+  Directory(0),
   ModulePtr(&module),
   Flags(flags | dtDynRegInfo)
 {
@@ -149,11 +188,19 @@ TDocTemplate::TDocTemplate(const char* desc, const char* filt,
   RegList = new TRegListOldDocTemplate(desc, filt, dir, ext, flags);
 }
 
+#endif  //  defined(OWL2_COMPAT)
+
 #endif
+//----------------------------------------------------------------------------
 #if !defined(SECTION) || SECTION == 2
 
 IMPLEMENT_ABSTRACT_STREAMABLE(TDocTemplate);
 
+#if !defined(BI_NO_OBJ_STREAMING)
+
+//
+//
+//
 void*
 TDocTemplate::Streamer::Read(ipstream& is, uint32 /*version*/) const
 {
@@ -162,16 +209,18 @@ TDocTemplate::Streamer::Read(ipstream& is, uint32 /*version*/) const
   is >> o->RefCnt;  // need to set back to 1 if doc attach increments!!?
   is >> o->Flags;
   if (o->IsStatic()) {
-    delete [] o->Directory;
+    delete[] o->Directory;
   }
   o->Directory   = is.freadString();
   if (o->IsStatic() && !wasStatic) {  // dummy template passed as sink
-    delete [] o->Directory;
+    delete[] o->Directory;
   }
   return o;
-  //!JD need to link up reg info table!!
 }
 
+//
+//
+//
 void
 TDocTemplate::Streamer::Write(opstream& os) const
 {
@@ -180,5 +229,7 @@ TDocTemplate::Streamer::Write(opstream& os) const
   os << o->GetFlags();
   os.fwriteString(o->Directory);
 }
+
+#endif  // if !defined(BI_NO_OBJ_STREAMING)
 
 #endif

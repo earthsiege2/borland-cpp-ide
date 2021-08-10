@@ -5,9 +5,9 @@
 */
 
 /*
- *      C/C++ Run Time Library - Version 6.5
+ *      C/C++ Run Time Library - Version 7.0
  *
- *      Copyright (c) 1987, 1994 by Borland International
+ *      Copyright (c) 1987, 1996 by Borland International
  *      All Rights Reserved.
  *
  */
@@ -50,7 +50,7 @@ typedef unsigned size_t;
 #define offsetof( s_name, m_name )  (size_t)&(((s_name _FAR *)0)->m_name)
 
 #ifndef __cplusplus
-#ifndef _WCHAR_T
+#if !defined(_WCHAR_T) && !defined(_WCHAR_T_DEFINED)
 #define _WCHAR_T
 #define _WCHAR_T_DEFINED  /* For WINDOWS.H */
 typedef unsigned short wchar_t;

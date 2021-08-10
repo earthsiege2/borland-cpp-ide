@@ -1,13 +1,25 @@
+//----------------------------------------------------------------------------
+// ObjectComponents
+// Copyright (c) 1994, 1996 by Borland International, All Rights Reserved
 //
+// $Revision:   2.2  $
+//----------------------------------------------------------------------------
 
 // Version label used/incremented by Integration
 //
 #include "ver.h"
+
+#define BOCOLE_NAME "BOCOLE.DLL\000"
+#define  IDS_SAVEOBJ  32900
+
 1 VERSIONINFO LOADONCALL MOVEABLE
-FILEVERSION       1,  1,  1, 83
-PRODUCTVERSION   1,   1,   0,   0
 FILEOS VOS__WINDOWS16
 FILETYPE VFT_DLL
+
+//#include "bocole.rh"
+
+FILEVERSION       1,  1,  1, 83
+PRODUCTVERSION   1,   1,   0,   0
 BEGIN
    BLOCK "StringFileInfo"
    BEGIN
@@ -18,12 +30,14 @@ BEGIN
                         VALUE "FileVersion", "1.10\000\000"
          VALUE "InternalName", ""
          VALUE "LegalCopyright", "Copyright (c) 1994 by Borland International, Inc. All rights reserved.\000\000"
-         VALUE "OriginalFilename", "BOCOLE.DLL\000"
+         VALUE "OriginalFilename", BOCOLE_NAME
                         VALUE "ProductVersion", "1.10\000\000"
          VALUE "SpecialBuild", ""
       END
    END
 END
 
-
-
+STRINGTABLE LOADONCALL MOVEABLE DISCARDABLE
+{
+  32900, "Save Object before closing?"
+}

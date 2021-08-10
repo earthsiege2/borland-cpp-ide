@@ -1,0 +1,11 @@
+#----------------------------------------------------------------------------
+# ObjectWindows - (C) Copyright 1991, 1993 by Borland International
+#----------------------------------------------------------------------------
+
+MODELS = ld
+SYSTEM = WIN16
+EXERES = cursor
+RESEXE_= cursor.ico
+!include $(BCEXAMPLEDIR)\owlmake.gen
+
+

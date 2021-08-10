@@ -10,9 +10,9 @@
  *-----------------------------------------------------------------------*/
 
 /*
- *      C/C++ Run Time Library - Version 6.5
+ *      C/C++ Run Time Library - Version 7.0
  *
- *      Copyright (c) 1987, 1994 by Borland International
+ *      Copyright (c) 1987, 1996 by Borland International
  *      All Rights Reserved.
  *
  */
@@ -74,6 +74,12 @@ static void pascal near ___exit(int quick, int dontexit, int errcode)
     static int  destructed = 0;
 #endif
 
+#if defined(_Windows) && defined(__LARGE__)
+void __pascal __CG_QUIET(void);
+
+    __CG_QUIET();
+#endif
+    
     if (!quick)
         {
 #ifdef _Windows

@@ -1,14 +1,21 @@
 //----------------------------------------------------------------------------
 // ObjectWindows
-// (C) Copyright 1992, 1994 by Borland International, All Rights Reserved
+// Copyright (c) 1992, 1996 by Borland International, All Rights Reserved
 //
-//   Implementation of GDI Region object class
+//$Revision:   10.4  $
+//
+// Implementation of class TRegion, a GDI Region object encapsulation
 //----------------------------------------------------------------------------
-#include <owl/owlpch.h>
-#include <owl/gdiobjec.h>
+#include <owl/pch.h>
+#if !defined(OWL_GDIOBJEC_H)
+# include <owl/gdiobjec.h>
+#endif
 
 DIAG_DECLARE_GROUP(OwlGDI);        // General GDI diagnostic group
 
+//
+// Constructor to create an empty region.
+//
 TRegion::TRegion()
 {
   Handle = ::CreateRectRgn(0, 0, 0, 0);
@@ -16,21 +23,30 @@ TRegion::TRegion()
   CheckValid();
 }
 
+//
+// Alias constructor for an existing region.
+//
 TRegion::TRegion(HRGN handle, TAutoDelete autoDelete)
 :
   TGdiBase(handle, autoDelete)
 {
 }
 
+//
+// Copy an existing region.
+//
 TRegion::TRegion(const TRegion& source)
 {
   Handle = ::CreateRectRgn(0, 0, 0, 0);
-  WARNX(OwlGDI, !Handle, 0, "Cannot create copy of region " << 
+  WARNX(OwlGDI, !Handle, 0, "Cannot create copy of region " <<
         uint(HRGN(source)));
   CheckValid();
   ::CombineRgn((HRGN)Handle, source, 0, RGN_COPY);
 }
 
+//
+// Create a rectangular region.
+//
 TRegion::TRegion(const TRect& rect)
 {
   Handle = ::CreateRectRgnIndirect(&rect);
@@ -38,6 +54,9 @@ TRegion::TRegion(const TRect& rect)
   CheckValid();
 }
 
+//
+// Create an elliptic region.
+//
 TRegion::TRegion(const TRect& rect, TRegion::TEllipse)
 {
   Handle = ::CreateEllipticRgnIndirect(&rect);
@@ -45,6 +64,9 @@ TRegion::TRegion(const TRect& rect, TRegion::TEllipse)
   CheckValid();
 }
 
+//
+// Create a rounded rectangular region.
+//
 TRegion::TRegion(const TRect& rect, const TSize& corner)
 {
   Handle = ::CreateRoundRectRgn(rect.left, rect.top, rect.right, rect.bottom,
@@ -53,19 +75,25 @@ TRegion::TRegion(const TRect& rect, const TSize& corner)
   CheckValid();
 }
 
+//
+// Create a region out of a polygon.
+//
 TRegion::TRegion(const TPoint* points, int count, int fillMode)
 {
   Handle = ::CreatePolygonRgn(points, count, fillMode);
-  WARNX(OwlGDI, !Handle, 0, "Cannot create poly region " << count << 
+  WARNX(OwlGDI, !Handle, 0, "Cannot create poly region " << count <<
         "pts @" << hex << uint32(LPVOID(points)));
   CheckValid();
 }
 
+//
+// Create a poly-polygon region.
+//
 TRegion::TRegion(const TPoint* points, const int* polyCounts, int count,
                  int fillMode)
 {
   Handle = ::CreatePolyPolygonRgn(points, polyCounts, count, fillMode);
-  WARNX(OwlGDI, !Handle, 0, "Cannot create polypoly region " << count << 
+  WARNX(OwlGDI, !Handle, 0, "Cannot create polypoly region " << count <<
         "polies @" << hex << uint32(LPVOID(points)));
   CheckValid();
 }
@@ -78,9 +106,12 @@ TRegion::~TRegion()
 {
   if (ShouldDelete)
     if (!::DeleteObject(Handle))
-      THROW( TGdiObject::TXGdi(IDS_GDIDELETEFAIL, Handle) );
+      TXGdi::Raise(IDS_GDIDELETEFAIL, Handle);
 }
 
+//
+// Modify and return the intersection of two regions.
+//
 TRegion&
 TRegion::operator &=(const TRect& source)
 {
@@ -88,6 +119,9 @@ TRegion::operator &=(const TRect& source)
   return *this;
 }
 
+//
+// Modify and return the union of two regions.
+//
 TRegion&
 TRegion::operator |=(const TRect& source)
 {
@@ -95,6 +129,9 @@ TRegion::operator |=(const TRect& source)
   return *this;
 }
 
+//
+// Modify and return the exclusive or of two regions.
+//
 TRegion&
 TRegion::operator ^=(const TRect& source)
 {

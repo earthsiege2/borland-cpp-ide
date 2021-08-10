@@ -1,0 +1,15 @@
+#----------------------------------------------------------------------------
+# Borland C++
+# Copyright (c) 1987, 1996 Borland International Inc.  All Rights Reserved.
+#   examples\series\dialog\makefile
+#----------------------------------------------------------------------------
+
+SYSTEMS = WIN16 WIN32
+OSMAJOR = 4
+OSMINOR = 0
+EXERES  = dialog
+CPCH    = -Hc -H"windows.h" -H=dialog.csm
+OBJEXE  = dialog.obj winmain.obj init.obj about.obj dispatch.obj misc.obj\
+          modal.obj modeless.obj
+
+!include $(BCEXAMPLEDIR)\makefile.gen

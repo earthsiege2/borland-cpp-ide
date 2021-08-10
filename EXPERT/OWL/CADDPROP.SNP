@@ -9,16 +9,16 @@
 ##*
 ##--END-- ? ClassMarker [[Search]]
 ##^BOL
-##(OLEType == CPPType) && (OLEType != "TAutoCurrency") && (OLEType != "TAutoDate")
+## (OLEType == CPPType) && (OLEType != "TAutoCurrency") && (OLEType != "TAutoDate")
 ##      :StripPtrRef(OLEType, [[StripType]]) [[AnyStripping]]
 ##      :StripType OLEType
 ##*
-##(GetProperty == TRUE) && (SetProperty == TRUE)
-    EXPOSE_PROPRW([[InternalName]], [[OLEType]], "[[InternalName]]", "[[Description]]", 0)
-##(GetProperty == TRUE) && (SetProperty == FALSE)
-    EXPOSE_PROPRO([[InternalName]], [[OLEType]], "[[InternalName]]", "[[Description]]", 0)
-##(GetProperty == FALSE) && (SetProperty == TRUE)
-    EXPOSE_PROPWO([[InternalName]], [[OLEType]], "[[InternalName]]", "[[Description]]", 0)
+## (GetProperty == TRUE) && (SetProperty == TRUE)
+  EXPOSE_PROPRW([[InternalName]], [[OLEType]], "[[InternalName]]", "[[Description]]", 0)
+## (GetProperty == TRUE) && (SetProperty == FALSE)
+  EXPOSE_PROPRO([[InternalName]], [[OLEType]], "[[InternalName]]", "[[Description]]", 0)
+## (GetProperty == FALSE) && (SetProperty == TRUE)
+  EXPOSE_PROPWO([[InternalName]], [[OLEType]], "[[InternalName]]", "[[Description]]", 0)
 ##^EOF
 ##0 [[ScrollPosition]]
 ##FALSE [[DuplicateFunction]]
@@ -45,9 +45,9 @@
 ##          --BEGIN-- ((GetProperty == TRUE) && (GetFoundIt == FALSE))
 ##              :(YPos() + 2) ScrollPosition
 
-[[CPPType]] [[ClassName]]::[[GetName]] ()
+[[CPPType]] [[ClassName]]::[[GetName]]()
 {
-    // INSERT>> Your get property code here.
+  // INSERT>> Your get property code here.
 }
 ##          --END-- ((GetProperty == TRUE) && (GetFoundIt == FALSE))
 ##          --BEGIN-- ((SetProperty == TRUE) && (SetFoundIt == FALSE))
@@ -55,13 +55,13 @@
 ##              :(YPos() + 2) ScrollPosition
 ##*
 
-void [[ClassName]]::[[SetName]] ([[CPPType]] property)
+void [[ClassName]]::[[SetName]]([[CPPType]] property)
 {
-    // INSERT>> Your set property code here.
+  // INSERT>> Your set property code here.
 
 }
 ##          --END-- ((SetProperty == TRUE) && (SetFoundIt == FALSE))
-##((GetFoundIt == FALSE) && (SetFoundIt == FALSE))
+## ((GetFoundIt == FALSE) && (SetFoundIt == FALSE))
 ##      :^@ScrollPosition
 ##      :^BOL
 ##      :^SCROLL

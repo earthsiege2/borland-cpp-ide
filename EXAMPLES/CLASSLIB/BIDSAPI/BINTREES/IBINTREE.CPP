@@ -78,6 +78,7 @@ int main()
   
     cout << "--- Starting Iterator (postorder)" << endl;
     UsePostorderIterator(container);
-  
+
+    container.Flush(1);
     return 0;
 }

@@ -1,12 +1,13 @@
 //----------------------------------------------------------------------------
-// (C) Copyright 1994 by Borland International, All Rights Reserved
+// Borland WinSys Library
+// Copyright (c) 1994, 1996 by Borland International, All Rights Reserved
 //
-// TLocaleString default NLS compare function - used only if non-OLE
+//$Revision:   5.4  $
+//
+// TLocaleString default NLS compare function - used only if non-OLE2
 //----------------------------------------------------------------------------
-#if !defined(_Windows)
-# define _Windows      // pretend we are in windows to get the headers we need
-#endif
-#include <osl/locale.h>
+#include <winsys/pch.h>
+#include <winsys/lclstrng.h>
 
 #if defined(BI_PLAT_WIN32)
 
@@ -25,9 +26,9 @@ TLocaleString::GetUserLangId()
 int
 TLocaleString::CompareLang(const char far* s1, const char far* s2, TLangId lang)
 {
-  typedef int WINAPI (*TCompareStringA)(LCID, DWORD, LPCSTR, int, LPCSTR, int);
+  typedef int (WINAPI *TCompareStringA)(LCID, DWORD, LPCSTR, int, LPCSTR, int);
   
-  static int WINAPI (*compareStringA)(LCID, DWORD, LPCSTR, int, LPCSTR, int) =
+  static int (WINAPI *compareStringA)(LCID, DWORD, LPCSTR, int, LPCSTR, int) =
     (TCompareStringA)::GetProcAddress(::GetModuleHandle("kernel32"), "CompareStringA");
 
   // Use CompareStringA if it is available
@@ -38,10 +39,10 @@ TLocaleString::CompareLang(const char far* s1, const char far* s2, TLangId lang)
 
   // Otherwise just use RTL function
   //
-  return _fstricmp(s1, s2);  // only permissible if not an OLE application
+  return stricmp(s1, s2);  // only permissible if not an OLE application
 }
 
-#else
+#elif defined(BI_PLAT_WIN16)
 
 #include <string.h>
 

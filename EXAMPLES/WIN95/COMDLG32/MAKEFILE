@@ -1,0 +1,13 @@
+#----------------------------------------------------------------------------
+# Borland C++
+# Copyright (c) 1987, 1996 Borland International Inc.  All Rights Reserved.
+#   examples\win95\comdlg32\makefile
+#----------------------------------------------------------------------------
+
+SYSTEMS = WIN32
+OSMAJOR = 4
+OSMINOR = 0
+CPCH    = -Hc -H"windows.h" -H=comdlg32.csm
+EXERES  = comdlg32
+
+!include $(BCEXAMPLEDIR)\makefile.gen

@@ -8,10 +8,11 @@
 //---------------------------------------------------------------------
 
 #define STRICT
+#define NOMINMAX
 
-#include <windows.h>
-#include <except.h>
-#include <checks.h>
+#include <services/wsysinc.h>
+#include <services/except.h>
+#include <services/checks.h>
 
 #include "todowin.h"
 

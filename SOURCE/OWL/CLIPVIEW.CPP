@@ -1,11 +1,16 @@
 //----------------------------------------------------------------------------
 // ObjectWindows
-// (C) Copyright 1992, 1994 by Borland International, All Rights Reserved
+// Copyright (c) 1992, 1996 by Borland International, All Rights Reserved
 //
-//   implementation of class TClipboardViewer
+//$Revision:   10.3  $
+//
+// Implementation of class TClipboardViewer, a TWindow mixin that allows a
+// window to receive clipboard notifications appropriate for being a viewer
 //----------------------------------------------------------------------------
-#include <owl/owlpch.h>
-#include <owl/clipview.h>
+#include <owl/pch.h>
+#if !defined(OWL_CLIPVIEW_H)
+# include <owl/clipview.h>
+#endif
 
 //
 // We only want to search this mixin for events, so don't include any base
@@ -28,14 +33,20 @@ TClipboardViewer::TClipboardViewer()
   HWndNext = 0;
 }
 
-TClipboardViewer::TClipboardViewer(HWND hWnd, TModule*   module)
+//
+//
+//
+TClipboardViewer::TClipboardViewer(THandle handle, TModule* module)
 :
-  TWindow(hWnd, module)
+  TWindow(handle, module)
 {
 }
 
+//
+//
+//
 TEventStatus
-TClipboardViewer::DoChangeCBChain(HWND hWndRemoved, HWND hWndNext)
+TClipboardViewer::DoChangeCBChain(THandle hWndRemoved, THandle hWndNext)
 {
   if (hWndRemoved == HWndNext)
     HWndNext = hWndNext;
@@ -45,6 +56,9 @@ TClipboardViewer::DoChangeCBChain(HWND hWndRemoved, HWND hWndNext)
   return esComplete;
 }
 
+//
+//
+//
 TEventStatus
 TClipboardViewer::DoDrawClipboard()
 {
@@ -53,29 +67,41 @@ TClipboardViewer::DoDrawClipboard()
   return esPartial;
 }
 
+//
+//
+//
 TEventStatus
 TClipboardViewer::DoDestroy()
 {
-  ::ChangeClipboardChain(HWindow, HWndNext);
+  ::ChangeClipboardChain(GetHandle(), HWndNext);
   return esPartial;
 }
 
+//
+//
+//
 void
 TClipboardViewer::SetupWindow()
 {
-  HWndNext = ::SetClipboardViewer(HWindow);
+  HWndNext = ::SetClipboardViewer(GetHandle());
 }
 
+//
+//
+//
 void
-TClipboardViewer::EvChangeCBChain(HWND hWndRemoved, HWND hWndNext)
+TClipboardViewer::EvChangeCBChain(THandle hWndRemoved, THandle hWndNext)
 {
-  if (hWndRemoved == HWndNext)
+  if (hWndRemoved == hWndNext)
     HWndNext = hWndNext;
 
   else
     ForwardMessage(HWndNext);
 }
 
+//
+//
+//
 void
 TClipboardViewer::EvDrawClipboard()
 {
@@ -84,6 +110,9 @@ TClipboardViewer::EvDrawClipboard()
   TWindow::EvDrawClipboard();
 }
 
+//
+//
+//
 void
 TClipboardViewer::EvDestroy()
 {

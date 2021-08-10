@@ -1,10 +1,13 @@
 //----------------------------------------------------------------------------
 // ObjectWindows
-// (C) Copyright 1994 by Borland International, All Rights Reserved
+// Copyright (c) 1994, 1996 by Borland International, All Rights Reserved
 //
-//   Menu and accelerators for use with TOleWindow & TOleView
+//$Revision:   10.4  $
+//
+// Menu and accelerators for use with TOleWindow & TOleView
 //----------------------------------------------------------------------------
 #include <owl/window.rh>
+#include <owl/edit.rh>
 #include <owl/docview.rh>
 #include <owl/oleview.rh>
 
@@ -20,8 +23,8 @@ IDM_OLEVIEW MENU LOADONCALL MOVEABLE PURE DISCARDABLE
   {
     MenuItem "&Undo\aCtrl+Z",     CM_EDITUNDO
     MenuItem Separator
-    MenuItem "&Cut\aCtrl+X",      CM_EDITCUT
-    MenuItem "C&opy\aCtrl+C",     CM_EDITCOPY
+    MenuItem "Cu&t\aCtrl+X",      CM_EDITCUT
+    MenuItem "&Copy\aCtrl+C",     CM_EDITCOPY
     MenuItem "&Paste\aCtrl+V",    CM_EDITPASTE
     MenuItem "Paste &Special...", CM_EDITPASTESPECIAL
     MenuItem "Paste &Link",       CM_EDITPASTELINK
@@ -52,8 +55,8 @@ IDM_OLEVIEWEMBED MENU LOADONCALL MOVEABLE PURE DISCARDABLE
   {
     MenuItem "&Undo\aCtrl+Z",     CM_EDITUNDO
     MenuItem Separator
-    MenuItem "&Cut\aCtrl+X",      CM_EDITCUT
-    MenuItem "C&opy\aCtrl+C",     CM_EDITCOPY
+    MenuItem "Cu&t\aCtrl+X",      CM_EDITCUT
+    MenuItem "&Copy\aCtrl+C",     CM_EDITCOPY
     MenuItem "&Paste\aCtrl+V",    CM_EDITPASTE
     MenuItem "Paste &Special...", CM_EDITPASTESPECIAL
     MenuItem "Paste &Link",       CM_EDITPASTELINK
@@ -67,7 +70,7 @@ IDM_OLEVIEWEMBED MENU LOADONCALL MOVEABLE PURE DISCARDABLE
   }
 }
 
-IDM_OLEPOPUP MENU 
+IDM_OLEPOPUP MENU
 {
  Popup "OLE"
  {
@@ -97,6 +100,8 @@ STRINGTABLE LOADONCALL MOVEABLE DISCARDABLE
   IDS_EXITSERVER,  "E&xit and Return to "
 }
 
+#if !defined(__OLEVIEW_RC_OCF_RC_COMMON_STRINGS)
+#define __OLEVIEW_RC_OCF_RC_COMMON_STRINGS
 STRINGTABLE LOADONCALL MOVEABLE DISCARDABLE
 {
   IDS_CFTEXT,        "Text\nplain text"
@@ -119,6 +124,7 @@ STRINGTABLE LOADONCALL MOVEABLE DISCARDABLE
 {
   IDS_IN, " in "
 }
+#endif
 
 IDA_OLEVIEW ACCELERATORS
 BEGIN

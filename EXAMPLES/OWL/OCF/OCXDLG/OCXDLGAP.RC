@@ -1,0 +1,125 @@
+//----------------------------------------------------------------------------
+//  Project OcxDlg
+//  Borland International, Inc.
+//  Copyright © 1996. All Rights Reserved.
+//
+//  SUBSYSTEM:  OcxDlg Application
+//  FILE:       OcxDlgAp.rc
+//  AUTHOR:     Chris McConn
+//
+//  OVERVIEW
+//  ~~~~~~~~
+//  All resources defined here.
+//
+//----------------------------------------------------------------------------
+
+#if !defined(WORKSHOP_INVOKED)
+# include <windows.h>
+#endif
+#include "OcxDlgAp.rh"
+#include <owl/window.rh>
+
+
+//============================================================================
+// Application ICON
+IDI_SDIAPPLICATION ICON "applsdi.ico"
+
+
+//============================================================================
+// Client Dialog
+IDD_CLIENT DIALOG 55, 38, 402, 201
+STYLE DS_3DLOOK | WS_CHILD | WS_CLIPSIBLINGS | WS_CAPTION
+CAPTION "Dialog Client"
+FONT 8, "MS Sans Serif"
+{
+ DEFPUSHBUTTON "OK", IDOK, 177, 178, 50, 14
+ CONTROL "VCF1.VCF1Ctrl.1", IDC_SPREADSHEET, "OCX", 0 | WS_CHILD | WS_VISIBLE, 22, 18, 243, 116
+ CONTROL "VCFI.VCFiCtrl.1", IDC_GRAPH, "OCX", 0 | WS_CHILD | WS_VISIBLE, 272, 18, 110, 116
+ CONTROL "Pie Chart", IDC_PIE_RAD, "button", BS_AUTORADIOBUTTON | WS_CHILD | WS_VISIBLE | WS_TABSTOP, 279, 139, 47, 12
+ CONTROL "Graph", IDC_GRAPH_RAD, "button", BS_AUTORADIOBUTTON | WS_CHILD | WS_VISIBLE | WS_TABSTOP, 332, 139, 43, 12
+ CONTROL "", -1, "BorShade", BSS_GROUP | BSS_CAPTION | BSS_LEFT | WS_CHILD | WS_VISIBLE, 15, 11, 373, 161
+}
+
+//============================================================================
+// Version info.
+#if !defined(__DEBUG_)
+
+// Non-Debug VERSIONINFO
+//
+1 VERSIONINFO LOADONCALL MOVEABLE
+FILEVERSION 1, 0, 0, 0
+PRODUCTVERSION 1, 0, 0, 0
+FILEFLAGSMASK 0
+FILEFLAGS VS_FFI_FILEFLAGSMASK
+#if defined(BI_PLAT_WIN32)
+FILEOS VOS__WINDOWS32
+#else
+FILEOS VOS__WINDOWS16
+#endif
+FILETYPE VFT_APP
+BEGIN
+  BLOCK "StringFileInfo"
+  BEGIN
+    // Language type = U.S. English(0x0409) and Character Set = Windows, Multilingual(0x04e4)
+    BLOCK "040904E4"              // Matches VarFileInfo Translation hex value.
+    BEGIN
+      VALUE "CompanyName", "Borland International, Inc.\000"
+      VALUE "FileDescription", "OcxDlg for Windows\000"
+      VALUE "FileVersion", "1.0\000"
+      VALUE "InternalName", "OcxDlg\000"
+      VALUE "LegalCopyright", "Copyright © 1996. All Rights Reserved.\000"
+      VALUE "LegalTrademarks", "Windows(TM) is a trademark of Microsoft Corporation\000"
+      VALUE "OriginalFilename", "OcxDlg.exe\000"
+      VALUE "ProductName", "OcxDlg\000"
+      VALUE "ProductVersion", "1.0\000"
+    END
+  END
+
+  BLOCK "VarFileInfo"
+  BEGIN
+    VALUE "Translation", 0x0409, 0x04e4    // U.S. English(0x0409) & Windows Multilingual(0x04e4) 1252
+  END
+END
+
+#else
+
+//============================================================================
+// Debug VERSIONINFO
+1 VERSIONINFO LOADONCALL MOVEABLE
+FILEVERSION 1, 0, 0, 0
+PRODUCTVERSION 1, 0, 0, 0
+FILEFLAGSMASK VS_FF_DEBUG | VS_FF_PRERELEASE | VS_FF_PATCHED | VS_FF_PRIVATEBUILD | VS_FF_SPECIALBUILD
+FILEFLAGS VS_FFI_FILEFLAGSMASK
+#if defined(BI_PLAT_WIN32)
+FILEOS VOS__WINDOWS32
+#else
+FILEOS VOS__WINDOWS16
+#endif
+FILETYPE VFT_APP
+BEGIN
+  BLOCK "StringFileInfo"
+  BEGIN
+    // Language type = U.S. English(0x0409) and Character Set = Windows, Multilingual(0x04e4)
+    BLOCK "040904E4"              // Matches VarFileInfo Translation hex value.
+    BEGIN
+      VALUE "CompanyName", "Borland International, Inc.\000"
+      VALUE "FileDescription", "OcxDlg for Windows\000"
+      VALUE "FileVersion", "1.0\000"
+      VALUE "InternalName", "OcxDlg\000"
+      VALUE "LegalCopyright", "Copyright © 1996. All Rights Reserved.\000"
+      VALUE "LegalTrademarks", "Windows(TM) is a trademark of Microsoft Corporation\000"
+      VALUE "OriginalFilename", "OcxDlg.exe\000"
+      VALUE "ProductName", "OcxDlg\000"
+      VALUE "ProductVersion", "1.0\000"
+      VALUE "SpecialBuild", "Debug Version\000"
+      VALUE "PrivateBuild", "Built by Chris McConn\000"
+    END
+  END
+
+  BLOCK "VarFileInfo"
+  BEGIN
+    VALUE "Translation", 0x0409, 0x04e4    // U.S. English(0x0409) & Windows Multilingual(0x04e4) 1252
+  END
+END
+
+#endif

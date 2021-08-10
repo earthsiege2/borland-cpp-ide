@@ -3,5 +3,5 @@
 
 ##QUERY_FILENAME_H [[HFileName]]
 ##StripDiacritic(HFileName) [[Filename]]
-#endif                                      // __[[Filename]]_h sentry.
+#endif  // [[Filename]]_h sentry.
 ##--END-- TRUE

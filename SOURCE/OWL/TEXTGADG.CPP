@@ -1,37 +1,57 @@
 //----------------------------------------------------------------------------
 // ObjectWindows
-// (C) Copyright 1992, 1994 by Borland International, All Rights Reserved
+// Copyright (c) 1992, 1996 by Borland International, All Rights Reserved
 //
-//   Implementation of TTextGadget.
+//$Revision:   10.4  $
+//
+// Implementation of TTextGadget.
 //----------------------------------------------------------------------------
-#include <owl/owlpch.h>
-#include <owl/textgadg.h>
-#include <owl/gadgetwi.h>
+#include <owl/pch.h>
+#if !defined(OWL_TEXTGADG_H)
+# include <owl/textgadg.h>
+#endif
+#if !defined(OWL_GADGETWI_H)
+# include <owl/gadgetwi.h>
+#endif
+#if !defined(WINSYS_UIMETRIC_H)
+# include <winsys/uimetric.h>
+#endif
 
+//
+// Construct a text gadget
+//
 TTextGadget::TTextGadget(int          id,
                          TBorderStyle borderStyle,
                          TAlign       align,
                          uint         numChars,
-                         const char*  text)
+                         const char far* text,
+                         TFont*       font)
 :
-  TGadget(id, borderStyle)
+  TGadget(id, borderStyle),
+  Font(font)
 {
-  Margins.Left = Margins.Right = 2;
+  Margins.Left = Margins.Right = TUIMetric::CxFixedFrame;
   Align = align;
   NumChars = numChars;
   Text = 0;
   TextLen = 0;
-  if (text)
-    SetText(text);
-}
 
-TTextGadget::~TTextGadget()
-{
-  delete [] Text;
+  SetShrinkWrap(false, true);
+  SetText(text);
 }
 
 //
-// Invalidate the working portion of this gadget--the InnerRect
+// Destruct this text gadget and delete the text it is holding
+//
+TTextGadget::~TTextGadget()
+{
+  delete[] Text;
+  delete Font;
+}
+
+//
+// Invalidate the working portion of this gadget--in this case just the
+// InnerRect
 //
 void
 TTextGadget::Invalidate()
@@ -46,58 +66,57 @@ TTextGadget::Invalidate()
 // Set the text for this gadget
 //
 void
-TTextGadget::SetText(const char* text)
+TTextGadget::SetText(const char far* text)
 {
+  // Skip processing if new text is the same as current
   //
-  // Skip processing if new text is similar to current
-  //
-  if (text && Text && !strcmp(text, Text))
+  if (text && Text && strcmp(text, Text) == 0)
     return;
 
-  //
-  // Skip processing if matching pointers [eg. g->SetText(g->GetText()),
-  // or g->SetText(0) when current text is already null].
-  // NOTE: This is safe as long as 'Text' is always a strnewduped string
-  //       and not simply a pointer to a user supplied buffer. Derived 
-  //       classes must follow the convention of always setting
-  //       'Text' via SetText.
-  //
-  if (text == Text) 
-    return;
-
-  delete [] Text;
-  Text = 0;
-  TextLen = 0;
+  delete[] Text;
 
   if (text) {
     Text = strnewdup(text);
     TextLen = strlen(Text);
   }
+  else {
+    Text = 0;
+    TextLen = 0;
+  }
+
+  if (Window)
+    Window->GadgetChangedSize(*this);
 
   Invalidate();
 }
 
-uint
-TTextGadget::GetMaxCharWidth()
-{
-  TScreenDC   dc;
-  TEXTMETRIC  metrics;
-
-  dc.SelectObject(Window->GetFont());
-  dc.GetTextMetrics(metrics);
-  return (metrics.tmMaxCharWidth + metrics.tmAveCharWidth) / 2;
-}
-
+//
+// Respond to the virtual call to let this gadget's Window know how big this
+// text gadget wants to be based on the text size.
+//
 void
 TTextGadget::GetDesiredSize(TSize& size)
 {
   TGadget::GetDesiredSize(size);
+  TFont* font = Font;
+  if (font == 0)
+    font = &(Window->GetFont());
+
+  if (font == 0)
+    return;
 
   if (ShrinkWrapWidth)
-    size.cx += GetMaxCharWidth() * NumChars;
+    size.cx += font->GetTextExtent(Text).cx;
+  else {
+    int  left, right, top, bottom;
+    GetOuterSizes(left, right, top, bottom);
+
+    int newW = font->GetMaxWidth() * NumChars;
+    size.cx += newW + left + right - Bounds.Width();  // Old bounds already considered
+  }
 
   if (ShrinkWrapHeight)
-    size.cy += Window->GetFontHeight();
+    size.cy += font->GetHeight() + 2;
 }
 
 //
@@ -114,8 +133,12 @@ TTextGadget::Paint(TDC& dc)
   int x = innerRect.left;
   int y = innerRect.top;
 
-  //
-  // adjust the horizontal position for centered or right justified text
+  if (Font == 0)
+    dc.SelectObject(Window->GetFont().GetHandle());
+  else
+    dc.SelectObject(*Font);
+
+  // Adjust the horizontal position for centered or right justified text
   //
   if (Text && TextLen && Align != Left) {
     TSize  extent = dc.GetTextExtent(Text, TextLen);
@@ -130,10 +153,10 @@ TTextGadget::Paint(TDC& dc)
     }
   }
 
+  // Use ExtTextOut() to paint the text & background rectangle
   //
-  // use ExtTextOut() to paint the text & background rectangle
-  //
-  dc.SetBkColor(GetSysColor(COLOR_BTNFACE));
-  dc.SetTextColor(GetSysColor(COLOR_BTNTEXT));
+  dc.SetBkColor(TColor::Sys3dFace);
+  dc.SetTextColor(GetEnabled() ? TColor::SysBtnText : TColor::SysGrayText);
   dc.ExtTextOut(x, y, ETO_CLIPPED | ETO_OPAQUE, &innerRect, Text, TextLen);
+  dc.RestoreFont();
 }

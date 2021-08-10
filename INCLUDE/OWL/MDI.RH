@@ -1,9 +1,13 @@
 //----------------------------------------------------------------------------
 // ObjectWindows
-// (C) Copyright 1992, 1994 by Borland International, All Rights Reserved
+// Copyright (c) 1992, 1996 by Borland International, All Rights Reserved
 //
-//   Resource & command IDs to use with mdi.h
+//$Revision:   10.3  $
+//
+// Resource & command IDs to use with mdi.h
 //----------------------------------------------------------------------------
+#if !defined(OWL_MDI_RH)
+#define OWL_MDI_RH
 
 //
 // Commands
@@ -14,3 +18,5 @@
 #define CM_ARRANGEICONS      24364
 #define CM_CLOSECHILDREN     24365
 #define CM_CREATECHILD       24366
+
+#endif  //  OWL_MDI_RH

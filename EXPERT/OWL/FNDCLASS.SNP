@@ -1,6 +1,6 @@
 <<[CPP]
 ##QUERY_CLASS_NAME [[ClassName]]
-##\\"[[ClassName]]::[[ClassName]] (" [[FindClass]]
+##\\"[[ClassName]]::[[ClassName]]" [[FindClass]]
 ##^BOF
 ##? FindClass [[Search]]
 ##Search == FALSE

@@ -1,75 +1,78 @@
-/*------------------------------------------------------------------------*/
-/*                                                                        */
-/*  SHDDEL.H                                                              */
-/*                                                                        */
-/*  Copyright (c) 1991, 1994 Borland International                        */
-/*  All Rights Reserved                                                   */
-/*                                                                        */
-/*------------------------------------------------------------------------*/
-
-#if !defined( CLASSLIB_SHDDEL_H )
+//----------------------------------------------------------------------------
+// Borland Class Library
+// Copyright (c) 1991, 1996 by Borland International, All Rights Reserved
+//
+//$Revision:   5.4  $
+//
+//----------------------------------------------------------------------------
+#if !defined(CLASSLIB_SHDDEL_H)
 #define CLASSLIB_SHDDEL_H
 
 #if !defined( CLASSLIB_DEFS_H )
-#include <classlib/defs.h>
+# include <classlib/defs.h>
 #endif
 
 #pragma option -Vo-
-#if defined( BI_CLASSLIB_NO_po )
-#pragma option -po-
+#if defined(BI_CLASSLIB_NO_po)
+# pragma option -po-
 #endif
 
+//
+// class TShouldDelete
+// ~~~~~ ~~~~~~~~~~~~~
 class TShouldDelete
 {
+  public:
+    enum TDelete { NoDelete, DefDelete, Delete };
+    typedef TDelete DeleteType;  // For compatibility
 
-public:
+    TShouldDelete(TDelete dt = Delete);
 
-    enum DeleteType { NoDelete, DefDelete, Delete };
+    bool OwnsElements();
+    void OwnsElements(bool del);
+    bool DelObj(TDelete dt);
 
-    TShouldDelete( DeleteType dt = Delete )
-        {
-        OwnsElements( dt );
-        }
-
-    int OwnsElements()
-        {
-        return ShouldDelete == Delete;
-        }
-
-    void OwnsElements( int del )
-        {
-        ShouldDelete = (del == 0) ? NoDelete : Delete;
-        }
-
-#if defined( BI_OLDNAMES )
+#if defined(BI_OLDNAMES)
     int ownsElements() { return OwnsElements(); }
-    void ownsElements( int del ) { OwnsElements(del); }
-#endif  // BI_OLDNAMES
+    void ownsElements(int del) { OwnsElements(del); }
+    int delObj(DeleteType dt) { return DelObj(dt); }
+#endif
 
-    int DelObj( DeleteType dt )
-        {
-        return dt == Delete || (dt==DefDelete && ShouldDelete==Delete);
-        }
-
-#if defined( BI_OLDNAMES )
-    int delObj( DeleteType dt ) { return DelObj(dt); }
-#endif  // BI_OLDNAMES
-
-private:
-
-    DeleteType ShouldDelete;
-
+  private:
+    TDelete ShouldDelete;  // Is either Delete or NoDelete
 };
 
-#if defined( BI_OLDNAMES )
-#define BI_ShouldDelete TShouldDelete
+//----------------------------------------------------------------------------
+// Inline implementation
+//
+
+inline TShouldDelete::TShouldDelete(TDelete dt)
+{
+  OwnsElements(dt != NoDelete);
+}
+
+inline bool TShouldDelete::OwnsElements()
+{
+  return ShouldDelete == Delete;
+}
+
+inline void TShouldDelete::OwnsElements(bool del)
+{
+  ShouldDelete = del ? Delete : NoDelete;
+}
+
+inline bool TShouldDelete::DelObj(TDelete dt)
+{
+  return dt == Delete || (dt==DefDelete && ShouldDelete==Delete);
+}
+
+#if defined(BI_OLDNAMES)
+# define BI_ShouldDelete TShouldDelete
 #endif
 
-#if defined( BI_CLASSLIB_NO_po )
-#pragma option -po.
+#if defined(BI_CLASSLIB_NO_po)
+# pragma option -po.
 #endif
-
 #pragma option -Vo.
 
 #endif  // CLASSLIB_SHDDEL_H
-

@@ -1,12 +1,14 @@
 //----------------------------------------------------------------------------
-// ObjectWindows - (C) Copyright 1991, 1993 by Borland International
+// ObjectWindows
+// Copyright (c) 1991, 1995 by Borland International, All Rights Reserved
 //----------------------------------------------------------------------------
-#include <owl\owlpch.h>
-#include <owl\applicat.h>
-#include <owl\framewin.h>
-#include <owl\dialog.h>
-#include <owl\static.h>
+#include <owl/pch.h>
+#include <owl/applicat.h>
+#include <owl/framewin.h>
+#include <owl/dialog.h>
+#include <owl/static.h>
 #include <dos.h>
+#include <stdio.h>
 #include "sysinfo.h"
 
 
@@ -33,17 +35,17 @@ struct SysInfo32Record {
   char Reserved[31];
 };
 
-#if defined(__WIN32__)
+#if defined(BI_PLAT_WIN32)
   typedef SysInfo32Record SysInfoRecord;
-  #define IDD_SYSINFO "IDD_SysInfo32"
+  #define IDD_SYSINFO     MAKEINTRESOURCE(IDD_SYSINFO32)
 #else
   typedef SysInfo16Record SysInfoRecord;
-  #define IDD_SYSINFO "IDD_SysInfo16"
+  #define IDD_SYSINFO     MAKEINTRESOURCE(IDD_SYSINFO16)
 #endif
 
 class TSysInfoWindow : public TDialog {
   public:
-    TSysInfoWindow(TWindow* parent, const char* title);
+    TSysInfoWindow(TWindow* parent, const char far* title);
     void GetSysInformation();
     void InitChildren();
 
@@ -51,7 +53,7 @@ class TSysInfoWindow : public TDialog {
     SysInfoRecord TransferRecord;
 };
 
-TSysInfoWindow::TSysInfoWindow(TWindow* parent, const char* title)
+TSysInfoWindow::TSysInfoWindow(TWindow* parent, const char far* title)
   : TWindow(parent),
     TDialog(parent, title)
 {
@@ -65,7 +67,7 @@ TSysInfoWindow::InitChildren()
 {
   TStatic* ts;
 
-#if defined(__WIN32__)
+#if defined(BI_PLAT_WIN32)
   ts = new TStatic(this, IDC_WINDOWSVERSION, sizeof TransferRecord.WindowsVersion);
   ts->EnableTransfer();
 
@@ -122,38 +124,43 @@ TSysInfoWindow::InitChildren()
 void
 TSysInfoWindow::GetSysInformation()
 {
-#if defined(__WIN32__)
+#if defined(BI_PLAT_WIN32)
   DWORD ver = ::GetVersion();
-  wsprintf(TransferRecord.WindowsVersion, "%d.%d", (int)LOBYTE(ver), (int)HIBYTE(ver));
+  sprintf(TransferRecord.WindowsVersion, "%d.%d", (int)LOBYTE(ver), (int)HIBYTE(ver));
 
   SYSTEM_INFO systemInfo;
   ::GetSystemInfo(&systemInfo);
-  
-  wsprintf(TransferRecord.OemId, "%lX", systemInfo.dwOemId);
-  wsprintf(TransferRecord.PageSize, "%lX", systemInfo.dwPageSize);
-  wsprintf(TransferRecord.MinAppAddress, "%lX", systemInfo.lpMinimumApplicationAddress);
-  wsprintf(TransferRecord.MaxAppAddress, "%lX", systemInfo.lpMaximumApplicationAddress);
-  wsprintf(TransferRecord.ActiveProcessorMask, "%lX", systemInfo.dwActiveProcessorMask);
-  wsprintf(TransferRecord.NumberOfProcessors, "%lX", systemInfo.dwNumberOfProcessors);
-  wsprintf(TransferRecord.ProcessorType, "%ld", systemInfo.dwProcessorType);
-  wsprintf(TransferRecord.AllocationGranularity, "%lX", systemInfo.dwAllocationGranularity);
-  wsprintf(TransferRecord.Reserved, "%lX", systemInfo.dwReserved);
-  
+
+  sprintf(TransferRecord.OemId, "%lX", systemInfo.dwOemId);
+  sprintf(TransferRecord.PageSize, "%lX", systemInfo.dwPageSize);
+  sprintf(TransferRecord.MinAppAddress, "%lX", systemInfo.lpMinimumApplicationAddress);
+  sprintf(TransferRecord.MaxAppAddress, "%lX", systemInfo.lpMaximumApplicationAddress);
+  sprintf(TransferRecord.ActiveProcessorMask, "%lX", systemInfo.dwActiveProcessorMask);
+  sprintf(TransferRecord.NumberOfProcessors, "%lX", systemInfo.dwNumberOfProcessors);
+  sprintf(TransferRecord.ProcessorType, "%ld", systemInfo.dwProcessorType);
+  sprintf(TransferRecord.AllocationGranularity, "%lX", systemInfo.dwAllocationGranularity);
+
+# if (__BORLANDC__ >= 0x500)
+    sprintf(TransferRecord.Reserved, "%lX", 0L);
+# else
+    sprintf(TransferRecord.Reserved, "%lX", systemInfo.dwReserved);
+# endif
+
 #else
   char  tempstr[31];
   UINT  strId;
   DWORD SysFlags = GetWinFlags();
 
-  wsprintf(TransferRecord.InstanceNumber, "%d", GetApplication()->GetModuleUsage());
+  sprintf(TransferRecord.InstanceNumber, "%d", GetApplication()->GetModuleUsage());
 
   DWORD ver = ::GetVersion();
-  wsprintf(TransferRecord.WindowsVersion, "%d.%d", (int)LOBYTE(ver), (int)HIBYTE(ver));
+  sprintf(TransferRecord.WindowsVersion, "%d.%d", (int)LOBYTE(ver), (int)HIBYTE(ver));
 
   if (SysFlags & WF_ENHANCED)
     strId = IDS_ENHANCED;
   else if (SysFlags & WF_STANDARD)
     strId = IDS_STANDARD;
-  else if (SysFlags & WF_PMODE)
+  else if (!(SysFlags & WF_PMODE))
     strId = IDS_REAL;
   else
     strId = IDS_UNKNOWN;
@@ -179,9 +186,9 @@ TSysInfoWindow::GetSysInformation()
   GetApplication()->LoadString(strId, tempstr, sizeof(tempstr));
   strcpy(TransferRecord.CoProcessor, tempstr);
 
-  wsprintf(TransferRecord.Global, "%lu", GetFreeSpace(0)/1024);
+  sprintf(TransferRecord.Global, "%lu", GetFreeSpace(0)/1024);
 
-  wsprintf(TransferRecord.VersionDos, "%d.%d", _osmajor, _osminor);
+  sprintf(TransferRecord.VersionDos, "%d.%d", _osmajor, _osminor);
 #endif
 }
 
@@ -190,8 +197,10 @@ class TSysInfoApp : public TApplication {
     TSysInfoApp() : TApplication() {}
     void InitMainWindow() {
       EnableCtl3d();
-      MainWindow = new TFrameWindow(0, "Windows System Information",
-                              new TSysInfoWindow(0, IDD_SYSINFO), TRUE);
+      SetMainWindow(new TFrameWindow(0, "Windows System Information",
+                                     new TSysInfoWindow(0, IDD_SYSINFO),
+                                     true));
+      GetMainWindow()->ModifyStyle(WS_MAXIMIZEBOX, 0);
     }
 };
 

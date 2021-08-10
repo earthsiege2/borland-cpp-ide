@@ -72,6 +72,7 @@ OBJS =               \
         getftime.obj \
         gets.obj     \
         getw.obj     \
+	iomacro.obj  \
         lgetc.obj    \
         lputc.obj    \
         makepath.obj \

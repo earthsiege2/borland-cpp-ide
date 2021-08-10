@@ -1,15 +1,14 @@
-//
 //----------------------------------------------------------------------------
 // ObjectComponents
-// (C) Copyright 1994 by Borland International, All Rights Reserved
+// Copyright (c) 1994, 1996 by Borland International, All Rights Reserved
 //
-//   Definition of TOcApp application connection class
+// Definition of TOcApp application connection class
 //----------------------------------------------------------------------------
 #if !defined(OCF_OCAPP_H)
 #define OCF_OCAPP_H
 
-#if !defined(OCF_BOLEINTF_H)
-# include <ocf/boleintf.h>
+#if !defined(OCF_OCBOCOLE_H)
+# include <ocf/ocbocole.h>
 #endif
 #if !defined(OCF_OCOBJECT_H)
 # include <ocf/ocobject.h>
@@ -29,12 +28,23 @@
 #include <ocf/ocapp.rh>
 
 class _ICLASS    TOcPart;
-class _BIDSCLASS TRegLink;
+class _WSYSCLASS TRegLink;
 class            TRegList;
 class _ICLASS    TOcClassMgr;
 class _ICLASS    TOcApp;
 
 //
+// OCF Mixin classes for users derived application class
+//
+#if !defined(_OCMCLASS)
+# define _OCMCLASS
+#endif
+class _OCMCLASS  TOcAppHost;
+class _OCMCLASS  TOcAppFrameHost;
+
+//
+// class TOcFormatName
+// ~~~~~ ~~~~~~~~~~~~~
 // Clipboard format name
 //
 class TOcFormatName {
@@ -54,6 +64,8 @@ class TOcFormatName {
 };
 
 //
+// class TOcNameList
+// ~~~~~ ~~~~~~~~~~~
 // Clipboard format names
 //
 class TOcNameList : private TICVectorImp<TOcFormatName> {
@@ -77,6 +89,8 @@ class TOcNameList : private TICVectorImp<TOcFormatName> {
 };
 
 //
+// class TOcRegistrar
+// ~~~~~ ~~~~~~~~~~~~
 // Linking & embeding version of the Registrar
 //
 class TOcRegistrar : public TRegistrar {
@@ -86,8 +100,12 @@ class TOcRegistrar : public TRegistrar {
                  HINSTANCE hInst = ::_hInstance);
    ~TOcRegistrar();
 
+    void            CreateOcApp(uint32 options, TOcAppHost* host,
+                                TOcAppFrameHost* frameHost);
     void            CreateOcApp(uint32 options, TOcApp*& ret);
     IBClassMgr*     CreateBOleClassMgr();
+
+    void						SetApp(TOcApp* app);
 
   protected:
     void far* GetFactory(const GUID& clsid, const GUID far& iid);
@@ -103,21 +121,30 @@ class TOcRegistrar : public TRegistrar {
 };
 
 //
-// OCF OcApplication class
+// class TOcApp
+// ~~~~~ ~~~~~~
+// OCF Application class.
 //
 class _ICLASS TOcApp : public TUnknown,
                        private IBApplication,
                        private IBClassMgr {
   public:
-    // Constructor for OcApp
+    // Constructor for OcApp & 2nd part of initialization
+    //   host & frameHost are interfaces that OcApp talks back to.
+    //
+    TOcApp(TOcRegistrar& registrar, uint32 options, TOcAppHost* host,
+           TOcAppFrameHost* frameHost);
+    void    SetupWindow(TOcAppFrameHost* frameHost);
+
+    // Constructor for OcApp & 2nd part of initialization
     //   retOcApp is location holding unrefcounted pointer to this OcApp
     //
     TOcApp(TOcRegistrar& registrar, uint32 options, TOcApp*& retOcApp);
+    void    SetupWindow(HWND frameWnd);
 
     // Public accessors
     //
     TOcRegistrar& GetRegistrar() {return Registrar;}
-    void    SetupWindow(HWND frameWnd) {FrameWnd = frameWnd;}
     string  GetName() const {return (const char far*)Name;}
     bool    IsOptionSet(uint32 option) const;
     void    SetOption(uint32 bit, bool state);
@@ -144,15 +171,16 @@ class _ICLASS TOcApp : public TUnknown,
     void     EvActivate(bool);
     bool     EvSetFocus(bool set) {return HRSucceeded(BServiceI->OnSetFocus(set));}
     bool     RegisterClass(const string& progid, BCID classId, bool multiUse);
-//  bool     OnModalDialog(bool enable)
-//               {return BServiceI->OnModalDialog(enable);}
     bool     TranslateAccel(MSG far* msg)
                {return HRSucceeded(BServiceI->TranslateAccel(msg));}
-//  TOcHelp HelpMode(TOcHelp newMode);
-//               {return BServiceI->HelpMode(newMode);}
+    bool     ModalDialog(bool enable)
+                 {return HRSucceeded(BServiceI->OnModalDialog(enable));}
+    TOcHelp  AppHelpMode(TOcHelp newMode)
+                 {return BServiceI->HelpMode(newMode);}
     bool     CanClose();
 
     bool     Browse(TOcInitInfo& initInfo);
+    bool     BrowseControls(TOcInitInfo& initInfo);
     bool     BrowseClipboard(TOcInitInfo& initInfo);
     bool     Paste(TOcInitInfo& initInfo);
     bool     Copy(TOcPart* ocPart);
@@ -176,12 +204,13 @@ class _ICLASS TOcApp : public TUnknown,
   protected:
    ~TOcApp();
 
-    uint32 Options;
-    bool   Registered;
-    TOcApp*& OcAppPtr;   // pointer to this instance, must zero on destruction
+    uint32   Options;
+    bool     Registered;
 
-    uint32 ForwardEvent(int eventId, const void far* param);
-    uint32 ForwardEvent(int eventId, uint32 param = 0);
+    TOcAppHost*      Host;
+    TOcAppFrameHost* FrameHost;
+
+    TOcApp** OcAppPtr;   // Pointer to this instance, must zero on destruction
 
     // TUnknown virtual overrides
     //
@@ -213,7 +242,7 @@ class _ICLASS TOcApp : public TUnknown,
     HRESULT  _IFUNC CanLink();
     HRESULT  _IFUNC CanEmbed();
     HRESULT  _IFUNC IsMDI();
-    HRESULT  _IFUNC OnModalDialog(bool svrModal);
+    HRESULT  _IFUNC OnModalDialog(BOOL svrModal);
     void     _IFUNC DialogHelpNotify(TOcDialogHelp);
     void     _IFUNC ShutdownMaybe();
 
@@ -232,8 +261,7 @@ class _ICLASS TOcApp : public TUnknown,
     //
     IBClassMgr*    BCmI;        // Our private class maneger
     IUnknown*      BService;    // BOle service object & interface
-    IBService*     BServiceI;   //
-    HWND           FrameWnd;    // Corresponding main window
+    IBService2*    BServiceI;   //
 
 #if defined(BI_DATA_NEAR)
     TString&       Name;        // Application name from reglist
@@ -248,19 +276,49 @@ class _ICLASS TOcApp : public TUnknown,
   friend class _ICLASS TOcPart;
   friend class _ICLASS TOcRemView;
   friend class _ICLASS TOcView;
+  friend class _ICLASS TOcClassMgr;
 };
 
-inline bool TOcApp::IsOptionSet(uint32 option) const
-               {return ToBool(Options & option);}
-inline void TOcApp::SetOption(uint32 bit, bool state)
-               {if (state) Options |= bit; else Options &= ~bit;}
+//
+//inline void TOcApp::SetupWindow(TOcAppFrameSocket* frameSocket)
+//{
+//  FrameSocket = frameSocket;
+//}
 
-inline void TOcRegistrar::CreateOcApp(uint32 options, TOcApp*& retOcApp) {
-  new TOcApp(*this, options, retOcApp);
+//
+inline bool TOcApp::IsOptionSet(uint32 option) const
+{
+  return ToBool(Options & option);
 }
 
 //
-// ObjectConnections message and subdispatch IDs
+inline void TOcApp::SetOption(uint32 bit, bool state)
+{
+  if (state)
+    Options |= bit;
+  else
+    Options &= ~bit;
+}
+
+//
+inline void TOcRegistrar::CreateOcApp(uint32 options, TOcAppHost* host,
+                                      TOcAppFrameHost* frameHost)
+{
+  new TOcApp(*this, options, host, frameHost);
+}
+
+//
+// Compatibility version of TOcApp creator
+//
+inline void TOcRegistrar::CreateOcApp(uint32 options, TOcApp*& retOcApp)
+{
+  new TOcApp(*this, options, retOcApp);
+}
+
+//----------------------------------------------------------------------------
+
+//
+// ObjectComponents message and subdispatch IDs
 //
 #define WM_BCXNAME          0x7FFF-8     // (WM_VBXNAME) BCX event fire by name
 #define WM_OCEVENT          WM_BCXNAME-1 // OC -> app messages
@@ -278,42 +336,126 @@ inline void TOcRegistrar::CreateOcApp(uint32 options, TOcApp*& retOcApp) {
 #define OC_APPRESTOREUI       0x0107  // Have the app frame restore its UI
 #define OC_APPDIALOGHELP      0x0108  // Ole dialog help button pressed
 #define OC_APPSHUTDOWN        0x0109  // Shutdown app frame window
+#define OC_APPGETACCEL        0x010A  // Get accelerators for menu merge
 
 //
-// OCF Mixin Class for users derived application class
-//
-#if !defined(_OCMCLASS)
-# define _OCMCLASS
-#endif
+// struct TOcGetAccel
+// ~~~~~~ ~~~~~~~~~~~
+struct TOcGetAccel {
+  HACCEL  Accel;
+  int     Count;
+};
 
-class _OCMCLASS TOcModule {
+//
+// class TOcAppHost
+// ~~~~~ ~~~~~~~~~~
+// OCF Application host class. Owner of & host for a TOcApp object
+//
+class _OCMCLASS TOcAppHost {
   public:
-    TOcModule() : OcApp(0) {} // must call OcInit after construction
-   ~TOcModule();
+    TOcAppHost() : OcApp(0) {} // Must call OcInit after construction
+   ~TOcAppHost();
 
     void OcInit(TOcRegistrar& registrar, uint32 options);
     TRegistrar& GetRegistrar() {return OcApp->GetRegistrar();}
 
-    TOleAllocator OleMalloc;   // default to task allocator
-    TOcApp* OcApp;
     bool IsOptionSet(uint32 option) const;
+
+    virtual void AttachHost(TOcApp* ocApp) {OcApp = ocApp;}
+    virtual void ReleaseOcObject() {OcApp = 0;}
+
+//  protected:
+    TOleAllocator OleMalloc;   // default to task allocator
+    TOcApp*       OcApp;
+
   private:
     uint32 InitOptions;
 };
+typedef TOcAppHost TOcModule;
 
-inline TOcModule::~TOcModule() {
+//
+// class TOcAppFrameHost
+// ~~~~~ ~~~~~~~~~~~~~~~
+// OCF Application frame window host class. Receives window events from OcApp
+//
+class _OCMCLASS TOcAppFrameHost {
+  public:
+    TOcAppFrameHost(TOcApp* ocApp=0) : OcApp(ocApp) {}
+
+    virtual void  ReleaseOcObject() {OcApp = 0;}
+
+    virtual bool  EvOcAppInsMenus(TOcMenuDescr far& sharedMenu) = 0;
+    virtual bool  EvOcAppMenus(TOcMenuDescr far& md) = 0;
+    virtual bool  EvOcAppProcessMsg(MSG far* msg) = 0;
+    virtual bool  EvOcAppFrameRect(TRect far* rect) = 0;
+    virtual bool  EvOcAppBorderSpaceReq(TRect far* rect) = 0;
+    virtual bool  EvOcAppBorderSpaceSet(TRect far* rect) = 0;
+    virtual void  EvOcAppStatusText(const char far* rect) = 0;
+    virtual void  EvOcAppRestoreUI() = 0;
+    virtual void  EvOcAppDialogHelp(TOcDialogHelp far& dh) = 0;
+    virtual bool  EvOcAppShutdown() = 0;
+    virtual bool  EvOcAppGetAccel(TOcGetAccel far* acc) = 0;
+
+    virtual HWND  EvOcGetWindow() const = 0;
+
+    // For compatibility
+    virtual void  SetWindow(HWND) {}
+
+  protected:
+    TOcApp* OcApp;  
+};
+
+//
+// class TOcAppFrameHostMsg
+// ~~~~~ ~~~~~~~~~~~~~~~~~~
+// Default implementation of frame window host that uses messages
+//
+class _OCMCLASS TOcAppFrameHostMsg : public TOcAppFrameHost {
+  public:
+    TOcAppFrameHostMsg(TOcApp* ocApp) : Wnd(0), TOcAppFrameHost(ocApp) {}
+
+    void   ReleaseOcObject() {delete this;}  // We are no longer needed by Oc
+
+    bool   EvOcAppInsMenus(TOcMenuDescr far& sharedMenu);
+    bool   EvOcAppMenus(TOcMenuDescr far& md);
+    bool   EvOcAppProcessMsg(MSG far* msg);
+    bool   EvOcAppFrameRect(TRect far* rect);
+    bool   EvOcAppBorderSpaceReq(TRect far* rect);
+    bool   EvOcAppBorderSpaceSet(TRect far* rect);
+    void   EvOcAppStatusText(const char far* rect);
+    void   EvOcAppRestoreUI();
+    void   EvOcAppDialogHelp(TOcDialogHelp far& dh);
+    bool   EvOcAppShutdown();
+    bool   EvOcAppGetAccel(TOcGetAccel far* acc);
+
+    HWND   EvOcGetWindow() const {return Wnd;}
+
+    void   SetWindow(HWND hWnd) {Wnd = hWnd;}
+
+  protected:
+    uint32 ForwardEvent(int eventId, const void far* param);
+    uint32 ForwardEvent(int eventId, uint32 param = 0);
+
+  private:
+    HWND   Wnd;
+};
+
+//
+inline TOcAppHost::~TOcAppHost()
+{
   if (OcApp)
-    OcApp->ReleaseObject();  // don't delete, just release
+    OcApp->ReleaseObject();  // don't delete, just release OC object
 }
 
-inline bool TOcModule::IsOptionSet(uint32 option) const {
+inline bool TOcAppHost::IsOptionSet(uint32 option) const
+{
   return OcApp ? OcApp->IsOptionSet(option) : (InitOptions & option) != 0;
 }
 
-inline void TOcModule::OcInit(TOcRegistrar& registrar, uint32 options) {
+inline void TOcAppHost::OcInit(TOcRegistrar& registrar, uint32 options)
+{
   InitOptions = options;
   registrar.CreateOcApp(options, OcApp);
 }
 
 #endif  // OCF_OCAPP_H
-

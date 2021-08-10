@@ -6,7 +6,6 @@
 #define SAMPCONT_H
 
 #define IDS_DOCFILEFILTER    1
-#define CM_FILEPRINTPREVIEW  207
 #define CM_EDIT_PASTESPECIAL 301
 #define CM_EDIT_PASTELINK    302
 #define CM_EDIT_INSERTOBJECT 303
@@ -24,7 +23,7 @@
 #if !defined(OWL_OPENSAVE_H)
 # include <owl/opensave.h>
 #endif
-
+#include <owl/editfile.rh>
 
 class TOleSampContainer : public TOleWindow {
   public:
@@ -36,10 +35,10 @@ class TOleSampContainer : public TOleWindow {
   private:
     void SetupWindow();
     void CleanupWindow();
-    
+
     void CmFileSave();
     void CmFileSaveAs();
-    void CmExit();  
+    void CmExit();
     void CmFilePrint();
     void CmFilePrinterSetup();
     void CmPrintPreview();

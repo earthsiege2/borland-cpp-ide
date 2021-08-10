@@ -18,20 +18,20 @@
 ##      :(YPos() + 2) ScrollPositionHead
 
 
-[[FunctionResult]] [[ClassName]]::[[FunctionName]] [[FunctionDefParam]]
+[[FunctionResult]] [[ClassName]]::[[FunctionName]][[FunctionDefParam]]
 {
 ##FunctionResult != "void" 3
-    [[FunctionResult]] result;
+  [[FunctionResult]] result;
 
-    result = [[BaseClass]]::[[FunctionName]][[FunctionCallParam]];
+  result = [[BaseClass]]::[[FunctionName]][[FunctionCallParam]];
 ##FunctionResult == "void"
-    [[BaseClass]]::[[FunctionName]][[FunctionCallParam]];
+  [[BaseClass]]::[[FunctionName]][[FunctionCallParam]];
 
-    // INSERT>> Your code here.
+  // INSERT>> Your code here.
 ##      :YPos() ScrollPositionInsert
 
 ##FunctionResult != "void"
-    return result;
+  return result;
 }
 ##      :^@ScrollPositionHead
 ##      :^SCROLL
@@ -67,6 +67,6 @@
 ##*
 ##--END-- ? ClassMarker [[Search]]
 ##^BOL
-    virtual [[FunctionResult]] [[FunctionName]] [[FunctionDefParam]];
+    virtual [[FunctionResult]] [[FunctionName]][[FunctionDefParam]];
 ##--END-- QUERY_CLASS_NAME [[ClassName]]
 >>[H]

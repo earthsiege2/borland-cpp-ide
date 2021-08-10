@@ -1,0 +1,38 @@
+#############################################################################
+#									    #
+# The make process relies on the creation of DLL and library response file  #
+# creation.  To control the location of object modules the following should #
+# be defined:                                                               #
+#                                                                           #
+#     IMPOBJS - A list of object modules that should appear in the DLL      #
+#               import library.                                             #
+#                                                                           #
+#        OBJS - If a DLL is build, this is a list of the object modules     #
+#               that are linked into the DLL.  If building a library, this  #
+#               is the list of object modules that goes into the library.   #
+#                                                                           #
+# The building of miscellaneous object modules and libraries is controlled  #
+# by the list of files in the MISC variable.                                #
+#                                                                           #
+#############################################################################
+
+#############################################################################
+# In order to build the OBJ list for 16 bit platforms, a definition of      #
+# MODEL is required.                                                        #
+#############################################################################
+!if ($(OS) == DOS || $(OS) == WIN16) && !$d(MODEL)
+!    error MODEL is required
+!endif
+
+#############################################################################
+# Build the object module lists.                                            #
+#############################################################################
+OBJS =               \
+	stdexcpt.obj
+
+#############################################################################
+# Configure the environment apprpriately.                                   #
+#############################################################################
+
+!include rules.mak
+

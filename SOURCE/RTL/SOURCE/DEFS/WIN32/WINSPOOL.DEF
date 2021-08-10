@@ -1,123 +1,122 @@
-LIBRARY     WINSPOOL.DRV
-
+LIBRARY WINSPOOL.DRV
 EXPORTS
-    ADVANCEDSETUPDIALOG            @1   
-    AbortPrinter                   @2   
-    AddFormA                       @3   
-    AddFormW                       @4   
-    AddJobA                        @5   
-    AddJobW                        @6   
-    AddMonitorA                    @7   
-    AddMonitorW                    @8   
-    AddPortA                       @9   
-    AddPortExA                     @10  
-    AddPortExW                     @11  
-    AddPortW                       @12  
-    AddPrintProcessorA             @13  
-    AddPrintProcessorW             @14  
-    AddPrintProvidorA              @15  
-    AddPrintProvidorW              @16  
-    AddPrinterA                    @17  
-    AddPrinterConnectionA          @18  
-    AddPrinterConnectionW          @19  
-    AddPrinterDriverA              @20  
-    AddPrinterDriverW              @21  
-    AddPrinterW                    @22  
-    AdvancedDocumentPropertiesA    @23  
-    AdvancedDocumentPropertiesW    @24  
-    AdvancedSetupDialog            @25  
-    ClosePrinter                   @26  
-    ConfigurePortA                 @27  
-    ConfigurePortW                 @28  
-    ConnectToPrinterDlg            @29  
-    CreatePrinterIC                @30  
-    DEVICECAPABILITIES             @31  
-    DEVICEMODE                     @32  
-    DeleteFormA                    @33  
-    DeleteFormW                    @34  
-    DeleteMonitorA                 @35  
-    DeleteMonitorW                 @36  
-    DeletePortA                    @37  
-    DeletePortW                    @38  
-    DeletePrintProcessorA          @39  
-    DeletePrintProcessorW          @40  
-    DeletePrintProvidorA           @41  
-    DeletePrintProvidorW           @42  
-    DeletePrinter                  @43  
-    DeletePrinterConnectionA       @44  
-    DeletePrinterConnectionW       @45  
-    DeletePrinterDriverA           @46  
-    DeletePrinterDriverW           @47  
-    DeletePrinterIC                @48  
-    DevQueryPrint                  @49  
-    DeviceCapabilities             @50  
-    DeviceCapabilitiesA            @51  
-    DeviceCapabilitiesW            @52  
-    DeviceMode                     @53  
-    DocumentPropertiesA            @54  
-    DocumentPropertiesW            @55  
-    EXTDEVICEMODE                  @56  
-    EndDocPrinter                  @57  
-    EndPagePrinter                 @58  
-    EnumFormsA                     @59  
-    EnumFormsW                     @60  
-    EnumJobsA                      @61  
-    EnumJobsW                      @62  
-    EnumMonitorsA                  @63  
-    EnumMonitorsW                  @64  
-    EnumPortsA                     @65  
-    EnumPortsW                     @66  
-    EnumPrintProcessorDatatypesA   @67  
-    EnumPrintProcessorDatatypesW   @68  
-    EnumPrintProcessorsA           @69  
-    EnumPrintProcessorsW           @70  
-    EnumPrinterDriversA            @71  
-    EnumPrinterDriversW            @72  
-    EnumPrintersA                  @73  
-    EnumPrintersW                  @74  
-    ExtDeviceMode                  @75  
-    FindClosePrinterChangeNotification @76  
-    FindFirstPrinterChangeNotification @77  
-    FindNextPrinterChangeNotification @78  
-    GetFormA                       @79  
-    GetFormW                       @80  
-    GetJobA                        @81  
-    GetJobW                        @82  
-    GetPrintProcessorDirectoryA    @83  
-    GetPrintProcessorDirectoryW    @84  
-    GetPrinterA                    @85  
-    GetPrinterDataA                @86  
-    GetPrinterDataW                @87  
-    GetPrinterDriverA              @88  
-    GetPrinterDriverDirectoryA     @89  
-    GetPrinterDriverDirectoryW     @90  
-    GetPrinterDriverW              @91  
-    GetPrinterW                    @92  
-    InitializeDll                  @93  
-    OpenPrinterA                   @94  
-    OpenPrinterW                   @95  
-    PlayGdiScriptOnPrinterIC       @96  
-    PrinterMessageBoxA             @97  
-    PrinterMessageBoxW             @98  
-    PrinterProperties              @99  
-    ReadPrinter                    @100 
-    ResetPrinterA                  @101 
-    ResetPrinterW                  @102 
-    ScheduleJob                    @103 
-    SetFormA                       @104 
-    SetFormW                       @105 
-    SetJobA                        @106 
-    SetJobW                        @107 
-    SetPrinterA                    @108 
-    SetPrinterDataA                @109 
-    SetPrinterDataW                @110 
-    SetPrinterW                    @111 
-    SpoolerDevQueryPrintW          @112 
-    SpoolerInit                    @113 
-    StartDocDlgA                   @114 
-    StartDocDlgW                   @115 
-    StartDocPrinterA               @116 
-    StartDocPrinterW               @117 
-    StartPagePrinter               @118 
-    WaitForPrinterChange           @119 
-    WritePrinter                   @120 
+    ADVANCEDSETUPDIALOG
+    AbortPrinter
+    AddFormA
+    AddFormW
+    AddJobA
+    AddJobW
+    AddMonitorA
+    AddMonitorW
+    AddPortA
+    AddPortExA
+    AddPortExW
+    AddPortW
+    AddPrintProcessorA
+    AddPrintProcessorW
+    AddPrintProvidorA
+    AddPrintProvidorW
+    AddPrinterA
+    AddPrinterConnectionA
+    AddPrinterConnectionW
+    AddPrinterDriverA
+    AddPrinterDriverW
+    AddPrinterW
+    AdvancedDocumentPropertiesA
+    AdvancedDocumentPropertiesW
+    AdvancedSetupDialog
+    ClosePrinter
+    ConfigurePortA
+    ConfigurePortW
+    ConnectToPrinterDlg
+    CreatePrinterIC
+    DEVICECAPABILITIES
+    DEVICEMODE
+    DeleteFormA
+    DeleteFormW
+    DeleteMonitorA
+    DeleteMonitorW
+    DeletePortA
+    DeletePortW
+    DeletePrintProcessorA
+    DeletePrintProcessorW
+    DeletePrintProvidorA
+    DeletePrintProvidorW
+    DeletePrinter
+    DeletePrinterConnectionA
+    DeletePrinterConnectionW
+    DeletePrinterDriverA
+    DeletePrinterDriverW
+    DeletePrinterIC
+    DevQueryPrint
+    DeviceCapabilities
+    DeviceCapabilitiesA
+    DeviceCapabilitiesW
+    DeviceMode
+    DocumentPropertiesA
+    DocumentPropertiesW
+    EXTDEVICEMODE
+    EndDocPrinter
+    EndPagePrinter
+    EnumFormsA
+    EnumFormsW
+    EnumJobsA
+    EnumJobsW
+    EnumMonitorsA
+    EnumMonitorsW
+    EnumPortsA
+    EnumPortsW
+    EnumPrintProcessorDatatypesA
+    EnumPrintProcessorDatatypesW
+    EnumPrintProcessorsA
+    EnumPrintProcessorsW
+    EnumPrinterDriversA
+    EnumPrinterDriversW
+    EnumPrintersA
+    EnumPrintersW
+    ExtDeviceMode
+    FindClosePrinterChangeNotification
+    FindFirstPrinterChangeNotification
+    FindNextPrinterChangeNotification
+    GetFormA
+    GetFormW
+    GetJobA
+    GetJobW
+    GetPrintProcessorDirectoryA
+    GetPrintProcessorDirectoryW
+    GetPrinterA
+    GetPrinterDataA
+    GetPrinterDataW
+    GetPrinterDriverA
+    GetPrinterDriverDirectoryA
+    GetPrinterDriverDirectoryW
+    GetPrinterDriverW
+    GetPrinterW
+    InitializeDll
+    OpenPrinterA
+    OpenPrinterW
+    PlayGdiScriptOnPrinterIC
+    PrinterMessageBoxA
+    PrinterMessageBoxW
+    PrinterProperties
+    ReadPrinter
+    ResetPrinterA
+    ResetPrinterW
+    ScheduleJob
+    SetFormA
+    SetFormW
+    SetJobA
+    SetJobW
+    SetPrinterA
+    SetPrinterDataA
+    SetPrinterDataW
+    SetPrinterW
+    SpoolerDevQueryPrintW
+    SpoolerInit
+    StartDocDlgA
+    StartDocDlgW
+    StartDocPrinterA
+    StartDocPrinterW
+    StartPagePrinter
+    WaitForPrinterChange
+    WritePrinter

@@ -9,12 +9,13 @@
 
 #define STRICT
 
+#include <services/wsysinc.h>
+#include <windowsx.h>
 #include <strstrea.h>
 #include <fstream.h>
 #include <ctype.h>
 #include <checks.h>
 #include <string.h>
-#include <windowsx.h>
 
 #include "classlib\objstrm.h"
 #include "todolist.h"

@@ -1,9 +1,8 @@
-//
 //----------------------------------------------------------------------------
 // ObjectComponents
-// (C) Copyright 1994 by Borland International, All Rights Reserved
+// Copyright (c) 1994, 1996 by Borland International, All Rights Reserved
 //
-//   OLE Registration definitions
+// OLE Registration definitions
 //----------------------------------------------------------------------------
 #if !defined(OCF_OCREG_H)
 #define OCF_OCREG_H
@@ -11,136 +10,17 @@
 #if !defined(OCF_AUTODEFS_H)
 # include <ocf/autodefs.h>
 #endif
-#if !defined(OSL_GEOMETRY_H)
-# include <osl/geometry.h>  // defines TPointer
+#if !defined(WINSYS_REGISTRY_H)
+# include <winsys/registry.h>
 #endif
-class _EXPCLASS istream;
-class _EXPCLASS ostream;
+#if !defined(CLASSLIB_POINTER_H)
+# include <classlib/pointer.h>
+#endif
 
-//____________________________________________________________________________
 //
-// TXRegistry - Windows Registry related exception object
-//____________________________________________________________________________
-
-class TXRegistry : public TXBase {
-  public:
-    TXRegistry(const char* msg, const char* key);
-    TXRegistry(const TXRegistry& copy);
-    static void Check(long stat, const char* key);
-    const char* Key;
-};
-inline TXRegistry::TXRegistry(const char* msg, const char* key)
-            : TXBase(msg), Key(key) {}
-inline TXRegistry::TXRegistry(const TXRegistry& src)
-            : TXBase(src), Key(src.Key) {}
-
-//____________________________________________________________________________
+// Global registration functions for OLE. Most are wrappers for winsys's
+// TRegistry functions
 //
-// Clipboard and registry data transfer format definitions
-//____________________________________________________________________________
-
-const int ocrVerbLimit   = 8;  // maximum number of verbs registered per class
-const int ocrFormatLimit = 8;  // maximum number of data formats per class
-
-// format: standard clipboard numeric format, or name of custom format
-//
-enum ocrClipFormat {
-  ocrText           =  1,  // CF_TEXT
-  ocrBitmap         =  2,  // CF_BITMAP
-  ocrMetafilePict   =  3,  // CF_METAFILEPICT
-  ocrSylk           =  4,  // CF_SYLK
-  ocrDif            =  5,  // CF_DIF
-  ocrTiff           =  6,  // CF_TIFF
-  ocrOemText        =  7,  // CF_OEMTEXT
-  ocrDib            =  8,  // CF_DIB
-  ocrPalette        =  9,  // CF_PALETTE
-  ocrPenData        = 10,  // CF_PENDATA
-  ocrRiff           = 11,  // CF_RIFF
-  ocrWave           = 12,  // CF_WAVE
-  ocrUnicodeText    = 13,  // CF_UNICODETEXT  Win32 only
-  ocrEnhMetafile    = 14,  // CF_ENHMETAFILE  Win32 only
-};
-#define ocrRichText          "Rich Text Format"
-#define ocrEmbedSource       "Embed Source"
-#define ocrEmbeddedObject    "Embedded Object"
-#define ocrLinkSource        "Link Source"
-#define ocrObjectDescriptor  "Object Descriptor"
-#define ocrLinkSrcDescriptor "Link Source Descriptor"
-
-// aspect: view types supported by transfer
-//
-enum ocrAspect {
-  ocrContent   = 1,  // DVASPECT_CONTENT    normal display representation
-  ocrThumbnail = 2,  // DVASPECT_THUMBNAIL  picture appropriate for browser
-  ocrIcon      = 4,  // DVASPECT_ICON       iconized representation of object
-  ocrDocPrint  = 8,  // DVASPECT_DOCPRINT   print preview representation
-};
-
-// medium: means of data transfer
-//
-enum ocrMedium {
-  ocrNull       = 0,
-  ocrHGlobal    = 1,  // TYMED_HGLOBAL  global memory handle
-  ocrFile       = 2,  // TYMED_FILE     data as contents of file
-  ocrIStream    = 4,  // TYMED_ISTREAM  instance of an IStream object
-  ocrIStorage   = 8,  // TYMED_ISTORAGE streams within an instance of IStorage
-  ocrGDI        = 16, // TYMED_GDI      GDI object in global handle
-  ocrMfPict     = 32, // TYMED_MFPICT   CF_METAFILEPICT containing global handle
-  ocrStaticMed  = 1024 // OLE 2 static object
-};
-
-// direction: transfer directions supported
-//
-enum ocrDirection {
-  ocrGet    = 1,
-  ocrSet    = 2,
-  ocrGetSet = 3,
-};
-
-//____________________________________________________________________________
-//
-// Miscellaneous registry definitions
-//____________________________________________________________________________
-
-// IOleObject miscellaneous status flags, defined for each or all aspects
-//
-enum ocrObjectStatus {
-  ocrRecomposeOnResize           = 1,   // request redraw on container resize
-  ocrOnlyIconic                  = 2,   // only useful context view is Icon
-  ocrInsertNotReplace            = 4,   // should not replace current select.
-  ocrStatic                      = 8,   // object is an OLE static object
-  ocrCantLinkInside              = 16,  // should not be the link source
-  ocrCanLinkByOle1               = 32,  // only used in OBJECTDESCRIPTOR
-  ocrIsLinkObject                = 64,  // set by OLE2 link for OLE1 compat.
-  ocrInsideOut                   = 128, // can be activated concurrently
-  ocrActivateWhenVisible         = 256, // hint to cntnr when ocrInsideOut set
-  ocrRenderingIsDeviceIndependent= 512, // no decisions made based on target
-  ocrNoSpecialRendering          = 512, // older enum for previous entry
-};
-
-// IOleObject verb menu flags
-//
-enum ocrVerbMenuFlags {
-  ocrGrayed      = 1,   // MF_GRAYED
-  ocrDisabled    = 2,   // MF_DISABLED
-  ocrChecked     = 8,   // MF_CHECKED
-  ocrMenuBarBreak= 32,  // MF_MENUBARBREAK
-  ocrMenuBreak   = 64,  // MF_MENUBAR
-};
-
-// IOleObject verb attribute flags
-//
-enum ocrVerbAttributes {
-  ocrNeverDirties      = 1,   // verb can never cause object to become dirty
-  ocrOnContainerMenu   = 2,   // only useful context view is Icon
-};
-
-// Entries for <usage> registration parameter, class factory registration mode
-//
-#define ocrSingleUse     "1"  // single client per instance
-#define ocrMultipleUse   "2"  // multiple clients per instance
-#define ocrMultipleLocal "3"  // multiple clients, separate inproc server
-
 
 long                                   // returns numeric value of <docflags>
 OcRegisterClass(TRegList& regInfo,     // obj holding array of reg parameters
@@ -149,33 +29,40 @@ OcRegisterClass(TRegList& regInfo,     // obj holding array of reg parameters
                 TLangId lang,          // language for registration
                 char* filter = 0,      // internal use to restrict entries
                 TRegItem* defaults = 0,// optional registration default list
-                TRegItem* extra = 0);  // optional registration override list
+                TRegItem* overrides= 0);// optional registration override list
 
 int                                   // returns error count, 0 if success
 OcUnregisterClass(TRegList& regInfo,  // registration table used for register
-                  TRegItem* extra=0); // optional additional regitration item
+                  TRegItem* overrides=0); // optional additional regitration item
 
-int OcRegistryValidate(istream& in);   // returns number of mismatched entires
+inline int OcRegistryValidate(istream& in) {
+  return TRegistry::Validate(TRegKey::ClassesRoot, in);
+}
 
-void OcRegistryUpdate(istream& in);
+inline void OcRegistryUpdate(istream& in) {
+  TRegistry::Update(TRegKey::ClassesRoot, in);
+}
 
 int                   // return: 0=no debug reg, -1=user clsid, 1=default used
 OcSetupDebugReg(TRegList& regInfo,    // original registration list
                 TRegItem* regDebug,   // temp override list[DebugReplaceCount]
                 TLangId lang,         // language for registration
                 char* clsid);         // default temp debug clsid string buf
+
+//
 const int DebugRegCount = 4+1;        // replacements + room for terminator
+
 extern char AppDebugFilter[];         // templates needed for debug app reg
 extern char DocDebugFilter[];         // templates needed for debug doc reg
 extern TRegItem OcRegNoDebug[];       // override list to shut off "debugger"
 extern TRegItem OcRegNotDll[];        // override to shut off EXE-only items
 
-//____________________________________________________________________________
+//----------------------------------------------------------------------------
+// TRegistrar class
 //
-// TRegistrar - Application registration manager interface class
-//____________________________________________________________________________
 
-// application running mode and registration flags
+//
+// Application running mode and registration flags
 // these are initialized when processing command line or registration requests
 // the application's copy of the initial option flags is dynamically updated
 //
@@ -203,6 +90,11 @@ typedef IUnknown*
 
 class _ICLASS TAppDescriptor;
 
+//
+// class TRegistrar
+// ~~~~~ ~~~~~~~~~~
+// Application registration manager interface class
+//
 class _ICLASS TRegistrar {
   public:
     TRegistrar(TRegList& regInfo, TComponentFactory callback,
@@ -244,10 +136,9 @@ class _ICLASS TRegistrar {
     TRegistrar* Next;                  // next link in registrar list
 };
 
-//____________________________________________________________________________
-//
+//----------------------------------------------------------------------------
 //  Factory for automated OLE components, no linking/embedding support
-//____________________________________________________________________________
+//
 
 template <class T> class TOcAutoFactory {
   public:
@@ -263,7 +154,6 @@ template <class T> class TOcAutoFactory {
     //
     static IUnknown* Create(IUnknown* outer, uint32 options, uint32 id);
 };
-
 
 //
 // Called when the app is not found and needs to be created
@@ -326,7 +216,7 @@ TOcAutoFactory<T>::Create(IUnknown* outer, uint32 options, uint32 /*id*/)
   return ifc;
 }
 
-//____________________________________________________________________________
+//----------------------------------------------------------------------------
 
 #if !defined(OCF_APPDESC_H)
 # include <ocf/appdesc.h>  // private for inline implementation only
@@ -357,4 +247,3 @@ inline void TRegistrar::SetOption(uint32 bit, bool state)
 inline void TRegistrar::ProcessCmdLine(string& cmdLine)
                                             {AppDesc.ProcessCmdLine(cmdLine);}
 #endif  // OCF_OCREG_H
-

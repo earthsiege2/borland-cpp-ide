@@ -1,0 +1,8 @@
+//----------------------------------------------------------------------------
+// ObjectWindows
+// Copyright (c) 1995, 1995 by Borland International, All Rights Reserved
+//----------------------------------------------------------------------------
+#define IDM_MAINMENU  100
+#define CM_CENTER     101
+#define CM_UPPERLEFT  102
+#define CM_STRETCH    103

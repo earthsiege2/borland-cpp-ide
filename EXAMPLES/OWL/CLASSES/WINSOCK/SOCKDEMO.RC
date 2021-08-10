@@ -1,0 +1,243 @@
+#if !defined(WORKSHOP_INVOKED)
+# include <windows.h>
+#endif
+#include <owl/except.rc>
+#include <owl/statusba.rc>
+#include <owl/editfile.rc>
+#include <owl/editsear.rc>
+#include <owl/inputdia.rc>
+#include <owl/slider.rc>
+#include <owl/window.rh>
+#include "sockdemo.rh"
+
+MENU_MAIN MENU 
+{
+ POPUP "&File"
+ {
+  MENUITEM "E&xit\tAlt+F4", CM_EXIT
+ }
+
+ POPUP "&Edit"
+ {
+  MENUITEM "&Undo\tAlt+BkSp", CM_EDITUNDO, GRAYED
+  MENUITEM SEPARATOR
+  MENUITEM "Cu&t\tShift+Del", CM_EDITCUT, GRAYED
+  MENUITEM "&Copy\tCtrl+Ins", CM_EDITCOPY, GRAYED
+  MENUITEM "&Paste\tShift+Ins", CM_EDITPASTE, GRAYED
+  MENUITEM SEPARATOR
+  MENUITEM "Clear &All\tCtrl+Del", CM_EDITCLEAR, GRAYED
+  MENUITEM "&Delete\tDel", CM_EDITDELETE, GRAYED
+ }
+
+ POPUP "&OWLSock"
+ {
+  MENUITEM "Get this computer's Winsock WSAData", CM_GET_WSADATA
+  MENUITEM "Get this computer's name and address", CM_GET_MY_ADDRESS
+  MENUITEM "Convert address to dotted-decimal (host lookup)...", CM_CONVERT_ADDRESS
+  MENUITEM "Convert service and protocol to port (service lookup)...", CM_CONVERT_SERVICE
+  MENUITEM "Send and receive datagrams...", CM_SEND_DATAGRAMS
+  MENUITEM "Make stream socket connection...", CM_STREAM_CONNECT
+  MENUITEM "Listen for stream socket connections...", CM_STREAM_LISTEN
+  MENUITEM "Show an example socket error", CM_SHOW_SOCKET_ERROR
+ }
+
+ POPUP "&Help"
+ {
+  MENUITEM "&About...", CM_HELPABOUT
+  MENUITEM "&How to use this demo", CM_HELP_HOW
+ }
+}
+
+
+// Application ICON
+IDI_SDIAPPLICATION ICON "owlsock.ico"
+
+
+// About box.
+IDD_ABOUT DIALOG 12, 17, 204, 74
+STYLE DS_3DLOOK | DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "About OWLSock Demo"
+FONT 8, "MS Sans Serif"
+{
+ CTEXT "Version", IDC_VERSION, 25, 15, 175, 8, SS_NOPREFIX
+ CTEXT "OWLSock Demo", -1, 23, 4, 179, 8, SS_CENTER | SS_NOPREFIX | WS_GROUP
+ CONTROL "", IDC_COPYRIGHT, "STATIC", SS_CENTER | SS_NOPREFIX | WS_GROUP, 2, 27, 200, 27
+ RTEXT "", IDC_DEBUG, 136, 55, 66, 8, SS_NOPREFIX
+ ICON IDI_SDIAPPLICATION, -1, 2, 2, 18, 20
+ DEFPUSHBUTTON "OK", IDOK, 82, 56, 40, 14
+}
+
+
+IDD_STREAM DIALOG 7, 18, 237, 249
+STYLE DS_3DLOOK | WS_POPUP | WS_VISIBLE | WS_CLIPSIBLINGS | WS_CAPTION
+CAPTION "Stream Socket"
+FONT 8, "MS Sans Serif"
+{
+ CONTROL "<enter port>", IDC_EDIT_PORT, "EDIT", WS_BORDER | WS_TABSTOP, 29, 5, 203, 12
+ CONTROL "<enter address>", IDC_EDIT_ADDRESS_SEND, "EDIT", WS_BORDER | WS_TABSTOP, 10, 32, 102, 12
+ EDITTEXT IDC_EDIT_ADDRESS_RECEIVE, 124, 32, 104, 12, ES_READONLY | WS_BORDER | WS_TABSTOP
+ CONTROL "Text to send", IDC_EDIT_SEND, "EDIT", ES_MULTILINE | ES_AUTOVSCROLL | ES_AUTOHSCROLL | ES_WANTRETURN | WS_BORDER | WS_VSCROLL | WS_HSCROLL | WS_TABSTOP, 6, 52, 110, 143
+ CONTROL "Received text", IDC_EDIT_RECEIVE, "EDIT", ES_MULTILINE | ES_AUTOVSCROLL | ES_AUTOHSCROLL | ES_WANTRETURN | WS_BORDER | WS_VSCROLL | WS_HSCROLL | WS_TABSTOP, 120, 52, 112, 143
+ PUSHBUTTON "Send", IDC_BTN_SEND, 7, 202, 50, 14
+ PUSHBUTTON "Clear", IDC_BTN_SEND_CLEAR, 65, 202, 50, 14
+ PUSHBUTTON "Clear", IDC_BTN_RECEIVE_CLEAR, 181, 201, 50, 14
+ DEFPUSHBUTTON "Connect", IDC_BTN_CONNECT, 126, 229, 50, 14
+ PUSHBUTTON "Close", IDOK, 181, 229, 50, 14
+ LTEXT "Port:", -1, 8, 7, 19, 10
+ LTEXT "Send To:", -1, 10, 22, 60, 10
+ LTEXT "Received From:", -1, 124, 22, 60, 8
+ CONTROL "", -1, "static", SS_BLACKFRAME | WS_CHILD | WS_VISIBLE, 6, 222, 227, 1
+ CONTROL "", -1, "static", SS_BLACKFRAME | WS_CHILD | WS_VISIBLE, 6, 20, 110, 27
+ CONTROL "", -1, "static", SS_BLACKFRAME | WS_CHILD | WS_VISIBLE, 120, 20, 112, 27
+ LTEXT "Status: Idle", IDC_STATIC_STATUS, 6, 231, 114, 8
+}
+
+
+IDD_DATAGRAM DIALOG 9, 18, 237, 247
+STYLE DS_3DLOOK | WS_POPUP | WS_VISIBLE | WS_CLIPSIBLINGS | WS_CAPTION
+CAPTION "Datagram Socket"
+FONT 8, "MS Sans Serif"
+{
+ CONTROL "<enter port>", IDC_EDIT_PORT, "EDIT", WS_BORDER | WS_TABSTOP, 28, 4, 203, 12
+ CONTROL "<enter address>", IDC_EDIT_ADDRESS_SEND, "EDIT", WS_BORDER | WS_TABSTOP, 8, 32, 102, 12
+ EDITTEXT IDC_EDIT_ADDRESS_RECEIVE, 123, 32, 102, 12, ES_READONLY | WS_BORDER | WS_TABSTOP
+ CONTROL "Text to send", IDC_EDIT_SEND, "EDIT", ES_MULTILINE | ES_AUTOVSCROLL | ES_AUTOHSCROLL | ES_WANTRETURN | WS_BORDER | WS_VSCROLL | WS_HSCROLL | WS_TABSTOP, 5, 51, 110, 143
+ CONTROL "Received text", IDC_EDIT_RECEIVE, "EDIT", ES_MULTILINE | ES_AUTOVSCROLL | ES_AUTOHSCROLL | ES_WANTRETURN | WS_BORDER | WS_VSCROLL | WS_HSCROLL | WS_TABSTOP, 119, 51, 112, 143
+ DEFPUSHBUTTON "Send", IDC_BTN_SEND, 6, 201, 50, 14
+ PUSHBUTTON "Clear", IDC_BTN_SEND_CLEAR, 64, 201, 50, 14
+ PUSHBUTTON "Clear", IDC_BTN_RECEIVE_CLEAR, 180, 200, 50, 14
+ PUSHBUTTON "Close", IDOK, 180, 228, 50, 14
+ LTEXT "Send To:", -1, 9, 22, 60, 10
+ LTEXT "Received From:", -1, 123, 22, 60, 8
+ LTEXT "Port:", -1, 7, 6, 19, 10
+ CONTROL "", -1, "static", SS_BLACKFRAME | WS_CHILD | WS_VISIBLE, 5, 221, 227, 1
+ CONTROL "", -1, "static", SS_BLACKFRAME | WS_CHILD | WS_VISIBLE, 5, 20, 110, 27
+ CONTROL "", -1, "static", SS_BLACKFRAME | WS_CHILD | WS_VISIBLE, 119, 20, 112, 27
+ LTEXT "Status: Idle", IDC_STATIC_STATUS, 5, 230, 162, 8
+}
+
+
+IDD_LISTEN DIALOG 93, 36, 131, 48
+STYLE DS_3DLOOK | WS_POPUP | WS_VISIBLE | WS_CLIPSIBLINGS | WS_CAPTION
+CAPTION "Listen Dialog"
+FONT 8, "MS Sans Serif"
+{
+ CONTROL "<enter port>", IDC_EDIT_PORT, "EDIT", WS_BORDER | WS_TABSTOP, 26, 5, 46, 12
+ DEFPUSHBUTTON "Listen", IDC_BTN_LISTEN, 76, 4, 50, 14
+ DEFPUSHBUTTON "Close", IDOK, 76, 29, 50, 14
+ LTEXT "Port:", IDC_STATIC_PORT, 6, 7, 19, 8
+ CONTROL "", -1, "static", SS_BLACKFRAME | WS_CHILD | WS_VISIBLE, 6, 23, 120, 1
+ LTEXT "Status: Idle", IDC_STATIC_STATUS, 6, 33, 63, 8
+}
+
+
+IDD_CONVERT_ADDRESS DIALOG 6, 15, 236, 59
+STYLE DS_3DLOOK | WS_POPUP | WS_VISIBLE | WS_CLIPSIBLINGS | WS_CAPTION
+CAPTION "Convert Address"
+FONT 8, "MS Sans Serif"
+{
+ CONTROL "<enter address>", IDC_EDIT_NAME, "EDIT", WS_BORDER | WS_TABSTOP, 5, 16, 98, 12
+ DEFPUSHBUTTON "--> Convert -->", IDC_BTN_CONVERT, 107, 15, 54, 14
+ EDITTEXT IDC_EDIT_ADDRESS, 165, 16, 66, 12, WS_BORDER | WS_TABSTOP
+ PUSHBUTTON "Close", IDOK, 180, 40, 50, 14
+ LTEXT "Name/Address:", -1, 5, 4, 35, 11
+ LTEXT "IP Address:", -1, 165, 5, 52, 9
+ CONTROL "", -1, "static", SS_BLACKFRAME | WS_CHILD | WS_VISIBLE, 5, 34, 225, 1
+ LTEXT "Status: Idle", IDC_STATIC_STATUS, 5, 44, 162, 8
+}
+
+
+IDD_GET_SERVICE_PORT DIALOG 12, 24, 206, 59
+STYLE DS_3DLOOK | WS_POPUP | WS_VISIBLE | WS_CLIPSIBLINGS | WS_CAPTION
+CAPTION "Get Service Port"
+FONT 8, "MS Sans Serif"
+{
+ CONTROL "<enter service>", IDC_EDIT_SERVICE, "EDIT", WS_BORDER | WS_TABSTOP, 6, 16, 56, 12
+ EDITTEXT IDC_EDIT_PROTOCOL, 66, 16, 36, 12, WS_BORDER | WS_TABSTOP
+ DEFPUSHBUTTON "--> Convert -->", IDC_BTN_CONVERT, 106, 15, 51, 14
+ EDITTEXT IDC_EDIT_PORT, 162, 16, 39, 12, WS_BORDER | WS_TABSTOP
+ PUSHBUTTON "Close", IDOK, 152, 40, 50, 14
+ CONTROL "", -1, "static", SS_BLACKFRAME | WS_CHILD | WS_VISIBLE, 6, 34, 196, 1
+ LTEXT "Service:", -1, 6, 4, 35, 11
+ LTEXT "Protocol:", -1, 66, 4, 35, 11
+ LTEXT "Port:", -1, 162, 4, 38, 9
+ LTEXT "Status: Idle", IDC_STATIC_STATUS, 6, 43, 140, 8
+}
+
+// Version info.
+//
+#if !defined(__DEBUG_)
+// Non-Debug VERSIONINFO
+1 VERSIONINFO 
+FILEVERSION 1, 0, 0, 0
+PRODUCTVERSION 1, 0, 0, 0
+FILEFLAGSMASK 0
+FILEFLAGS VS_FFI_FILEFLAGSMASK
+FILEOS VOS__WINDOWS16
+FILETYPE VFT_APP
+{
+ BLOCK "StringFileInfo"
+ {
+  BLOCK "040904E4"
+  {
+   VALUE "CompanyName", "\000"
+   VALUE "FileDescription", "OWLSock demo program for Windows\000"
+   VALUE "FileVersion", "1.0\000"
+   VALUE "InternalName", "OWLSock\000"
+   VALUE "LegalCopyright", "Copyright © 1995 Paul Pedriana. All Rights Reserved. 70541.3223@compuserve.com\000"
+   VALUE "LegalTrademarks", "Windows (TM) is a trademark of Microsoft Corporation\000"
+   VALUE "OriginalFilename", "OWLSock.exe\000"
+   VALUE "ProductName", "OWLSock\000"
+   VALUE "ProductVersion", "1.0\000"
+  }
+
+ }
+
+ BLOCK "VarFileInfo"
+ {
+  VALUE "Translation", 0x0409, 0x04e4
+ }
+
+}
+#else
+
+// Debug VERSIONINFO
+1 VERSIONINFO LOADONCALL MOVEABLE 
+FILEVERSION 1, 0, 0, 0
+PRODUCTVERSION 1, 0, 0, 0
+FILEFLAGSMASK VS_FF_DEBUG | VS_FF_PRERELEASE | VS_FF_PATCHED | VS_FF_PRIVATEBUILD | VS_FF_SPECIALBUILD
+FILEFLAGS VS_FFI_FILEFLAGSMASK
+FILEOS VOS__WINDOWS16
+FILETYPE VFT_APP
+BEGIN
+    BLOCK "StringFileInfo"
+    BEGIN
+        // Language type = U.S. English (0x0409) and Character Set = Windows, Multilingual(0x04e4)
+        BLOCK "040904E4"                            // Matches VarFileInfo Translation hex value.
+        BEGIN
+            VALUE "CompanyName", "\000"
+            VALUE "FileDescription", "winsock for Windows\000"
+            VALUE "FileVersion", "1.0\000"
+            VALUE "InternalName", "winsock\000"
+            VALUE "LegalCopyright", "Copyright © 1994. All Rights Reserved.\000"
+            VALUE "LegalTrademarks", "Windows (TM) is a trademark of Microsoft Corporation\000"
+            VALUE "OriginalFilename", "winsock.EXE\000"
+            VALUE "ProductName", "winsock\000"
+            VALUE "ProductVersion", "1.0\000"
+            VALUE "SpecialBuild", "Debug Version\000"
+            VALUE "PrivateBuild", "Built by Paul Pedriana\000"
+        END
+    END
+
+    BLOCK "VarFileInfo"
+    BEGIN
+        VALUE "Translation", 0x0409, 0x04e4        // U.S. English(0x0409) & Windows Multilingual(0x04e4) 1252
+    END
+
+END
+#endif
+
+
+
+
+

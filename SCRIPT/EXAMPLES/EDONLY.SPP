@@ -1,0 +1,267 @@
+//--------------------------------------------------------------------------
+// Object Scripting
+// Copyright (c) 1996 by Borland International, All Rights Reserved
+//
+// EDONLY.SPP: Edit-only. Temporarily shows only those lines in the current
+//   buffer that contain a specified string. Useful for seeing how an
+//   identifier is being used, making changes without searching and
+//   replacing, isolating strings for spell-checking, etc.
+//
+// USE: Run script. Enter the edit-only-lines-containing string. The matching
+//   lines will appear in the buffer, prefixed with their original line
+//   numbers. Do not edit the line numbers, or add or remove lines! (The
+//   return key will be temporarily disabled for the edit-only buffer.)
+//   Invoke edonly() again to restore the buffer.
+//
+// FILES: MSG.SPP, FILE.SPP, MISC.SPP
+//
+// NOTES: Do not unload this script while it is an editing-only state.
+//--------------------------------------------------------------------------
+print "edonly.spp";
+
+//
+// IDE imports.
+//
+import IDE;
+import scriptEngine;
+import editor;
+
+//
+// Load support module(s).
+//
+if (!scriptEngine.IsLoaded("msg.spp")) scriptEngine.Load("msg.spp");
+if (!scriptEngine.IsLoaded("file.spp")) scriptEngine.Load("file.spp");
+if (!scriptEngine.IsLoaded("misc.spp")) scriptEngine.Load("misc.spp");
+
+//
+// RTL items.
+//
+import "cw3220.dll" {
+  int  creat  (const char *, int);
+  int  close  (int);
+}
+
+#define S_IWRITE 0x0080  // Owner may write file. Needed for creat().
+
+Msg = new TMsg();     // Meassage object.
+EditingOnly = FALSE;  // Indicates if a buffer is currently editing-only.
+EdOnlyLineObjs;       // Array of edit-only line objects.
+UserBuf;              // The user's buffer.
+UserView;             // The user's view.
+EdOnlyBuf;            // The edit-only buffer.
+EdOnlyFile;           // The edit-only file.
+ReturnKeyAssignment;  // Original command tied to the return key.
+
+ModuleDir = GetModuleDir("edonly.spp");  // Directory of this module.
+
+edonly()
+{
+  // Edit-only, unless already doing so, in which case edit-all.
+  //
+  if (EditingOnly) {
+    EditingOnly = !EditAll();
+  }
+  else {
+    EditingOnly = EditOnly();
+  }
+
+  IDE.StatusBar = "";
+}
+
+//
+// class TEdOnlyLine
+// ~~~~~ ~~~~~~~~~~~
+// TEdOnlyLine represents an edit-only line.
+//
+class TEdOnlyLine(text, row) {
+  declare Text = text;
+  declare Row  = row;
+}
+
+//
+// Returns TRUE if an edit-only state is achieved; FALSE otherwise.
+//
+EditOnly()
+{
+  // Validate the current buffer.
+  //
+  if (!editor.TopView) {
+    Msg.Info("You need a valid buffer to edit-only.");
+    return FALSE;
+  }
+  UserView = editor.TopView;
+
+  // Get the edit-only string.
+  //
+  declare edOnlyStr = IDE.SimpleDialog("Enter the edit-only string.",
+                                       editor.GetWord());
+  if (edOnlyStr == "") return FALSE;
+
+  IDE.StatusBar = "Isolating lines in buffer...";  // Notify we're working.
+
+  // Stash the user's buffer.
+  //
+  UserBuf = UserView.Buffer;
+
+  // Save the caret position.
+  UserView.Position.Save();
+
+  // Get the lines containing the edit-only string, and their row numbers.
+  //
+  declare i = 0;
+  declare row = 1;
+  declare sTmp;
+  EdOnlyLineObjs = new array[];
+  do {
+    UserView.Position.Move(row, 1);
+    sTmp = new String(UserView.Position.Read());
+    if (sTmp.Index(edOnlyStr)) {
+      sTmp.Text = "[" + row + "] " + sTmp.Text;  // Add the row as prefix.
+      EdOnlyLineObjs[i] = new TEdOnlyLine(sTmp.Text, row);
+      i++;
+    }
+    row++;
+  } while (row - 1 < UserView.Position.LastRow);
+
+  // Bail if no edit-only strings found.
+  //
+  if (i == 0) {
+    UserView.Position.Restore();  // Restore the caret.
+    Msg.Info("The edit-only string was not found.");
+    return FALSE;
+  }
+
+  //
+  // Create a temporary file for an "edit-only" buffer.
+  //
+  EdOnlyFile = UserBuf.FullName + " (EDIT ONLY)";
+  declare hFile = creat(EdOnlyFile, S_IWRITE);
+  if (!hFile) {
+    UserView.Position.Restore();  // Restore the caret.
+    Msg.Error("Could not create temporary edit-only file.");
+    return FALSE;
+  }
+  close(hFile);
+
+  //
+  // Create a new edit buffer based on the temporary file, fill it with the
+  // edit-only lines, and attach it to the user's view.
+  //
+  EdOnlyBuf = new EditBuffer(EdOnlyFile, FALSE, FALSE);
+  if (!EdOnlyBuf.IsValid) {
+    UserView.Position.Restore();  // Restore the caret.
+    Msg.Error("Could not create a new edit buffer.");
+    return FALSE;
+  }
+  declare lineObj;
+  iterate (lineObj; EdOnlyLineObjs) {
+    EdOnlyBuf.Position.InsertText(lineObj.Text);
+  }
+  EdOnlyBuf.Position.Move(1, 1);
+  UserView.Attach(EdOnlyBuf);
+
+  //
+  // Save the current assignment of the return key, and reassign it to
+  // a handler which will execute nothing if the edit-only buffer is
+  // current, or the original command if we are in a different buffer.
+  // This prevents lines from being added to the edit-only buffer.
+  //
+  declare edKeyboard = IDE.KeyboardManager.GetKeyboard("Editor");
+  ReturnKeyAssignment = edKeyboard.GetCommand("<Enter>");
+  edKeyboard.Assign("<Enter>", "ReturnHandler();", ASSIGN_IMPLICIT_KEYPAD ||
+                    ASSIGN_IMPLICIT_SHIFT || ASSIGN_IMPLICIT_MODIFIER);
+
+  return TRUE;
+}
+
+//
+// Does nothing if called when the edit-only buffer is the current buffer,
+// and executes the original return key command if the current buffer is some
+// other.
+//
+ReturnHandler()
+{
+  if (editor.TopView.Buffer.FullName == EdOnlyBuf.FullName) {
+    return;
+  }
+  else {
+    scriptEngine.Execute(ReturnKeyAssignment, FALSE);
+  }
+}
+
+//
+// Returns TRUE if an edit-all state is created; FALSE otherwise.
+//
+EditAll()
+{
+  // Bail if this is not the edit-only buffer.
+  //
+  declare curView = editor.TopView;
+  if (curView.Buffer.FullName != EdOnlyBuf.FullName) {
+    Msg.Warn("You are already editing-only in buffer " +
+             EdOnlyBuf.FullName + ". You must restore that buffer.");
+    return FALSE;
+  }
+
+  IDE.StatusBar = "Restoring buffer...";  // Notify we're working.
+
+  // Restore the use of the return key.
+  //
+  declare edKeyboard = IDE.KeyboardManager.GetKeyboard("Editor");
+  edKeyboard.Assign("<Enter>", ReturnKeyAssignment, ASSIGN_IMPLICIT_KEYPAD ||
+                                                    ASSIGN_IMPLICIT_SHIFT ||
+                                                    ASSIGN_IMPLICIT_MODIFIER);
+
+  // Get the possibly modified edit-only lines from the buffer.
+  //
+  declare file = new TFlatFile(EdOnlyBuf.FullName);
+  declare modifiedEdOnlyLines = file.GetLines("", TRUE);
+  file.Close();
+
+  // Swap in each edit-only line into the user's buffer.
+  //
+  declare edOnlyLineObj;
+  declare index;
+  declare sTmp;
+  iterate (edOnlyLineObj; EdOnlyLineObjs; index) {
+    sTmp = new String(modifiedEdOnlyLines[index]);
+    sTmp = sTmp.SubString(sTmp.Index("] ") + 1);  // Remove the row prefix.
+    UserBuf.Position.Move(edOnlyLineObj.Row, 1);  // Find the line.
+    declare sLine = new String(UserBuf.Position.Read());  // Read it.
+    UserBuf.Position.Delete(sLine.Length - 1);  // Delete it.
+    UserBuf.Position.InsertText(sTmp.Text);  // Replace it.
+  }
+
+  // Attach the user's buffer back to the view.
+  //
+  UserView.Attach(UserBuf);
+
+  UserView.Position.Restore();  // Restore the caret.
+
+  // Clean up. Don't want any of these lying around.
+  //
+  delete EdOnlyLineObjs;
+  EdOnlyBuf.Destroy();
+  DeleteFile(EdOnlyFile);
+
+  return TRUE;
+}
+
+//
+// Must prevent this script from being loaded again before the buffer is
+// restored by a second invocation of edonly(). Otherwise the flag
+// EditingOnly is reinitialized. This is handled by preventing the load
+// and calling edonly().
+//
+on scriptEngine:>Load(fileName)
+{
+  declare sTmp = new String(fileName);
+  sTmp = sTmp.Lower();
+  if (EditingOnly && sTmp.Index("edonly.sp")) {
+    edonly();
+  }
+  else {
+    return pass(fileName);
+  }
+}
+

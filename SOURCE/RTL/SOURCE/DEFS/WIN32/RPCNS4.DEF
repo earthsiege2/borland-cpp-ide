@@ -1,61 +1,60 @@
-LIBRARY     RPCNS4.DLL
-
+LIBRARY RPCNS4
 EXPORTS
-    I_GetDefaultEntrySyntax        @1   
-    I_RpcNsGetBuffer               @2   
-    I_RpcNsRaiseException          @3   
-    I_RpcNsSendReceive             @4   
-    I_RpcReBindBuffer              @5   
-    RpcIfIdVectorFree              @6   
-    RpcNsBindingExportA            @7   
-    RpcNsBindingExportW            @8   
-    RpcNsBindingImportBeginA       @9   
-    RpcNsBindingImportBeginW       @10  
-    RpcNsBindingImportDone         @11  
-    RpcNsBindingImportNext         @12  
-    RpcNsBindingLookupBeginA       @13  
-    RpcNsBindingLookupBeginW       @14  
-    RpcNsBindingLookupDone         @15  
-    RpcNsBindingLookupNext         @16  
-    RpcNsBindingSelect             @17  
-    RpcNsBindingUnexportA          @18  
-    RpcNsBindingUnexportW          @19  
-    RpcNsEntryExpandNameA          @20  
-    RpcNsEntryExpandNameW          @21  
-    RpcNsEntryObjectInqBeginA      @22  
-    RpcNsEntryObjectInqBeginW      @23  
-    RpcNsEntryObjectInqDone        @24  
-    RpcNsEntryObjectInqNext        @25  
-    RpcNsGroupDeleteA              @26  
-    RpcNsGroupDeleteW              @27  
-    RpcNsGroupMbrAddA              @28  
-    RpcNsGroupMbrAddW              @29  
-    RpcNsGroupMbrInqBeginA         @30  
-    RpcNsGroupMbrInqBeginW         @31  
-    RpcNsGroupMbrInqDone           @32  
-    RpcNsGroupMbrInqNextA          @33  
-    RpcNsGroupMbrInqNextW          @34  
-    RpcNsGroupMbrRemoveA           @35  
-    RpcNsGroupMbrRemoveW           @36  
-    RpcNsMgmtBindingUnexportA      @37  
-    RpcNsMgmtBindingUnexportW      @38  
-    RpcNsMgmtEntryCreateA          @39  
-    RpcNsMgmtEntryCreateW          @40  
-    RpcNsMgmtEntryDeleteA          @41  
-    RpcNsMgmtEntryDeleteW          @42  
-    RpcNsMgmtEntryInqIfIdsA        @43  
-    RpcNsMgmtEntryInqIfIdsW        @44  
-    RpcNsMgmtHandleSetExpAge       @45  
-    RpcNsMgmtInqExpAge             @46  
-    RpcNsMgmtSetExpAge             @47  
-    RpcNsProfileDeleteA            @48  
-    RpcNsProfileDeleteW            @49  
-    RpcNsProfileEltAddA            @50  
-    RpcNsProfileEltAddW            @51  
-    RpcNsProfileEltInqBeginA       @52  
-    RpcNsProfileEltInqBeginW       @53  
-    RpcNsProfileEltInqDone         @54  
-    RpcNsProfileEltInqNextA        @55  
-    RpcNsProfileEltInqNextW        @56  
-    RpcNsProfileEltRemoveA         @57  
-    RpcNsProfileEltRemoveW         @58  
+
+    I_GetDefaultEntrySyntax
+    I_RpcNsGetBuffer
+    I_RpcNsRaiseException
+    I_RpcNsSendReceive
+    I_RpcReBindBuffer
+    RpcNsBindingExportA
+    RpcNsBindingExportW
+    RpcNsBindingImportBeginA
+    RpcNsBindingImportBeginW
+    RpcNsBindingImportDone
+    RpcNsBindingImportNext
+    RpcNsBindingLookupBeginA
+    RpcNsBindingLookupBeginW
+    RpcNsBindingLookupDone
+    RpcNsBindingLookupNext
+    RpcNsBindingSelect
+    RpcNsBindingUnexportA
+    RpcNsBindingUnexportW
+    RpcNsEntryExpandNameA
+    RpcNsEntryExpandNameW
+    RpcNsEntryObjectInqBeginA
+    RpcNsEntryObjectInqBeginW
+    RpcNsEntryObjectInqDone
+    RpcNsEntryObjectInqNext
+    RpcNsGroupDeleteA
+    RpcNsGroupDeleteW
+    RpcNsGroupMbrAddA
+    RpcNsGroupMbrAddW
+    RpcNsGroupMbrInqBeginA
+    RpcNsGroupMbrInqBeginW
+    RpcNsGroupMbrInqDone
+    RpcNsGroupMbrInqNextA
+    RpcNsGroupMbrInqNextW
+    RpcNsGroupMbrRemoveA
+    RpcNsGroupMbrRemoveW
+    RpcNsMgmtBindingUnexportA
+    RpcNsMgmtBindingUnexportW
+    RpcNsMgmtEntryCreateA
+    RpcNsMgmtEntryCreateW
+    RpcNsMgmtEntryDeleteA
+    RpcNsMgmtEntryDeleteW
+    RpcNsMgmtEntryInqIfIdsA
+    RpcNsMgmtEntryInqIfIdsW
+    RpcNsMgmtHandleSetExpAge
+    RpcNsMgmtInqExpAge
+    RpcNsMgmtSetExpAge
+    RpcNsProfileDeleteA
+    RpcNsProfileDeleteW
+    RpcNsProfileEltAddA
+    RpcNsProfileEltAddW
+    RpcNsProfileEltInqBeginA
+    RpcNsProfileEltInqBeginW
+    RpcNsProfileEltInqDone
+    RpcNsProfileEltInqNextA
+    RpcNsProfileEltInqNextW
+    RpcNsProfileEltRemoveA
+    RpcNsProfileEltRemoveW

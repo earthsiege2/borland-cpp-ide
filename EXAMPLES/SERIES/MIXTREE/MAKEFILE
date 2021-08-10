@@ -1,0 +1,15 @@
+#----------------------------------------------------------------------------
+# Borland C++
+# Copyright (c) 1987, 1996 Borland International Inc.  All Rights Reserved.
+#   examples\series\mixtree\makefile
+#----------------------------------------------------------------------------
+
+SYSTEMS = WIN32
+OSMAJOR = 4
+OSMINOR = 0
+EXERES  = mixtree
+CPCH    = -Hc -H"windows.h" -H=mixtree.csm
+OBJEXE  = mixtree.obj winmain.obj init.obj about.obj dispatch.obj misc.obj\
+          iteminfo.obj mixinfo.obj mixline.obj
+
+!include $(BCEXAMPLEDIR)\makefile.gen

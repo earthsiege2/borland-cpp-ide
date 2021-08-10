@@ -5,9 +5,9 @@
 */
 
 /*
- *      C/C++ Run Time Library - Version 6.5
+ *      C/C++ Run Time Library - Version 7.0
  *
- *      Copyright (c) 1987, 1994 by Borland International
+ *      Copyright (c) 1987, 1996 by Borland International
  *      All Rights Reserved.
  *
  */
@@ -26,7 +26,7 @@
 #pragma warn -nak
 #endif
 
-#pragma option -a-
+#pragma pack(push, 1)
 
 #endif  /* !RC_INVOKED */
 
@@ -78,11 +78,11 @@ size_t      _RTLENTRY _EXPFUNC   strftime(char _FAR *__s, size_t __maxsize,
 size_t      _RTLENTRY _EXPFUNC   _lstrftime(char _FAR *__s, size_t __maxsize,
                         const char _FAR *__fmt, const struct tm _FAR *__t);
 
-#if !defined(__STDC__)  /* NON-ANSI */
-#define daylight  _daylight
-#define timezone  _timezone
-#define tzname    _tzname
-#endif
+
+/* NOTE: The old daylight, timezone, tzname definitions are no longer used.
+         If you need them for backwards compatibility, you'll have to proto-
+         type them yourself, and include obsolete.lib
+*/
 
 #if !defined(_RTLDLL) || defined(__FLAT__)
 
@@ -125,7 +125,8 @@ char _FAR * _RTLENTRY  _EXPFUNC _strtime(char _FAR *timestr);
 
 #if !defined(RC_INVOKED)
 
-#pragma option -a. /* restore default packing */
+/* restore default packing */
+#pragma pack(pop)
 
 #if defined(__STDC__)
 #pragma warn .nak

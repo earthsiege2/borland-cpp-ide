@@ -131,5 +131,4 @@ gopError:
 		perror ("get command line option");
 	return ('?');
 }
-
-
+

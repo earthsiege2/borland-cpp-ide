@@ -1,128 +1,212 @@
 //----------------------------------------------------------------------------
 // ObjectWindows
-// (C) Copyright 1992, 1994 by Borland International, All Rights Reserved
+// Copyright (c) 1992, 1996 by Borland International, All Rights Reserved
 //
-//   Implementation for GDI Brush object
+//$Revision:   10.12  $
+//
+// Implementation for TBrush GDI Brush object. Includes cache for solid brushes
 //----------------------------------------------------------------------------
-#include <owl/owlpch.h>
-#include <owl/gdiobjec.h>
+#pragma hdrignore SECTION
+#include <owl/pch.h>
+#if !defined(OWL_GDIOBJEC_H)
+# include <owl/gdiobjec.h>
+#endif
 
 DIAG_DECLARE_GROUP(OwlGDI);        // General GDI diagnostic group
 
-//
-// internal brush cache to keep most common brushes around cached by color
-//
+#define CACHE_SIZE 8
 
+#if !defined(SECTION) || SECTION == 1
+
+//
+// Internal MRU brush cache to keep most recent solid brushes around cached by
+// color
+//
 class TBrushCache {
   public:
     struct TEntry {
-      HBRUSH  Handle;
-      TColor  Color;
-      
-      TEntry(HANDLE handle) {Handle = (HBRUSH)handle;}
+      HANDLE   Handle;
+      COLORREF Color;
     };
-    
-    TBrushCache(TEntry* entries, int numEntries);
-    HBRUSH Lookup(TColor color);
+
+    TBrushCache();
+   ~TBrushCache();
+
+    static HANDLE Lookup(COLORREF color);
+    static void   Float(int i);
+    static void   Add(HANDLE handle, COLORREF color);
 
   private:
-    TEntry*  Entries;
-    int      NumEntries;
+    static TEntry Entries[CACHE_SIZE];
+    static int Size;
 };
 
-TBrushCache::TBrushCache(TEntry* entries, int numEntries)
-{
-  Entries = entries;
-  NumEntries = numEntries;
+//
+// Static data members
+//
+int TBrushCache::Size = CACHE_SIZE;
 
-  for (int i = 0; i < NumEntries; i++) {
-    LOGBRUSH logBrush;
-    if (GetObject(Entries[i].Handle, sizeof(LOGBRUSH), &logBrush))
-      Entries[i].Color = logBrush.lbColor;
-  }
+//
+// Initialize all entries to 0.
+//
+TBrushCache::TEntry TBrushCache::Entries[CACHE_SIZE] = {{0, 0}};
+
+
+//
+//
+//
+TBrushCache::TBrushCache()
+{
 }
 
-HBRUSH
-TBrushCache::Lookup(TColor color)
+
+//
+//
+//
+TBrushCache::~TBrushCache()
 {
-  for (int i = 0; i < NumEntries; i++)
-    if (color == Entries[i].Color)
-      return Entries[i].Handle;
+  for (int i = 0; i < Size; i++)
+    if (Entries[i].Handle) {
+      TGdiObject::RefDec(Entries[i].Handle, false);
+      Entries[i].Handle = 0;
+    }
+}
+
+//
+// Move an entry to the front, shifting in between ones down
+//
+void
+TBrushCache::Float(int i)
+{
+  HANDLE handle = Entries[i].Handle;
+  COLORREF color = Entries[i].Color;
+
+  TRACEX(OwlGDI, 2, "TBrushCache::Float(" << i << ") (" <<
+    hex << uint(handle) << ", " << hex << color << ")");
+
+  memmove(Entries+1, Entries, sizeof(TEntry)*i);
+  Entries[0].Handle = handle;
+  Entries[0].Color = color;
+}
+
+//
+// Add a new entry to the front, pushing the last old one off the end.
+//
+void
+TBrushCache::Add(HANDLE handle, COLORREF color)
+{
+  TRACEX(OwlGDI, 2, "TBrushCache::Add(" << hex << uint(handle) <<
+    ", " << hex << color << ")");
+  CHECK(Size > 1);
+
+  if (Entries[Size-1].Handle)
+    TGdiObject::RefDec(Entries[Size-1].Handle, false);  
+
+  memmove(Entries+1, Entries, sizeof(TEntry)*(Size-1));
+  Entries[0].Handle = handle;
+  Entries[0].Color = color;
+  TGdiObject::RefAdd(handle, TGdiObject::Brush);
+}
+
+//
+// Lookup a color in the cache, returning the handle if found
+//
+HANDLE
+TBrushCache::Lookup(COLORREF color)
+{
+  for (int i = 0; i < Size && Entries[i].Handle; i++)
+    if (color == Entries[i].Color) {
+      TRACEX(OwlGDI, 2, "TBrushCache::Lookup(" << hex << color <<
+        "): found " << hex << uint(Entries[i].Handle) << " @" << i);
+      Float(i);
+      return Entries[0].Handle;  // After Float() our entry is at 0!
+    }
+  TRACEX(OwlGDI, 2, "TBrushCache::Lookup(" << hex << color << "): not found");
   return 0;
 }
 
 //
-// Static instance of a brush cache table & the cache itself
+// Static instance of the brush cache used by TBrush
 //
-static TBrushCache::TEntry BrushCacheEntries[] = {
-  {::GetStockObject(BLACK_BRUSH)},
-  {::GetStockObject(DKGRAY_BRUSH)},
-  {::GetStockObject(GRAY_BRUSH)},
-  {::GetStockObject(LTGRAY_BRUSH)},
-  {::GetStockObject(WHITE_BRUSH)}
-};
-static TBrushCache BrushCache(BrushCacheEntries, COUNTOF(BrushCacheEntries));
+static TBrushCache BrushCache;
 
 //
 // Constructors
 //
+
+//
+// Alias an existing brush handle. Assume ownership if autoDelete says so
+//
 TBrush::TBrush(HBRUSH handle, TAutoDelete autoDelete)
-  : TGdiObject(handle, autoDelete)
+:
+  TGdiObject(handle, autoDelete)
 {
-#if !defined(NO_GDI_ORPHAN_CONTROL)
   if (ShouldDelete)
-    OBJ_REF_ADD(Handle, Brush);
-#endif
+    RefAdd(Handle, Brush);
+  TRACEX(OwlGDI, OWL_CDLEVEL, "TBrush constructed @" << (void*)this <<
+                              " with handle " << uint(handle));
 }
 
-TBrush::TBrush(TColor color)
+//
+// Construct a brush from a solid color. Gets handle from the cache if found,
+// otherwise create the brush and add it to the cache
+//
+TBrush::TBrush(const TColor& color)
 {
-  if ((Handle = BrushCache.Lookup(color)) != 0) {
-    ShouldDelete = false;
-    return;
+  ShouldDelete = false;
+
+#if 0  
+  if (color.IsSysColor())
+    Handle = ::GetSysColorBrush(color.Index());
+  else
+#endif
+  {
+    COLORREF cr = color;
+    if ((Handle = BrushCache.Lookup(cr)) != 0)
+      return;
+    Handle = ::CreateSolidBrush(cr);
   }
-  Handle = ::CreateSolidBrush(color);
   WARNX(OwlGDI, !Handle, 0, "Cannot create solid TBrush " << hex << color);
   CheckValid();
-  OBJ_REF_ADD(Handle, Brush);
+
+  BrushCache.Add(Handle, color);
+
+  TRACEX(OwlGDI, OWL_CDLEVEL, "TBrush constructed @" << (void*)this <<
+                              " with color " << (COLORREF)color);
 }
 
-TBrush::TBrush(TColor color, int style)
+//
+// Construct a hatch brush of a given color and hatch style
+//
+TBrush::TBrush(const TColor& color, int style)
 {
   Handle = ::CreateHatchBrush(style, color);
   WARNX(OwlGDI, !Handle, 0, "Cannot create hatch TBrush " << hex << color <<
-        " " << style);
+                            " " << style);
   CheckValid();
-  OBJ_REF_ADD(Handle, Brush);
+  RefAdd(Handle, Brush);
+  TRACEX(OwlGDI, OWL_CDLEVEL, "TBrush constructed @" << (void*)this <<
+                              " with color " << (COLORREF)color <<
+                              ", style 0x" << style);
 }
 
+//
+// Construct a pattern brush given a TBitmap
+//
 TBrush::TBrush(const TBitmap& pattern)
 {
   Handle = ::CreatePatternBrush(pattern);
   WARNX(OwlGDI, !Handle, 0, "Cannot create pattern TBrush from bitmap " <<
         hex << (uint)(HBITMAP)pattern);
   CheckValid();
-  OBJ_REF_ADD(Handle, Brush);
+  RefAdd(Handle, Brush);
+  TRACEX(OwlGDI, OWL_CDLEVEL, "TBrush constructed @" << (void*)this <<
+                              " from bitmap @" << (void*)&pattern);
 }
 
-TBrush::TBrush(const TDib& pattern)
-{
-  // This calls is 16/32 independent (& avoids Win32s not-implemented problem)
-  //
-#if (0)  // Extra step using hbitmap required for some Win32 versions
-  TBitmap bm(pattern);
-  LOGBRUSH lb = { BS_PATTERN, 0, (int)HANDLE(bm) };
-  Handle = ::CreateBrushIndirect(&lb);
-#else
-  Handle = ::CreateDIBPatternBrush(pattern, pattern.Usage());
-#endif
-
-  WARNX(OwlGDI, !Handle, 0, "Cannot create pattern TBrush from DIB " <<
-        hex << (uint)(HANDLE)pattern);
-  CheckValid();
-  OBJ_REF_ADD(Handle, Brush);
-}
-
+//
+// Construct a brush from a logical brush definition
+//
 TBrush::TBrush(const LOGBRUSH far* logBrush)
 {
   PRECONDITION(logBrush);
@@ -130,60 +214,98 @@ TBrush::TBrush(const LOGBRUSH far* logBrush)
   WARNX(OwlGDI, !Handle, 0, "Cannot create TBrush from logBrush @" <<
         hex << uint32(LPVOID(logBrush)));
   CheckValid();
-  OBJ_REF_ADD(Handle, Brush);
+  RefAdd(Handle, Brush);
+  TRACEX(OwlGDI, OWL_CDLEVEL, "TBrush constructed @" << (void*)this <<
+                              " from logBrush @" << (void*)logBrush);
 }
 
+//
+// Construct a copy of an existing brush. Contructed brush will share the
+// handle unless NO_GDI_SHARE_HANDLES is defined, in which case a new handle is
+// created
+//
 TBrush::TBrush(const TBrush& src)
 {
+#if !defined(NO_GDI_SHARE_HANDLES)
+  Handle = src.Handle;
+  RefAdd(Handle, Brush);
+#else
   LOGBRUSH logBrush;
   src.GetObject(logBrush);
   Handle = ::CreateBrushIndirect(&logBrush);
   WARNX(OwlGDI, !Handle, 0, "Cannot create TBrush from TBrush @" <<
         hex << uint32(LPVOID(&src)));
   CheckValid();
-  OBJ_REF_ADD(Handle, Brush);
+  RefAdd(Handle, Brush);
+#endif
+  TRACEX(OwlGDI, OWL_CDLEVEL, "Copy constructed TBrush @" << (void*)this <<
+                              " from TBrush @" << (void*)&src);
+}
+
+//
+// Destroy the C++ object.
+//
+TBrush::~TBrush()
+{
+  TRACEX(OwlGDI, OWL_CDLEVEL, "TBrush destructed @" << (void*)this);
+}
+#endif
+
+#if !defined(SECTION) || SECTION == 2
+
+//
+// Construct a pattern brush given a TDib
+//
+TBrush::TBrush(const TDib& pattern)
+{
+  Handle = ::CreateDIBPatternBrush(pattern, pattern.Usage());
+  WARNX(OwlGDI, !Handle, 0, "Cannot create pattern TBrush from DIB " <<
+        hex << (uint)(HANDLE)pattern);
+  CheckValid();
+  RefAdd(Handle, Brush);
+  TRACEX(OwlGDI, OWL_CDLEVEL, "TBrush constructed @" << (void*)this <<
+                              " from DIB @" << (void*)&pattern);
 }
 
 //----------------------------------------------------------------------------
 
-THatch8x8Brush::THatch8x8Brush(const uint8 hatch[], TColor fgColor, TColor bgColor)
-  : TBrush(Create(hatch, fgColor, bgColor), AutoDelete)
+//
+// Create a hatch brush.
+//
+THatch8x8Brush::THatch8x8Brush(const uint8 hatch[], const TColor& fgColor, const TColor& bgColor)
+:
+  TBrush(Create(hatch, fgColor, bgColor), AutoDelete)
 {
 }
 
 //
-// reconstructs the brush with a new pattern or colors
+// Reconstructs the brush with a new pattern or colors
 //
 void
-THatch8x8Brush::Reconstruct(const uint8 hatch[], TColor fgColor, TColor bgColor)
+THatch8x8Brush::Reconstruct(const uint8 hatch[], const TColor& fgColor, const TColor& bgColor)
 {
-  if (Handle) {
-#if !defined(NO_GDI_ORPHAN_CONTROL)
-    OBJ_REF_DEC(Handle, true);
-#else
-    if (!::DeleteObject(Handle))
-      THROW( TXGdi(IDS_GDIDELETEFAIL, Handle) );
-#endif
-  }
+  if (Handle)
+    RefDec(Handle, true);
+
   Handle = Create(hatch, fgColor, bgColor);
-  OBJ_REF_ADD(Handle, Brush);
+  RefAdd(Handle, Brush);
 }
 
 //
-// private static create member to create or re-create the handle
+// Private static create member to create or re-create the handle
 //
 HBRUSH
-THatch8x8Brush::Create(const uint8 hatch[], TColor fgColor, TColor bgColor)
+THatch8x8Brush::Create(const uint8 hatch[], const TColor& fgColor, const TColor& bgColor)
 {
   TDib dib(8, 8, 2, DIB_RGB_COLORS);
-  unsigned char HUGE* bits = (unsigned char HUGE*)dib.GetBits();
+  uchar HUGE* bits = (uchar HUGE*)dib.GetBits();
   memset(bits, 0, 8*sizeof(uint32));
   for (int i = 0; i < 8; i++)
     bits[(7-i) * sizeof(uint32)] = hatch[i];  // Dib is upside down
   dib.SetColor(0, bgColor);
   dib.SetColor(1, fgColor);
 
-#if (0)  // Extra step using hbitmap required for some Win32 versions
+#if 0  // Extra step using hbitmap required for some old Win32 versions
   TBitmap bm(dib);
   LOGBRUSH lb = { BS_PATTERN, DIB_RGB_COLORS, (int)HANDLE(bm) };
   HBRUSH handle = ::CreateBrushIndirect(&lb);
@@ -214,3 +336,4 @@ const uint8 THatch8x8Brush::Hatch13B1[8] = {
   0x44, 0x22, 0x11, 0x88, 0x44, 0x22, 0x11, 0x88
 };
 
+#endif

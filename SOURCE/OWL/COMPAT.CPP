@@ -1,12 +1,18 @@
 //----------------------------------------------------------------------------
 // ObjectWindows
-// (C) Copyright 1992, 1994 by Borland International, All Rights Reserved
+// Copyright (c) 1992, 1996 by Borland International, All Rights Reserved
 //
-//   Owl 1.0 compatibility structures & functions
+//$Revision:   10.3  $
+//
+// OWL 1.0 compatibility structures & functions
 //----------------------------------------------------------------------------
-#include <owl/owlpch.h>
-#include <owl/compat.h>
-#include <owl/window.h>
+#include <owl/pch.h>
+#if !defined(OWL_COMPAT_H)
+# include <owl/compat.h>
+#endif
+#if !defined(OWL_WINDOW_H)
+# include <owl/window.h>
+#endif
 
 TMessage _OWLFUNC
 __GetTMessageWin(TWindow* win)
@@ -14,7 +20,7 @@ __GetTMessageWin(TWindow* win)
   TMessage  msg;
   TCurrentEvent& currentEvent = win->GetCurrentEvent();
 
-  msg.Receiver = currentEvent.Win->HWindow;
+  msg.Receiver = currentEvent.Win->GetHandle();
   msg.Message = (uint16)currentEvent.Message;
   msg.WParam = (uint16)currentEvent.WParam;
   msg.LParam = currentEvent.LParam;
@@ -22,6 +28,9 @@ __GetTMessageWin(TWindow* win)
   return msg;
 }
 
+//
+//
+//
 string
 TXCompatibility::MapStatusCodeToString(int statusCode)
 {
@@ -65,6 +74,9 @@ TXCompatibility::TXCompatibility(int statusCode)
 {
 }
 
+//
+//
+//
 TXCompatibility::TXCompatibility(const TXCompatibility& src)
 :
   TXOwl(src),
@@ -72,22 +84,28 @@ TXCompatibility::TXCompatibility(const TXCompatibility& src)
 {
 }
 
-TXCompatibility::~TXCompatibility()
-{
-}
-
+#if defined(BI_NO_COVAR_RET)
+TXBase*
+#else
 TXCompatibility*
+#endif
 TXCompatibility::Clone()
 {
   return new TXCompatibility(*this);
 }
 
+//
+//
+//
 int
 TXCompatibility::Unhandled(TModule*, unsigned)
 {
   return Status;
 }
 
+//
+//
+//
 void
 TXCompatibility::Throw()
 {

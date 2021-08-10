@@ -1,0 +1,16 @@
+#----------------------------------------------------------------------------
+# ObjectWindows
+# Copyright (c) 1993, 1995 by Borland International, All Rights Reserved
+#----------------------------------------------------------------------------
+
+MODELS = ldft
+
+LIBEXE = $(BCLIBDIR)\bivbx.lib
+
+EXERES = vbxctl
+OBJEXE = vbxctlx.obj
+
+!include $(BCEXAMPLEDIR)\owlmake.gen
+!if $(_32BIT_)
+  LIBEXE=$(BCLIBDIR)\bivbx32.lib
+!endif

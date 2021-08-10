@@ -5,9 +5,9 @@
 
 */
 /*
- *      C/C++ Run Time Library - Version 6.5
+ *      C/C++ Run Time Library - Version 7.0
  *
- *      Copyright (c) 1987, 1994 by Borland International
+ *      Copyright (c) 1987, 1996 by Borland International
  *      All Rights Reserved.
  *
  */
@@ -26,7 +26,7 @@
 #pragma warn -nak
 #endif
 
-#pragma option -a-
+#pragma pack(push, 1)
 
 #endif  /* !RC_INVOKED */
 
@@ -149,6 +149,7 @@ struct ffblk
 };
 #endif  /* _FFBLK_DEF */
 
+/* The MSC find_t structure corresponds exactly to the ffblk structure */
 struct find_t
 {
     char     reserved[21];      /* Microsoft reserved - do not change */
@@ -158,6 +159,10 @@ struct find_t
     long     size;              /* size of file */
     char     name[13];          /* asciiz name of matched file */
 };
+#ifdef __MSC
+#define _find_t find_t
+#endif
+
 #endif  /* !__FLAT__ */
 
 
@@ -416,10 +421,12 @@ void          _RTLENTRY             outportb(unsigned __portid, unsigned char __
 unsigned      _RTLENTRY             outpw(unsigned __portid, unsigned __value);
 int           _RTLENTRY             outp(unsigned __portid, int __value);
 
+#if defined(_USE_PORT_INTRINSICS)
 #define inport(__portid)            __inportw__(__portid)
 #define inportb(__portid)           __inportb__(__portid)
 #define outport(__portid, __value)  ((void) __outportw__(__portid, __value))
 #define outportb(__portid, __value) ((void) __outportb__(__portid, __value))
+#endif /* _USE_PORT_INTRINSICS */
 
 /* MSC-compatible macros for port I/O */
 #define inp(__portid)               __inportb__ (__portid)
@@ -602,7 +609,7 @@ void     _RTLENTRYF harderr(int _USERENTRY (*__handler)());
 void     _RTLENTRYF hardresume(int __axret);
 void     _RTLENTRYF hardretn(int __retn);
 
-#if !__STDC__
+#if !defined(__STDC__)
 extern  unsigned    _RTLENTRY  _ovrbuffer;
 
 int      __cdecl __far _OvrInitEms(unsigned __emsHandle, unsigned __emsFirst,
@@ -613,7 +620,7 @@ int      __cdecl __far _OvrInitExt(unsigned long __extStart,
 
 #endif  /* !_Windows */
 
-#if !__STDC__
+#if !defined(__STDC__)
 #define MK_FP(seg,ofs) ((void __seg *)(seg) + (void __near *)(ofs))
 #define FP_SEG(fp)     ((unsigned)(void __seg *)(void __far *)(fp))
 #define FP_OFF(fp)     ((unsigned)(fp))
@@ -760,7 +767,8 @@ unsigned short __stdcall GetLoaderVersion(void);
 
 #if !defined(RC_INVOKED)
 
-#pragma option -a. /* restore default packing */
+/* restore default packing */
+#pragma pack(pop)
 
 #if defined(__STDC__)
 #pragma warn .nak

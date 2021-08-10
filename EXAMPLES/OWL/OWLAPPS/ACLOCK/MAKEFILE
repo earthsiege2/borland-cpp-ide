@@ -1,9 +1,0 @@
-#----------------------------------------------------------------------------
-# ObjectWindows - (C) Copyright 1991, 1993 by Borland International
-#----------------------------------------------------------------------------
-
-EXERES = aclock
-MODELS = mldf
-RESEXE_= cuckoo1.bmp cuckoo2.bmp cuckoo3.bmp cuckoo4.bmp\
-         cuckoo5.bmp cuckoo6.bmp cuckoo7.bmp cuckoo8.bmp face_bmp.bmp
-!include $(BCEXAMPLEDIR)\owlmake.gen

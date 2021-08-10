@@ -31,7 +31,6 @@
 #                                                                           #
 #############################################################################
 
-
 #############################################################################
 # Setup some reasonable defaults.                                           #
 #############################################################################
@@ -39,29 +38,28 @@
     OS = dos
 !endif
 
-
-BC45ROOT  = \bc45
-
-!if !$d(RTLROOT)
-    RTLROOT = $(BC45ROOT)\source\rtl
+!if !$d(BCROOT)
+    !include $(MAKEDIR)\bcroot.inc
 !endif
-
+!if !$d(RTLROOT)
+    RTLROOT = $(BCROOT)\source\rtl
+!endif
 #############################################################################
 # Setup some useful directories.                                            #
 #############################################################################
-BC45INCL  = $(BC45ROOT)\include
-INCLBASE  = $(RTLROOT)
-LIBDIR    = $(RTLROOT)\lib
-OBJBASE   = $(RTLROOT)\obj\$(OS)
 SRCBASE   = $(RTLROOT)\source
+OBJBASE   = $(RTLROOT)\obj\$(OS)
+LIBDIR    = $(RTLROOT)\lib
+EXTDIR    = $(RTLROOT)\external
 DEFDIR    = $(SRCBASE)\defs\$(OS)
+BCINCL    = $(BCROOT)\include
+INCLBASE  = $(RTLROOT)
 
 #############################################################################
 # Guard against illegal variable combinations and obtain the operating      #
 # platform specific build rules.                                            #
 #############################################################################
-!if $(OS) != DOS && $(OS) != WIN16 && $(OS) != DPMI16 && \
-    $(OS) != DPMI32 && $(OS) != WIN32 && $(OS) != OS2
+!if $(OS) != DOS && $(OS) != WIN16 && $(OS) != DPMI16 &&     $(OS) != DPMI32 && $(OS) != WIN32 && $(OS) != OS2
 !    error Unknown OS
 !endif
 
@@ -176,6 +174,9 @@ librsp :
 #############################################################################
 lib : librsp
     $(TLIB) $(LIBDIR)\$(LIBNAME)$(MTSUFFIX).lib @tlib.rsp,temp.lst
+!if ($(OS) == WIN16 && $(MODEL) == l) || $(OS) == WIN32 || $(OS) == DPMI16
+    $(PUBTOOL) $(EXTDIR)\$(PUBNAME) $(LIBDIR)\$(LIBNAME)$(MTSUFFIX).lib
+!endif
     if exist $(LIBDIR)\$(LIBNAME)$(MTSUFFIX).bak del $(LIBDIR)\$(LIBNAME)$(MTSUFFIX).bak
     del temp.lst
 
@@ -197,18 +198,17 @@ importrsp :
 # The rule for building the RTL DLL.                                        #
 #############################################################################
 dll : $(LIBDIR)\dll.rsp $(LIBDIR)\import.rsp $(OBJDIR)\version.res
-    copy &&|
-    $(DEFDIR)\$(DLLDEF), $(OBJDIR)\version
-|   dll1.rsp
-    $(LINK) @dll.rsp,$(DLLNAME),,$(IMPORT), @dll1.rsp
+    $(LINK) @dll.rsp,$(DLLNAME),,$(IMPORT),$(DEFDIR)\$(DLLDEF),$(OBJDIR)\version
     implib $(LIBNAME)$(MTSUFFIX)$(DLLSUFFIX).lib $(DLLNAME).dll
     fastlib $(LIBNAME)$(MTSUFFIX)$(DLLSUFFIX).lib $(LIBNAME)$(MTSUFFIX)$(DLLSUFFIX).fst
     $(TLIB) $(IMPLIBNAME)-+$(LIBNAME)$(MTSUFFIX)$(DLLSUFFIX).fst
     $(TLIB) $(IMPLIBNAME) @import.rsp,nul
+!if $(OS) == WIN32
+    $(PUBTOOL) $(EXTDIR)\$(PUBNAME) $(IMPLIBNAME).lib
+!endif
     del $(LIBNAME)$(MTSUFFIX)$(DLLSUFFIX).lib
     del $(LIBNAME)$(MTSUFFIX)$(DLLSUFFIX).fst
     del $(IMPLIBNAME).bak
-    del dll1.rsp
 
 #############################################################################
 # The crux of the build process is to build the required response files     #

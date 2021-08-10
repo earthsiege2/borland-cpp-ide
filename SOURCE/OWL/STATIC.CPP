@@ -1,15 +1,24 @@
 //----------------------------------------------------------------------------
 // ObjectWindows
-// (C) Copyright 1991, 1994 by Borland International, All Rights Reserved
+// Copyright (c) 1991, 1996 by Borland International, All Rights Reserved
 //
-//   Implementation of class TStatic.  This defines the basic behavior of
-//   static controls
+//$Revision:   10.3  $
+//
+// Implementation of class TStatic.  This defines the basic behavior of static
+// text controls
 //----------------------------------------------------------------------------
 #pragma hdrignore SECTION
-#include <owl/owlpch.h>
-#include <owl/static.h>
-#include <owl/applicat.h>
-#include <bwcc.h>
+#include <owl/pch.h>
+#if !defined(OWL_STATIC_H)
+# include <owl/static.h>
+#endif
+#if !defined(OWL_APPLICAT_H)
+# include <owl/applicat.h>
+#endif
+
+#if defined(BI_COMP_BORLANDC)
+# include <bwcc.h>
+#endif
 
 #if !defined(SECTION) || SECTION == 1
 
@@ -18,39 +27,39 @@ DEFINE_RESPONSE_TABLE1(TStatic,TControl)
 END_RESPONSE_TABLE;
 
 //
-// constructor for a TStatic object
+// Constructor for a TStatic object
 //
-// by default, static controls have left-justified text
+// By default, static controls have left-justified text
 //
 TStatic::TStatic(TWindow*        parent,
                  int             id,
                  const char far* title,
                  int x, int y, int w, int h,
-                 uint            textLen,
+                 uint            textLimit,
                  TModule*        module)
 :
-  TControl(parent, id, title, x, y, w, h, module)
+  TControl(parent, id, title, x, y, w, h, module),
+  TextLimit(textLimit)
 {
-  TextLen = textLen;
   Attr.Style = (Attr.Style | SS_LEFT) & ~WS_TABSTOP;
 }
 
 //
-// constructor for a TStatic to be associated with a MS-Windows
+// Constructor for a TStatic to be associated with a MS-Windows
 // interface element created by MS-Windows from a resource definition
 //
-// initializes its data fields using passed parameters
+// Initializes its data fields using passed parameters
 //
-// data transfer is disabled, by default, for the TStatic
+// Data transfer is disabled, by default, for the TStatic
 //
 TStatic::TStatic(TWindow*   parent,
                  int        resourceId,
-                 uint       textLen,
+                 uint       textLimit,
                  TModule*   module)
 :
-  TControl(parent, resourceId, module)
+  TControl(parent, resourceId, module),
+  TextLimit(textLimit)
 {
-  TextLen = textLen;
   DisableTransfer();
 }
 
@@ -62,42 +71,47 @@ void
 TStatic::EvSize(uint sizeType, TSize& size)
 {
   Invalidate();
-  TControl::EvSize(sizeType,size);
+  TControl::EvSize(sizeType, size);
 }
 
 //
-// Return name of predefined BWCC or Windows static class
+// Returns name of predefined BWCC or Windows static class
 //
 char far*
 TStatic::GetClassName()
 {
+#if defined(BI_COMP_BORLANDC)
   if (GetApplication()->BWCCEnabled())
     return STATIC_CLASS;
   else
+#endif
     return "STATIC";
 }
 
 //
-// transfers state information for TStatic controls
+// Transfers state information for TStatic controls
 //
-// the direction passed specifies whether data is to be read from or
+// The direction passed specifies whether data is to be read from or
 // written to the passed buffer, or whether the data element size is simply to
 // be returned
 //
-// the return value is the size (in bytes) of the transfer data
+// The return value is the size (in bytes) of the transfer data
 //
 uint
 TStatic::Transfer(void* buffer, TTransferDirection direction)
 {
   if (direction == tdGetData)
-    GetText((char far*)buffer, TextLen);
+    GetText((char far*)buffer, TextLimit);
 
   else if (direction == tdSetData)
     SetText((char far*)buffer);
 
-  return TextLen;
+  return TextLimit;
 }
 
+//
+// Clears the text contents of this control
+//
 void
 TStatic::Clear()
 {
@@ -109,26 +123,34 @@ TStatic::Clear()
 
 IMPLEMENT_STREAMABLE1(TStatic, TControl);
 
+#if !defined(BI_NO_OBJ_STREAMING)
+
 //
-// reads an instance of TStatic from the passed ipstream
+// Reads an instance of TStatic from the passed ipstream
 //
 void*
 TStatic::Streamer::Read(ipstream& is, uint32 /*version*/) const
 {
   ReadBaseObject((TControl*)GetObject(), is);
-  is >> GetObject()->TextLen;
+  is >> GetObject()->TextLimit;
   return GetObject();
 }
 
+#if !defined(BI_NO_OBJ_STREAMING)
+
 //
-// writes the TStatic to the passed opstream
+// Writes the TStatic to the passed opstream
 //
 void
 TStatic::Streamer::Write(opstream& os) const
 {
   WriteBaseObject((TControl*)GetObject(), os);
-  os << GetObject()->TextLen;
+  os << GetObject()->TextLimit;
 }
+
+#endif  // if !defined(BI_NO_OBJ_STREAMING)
+
+#endif  // if !defined(BI_NO_OBJ_STREAMING)
 
 #endif
 

@@ -1,6 +1,8 @@
 //----------------------------------------------------------------------------
 // ObjectWindows
-// (C) Copyright 1994 by Borland International, All Rights Reserved
+// Copyright (c) 1994, 1996 by Borland International, All Rights Reserved
+//
+//$Revision:   10.3  $
 //
 //----------------------------------------------------------------------------
 #if !defined(OWL_OLEVIEW_H)
@@ -12,8 +14,12 @@
 #if !defined(OWL_DOCVIEW_H)
 # include <owl/docview.h>
 #endif
+#if !defined(OWL_DOCMANAG_H)
+# include <owl/docmanag.h>
+#endif
 
-//---------------------  Additional notification messages ---------------------
+//
+// Additional notification messages
 //
 const int vnInvalidate  = 9;   // a rect in view needs repaint
 const int vnLinkView    = 10;  // find view with matched TOcLinkView
@@ -27,10 +33,13 @@ NOTIFY_SIG(vnLinkMoniker, TString&)
 #define EV_VN_LINKVIEW    VN_DEFINE(vnLinkView,    VnLinkView,    long)
 #define EV_VN_LINKMONIKER VN_DEFINE(vnLinkMoniker, VnLinkMoniker, long)
 
+// Generic definitions/compiler options (eg. alignment) preceeding the 
+// definition of classes
+#include <services/preclass.h>
+
 //
 // class TOleView
-// ----- --------
-//
+// ~~~~~ ~~~~~~~~
 // The ole 2 window view class. Used as a view in doc/view model
 //
 class _USERCLASS TOleView : public TOleWindow, public TView {
@@ -38,14 +47,13 @@ class _USERCLASS TOleView : public TOleWindow, public TView {
     TOleView(TDocument& doc, TWindow* parent = 0);
    ~TOleView();
 
-    static const char far* StaticName() {return "Ole View";}
+    static const char far* StaticName();
 
     // Inherited virtuals from TView
     //
-    const char far* GetViewName() {return StaticName();}
-    TWindow* GetWindow() {return (TWindow*)this;}
-    bool     SetDocTitle(const char far* docname, int index)
-               {return TWindow::SetDocTitle(docname, index);}
+    const char far* GetViewName();
+    TWindow* GetWindow();
+    bool     SetDocTitle(const char far* docname, int index);
     bool     OleShutDown();
 
   protected:
@@ -61,6 +69,8 @@ class _USERCLASS TOleView : public TOleWindow, public TView {
     bool VnDocClosed(int omode);
 
     TMenuDescr* GetViewMenu();
+
+    const char far* GetFileName();
 
     bool EvOcViewPartInvalid(TOcPartChangeInfo& changeInfo);
 //    uint32 EvOcViewDiscardUndo(void far* undo);
@@ -92,9 +102,9 @@ class _USERCLASS TOleView : public TOleWindow, public TView {
   DECLARE_STREAMABLE(_OWLCLASS, TOleView,1);
 };
 
-
-//=====================  TOleLinkView  =======================================
-
+//
+// class TOleLinkView
+// ~~~~~ ~~~~~~~~~~~~
 class _DOCVIEWCLASS TOleLinkView : public TView {
   public:
     TOleLinkView(TDocument& doc, TOcLinkView& view);
@@ -105,20 +115,58 @@ class _DOCVIEWCLASS TOleLinkView : public TView {
     virtual bool UpdateLinks();
     TString& GetMoniker();
 
-    static const char far* StaticName()
-    {
-      return "Link View";
-    }
-
-    const char far* GetViewName()
-    {
-      return StaticName();
-    }
+    static const char far* StaticName();
+    const char far* GetViewName();
 
   protected:
     TOcLinkView&  OcLinkView;     // TOcLinkView partner for this view
 
   DECLARE_RESPONSE_TABLE(TOleLinkView);
 };
+
+// Generic definitions/compiler options (eg. alignment) following the 
+// definition of classes
+#include <services/posclass.h>
+
+// --------------------------------------------------------------------------
+// Inline implementation
+//
+
+//
+inline const char far* TOleView::StaticName() {
+  return "Ole View";
+}
+
+//
+inline const char far* TOleView::GetViewName() {
+  return StaticName();
+}
+
+//
+inline TWindow* TOleView::GetWindow() {
+  return (TWindow*)this;
+}
+
+//
+inline bool TOleView::SetDocTitle(const char far* docname, int index) {
+  return TWindow::SetDocTitle(docname, index);
+}
+
+//
+inline const char far* TOleView::GetFileName() {
+  return GetDocument().GetTitle();
+}
+
+//
+inline const char far* TOleLinkView::StaticName() {
+  return "Link View";
+}
+
+//
+inline const char far* TOleLinkView::GetViewName() {
+  return StaticName();
+}
+
+
 
 #endif  // OWL_OLEVIEW_H

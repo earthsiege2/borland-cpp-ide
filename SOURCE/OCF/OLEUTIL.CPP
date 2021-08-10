@@ -1,13 +1,16 @@
-//
 //----------------------------------------------------------------------------
 // ObjectComponents
-// (C) Copyright 1994 by Borland International, All Rights Reserved
+// Copyright (c) 1994, 1996 by Borland International, All Rights Reserved
 //
-//   OLE Utility class implementations
+// $Revision:   2.6  $
+//
+// OLE Utility class implementations
 //----------------------------------------------------------------------------
-#include <ocf/ocfpch.h>
-#include <ocf/ocdefs.h>
-#include <osl/ustring.h>
+#include <ocf/pch.h>
+#include <ocf/defs.h>
+#include <ocf/oleutil.h>
+#include <winsys/string.h>
+#include <services/memory.h>
 
 DIAG_DEFINE_GROUP(OcRefCount, true, 1);
 
@@ -15,35 +18,58 @@ DIAG_DEFINE_GROUP(OcRefCount, true, 1);
 const char OleErrorStringsDLL[] = "OLE_ERR.DLL";
 #else
 const char OleErrorStringsDLL[] = "OLE_ERRF.DLL";
-#endif 
+#endif
 
 
+//
+//
+//
 TXOle::~TXOle()
 {
 }
 
-TXOle* TXOle::Clone()
+//
+//
+//
+TXOle*
+TXOle::Clone()
 {
   return new TXOle(*this);
 }
 
-void TXOle::Throw()
+//
+//
+//
+void
+TXOle::Throw()
 {
   THROW( *this );
 }
- 
-void TXOle::Check(HRESULT hr, const char far* msg)
+
+//
+//
+//
+void
+TXOle::Check(HRESULT hr, const char far* msg)
 {
   if (FAILED(hr))
     Throw(hr, msg);
 }
 
-void TXOle::Check(HRESULT hr)
+//
+//
+//
+void
+TXOle::Check(HRESULT hr)
 {
   Check(hr, 0);
 }
 
-void TXOle::Throw(HRESULT hr, const char far* msg)
+//
+//
+//
+void
+TXOle::Throw(HRESULT hr, const char far* msg)
 {
   if (!InstanceCount) {
     char buf[128+1];
@@ -62,12 +88,13 @@ void TXOle::Throw(HRESULT hr, const char far* msg)
 // If OLE-Error-String DLL exists, & msg string is there, then use
 // it. Otherwise just use the number.
 //
-void TXOle::OleErrorFromCode(HRESULT stat, char far* buffer, int size)
+void
+TXOle::OleErrorFromCode(HRESULT stat, char far* buffer, int size)
 {
   const   char HResultToStringIDFunc[] = "StringIDFromHResult";
   typedef int _export CALLBACK (*TStringIDFromHResult)(HRESULT hr);
 
-  int len = 0;  
+  int len = 0;
   OFSTRUCT ofs;
   if (OpenFile(OleErrorStringsDLL, &ofs, OF_EXIST) != HFILE_ERROR) {
     HINSTANCE hInst = LoadLibrary(OleErrorStringsDLL);
@@ -77,7 +104,7 @@ void TXOle::OleErrorFromCode(HRESULT stat, char far* buffer, int size)
       if (func) {
         int id = func(stat);
         if (id)
-          len = ::LoadString(hInst, id, buffer, size);        
+          len = ::LoadString(hInst, id, buffer, size);
       }
       FreeLibrary(hInst);
     }
@@ -92,6 +119,9 @@ void TXOle::OleErrorFromCode(HRESULT stat, char far* buffer, int size)
 
 //----------------------------------------------------------------------------
 
+//
+//
+//
 void far*
 TOleAllocator::Alloc(unsigned long size)
 {
@@ -100,33 +130,54 @@ TOleAllocator::Alloc(unsigned long size)
   return blk;
 }
 
-//____________________________________________________________________________
-//
+//----------------------------------------------------------------------------
 // TClassId - GUID/IID/CLSID management implementation
-//____________________________________________________________________________
+//
 
-TClassId::TClassId(const char far* idtxt) : Text(0)
+//
+//
+//
+TClassId::TClassId(const char far* idtxt)
+:
+  Text(0)
 {
   PRECONDITION(idtxt);
 
   OLECALL(::CLSIDFromString(OleStr((char far*)idtxt), &Guid), "Invalid GUID string");
 }
 
-TClassId::TClassId(const GUID far& guid, int offset) : Text(0), Guid(guid)
+//
+//
+//
+TClassId::TClassId(const GUID far& guid, int offset)
+:
+  Text(0),
+  Guid(guid)
 {
   Guid.Data1 += (long)offset;
 }
 
-TClassId::TClassId(TGenerate) : Text(0)
+//
+//
+//
+TClassId::TClassId(TGenerate)
+:
+  Text(0)
 {
   OLECALL(::CoCreateGuid(&Guid), "CoCreateGuid");
 }
 
+//
+//
+//
 TClassId::~TClassId()
 {
-  delete const_cast<char*>(Text);
+  delete[] const_cast<char*>(Text);
 }
 
+//
+//
+//
 TClassId::operator const char*()
 {
   if (!Text) {
@@ -140,33 +191,71 @@ TClassId::operator const char*()
   return Text;
 }
 
+//
+//
+//
 TBaseClassId::TBaseClassId(const GUID far& guid, int maxAlloc)
-             : TClassId(guid), MaxAlloc(maxAlloc), Offset(0) {}
+:
+  TClassId(guid),
+  MaxAlloc(maxAlloc),
+  Offset(0)
+{
+}
 
+//
+//
+//
 TBaseClassId::TBaseClassId(const char far* idtxt, int maxAlloc)
-             : TClassId(idtxt), MaxAlloc(maxAlloc), Offset(0) {}
+:
+  TClassId(idtxt),
+  MaxAlloc(maxAlloc),
+  Offset(0)
+{
+}
 
+//
+//
+//
 TBaseClassId::TBaseClassId(TGenerate e, int maxAlloc)
-             : TClassId(e), MaxAlloc(maxAlloc), Offset(0) {}
+:
+  TClassId(e),
+  MaxAlloc(maxAlloc),
+  Offset(0)
+{
+}
 
+//
+//
+//
 TBaseClassId::TBaseClassId(TRegList& regInfo, int maxAlloc)
-             : TClassId(), MaxAlloc(maxAlloc), Offset(0)
+:
+  TClassId(),
+  MaxAlloc(maxAlloc),
+  Offset(0)
 {
   const char* str = regInfo["clsid"];
-  // must check for valid clasid, else generate??  
+  // must check for valid clasid, else generate??
   if (!str)
     OLECALL(HR_CLASS_CLASSNOTAVAILABLE, "Missing REGDATA clsid");
   OLECALL(::CLSIDFromString(OleStr((char far*)str), &Guid), "Invalid GUID string");
 }
 
-TClassId TBaseClassId::operator [](int offset)
+//
+//
+//
+TClassId
+TBaseClassId::operator [](int offset)
 {
   if(offset > Offset)
     OLECALL(HR_CLASS_CLASSNOTAVAILABLE, "Unassigned GUID");
   return TClassId(Guid, offset);
 }
 
-int TBaseClassId::AllocId()
+//
+//
+//
+int
+TBaseClassId::AllocId()
 {
   ++Offset;
   if(Offset >= MaxAlloc)
@@ -174,7 +263,11 @@ int TBaseClassId::AllocId()
   return Offset;
 }
 
-int TBaseClassId::GetOffset(const GUID far& guid)
+//
+//
+//
+int
+TBaseClassId::GetOffset(const GUID far& guid)
 {
   unsigned long offset = guid.Data1 - Guid.Data1;
   if ( offset >= (unsigned long)Offset &&
@@ -186,14 +279,17 @@ int TBaseClassId::GetOffset(const GUID far& guid)
     return -1;
 }
 
-//____________________________________________________________________________
-//
+//----------------------------------------------------------------------------
 // GUID compare routines use by implementations of IUnknown::QueryInterface
 //       the low-order long word is verifed before calling these routines
 //       success is indicated by virtue of assigment of the returned interface
-//____________________________________________________________________________
+//
 
-void CmpGuid12(IUnknown* obj, REFIID req, REFIID ref, void far*far* pif)
+//
+//
+//
+void
+CmpGuid12(IUnknown* obj, REFIID req, REFIID ref, void far*far* pif)
 {
   if ( ((long far*)&req)[1] == ((long far*)&ref)[1] &&
        ((long far*)&req)[2] == ((long far*)&ref)[2] &&
@@ -201,9 +297,13 @@ void CmpGuid12(IUnknown* obj, REFIID req, REFIID ref, void far*far* pif)
     *pif = obj;
     obj->AddRef();
   }
-} 
+}
 
-void CmpGuidOle(IUnknown* obj, REFIID req, void far*far* pif)
+//
+//
+//
+void
+CmpGuidOle(IUnknown* obj, REFIID req, void far*far* pif)
 {
   if ( ((long far*)&req)[1] == 0x00000000L &&
        ((long far*)&req)[2] == 0x000000C0L &&
@@ -213,10 +313,9 @@ void CmpGuidOle(IUnknown* obj, REFIID req, void far*far* pif)
   }
 }
 
-//____________________________________________________________________________
-//
+//----------------------------------------------------------------------------
 // TUnknown - standard implementation of IUnknown
-//____________________________________________________________________________
+//
 
 //
 // Handy container to help watch COM object lifetime when debugging
@@ -227,7 +326,12 @@ void CmpGuidOle(IUnknown* obj, REFIID req, void far*far* pif)
   TUnknownBag* UnknownBag;
 #endif
 
-TUnknown::TUnknown() : Outer(&I)
+//
+//
+//
+TUnknown::TUnknown()
+:
+  Outer(&I)
 {
 #if (__DEBUG >= 2)
   if (!UnknownBag)
@@ -236,7 +340,11 @@ TUnknown::TUnknown() : Outer(&I)
 #endif
 }
 
-IUnknown& TUnknown::Aggregate(TUnknown& inner)
+//
+//
+//
+IUnknown&
+TUnknown::Aggregate(TUnknown& inner)
 {
   if (I.Inner)
     return I.Inner->Aggregate(inner);
@@ -245,8 +353,11 @@ IUnknown& TUnknown::Aggregate(TUnknown& inner)
   return *Outer;
 }
 
+//
+//
+//
 TUnknown::~TUnknown()
-{ 
+{
 #if (__DEBUG >= 2)
   UnknownBag->Detach(this);
 #endif
@@ -267,6 +378,9 @@ TUnknown::QueryObject(const GUID far& /*iid*/, void far* far* /*pif*/)
   return ResultFromScode(E_NOINTERFACE);
 }
 
+//
+//
+//
 HRESULT _IFUNC
 TUnknown::TUnknownI::QueryInterface(const GUID far& iid, void far* far* pif)
 {
@@ -284,6 +398,9 @@ TUnknown::TUnknownI::QueryInterface(const GUID far& iid, void far* far* pif)
     return ResultFromScode(E_NOINTERFACE);
 }
 
+//
+//
+//
 unsigned long _IFUNC
 TUnknown::TUnknownI::AddRef()
 {
@@ -292,6 +409,9 @@ TUnknown::TUnknownI::AddRef()
   return ++RefCnt;
 }
 
+//
+//
+//
 unsigned long _IFUNC
 TUnknown::TUnknownI::Release()
 {
@@ -307,6 +427,9 @@ TUnknown::TUnknownI::Release()
   return 0;
 }
 
+//
+//
+//
 unsigned long
 TUnknown::GetRefCount()
 {
@@ -316,31 +439,42 @@ TUnknown::GetRefCount()
   return Outer->Release();
 }
 
+//
+//
+//
 TUnknown::TUnknownI::~TUnknownI()
 {
   if (RefCnt)             // in case destructor called before RefCnt goes to 0
     ::CoDisconnectObject(this,0);// OLE will try to remove external references
 }
 
-//____________________________________________________________________________
-//
+//----------------------------------------------------------------------------
 // TLocaleString wrapper method replacements using OLE2 NLS functions for Win16
-//____________________________________________________________________________
+//
 
 #if defined(BI_PLAT_WIN16)
 
+//
+//
+//
 TLangId
 TLocaleString::GetSystemLangId()
 {
   return ::GetSystemDefaultLangID();
 }
 
+//
+//
+//
 TLangId
 TLocaleString::GetUserLangId()
 {
   return ::GetUserDefaultLangID();
 }
 
+//
+//
+//
 int
 TLocaleString::CompareLang(const char far* s1, const char far* s2, TLangId lang)
 {
@@ -349,4 +483,3 @@ TLocaleString::CompareLang(const char far* s1, const char far* s2, TLangId lang)
 }
 
 #endif
-

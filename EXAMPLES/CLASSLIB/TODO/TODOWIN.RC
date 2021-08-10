@@ -7,7 +7,10 @@
 //
 //---------------------------------------------------------------------*/
 
+#if !defined(WORKSHOP_INVOKED)
 #include <windows.h>
+#endif
+
 #include "tododefs.h"
 
 TodoMenu MENU

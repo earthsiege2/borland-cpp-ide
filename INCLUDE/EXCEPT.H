@@ -5,9 +5,9 @@
 */
 
 /*
- *      C/C++ Run Time Library - Version 6.5
+ *      C/C++ Run Time Library - Version 7.0
  *
- *      Copyright (c) 1992, 1994 by Borland International
+ *      Copyright (c) 1992, 1996 by Borland International
  *      All Rights Reserved.
  *
  */
@@ -30,7 +30,7 @@
 
 #if !defined(RC_INVOKED)
 
-#pragma option -a-      // byte packing
+#pragma pack(push, 1)
 
 #if defined(__BCOPT__)
 #if !defined(_RTL_ALLOW_po) && !defined(__FLAT__)
@@ -57,8 +57,8 @@ typedef void (_RTLENTRY *unexpected_function)();
 terminate_function  _RTLENTRY set_terminate(terminate_function);
 unexpected_function _RTLENTRY set_unexpected(unexpected_function);
 
-terminate_function  _RTLENTRY terminate();
-unexpected_function _RTLENTRY unexpected();
+void  _RTLENTRY terminate();
+void  _RTLENTRY unexpected();
 
 extern  char _FAR * _RTLENTRY __ThrowFileName();
 extern  unsigned    _RTLENTRY __ThrowLineNumber();
@@ -126,7 +126,8 @@ inline size_t _RTLENTRY xalloc::requested() const
 #endif
 #endif
 
-#pragma option -a.      // restore default packing
+/* restore default packing */
+#pragma pack(pop)
 
 #endif  /* !RC_INVOKED */
 

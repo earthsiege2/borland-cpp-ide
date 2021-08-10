@@ -331,10 +331,12 @@ N_FDIV@		PROC	NEAR
 		ret
 @@flaw_detected:
 		push	bp
+		push	ax
 		sub	sp, STACK_SIZE
 		mov	bp, sp
 		fdivp_sti 1 0
-;		add	sp, STACK_SIZE
+		; Macro cleans up stack
+		pop	ax
 		pop	bp
 		ret
 N_FDIV@		ENDP
@@ -344,6 +346,7 @@ N_FDIV@		ENDP
 F_FDIV@		PROC	FAR
 ifdef __HUGE__
 		push	ds
+		push	ax
 		mov	ax, seg __fdivflag
 		mov	ds, ax
 endif
@@ -351,17 +354,21 @@ endif
 		je	@@flaw_detected
 		fdiv
 ifdef __HUGE__
+		pop	ax
 		pop	ds
 endif
 		ret
 @@flaw_detected:
 		push	bp
+		push	ax
 		sub	sp, STACK_SIZE
 		mov	bp, sp
 		fdivp_sti 1 0
-;		add	sp, STACK_SIZE
+		; Macro cleans up stack
+		pop	ax
 		pop	bp
 ifdef __HUGE__
+		pop	ax
 		pop	ds
 endif
 		ret
@@ -376,10 +383,12 @@ N_FDIVR@	PROC	NEAR
 		ret
 @@flaw_detected:
 		push	bp
+		push	ax
 		sub	sp, STACK_SIZE
 		mov	bp, sp
 		fdivrp_sti 1 0
-;		add	sp, STACK_SIZE
+		; Macro cleans up stack
+		pop	ax
 		pop	bp
 		ret
 N_FDIVR@	ENDP
@@ -389,6 +398,7 @@ N_FDIVR@	ENDP
 F_FDIVR@	PROC	FAR
 ifdef __HUGE__
 		push	ds
+		push	ax
 		mov	ax, seg __fdivflag
 		mov	ds, ax
 endif
@@ -396,17 +406,21 @@ endif
 		je	@@flaw_detected
 		fdivr
 ifdef __HUGE__
+		pop	ax
 		pop	ds
 endif
 		ret
 @@flaw_detected:
 		push	bp
+		push	ax
 		sub	sp, STACK_SIZE
 		mov	bp, sp
 		fdivrp_sti 1 0
-;		add	sp, STACK_SIZE
+		; Macro cleans up stack
+		pop	ax
 		pop	bp
 ifdef __HUGE__
+		pop	ax
 		pop	ds
 endif
 		ret

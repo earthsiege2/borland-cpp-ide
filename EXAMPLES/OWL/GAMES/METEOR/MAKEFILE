@@ -1,0 +1,16 @@
+#----------------------------------------------------------------------------
+# ObjectWindows
+# Copyright (c) 1994, 1995 by Borland International, All Rights Reserved
+#----------------------------------------------------------------------------
+
+MODELS = ldf
+
+LIBEXE = $(BCLIBDIR)\bivbx.lib
+EXERES = meteor
+OBJEXE = meteor.obj sprite.obj
+
+!include $(BCEXAMPLEDIR)\owlmake.gen
+
+!if $(_32BIT_)
+  LIBEXE=$(BCLIBDIR)\bivbx32.lib
+!endif

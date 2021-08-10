@@ -1,0 +1,10 @@
+#----------------------------------------------------------------------------
+# ObjectWindows
+# Copyright (c) 1995, 1995 by Borland International, All Rights Reserved
+#----------------------------------------------------------------------------
+
+EXERES = hotkey
+OBJEXE = hotkeyx.obj
+
+!include $(BCEXAMPLEDIR)\owlmake.gen
+

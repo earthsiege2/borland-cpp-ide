@@ -1,0 +1,9 @@
+//----------------------------------------------------------------------------
+// ObjectWindows
+// Copyright (c) 1991, 1995 by Borland International, All Rights Reserved
+//----------------------------------------------------------------------------
+
+#include <owl/owlapp.rc>         // default owl app icon
+#include <owl/except.rc>
+#include <owl/slider.rc>
+#include <owl/window.rh>

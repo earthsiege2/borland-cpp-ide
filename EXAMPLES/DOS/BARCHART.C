@@ -56,5 +56,4 @@ void makegraph(float p[])
   closegraph();
   return;
 }
-
-
+

@@ -1,15 +1,27 @@
 //----------------------------------------------------------------------------
 // ObjectWindows
-// (C) Copyright 1992, 1994 by Borland International, All Rights Reserved
+// Copyright (c) 1992, 1996 by Borland International, All Rights Reserved
 //
-//   Definition of print preview classes
+//$Revision:   10.3  $
+//
+// Implementation of print preview classes
 //----------------------------------------------------------------------------
-#include <owl/owlpch.h>
-#include <owl/preview.h>
-#include <owl/printer.h>
-#include <owl/gdiobjec.h>
-#include <owl/dc.h>
-#include <owl/printdia.h>
+#include <owl/pch.h>
+#if !defined(OWL_PREVIEW_H)
+# include <owl/preview.h>
+#endif
+#if !defined(OWL_PRINTER_H)
+# include <owl/printer.h>
+#endif
+#if !defined(OWL_GDIOBJEC_H)
+# include <owl/gdiobjec.h>
+#endif
+#if !defined(OWL_DC_H)
+# include <owl/dc.h>
+#endif
+#if !defined(OWL_PRINTDIA_H)
+# include <owl/printdia.h>
+#endif
 #include <math.h>
 
 //
@@ -23,13 +35,35 @@
   inline bool SetViewportOrg(HDC hdc, int x, int y) {return ::SetViewportOrgEx(hdc, x, y, 0);}
 #endif
 
+
+//
+// Construct a basic Preview DC
+//
+TPreviewDCBase::TPreviewDCBase(TDC&      screen,
+                               TPrintDC& printdc)
+:
+  TPrintDC(screen),
+  PrnDC(printdc)
+{}
+
+//
+//
+//
+HDC
+TPreviewDCBase::GetAttributeHDC() const
+{
+  return PrnDC;
+}
+
+//
+// Construct a Print Preview Device context
+//
 TPrintPreviewDC::TPrintPreviewDC(TDC&         screen,
                                  TPrintDC&    printdc,
                                  const TRect& client,
                                  const TRect& clip)
 :
-  TPrintDC(screen),
-  PrnDC(printdc),
+  TPreviewDCBase(screen, printdc),
   PrnFont(0),
   CurrentPreviewFont(0)
 {
@@ -53,18 +87,15 @@ TPrintPreviewDC::TPrintPreviewDC(TDC&         screen,
   SyncFont();
 }
 
+//
+//
+//
 TPrintPreviewDC::~TPrintPreviewDC()
 {
   // cleanup screen dc
   //
   ::DeleteObject(::SelectObject(GetHDC(), ::GetStockObject(SYSTEM_FONT)));
   delete CurrentPreviewFont;
-}
-
-HDC
-TPrintPreviewDC::GetAttributeHDC() const
-{
-  return PrnDC;
 }
 
 //
@@ -91,6 +122,9 @@ TPrintPreviewDC::SelectObject(const TFont& newFont)
   }
 }
 
+//
+//
+//
 void
 TPrintPreviewDC::SelectStockObject(int index)
 {
@@ -114,6 +148,9 @@ TPrintPreviewDC::SelectStockObject(int index)
   }
 }
 
+//
+//
+//
 void
 TPrintPreviewDC::RestoreFont()
 {
@@ -123,6 +160,9 @@ TPrintPreviewDC::RestoreFont()
   SyncFont();
 }
 
+//
+//
+//
 int
 TPrintPreviewDC::GetDeviceCaps(int index) const
 {
@@ -141,6 +181,9 @@ TPrintPreviewDC::GetDeviceCaps(int index) const
   }
 }
 
+//
+//
+//
 inline int
 GlyphHeight(TEXTMETRIC& tm)
 {
@@ -195,7 +238,7 @@ TPrintPreviewDC::SyncFont()
   lf.lfOutPrecision   = OUT_TT_PRECIS;
   lf.lfClipPrecision  = CLIP_DEFAULT_PRECIS;
   lf.lfQuality        = DRAFT_QUALITY;
-  
+
   // Keep just the pitch (low 2 bits). Ignore the family
   //
   lf.lfPitchAndFamily = uint8((tm.tmPitchAndFamily & 0x0003) | FF_DONTCARE);
@@ -258,22 +301,31 @@ TPrintPreviewDC::ReOrg()
   ::SetWindowOrg(GetHDC(), origin.x, origin.y);
 }
 
+//
+//
+//
 TColor
-TPrintPreviewDC::SetBkColor(TColor color)
+TPrintPreviewDC::SetBkColor(const TColor& color)
 {
   TColor result = PrnDC.SetBkColor(color);
   ::SetBkColor(GetHDC(), PrnDC.GetBkColor());
   return result;
 }
 
+//
+//
+//
 TColor
-TPrintPreviewDC::SetTextColor(TColor color)
+TPrintPreviewDC::SetTextColor(const TColor& color)
 {
   TColor result = PrnDC.SetTextColor(color);
   ::SetTextColor(GetHDC(), PrnDC.GetTextColor());
   return result;
 }
 
+//
+//
+//
 int
 TPrintPreviewDC::SetMapMode(int mode)
 {
@@ -282,6 +334,9 @@ TPrintPreviewDC::SetMapMode(int mode)
   return result;
 }
 
+//
+//
+//
 bool
 TPrintPreviewDC::SetViewportOrg(const TPoint& origin, TPoint far* oldOrg)
 {
@@ -290,6 +345,9 @@ TPrintPreviewDC::SetViewportOrg(const TPoint& origin, TPoint far* oldOrg)
   return result;
 }
 
+//
+//
+//
 bool
 TPrintPreviewDC::OffsetViewportOrg(const TPoint& delta, TPoint far* oldOrg)
 {
@@ -298,6 +356,9 @@ TPrintPreviewDC::OffsetViewportOrg(const TPoint& delta, TPoint far* oldOrg)
   return result;
 }
 
+//
+//
+//
 bool
 TPrintPreviewDC::SetViewportExt(const TSize& extent, TSize far* oldExtent)
 {
@@ -323,6 +384,9 @@ TPrintPreviewDC::SetWindowExt(const TSize& extent, TSize far* oldExtent)
   return result;
 }
 
+//
+//
+//
 bool
 TPrintPreviewDC::ScaleWindowExt(int xNum, int xDenom, int yNum, int yDenom,
                                 TSize far* oldExtent)
@@ -339,21 +403,36 @@ END_RESPONSE_TABLE;
 
 IMPLEMENT_CASTABLE(TPreviewPage);
 
+//
+//
+//
 TPreviewPage::TPreviewPage(TWindow* parent, TPrintout& printout,
                            TPrintDC& prndc, TSize& printExtent, int pagenum)
-      : TWindow(parent),
-        Printout(printout),
-        PrintDC(prndc),
-        PrintExtent(printExtent),
-        PageNum(pagenum)
+:
+  TWindow(parent),
+  Printout(printout),
+  PrintDC(prndc),
+  PrintExtent(printExtent),
+  PageNum(pagenum)
 {
   Attr.Style = WS_CHILD | WS_BORDER | WS_VISIBLE;
   SetBkgndColor(TColor::White);
 }
 
 //
+//
+//
+void
+TPreviewPage::SetPageNumber(int newNum)
+{
+  PageNum = newNum;
+  if (GetHandle())
+    Invalidate();
+}
+
+//
 // Using a TPrintPreviewDC, 'print' the current page (PageNum) of Printout
-// onto the window DC provided, 
+// onto the window DC provided,
 //
 void
 TPreviewPage::Paint(TDC& dc, bool, TRect& clip)
@@ -373,7 +452,7 @@ TPreviewPage::Paint(TDC& dc, bool, TRect& clip)
     Printout.EndDocument();
     Printout.EndPrinting();
   }
-  else 
+  else
     dc.PatBlt(0, 0, Attr.W, Attr.H, WHITENESS);
 }
 

@@ -25,7 +25,6 @@ OBJS =               \
         memchk.obj   \
         stkavail.obj \
         calloc.obj   \
-        getmem.obj   \
         heap.obj     \
         heapchk.obj  \
         heapchkf.obj \
@@ -43,6 +42,7 @@ OBJS =               \
         newarray.obj \
         newpl.obj    \
         newplarr.obj \
+	setnew.obj   \
         vapp.obj     \
         vappv.obj    \
         vdel.obj     \
@@ -59,6 +59,9 @@ OBJS =               \
             vnewv.obj
 !endif
 
+    MISC =		\
+            setnewnx.obj
+
 #############################################################################
 # Configure the environment appropriately.                                  #
 #############################################################################
@@ -66,3 +69,8 @@ TASMCFG = 1        # Force tasm.cfg creation
 
 !include rules.mak
 
+#############################################################################
+# MISC explicit rules.                                                      #
+#############################################################################
+setnewnx.obj : setnew.cpp
+    $(CC) -o$(OBJDIR)\$& -DNOXX $?

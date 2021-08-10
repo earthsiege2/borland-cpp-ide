@@ -1,0 +1,11 @@
+#----------------------------------------------------------------------------
+# ObjectWindows
+# Copyright (c) 1991, 1995 by Borland International, All Rights Reserved
+#----------------------------------------------------------------------------
+
+MODELS = ldft
+
+EXERES = palette
+OBJEXE = palettex.obj
+
+!include $(BCEXAMPLEDIR)\owlmake.gen

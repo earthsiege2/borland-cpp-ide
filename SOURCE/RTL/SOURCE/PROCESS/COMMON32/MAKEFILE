@@ -60,6 +60,11 @@ OBJS =               \
     MISC = $(LIBDIR)\wildargs.obj
 !endif
 
+!if $(OS) == WIN32
+    OBJS = 		\
+        $(OBJS)		\
+	setargv0.obj
+!endif
 #############################################################################
 # Configure the environment appropriately.                                  #
 #############################################################################

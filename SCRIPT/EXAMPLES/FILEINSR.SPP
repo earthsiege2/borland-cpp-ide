@@ -1,0 +1,58 @@
+//--------------------------------------------------------------------------
+// Object Scripting
+// Copyright (c) 1996 by Borland International, All Rights Reserved
+//
+// FILEINSR.SPP: File Insert. Inserts a file into the current buffer.
+//
+// USE: Run script. The inserted text will replace any current block if the
+//   "Overwrite blocks" editor option is set.
+//
+// FILES: MSG.SPP
+//
+// NOTE: This functionality is already available under Brief emulation.
+//--------------------------------------------------------------------------
+print "fileinsr.spp";
+
+//
+// IDE imports.
+//
+import IDE;
+import scriptEngine;
+import editor;
+
+//
+// Load support module(s).
+//
+if (!scriptEngine.IsLoaded("msg.spp")) scriptEngine.Load("msg.spp");
+
+fileinsr()
+{
+  declare msg = new TMsg();
+
+  // Validate current buffer.
+  //
+  if (!initialized(editor.TopView)) {
+    msg.Info("There is no valid current buffer.");
+    return;
+  }
+  declare curView = editor.TopView;
+
+  // Get a filename.
+  //
+  declare fileName = IDE.FileDialog("Enter the file to insert.", NULL);
+  if (fileName == "") {
+    return;
+  }
+
+  // Check the file.
+  //
+  if (!FileExists(fileName)) {
+    msg.Error("Can't find file " + fileName);
+    return;
+  }
+
+  // Insert the contents into the current buffer.
+  //
+  curView.Position.InsertFile(fileName);
+}
+

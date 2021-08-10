@@ -1,0 +1,2024 @@
+//----------------------------------------------------------------------------
+// cScript
+// (C) Copyright 1995 by Borland International, All Rights Reserved
+//
+// EDIT.SPP
+//    Script component of IDE's Editor editor class.
+//    Provides support services for editing environment.
+//
+// $Revision:   1.138  $
+//
+//----------------------------------------------------------------------------
+
+//----------------------------------------------------------------------------
+// Symbol Imports
+//----------------------------------------------------------------------------
+
+import IDE;
+import scriptEngine;
+
+// mark this module as being a library module
+library;
+
+//----------------------------------------------------------------------------
+// Symbol Exports
+//----------------------------------------------------------------------------
+
+export editor = new Editor();
+export bPopEditorKeyboard = false;
+
+//----------------------------------------------------------------------------
+// Symbol Loads
+//----------------------------------------------------------------------------
+
+scriptEngine.SymbolLoad("ED_BRIEF", "BriefEmulation");
+scriptEngine.SymbolLoad("ED_CLSSC", "ClassicEmulation");
+scriptEngine.SymbolLoad("ED_DFLT", "DefaultEmulation");
+scriptEngine.SymbolLoad("ED_EPSLN", "EpsilonEmulation");
+
+//----------------------------------------------------------------------------
+// Symbol Defines
+//----------------------------------------------------------------------------
+
+#define BOOKMARK_ID_SYSTEM_ONE   19
+#define BOOKMARK_ID_SYSTEM_TWO   18
+#define BOOKMARK_ID_SYSTEM_THREE 17
+
+declare gbStyle = EXCLUSIVE_BLOCK;
+
+//----------------------------------------------------------------------------
+// Methods altering the current position of the cursor.
+//----------------------------------------------------------------------------
+
+//
+// Move the cursor to the begining of the mark.
+//
+on editor:>MoveCursorToMarkBegin() {
+   declare eb = .BlockExists();
+   if (eb != NULL) {
+      eb.Save();
+      .TopView.Position.Move(eb.StartingRow, eb.StartingColumn);
+      eb.Restore();
+	} else {
+      IDE.ReportError("Mark not selected");
+   }
+}
+
+//
+// Move the cursor to the end of the mark.
+//
+on editor:>MoveCursorToMarkEnd() {
+   declare eb = .BlockExists();
+   if (eb != NULL) {
+      eb.Save();
+      .TopView.Position.Move(eb.EndingRow, eb.EndingColumn);
+      eb.Restore();
+   } else {
+      IDE.ReportError("Mark not selected");
+   }
+}
+
+//
+// Move the cursor to the coressponding brace.
+//
+on editor:>MoveCursorToMate(defaultDir) {
+   LoadMateFunctionality();
+   .Mate(defaultDir);
+}
+
+//
+// Move the cursor to the left of the current word.
+//
+on editor:>MoveCursorToWordLeft() {
+
+   declare ep = .TopView.Position;
+
+   if (ep.Column == 1) {
+       declare nRow = ep.Row;
+       ep.MoveRelative(-1,0);
+       if (ep.Row != nRow)
+	   ep.MoveEOL();
+   } else {
+      ep.MoveCursor(SKIP_LEFT | SKIP_NONWORD);
+      ep.MoveCursor(SKIP_LEFT | SKIP_WORD);
+   }
+}
+
+//
+// Move the cursor to the right of the current word.
+//
+on editor:>MoveCursorToWordRight() {
+
+   declare ep = .TopView.Position;
+
+   if (ep.Character == 13) {
+       declare nRow = ep.Row;
+       ep.MoveRelative(1,0);
+       if (ep.Row != nRow)
+	   ep.Move(0,1);
+   } else {
+      ep.MoveCursor(SKIP_RIGHT | SKIP_WORD);
+      ep.MoveCursor(SKIP_RIGHT | SKIP_NONWORD);
+   }
+}
+
+//----------------------------------------------------------------------------
+// Methods altering the position of the cursor while marking.
+//----------------------------------------------------------------------------
+
+//
+// While marking, move to the begining of the file.
+//
+on editor:>MarkToBOF() {
+   declare eb = .BlockExists();
+
+   if (eb == NULL) {
+      eb = .TopView.Block;
+      eb.Begin();
+      SetBlockStyle(gbStyle);
+   }
+
+   eb.Extend(1,1);
+}
+
+//
+// While marking, move to the begining of the line.
+//
+on editor:>MarkToBOL(declare nBlockStyle) {
+   declare eb = .BlockExists();
+
+   if (eb == NULL) {
+      eb = .TopView.Block;
+      eb.Begin();
+
+      if (!initialized(nBlockStyle))
+	 nBlockStyle = gbStyle;
+
+      SetBlockStyle(nBlockStyle);
+   }
+
+   eb.Extend(.TopView.Position.Row, 1);
+}
+
+//
+// While marking, move to the end of the file.
+//
+on editor:>MarkToEOF() {
+   declare eb = .BlockExists();
+   declare ep = .TopView.Position;
+
+   if (eb == NULL) {
+      eb = .TopView.Block;
+      eb.Begin();
+      SetBlockStyle(gbStyle);
+   }
+
+   eb.Save();
+   ep.Save();
+   ep.MoveEOF();
+   declare endRow = ep.Row;
+   declare endCol = ep.Column;
+   ep.Restore();
+   eb.Restore();
+
+   eb.Extend(endRow, endCol);
+}
+
+//
+// While marking, move to the end of the line.
+//
+on editor:>MarkToEOL(declare nBlockStyle) {
+   declare eb = .BlockExists();
+   declare ep = .TopView.Position;
+
+   if (eb == NULL) {
+      eb = .TopView.Block;
+      eb.Begin();
+
+      if (!initialized(nBlockStyle))
+	  nBlockStyle = gbStyle;
+
+      SetBlockStyle(nBlockStyle);
+   }
+
+   eb.Save();
+   ep.Save();
+   ep.MoveEOL();
+   declare endRow = ep.Row;
+   declare endCol = ep.Column;
+   ep.Restore();
+   eb.Restore();
+
+   eb.Extend(endRow, endCol);
+}
+
+//
+// Move to specified location relative to the current location.
+//
+on editor:>MarkToRelative(declare deltaRow, declare deltaCol) {
+   declare eb = .BlockExists();
+
+   if (eb == NULL) {
+       eb = BeginBlock(gbStyle);
+    }
+
+   eb.ExtendRelative(deltaRow, deltaCol);
+}
+
+//
+// While marking, move down one page.
+//
+on editor:>MarkToPageDown() {
+   declare eb = .BlockExists();
+
+   if (eb == NULL) {
+      eb = BeginBlock(gbStyle,true);
+   }
+
+   eb.ExtendPageDown();
+}
+
+//
+// While marking, move up one page.
+//
+on editor:>MarkToPageUp() {
+   declare eb = .BlockExists();
+
+   if (eb == NULL) {
+      eb = .TopView.Block;
+      eb.Reset();
+      eb.Begin();
+      SetBlockStyle(gbStyle);
+	}
+
+   eb.ExtendPageUp();
+}
+
+//
+// While marking, move to the bottom of the current views window.
+//
+on editor:>MarkToViewBottom() {
+   declare eb = .BlockExists();
+
+   if (eb == NULL) {
+      eb = .TopView.Block;
+      eb.Begin();
+      SetBlockStyle(gbStyle);
+   }
+
+   eb.Extend(.TopView.BottomRow, .TopView.Position.Column);
+}
+
+//
+// While marking, move to the top of the current views window.
+//
+on editor:>MarkToViewTop() {
+   declare eb = .BlockExists();
+
+   if (eb == NULL) {
+      eb = .TopView.Block;
+      eb.Begin();
+      SetBlockStyle(gbStyle);
+   }
+
+   eb.Extend(.TopView.TopRow, .TopView.Position.Column);
+}
+
+//
+// While marking, move to the left of the current word.
+//
+on editor:>MarkToWordLeft(declare bWithDelete) {
+   declare eb = .BlockExists();
+   declare ep = .TopView.Position;
+
+   if (eb == NULL) {
+      eb = .TopView.Block;
+      SetBlockStyle(gbStyle);
+   }
+
+   ep.Save();
+   eb.Save();
+   .MoveCursorToWordLeft();
+   declare nRow = ep.Row;
+   declare nColumn = ep.Column;
+   ep.Restore();
+   eb.Restore();
+   eb.Extend(nRow, nColumn);
+
+   if (bWithDelete) {
+      eb.Cut();
+   }
+}
+
+//
+// While marking, move to the right of the current word.
+//
+on editor:>MarkToWordRight(declare bWithDelete) {
+   declare eb = .BlockExists();
+   declare ep = .TopView.Position;
+
+   if (eb == NULL) {
+       eb = .TopView.Block;
+   }
+
+   if (eb.Size == 0) {
+      ResetBlock();
+      BeginBlock(gbStyle);
+   }
+
+   ep.Save();
+
+   if (bWithDelete)
+      ep.Save();
+
+   eb.Save();
+
+   .MoveCursorToWordRight();
+
+   declare nRow = ep.Row;
+   declare nColumn = ep.Column;
+
+   ep.Restore();
+   eb.Restore();
+
+   eb.Extend(nRow, nColumn);
+
+   if (bWithDelete) {
+      eb.Cut();
+      ep.Restore();
+   }
+}
+
+//----------------------------------------------------------------------------
+// Methods altering the position of the cursor while using modal
+// blocking.
+//----------------------------------------------------------------------------
+
+//
+// Move the cursor to the begining of the file, extending the block.
+//
+on editor:>ModalMoveBOF() {
+   declare eb = .BlockExists();
+   if (eb != NULL) {
+      return .MarkToBOF();
+   }
+
+   .TopView.Position.Move(1,1);
+}
+
+//
+// Move the cursor to the begining of the line, extending the block.
+//
+on editor:>ModalMoveBOL() {
+   declare eb = .BlockExists();
+   if (eb != NULL) {
+      return .MarkToBOL();
+   }
+
+   return .TopView.Position.MoveBOL();
+}
+
+//
+// Move the cursor to the end of the file, extending the block.
+//
+on editor:>ModalMoveEOF() {
+   declare eb = .BlockExists();
+   if (eb != NULL) {
+		return .MarkToEOF();
+   }
+
+   .TopView.SetTopLeft(0,1);
+   .TopView.Position.MoveEOF();
+}
+
+//
+// Move the cursor to the end of the line, extending the block.
+//
+on editor:>ModalMoveEOL() {
+   declare eb = .BlockExists();
+   if (eb != NULL) {
+      return .MarkToEOL();
+   }
+
+   return .TopView.Position.MoveEOL();
+}
+
+//
+// Move the cursor to the specified line, extending the block.
+//
+on editor:>ModalMoveToLine(declare lineNum) {
+
+   declare ep = .TopView.Position;
+   declare eb = .BlockExists();
+
+   if (eb != NULL) {
+      ep.Save();
+      eb.Save();
+   }
+
+   if (initialized(lineNum))
+      ep.MoveRelative(lineNum,0);
+   else {
+      ep.GotoLine();
+   }
+
+   if (eb != NULL) {
+      declare row = ep.Row;
+      declare column = ep.Column;
+      ep.Restore();
+      eb.Restore();
+      eb.Extend(row, column);
+   }
+}
+
+//
+// Move the cursor to the specified position relative to the current
+// location, extending the block.
+//
+on editor:>ModalMoveRelative(deltaRow, deltaColumn) {
+
+   declare eb = .BlockExists();
+
+   if (eb != NULL) {
+      return eb.ExtendRelative(deltaRow, deltaColumn);
+   }
+
+   return .TopView.Position.MoveRelative(deltaRow, deltaColumn, true);
+}
+
+//
+// Move the cursor to the bottom of the current screen view, extending
+// the block.
+//
+on editor:>ModalMoveViewBottom() {
+   declare eb = .BlockExists();
+   if (eb != NULL) {
+      return .MarkToViewBottom();
+   }
+
+   .TopView.Position.Move(.TopView.BottomRow-1);
+}
+
+//
+// Move the cursor to the top of the current screen view, extending
+// the block.
+//
+on editor:>ModalMoveViewTop() {
+   declare eb = .BlockExists();
+   if (eb != NULL) {
+      return .MarkToViewTop();
+   }
+
+   .TopView.Position.Move(.TopView.TopRow);
+}
+
+//
+// Move the cursor down one page, extending the block.
+//
+on editor:>ModalPageDown() {
+   declare ep = .TopView.Position;
+   declare eb = .BlockExists();
+
+   if (eb != NULL) {
+      ep.Save();
+      eb.Save();
+   }
+
+   .TopView.PageDown();
+
+   if (eb != NULL) {
+      declare row = ep.Row;
+      declare column = ep.Column;
+      ep.Restore();
+      eb.Restore();
+      eb.Extend(row, column);
+   }
+}
+
+//
+// Move the cursor up one page, extending the block.
+//
+on editor:>ModalPageUp() {
+   declare ep = .TopView.Position;
+   declare eb = .BlockExists();
+
+   if (eb != NULL) {
+      ep.Save();
+      eb.Save();
+   }
+
+   .TopView.PageUp();
+
+   if (eb != NULL) {
+      declare row = ep.Row;
+      declare column = ep.Column;
+      ep.Restore();
+      eb.Restore();
+      eb.Extend(row, column);
+   }
+}
+
+//
+// Delete word to the left.
+//
+on editor:>ModalMarkToWordLeft(declare bWithDelete) {
+   // declare variables.
+   declare eb = .TopView.Block;
+   declare ep = .TopView.Position;
+
+   eb.End();
+
+   .MoveCursorToWordLeft();
+
+   eb.Begin();
+
+   if (bWithDelete)
+      eb.Cut();
+}
+
+//
+// Delete word to the right.
+//
+on editor:>ModalMarkToWordRight(declare bWithDelete) {
+   // declare variables.
+   declare eb = .TopView.Block;
+   declare ep = .TopView.Position;
+
+   eb.Begin();
+
+   .MoveCursorToWordRight();
+
+   eb.End();
+
+   if (bWithDelete)
+      eb.Cut();
+}
+
+
+//----------------------------------------------------------------------------
+// Methods for controlling Views, Windows and Buffers.
+//----------------------------------------------------------------------------
+
+//
+// Creates a new view in the specified direction.
+//
+declare gewClassExpert = NULL;
+
+on editor:>CreateView(declare direction) {
+
+   declare ew = .TopView.Window;
+
+   if (initialized(ew))
+       if (ew != gewClassExpert) {
+
+	    declare evNew = ew.ViewCreate(direction);
+
+	    if (initialized(evNew))
+		if (evNew != NULL){
+		    declare evOrg = .TopView;
+		    declare ep = evNew.Position;
+						  ep.Move(evOrg.Position.Row, evOrg.Position.Column);
+						  IDE.ViewActivate(direction);
+						  return evNew;
+		}
+       }
+
+   return false;
+}
+
+//
+// Delete view in the specified direction.
+//
+on editor:>DeleteView(declare direction) {
+
+   if (initialized(.TopView)) {
+       if (.TopView != NULL) {
+	   if (initialized(.TopView.Window)) {
+	       declare ew = .TopView.Window;
+
+	       if (ew != NULL && ew != gewClassExpert)
+		   return ew.ViewDelete(direction);
+	   }
+       }
+   }
+
+   return false;
+}
+
+//
+// Scroll the editor's current line by the specified magnitude,
+// extending the block.
+//
+on editor:>ModalScroll(declare magnitude) {
+
+   declare ep = .TopView.Position;
+   declare eb = .BlockExists();
+
+   if (eb != NULL) {
+      ep.Save();
+      eb.Save();
+   }
+
+   .TopView.Scroll(magnitude);
+
+   if (ep.Row >= .TopView.BottomRow) {
+      ep.Move(ep.Row - 1, ep.Column);
+      .TopView.MoveViewToCursor();
+   }
+
+   if (ep.Row < .TopView.TopRow) {
+      ep.Move(ep.Row + 1, ep.Column);
+      .TopView.MoveViewToCursor();
+   }
+
+   if (eb != NULL) {
+      declare row = ep.Row;
+      declare column = ep.Column;
+      ep.Restore();
+      eb.Restore();
+      eb.Extend(row, column);
+   }
+}
+
+//
+// Reposition the editor's current line to the bottom of the current
+// view.
+//
+on editor:>MoveLineViewBottom() {
+   declare ev  = .TopView;
+   declare row = ev.Position.Row;
+   declare topRow = ev.TopRow;
+   declare bottomRow = ev.BottomRow;
+   declare height = bottomRow - topRow;
+   if (row > height)
+      ev.SetTopLeft(row - (height - 1));
+}
+
+//
+// Reposition the editor's current line to the top of the current
+// view.
+//
+on editor:>MoveLineViewTop() {
+   declare ev = .TopView;
+   declare row = ev.Position.Row;
+   ev.SetTopLeft(row);
+}
+
+//
+// Reposition the editor's current line to the center of
+// the current view.
+//
+on editor:>MoveLineViewCenter() {
+   declare ev = .TopView;
+   declare row = ev.Position.Row;
+   ev.Center(row);
+}
+
+//
+// Replace the EditBuffer being viewed in the top level EditView with
+// a new EditBuffer.
+//
+// This method is invoked by the IDE in response to source file navigation
+// from the MessageView, Debugger and Browser when the Options|Environment|
+// Preferences|Source Tracking options is set to 'Current Window'
+//
+on editor:>NewView(declare fn) {
+   declare msg;
+
+   // prompt for the filename if necessary
+   if (!IDE.IsLegalFileName(fn)) {
+      fn = IDE.FileDialog("Open File (into pane)","*.*");
+   }
+
+   if (IDE.IsLegalFileName(fn)) {
+
+      declare newBuf = new EditBuffer(fn);
+      if (newBuf == NULL) {
+	 IDE.ReportError("Unable to create new edit buffer");
+	 return;
+      }
+      if (newBuf.IsValid == FALSE) {
+	 IDE.ReportError("Unable to create new edit buffer");
+	 return;
+      }
+
+      declare theView = .TopView;
+      declare replaceExisting = false;
+      if (theView != NULL)
+	if(theView.IsValid == TRUE) {
+		replaceExisting = true;
+      }
+      
+      if(replaceExisting){
+	 theView.Attach(newBuf);
+      }else{
+	 // create a new Editor Window
+	 new EditWindow(newBuf).Activate();
+      }
+
+      if (IDE.FileExists(fn))
+	 msg = FormatString("Buffer \"%1\" opened", fn);
+      else
+	 msg = FormatString("Buffer \"%1\" created", fn);
+
+      IDE.StatusBar = msg;
+   }
+}
+
+//
+// Switch to the next window.
+//
+on editor:>NextWindow() {
+   if(.GetWindow() != NULL){
+      declare ew = .GetWindow();
+
+      if (initialized(ew)) {
+	  ew = ew.Next;
+
+	  if (ew != NULL) {
+	      ew.Activate();
+	  }
+      }
+   }
+}
+
+//
+// Switch to the next view.
+//
+on editor:>NextView() {
+   if (editor.TopView != NULL){
+      editor.TopView.Next.Window.ViewActivate(0, editor.TopView.Next);
+   }
+}
+
+//
+// Scroll the editor's current line by the specified magnitude.
+//
+on editor:>Scroll(declare magnitude) {
+   declare ep = .TopView.Position;
+
+   .TopView.Scroll(magnitude);
+
+   if (ep.Row >= .TopView.BottomRow) {
+      ep.Move(ep.Row - 1, ep.Column);
+      .TopView.MoveViewToCursor();
+   }
+
+   if (ep.Row < .TopView.TopRow) {
+      ep.Move(ep.Row + 1, ep.Column);
+      .TopView.MoveViewToCursor();
+   }
+}
+
+//
+// Slide a view from the specified direction.
+//
+on editor:>SlideView(declare direction) {
+   if (initialized(.TopView.Window))
+      return .TopView.Window.ViewSlide(direction);
+}
+
+//
+// Switch to the previous window.
+//
+on editor:>PreviousWindow() {
+   if(.GetWindow() != NULL){
+      declare ew = .GetWindow();
+
+      if (initialized(ew)) {
+	  ew = ew.Prior;
+	  if (ew != NULL) {
+	      ew.Activate();
+	 }
+      }
+   }
+}
+
+//
+// Switch to the next view.
+//
+on editor:>PreviousView() {
+
+   if (editor.TopView != NULL){
+      editor.TopView.Prior.Window.ViewActivate(0, editor.TopView.Prior);
+   }
+}
+
+//
+// Toggles the current zoom state of the current view.
+//
+on editor:>ToggleWindowState() {
+
+   declare State = IDE.GetWindowState();
+   if (State == SW_MAXIMIZE)
+      IDE.SetWindowState(SW_RESTORE);
+   else
+      IDE.SetWindowState(SW_MAXIMIZE);
+}
+
+//----------------------------------------------------------------------------
+// Methods for controlling behavior of Cut/Copy/Paste/Delete/Move.
+//----------------------------------------------------------------------------
+
+on editor:>Delete() {
+   declare eb = .BlockExists();
+   if (eb != NULL) {
+      if (eb.Size != 0) {
+	  RemoveBlock(eb,TRUE);
+	  IDE.StatusBar = "Block deleted";
+	  return;
+	 }
+   }
+   return .DeleteChar(1);
+}
+
+on editor:>DeleteChar(declare numToDelete) {
+   return .TopView.Position.Delete(numToDelete);
+}
+
+on editor:>BackspaceDelete(declare numToDelete) {
+   declare eb = .BlockExists();
+   if (eb)
+      eb.Reset();
+   .TopView.Position.BackspaceDelete(numToDelete);
+}
+
+on editor:>DeleteLine(moveToBOL) {
+   declare EditBlock theBlock(.TopView);
+   SetBlockStyle(LINE_BLOCK);
+   theBlock.Delete();
+
+   if (moveToBOL) {
+      .TopView.Position.MoveBOL();
+   }
+}
+
+on editor:>ModalDeleteLine(moveToBOL) {
+   declare EditBlock theBlock(.TopView);
+   SetBlockStyle(LINE_BLOCK);
+   theBlock.Delete();
+
+   if (moveToBOL) {
+      .ModalMoveBOL();
+   }
+}
+
+on editor:>DeleteToEOL(declare emacsStyle, declare append) {
+   declare thePos = .TopView.Position;
+   declare endRow = thePos.Row;
+   declare endCol = thePos.Column;
+   declare EditBlock theBlock(.TopView);
+   declare rv = "";
+
+   declare nColumnCorrection = .TopView.LeftColumn;
+
+   thePos.MoveEOL();
+
+   // see if we are already at (or past) the end
+   if (thePos.Column <= endCol) {
+      if (!emacsStyle) {
+	 // restore the position and leave
+	 thePos.Move(endRow, endCol);
+      } else {
+	 // pull the next line up a row
+	 thePos.Save();
+
+	 SetBlockStyle(INCLUSIVE_BLOCK);
+	 theBlock.Extend(endRow, endCol);
+	 rv = theBlock.Text;
+	 theBlock.Cut(append);
+
+	 thePos.Restore();
+      }
+   } else {
+      // delete remainder of line
+      thePos.MoveRelative(0, -1);
+      SetBlockStyle(INCLUSIVE_BLOCK);
+      theBlock.Extend(endRow, endCol);
+      rv = theBlock.Text;
+      if (emacsStyle)
+	 theBlock.Cut(append);
+      else
+	 theBlock.Delete();
+   }
+
+   if (nColumnCorrection != .TopView.LeftColumn) {
+      .TopView.Scroll(0, (.TopView.LeftColumn - nColumnCorrection) * -1 );
+   }
+
+   return rv;
+}
+
+on editor:>DeleteToBOL() {
+
+   declare eb = .BlockExists();
+
+   if (eb != NULL) {
+       eb.Save();
+   }
+
+   ResetBlock();
+   EndBlock();
+   .TopView.Position.MoveBOL();
+   BeginBlock(EXCLUSIVE_BLOCK).Delete();
+   ResetBlock();
+
+   if (eb != NULL) {
+       eb.Restore();
+   }
+}
+
+//
+// Returns the text for the 'current' word without affecting the block
+// state or position
+//
+on editor:>GetWord() {
+
+   if(!initialized(.TopView)){
+      // no edit window exists, can't rip anything
+      return "";
+   }
+
+   declare theBlock = .TopView.Block;
+   declare thePos = .TopView.Position;
+
+   if (theBlock.Size > 0) {
+      declare chkStr = new String(theBlock.Text);
+
+      // if there are nothing but alphanumeric characters in the
+      // block, assume the block is what they want.
+      // if (!chkStr.Contains("", INVERT_LEGAL_CHARS |
+      // INCLUDE_ALPHA_CHARS | INCLUDE_NUMERIC_CHARS))
+      return theBlock.Text;
+   }
+
+   //
+   // Bug fix for B50-31615 [SQF]
+   //
+   declare ep = .TopView.Position;
+   if (!ep.IsWordCharacter) {
+      return new String( "" ).Text;
+   }
+
+   thePos.Save();
+   theBlock.Save();
+
+   declare rv = new String(.MarkWord().Text);
+   declare crlf = new String("\n");
+   declare fixup = rv.Index(crlf.Text);
+   if (fixup)
+      rv = rv.SubString(0,fixup-2);
+
+   thePos.Restore();
+   theBlock.Restore();
+
+   return rv.Text;
+}
+
+//
+// Returns the text for the current line without affecting the block
+// state or position
+//
+on editor:>GetLine() {
+   declare thePos = .TopView.Position;
+
+   thePos.Save();
+   thePos.MoveBOL();
+   declare rv = thePos.Read();
+   thePos.Restore();
+
+   return rv;
+}
+
+//
+// Marks and returns the EditBlock representing the current word.
+//
+on editor:>MarkWord() {
+   declare ep = .TopView.Position;
+   declare theBlock = .TopView.Block;
+
+   if (ep.IsWordCharacter) {
+      ep.MoveCursor(SKIP_LEFT | SKIP_WORD);
+   }
+
+   if (ep.IsWhiteSpace) {
+      ep.MoveCursor(SKIP_RIGHT | SKIP_WHITE);
+   }
+
+   if (!ep.IsWhiteSpace) {
+      if (!ep.IsWordCharacter) {
+	 ep.MoveCursor(SKIP_RIGHT | SKIP_NONWORD);
+      }
+
+      if (ep.IsWordCharacter) {
+	 theBlock.Reset();
+	 SetBlockStyle(EXCLUSIVE_BLOCK);
+	 theBlock.Begin();
+	 ep.MoveCursor(SKIP_RIGHT | SKIP_WORD);
+	 theBlock.End();
+      }
+   }
+   return theBlock;
+}
+
+
+on editor:>DeleteWord(declare toLeft) {
+   if (toLeft) {
+      .MoveCursorToWordLeft();
+   }
+
+   .MarkWord().Delete();
+}
+
+on editor:>LowerWord() {
+   .TopView.BookmarkRecord(BOOKMARK_ID_SYSTEM_ONE);
+   .MarkWord().LowerCase();
+   .TopView.BookmarkGoto(BOOKMARK_ID_SYSTEM_ONE);
+   .TopView.Block.Reset();
+}
+
+on editor:>UpperWord() {
+   .TopView.BookmarkRecord(BOOKMARK_ID_SYSTEM_ONE);
+   .MarkWord().UpperCase();
+   .TopView.BookmarkGoto(BOOKMARK_ID_SYSTEM_ONE);
+   .TopView.Block.Reset();
+}
+
+//
+// Mark the current line.
+//
+on editor:>MarkLine() {
+   .TopBuffer.Block.StartingRow = .TopView.Position.Row;
+   SetBlockStyle(LINE_BLOCK);
+}
+
+//
+// Deletes block and blocks contents.
+//
+on editor:>Clear() {
+   declare eb = .BlockExists();
+   if (eb != NULL) {
+      eb.Delete();
+   } else
+      IDE.ReportError("No marked block");
+}
+
+//
+// Copy currently selected block.
+//
+on editor:>Copy() {
+   declare eb = .BlockExists();
+   if (eb != NULL) {
+      CopyBlock(eb,false,true);
+   } else
+      IDE.ReportError("No marked block");
+}
+
+//
+// Cut currently selected block.
+//
+on editor:>Cut() {
+   declare eb = .BlockExists();
+
+   if (eb != NULL) {
+      RemoveBlock(eb);
+   } else
+      IDE.ReportError("No marked block");
+}
+
+//
+// Copy currently selected block, switch to single line block mode if
+// needed.
+//
+on editor:>ModalCopy(declare append) {
+   declare eb = .BlockExists();
+   declare msg;
+   if (eb == NULL) {
+      eb = ToggleBlockStyle(LINE_BLOCK);
+      msg = "Line copied to scrap";
+   } else
+      msg = "Block copied to scrap";
+
+   CopyBlock(eb,append);
+
+   IDE.StatusBar = msg;
+}
+
+//
+// Cut currently selected block, switch to single line block mode if
+// needed.
+//
+on editor:>ModalCut() {
+   // declare variables.
+   declare eb = .BlockExists();
+   declare ep = .TopView.Position;
+   declare nRestoreColumn = 0;
+   declare msg = "Block deleted to scrap";
+
+   if (eb == NULL) {
+      nRestoreColumn = ep.Column;
+      eb = ToggleBlockStyle(LINE_BLOCK);
+      msg = "Line cut to scrap";
+   }
+
+   RemoveBlock(eb);
+
+   if (nRestoreColumn)
+       ep.Move(0,nRestoreColumn);
+
+   IDE.StatusBar = msg;
+}
+
+//
+// Moves block into the buffer at the current cursor location
+//
+on editor:>MoveBlock() {
+   declare eb = .BlockExists();
+   if (eb != NULL) {
+      eb.Cut();
+      .TopView.Position.InsertScrap();
+// gmc revisit: the InsertBlock method doesn't work, so we do it with
+//     Cut/Paste .TopView.Position.InsertBlock(aBlock);
+      IDE.StatusBar = "Block moved";
+   } else {
+      IDE.ReportError("No marked block");
+   }
+}
+
+//
+// Paste current scrap buffer into current buffer.
+//
+on editor:>Paste() {
+   .TopView.Position.InsertScrap();
+   IDE.StatusBar = "Scrap inserted";
+}
+
+//
+// Selects entire contents of a file.
+//
+on editor:>SelectAll() {
+   .TopView.Position.Move(1,1);
+   .TopView.Block.Reset();
+   .MarkToEOF ();
+}
+
+//----------------------------------------------------------------------------
+// Methods for doing Block manipulations.
+//----------------------------------------------------------------------------
+
+//
+// Change all characters in the block to lowercase.
+//
+on editor:>BlockLower() {
+   .TopView.Block.LowerCase();
+}
+
+//
+// Change all characters in the block to uppercase.
+//
+on editor:>BlockUpper() {
+   .TopView.Block.UpperCase();
+}
+
+//
+// Delete the current block.
+//
+on editor:>BlockDelete() {
+   .TopView.Block.Delete();
+}
+
+//
+// Save the contents of a block in the specified file.
+//
+on editor:>BlockSave() {
+   .TopView.Block.SaveToFile();
+}
+
+//
+// Start block at current position.
+//
+on editor:>StartBlock(declare type) {
+   declare eb = .BlockExists();
+   if (eb == NULL) {
+      BeginBlock(type,TRUE);
+      return;
+   }
+
+   // If our current position is past the endpoint, we need to reset
+   // the block so we don't get leftovers on the display.
+   declare ep = .TopView.Position;
+
+   if ((ep.Row > eb.EndingRow) ||
+      ((ep.Row == eb.EndingRow) &&
+	 (ep.Column >= eb.EndingColumn))) {
+      ResetBlock(type);
+   } else {
+      BeginBlock(type);
+   }
+}
+
+//
+// End block at current position.
+//
+on editor:>StopBlock(declare type) {
+   declare eb = .BlockExists();
+   if ( eb == NULL) {
+      EndBlock();
+      return;
+   }
+
+   // If our current position is before the startpoint, we need to
+   // reset the block so we don't get leftovers on the display.
+   declare ep = .TopView.Position;
+
+   if ( (ep.Row < eb.StartingRow) ||
+      ((ep.Row == eb.StartingRow) &&
+	 (ep.Column <= eb.StartingColumn))) {
+      ResetBlock(type);
+   } else {
+      EndBlock();
+   }
+}
+
+//
+// Indent block in the specified direction.
+//
+on editor:>SlideBlock(backward) {
+   declare eb = .BlockExists();
+   if (eb != NULL) {
+      declare nIndent = .Options.BlockIndent;
+      if (backward) {
+	 nIndent = nIndent * -1;
+      }
+      eb.Indent(nIndent);
+   } else
+      IDE.StatusBar = "No block exists";
+}
+
+//
+// Toggle the visibility of a block.
+//
+on editor:>ToggleBlock() {
+   .TopView.Block.Hide = !(.TopView.Block.Hide);
+}
+
+//
+// Write out block.
+//
+on editor:>Write() {
+	declare eb = .BlockExists();
+
+	if (eb != NULL)
+		if (eb.Size != 0) {
+			eb.SaveToFile();
+			return TRUE;
+		}
+
+  return FALSE;
+}
+
+//----------------------------------------------------------------------------
+// Methods for handling buffer operations.
+//----------------------------------------------------------------------------
+
+//
+// Deletes current buffer.
+//
+on editor:>DeleteBuffer() {
+
+   if (initialized(.TopBuffer)) {
+      if (initialized(.TopView)) {
+
+	 declare curBuf = .TopBuffer;
+	 declare curView = .TopView;
+
+	 if (curView != NULL && curView.IsValid == true) {
+
+	    if (curBuf.IsModified == true) {
+	       declare theMsg = FormatString("Buffer \"%1\" has been modified, delete anyway?", curBuf.FullName);
+	       if (IDE.YesNoDialog(theMsg, "No") != "Yes")
+		  return;
+	    }
+
+	    declare nextBuffer = curBuf.NextBuffer();
+
+	    if (nextBuffer.FullName != curBuf.FullName) {
+	       curView.Attach(nextBuffer);
+
+	       if (curBuf.Destroy() == false)
+		  IDE.StatusBar = FormatString("Existing views on \"%1\" still exist", curBuf.FullName);
+	       else
+		  IDE.StatusBar = FormatString("Buffer %1 activated", nextBuffer.Describe());
+	    }
+	 }
+      }
+   }
+}
+
+//
+// Switches current view to the next buffer.
+//
+on editor:>NextBuffer() {
+   declare curView = .TopView;
+   if (curView != NULL && curView.IsValid == TRUE) {
+      declare curBuf = .TopBuffer;
+      declare nextBuffer = curBuf.NextBuffer();
+      if (nextBuffer.FullName != curBuf.FullName) {
+	 curView.Attach(nextBuffer);
+	 IDE.StatusBar = FormatString("Buffer %1 activated", nextBuffer.Describe());
+      }else{
+	 IDE.StatusBar = "No other buffers";
+      }
+   }
+}
+
+//
+// Switches current view to the previous buffer.
+//
+on editor:>PreviousBuffer() {
+   declare curView = .TopView;
+   if (curView != NULL && curView.IsValid == TRUE) {
+      declare curBuf = .TopBuffer;
+      declare priorBuffer = curBuf.PriorBuffer();
+      if (priorBuffer.FullName != curBuf.FullName) {
+	 curView.Attach(priorBuffer);
+	 IDE.StatusBar = FormatString("Buffer %1 activated", priorBuffer.Describe());
+      }
+   }
+}
+
+//
+// Read file into current buffer.
+//
+on editor:>ReadFileIntoBuffer() {
+
+   declare sFileName = new String(IDE.FileDialog("File to read:","*.*"));
+
+   if (sFileName.Text != "" && IDE.IsLegalFileName(sFileName.Text)) {
+      .TopView.Position.InsertFile(sFileName.Text);
+      IDE.StatusBar = "File Read.";
+   }
+}
+
+//
+// Open file specified from the context of the current cursor
+// location.
+//
+on editor:>OpenFileAtCursor() {
+   LoadFileAtCursor();
+}
+
+//----------------------------------------------------------------------------
+// Methods controlling Search/Replace.
+//----------------------------------------------------------------------------
+
+//
+// Set the direction to the specified value.
+// Depends upon the the value of SEARCH_FORWARD being 0.
+//
+on editor:>Search(declare direction) {
+   if (initialized(direction)) {
+      .SearchOptions.GoForward = !(direction == SEARCH_BACKWARD);
+   }
+}
+
+//
+// Invoke the search/replace dialog defaulting the direction to the
+// specified value.
+//
+// Depends upon the the value of SEARCH_FORWARD being 0.
+//
+on editor:>Replace(declare direction) {
+   if (initialized(direction)) {
+      .SearchOptions.GoForward = !(direction == SEARCH_BACKWARD);
+   }
+}
+
+//
+// Repeat the last search/replace operation.
+//
+on editor:>ReplaceAgain() {
+
+   declare ep = .TopView.Position;
+   ep.SearchOptions.Copy(.SearchOptions);
+   ep.ReplaceAgain();
+}
+
+
+//----------------------------------------------------------------------------
+// Methods controlling option settings.
+//----------------------------------------------------------------------------
+
+//
+// Toggles buffers insert mode.
+//
+on editor:>ToggleInsertMode() {
+
+   declare EditStyle es;
+   es.EditMode.BufferOptions.InsertMode = !es.EditMode.BufferOptions.InsertMode;
+   .ApplyStyle(es);
+}
+
+//
+// Toggles buffers create backup.
+//
+on editor:>ToggleCreateBackup() {
+
+   // Togggle backup option.
+   .Options.BufferOptions.CreateBackup = !.Options.BufferOptions.CreateBackup;
+
+   // Notify user.
+   if (.Options.BufferOptions.CreateBackup) {
+      IDE.StatusBar = "Backup files will be created.";
+   } else {
+      IDE.StatusBar = "Backup files will not be created.";
+   }
+}
+
+//
+// Toggles use of regualr expressions during searches.
+//
+on editor:>ToggleRegularExpression() {
+
+   // Togggle regular expressions option.
+   .SearchOptions.RegularExpression = !.SearchOptions.RegularExpression;
+
+   // Notify user.
+   if (.SearchOptions.RegularExpression) {
+      IDE.StatusBar = "Regular expressions on.";
+   } else {
+      IDE.StatusBar = "Regular expressions off.";
+   }
+}
+
+//
+// Toggles use of case during searches.
+//
+on editor:>ToggleSearchCase() {
+   // Togggle case sensitive option.
+   .SearchOptions.CaseSensitive = !.SearchOptions.CaseSensitive;
+
+   // Notify user.
+   if (.SearchOptions.CaseSensitive) {
+      IDE.StatusBar = "Case sensitivitiy on.";
+   } else {
+      IDE.StatusBar = "Case sensitivitiy off.";
+   }
+}
+
+
+//----------------------------------------------------------------------------
+// Methods controlling miscellaneous operations.
+//----------------------------------------------------------------------------
+
+//
+// Invoke printing dialog.
+//
+on editor:>Print() {
+   .TopBuffer.Print();
+}
+
+//
+// Split line at current cursor location and continue editing.
+//
+on editor:>OpenLine() {
+   declare ep = .TopView.Position;
+   ep.Save();
+   ep.InsertCharacter(10);
+   ep.Restore();
+}
+
+//
+// Get the next key for literal insertion.
+//
+
+declare kbdNextKey = NULL;
+
+on editor:>InsertLiteralKeyNext() {
+   if (kbdNextKey == NULL) {
+      kbdNextKey = new Keyboard(FALSE);
+      kbdNextKey.DefaultAssignment = "editor.InsertLiteralKeyPress();";
+   }
+
+   IDE.KeyboardManager.Push(kbdNextKey, "Editor", FALSE);
+   bPopEditorKeyboard = true;
+   IDE.StatusBar = "Inserting literal key.";
+}
+
+on editor:>InsertLiteralKeyPress() {
+
+   declare nKey = IDE.KeyboardManager.LastKeyProcessed;
+
+   .TopView.Position.InsertCharacter(nKey);
+
+   IDE.StatusBar = "Literal key inserted.";
+   IDE.KeyboardManager.Pop("Editor");
+   bPopEditorKeyboard = false;
+}
+
+//
+// Set the specified bookmark to the current location.
+//
+on editor:>SetBookmark(declare whichOne) {
+   if (.TopView.BookmarkRecord(whichOne))
+      IDE.StatusBar = FormatString("Bookmark %1 dropped.", whichOne);
+   else
+      IDE.ReportError("Unable to drop bookmark.");
+}
+
+//
+// Goto the specified bookmark location.
+//
+
+declare kbdGotoBookmark = NULL;
+
+on editor:>GotoBookmark(declare nBookmarkId) {
+
+   if (!initialized(nBookmarkId)) {
+       if (kbdGotoBookmark == NULL) {
+	   kbdGotoBookmark = new Keyboard(FALSE);
+	   kbdGotoBookmark.Assign("<0>","editor.GotoBookmarkSelect(0);");
+	   kbdGotoBookmark.Assign("<1>","editor.GotoBookmarkSelect(1);");
+	   kbdGotoBookmark.Assign("<2>","editor.GotoBookmarkSelect(2);");
+	   kbdGotoBookmark.Assign("<3>","editor.GotoBookmarkSelect(3);");
+	   kbdGotoBookmark.Assign("<4>","editor.GotoBookmarkSelect(4);");
+	   kbdGotoBookmark.Assign("<5>","editor.GotoBookmarkSelect(5);");
+	   kbdGotoBookmark.Assign("<6>","editor.GotoBookmarkSelect(6);");
+	   kbdGotoBookmark.Assign("<7>","editor.GotoBookmarkSelect(7);");
+	   kbdGotoBookmark.Assign("<8>","editor.GotoBookmarkSelect(8);");
+	   kbdGotoBookmark.Assign("<9>","editor.GotoBookmarkSelect(9);");
+
+	   kbdGotoBookmark.DefaultAssignment = "editor.GotoBookmarkSelect();";
+       }
+
+       IDE.KeyboardManager.Push(kbdGotoBookmark, "Editor", FALSE);
+       bPopEditorKeyboard = true;
+       IDE.StatusBar = "Go to Bookmark [1-10]:";
+
+   } else {
+
+       declare result = .TopView.BookmarkGoto(nBookmarkId);
+
+       if (result) {
+	   .TopView.Position.MoveRelative(0,0);
+       }  else
+	   IDE.ReportError(FormatString("Bookmark %1 doesn't exist.", nBookmarkId));
+   }
+}
+
+on editor:>GotoBookmarkSelect(declare nBookmarkId) {
+
+   if (initialized(nBookmarkId)) {
+
+       declare result = .TopView.BookmarkGoto(nBookmarkId);
+
+       if (result) {
+	   .TopView.Position.MoveRelative(0,0);
+	   IDE.StatusBar = "";
+       } else
+	   IDE.ReportError(FormatString("Bookmark %1 doesn't exist.", nBookmarkId));
+   } else
+       IDE.StatusBar = "";
+
+  IDE.KeyboardManager.Pop("Editor");
+  bPopEditorKeyboard = false;
+}
+
+//
+// Move cursor forward one tab stop.
+//
+on editor:>SmartTab() {
+   .TopView.Position.Align(1);
+}
+
+//
+// Backup cursor position one tab stop.
+//
+on editor:>BackTab() {
+   .TopView.Position.Tab(-1);
+}
+
+//
+// Move cursor forward one tab stop.
+//
+on editor:>Tab() {
+   .TopView.Position.Tab(1);
+}
+
+//
+// Save all buffers and exit IDE.
+//
+on editor:>SaveAllAndExit() {
+   IDE.FileSaveAll();
+   IDE.FileExit();
+}
+
+on editor:>Undo() {
+   .ViewUndo(.TopView);
+}
+
+on editor:>Redo() {
+   .ViewRedo(.TopView);
+}
+
+on editor:>ToggleCase() {
+   .TopView.Block.ToggleCase();
+}
+
+//----------------------------------------------------------------------------
+// Methods for extending editor operations.
+//----------------------------------------------------------------------------
+
+//
+// Determines if the blocks start is before the cursor position.
+//
+StartBlockBeforeCursor(declare editBlock, declare editPosition) {
+   // Block's row is before cursors row.
+   if (editBlock.StartingRow < editPosition.Row)
+      return TRUE;
+
+   // Block's row is after cursors row.
+   if (editBlock.StartingRow > editPosition.Row)
+      return FALSE;
+
+   // We're on the same row.  Block's column is before cursors column.
+   if (editBlock.StartingColumn < editPosition.Column)
+      return TRUE;
+
+   // Block's column is after cursors column.
+   if (editBlock.StartingColumn > editPosition.Column)
+      return FALSE;
+
+   // We're on the same row & column.
+   return FALSE;
+}
+
+//
+// Begins incremental searching of current buffer.
+//
+declare ISearchKbd = NULL;
+declare ISearchString = "";
+declare ISearchDirection = SEARCH_FORWARD;
+
+on editor:>IncrementalSearch(declare direction) {
+
+   if (ISearchKbd == NULL) {
+       ISearchKbd = new Keyboard(false);      // not transparent
+       ISearchKbd.Assign("<Space>","editor.ISearchSpace();");
+       ISearchKbd.Assign("<Backspace>","editor.ISearchBackspace();");
+       ISearchKbd.Assign("<Ctrl-g>","IDE.KeyboardManager.SendKeys(\"{VK_ESCAPE}\");");
+       ISearchKbd.Assign("<Ctrl-r>","editor.ISearchBackward();");
+       ISearchKbd.Assign("<Ctrl-s>","editor.ISearchForward();");
+       ISearchKbd.DefaultAssignment = "editor.ISearchKey();";
+   }
+
+   if (initialized(direction))
+      ISearchDirection = direction;
+   else {
+       if (.SearchOptions.GoForward)
+	  ISearchDirection = SEARCH_FORWARD;
+       else
+	  ISearchDirection = SEARCH_BACKWARD;
+   }
+
+   declare keySequence = IDE.KeyboardManager.GetKeyboard("Desktop").GetKeySequence("IDE.SearchSearchAgain();");
+   ISearchKbd.Assign(keySequence,"editor.ISearchEndAndSearchAgain();");
+
+
+   IDE.KeyboardManager.Push(ISearchKbd, "Editor", false);
+   bPopEditorKeyboard = true;
+   ISearchString = "";
+   .ISearchDisplayStatus();
+}
+
+//
+// Performs incremental searching of current buffer.
+//
+on editor:>ISearch(declare acKey) {
+
+   declare ep = .TopView.Position;
+   declare sKey = new String(acKey);
+   sKey = sKey.SubString(1, 1);
+
+   if ((IDE.KeyboardManager.KeyboardFlags & 0x03) && sKey.Character > 96)
+      sKey.Character -= 32;
+
+   ISearchString = ISearchString + sKey.Text;
+
+   declare String CS(ISearchString);
+
+   if (!.ISearchAgain())
+      ISearchString = CS.SubString(0, CS.Length - 1).Text;
+
+   .SearchOptions.SearchText = ISearchString;
+
+   .ISearchDisplayStatus();
+}
+
+
+on editor:>ISearchBackward() {
+   if (ISearchDirection == SEARCH_BACKWARD)
+      .ISearchAgain(true);
+   else
+      ISearchDirection = SEARCH_BACKWARD;
+   .ISearchDisplayStatus();
+}
+
+on editor:>ISearchDisplayStatus() {
+   if (ISearchDirection == SEARCH_FORWARD)
+      IDE.StatusBar = "I-Search (forward) for:" + ISearchString;
+   else
+      IDE.StatusBar = "I-Search (backward) for:" + ISearchString;
+}
+
+
+on editor:>ISearchForward() {
+   if (ISearchDirection == SEARCH_FORWARD)
+      .ISearchAgain(true);
+   else
+      ISearchDirection = SEARCH_FORWARD;
+   .ISearchDisplayStatus();
+}
+
+on editor:>ISearchAgain(declare bStep) {
+
+   declare ep = .TopView.Position;
+
+   if (initialized(bStep))
+      if (bStep && ISearchDirection == SEARCH_FORWARD)
+	 ep.MoveRelative(0,new String(ISearchString).Length);
+
+   declare result = ep.Search("\\c"+ISearchString, .SearchOptions.CaseSensitive, true, ISearchDirection,BRIEF_RE);
+
+   if (!result) {
+      if (bStep && ISearchDirection == SEARCH_FORWARD) {
+	 ep.MoveRelative(0,-(new String(ISearchString).Length));
+	 ep.Search("\\c"+ISearchString, .SearchOptions.CaseSensitive, true, ISearchDirection,BRIEF_RE);
+      }
+      IDE.Message(FormatString("Search string '%1' not found. ", ISearchString), ERROR, OK);
+   }
+
+   return result;
+}
+
+
+//
+// Undoes the last incremental search.
+//
+
+on editor:>ISearchBackspace() {
+
+   declare String CS(ISearchString);
+   ISearchString = CS.SubString(0, CS.Length - 1).Text;
+   .ISearchDisplayStatus();
+   IDE.EditUndo();
+}
+
+//
+// Ends incremental searching and performs search again.
+//
+on editor:>ISearchEndAndSearchAgain() {
+
+   IDE.KeyboardManager.SendKeys("{VK_ESCAPE}");
+   IDE.SearchSearchAgain();
+}
+
+//
+// Processes general keys.
+//
+
+on editor:>ISearchKey() {
+
+   declare nLastKeyProcessed = IDE.KeyboardManager.LastKeyProcessed;
+
+   if ((nLastKeyProcessed < 28) || (nLastKeyProcessed > 127)) {
+
+      declare String CS(ISearchString);
+      .TopView.Position.MoveRelative(0, CS.Length);
+      IDE.KeyboardManager.Pop("Editor");
+      bPopEditorKeyboard = false;
+
+      IDE.StatusBar = "I-Search ended";
+      return;
+   }
+
+   .ISearch(IDE.KeyboardManager.CodeToKey(nLastKeyProcessed));
+}
+
+on editor:>ISearchSpace() {
+ .ISearch("< >");
+}
+
+//----------------------------------------------------------------------------
+// Event hooks for receiving notification of options modifications.
+//----------------------------------------------------------------------------
+
+//
+// Update editing environment to use value of persistent blocks.
+//
+on editor:>OptionsChanged(editOptions) {
+
+   if (initialized(.TopView))
+       if (.TopView != NULL)
+	   if (initialized(.TopView.Block))
+	       .TopView.Block.Style = gbStyle;
+
+   pass(editOptions);
+}
+
+//----------------------------------------------------------------------------
+// Blocking support functions.
+//----------------------------------------------------------------------------
+
+// The global variable screenBlock is used to represent the marked
+// area in the currently active edit view.
+declare screenBlock;
+
+// The global variable zeroSizeBlockOkay indicates if a block which
+// marks no characters should be considered valid or not.
+declare zeroSizeBlockOkay = FALSE;
+
+// The global varibale gbToggle keeps track of what is being toggled
+// to and from and if the block should be started or ended.
+
+declare gbToggle = NULL;
+
+InitializeScreenBlock() {
+   if (!initialized(screenBlock)) {
+      screenBlock = editor.TopView.Block;
+   }
+}
+
+//
+// This event is triggered when a differant editor view is activated
+// by the user.  Occurances of this event prior to the loading of this
+// module are of no concern.  Once loaded, this event will keep the
+// global variable screenBlock in synch with the displayed view.
+//
+
+on editor:>ViewActivated(newEditView) {
+
+   if (IDE.KeyboardManager.GetKeyboard() == IDE.KeyboardManager.GetKeyboard("ClassExpert"))
+      if (initialized(.GetWindow()))
+	  gewClassExpert = .GetWindow();
+
+   // Perform existing behaviour
+   pass(newEditView);
+   // Reset block kill append.
+   screenBlock = newEditView.Block;
+}
+
+//
+// Dynamically add the method BlockExists() to the editor instance.
+// This method is called from the editor movement scripts to determine
+// weather a block's dimensions should be updated or if the cursor
+// ought to simply be moved.
+//
+on editor:>BlockExists() {
+   // Since there is no such thing as an Invalid block, we interpret a
+   // block to be invalid if it has not explicitly had its type set
+   // AND it is of size zero AND we have not explicitly been told that
+   // zero sized blocks really do count.
+   if ((screenBlock.Style != EXCLUSIVE_BLOCK) || (screenBlock.Size != 0) ||
+      zeroSizeBlockOkay) {
+      return screenBlock;
+   }
+   return NULL;
+}
+
+
+ToggleBlockStyle(newStyle) {
+
+   InitializeScreenBlock();
+
+   declare currentStyle = screenBlock.Style;
+
+   switch (newStyle) {
+      case COLUMN_BLOCK:
+      case INCLUSIVE_BLOCK:
+      case LINE_BLOCK: {
+	  if (currentStyle == newStyle) {
+	     ResetBlock();
+	     gbToggle = false;
+	     zeroSizeBlockOkay = false;
+	  } else {
+	     gbStyle = newStyle;
+	     screenBlock.Style = newStyle;
+	     gbToggle = true;
+	  }
+       break;
+      }
+
+      case EXCLUSIVE_BLOCK: {
+	  if (currentStyle == newStyle && gbToggle) {
+	     ResetBlock();
+	     gbToggle = false;
+	     zeroSizeBlockOkay = false;
+	  } else {
+	     zeroSizeBlockOkay = true;
+	     gbStyle = newStyle;
+	     screenBlock.Style = newStyle;
+	     gbToggle = true;
+	  }
+       break;
+      }
+
+   }
+
+ return screenBlock;
+}
+
+//
+// The Wordstar keymap uses these entrypoints to control it's block
+//
+ResetBlock(declare type) {
+   if (initialized(type)) {
+       declare curType = screenBlock.Style;
+       if (curType == type) {
+	   zeroSizeBlockOkay = FALSE;
+       }
+   } else {
+	zeroSizeBlockOkay = FALSE;
+   }
+
+   gbToggle = false;
+   screenBlock.Reset();
+   return screenBlock;
+}
+
+BeginBlock(declare type, declare bBlockReset) {
+
+   if (!initialized(type)) {
+      type = screenBlock.Style;
+   }
+
+   if (initialized(bBlockReset)) {
+      if (bBlockReset == true) {
+	  screenBlock.Begin();
+	  SetBlockStyle(type);
+	  return screenBlock;
+      }
+   } else {
+      screenBlock.Reset();
+      screenBlock.Begin();
+      SetBlockStyle(type);
+      return screenBlock;
+   }
+
+}
+
+EndBlock() {
+ screenBlock.End();
+ return screenBlock;
+}
+
+CopyBlock(declare editBlock, declare append, declare dontReset) {
+
+   // Now Copy the block.
+   if (editBlock != NULL) {
+      editBlock.Copy(append);
+   }
+
+   // Turn off the block.
+   if (!initialized(dontReset))
+      ResetBlock();
+   else if (!dontReset)
+      ResetBlock();
+}
+
+RemoveBlock(declare editBlock, declare bDelete) {
+
+   // Now Delete or Cut the block.
+   if (editBlock != NULL) {
+      editor.TopView.BookmarkRecord(BOOKMARK_ID_SYSTEM_ONE);
+
+      if (initialized(bDelete)) {
+	  if (bDelete == TRUE) {
+	     editBlock.Delete();
+	  } else {
+	     editBlock.Cut();
+	  }
+       } else {
+	  editBlock.Cut();
+       }
+
+       editor.TopView.BookmarkGoto(BOOKMARK_ID_SYSTEM_ONE);
+   }
+
+   // Turn off the block...
+   ResetBlock();
+}
+
+SetBlockStyle(declare blockStyle) {
+   gbStyle = blockStyle;
+   screenBlock.Style = blockStyle;
+   gbStyle = blockStyle;
+   if (blockStyle == EXCLUSIVE_BLOCK)
+       zeroSizeBlockOkay = TRUE;
+   else
+      zeroSizeBlockOkay = FALSE;
+}
+
+SetZeroBlock(newVal){
+ zeroSizeBlockOkay = newVal;
+}

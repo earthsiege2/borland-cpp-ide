@@ -8,9 +8,9 @@
 /*[]------------------------------------------------------------[]*/
 
 /*
- *      C/C++ Run Time Library - Version 6.5
+ *      C/C++ Run Time Library - Version 7.0
  *
- *      Copyright (c) 1990, 1994 by Borland International
+ *      Copyright (c) 1990, 1996 by Borland International
  *      All Rights Reserved.
  *
  */
@@ -28,6 +28,7 @@ void ios::init(streambuf* sbp)
     x_width = 0;
     x_fill = ' ';
     x_tie = 0;
+    x_delbuf = 1;
     bp = sbp;
 }
 

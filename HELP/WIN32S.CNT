@@ -1,0 +1,89 @@
+:Base win32s.HLP
+1 Microsoft Win32s
+2 Introduction to Microsoft Win32s=W32s_Introduction_to_Microsoft_Win32s
+2 New Features=_win32_New_Features
+2 Win32s System Requirements=W32s_Win32s_System_Requirements
+2 Installing Win32s=W32s_Installing_Win32s
+2 Making a Floppy-Disk Version of Win32s=W32s_Making_a_Floppy.2d.Disk_Version_of_Win32s
+2 Installing Win32s from a Floppy Disk=W32s_Installing_Win32s_from_a_Floppy_Disk
+2 Installing Win32s from CD-ROM or a Network=W32s_Installing_Win32s_from_CD.2d.ROM_or_a_Network
+2 Verifying Win32s Installation=W32s_Verifying_Win32s_Installation
+2 Disabling Win32s=W32s_Disabling_Win32s
+1 Technical Overview of Win32s
+2 Technical Overview=W32s_Technical_Overview
+2 Features=W32s_Features
+2 Architecture=W32s_Architecture
+2 Coordination Between Windows 3.1x and Win32s=W32s_Coordination_Between_Windows_3_1x_and_Win32s
+2 Handling Messages=W32s_Handling_Messages
+2 Memory=W32s_Memory
+2 Processes and Tasking=W32s_Processes_and_Tasking
+2 Win32 Dynamic-Link Libraries=W32s_Win32_Dynamic_Link_Libraries
+2 File Input and Output (I/O)=W32s_File_Input_and_Output_I_O_
+2 Floating-Point Emulation=W32s_Floating_Point_Emulation
+2 OLE Support=W32s_OLE_2_Support
+2 Printing=W32s_Printing
+1 Win32s Programming Information
+2 Win32s Programming Details=W32s_Win32s_Programming_Details
+2 Preemptive Multitasking=W32s_Preemptive_Multitasking
+2 Message Handling=W32s_Message_Handling
+2 Dynamic Data Exchange=_win32s_Dynamic_Data_Exchange
+2 Memory Management=W32s_Memory_Management
+2 C Run-time Support=W32s_C_Run_time_Support
+2 File Input and Output=W32s_File_Input_and_Output
+2 International Support=W32s_International_Support
+2 Localized Versions of Win32s=W32s_Localized_Versions_of_Win32s
+2 Code Page and Unicode Translation Support=W32s_Code_Page_and_Unicode_Translation_Support
+2 Performance Considerations=W32s_Performance_Considerations
+2 Advanced Features=W32s_Advanced_Features
+2 Mixing 16-bit and 32-bit Code=W32s_Mixing_16_bit_and_32_bit_Code
+2 Device Drivers=W32s_Device_Drivers
+1 Universal Thunk
+2 Universal Thunk=W32s_Universal_Thunk
+2 Universal Thunk Design=W32s_Universal_Thunk_Design
+2 Translation List=W32s_Translation_List
+2 Universal Thunk Implementation Notes=W32s_Universal_Thunk_Implementation_Notes
+1 Win32s Development
+2 Win32s Development with the Win32 SDK=W32s_Win32s_Development_with_the_Win32_SDK
+2 Installing Win32s Development Files=W32s_Installing_Win32s_Development_Files
+2 Porting Tool=W32s_Porting_Tool
+2 Debugging and Testing=W32s_Debugging_and_Testing
+2 Remote WinDbg=W32s_Remote_WinDbg
+2 Debugging Session Example=W32s_Debugging_Session_Example
+2 Win32s Debugging DLLs=W32s_Win32s_Debugging_DLLs
+2 Automated Testing Using Microsoft Test=W32s_Automated_Testing_Using_Microsoft_Test
+2 Application Profiling=W32s_Application_Profiling
+2 Kernel Debugger=W32s_Kernel_Debugger
+1 Win32s Installation
+2 Shipping Win32s with Win32 Applications=W32s_Shipping_Win32s_with_Win32_Applications
+2 Win32s Installation Rules=W32s_Win32s_Installation_Rules
+2 Win32s File Installation and Configuration=W32s_Win32s_File_Installation_and_Configuration
+2 Installing OLE Applications=W32s_Installing_OLE_Applications
+2 Disk Contents=W32s_Disk_Contents
+2 Where to Install=W32s_Where_to_Install
+2 TEMP Entry=W32s_TEMP_Entry
+2 SHARE.EXE=W32s_SHARE..EXE
+2 Registering OLE 2 Libraries=W32s_Registering_OLE_2_Libraries
+2 Win32s Setup Sample=W32s_Win32s_Setup_Sample
+1 Appendix A: Unsupported Features
+2 Unsupported Features=_win32_Unsupported_Features
+1 Appendix B: Win32s for Win3.1x and NT
+2 System Limits=W32s_System_Limits
+2 Window Manager (User)=W32s_Window_Manager_.28.User.29
+2 Graphics (GDI)=W32s_Graphics_.28.GDI.29
+2 System Services (Kernel)=W32s_System_Services_.28.Kernel.29
+2 Networking=W32s_Networking
+2 Multimedia=W32s_Multimedia
+1 Appendix C: Win32s API Reference
+2 Win32s API Reference=W32s_Win32s_API_Reference
+2 GetWin32sInfo=W32s_GetWin32sInfo
+2 Universal Thunk API=W32s_Universal_Thunk_API
+2 UTRegister=W32s_UTRegister
+2 UTUnRegister=W32s_UTUnRegister
+2 UT16INIT=W32s_UT16INIT
+2 UT16CBPROC=W32s_UT16CBPROC
+2 UT32CBPROC=W32s_UT32CBPROC
+2 UT16PROC=W32s_UT16PROC
+2 UT32PROC=W32s_UT32PROC
+2 Universal Thunk Auxiliary Services=W32s_Universal_Thunk_Auxiliary_Services
+2 UTLinearToSelectorOffset=W32s_UTLinearToSelectorOffset
+2 UTSelectorOffsetToLinear=W32s_UTSelectorOffsetToLinear

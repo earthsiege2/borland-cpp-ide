@@ -1,0 +1,23 @@
+;-----------------------------------------------------------------------------
+;   Project Animals
+;   Borland International
+;   Copyright © 1996. All Rights Reserved.
+;
+;   SUBSYSTEM:    Animals Module Defintion File
+;   FILE:         AnmlsApp.def
+;   AUTHOR:       
+;
+;-----------------------------------------------------------------------------
+
+NAME 'Animals'
+
+DESCRIPTION 'Animals Application - Copyright © 1996. All Rights Reserved.'
+EXETYPE     WINDOWS
+CODE        PRELOAD MOVEABLE DISCARDABLE
+DATA        PRELOAD MOVEABLE
+
+; Note: The following are recommended settings for the default
+;       AppExpert application when compiled as a 16-bit target.
+;
+; HEAPSIZE    4096
+; STACKSIZE   8192

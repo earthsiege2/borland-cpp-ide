@@ -10,9 +10,9 @@
  *-----------------------------------------------------------------------*/
 
 /*
- *      C/C++ Run Time Library - Version 1.5
+ *      C/C++ Run Time Library - Version 2.0
  *
- *      Copyright (c) 1987, 1994 by Borland International
+ *      Copyright (c) 1987, 1996 by Borland International
  *      All Rights Reserved.
  *
  */
@@ -93,6 +93,12 @@ CheckOpenType (register const char *type, unsigned *oflagsP, unsigned *modeP)
         mode   = S_IWRITE;
         flags  = _F_WRIT;
     }
+#if 0
+    else if (c == 'c')  /* New DOS 'commit' attribute */
+    {
+        // ...
+    }
+#endif
     else
         return 0;
 
@@ -119,6 +125,9 @@ CheckOpenType (register const char *type, unsigned *oflagsP, unsigned *modeP)
     }
     else
     {
+        if ((c != '+') && (c != '\0'))
+            return 0;   /* bad character in mode string */
+
         if ((oflags |= (_FMODE & (O_TEXT | O_BINARY))) & O_BINARY)
             flags |= _F_BIN;
     }

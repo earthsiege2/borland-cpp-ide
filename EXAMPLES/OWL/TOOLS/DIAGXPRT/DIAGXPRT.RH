@@ -1,0 +1,85 @@
+//----------------------------------------------------------------------------
+// ObjectWindows - (C) Copyright 1991, 1993 by Borland International
+//
+//----------------------------------------------------------------------------
+#include    <owl\window.rh>
+#include    <owl\edit.rh>
+#include    <owl\editfile.rh>
+#include    <owl\editsear.rh>
+
+// Strings
+//
+#define IDS_TITLE           100
+#define IDS_FONT0_NAME      102
+#define IDS_FONT0_SIZE      103
+#define IDS_FONT1_NAME      104
+#define IDS_FONT1_SIZE      105
+#define IDS_MORE            200
+#define IDS_LESS            201
+#define IDS_DECORATED       202
+#define IDS_START           203
+#define IDS_STOP            204
+#define IDS_ERR_DEL_TXT     300
+#define IDS_ERR_DEL_CAP     301
+#define IDS_ERR_ADD_TXT     302
+#define IDS_ERR_ADD_CAP     303
+
+// Icons
+//
+#define IC_OWLDIAG          100
+
+// Bitmaps IDs
+//
+#define IDB_HELP            105
+#define IDB_MEM             104
+#define IDB_PASTE           103
+#define IDB_COPY            102
+#define IDB_STOP            101
+#define IDB_START           100
+
+// SpeedBar/StatusBar IDs
+//
+#define CM_SETUP            25000
+#define CM_START            25001
+#define CM_STOP             25002
+#define CM_TOOLBAR          25004
+#define CM_TINY             25005
+#define CM_STATUSBAR        25006
+#define CM_MEM              25007
+#define CM_HELP             25008
+
+// System menu IDs
+//
+#define SC_TOGGLE_SIZE  (SC_SIZE+0x200)
+
+// Dialogs
+//
+#define IDD_OPTIONS         1000
+#define IDD_EDT_CUSTOM      1003
+#define IDD_DEL_CUSTOM      1002
+#define IDD_ADD_CUSTOM      1001
+
+// Controls
+//
+#define IDC_DESCR           100
+#define IDC_CLASS           101
+#define IDC_LIST            102
+#define ID_BOX              103
+#define IDC_MORE            104
+#define IDC_ADD             105
+#define IDC_DEL             106
+#define IDC_EDT             107
+#define IDC_USR_SCROLL      108
+#define IDC_SYS_SCROLL      109
+#define ID_SYS_ENABLE       110
+#define ID_USR_ENABLE       111
+#define IDC_COPY_CLIP       113
+
+#define MAX_SYS_DIAGS       10
+#define ID_SYS_CHECK        4000+0*4
+#define ID_USR_CHECK        6000+0+MAX_SYS_DIAGS*4
+
+// User resources
+//
+#define IDR_SYS_ITEMS       100
+

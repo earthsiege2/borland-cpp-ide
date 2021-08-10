@@ -1,54 +1,80 @@
 //----------------------------------------------------------------------------
 // ObjectWindows
-// (C) Copyright 1993, 1994 by Borland International, All Rights Reserved
+// Copyright (c) 1993, 1996 by Borland International, All Rights Reserved
 //
-//   Implementation of class TVbxControl.
+//$Revision:   10.6  $
+//
+// Implementation of classes TVbxControl and TBIVbxLibrary.
 //----------------------------------------------------------------------------
-#include <owl/owlpch.h>
-#include <owl/vbxctl.h>
+#include <owl/pch.h>
+#if !defined(OWL_VBXCTL_H)
+# include <owl/vbxctl.h>
+#endif
 
 //----------------------------------------------------------------------------
 
-const char BIVbxDllName[] = "bivbx11.dll";
 const char BIVbxClassPrefix[] = "THUNDER";
 
-
+//
+//
+//
 TBIVbxLibrary::TBIVbxLibrary()
-:
-#if defined(BI_PLAT_WIN32)
-  TModule(BIVbxDllName, false)
-#else
-  TModule(BIVbxDllName, true)
-#endif
 {
+  // Initialize the VBX support
+  //
   if (!::VBXInit(_hInstance, BIVbxClassPrefix))
-    THROW(TXVbxLibrary());
+    TXVbxLibrary::Raise();
 }
 
+//
+//
+//
 TBIVbxLibrary::~TBIVbxLibrary()
 {
   ::VBXTerm();
 }
 
 //----------------------------------------------------------------------------
+
 //
-// Exception class
+// Exception class for VBX errors other than initial DLL load
 //
 
-TBIVbxLibrary::TXVbxLibrary::TXVbxLibrary() : TXOwl(IDS_VBXLIBRARYFAIL)
+//
+//
+//
+TXVbxLibrary::TXVbxLibrary()
+:
+  TXOwl(IDS_VBXLIBRARYFAIL)
 {
 }
 
-TXOwl*
-TBIVbxLibrary::TXVbxLibrary::Clone()
+#if defined(BI_NO_COVAR_RET)
+TXBase*
+#else
+TXVbxLibrary*
+#endif
+TXVbxLibrary::Clone()
 {
   return new TXVbxLibrary(*this);
 }
 
+//
+//
+//
 void
-TBIVbxLibrary::TXVbxLibrary::Throw()
+TXVbxLibrary::Throw()
 {
   THROW( *this );
+}
+
+//
+//
+//
+void
+TXVbxLibrary::Raise()
+{
+  TXVbxLibrary().Throw();
 }
 
 //----------------------------------------------------------------------------
@@ -65,7 +91,7 @@ END_RESPONSE_TABLE;
 IMPLEMENT_CASTABLE(TVbxControl);
 
 //
-// constructor for a TVbxControl object
+// Constructor for a TVbxControl object
 //
 TVbxControl::TVbxControl(TWindow*        parent,
                          int             id,
@@ -90,25 +116,15 @@ TVbxControl::TVbxControl(TWindow*        parent,
   Attr.Style = 0;
 }
 
-void
-TVbxControl::SetupWindow()
-{
-  TControl::SetupWindow();
-
-  // If we haven't bound to HCtl yet, do it here
-  //
-  if (!HCtl)
-    HCtl = ::VBXGetHctl(HWindow);
-}
-
 //
-// constructor for a TVbxControl to be associated with a MS-Windows
+// Constructor for a TVbxControl to be associated with a MS-Windows
 // interface element created by MS-Windows from a resource definition
 //
 TVbxControl::TVbxControl(TWindow*   parent,
                          int        resourceId,
                          TModule*   module)
-  : TControl(parent, resourceId, module)
+:
+  TControl(parent, resourceId, module)
 {
   VbxName = 0;
   VbxClass = 0;
@@ -117,13 +133,34 @@ TVbxControl::TVbxControl(TWindow*   parent,
   InitData = 0;
 }
 
+//
+//
+//
 TVbxControl::~TVbxControl()
 {
-  delete VbxName;
-  delete VbxClass;
+  delete[] VbxName;
+  delete[] VbxClass;
 }
 
-LRESULT TVbxControl::EvDefaultProcessing(WPARAM, LPARAM)
+//
+//
+//
+void
+TVbxControl::SetupWindow()
+{
+  TControl::SetupWindow();
+
+  // If we haven't bound to HCtl yet, do it here
+  //
+  if (!HCtl)
+    HCtl = ::VBXGetHctl(GetHandle());
+}
+
+//
+//
+//
+TResult
+TVbxControl::EvDefaultProcessing(TParam1, TParam2)
 {
   return DefaultProcessing();
 }
@@ -148,12 +185,12 @@ TVbxControl::PerformCreate(int menuOrId)
   if (InitData)
     formFile = ::VBXCreateFormFile(InitLen,InitData);
 
-  HCtl = ::VBXCreate(Parent->HWindow, menuOrId, VbxName, VbxClass, Title,
+  HCtl = ::VBXCreate(Parent->GetHandle(), menuOrId, VbxName, VbxClass, Title,
                      Attr.Style, Attr.X, Attr.Y, Attr.W, Attr.H, formFile);
   if (formFile)
     ::VBXDeleteFormFile(formFile);
 
-  HWindow = ::VBXGetHwnd(HCtl);
+  SetHandle(::VBXGetHwnd(HCtl));
 }
 
 //
@@ -168,7 +205,9 @@ TVbxControl::GetProp(int prop, string& value, int /*index*/)
     return false;
 
   char buf[256];
-  if (!::VBXGetCStringBuf(HSZ(strHandle), buf, sizeof(buf)))
+  *buf = 0xff;
+  if (!::VBXGetCStringBuf(HSZ(strHandle), buf, sizeof(buf))
+   && *buf == char(0xff))
     return false;
   value = buf;
   ::VBXDestroyCString(HSZ(strHandle));
@@ -250,39 +289,40 @@ VbxEqualOperator(TGenericTableEntry __RTFAR& entry,
 // Handle a VBX fire event message by forwarding to control and/or
 // sub-dispatching to specific event handlers.
 //
-LRESULT
-TVbxEventHandler::EvVbxDispatch(WPARAM wp, LPARAM lp)
+TResult
+TVbxEventHandler::EvVbxDispatch(TParam1 p1, TParam2 p2)
 {
-  VBXEVENT far* e = (VBXEVENT far*)lp;
+  VBXEVENT far* e = (VBXEVENT far*)p2;
   TVbxEventInfo eventInfo(e->EventName, WM_VBXBASE + e->EventIndex,
                           ::GetDlgCtrlID(e->Window));
 
-  //
   // If the control is not us, then send the fire event message to it to give
   // it first crack.
   //
   TWindow* ctl = GetWindowPtr(e->Window);
   if (ctl &&
     STATIC_CAST(TEventHandler*, ctl) != STATIC_CAST(TEventHandler*, this))
-    if (ctl->HandleMessage(WM_VBXFIREEVENT, wp, lp))
+    if (ctl->HandleMessage(WM_VBXFIREEVENT, p1, p2))
       return 1;
 
-  //
   // See if we have a handler for this event
   //
   if (Find(eventInfo) || Find(eventInfo, VbxEqualOperator))
-    return Dispatch(eventInfo, wp, lp);
+    return Dispatch(eventInfo, p1, p2);
   return 0;
 }
 
-LRESULT
-TVbxEventHandler::EvVbxInitForm(WPARAM wp, LPARAM lp)
+//
+//
+//
+TResult
+TVbxEventHandler::EvVbxInitForm(TParam1 p1, TParam2 p2)
 {
-  HWND hWnd = HWND(wp);
+  HWND hWnd = HWND(p1);
 #if defined(BI_PLAT_WIN32)
-  HINSTANCE hInst = (HINSTANCE)::GetWindowLong(hWnd, GWL_HINSTANCE);
+  HINSTANCE hInst = HINSTANCE(::GetWindowLong(hWnd, GWL_HINSTANCE));
 #else
-  HINSTANCE hInst = (HINSTANCE)::GetWindowWord(hWnd, GWW_HINSTANCE);
+  HINSTANCE hInst = HINSTANCE(::GetWindowWord(hWnd, GWW_HINSTANCE));
 #endif
-  return ::VBXInitDialog(hWnd, hInst, (char far*)lp) ? 1 : -1;
+  return ::VBXInitDialog(hWnd, hInst, (char far*)p2) ? 1 : -1;
 }

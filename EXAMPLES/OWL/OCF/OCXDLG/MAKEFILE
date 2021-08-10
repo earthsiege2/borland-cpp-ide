@@ -1,0 +1,9 @@
+MODEL = f
+CFLAGS=-D_OCFPCH
+
+EXE=ocxdlg
+
+RESEXE = ocxdlgap.res
+DEFEXE = ocxdlgap.def
+OBJEXE = ocxdlgap.obj ocxdlg.obj
+!include $(BCEXAMPLEDIR)\owlocfmk.gen

@@ -1,31 +1,46 @@
 //----------------------------------------------------------------------------
 // ObjectWindows
-// (C) Copyright 1993, 1994 by Borland International, All Rights Reserved
+// Copyright (c) 1993, 1996 by Borland International, All Rights Reserved
+//
+//$Revision:   10.2  $
 //
 //----------------------------------------------------------------------------
 #pragma hdrignore SECTION
-#include <owl/owlpch.h>
-#include <owl/validate.h>
-#include <owl/applicat.h>
-#include <owl/appdict.h>
-#include <owl/framewin.h>
+#include <owl/pch.h>
+#if !defined(OWL_VALIDATE_H)
+# include <owl/validate.h>
+#endif
+#if !defined(OWL_APPLICAT_H)
+# include <owl/applicat.h>
+#endif
+#if !defined(OWL_APPDICT_H)
+# include <owl/appdict.h>
+#endif
+#if !defined(OWL_FRAMEWIN_H)
+# include <owl/framewin.h>
+#endif
 
 #if !defined(SECTION) || SECTION == 1
 
 //
 // TLookupValidator
 //
-
 TLookupValidator::TLookupValidator()
 {
 }
 
+//
+//
+//
 bool
 TLookupValidator::IsValid(const char far* str)
 {
   return Lookup(str);
 }
 
+//
+//
+//
 bool
 TLookupValidator::Lookup(const char far* /*str*/)
 {
@@ -43,97 +58,173 @@ TSortedStringArray::TSortedStringArray(int upper, int lower, int delta)
 {
 }
 
-int TSortedStringArray::LowerBound() const
+//
+//
+//
+int
+TSortedStringArray::LowerBound() const
 {
   return Data.LowerBound();
 }
 
-int TSortedStringArray::UpperBound() const
+//
+//
+//
+int
+TSortedStringArray::UpperBound() const
 {
   return Data.UpperBound();
 }
 
-unsigned TSortedStringArray::ArraySize() const
+//
+//
+//
+unsigned
+TSortedStringArray::ArraySize() const
 {
   return Data.ArraySize();
 }
 
-int TSortedStringArray::IsFull() const
+//
+//
+//
+int
+TSortedStringArray::IsFull() const
 {
   return Data.IsFull();
 }
 
-int TSortedStringArray::IsEmpty() const
+//
+//
+//
+int
+TSortedStringArray::IsEmpty() const
 {
   return Data.IsEmpty();
 }
 
-unsigned TSortedStringArray::GetItemsInContainer() const
+//
+//
+//
+unsigned
+TSortedStringArray::GetItemsInContainer() const
 {
   return Data.GetItemsInContainer();
 }
 
-int TSortedStringArray::Add(const string& t)
+//
+//
+//
+int
+TSortedStringArray::Add(const string& t)
 {
   return Data.Add(t);
 }
 
-int TSortedStringArray::Detach(const string& t)
+//
+//
+//
+int
+TSortedStringArray::Detach(const string& t)
 {
   return Data.Detach(t);
 }
 
-int TSortedStringArray::Detach(int loc)
+//
+//
+//
+int
+TSortedStringArray::Detach(int loc)
 {
   return Data.Detach(loc);
 }
 
-int TSortedStringArray::Destroy(const string& t)
+//
+//
+//
+int
+TSortedStringArray::Destroy(const string& t)
 {
   return Detach(t);
 }
 
-int TSortedStringArray::Destroy(int loc)
+//
+//
+//
+int
+TSortedStringArray::Destroy(int loc)
 {
   return Detach(loc);
 }
 
-int TSortedStringArray::HasMember(const string& t) const
+//
+//
+//
+int
+TSortedStringArray::HasMember(const string& t) const
 {
   return Data.HasMember(t);
 }
 
-int TSortedStringArray::Find(const string& t) const
+//
+//
+//
+int
+TSortedStringArray::Find(const string& t) const
 {
   return Data.Find(t);
 }
 
-string& TSortedStringArray::operator [](int loc)
+//
+//
+//
+string&
+TSortedStringArray::operator [](int loc)
 {
   return Data[loc];
 }
 
-string& TSortedStringArray::operator [](int loc) const
+//
+//
+//
+string&
+TSortedStringArray::operator [](int loc) const
 {
   return Data[loc];
 }
 
-void TSortedStringArray::ForEach(IterFunc iter, void* args)
+//
+//
+//
+void
+TSortedStringArray::ForEach(IterFunc iter, void* args)
 {
   Data.ForEach(iter, args);
 }
 
-string* TSortedStringArray::FirstThat(CondFunc cond, void* args) const
+//
+//
+//
+string*
+TSortedStringArray::FirstThat(CondFunc cond, void* args) const
 {
   return Data.FirstThat(cond, args);
 }
 
-string* TSortedStringArray::LastThat(CondFunc cond, void* args) const
+//
+//
+//
+string*
+TSortedStringArray::LastThat(CondFunc cond, void* args) const
 {
   return Data.LastThat(cond, args);
 }
 
-void TSortedStringArray::Flush()
+//
+//
+//
+void
+TSortedStringArray::Flush()
 {
   Data.Flush();
 }
@@ -144,6 +235,9 @@ void TSortedStringArray::Flush()
 // TStringLookupValidator
 //
 
+//
+//
+//
 TStringLookupValidator::TStringLookupValidator(TSortedStringArray* strings)
 :
   TLookupValidator()
@@ -151,23 +245,29 @@ TStringLookupValidator::TStringLookupValidator(TSortedStringArray* strings)
   Strings = strings ? strings : new TSortedStringArray(0, 0, 0);
 }
 
+//
+//
+//
 TStringLookupValidator::~TStringLookupValidator()
 {
   delete Strings;
 }
 
+//
+//
+//
 void
-TStringLookupValidator::Error()
+TStringLookupValidator::Error(TWindow* owner)
 {
-  TApplication* app = GetApplicationObject();
+  PRECONDITION(owner);
+  TApplication* app = owner->GetApplication();
   const char* msg = app->LoadString(IDS_VALNOTINLIST).c_str();
-  TWindow* w = GetWindowPtr(app->GetMainWindow()->GetLastActivePopup());
-  if (w)
-    w->MessageBox(msg, app->GetName(), MB_ICONEXCLAMATION|MB_OK);
-  else
-    ::MessageBox(0, msg, app->GetName(), MB_ICONEXCLAMATION|MB_OK|MB_TASKMODAL);
+  owner->MessageBox(msg, app->GetName(), MB_ICONEXCLAMATION|MB_OK);
 }
 
+//
+//
+//
 bool
 TStringLookupValidator::Lookup(const char far* str)
 {
@@ -176,6 +276,9 @@ TStringLookupValidator::Lookup(const char far* str)
   return false;
 }
 
+//
+//
+//
 void
 TStringLookupValidator::NewStringList(TSortedStringArray* strings)
 {
@@ -183,11 +286,38 @@ TStringLookupValidator::NewStringList(TSortedStringArray* strings)
   Strings = strings;
 }
 
+//
+// Adjust the 'value' of the text, given a cursor position & an amount
+// Return the actual amount adjusted.
+//
+int
+TStringLookupValidator::Adjust(string& text, uint& /*begPos*/, uint& /*endPos*/, int amount)
+{
+  if (!Strings)
+    return 0;
+
+  int count = Strings->GetItemsInContainer();
+  int index = Strings->Find(text);
+  int newIndex = index + amount;
+  if (newIndex < 0)
+    newIndex = 0;
+  else if (newIndex >= count)
+    newIndex = count-1;
+
+  text = (*Strings)[newIndex];
+  return newIndex - index;
+}
+
 #endif
 
 #if !defined(SECTION) || SECTION == 2
 IMPLEMENT_STREAMABLE1(TLookupValidator, TValidator);
 
+#if !defined(BI_NO_OBJ_STREAMING)
+
+//
+//
+//
 void*
 TLookupValidator::Streamer::Read(ipstream& is, uint32 /*version*/) const
 {
@@ -195,6 +325,9 @@ TLookupValidator::Streamer::Read(ipstream& is, uint32 /*version*/) const
   return GetObject();
 }
 
+//
+//
+//
 void
 TLookupValidator::Streamer::Write(opstream& os) const
 {
@@ -203,6 +336,9 @@ TLookupValidator::Streamer::Write(opstream& os) const
 
 IMPLEMENT_STREAMABLE1(TStringLookupValidator, TLookupValidator);
 
+//
+//
+//
 void*
 TStringLookupValidator::Streamer::Read(ipstream& is, uint32 /*version*/) const
 {
@@ -218,6 +354,9 @@ TStringLookupValidator::Streamer::Read(ipstream& is, uint32 /*version*/) const
   return GetObject();
 }
 
+//
+//
+//
 void
 TStringLookupValidator::Streamer::Write(opstream& os) const
 {
@@ -227,5 +366,7 @@ TStringLookupValidator::Streamer::Write(opstream& os) const
   for (unsigned i = 0; i < count; i++)
     os << (*GetObject()->Strings)[i];
 }
+
+#endif  // if !defined(BI_NO_OBJ_STREAMING)
 
 #endif

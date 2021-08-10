@@ -7,9 +7,9 @@
  *--------------------------------------------------------------------------*/
 
 /*
- *      C/C++ Run Time Library - Version 1.5
+ *      C/C++ Run Time Library - Version 2.0
  *
- *      Copyright (c) 1991, 1994 by Borland International
+ *      Copyright (c) 1991, 1996 by Borland International
  *      All Rights Reserved.
  *
  */
@@ -27,6 +27,8 @@
 
 extern unsigned char _cFlag;    /* Flag presence of un-gotten char */
 extern unsigned char _cChar;    /* The ungotten char               */
+
+int _cextend = -1;                /* Used for the scan code of an extended key */
 
 
 /*----------------------------------------------------------------------
@@ -48,7 +50,7 @@ struct kbd
     short shift;              /* BIOS keycode - Shift- */
     short ctrl;               /* BIOS keycode - Ctrl- */
     short alt;                /* BIOS keycode - Alt- */
-} kbdtab [] = 
+} kbdtab [] =
 {
 /*    Virtual key   Normal      Shift       Control     Alt */
 
@@ -170,7 +172,6 @@ int _RTLENTRY _EXPFUNC getch(void)
     DWORD kbdmode;
     struct kbd *k;
     int keycode, state, c;
-    static int extend = -1;
 
     /* If a previous ungetch() call has been performed, return
      * the key that it saved.
@@ -184,10 +185,10 @@ int _RTLENTRY _EXPFUNC getch(void)
     /* If a previous call returned an extended code, return
      * the scan code for the key.
      */
-    if (extend != -1)
+    if (_cextend != -1)
     {
-        c = extend;
-        extend = -1;                /* Reset the flag */
+        c = _cextend;
+        _cextend = -1;                /* Reset the flag */
         return c;                   /* Return the extended scancode */
     }
 
@@ -211,7 +212,7 @@ int _RTLENTRY _EXPFUNC getch(void)
             c = -1;
             break;
         }
-        else if (inp.Event.KeyEvent.bKeyDown)
+        else if ((inp.EventType==KEY_EVENT) && inp.Event.KeyEvent.bKeyDown)
         {
             keycode = inp.Event.KeyEvent.wVirtualKeyCode;
             state   = inp.Event.KeyEvent.dwControlKeyState;
@@ -253,7 +254,7 @@ int _RTLENTRY _EXPFUNC getch(void)
              */
             if (ISEXT(c))
             {
-                extend = EXTVAL(c);
+                _cextend = EXTVAL(c);
                 c = 0;
             }
             break;
@@ -290,7 +291,7 @@ Return value    ungetch returns the character c if it is successful.
 
 int _RTLENTRY _EXPFUNC ungetch(int c)
 {
-    if (_cFlag) 
+    if (_cFlag)
         return(EOF);
 
     _cFlag = 1;

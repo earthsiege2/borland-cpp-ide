@@ -8,9 +8,13 @@ produced by Borland Resource Workshop
 
 *****************************************************************************/
 
+#include <owl/owlapp.rc>
+#include <owl/except.rc>
+#include <owl/window.rh>
+
 #include "meteor.rh"
 
-ICON_1 ICON 
+ICON_1 ICON
 {
  '00 00 01 00 01 00 20 20 10 00 00 00 00 00 E8 02'
  '00 00 16 00 00 00 28 00 00 00 20 00 00 00 40 00'
@@ -62,7 +66,7 @@ ICON_1 ICON
  '00 00 00 00 00 00 00 00 00 00 00 00 00 00'
 }
 
-MENU_1 MENU 
+MENU_1 MENU
 {
  POPUP "&Game"
  {
@@ -78,7 +82,7 @@ MENU_1 MENU
 
 
 ABOUT_BOX DIALOG 49, 45, 115, 66
-STYLE DS_MODALFRAME | WS_POPUP | WS_VISIBLE | WS_CAPTION
+STYLE DS_3DLOOK | DS_MODALFRAME | WS_POPUP | WS_VISIBLE | WS_CAPTION
 CAPTION "Turbo Meteors"
 FONT 8, "MS Sans Serif"
 {

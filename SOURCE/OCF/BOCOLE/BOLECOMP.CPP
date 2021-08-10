@@ -1,18 +1,15 @@
+//----------------------------------------------------------------------------
+// ObjectComponents
+// Copyright (c) 1994, 1996 by Borland International, All Rights Reserved
 //
-//**************************************************************************
-// 
-// BOleComp.cpp -- Provides a default IUnknownMain implementation for all
-//                 Bolero components (helper objects and some private
-//                 objects.
+// $Revision:   2.1  $
 //
-//                 IUnknownMain is a way to create aggregatable components
-//                 which support IUnknown-based interfaces via multiple-
-//                 inheritance. 
+//  Provides a default IUnknownMain implementation for all Bolero components 
+//  (helper objects and some private objects.
 //
-// Copyright (c) 1993,94 by Borland International, Inc. All rights reserved
-//
-//**************************************************************************
-
+//    IUnknownMain is a way to create aggregatable components which support 
+//    IUnknown-based interfaces via multiple-inheritance. 
+//----------------------------------------------------------------------------
 #include "BOleComp.h"
 
 ULONG _IFUNC BOleComponent::AddRefMain()
@@ -44,5 +41,4 @@ BOleComponent::BOleComponent(BOleClassManager *pF, IBUnknownMain *pO)
 BOleComponent::~BOleComponent()
 {
 }
-
 

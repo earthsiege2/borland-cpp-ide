@@ -59,7 +59,9 @@ OBJS =               \
         strspn.obj   \
         strstr.obj   \
         strtok.obj   \
-        _stpcpy.obj
+        _stpcpy.obj  \
+        wcslen.obj   \
+        wcscpy.obj
 
 !if $d(DLL)
     IMPOBJS =            \

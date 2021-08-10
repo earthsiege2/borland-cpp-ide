@@ -1,32 +1,31 @@
 ##--BEGIN-- TRUE
-##QUERY_FILENAME_H [[HFileName]]
-##--BEGIN-- StripDiacritic(HFileName) [[Filename]]
-#if !defined(__[[Filename]]_h)              // Sentry, use file only if it's not already included.
-#define __[[Filename]]_h
-##--END-- StripDiacritic(HFileName) [[Filename]]
-
+//----------------------------------------------------------------------------
 ##@QUERY_PRJ_NAME [[Project]]
-/*  Project [[Project]]
+//  Project [[Project]]
 ##@QUERY_PRJ_COMPANY [[CompanyName]] 2
 ##@QUERY_PRJ_COPYRIGHT [[Copyright]] 2
 ##\\Copyright Copyright 2
-    [[CompanyName]]
-    [[Copyright]]
-
+//  [[CompanyName]]
+//  [[Copyright]]
+//
 ##@QUERY_TARGET_NAME [[Target]]
-    SUBSYSTEM:    [[Target]] Application
+//  SUBSYSTEM:    [[Target]] Application
 ##QUERY_FILE_H [[Filename]]
-    FILE:         [[Filename]]
+//  FILE:         [[Filename]]
 ##@QUERY_PRJ_USER [[Author]]
-    AUTHOR:       [[Author]]
-
-
-    OVERVIEW
-    ========
+//  AUTHOR:       [[Author]]
+//
+//  OVERVIEW
+//  ~~~~~~~~
 ##QUERY_CLASS_NAME [[ClassName]]
 ##QUERY_BASE_NAME [[BaseName]]
-    Class definition for [[ClassName]] ([[BaseName]]).      
-*/
-
+//  Class definition for [[ClassName]] ([[BaseName]]).
+//
+//----------------------------------------------------------------------------
+##QUERY_FILENAME_H [[HFileName]]
+##--BEGIN-- StripDiacritic(HFileName) [[Filename]]
+#if !defined([[Filename]]_h)              // Sentry, use file only if it's not already included.
+#define [[Filename]]_h
+##--END-- StripDiacritic(HFileName) [[Filename]]
 
 ##--END-- TRUE

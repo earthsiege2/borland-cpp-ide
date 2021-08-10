@@ -2,7 +2,7 @@
 // ObjectWindows - (C) Copyright 1991, 1994 by Borland International
 //   Ole tutorial application -- owlole1.cpp
 //----------------------------------------------------------------------------
-#include <owl/owlpch.h>
+#include <owl/pch.h>
 #include <owl/applicat.h>
 #include <owl/decframe.h>
 #include <owl/dc.h>
@@ -443,7 +443,7 @@ class TScribbleApp : public TApplication {
   DECLARE_RESPONSE_TABLE(TScribbleApp);
 };
 
-DEFINE_RESPONSE_TABLE(TScribbleApp)
+DEFINE_RESPONSE_TABLE1(TScribbleApp, TApplication)
   EV_COMMAND(CM_FILENEW, CmFileNew),
   EV_COMMAND(CM_FILEOPEN, CmFileOpen),
 END_RESPONSE_TABLE;
@@ -482,9 +482,12 @@ TScribbleApp::InitMainWindow()
   frame->Insert(*sb, TDecoratedFrame::Bottom);
   frame->Insert(*cb, TDecoratedFrame::Top);
 
-  // Set the main window and its menu
+  // Set the menu & icon
+  frame->SetMenuDescr(TMenuDescr(IDM_SCRIBBLE));
+  frame->SetIcon(this, IDI_TUTORIAL);
+
+  // Set the main window
   SetMainWindow(frame);
-  GetMainWindow()->SetMenuDescr(TMenuDescr(IDM_SCRIBBLE));
 }
 
 //

@@ -100,10 +100,11 @@ OBJS =               \
 	isteatwh.obj \
 	istebuf.obj  \
 	istechp.obj  \
-        istedbl.obj  \
-        isteflt.obj  \
+	istebor.obj  \
+	istedbl.obj  \
+	isteflt.obj  \
 	isteint.obj  \
-        isteldbl.obj \
+	isteldbl.obj \
 	istelng.obj  \
 	istepchr.obj \
 	isteschr.obj \
@@ -151,6 +152,7 @@ OBJS =               \
 	ostfloat.obj \
 	ostflush.obj \
 	ostibuf.obj  \
+  ostibool.obj \
 	ostint.obj   \
 	ostischr.obj \
 	ostmanip.obj \

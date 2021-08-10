@@ -1,29 +1,25 @@
-/*------------------------------------------------------------------------*/
-/*                                                                        */
-/*  HEAPSEL.H                                                             */
-/*                                                                        */
-/*  Copyright (c) 1993, 1994 Borland International                        */
-/*  All Rights Reserved                                                   */
-/*                                                                        */
-/*------------------------------------------------------------------------*/
+//----------------------------------------------------------------------------
+// Borland Class Library
+// Copyright (c) 1993, 1996 by Borland International, All Rights Reserved
+//
+//$Revision:   5.3  $
+//
+//----------------------------------------------------------------------------
+#if !defined(CLASSLIB_HEAPSEL_H)
+#define CLASSLIB_HEAPSEL_H
 
-#if !defined( __HEAPSEL_H )
-#define __HEAPSEL_H
-
-#if !defined( __DOS_H )
-#include <dos.h>
+#if !defined(CLASSLIB_DEFS_H)
+# include <classlib/defs.h>
 #endif
-
-#if !defined( __STDLIB_H )
-#include <stdlib.h>
+#if !defined(__DOS_H) && !defined(_INC_DOS)
+# include <dos.h>
 #endif
-
-#if !defined( CLASSLIB_DEFS_H )
-#include <classlib/defs.h>
+#if !defined(__STDLIB_H) && !defined(_INC_STDLIB)
+# include <stdlib.h>
 #endif
 
 #if defined( BI_CLASSLIB_NO_po )
-#pragma option -po-
+# pragma option -po-
 #endif
 
 /*------------------------------------------------------------------------*/
@@ -62,24 +58,26 @@ class _BIDSFARCLASS _RTTI THeapSelector
 
 public:
 
-    THeapSelector() {};
+    THeapSelector() {}
 
     friend void _BIDSFARDATA *operator new( size_t sz,
                                         const THeapSelector _BIDSFARDATA &heap );
-    friend void _BIDSFARDATA *operator new [] ( size_t sz,
-                                        const THeapSelector _BIDSFARDATA &heap );
     void operator delete( void _BIDSFARDATA *ptr );
-    void operator delete [] ( void _BIDSFARDATA *ptr );
+#if !defined(BI_NO_ARRAYNEW)
+    friend void _BIDSFARDATA *operator new[] ( size_t sz,
+                                        const THeapSelector _BIDSFARDATA &heap );
+    void operator delete[] ( void _BIDSFARDATA *ptr );
+#endif
 
 // protected:   // workaround
 
-    THeapSelector( const THeapSelector _BIDSFARDATA & ) {};
+    THeapSelector( const THeapSelector _BIDSFARDATA & ) {}
     THeapSelector _BIDSFARDATA & operator = ( const THeapSelector _BIDSFARDATA & )
-        { return *this; };
+        { return *this; }
 
 private:
 
-#if !defined( __FLAT__ )
+#if !defined(BI_PTR_O_32)
 
     void _BIDSFARDATA *Allocate( size_t ) const;
     static void Free( void _BIDSFARDATA * );
@@ -97,7 +95,7 @@ private:
 
 };
 
-#if defined( __FLAT__ )
+#if defined(BI_PTR_O_32)
 
 inline void *operator new( size_t sz,
                            const THeapSelector &heap )
@@ -105,15 +103,17 @@ inline void *operator new( size_t sz,
     return ::operator new( sz );
 }
 
+inline void THeapSelector::operator delete( void *ptr )
+{
+    ::operator delete( ptr );
+}
+
+#if !defined(BI_NO_ARRAYNEW)
+
 inline void *operator new [] ( size_t sz,
                                const THeapSelector &heap )
 {
     return ::operator new[]( sz );
-}
-
-inline void THeapSelector::operator delete( void *ptr )
-{
-    ::operator delete( ptr );
 }
 
 inline void THeapSelector::operator delete [] ( void *ptr )
@@ -121,15 +121,11 @@ inline void THeapSelector::operator delete [] ( void *ptr )
     ::operator delete[]( ptr );
 }
 
+#endif
+
 #else   // 16-bit
 
 inline void _BIDSFARDATA *operator new( size_t sz,
-                                    const THeapSelector _BIDSFARDATA &heap )
-{
-    return heap.Allocate( sz );
-}
-
-inline void _BIDSFARDATA *operator new [] ( size_t sz,
                                     const THeapSelector _BIDSFARDATA &heap )
 {
     return heap.Allocate( sz );
@@ -140,10 +136,18 @@ inline void THeapSelector::operator delete( void _BIDSFARDATA *ptr )
     THeapSelector::Free( ptr );
 }
 
+#if !defined(BI_NO_ARRAYNEW)
+inline void _BIDSFARDATA *operator new [] ( size_t sz,
+                                    const THeapSelector _BIDSFARDATA &heap )
+{
+    return heap.Allocate( sz );
+}
+
 inline void THeapSelector::operator delete [] ( void _BIDSFARDATA *ptr )
 {
     THeapSelector::Free( ptr );
 }
+#endif
 
 inline THeapSelector::HeapSetup::HeapSetup( unsigned seg )
 {
@@ -159,8 +163,7 @@ inline THeapSelector::HeapSetup::~HeapSetup()
 #endif
 
 #if defined( BI_CLASSLIB_NO_po )
-#pragma option -po.
+# pragma option -po.
 #endif
 
-#endif  // __HEAPSEL_H
-
+#endif  // CLASSLIB_HEAPSEL_H

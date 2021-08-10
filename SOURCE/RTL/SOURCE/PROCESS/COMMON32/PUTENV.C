@@ -6,9 +6,9 @@
  *-----------------------------------------------------------------------*/
 
 /*
- *      C/C++ Run Time Library - Version 1.5
+ *      C/C++ Run Time Library - Version 2.0
  *
- *      Copyright (c) 1987, 1994 by Borland International
+ *      Copyright (c) 1987, 1996 by Borland International
  *      All Rights Reserved.
  *
  */
@@ -16,6 +16,9 @@
 #include <_process.h>
 #include <string.h>
 #include <stdlib.h>
+
+extern int _RTLENTRY _EXPDATA envsize; /* number of env strings allocated */
+int _expandblock (void);
 
 /*-----------------------------------------------------------------------*
 
@@ -45,8 +48,8 @@ Description     Define an environment string to be of the form:
                 the old block is deallocated. The envp parameter to  main()
                 will then be invalid.
 
-                The string  comparison is case-sensitive, in  the usual "C"
-                tradition.
+                The string  comparison is NOT case-sensitive.
+
 
 
 Return value    On success, putenv returns 0; on failure, -1
@@ -56,7 +59,7 @@ Return value    On success, putenv returns 0; on failure, -1
 int _RTLENTRY _EXPFUNC putenv( const char *nameP )
 {
     char  **envP;
-    int   len, nstrings;
+    int   len, j;
     char  *p;
 
     /* Calculate length of the "NAME=" portion of the environment variable.
@@ -66,11 +69,11 @@ int _RTLENTRY _EXPFUNC putenv( const char *nameP )
     len = (p - (char *)nameP) + 1;
 
     _lock_env();                    /* lock out other users of 'environ' */
-    
+
     /* Search for this name.
      */
     for (envP = environ; *envP != NULL; envP++)
-        if (strncmp(*envP,nameP,len) == 0)
+        if (strnicmp(*envP,nameP,len) == 0)
             break;
 
     if (*envP)      /* Name already exists in table */
@@ -80,28 +83,40 @@ int _RTLENTRY _EXPFUNC putenv( const char *nameP )
             /* The value of the new string (the part to the right of the
              * '=') is blank.  Delete the existing string from the table.
              */
-            while ((envP[0] = envP[1]) != NULL)
-                envP++;
+
+            *envP = "";   /* place holder for the deleted string */
         }
         else
         {
             /* Replace the string with the new string.
              */
-            *envP = (char *)nameP;
+            *envP = (char *) nameP;
         }
     }
     else
     {
-        /* Name doesn't exist.  Enlarge the table and add the string
-         * to the end of the table, just before the terminating NULL
-         * pointer.
+        /* Name doesn't exist. Check for an empty slot in one of the
+         * four extra slots.  If none, then expand the table and add
+         * the string.
          */
-        nstrings = envP - environ;
-        if ((envP = realloc(environ,(nstrings+2) * sizeof(char *))) == NULL)
-            return (-1);
-        envP[nstrings] = (char *)nameP;
-        envP[nstrings + 1] = NULL;
-        environ = envP;
+
+        j = 4;
+        while (environ[envsize-j])
+        {
+            j--;
+            if (j == 0)
+            {
+                if (_expandblock() == 0)
+                {
+                    _unlock_env();
+                    return (-1);
+                }
+                j = 4;
+            }
+        }
+        /* Copy the string in the new spot
+         */
+        environ[envsize-j] = (char *) nameP;
     }
 
     /* Inform the operating system about this environment string.

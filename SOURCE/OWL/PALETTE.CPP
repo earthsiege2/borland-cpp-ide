@@ -1,12 +1,18 @@
 //----------------------------------------------------------------------------
 // ObjectWindows
-// (C) Copyright 1992, 1994 by Borland International, All Rights Reserved
+// Copyright (c) 1992, 1996 by Borland International, All Rights Reserved
 //
-//   Implementation of GDI Palette object class
+//$Revision:   10.2  $
+//
+// Implementation of TPalette, an encapsulation of the GDI Palette object
 //----------------------------------------------------------------------------
-#include <owl/owlpch.h>
-#include <owl/gdiobjec.h>
-#include <owl/clipboar.h>
+#include <owl/pch.h>
+#if !defined(OWL_GDIOBJEC_H)
+# include <owl/gdiobjec.h>
+#endif
+#if !defined(OWL_CLIPBOAR_H)
+# include <owl/clipboar.h>
+#endif
 #include <memory.h>
 
 DIAG_DECLARE_GROUP(OwlGDI);        // General GDI diagnostic group
@@ -15,75 +21,74 @@ DIAG_DECLARE_GROUP(OwlGDIOrphan);  // Orphan control tracing group
 //
 // Constructors
 //
+
+//
+// Alias an existing palette handle. Assume ownership if autoDelete says so
+//
 TPalette::TPalette(HPALETTE handle, TAutoDelete autoDelete)
 :
   TGdiObject(handle, autoDelete)
 {
-  #if !defined(NO_GDI_ORPHAN_CONTROL)
-    if (ShouldDelete)
-      OBJ_REF_ADD(Handle, Palette);
-  #endif
+  if (ShouldDelete)
+    RefAdd(Handle, Palette);
 }
 
+//
+// Construct a TPalette by pulling a palette handle from the clipboard
+//
 TPalette::TPalette(const TClipboard& clipboard)
 :
   TGdiObject(clipboard.GetClipboardData(CF_PALETTE))
 {
-  OBJ_REF_ADD(Handle, Palette);
-  OBJ_REF_INC(Handle);
-}
-
-TPalette::TPalette(const LOGPALETTE far* logPalette)
-{
-  PRECONDITION(logPalette);
-  Handle = ::CreatePalette(logPalette);
-  WARNX(OwlGDI, !Handle, 0, "Cannot create palette from logPalette @" << 
-        hex << uint32(LPVOID(logPalette)));
+  WARNX(OwlGDI, !Handle, 0, "Cannot create TPalette from the clipboard");
   CheckValid();
-  OBJ_REF_ADD(Handle, Palette);
+  RefAdd(Handle, Palette);
+  RefInc(Handle);
 }
 
-TPalette::TPalette(const TPalette& palette)
+//
+// Construct a copy of an existing palette. Always performs full, deep object
+// copy
+//
+TPalette::TPalette(const TPalette& src)
 {
   uint16  nColors;
-  palette.GetObject(nColors);
+  src.GetObject(nColors);
   if (nColors) {
     LOGPALETTE* logPal = (LOGPALETTE*) new
       uint8[sizeof(LOGPALETTE)+(nColors-1)*sizeof(PALETTEENTRY)];
 
-    logPal->palVersion = 0x300;
+    logPal->palVersion = 0x300;  
     logPal->palNumEntries = nColors;
-    palette.GetPaletteEntries(0, nColors, logPal->palPalEntry);
+    src.GetPaletteEntries(0, nColors, logPal->palPalEntry);
     Handle = ::CreatePalette(logPal);
-    delete [] logPal;
+    delete[] logPal;
   }
   else
-    Handle = 0;
+    Handle = 0;  // Force a failure
 
-  WARNX(OwlGDI, !Handle, 0, "Cannot create palette from palette " << 
-        uint(HPALETTE(palette)));
+  WARNX(OwlGDI, !Handle, 0, "Cannot create palette from palette " <<
+        uint(HPALETTE(src)));
   CheckValid();
-  OBJ_REF_ADD(Handle, Palette);
+  RefAdd(Handle, Palette);
 }
 
-TPalette::TPalette(const BITMAPINFO far* info, uint flags)
+//
+// Construct a TPalette given a logical palette object
+//
+TPalette::TPalette(const LOGPALETTE far* logPalette)
 {
-  Create(info, flags);
+  PRECONDITION(logPalette);
+  Handle = ::CreatePalette(logPalette);
+  WARNX(OwlGDI, !Handle, 0, "Cannot create palette from logPalette @" <<
+        hex << uint32(LPVOID(logPalette)));
+  CheckValid();
+  RefAdd(Handle, Palette);
 }
 
-TPalette::TPalette(const BITMAPCOREINFO far* core, uint flags)
-{
-  Create(core, flags);
-}
-
-TPalette::TPalette(const TDib& dib, uint flags)
-{
-  if (dib.IsPM())
-    Create((const BITMAPCOREINFO far*)dib.GetInfo(), flags);
-  else
-    Create(dib.GetInfo(), flags);
-}
-
+//
+// Construct a TPalette given a palette entry array
+//
 TPalette::TPalette(const PALETTEENTRY far* entries, int count)
 {
   LOGPALETTE* logPal = (LOGPALETTE*)new uint8[
@@ -93,12 +98,28 @@ TPalette::TPalette(const PALETTEENTRY far* entries, int count)
   logPal->palNumEntries = (uint16)count;
   memcpy(logPal->palPalEntry, entries, count*sizeof(PALETTEENTRY));
   Handle = ::CreatePalette(logPal);
-  delete [] logPal;
+  delete[] logPal;
 
   WARNX(OwlGDI, !Handle, 0, "Cannot create palette from " << count <<
         "palette entries @" << hex << uint32(LPVOID(entries)));
   CheckValid();
-  OBJ_REF_ADD(Handle, Palette);
+  RefAdd(Handle, Palette);
+}
+
+//
+// Construct a TPalette from the bitmap info from a DIB
+//
+TPalette::TPalette(const BITMAPINFO far* info, uint flags)
+{
+  Create(info, flags);
+}
+
+//
+// Construct a TPalette from a TDib
+//
+TPalette::TPalette(const TDib& dib, uint flags)
+{
+  Create(dib.GetInfo(), flags);
 }
 
 //
@@ -131,15 +152,42 @@ TPalette::Create(const BITMAPINFO far* info, uint flags)
       logPal->palPalEntry[n].peFlags = (uint8)flags;
     }
     Handle = ::CreatePalette(logPal);
-    delete [] logPal;
+    delete[] logPal;
   }
   else
     Handle = 0;
 
-  WARNX(OwlGDI, !Handle, 0, "Cannot create palette from bitmapinfo @" << 
+  WARNX(OwlGDI, !Handle, 0, "Cannot create palette from bitmapinfo @" <<
         hex << uint32(LPVOID(info)));
   CheckValid();
-  OBJ_REF_ADD(Handle, Palette);
+  RefAdd(Handle, Palette);
+}
+
+//
+// Move this palette handle to the clipboard.  Clipboard assumes ownership,
+// this TPalette will not delete the handle
+//
+void
+TPalette::ToClipboard(TClipboard& clipboard)
+{
+  if (Handle) {
+    clipboard.SetClipboardData(CF_PALETTE, Handle);
+    ShouldDelete = false; // GDI object now owned by Clipboard
+    RefRemove(Handle);
+  }
+}
+
+//
+// Obsolete PM core info based palette construction. TDib now always converts
+// PM DIBs to Windows DIBs when reading.
+//
+#if defined(OWL2_COMPAT)
+//
+//
+//
+TPalette::TPalette(const BITMAPCOREINFO far* core, uint flags)
+{
+  Create(core, flags);
 }
 
 //
@@ -173,26 +221,14 @@ TPalette::Create(const BITMAPCOREINFO far* coreInfo, uint flags)
       logPal->palPalEntry[n].peFlags = (uint8)flags;
     }
     Handle = ::CreatePalette(logPal);
-    delete [] logPal;
+    delete[] logPal;
   }
   else
     Handle = 0;
 
-  WARNX(OwlGDI, !Handle, 0, "Cannot create palette from coreinfo @" << 
+  WARNX(OwlGDI, !Handle, 0, "Cannot create palette from coreinfo @" <<
         hex << uint32(LPVOID(coreInfo)));
   CheckValid();
-  OBJ_REF_ADD(Handle, Palette);
+  RefAdd(Handle, Palette);
 }
-
-//
-// Move this logical palette to the clipboard.  Clipboard assumes ownership
-//
-void
-TPalette::ToClipboard(TClipboard& clipboard)
-{
-  if (Handle) {
-    clipboard.SetClipboardData(CF_PALETTE, Handle);
-    ShouldDelete = false; // GDI object now owned by Clipboard
-    OBJ_REF_REMOVE(Handle);
-  }
-}
+#endif

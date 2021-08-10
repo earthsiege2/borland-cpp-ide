@@ -1,15 +1,25 @@
 //----------------------------------------------------------------------------
 // ObjectWindows
-// (C) Copyright 1993, 1994 by Borland International, All Rights Reserved
+// Copyright (c) 1993, 1996 by Borland International, All Rights Reserved
 //
-//   Implements classes TStorageDocument, TDocFile, streams
+//$Revision:   10.4  $
+//
+// Implementation of classes TStorageDocument, TDocFile, and associated streams
 //----------------------------------------------------------------------------
 #define INC_OLE2
-#include <owl/owlpch.h>
-#include <owl/docview.h>      // force Windows headers in before OLE
-#include <osl/ustring.h>
-#include <owl/stgdoc.h>
+#include <owl/pch.h>
+#if !defined(OWL_DOCVIEW_H)
+# include <owl/docview.h>      // force Windows headers in before OLE
+#endif
+#if !defined(WINSYS_STRING_H)
+# include <winsys/string.h>
+#endif
+#if !defined(OWL_STGDOC_H)
+# include <owl/stgdoc.h>
+#endif
+#include <stdio.h>
 
+//
 // Simple refcount debug assistant
 //
 #if defined(CHECK_REFCOUNT)
@@ -25,12 +35,12 @@ const int B_size    = 516;                // default buffer size
 const char DefaultStreamName[] = "Contents";
 
 //
-//  class TStorageBuf
-//  ----- -----------
-//
+// class TStorageBuf
+// ~~~~~ ~~~~~~~~~~~
 class  _OWLCLASS_RTL TStorageBuf : public streambuf {
   public:
-    // constructors, destructor
+    // Constructors, destructor
+    //
     TStorageBuf _FAR * open(IStorage& stg, LPCSTR name, int omode);
     TStorageBuf();                       // make a closed TStorageBuf
     virtual ~TStorageBuf();
@@ -56,9 +66,8 @@ class  _OWLCLASS_RTL TStorageBuf : public streambuf {
 };
 
 //
-//  class TStorageStreamBase
-//  ----- ------------------
-//
+// class TStorageStreamBase
+// ~~~~~ ~~~~~~~~~~~~~~~~~~
 class _OWLCLASS_RTL TStorageStreamBase : virtual public ios {
   public:
     TStorageStreamBase(IStorage& stg, const char far* name, int mode);
@@ -70,9 +79,8 @@ class _OWLCLASS_RTL TStorageStreamBase : virtual public ios {
 };
 
 //
-//  class TStorageInStream
-//  ----- ----------------
-//
+// class TStorageInStream
+// ~~~~~ ~~~~~~~~~~~~~~~~
 class _OWLCLASS_RTL TStorageInStream : public TStorageStreamBase,
                                        public TInStream {
   public:
@@ -83,9 +91,8 @@ class _OWLCLASS_RTL TStorageInStream : public TStorageStreamBase,
 };
 
 //
-//  class TStorageOutStream
-//  ----- -----------------
-//
+// class TStorageOutStream
+// ~~~~~ ~~~~~~~~~~~~~~~~~
 class _OWLCLASS_RTL TStorageOutStream : public TStorageStreamBase,
                                         public TOutStream {
   public:
@@ -95,11 +102,13 @@ class _OWLCLASS_RTL TStorageOutStream : public TStorageStreamBase,
    ~TStorageOutStream() {}
 };
 
-
 //----------------------------------------------------------------------------
-//  class TStorageDocument
+// class TStorageDocument
 //
 
+//
+//
+//
 TStorageDocument::~TStorageDocument()
 {
   ReleaseDoc();
@@ -122,11 +131,11 @@ TStorageDocument::ReleaseDoc()
 bool
 TStorageDocument::Open(int omode, const char far* name)
 {
-  if (StorageI > 0) {
+  if (StorageI)
     return true;
-  }
+
   do {  // establish try block
-    HRESULT hres;
+    HRESULT hr;
     IStorage* parentStg;
     int pmode = 0;
 
@@ -197,27 +206,27 @@ TStorageDocument::Open(int omode, const char far* name)
                                        &parentStg, 0))
         break;
       if (stgopen) {
-        hres = parentStg->OpenStorage(OleStr(name), 0, childMode, 0, 0, &StorageI);
-        if (SUCCEEDED(hres))
+        hr = parentStg->OpenStorage(OleStr(name), 0, childMode, 0, 0, &StorageI);
+        if (SUCCEEDED(hr))
           stgcreate = false;
       }
       if (stgcreate) {
-        hres = parentStg->CreateStorage(OleStr(name), childMode, 0, 0, &StorageI);
+        hr = parentStg->CreateStorage(OleStr(name), childMode, 0, 0, &StorageI);
       }
     }
     else {
       if (stgopen) {
-        hres = ::StgOpenStorage(OleStr(name), 0, grfMode, 0, 0, &StorageI);
-        if (SUCCEEDED(hres))
+        hr = ::StgOpenStorage(OleStr(name), 0, grfMode, 0, 0, &StorageI);
+        if (SUCCEEDED(hr))
           stgcreate = false;
       }
       if (stgcreate) {
-        hres = ::StgCreateDocfile(OleStr(name), grfMode, 0, &StorageI);
+        hr = ::StgCreateDocfile(OleStr(name), grfMode, 0, &StorageI);
       }
     }
     RefCountCheck(StorageI);
 
-    if (!SUCCEEDED(hres))
+    if (!SUCCEEDED(hr))
       break;
     NotifyViews(vnDocOpened,ThisOpen);
     return true;  // successful return
@@ -282,7 +291,7 @@ TStorageDocument::SetStorage(IStorage* stg, bool remember)
   if (stgInfo.pwcsName) {
     IMalloc* memmgr;
     if (SUCCEEDED(CoGetMalloc(MEMCTX_TASK, &memmgr))) {
-      memmgr->Free(stgInfo.pwcsName);    //!CQ really do this here?
+      memmgr->Free(stgInfo.pwcsName);    // Free the string from the Stat call
       memmgr->Release();
     }
   }
@@ -292,7 +301,7 @@ TStorageDocument::SetStorage(IStorage* stg, bool remember)
 }
 
 //
-// Restores the original root IStorage before the save operation
+// Restore the original root IStorage before the save operation
 //
 bool
 TStorageDocument::RestoreStorage()
@@ -309,7 +318,38 @@ TStorageDocument::RestoreStorage()
 }
 
 //
-//  Create an istorage based on a memeroy handle
+// Get a new IStorage, typically in a SaveAs situation. Release StorageI and
+// set it to the new storage if all OK.
+//
+IStorage*
+TStorageDocument::GetNewStorage()
+{
+  PRECONDITION(StorageI);
+
+  STATSTG stgInfo;
+  if (!SUCCEEDED(StorageI->Stat(&stgInfo, STATFLAG_NONAME)))
+    return 0;
+
+  // Create another root storage based on the new doc path
+  // Should close the current document and open a new one.
+  //
+  IStorage* newStorage = 0;
+
+  HRESULT hr;
+  hr = ::StgOpenStorage(OleStr(GetDocPath()), 0, stgInfo.grfMode, 0, 0, &newStorage);
+  if (!SUCCEEDED(hr))
+    hr = ::StgCreateDocfile(OleStr(GetDocPath()), stgInfo.grfMode, 0, &newStorage);
+
+  if (SUCCEEDED(hr)) {
+    StorageI->Release(); // Release the old root storage
+    StorageI = newStorage;
+  }
+
+  return newStorage;
+}
+
+//
+// Create an IStorage based on a memory handle
 //
 bool
 TStorageDocument::OpenHandle(int omode, HANDLE hGlobal)
@@ -346,7 +386,7 @@ TStorageDocument::OpenHandle(int omode, HANDLE hGlobal)
 }
 
 //
-//  Replace the IStorage with an istorage based on a memory handle
+// Replace the IStorage with an istorage based on a memory handle
 //
 bool
 TStorageDocument::SetHandle(int omode, HANDLE hGlobal, bool create, bool remember)
@@ -397,7 +437,7 @@ TStorageDocument::SetHandle(int omode, HANDLE hGlobal, bool create, bool remembe
 }
 
 //
-//  Get the global handle from ILockBytes
+// Get the global handle from ILockBytes
 //
 bool
 TStorageDocument::GetHandle(HGLOBAL* handle)
@@ -519,10 +559,10 @@ TStorageDocument::Commit(bool force)
 bool
 TStorageDocument::CommitTransactedStorage()
 {
-  HRESULT cres = StorageI->Commit(0);  // try 2phase commit first
-  if (!SUCCEEDED(cres)) // check for STG_S_TRYOVERWRITE, but GetScode not in lib
-    cres = StorageI->Commit(STGC_OVERWRITE);   // try less robust method
-  if (!SUCCEEDED(cres))
+  HRESULT hr = StorageI->Commit(0);  // try 2phase commit first
+  if (!SUCCEEDED(hr)) // check for STG_S_TRYOVERWRITE, but GetScode not in lib
+    hr = StorageI->Commit(STGC_OVERWRITE);   // try less robust method
+  if (!SUCCEEDED(hr))
     return false;
 
   return true;
@@ -630,7 +670,7 @@ TStorageDocument::GetProperty(int prop, void far* dest, int textlen)
             }
             else {
               char buf[10];
-              int len = wsprintf(buf, "%ld", uint64(stgInfo.cbSize).LowPart);
+              int len = sprintf(buf, "%ld", uint64(stgInfo.cbSize).LowPart);
               if (textlen > len)
                 textlen = len;
               memcpy(dest, buf, textlen);
@@ -669,6 +709,8 @@ TStorageDocument::SetProperty(int prop, const void far* src)
 //
 IMPLEMENT_STREAMABLE1(TStorageDocument, TDocument);
 
+#if !defined(BI_NO_OBJ_STREAMING)
+
 //
 //
 //
@@ -692,6 +734,9 @@ TStorageDocument::Streamer::Write(opstream& os) const
 //  class TStorageStreamBase
 //
 
+//
+//
+//
 TStorageStreamBase::TStorageStreamBase(IStorage& stg, const char far* name, int mode)
 :
   buf()
@@ -803,15 +848,15 @@ TStorageBuf* TStorageBuf::open(IStorage& stg, const char far* name, int omode)
   // Now try to open or create
   //
   if (stgopen) {
-    HRESULT hres = stg.OpenStream(OleStr(name), 0, how, 0, &strm);
-    if (SUCCEEDED(hres))
+    HRESULT hr = stg.OpenStream(OleStr(name), 0, how, 0, &strm);
+    if (SUCCEEDED(hr))
       stgcreate = false;
     else
       return 0;
   }
   if (stgcreate) {
-    HRESULT hres = stg.CreateStream(OleStr(name), how, 0, 0, &strm);
-    if (!SUCCEEDED(hres))
+    HRESULT hr = stg.CreateStream(OleStr(name), how, 0, 0, &strm);
+    if (!SUCCEEDED(hr))
       return 0;
   }
 
@@ -867,9 +912,15 @@ TStorageBuf* TStorageBuf::attach(IStream* f)
   setg(b, b+pb, b+pb);
   return this;
 }
+#endif  // if !defined(BI_NO_OBJ_STREAMING)
+
 #endif
 
-streambuf* TStorageBuf::setbuf(char* b, int len)
+//
+//
+//
+streambuf*
+TStorageBuf::setbuf(char* b, int len)
 {
   if (opened && base())
     return 0;        // already open with a buffer -- no change
@@ -896,21 +947,20 @@ streampos
 TStorageBuf::seekoff(streamoff off, ios::seek_dir dir, int /* mode ignored */)
 {
   long loff = off;
-  HRESULT hres;
-  unsigned long actual;
   int count = out_waiting();
 
   if (count) {  // flush the output
-    hres = strm->Write(pbase(), (ulong)count, &actual);
-    if (!SUCCEEDED(hres) || (int)actual != count)
+    ulong actual;
+    HRESULT hr = strm->Write(pbase(), (ulong)count, &actual);
+    if (!SUCCEEDED(hr) || (int)actual != count)
       return EOF;
   }
-  else if (dir == ios::cur)
-    if ((count = in_avail()) != 0) {
+  else if (dir == ios::cur) {
+    count = in_avail();
+    if (count != 0) {
       loff -= count;
 
-      //  if we're in text mode, need to allow for newlines
-      //  in the buffer
+      // If we're in text mode, need to allow for newlines in the buffer
       //
       if ((mode & ofBinary) == 0) {
         char *tptr = gptr();
@@ -919,6 +969,7 @@ TStorageBuf::seekoff(streamoff off, ios::seek_dir dir, int /* mode ignored */)
             loff--;
       }
     }
+  }
 
   uint32 w = (dir == ios::beg) ? STREAM_SEEK_SET
        : ((dir == ios::cur) ? STREAM_SEEK_CUR
@@ -940,7 +991,6 @@ TStorageBuf::seekoff(streamoff off, ios::seek_dir dir, int /* mode ignored */)
 //
 int TStorageBuf::sync()
 {
-  HRESULT hres;
   if (!opened)
     return EOF;
 
@@ -951,26 +1001,26 @@ int TStorageBuf::sync()
     char* srcp = pbase();
     char* endp = srcp + count;
 
-    // convert LF's to CR/LF if text mode
+    // Convert LF's to CR/LF if text mode
     //
     if ((mode & ofBinary) == 0) {
       for (curp = srcp; curp < endp; curp++) {
         if (*curp == '\n') {
           *curp = '\r';
           count = (int)(curp - srcp + 1);
-          hres = strm->Write(srcp, (unsigned long)count, &actual);
-          if (!SUCCEEDED(hres) || (int)actual != count)
+          HRESULT hr = strm->Write(srcp, (unsigned long)count, &actual);
+          if (!SUCCEEDED(hr) || (int)actual != count)
             return EOF;
           *(srcp = curp) = '\n';
         }
       }
       count = (int)(curp - srcp);  // write what remains in the buffer below
     }
-    hres = strm->Write(srcp, (unsigned long)count, &actual);
-    if (!SUCCEEDED(hres) || (int)actual != count)
+    HRESULT hr = strm->Write(srcp, (ulong)count, &actual);
+    if (!SUCCEEDED(hr) || (int)actual != count)
         return EOF;
 
-    // reset get and put areas
+    // Reset get and put areas
     //
     int pb = (blen() > 8) ? 4 : 1;  // putback area size
     char *b = base();
@@ -992,16 +1042,15 @@ int TStorageBuf::sync()
 //
 int TStorageBuf::underflow()
 {
-  HRESULT  hres;
-  ulong    actual;
-  unsigned count;  // input character count
-  int      c;      // the return value
+  ulong  actual;
+  uint   count;  // input character count
+  int    c;      // the return value
 
   if (!opened || (mode & (ofRead | ofWrite)) == ofWrite)
     return EOF;
 
   if (in_avail())                   // no action needed
-    return (unsigned char)*gptr();
+    return (uchar)*gptr();
 
   if (!unbuffered() && base()) {    // this is buffered
     if (sync() != 0)
@@ -1014,8 +1063,8 @@ int TStorageBuf::underflow()
 
     // read in a new buffer
     //
-    hres = strm->Read(begp, blen()-pb, &actual);
-    if (!SUCCEEDED(hres))
+    HRESULT hr = strm->Read(begp, blen()-pb, &actual);
+    if (!SUCCEEDED(hr))
       return EOF;
     count = (unsigned)actual;
 
@@ -1052,18 +1101,18 @@ int TStorageBuf::underflow()
     setp(begp, begp);
 
     if (count)
-      c = (unsigned char)*gptr();
+      c = (uchar)*gptr();
 
   }
   else {     // this is not buffered
     for (;;) {
-      hres = strm->Read(lahead, 1, &actual);
-      if (!SUCCEEDED(hres) || actual == 0) {
+      HRESULT hr = strm->Read(lahead, 1, &actual);
+      if (!SUCCEEDED(hr) || actual == 0) {
         c = EOF;
         setg(0, 0, 0);
       }
       else {
-        c = (unsigned char)lahead[0];
+        c = (uchar)lahead[0];
         if ((mode & ofBinary) == 0  && c == '\r')
           continue;
         setg(lahead, lahead, lahead+1);
@@ -1139,7 +1188,7 @@ TStorageBuf* TStorageBuf::close()
   if ((mode & ofWrite) /* && !strm->Commit(0) */)
     ores = 1;
 
-  strm->Release();    //! Question: should we release if commit fails?!!
+  strm->Release();    
   strm = 0;
   opened = 0;
   return ores ? 0 : this;

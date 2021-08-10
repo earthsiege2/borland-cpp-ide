@@ -148,7 +148,8 @@
             setftime.obj \
             unlink.obj   \
             vprinter.obj \
-            zapctlz.obj
+            zapctlz.obj  \
+	    _tmpnam.obj
 
 !   if $d(DLL)
         IMPOBJS = $(AUXOBJS)  \

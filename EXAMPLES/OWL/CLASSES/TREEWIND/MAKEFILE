@@ -1,0 +1,11 @@
+#----------------------------------------------------------------------------
+# ObjectWindows
+# Copyright (c) 1995, 1995 by Borland International, All Rights Reserved
+#----------------------------------------------------------------------------
+
+MODELS = ldft
+
+EXERES = treewind
+OBJEXE = treewinx.obj
+
+!include $(BCEXAMPLEDIR)\owlmake.gen

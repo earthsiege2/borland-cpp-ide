@@ -1,14 +1,25 @@
 //----------------------------------------------------------------------------
 // ObjectWindows
-// (C) Copyright 1991, 1994 by Borland International, All Rights Reserved
+// Copyright (c) 1991, 1996 by Borland International, All Rights Reserved
 //
-//   Implementation of obsolete functions in class TModule.
+//$Revision:   10.3  $
+//
+// Implementation of obsolete functions in class TModule.
 //----------------------------------------------------------------------------
-#include <owl/owlpch.h>
-#include <owl/applicat.h>
-#include <owl/dialog.h>
-#include <owl/mdi.h>
+#include <owl/pch.h>
+#if !defined(OWL_APPLICAT_H)
+# include <owl/applicat.h>
+#endif
+#if !defined(OWL_DIALOG_H)
+# include <owl/dialog.h>
+#endif
+#if !defined(OWL_MDI_H)
+# include <owl/mdi.h>
+#endif
 
+//
+//
+//
 TWindow*
 TModule::MakeWindow(TWindow* win)
 {
@@ -20,6 +31,9 @@ TModule::MakeWindow(TWindow* win)
   return 0;
 }
 
+//
+//
+//
 int
 TModule::ExecDialog(TDialog* dialog)
 {
@@ -28,6 +42,9 @@ TModule::ExecDialog(TDialog* dialog)
   return ret;
 }
 
+//
+//
+//
 HWND
 TModule::GetClientHandle(HWND hWnd)
 {
@@ -38,7 +55,7 @@ TModule::GetClientHandle(HWND hWnd)
       do {
         char  className[10];
 
-        GetClassName(curWindow, className, sizeof(className));
+        ::GetClassName(curWindow, className, sizeof(className));
 
         if (strnicmp(className, "MDICLIENT", sizeof(className)) == 0)
           return curWindow;
@@ -50,6 +67,9 @@ TModule::GetClientHandle(HWND hWnd)
   return 0;
 }
 
+//
+//
+//
 TWindow*
 TModule::GetParentObject(HWND hWndParent)
 {

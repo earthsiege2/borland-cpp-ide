@@ -1,16 +1,21 @@
 //----------------------------------------------------------------------------
-// ObjectComponents - (C) Copyright 1994 by Borland International
+// ObjectComponents
+// Copyright (c) 1994, 1996 by Borland International, All Rights Reserved
+//
 // Tool to load, register, unregister, and debug OLE2 inproc servers and EXEs.
 // Reads its command line to determine action, suggestion: use progman icons.
 // Does no registration itself, simply invokes functions in the OC component.
 // Brings up help dialog on empty command line; refer to that for usage info.
 //----------------------------------------------------------------------------
 #include <ocf/ocreg.h>
+#include <classlib/cmdline.h>
 #include <string.h>
 #include "register.rh"
 #include <shellapi.h>
 
 #define DLLENTRY   "DllRegisterCommand"
+#define MSDLLREGSERVERENTRY "DllRegisterServer"
+#define MSDLLUNREGSERVERENTRY "DllUnregisterServer"
 #define REGISTER32 "REGIST32.EXE"
 
 //
@@ -72,7 +77,8 @@ int GetFileType(const char far* fileName)
         type |= ftModule;
         if (*(short*)(buf+0x0C) & 0x8000)
           type |= ftLibrary;
-      } else if (*(short*)(buf+0x00) == 0x4550) { // check if 32-bit module
+      }
+      else if (*(short*)(buf+0x00) == 0x4550) { // check if 32-bit module
         type |= (ftModule | ft32Bit);
         if (*(short*)(buf+0x16) & 0x2000)
           type |= ftLibrary;
@@ -98,8 +104,11 @@ struct TDllData {
   HINSTANCE Lib;
   union {
     TDllRegisterCommand  DllRegisterCommand;
+    HRESULT STDAPICALLTYPE (*MsDllRegServer)();
+    HRESULT STDAPICALLTYPE (*MsDllUnRegServer)();
     FARPROC  DllRegProc;
   };
+  bool DllRegisterCommandEntry;
 };
 
 bool TDllData::LoadLib(const char* name)
@@ -114,18 +123,47 @@ bool TDllData::LoadLib(const char* name)
 
 bool TDllData::GetEntry()
 {
-  return (DllRegProc = ::GetProcAddress(Lib, DLLENTRY)) != 0;
+  if ((DllRegProc = ::GetProcAddress(Lib, DLLENTRY)) != 0) {
+    DllRegisterCommandEntry = true;
+    return true;
+  }
+  DllRegisterCommandEntry = false;  // Will have to call Dll[R|Unr]egisterServer
+  // note:  we're getting the entry for DllRegisterServer but it may change
+  // (in CallEntry) to the entry for DllUnregisterServer.
+  return (DllRegProc = ::GetProcAddress(Lib, MSDLLREGSERVERENTRY)) != 0;
 }
 
 HRESULT TDllData::CallEntry(const char far* cmdLine)
 {
-  return (*DllRegisterCommand)(cmdLine);
+  // It's one of ours
+  if (DllRegisterCommandEntry)
+    return (*DllRegisterCommand)(cmdLine);
+
+  // We need to work with a lowercase command line
+  TAPointer<char> lwcLine = new char[strlen(cmdLine)+1];
+  strcpy(lwcLine, cmdLine);
+  strlwr(lwcLine);
+
+  // DllUnregisterServer
+  if (strstr(lwcLine, "unregserver")) {
+    if ((DllRegProc = ::GetProcAddress(Lib, MSDLLUNREGSERVERENTRY)) == 0)
+      return ResultFromScode(E_UNEXPECTED);
+    else
+      return (*MsDllUnRegServer)();
+  }
+
+  // DllRegisterServer
+  if (strstr(lwcLine, "regserver"))
+    return (*MsDllRegServer)();
+
+  // Neither RegServer nor UnRegServer Selected, just return
+  return ResultFromScode(S_OK);
 }
 
 //
 // Command option state flags
 //
-const int rfDone     = 1; // force break from loop 
+const int rfDone     = 1; // force break from loop
 const int rfNoValue  = 2; // no value allowed for option
 const int rfReqValue = 4; // value required for option
 const int rfOptValue = 8; // optional value for option
@@ -212,7 +250,7 @@ WinMain(HINSTANCE hInst, HINSTANCE/*hPrev*/, char far* cmdLine, int/*show*/)
             optFlags |= curFlags;
             if (curFlags & rfQuietReg)
               break;
-            *cmdptr++ = '/'; //	use slash for option, dash needs leading space
+            *cmdptr++ = '/'; // use slash for option, dash needs leading space
             strcpy(cmdptr, table[tblIndex].String);
             cmdptr += strlen(table[tblIndex].String);
             break;
@@ -238,7 +276,8 @@ WinMain(HINSTANCE hInst, HINSTANCE/*hPrev*/, char far* cmdLine, int/*show*/)
         if (fileType & ft32Bit) {
           uint execStat = ::WinExec(cmdbuf, SW_SHOW);
           ErrorIf(execStat < (uint)HINSTANCE_ERROR, IDS_CANTLOAD32, modName);
-        } else {
+        }
+        else {
 #endif
           ErrorIf(!dll.LoadLib(modName), IDS_NOLOADMOD, modName);
           ErrorIf(!dll.GetEntry(), IDS_NOENTRYPNT, DLLENTRY);
@@ -247,31 +286,34 @@ WinMain(HINSTANCE hInst, HINSTANCE/*hPrev*/, char far* cmdLine, int/*show*/)
             ::MessageBox(0, "Press OK to unload when debugging is finished",
                          "DLL loaded for debugging", MB_OK);
         }
-      } else {
+      }
+      else {
         uint execStat = ::WinExec(execmd, SW_HIDE);
         ErrorIf(execStat < (uint)HINSTANCE_ERROR, IDS_NOLOADMOD, modName);
       }
       if (optFlags & rfQuietReg) // ignore errors if spawned from another app
         continue;
       long buflen = sizeof(regBuf);
-		if ((optFlags & rfRegServer) && ERROR_SUCCESS ==
-         ::RegQueryValue(HKEY_CLASSES_ROOT,"OcErr_RegServer", regBuf,&buflen)){
-        ::RegDeleteKey(HKEY_CLASSES_ROOT, "OcErr_RegServer");
+      if ((optFlags & rfRegServer) && S_OK ==
+          ::RegQueryValue(TRegKey::ClassesRoot,"OcErr_RegServer", regBuf,&buflen)){
+        ::RegDeleteKey(TRegKey::ClassesRoot, "OcErr_RegServer");
         Error((char*)IDS_REGFAILURE, regBuf);
       }
-		if ((optFlags & rfTypeLib) && ERROR_SUCCESS ==
-         ::RegQueryValue(HKEY_CLASSES_ROOT, "OcErr_Typelib", regBuf,&buflen)){
-        ::RegDeleteKey(HKEY_CLASSES_ROOT, "OcErr_Typelib");
+      if ((optFlags & rfTypeLib) && S_OK ==
+          ::RegQueryValue(TRegKey::ClassesRoot, "OcErr_Typelib", regBuf,&buflen)){
+        ::RegDeleteKey(TRegKey::ClassesRoot, "OcErr_Typelib");
         Error((char*)IDS_TYPELIBERR, regBuf);
       }
     } while (cmd.Kind != TCmdLine::Done);
     return 0;
   }
+
   catch (TLocalError& xcpt) {
     char msgbuf[80];
     const char ** pmsg;
-    if ( *(pmsg = &xcpt.Message) <= (const char*)IDS_MAX ||
-         *(pmsg = &xcpt.Title)   <= (const char*)IDS_MAX) {
+    if (*(pmsg = &xcpt.Message) <= (const char*)IDS_MAX ||
+        *(pmsg = &xcpt.Title)   <= (const char*)IDS_MAX)
+    {
       ::LoadString(hInst, *(unsigned*)pmsg, msgbuf, sizeof(msgbuf));
       *pmsg = msgbuf;
     }

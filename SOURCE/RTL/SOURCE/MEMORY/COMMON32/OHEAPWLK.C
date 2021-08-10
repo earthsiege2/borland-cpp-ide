@@ -6,9 +6,9 @@
  *-----------------------------------------------------------------------*/
 
 /*
- *      C/C++ Run Time Library - Version 1.5
+ *      C/C++ Run Time Library - Version 2.0
  *
- *      Copyright (c) 1991, 1994 by Borland International
+ *      Copyright (c) 1995, 1996 by Borland International
  *      All Rights Reserved.
  *
  */
@@ -57,12 +57,14 @@ int _RTLENTRY _EXPFUNC heapwalk(struct heapinfo *entry)
 
     /* Call the MSC-compatible function to do all the work.
      */
-    msc_entry._pentry = entry->ptr;
+    msc_entry._pentry  = entry->ptr;
+    msc_entry.__pentry = entry->ptr2;
     rc = _rtl_heapwalk(&msc_entry);
 
     /* Convert the _heapinfo to a heapinfo, and convert the return code.
      */
     entry->ptr    = msc_entry._pentry;
+    entry->ptr2   = msc_entry.__pentry;
     entry->size   = msc_entry._size;
     entry->in_use = msc_entry._useflag == _USEDENTRY;
     return rc == _HEAPOK || rc == _HEAPEMPTY || rc == _HEAPEND ? rc : _HEAPCORRUPT;

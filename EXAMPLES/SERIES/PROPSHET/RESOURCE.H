@@ -1,0 +1,20 @@
+#define IDS_APPNAME                     1
+#define IDS_DESCRIPTION                 2
+#define IDD_VERFIRST                    100
+#define dlgbackcolor                    101
+#define dlgshape                        102
+#define IDI_BACKCOLOR                   103
+#define IDI_SHAPES                      104
+#define IDD_VERLAST                     104
+#define IDI_APPICON                     105
+#define IDC_RED                         1000
+#define IDM_EXIT                        1000
+#define IDC_GREEN                       1001
+#define IDC_BLUE                        1002
+#define IDC_RECTSQUARE                  1002
+#define IDC_TRAPEZOID                   1003
+#define IDC_RECTANGLE                   1004
+#define IDM_ABOUT                       1100
+#define IDM_PROPSHET                    40001
+#define IDC_STATIC                      -1
+

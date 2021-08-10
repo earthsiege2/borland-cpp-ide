@@ -1,172 +1,176 @@
 ##--BEGIN-- @OPT_APPL_HELP 
 
-
-bool [[TApplication]]::ProcessAppMsg (MSG& msg)
+//
+// Process application messages to provide context sensitive help
+//
+bool [[TApplication]]::ProcessAppMsg(MSG& msg)
 {
-    if (msg.message == WM_COMMAND) {
-        if (ContextHelp || (::GetKeyState(VK_F1) < 0)) {
-            ContextHelp = false;
-            GetMainWindow()->WinHelp(HelpFileName, HELP_CONTEXT, msg.wParam);
-            return true;
+  if (msg.message == WM_COMMAND) {
+    if (ContextHelp || ::GetKeyState(VK_F1) < 0) {
+      ContextHelp = false;
+      GetMainWindow()->WinHelp(HelpFileName, HELP_CONTEXT, msg.wParam);
+      return true;
+    }
+  }
+  else
+    switch(msg.message) {
+    case WM_KEYDOWN:
+      if (msg.wParam == VK_F1) {
+##:@QUERY_APPL_COMMENT == VALUE_VERBOSE 2
+        // If the Shift/F1 then set the help cursor and turn on the modal help state.
+        //
+        if (::GetKeyState(VK_SHIFT) < 0) {
+          ContextHelp = true;
+          HelpCursor = new TCursor(GetMainWindow()->GetModule()->GetInstance(), TResId(IDC_HELPCURSOR));
+          ::SetCursor(*HelpCursor);
+          return true;        // Gobble up the message.
         }
-    } else
-        switch (msg.message) {
-        case WM_KEYDOWN:
-            if (msg.wParam == VK_F1) {
-##:@QUERY_APPL_COMMENT == VALUE_VERBOSE
-                // If the Shift/F1 then set the help cursor and turn on the modal help state.
-                if (::GetKeyState(VK_SHIFT) < 0) {
-                    ContextHelp = true;
-                    HelpCursor = ::LoadCursor(GetMainWindow()->GetModule()->GetInstance(), MAKEINTRESOURCE(IDC_HELPCURSOR));
-                    ::SetCursor(HelpCursor);
-                    return true;        // Gobble up the message.
-                } else {
-##:@QUERY_APPL_COMMENT == VALUE_VERBOSE
-                    // If F1 w/o the Shift key then bring up help's main index.
-                    GetMainWindow()->WinHelp(HelpFileName, HELP_INDEX, 0L);
-                    return true;        // Gobble up the message.
-                }
-            } else {
-                if (ContextHelp && (msg.wParam == VK_ESCAPE)) {
-                    if (HelpCursor)
-                        ::DestroyCursor(HelpCursor);
-                    ContextHelp = false;
-                    HelpCursor = 0;
-                    GetMainWindow()->SetCursor(0, IDC_ARROW);
-                    return true;    // Gobble up the message.
-                }
-            }
-            break;
+        else {
+##:@QUERY_APPL_COMMENT == VALUE_VERBOSE 2
+          // If F1 w/o the Shift key then bring up help's main index.
+          //
+          GetMainWindow()->WinHelp(HelpFileName, HELP_INDEX, 0);
+          return true;        // Gobble up the message.
+        }
+      }
+      else {
+        if (ContextHelp && msg.wParam == VK_ESCAPE) {
+          if (HelpCursor)
+            delete HelpCursor;
+          HelpCursor = 0;
+          ContextHelp = false;
+          GetMainWindow()->SetCursor(0, IDC_ARROW);
+          return true;    // Gobble up the message.
+        }
+      }
+      break;
 
-        case WM_MOUSEMOVE:
-        case WM_NCMOUSEMOVE:
-            if (ContextHelp) {
-                ::SetCursor(HelpCursor);
-                return true;        // Gobble up the message.
-            }
-            break;
+    case WM_MOUSEMOVE:
+    case WM_NCMOUSEMOVE:
+      if (ContextHelp) {
+        ::SetCursor(*HelpCursor);
+        return true;        // Gobble up the message.
+      }
+      break;
 
-        case WM_INITMENU:
-            if (ContextHelp) {
-                ::SetCursor(HelpCursor);
-                return true;        // Gobble up the message.
-            }
-            break;
-        
-        case WM_ENTERIDLE:
-            if (msg.wParam == MSGF_MENU)
-                if (GetKeyState(VK_F1) < 0) {
-                    ContextHelp = true;
-                    GetMainWindow()->PostMessage(WM_KEYDOWN, VK_RETURN, 0L);
-                    return true;       // Gobble up the message.
-                }
-            break;
-        
-        default:
-            ;
-        };  // End of switch
+    case WM_INITMENU:
+      if (ContextHelp) {
+        ::SetCursor(*HelpCursor);
+        return true;    // Gobble up the message.
+      }
+      break;
+    case WM_ENTERIDLE:
+      if (msg.wParam == MSGF_MENU)
+        if (GetKeyState(VK_F1) < 0) {
+          ContextHelp = true;
+          GetMainWindow()->PostMessage(WM_KEYDOWN, VK_RETURN, 0);
+          return true;     // Gobble up the message.
+        }
+      break;
+    default:
+      ;
+    }  // End of message switch
 
-    // Continue normal processing.
-
-    return TApplication::ProcessAppMsg(msg);
+  // Continue normal processing.
+  //
+  return TApplication::ProcessAppMsg(msg);
 }
 
 
 ##--END-- @OPT_APPL_HELP
 ##--BEGIN-- @OPT_APPL_PRINTING 
-void [[TApplication]]::EvWinIniChange (char far* section)
+void [[TApplication]]::EvWinIniChange(char far* section)
 {
-    if (strcmp(section, "windows") == 0) {
+  if (strcmp(section, "windows") == 0) {
 ##--BEGIN-- @QUERY_APPL_COMMENT == VALUE_VERBOSE
-        // If the device changed in the WIN.INI file then the printer
-        // might have changed.  If we have a TPrinter (Printer) then
-        // check and make sure it's identical to the current device
-        // entry in WIN.INI.
+    // If the device changed in the WIN.INI file then the printer
+    // might have changed.  If we have a TPrinter(Printer) then
+    // check and make sure it's identical to the current device
+    // entry in WIN.INI.
+    //
 ##--END-- @QUERY_APPL_COMMENT == VALUE_VERBOSE
-        if (Printer) {
-            char printDBuffer[255];
-            LPSTR printDevice = printDBuffer;
-            LPSTR devName;
-            LPSTR driverName = 0;
-            LPSTR outputName = 0;
-        
-            if (::GetProfileString("windows", "device", "", printDevice, sizeof(printDevice))) {
+    if (Printer) {
+      const int bufferSize = 255;
+      char printDBuffer[bufferSize];
+      LPSTR printDevice = printDBuffer;
+      LPSTR devName;
+      LPSTR driverName = 0;
+      LPSTR outputName = 0;
+      if (::GetProfileString("windows", "device", "", printDevice, bufferSize)) {
 ##--BEGIN-- @QUERY_APPL_COMMENT == VALUE_VERBOSE
-                // The string which should come back is something like:
-                //
-                //      HP LaserJet III,hppcl5a,LPT1:
-                //
-                // Where the format is:
-                //
-                //      devName,driverName,outputName
-                //
+        // The string which should come back is something like:
+        //
+        //      HP LaserJet III,hppcl5a,LPT1:
+        //
+        // Where the format is:
+        //
+        //      devName,driverName,outputName
+        //
 ##--END-- @QUERY_APPL_COMMENT == VALUE_VERBOSE
-                devName = printDevice;
-                while (*printDevice) {
-                    if (*printDevice == ',') {
-                        *printDevice++ = 0;
-                        if (!driverName)
-                            driverName = printDevice;
-                        else
-                            outputName = printDevice;
-                    } else
-                        printDevice = ::AnsiNext(printDevice);
-                }
-
-                if ((Printer->GetSetup().Error != 0)                                ||
-                    (strcmp(devName, Printer->GetSetup().GetDeviceName()) != 0)    ||
-                    (strcmp(driverName, Printer->GetSetup().GetDriverName()) != 0) ||
-                    (strcmp(outputName, Printer->GetSetup().GetOutputName()) != 0)) {
-                
-                    // New printer installed so get the new printer device now.
-                    delete Printer;
-                    Printer = new TPrinter(this);
-                }
-            } else {
-                // No printer installed (GetProfileString failed).
-                delete Printer;
-                Printer = new TPrinter(this);
-            }
+        devName = printDevice;
+        while (*printDevice) {
+          if (*printDevice == ',') {
+            *printDevice++ = 0;
+            if (!driverName)
+              driverName = printDevice;
+            else
+              outputName = printDevice;
+          }
+          else
+            printDevice = ::AnsiNext(printDevice);
         }
+
+        if (Printer->GetSetup().Error != 0                ||
+            strcmp(devName, Printer->GetSetup().GetDeviceName()) != 0  ||
+            strcmp(driverName, Printer->GetSetup().GetDriverName()) != 0 ||
+            strcmp(outputName, Printer->GetSetup().GetOutputName()) != 0 ) {
+          // New printer installed so get the new printer device now.
+          //
+          delete Printer;
+          Printer = new TPrinter(this);
+        }
+      }
+      else {
+        // No printer installed(GetProfileString failed).
+        //
+        delete Printer;
+        Printer = new TPrinter(this);
+      }
     }
+  }
 }
 
-
 ##--END-- @OPT_APPL_PRINTING 
-int OwlMain (int , char* [])
-{
-    try {
-##--BEGIN-- @QUERY_APPL_OLE != VALUE_NOOLE
-##      :!@QUERY_APPL_OLE_AUTO 2
-        ::Registrar = new TOcRegistrar(::ApplicationReg, TOleDocViewFactory<[[TApplication]]>(), TApplication::GetCmdLine(), ::DocTemplateStaticHead);
-        if (::Registrar->IsOptionSet(amAnyRegOption))
-##      :@QUERY_APPL_OLE_AUTO 2
-        ::Registrar = new TOcRegistrar(::ApplicationReg, TOleDocViewAutoFactory<[[TApplication]]>(), TApplication::GetCmdLine(), ::DocTemplateStaticHead);
-        if (::Registrar->IsOptionSet(amAnyRegOption))
-            return 0;
 
-        // If this is an exe server normal run, run the app now. Otherwise, wait
-        // until our factory gets a call.
-        return ::Registrar->Run();
+int OwlMain(int , char* [])
+{
+##--BEGIN-- @QUERY_APPL_OLE != VALUE_NOOLE
+##    :!@QUERY_APPL_OLE_AUTO 2
+  ::Registrar = new TOcRegistrar(::ApplicationReg, TOleDocViewFactory<[[TApplication]]>(), TApplication::GetCmdLine(), ::DocTemplateStaticHead);
+  if (::Registrar->IsOptionSet(amAnyRegOption))
+##      :@QUERY_APPL_OLE_AUTO 2
+  ::Registrar = new TOcRegistrar(::ApplicationReg, TOleDocViewAutoFactory<[[TApplication]]>(), TApplication::GetCmdLine(), ::DocTemplateStaticHead);
+  if (::Registrar->IsOptionSet(amAnyRegOption))
+    return 0;
+
+  // If this is an exe server normal run, run the app now. Otherwise, wait
+  // until our factory gets a call.
+  //
+  return ::Registrar->Run();
 ##--END-- @QUERY_APPL_OLE != VALUE_NOOLE
 ##--BEGIN-- @QUERY_APPL_OLE == VALUE_NOOLE
 ##      :!@QUERY_APPL_OLE_AUTO 2
-        [[TApplication]]    app;
-        return app.Run();
+  [[TApplication]]   app;
+  return app.Run();
 ##      --BEGIN-- @QUERY_APPL_OLE_AUTO
-        ::Registrar = new TRegistrar(::ApplicationReg, TAutoFactory<[[TApplication]]>(), TApplication::GetCmdLine(), _hInstance);
-        if (::Registrar->IsOptionSet(amAnyRegOption))
-            return 0;
+  ::Registrar = new TRegistrar(::ApplicationReg, TAutoFactory<[[TApplication]]>(), TApplication::GetCmdLine(), _hInstance);
+  if (::Registrar->IsOptionSet(amAnyRegOption))
+    return 0;
 
-        // If this is an exe server normal run, run the app now. Otherwise, wait
-        // until our factory gets a call.
-        return ::Registrar->Run();
+  // If this is an exe server normal run, run the app now. Otherwise, wait
+  // until our factory gets a call.
+  //
+  return ::Registrar->Run();
 ##      --END-- @QUERY_APPL_OLE_AUTO
 ##--END-- @QUERY_APPL_OLE == VALUE_NOOLE
-    }
-    catch (xmsg& x) {
-        ::MessageBox(0, x.why().c_str(), "Exception", MB_OK);
-    }
-
-    return -1;
 }

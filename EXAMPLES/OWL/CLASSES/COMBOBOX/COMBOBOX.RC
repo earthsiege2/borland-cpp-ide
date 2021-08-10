@@ -1,0 +1,50 @@
+//----------------------------------------------------------------------------
+// ObjectWindows
+// Copyright (C) 1991, 1995 by Borland International, All Rights Reserved
+//----------------------------------------------------------------------------
+#ifndef WORKSHOP_INVOKED
+# include <windows.h>
+#endif
+#include <owl/owlapp.rc>         // default owl app icon
+#include <owl/mdi.rh>
+#include <owl/inputdia.rh>
+#include <owl/inputdia.rc>
+#include <owl/window.rh>
+#include "combobox.rh"
+
+IDM_COMBOBOX MENU
+BEGIN
+   POPUP "&ComboBox"
+   BEGIN
+      MENUITEM "&Simple", CM_SIMPLE
+      MENUITEM "Drop &Down", CM_DROPDOWN
+      MENUITEM "Drop Down &List", CM_DROPDOWN_LIST
+      MENUITEM SEPARATOR
+      MENUITEM "&Exit", CM_EXIT
+   END
+
+   POPUP "&Add"
+   BEGIN
+      MENUITEM "Add &String", CM_ADD_STRING
+      MENUITEM "Add String &At", CM_ADD_STRING_AT
+   END
+
+   POPUP "&Search"
+   BEGIN
+      MENUITEM "Find &String", CM_FIND_STRING
+      MENUITEM "Find String &At", CM_FIND_STRING_AT
+   END
+
+   POPUP "&Delete"
+   BEGIN
+      MENUITEM "Delete &String", CM_DELETE_STRING
+      MENUITEM "Delete &At", CM_DELETE_STRING_AT
+   END
+
+   POPUP "&Other"
+   BEGIN
+      MENUITEM "&Clear", CM_CLEAR
+      MENUITEM "&Show", CM_SHOW_LIST
+      MENUITEM "&Hide", CM_HIDE_LIST
+   END
+END

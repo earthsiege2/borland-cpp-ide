@@ -51,7 +51,8 @@ extern "C" {
 
 struct _PSP
 {
-  int dummy;                    /* Dummy structure to eliminate warnings */
+  int dummy;    /* dummy definition of structure to prevent compiler
+                   warnings */
 };
 typedef struct _PSP FAR* HPROPSHEETPAGE;
 

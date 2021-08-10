@@ -1,0 +1,13 @@
+:Base OPENHELP.HLP
+1 Getting Help in Borland C++
+2 About getting Help in Borland C++ = UsingBorHelp
+2 Using Help in Borland C++ = UsingHelpInBorlandC
+2 Getting context-sensitive Help = ContextSensitiveHelp
+2 Accessing and using contents screens = BorlandHelpContents
+2 Using the index = UsingTheIndex
+2 Searching for keywords = KeywordSearch
+2 Printing Help topics = PrintingHelpTopics
+2 Help SpeedMenus = LocalHelpMenus
+2 Using Windows Help = UsingWindowsHelp
+
+

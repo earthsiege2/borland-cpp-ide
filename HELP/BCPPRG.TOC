@@ -1,0 +1,101 @@
+:Base bcpp.hlp
+1 The Runtime library reference
+4 Reasons To Access the Run-time Library Source Code = ReasonsToAccessRTL
+2 Header files overview
+4 Header Files Summary = HFileIndex
+2 The main() function
+4 About the main() function = MainFunction
+4 Arguments to main () = ArgumentsToMain
+4 Wildcard Arguments = WildcardArguments
+4 Using --p (Pascal Calling Conventions) = UsingPascalCallingConventions
+4 The Value main() Returns = ValueMainReturns
+4 Passing File Information to Child Processes = PassingFileInformationToChildProcesses
+4 Multithread Programs = MultithreadPrograms
+4 International API = InternationalAPI
+4 International API Sample Program (ANSI character set) = InternationalAPISampleProgram
+4 Guidelines for Selecting Run-Time Libraries = GuidelinesForSelectingRunTimeLibraries
+4 Static Run-time Libraries = StaticRuntimeLibraries
+4 Dynamic-link Libraries = DynamicLinkLibraries
+4 Default Run-Time Libraries = DefaultRunTimeLibraries
+2 Borland C++ Library Category overview
+4 Borland C++ Library Routines, by Category = FunctionXRef
+4 C++ Prototyped Routines = CPPPrototypedRoutines
+4 Classification Routines = ClassificationRoutines
+4 Console I/O Routines = ConsoleIORoutines
+4 Conversion Routines = ConversionRoutines
+4 Diagnostic Routines = DiagnosticRoutines
+4 Directory Control Routines = DirectoryControlRoutines
+4 EasyWin Routines = EasyWinRoutines
+4 Inline Routines = InlineRoutines
+4 Interface Routines (DOS, 8086, BIOS) = InterfaceRoutines
+4 International API Routines = InternationalAPIRoutines
+4 Manipulation Routines = ManipulationRoutines
+4 Math Routines = MathRoutines
+4 Memory Routines = MemoryRoutines
+4 Miscellaneous Routines = MiscellaneousRoutines
+4 Obsolete Functions = ObsoleteFunctions
+4 Process Control Routines = ProcessControlRoutines
+4 Time and Date Routines = TimeAndDateRoutines
+4 Variable Argument List Routines = VariableArgumentListRoutines
+2 Runtime Library Routines
+3 Borland C++ Library Routines, by Name = FunctionsByName
+3 Global variables overview
+3 Global Variables = VariablesSummary
+3 Obsolete Global Variables = ObsoleteGlobalVariables
+
+1  BASM: The Inline Assembler
+2  The Inline Assembler (BASM) = BASM
+2  Operands = BASMOperands
+2  Expressions = BASMExpressions
+2  Expression Classes = BASMExpressionClasses
+2  Expression Operators = BASMExpressionOperators
+2  Expression Types = BASMExpressionTypes
+2  Predefined Type Symbols = BASMPredefinedTypeSyms
+2  NEAR and FAR Pseudo-Types = BASMNEARandFAR
+2  Register Expressions = BASMClassRegisters
+2  Memory Reference Expressions = BASMClassMemoryRefs
+2  Immediate Value Expressions = BASMClassImmediate
+2  Relocatable vs. Absolute Expressions = RelocatableVsAbsolute
+2  Register Symbols = BASMRegisterSymbols
+2  Expression Symbols = BASMExpressionSymbols
+2  ST(x) Register Symbol = STRegisterSymbol
+2  String Constants = AsmStringConstants
+2  Numeric Constants = NumericConstants
+2  Reserved Words = BASMReservedWords
+2  Prefix Opcodes = BASMPrefixOpcodes
+2  Instruction Opcodes = BASMInstructionOpcodes
+2  RET Instructions = BASMRETs
+2  Jump Optimization = BASMJMPs
+2  DB, DW, and DD Directives = DBandDWandDD
+2  Statement = AssemblerStatement
+2  Labels = BASMLabels
+2  Subexpression (...) = BASMSubexpression
+2  operators
+3  Memory Reference Operator [...] = BASMMemoryReference
+3  Structure Member Operator (xxx . yyy) = BASMStructureMember
+3  HIGH Operator = BASMHigh
+3  LOW Operator = BASMLow
+3  Unary Plus (+...) = BASMUnaryPlus
+3  Unary Minus (-...) = BASMUnaryMinus
+3  Segment Override Operator (: ...) = BASMSegmentOverride
+3  OFFSET Operator = BASMOffset
+3  SEG Operator = BASMSeg
+3  TYPE Operator = BASMType
+3  Typecast Operator (... PTR ...) = BASMTypecast
+3  Multiplication Operator (... * ...) = BASMMultiplication
+3  Integer Division (... / ...) = BASMIntegerDivision
+3  Integer Modulus (... MOD ...) = BASMIntegerModulus
+3  Shift Left Operator (... SHL ...) = BASMLogicalSHL
+3  Shift Right Operator (... SHR ...) = BASMLogicalSHR
+3  Addition Operator (... + ...) = BASMAddition
+3  Subtraction Operator (... - ...) = BASMSubtraction
+3  Bitwise Negation (NOT) = BASMBitwiseNOT
+3  Bitwise AND = BASMBitwiseAND
+3  Bitwise OR = BASMBitwiseOR
+3  Bitwise Exclusive XOR = BASMBitwiseXOR
+2  Function Returns 
+3  Function Returns = BASMFunctionReturns
+2  Jumps 
+3  short jump = ShortJump
+3  near jump = NearJump
+3  short inverse jump = ShortJumpInverse

@@ -1,0 +1,15 @@
+#----------------------------------------------------------------------------
+# Borland C++
+# Copyright (c) 1987, 1996 Borland International Inc.  All Rights Reserved.
+#   examples\series\listctrl\makefile
+#----------------------------------------------------------------------------
+
+SYSTEMS = WIN32
+OSMAJOR = 4
+OSMINOR = 0
+CPCH    = -Hc -H"windows.h" -H=listctrl.csm
+EXERES  = listctrl
+OBJEXE  = listctrl.obj winmain.obj init.obj about.obj dispatch.obj misc.obj\
+          listview.obj stckinfo.obj
+
+!include $(BCEXAMPLEDIR)\makefile.gen

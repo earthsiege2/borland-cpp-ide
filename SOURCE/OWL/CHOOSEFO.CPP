@@ -1,20 +1,29 @@
 //----------------------------------------------------------------------------
 // ObjectWindows
-// (C) Copyright 1992, 1994 by Borland International, All Rights Reserved
+// Copyright (c) 1992, 1996 by Borland International, All Rights Reserved
 //
-//   Implementation of Choose Font Common Dialog class
+//$Revision:   10.6  $
+//
+// Implementation of TChooseFontDialog, a Choose Font Common Dialog class
 //----------------------------------------------------------------------------
-#include <owl/owlpch.h>
-#include <owl/choosefo.h>
+#include <owl/pch.h>
+#if !defined(OWL_CHOOSEFO_H)
+# include <owl/choosefo.h>
+#endif
 #if !defined(ctlFirst)
 # include <dlgs.h>
 #endif
+
+DIAG_DECLARE_GROUP(OwlCommDialog);  // diagnostic group for common dialogs
 
 DEFINE_RESPONSE_TABLE1(TChooseFontDialog, TCommonDialog)
 END_RESPONSE_TABLE;
 
 IMPLEMENT_CASTABLE(TChooseFontDialog);
 
+//
+// Initialize the ChooseFont data members.
+//
 TChooseFontDialog::TChooseFontDialog(TWindow*        parent,
                                      TData&          data,
                                      TResId          templateId,
@@ -24,47 +33,68 @@ TChooseFontDialog::TChooseFontDialog(TWindow*        parent,
   TCommonDialog(parent, title, module),
   Data(data)
 {
-  memset(&cf, 0, sizeof(CHOOSEFONT));
-  cf.lStructSize = sizeof(CHOOSEFONT);
-  cf.hwndOwner = Parent ? Parent->HWindow : 0;
-  cf.hInstance = *GetModule();
-  cf.Flags = CF_ENABLEHOOK | Data.Flags;
+  memset(&Cf, 0, sizeof(CHOOSEFONT));
+  Cf.lStructSize = sizeof(CHOOSEFONT);
+  Cf.hwndOwner = Parent ? Parent->GetHandle() : 0;
+  Cf.hInstance = *GetModule();
+  Cf.Flags = CF_ENABLEHOOK | Data.Flags;
   if (templateId) {
-    cf.lpTemplateName = templateId;
-    cf.Flags |= CF_ENABLETEMPLATE;
+    Cf.lpTemplateName = templateId;
+    Cf.Flags |= CF_ENABLETEMPLATE;
   }
   else
-    cf.Flags &= ~CF_ENABLETEMPLATE;
-  cf.lpfnHook = 0;
+    Cf.Flags &= ~CF_ENABLETEMPLATE;
+  Cf.lpfnHook = 0;
 
-  cf.hDC = Data.DC;
-  cf.lpLogFont = &Data.LogFont;
-  cf.iPointSize = Data.PointSize;
-  cf.rgbColors = Data.Color;
-  cf.lpszStyle = Data.Style;
-  cf.nFontType = Data.FontType;
-  cf.nSizeMin = Data.SizeMin;
-  cf.nSizeMax = Data.SizeMax;
+  Cf.hDC = Data.DC;
+  Cf.lpLogFont = &Data.LogFont;
+  Cf.iPointSize = Data.PointSize;
+  Cf.rgbColors = Data.Color;
+  Cf.lpszStyle = Data.Style;
+  Cf.nFontType = Data.FontType;
+  Cf.nSizeMin = Data.SizeMin;
+  Cf.nSizeMax = Data.SizeMax;
+
+  TRACEX(OwlCommDialog, OWL_CDLEVEL, "TChooseFontDialog constructed @" << (void*)this);
 }
 
-bool
-TChooseFontDialog::DialogFunction(uint msg, WPARAM wParam, LPARAM lParam)
+
+//
+// Destructor for this object does nothing in the non-diagnostic versions
+// of the library.
+// In the diagnostic version, it produces a trace message.
+//
+TChooseFontDialog::~TChooseFontDialog()
 {
-  return TCommonDialog::DialogFunction(msg, wParam, lParam);
+  TRACEX(OwlCommDialog, OWL_CDLEVEL, "TChooseFontDialog destructed @" << (void*)this);
 }
 
+
+//
+// Override the virtual DialogFunction.
+// It does no additional processing.
+//
+bool
+TChooseFontDialog::DialogFunction(uint msg, TParam1 param1, TParam2 param2)
+{
+  return TCommonDialog::DialogFunction(msg, param1, param2);
+}
+
+//
+// Execute the dialog to retrieve the font selected by the user.
+//
 int
 TChooseFontDialog::DoExecute()
 {
-  (DLGPROC)cf.lpfnHook = (DLGPROC)(FARPROC)StdDlgProcInstance;
-  int ret = ::ChooseFont(&cf);
+  Cf.lpfnHook = LPCFHOOKPROC(StdDlgProc);
+  int ret = ::ChooseFont(&Cf);
   if (ret) {
-    Data.Flags = cf.Flags;
+    Data.Flags = Cf.Flags;
     Data.Error = 0;
-    Data.PointSize = cf.iPointSize;
-    Data.Color = cf.rgbColors;
-    Data.Style = cf.lpszStyle;
-    Data.FontType = cf.nFontType;
+    Data.PointSize = Cf.iPointSize;
+    Data.Color = Cf.rgbColors;
+    Data.Style = Cf.lpszStyle;
+    Data.FontType = Cf.nFontType;
   }
   else {
     Data.Error = ::CommDlgExtendedError();

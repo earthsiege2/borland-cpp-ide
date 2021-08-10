@@ -39,6 +39,13 @@ OBJS =               \
         ctor6.obj    \
         ctor7.obj    \
         ctor8.obj    \
+        ctor9.obj    \
+        ctor10.obj   \
+        ctor11.obj   \
+        ctor12.obj   \
+        ctor13.obj   \
+        ctor14.obj   \
+        ctor15.obj   \
         find1.obj    \
         find2.obj    \
         find3.obj    \
@@ -139,6 +146,30 @@ ctor6.obj:    ctor6.cpp
         $(EXCPTBUILD)
 
 ctor7.obj:    ctor7.cpp
+        $(EXCPTBUILD)
+
+ctor8.obj:    ctor8.cpp
+        $(EXCPTBUILD)
+
+ctor9.obj:    ctor9.cpp
+        $(EXCPTBUILD)
+
+ctor10.obj:    ctor10.cpp
+        $(EXCPTBUILD)
+
+ctor11.obj:    ctor11.cpp
+        $(EXCPTBUILD)
+
+ctor12.obj:    ctor12.cpp
+        $(EXCPTBUILD)
+
+ctor13.obj:    ctor13.cpp
+        $(EXCPTBUILD)
+
+ctor14.obj:    ctor14.cpp
+        $(EXCPTBUILD)
+
+ctor15.obj:    ctor15.cpp
         $(EXCPTBUILD)
 
 find1.obj:    find1.cpp

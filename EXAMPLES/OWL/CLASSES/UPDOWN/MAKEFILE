@@ -1,0 +1,8 @@
+#----------------------------------------------------------------------------
+# ObjectWindows
+# Copyright (c) 1995, 1996 by Borland International, All Rights Reserved
+#----------------------------------------------------------------------------
+EXERES = updown
+OBJEXE = updownx.obj 
+
+!include $(BCEXAMPLEDIR)\owlmake.gen

@@ -1,0 +1,11 @@
+#----------------------------------------------------------------------------
+# ObjectWindows
+# Copyright (c) 1993, 1995 by Borland International, All Rights Reserved
+#----------------------------------------------------------------------------
+
+MODELS = ldft
+
+EXERES = commdlgx
+OBJEXE = commdlgx.obj
+
+!include $(BCEXAMPLEDIR)\owlmake.gen

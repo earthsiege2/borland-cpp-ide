@@ -1,0 +1,10 @@
+#----------------------------------------------------------------------------
+# ObjectWindows
+# Copyright (c) 1995, 1996 by Borland International, All Rights Reserved
+#----------------------------------------------------------------------------
+EXERES = apxole
+RESEXE = apxolapp.res
+OBJEXE = apxolabd.obj apxolapp.obj apxololv.obj apxomdi1.obj apxomdic.obj \
+         apxprev.obj apxprint.obj
+
+!include $(BCEXAMPLEDIR)\owlocfmk.gen

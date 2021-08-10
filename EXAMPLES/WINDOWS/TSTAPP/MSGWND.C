@@ -490,9 +490,12 @@ LRESULT CALLBACK _export MsgwndWndProc(HWND hWnd, UINT message,
                               MAKEINTRESOURCE(ABOUT),
                               hWnd,
                               lpproc);
-                    #pragma warn -eff
+
+                    #ifndef __FLAT__
+                    // required for 16-bit applications only
                     FreeProcInstance((FARPROC)lpproc);
-                    #pragma warn .eff
+                    #endif
+
                     break;
 
                 default:

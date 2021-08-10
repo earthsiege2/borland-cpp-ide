@@ -1,12 +1,11 @@
+//----------------------------------------------------------------------------
+// ObjectComponents
+// Copyright (c) 1991, 1996 by Borland International, All Rights Reserved
 //
-//**************************************************************************
-// 
+// $Revision:   2.2  $
+//
 // OleDLL.cpp -- DLL entry/exit points for BOLE.DLL
-//
-// Copyright (c) 1993,94 by Borland International, Inc. All rights reserved
-//
-//**************************************************************************
-
+//----------------------------------------------------------------------------
 #include <BOle32.h>
 #include <Windows.h>
 #include "OLE2UI.h"
@@ -20,10 +19,6 @@ HINSTANCE boleInst;
 	void WhackRTL ()	{ _LockWIN87EM = FALSE; }
 	#pragma startup WhackRTL 0
 #endif
-
-extern "C" {
-#include "ole2ui.h"
-}
 
 OLEDBGDATA_MAIN ("BOLE")
 
@@ -60,6 +55,5 @@ extern "C" BOOL WINAPI DllEntryPoint( HINSTANCE hInst, DWORD dwReason, LPVOID )
 }
 
 #endif
-
 
 

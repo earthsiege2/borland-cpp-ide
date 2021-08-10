@@ -1,14 +1,13 @@
+//----------------------------------------------------------------------------
+// ObjectComponents
+// Copyright (c) 1994, 1996 by Borland International, All Rights Reserved
 //
-//**************************************************************************
+// $Revision:   2.2  $
 //
-// BOle32.h -- Portability helper for 32bit platforms
-//
-// Copyright (c) 1993,94 by Borland International, Inc. All rights reserved
-//
-//**************************************************************************
-
-#ifndef BOLE32_H
-#define BOLE32_H
+// Portability helper for 32bit platforms
+//----------------------------------------------------------------------------
+#ifndef _BOLE32_H
+#define _BOLE32_H
 
 #include "PortDefs.h"
 
@@ -20,4 +19,3 @@
 
 #endif
 #endif // BOLE32_H
-

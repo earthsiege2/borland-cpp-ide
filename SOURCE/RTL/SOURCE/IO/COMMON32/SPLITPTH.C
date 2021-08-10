@@ -9,9 +9,9 @@
  *-----------------------------------------------------------------------*/
 
 /*
- *      C/C++ Run Time Library - Version 1.5
+ *      C/C++ Run Time Library - Version 2.0
  *
- *      Copyright (c) 1987, 1994 by Borland International
+ *      Copyright (c) 1987, 1996 by Borland International
  *      All Rights Reserved.
  *
  */
@@ -182,10 +182,6 @@ char *nameP, char *extP)
           Copy filename into template up to MAXPATH characters
         */
         pB = buf;
-#ifndef __OS2__
-        while (*pathP == ' ')
-                pathP++;
-#endif
         if ((Wrk = strlen(pathP)) > MAXPATH)
                 Wrk = MAXPATH;
         *pB++ = 0;

@@ -1,6 +1,6 @@
 //----------------------------------------------------------------------------
-// ObjectWindows - (C) Copyright 1991, 1993 by Borland International
-//
+// ObjectWindows
+// Copyright (c) 1991, 1995 by Borland International, All Rights Reserved
 //
 //   Drag and Drop example in OWL
 //
@@ -15,14 +15,14 @@
 //   important lines of code that affect the performance of your
 //   application.
 //----------------------------------------------------------------------------
-#include <owl\owlpch.h>
-#include <owl\applicat.h>
-#include <owl\window.h>
-#include <owl\framewin.h>
-#include <owl\dc.h>
+#include <owl/pch.h>
+#include <owl/applicat.h>
+#include <owl/window.h>
+#include <owl/framewin.h>
+#include <owl/dc.h>
+#include <classlib/bags.h>
 #include <stdio.h>
 #include <dir.h>
-#include <classlib\bags.h>
 
 char HelpText[]=
   "\n\r"
@@ -117,7 +117,7 @@ class TMyWindow : public TWindow {
   protected:
     void SetupWindow();
     void CleanupWindow();
-    void Paint(TDC&, BOOL, TRect&);
+    void Paint(TDC&, bool, TRect&);
 
     //----------------------------------------------------------------
     // Step 2:
@@ -269,7 +269,7 @@ TMyWindow::EvDropFiles(TDropInfo drop)
 }
 
 void
-TMyWindow::Paint(TDC& dc, BOOL, TRect&)
+TMyWindow::Paint(TDC& dc, bool, TRect&)
 {
   if (GetHelp) {
     TRect rect;

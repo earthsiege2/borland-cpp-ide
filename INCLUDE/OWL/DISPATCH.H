@@ -1,34 +1,41 @@
 //----------------------------------------------------------------------------
 // ObjectWindows
-// (C) Copyright 1992, 1994 by Borland International, All Rights Reserved
+// Copyright (c) 1992, 1996 by Borland International, All Rights Reserved
 //
-//   Dispatch functions (crackers) to crack a Windows message and pass control
-//   to a member function via a pointer (pmf).
+//$Revision:   10.7  $
+//
+// Dispatch functions (crackers) to crack a Windows message and pass control
+// to a member function via a pointer (pmf).
 //----------------------------------------------------------------------------
 #if !defined(OWL_DISPATCH_H)
 #define OWL_DISPATCH_H
 
-#if !defined(OWL_OWLDEFS_H)
-# include <owl/owldefs.h>
+#if !defined(OWL_DEFS_H)
+# include <owl/defs.h>
 #endif
 
 //
 // class GENERIC
-// ----- -------
-// generic class for casting pointer to objects and pointer to member functions
+// ~~~~~ ~~~~~~~
+// Generic class for casting pointer to objects and pointer to member functions
+// Class is not actually defined or implemented anywhere
 //
-class _OWLFASTTHIS GENERIC;   // conditionally define to correct calling model
+class _CALLCNVN GENERIC;   // Conditionally define to correct calling model
+
+#if defined(BI_COMP_MSC)
+# pragma pointers_to_members(full_generality, virtual_inheritance)
+#endif
 
 //
 // typedef TAnyPMF
-// ------- -------
+// ~~~~~~~ ~~~~~~~
 // generic pointer to member function
 //
 typedef void (GENERIC::*TAnyPMF)();
 
 //
 // typedef TAnyDispatcher
-// ------- --------------
+// ~~~~~~~ ~~~~~~~~~~~~~~
 // all message dispatcher functions take four parameters:
 // - reference to an object
 // - pointer to member function (signature varies according to the cracking
@@ -83,6 +90,24 @@ i_WPARAM_Dispatch(GENERIC& generic,
                   uint     wParam,
                   int32    lParam);
 
+//
+// passes wParam as a uint and returns a bool result
+//
+int32 _OWLFUNC
+B_WPARAM_Dispatch(GENERIC& generic,
+                  bool     (GENERIC::*pmf)(uint),
+                  uint     wParam,
+                  int32    lParam);
+
+//
+// passes wParam as a bool and returns a bool result
+//
+int32 _OWLFUNC
+B_B_Dispatch(GENERIC& generic,
+             bool     (GENERIC::*pmf)(bool),
+             uint     wParam,
+             int32    lParam);
+
 //----------------------------------------------------------------------------
 
 //
@@ -131,6 +156,23 @@ U_Dispatch(GENERIC& generic,
            uint    (GENERIC::*pmf)(),
            uint     wParam,
            int32    lParam);
+//
+// passes lParam as an int32 and returns a bool result
+//
+int32 _OWLFUNC
+B_LPARAM_Dispatch(GENERIC& generic,
+                  bool    (GENERIC::*pmf)(int32),
+                  uint     wParam,
+                  int32    lParam);
+
+//
+// passes no arguments and returns a bool result
+//
+int32 _OWLFUNC
+B_Dispatch(GENERIC& generic,
+           bool    (GENERIC::*pmf)(),
+           uint     wParam,
+           int32    lParam);
 
 //
 // passes lParam as an int32 and returns a uint result
@@ -139,7 +181,16 @@ int32 _OWLFUNC
 U_LPARAM_Dispatch(GENERIC& generic,
                   uint    (GENERIC::*pmf)(int32),
                   uint     wParam,
-                  int32    lParam);
+                  int32    param2);
+
+//
+// passes nothing and returns a uint32 result
+//
+int32 _OWLFUNC
+U32_Dispatch(GENERIC& generic,
+             uint32  (GENERIC::*pmf)(),
+             uint,
+             int32);
 
 //
 // passes lParam as a TPoint& and returns a uint result
@@ -151,22 +202,114 @@ U_POINT_Dispatch(GENERIC& generic,
                  int32    lParam);
 
 //
-// passes lParam as a void* and returns a uint result 
+// passes lParam as a void* and returns a uint result
 //
 int32 _OWLFUNC
 U_POINTER_Dispatch(GENERIC& generic,
                    uint    (GENERIC::*pmf)(void*),
                    uint,
                    int32    lParam);
+                       
+//
+// passes lParam as a void* and returns a bool result
+//
+int32 _OWLFUNC
+B_POINTER_Dispatch(GENERIC& generic,
+                   bool    (GENERIC::*pmf)(void*),
+                   uint,
+                   int32    lParam);
 
 //
-// passes lParam as a uint and returns a uint result
+// passes wParam as a uint and returns a uint result
 //
 int32 _OWLFUNC
 U_U_Dispatch(GENERIC& generic,
              uint    (GENERIC::*pmf)(uint),
+             uint    param1,
+             int32);
+
+//
+// passes wParam as a bool and returns a bool result
+//
+int32 _OWLFUNC
+B_B_Dispatch(GENERIC& generic,
+             bool    (GENERIC::*pmf)(bool),
+             uint    param1,
+             int32);
+
+//
+// Passes param2 as an int and returns bool
+//
+int32 _OWLFUNC
+B_I2_Dispatch(GENERIC& generic,
+              bool  (GENERIC::*pmf)(int),
+              uint,
+              int32    param2);
+
+//
+// passes wParam as a bool and returns a uint result
+//
+int32 _OWLFUNC
+U_B_Dispatch(GENERIC& generic,
+             uint    (GENERIC::*pmf)(bool),
+             uint     param1,
+             int32);
+
+//
+// passes wParam as bool, lParam as a uint and returns a bool result
+//
+int32 _OWLFUNC
+B_B_U_Dispatch(GENERIC& generic,
+             bool    (GENERIC::*pmf)(bool, uint),
+             uint     wParam,
+             int32    lParam);
+
+//
+// passes wParam as a uint, lParam as a uint and returns a uint
+//
+int32 _OWLFUNC
+U_U_U_Dispatch(GENERIC& generic,
+             uint    (GENERIC::*pmf)(uint, uint),
              uint,
              int32    lParam);
+
+//
+// passes wParam as a bool, lParam as a uint and returns a uint
+//
+int32 _OWLFUNC
+U_B_U_Dispatch(GENERIC& generic,
+             uint    (GENERIC::*pmf)(bool, uint),
+             uint,
+             int32    lParam);
+
+//
+// passes wParam as a uint, lParam as a uint and returns a bool
+//
+int32 _OWLFUNC
+B_U_U_Dispatch(GENERIC& generic,
+             bool    (GENERIC::*pmf)(uint, uint),
+             uint,
+             int32    lParam);
+
+//
+// passes wParam as a uint, lParam as a far pointer to a rect, copying to a
+// temp rect & back, if needed for near data models only.  returns uint
+//
+int32 _OWLFUNC
+U_U_RECT_Dispatch(GENERIC& generic,
+                  uint    (GENERIC::*pmf)(uint, TRect&),
+                  uint     param1,
+                  int32    param2);
+
+//
+// passes wParam as a uint, lParam as a far pointer to a rect, copying to a
+// temp rect & back, if needed for near data models only.  returns bool
+//
+int32 _OWLFUNC
+B_U_RECT_Dispatch(GENERIC& generic,
+                  bool    (GENERIC::*pmf)(uint, TRect&),
+                  uint     param1,
+                  int32    param2);
 
 //
 // passes wParam as a uint, lParam.lo as a uint, and lParam.hi as a uint
@@ -178,6 +321,15 @@ U_U_U_U_Dispatch(GENERIC& generic,
                  int32    lParam);
 
 //
+// passes wParam as a uint, lParam.lo as a uint, and lParam.hi as a uint
+// and returns a bool
+int32 _OWLFUNC
+B_U_U_U_Dispatch(GENERIC& generic,
+                 bool    (GENERIC::*pmf)(uint, uint, uint),
+                 uint     wParam,
+                 int32    lParam);
+
+//
 // passes wParam as a uint and lParam as an int32 and returns a uint result
 //
 int32 _OWLFUNC
@@ -185,6 +337,24 @@ U_WPARAM_LPARAM_Dispatch(GENERIC& generic,
                          uint    (GENERIC::*pmf)(uint, int32),
                          uint     wParam,
                          int32    lParam);
+
+//
+// passes wParam as a uint and lParam as an int32 and returns a bool result
+//
+int32 _OWLFUNC
+B_WPARAM_LPARAM_Dispatch(GENERIC& generic,
+                         uint    (GENERIC::*pmf)(uint, int32),
+                         uint     wParam,
+                         int32    lParam);
+
+//
+// passes wParam as a bool and lParam as an int32 and returns a uint result
+//
+int32 _OWLFUNC
+U_B_LPARAM_Dispatch(GENERIC& generic,
+                    uint    (GENERIC::*pmf)(bool, int32),
+                    uint     wParam,
+                    int32    lParam);
 
 //----------------------------------------------------------------------------
 
@@ -252,12 +422,50 @@ v_U_U_Dispatch(GENERIC& generic,
                int32    lParam);
 
 //
+// passes wParam as a uint and lParam as a bool and always returns 0
+//
+int32 _OWLFUNC
+v_U_B_Dispatch(GENERIC& generic,
+               void    (GENERIC::*pmf)(uint, bool),
+               uint     wParam,
+               int32    lParam);
+
+//
+// passes wParam as a bool and lParam as a uint and always returns 0
+//
+int32 _OWLFUNC
+v_B_U_Dispatch(GENERIC& generic,
+               void    (GENERIC::*pmf)(bool, uint),
+               uint     wParam,
+               int32    lParam);
+
+//
 // passes wParam as a uint, lParam.lo as a uint, and lParam.hi as a uint and
 // always returns 0
 //
 int32 _OWLFUNC
 v_U_U_U_Dispatch(GENERIC& generic,
                  void    (GENERIC::*pmf)(uint, uint, uint),
+                 uint     wParam,
+                 int32    lParam);
+
+//
+// passes wParam as a bool, lParam.lo as a uint, and lParam.hi as a uint and
+// always returns 0
+//
+int32 _OWLFUNC
+v_B_U_U_Dispatch(GENERIC& generic,
+                 void    (GENERIC::*pmf)(bool, uint, uint),
+                 uint     wParam,
+                 int32    lParam);
+
+//
+// passes wParam as a uint, lParam.lo as a uint, and lParam.hi as a bool and
+// always returns 0
+//
+int32 _OWLFUNC
+v_U_U_B_Dispatch(GENERIC& generic,
+                 void    (GENERIC::*pmf)(uint, uint, bool),
                  uint     wParam,
                  int32    lParam);
 
@@ -269,6 +477,36 @@ v_WPARAM_Dispatch(GENERIC& generic,
                   void    (GENERIC::*pmf)(uint),
                   uint     wParam,
                   int32    lParam);
+
+#if defined(BI_PLAT_WIN32)
+//
+// passes wParam as an HWND and lParam as a pointer and always returns true
+// for WM_COPYDATA
+//
+int32 _OWLFUNC
+v_HWND_PCOPYDATASTRUCT_Dispatch(GENERIC& generic,
+                         void    (GENERIC::*pmf)(HWND, COPYDATASTRUCT*),
+                         uint     wParam,
+                         int32    lParam);
+#endif
+
+//
+// passes wParam as a bool and always returns 0
+//
+int32 _OWLFUNC
+v_B_Dispatch(GENERIC& generic,
+             void    (GENERIC::*pmf)(bool),
+             uint     wParam,
+             int32    lParam);
+
+//
+// passes wParam and lParam as bools and always returns 0
+//
+int32 _OWLFUNC
+v_B_B_Dispatch(GENERIC& generic,
+             void    (GENERIC::*pmf)(bool, bool),
+             uint     wParam,
+             int32    lParam);
 
 //
 // passes wParam as a uint and lParam as an int32 and always returns 0
@@ -314,7 +552,7 @@ v_U_U_W_Dispatch(GENERIC& generic,
 //
 int32 _OWLFUNC
 v_Activate_Dispatch(GENERIC& generic,
-                    void    (GENERIC::*pmf)(uint, uint, uint),
+                    void    (GENERIC::*pmf)(uint, bool, uint),
                     uint     wParam,
                     int32    lParam);
 

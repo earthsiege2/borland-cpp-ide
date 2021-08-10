@@ -1,14 +1,16 @@
 //----------------------------------------------------------------------------
 // ObjectWindows
-// (C) Copyright 1991, 1994 by Borland International, All Rights Reserved
+// Copyright (c) 1991, 1996 by Borland International, All Rights Reserved
 //
-//   Definition of class TScroller.
+//$Revision:   10.3  $
+//
+// Definition of class TScroller.
 //----------------------------------------------------------------------------
 #if !defined(OWL_SCROLLER_H)
 #define OWL_SCROLLER_H
 
-#if !defined(OWL_OWLDEFS_H)
-# include <owl/owldefs.h>
+#if !defined(OWL_DEFS_H)
+# include <owl/defs.h>
 #endif
 #if !defined(CLASSLIB_OBJSTRM_H)
 # include <classlib/objstrm.h>
@@ -17,8 +19,12 @@
 # include <limits.h>
 #endif
 
+// Generic definitions/compiler options (eg. alignment) preceeding the
+// definition of classes
+#include <services/preclass.h>
+
 class _OWLCLASS TWindow;
-#if !defined(OSL_GEOMETRY_H)
+#if !defined(WINSYS_GEOMETRY_H)
  class _BIDSCLASS TRect;
 #endif
 class _OWLCLASS TDC;
@@ -27,9 +33,8 @@ inline long LongMulDiv(long mul1, long mul2, long div1)
                        {return (mul1*mul2) / div1;}
 
 //
-//  class TScroller
-//  ----- ---------
-//
+// class TScroller
+// ~~~~~ ~~~~~~~~~
 // Class TScroller implements the actual scroller object. All functions
 // are inline or virtual to avoid pulling in code when no scrollers have
 // been constructed.
@@ -41,11 +46,12 @@ class _OWLCLASS TScroller : public TStreamableBase {
               long     xRange, long yRange);
     virtual ~TScroller();
 
-            void  SetWindow(TWindow* win) {Window = win;}
+            void  SetWindow(TWindow* win);
     virtual void  SetUnits(int xUnit, int yUnit);
     virtual void  SetPageSize();
     virtual void  SetSBarRange();
     virtual void  SetRange(long xRange, long yRange);
+    virtual void  SetTotalRangeOfUnits(long xTotalUnits, long yTotalUnits);
 
     virtual void  BeginView(TDC& dc, TRect& rect);
     virtual void  EndView();
@@ -53,63 +59,110 @@ class _OWLCLASS TScroller : public TStreamableBase {
     virtual void  HScroll(uint scrollEvent, int thumbPos);
     virtual void  ScrollTo(long x, long y);
 
+    // Scrolls to a position calculated using the passed delta values
     //
-    // scrolls to a position calculated using the passed "Delta" values
-    //
-    void          ScrollBy(long dx, long dy) {ScrollTo(XPos+dx, YPos+dy);}
+    void          ScrollBy(long dx, long dy);
 
     virtual bool  IsAutoMode();
     virtual void  AutoScroll();
 
-    //
-    // returns a bool value indicating whether or not the passed
+    // Returns a bool value indicating whether or not the passed
     // area (in units) is currently visible
     //
-    bool          IsVisibleRect(long x, long y, int xExt, int yExt)
-            {return (x + xExt > XPos) && (y + yExt > YPos) &&
-                  (x <= XPos + XPage + 1) && (y <= YPos + YPage + 1);}
+    bool          IsVisibleRect(long x, long y, int xExt, int yExt);
 
-    //
-    // converts a horizontal range value from the scrollbar to a
+    // Converts a horizontal range value from the scrollbar to a
     // horizontal scroll value
     //
-    int           XScrollValue(long rangeUnit)
-            {return (int)LongMulDiv(rangeUnit, SHRT_MAX, XRange);}
+    int           XScrollValue(long rangeUnit);
 
-    //
-    // converts a vertical range value from the scrollbar to a
+    // Converts a vertical range value from the scrollbar to a
     // vertical scroll value
     //
-    int           YScrollValue(long rangeUnit)
-            {return (int)LongMulDiv(rangeUnit, SHRT_MAX, YRange);}
+    int           YScrollValue(long rangeUnit);
 
-    //
-    // converts a horizontal scroll value from the scrollbar to
+    // Converts a horizontal scroll value from the scrollbar to
     // a horizontal range value
     //
-    long          XRangeValue(int scrollUnit)
-            {return LongMulDiv(scrollUnit, XRange, SHRT_MAX);}
+    long          XRangeValue(int scrollUnit);
 
-    //
-    // converts a vertical scroll value from the scrollbar to
+    // Converts a vertical scroll value from the scrollbar to
     // a vertical range value
     //
-    long          YRangeValue(int scrollUnit)
-            {return LongMulDiv(scrollUnit, YRange, SHRT_MAX);}
+    long          YRangeValue(int scrollUnit);
 
   public:
-    TWindow*  Window;          // Window that this scroller belongs to
-    long      XPos, YPos;      // current pos in horz/vert scroll units
-    long      XRange, YRange;  // # of scrollable horz/vert scroll units
-    int       XUnit, YUnit;    // logical device units per horz/vert scroll unit
-    int       XLine, YLine;    // # of horz/vert scroll units per line
-    int       XPage, YPage;    // # of horz/vert scroll units per page
-    bool      AutoMode;        // auto scrolling mode
-    bool      TrackMode;       // track scroll mode
-    bool      AutoOrg;         // indicates Scroller offsets origin
-    bool      HasHScrollBar, HasVScrollBar;
+    TWindow*  Window;         // Window that this scroller belongs to
+    long      XPos;           // Current pos in horz/vert scroll units
+    long      YPos;           //
+    long      XRange;         // # of scrollable horz/vert scroll units
+    long      YRange;         //
+    long      XTotalUnits;    // Total number of horz/vert scroll units
+    long      YTotalUnits;    //
+    int       XUnit;          // Logical device units per horz/vert scroll unit
+    int       YUnit;          //
+    int       XLine;          // # of horz/vert scroll units per line
+    int       YLine;          //
+    int       XPage;          // # of horz/vert scroll units per page
+    int       YPage;          //
+    bool      AutoMode;       // Auto scrolling mode
+    bool      TrackMode;      // Track scroll mode
+    bool      AutoOrg;        // Indicates Scroller offsets origin
+    bool      HasHScrollBar;
+    bool      HasVScrollBar;
 
   DECLARE_STREAMABLE(_OWLCLASS, TScroller, 1);
 };
+
+// Generic definitions/compiler options (eg. alignment) following the
+// definition of classes
+#include <services/posclass.h>
+
+//----------------------------------------------------------------------------
+// Inline implementations
+//
+
+//
+inline void TScroller::SetWindow(TWindow* win)
+{
+  Window = win;
+}
+
+//
+inline void TScroller::ScrollBy(long dx, long dy)
+{
+  ScrollTo(XPos+dx, YPos+dy);
+}
+
+//
+inline bool TScroller::IsVisibleRect(long x, long y, int xExt, int yExt)
+{
+  return (x + xExt > XPos) && (y + yExt > YPos) &&
+      (x <= XPos + XPage + 1) && (y <= YPos + YPage + 1);
+}
+
+//
+inline int  TScroller::XScrollValue(long rangeUnit)
+{
+  return (int)LongMulDiv(rangeUnit, SHRT_MAX, XRange);
+}
+
+//
+inline int  TScroller::YScrollValue(long rangeUnit)
+{
+  return (int)LongMulDiv(rangeUnit, SHRT_MAX, YRange);
+}
+
+//
+inline long TScroller::XRangeValue(int scrollUnit)
+{
+  return LongMulDiv(scrollUnit, XRange, SHRT_MAX);
+}
+
+//
+inline long TScroller::YRangeValue(int scrollUnit)
+{
+  return LongMulDiv(scrollUnit, YRange, SHRT_MAX);
+}
 
 #endif  // OWL_SCROLLER_H

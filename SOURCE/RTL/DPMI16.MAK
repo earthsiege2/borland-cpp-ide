@@ -1,19 +1,21 @@
 #############################################################################
 # Configure the tools appropriately.                                        #
 #############################################################################
-AFLAGS   = -D__$(MODEL)__ -D__DPMI16__ -D_WINDOWS -D_Windows -m -mx -q -t -I$(BC45INCL) -I$(INCLBASE)\rtlinc\common16
-ASM      = tasm
+AFLAGS   = -D__$(MODEL)__ -D__DPMI16__ -D_WINDOWS -D_Windows -m -mx -q -t -I$(BCINCL) -I$(INCLBASE)\rtlinc\common16
+ASM      = tasmx
 CC       = bcc +$(OBJDIR)\$(CFG)
 CFLAGS   = -WX -a- -c -D_WINDOWS -O1 -Vs -w -w-asm -xc -X -zC_TEXT -zR_DATA -n$(OBJDIR) -I$(INCLUDES) -m$(MODEL)
 IMPLIB   = implib -i -c -o
-INCLUDES = $(BC45INCL);$(INCLBASE)\rtlinc\common16
+INCLUDES = $(BCINCL);$(INCLBASE)\rtlinc\common16
 LIBNAME  = dpmi16
 OBJDIR   = $(OBJBASE)
+PUBTOOL  = pubdup.exe
+PUBNAME  = names16.pub
 
 !if $d(DEBUG)
-    TLIB = tlib /C /P128 /E
+    TLIB = tlib /C /P128
 !else
-    TLIB = tlib /C /0 /E
+    TLIB = tlib /C /0
 !endif
 
 #############################################################################
@@ -33,3 +35,4 @@ SRCDIRS =                              \
 	  $(SRCBASE)\process\dpmi16    \
 	  $(SRCBASE)\process\win16     \
 	  $(SRCBASE)\startup\win16
+

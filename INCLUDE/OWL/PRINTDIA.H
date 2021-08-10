@@ -1,9 +1,10 @@
 //----------------------------------------------------------------------------
 // ObjectWindows
-// (C) Copyright 1992, 1994 by Borland International, All Rights Reserved
+// Copyright (c) 1992, 1996 by Borland International, All Rights Reserved
 //
-//   Implementation of Print and PrintSetup common Dialogs
-//   classes
+//$Revision:   10.3  $
+//
+// Definition of Print and PrintSetup common Dialogs classes
 //----------------------------------------------------------------------------
 #if !defined(OWL_PRINTDIA_H)
 #define OWL_PRINTDIA_H
@@ -15,6 +16,13 @@
 # include <owl/dc.h>
 #endif
 
+// Generic definitions/compiler options (eg. alignment) preceeding the 
+// definition of classes
+#include <services/preclass.h>
+
+//
+// class TPrintDialog
+// ~~~~~ ~~~~~~~~~~~~
 class _OWLCLASS TPrintDialog : public TCommonDialog {
   public:
     class _OWLCLASS TData {
@@ -27,15 +35,23 @@ class _OWLCLASS TPrintDialog : public TCommonDialog {
         int             MaxPage;
         int             Copies;
 
+#if defined(BI_PLAT_WIN32)  
+        uint32          PageSetupFlags;    // Additional page setup dialog flags
+        TPoint          PaperSize;         // Size of the paper user has chosen
+        TRect           MinMargin;         // Minimum allowable margins of the paper
+        TRect           Margin;            // Initial margins for the paper
+        bool            DoPageSetup;       // Flag to do page setup?
+#endif
+
         TData();
        ~TData();
         void                Lock();
         void                Unlock();
         void                ClearDevMode();
-        const DEVMODE far*  GetDevMode() const {return DevMode;}
+        const DEVMODE far*  GetDevMode() const;
         void                SetDevMode(const DEVMODE far* devMode);
         void                ClearDevNames();
-        const DEVNAMES far* GetDevNames() const {return DevNames;}
+        const DEVNAMES far* GetDevNames() const;
         const char far*     GetDriverName() const;
         const char far*     GetDeviceName() const;
         const char far*     GetOutputName() const;
@@ -43,14 +59,14 @@ class _OWLCLASS TPrintDialog : public TCommonDialog {
                                         const char far* device,
                                         const char far* output);
         TPrintDC*           TransferDC();
-        
+
         void*               Read(ipstream& is, uint32 version);
         void                Write(opstream& os);
 
       private:
-        HGLOBAL       hDevMode;
-        HGLOBAL       hDevNames;
-        HDC           hDC;
+        HGLOBAL       HDevMode;
+        HGLOBAL       HDevNames;
+        HDC           HDc;
 
         DEVMODE far*  DevMode;
         DEVNAMES far* DevNames;
@@ -67,20 +83,33 @@ class _OWLCLASS TPrintDialog : public TCommonDialog {
                  const char far* setupTemplateName = 0,
                  const char far* title = 0,
                  TModule*        module = 0);
-               
+
     bool       GetDefaultPrinter();
 
     int        DoExecute();
 
   protected:
-    PRINTDLG   pd;
-    TData&     Data;
-
-    bool    DialogFunction(uint message, WPARAM, LPARAM);
+    bool    DialogFunction(uint message, TParam1, TParam2);
 
     // Default behavior inline for message response functions
     //
-    void       CmSetup() {DefaultProcessing();} //EV_COMMAND(psh1, 
+    void       CmSetup(); //EV_COMMAND(psh1,
+
+    PRINTDLG&  GetPD();
+    void       SetPD(const PRINTDLG& _pd);
+
+    TData&     GetData();
+    void       SetData(const TData& data);
+
+  protected_data:
+    union {
+      PRINTDLG     pd;  // old name
+      PRINTDLG     Pd;  // new name
+    };
+#if defined(BI_PLAT_WIN32)
+    PAGESETUPDLG   Psd;
+#endif
+    TData&         Data;
 
   private:
     TPrintDialog(const TPrintDialog&);
@@ -89,5 +118,63 @@ class _OWLCLASS TPrintDialog : public TCommonDialog {
   DECLARE_RESPONSE_TABLE(TPrintDialog);
   DECLARE_CASTABLE;
 };
+
+// Generic definitions/compiler options (eg. alignment) following the 
+// definition of classes
+#include <services/posclass.h>
+
+// ---------------------------------------------------------------------------
+// Inline implementation
+//
+//
+
+//
+// Return the DEVMODE structure used by the dialog.
+//
+inline const DEVMODE far*  TPrintDialog::TData::GetDevMode() const {
+  return DevMode;
+}
+
+//
+// Return the DEVNAMES structure used by the dialog.
+//
+inline const DEVNAMES far* TPrintDialog::TData::GetDevNames() const {
+  return DevNames;
+}
+
+//
+// Default processing.
+//
+inline void TPrintDialog::CmSetup() {
+  DefaultProcessing();
+}
+
+//
+// Return the PRINTDLG structure used by the dialog.
+//
+inline PRINTDLG& TPrintDialog::GetPD() {
+  return pd;
+}
+
+//
+// Set the PRINTDLG structure used by the dialog.
+//
+inline void TPrintDialog::SetPD(const PRINTDLG& _pd) {
+  pd = _pd;
+}
+
+//
+// Return the transfer data of the dialog.
+//
+inline TPrintDialog::TData& TPrintDialog::GetData() {
+  return Data;
+}
+
+//
+// Set the transfer data of the dialog.
+//
+inline void TPrintDialog::SetData(const TData& data) {
+  Data = data;
+}
 
 #endif  // OWL_PRINTDIA_H

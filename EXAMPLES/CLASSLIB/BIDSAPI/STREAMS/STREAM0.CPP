@@ -1,7 +1,7 @@
 // ---------------------------------------------------------------------------
 // Copyright (C) 1994 Borland International
 // stream0.cpp
-//    Must link with strmpnt.cpp 
+//    Must link with strmpnt.cpp
 // ---------------------------------------------------------------------------
 
 #include "strmpnt.h"
@@ -22,6 +22,7 @@ void ReadStream(void)
     ifp >> p2;
     if( p2 )
         p2->Draw();
+    delete p2;
 }
 
 int main()

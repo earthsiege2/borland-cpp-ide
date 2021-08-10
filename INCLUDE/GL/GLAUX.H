@@ -1,7 +1,5 @@
 /*++ BUILD Version: 0004    // Increment this if a change has global effects
 
-Copyright (c) 1985-94, Microsoft Corporation
-
 Module Name:
 
     glaux.h
@@ -12,6 +10,14 @@ Abstract:
     Auxiliary Library.
 
 --*/
+
+/*
+ *      C/C++ Run Time Library - Version 7.0
+ *
+ *      Copyright (c) 1994, 1996 by Borland International
+ *      All Rights Reserved.
+ *
+ */
 
 #ifndef __GLAUX_H__
 #define __GLAUX_H__
@@ -350,21 +356,6 @@ void APIENTRY auxSolidTeapot(GLdouble);
 HWND  APIENTRY auxGetHWND(void);
 HDC   APIENTRY auxGetHDC(void);
 HGLRC APIENTRY auxGetHGLRC(void);
-
-/*
-** Viewperf support functions and constants
-*/
-/* Display Mode Selection Criteria */
-enum {
-    AUX_USE_ID = 1,
-    AUX_EXACT_MATCH,
-    AUX_MINIMUM_CRITERIA
-};
-void   APIENTRY auxInitDisplayModePolicy(GLenum);
-GLenum APIENTRY auxInitDisplayModeID(GLint);
-GLenum APIENTRY auxGetDisplayModePolicy(void);
-GLint  APIENTRY auxGetDisplayModeID(void);
-GLenum APIENTRY auxGetDisplayMode(void);
 
 #ifdef __cplusplus
 }

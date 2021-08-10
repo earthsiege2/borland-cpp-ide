@@ -1,22 +1,23 @@
-//
 //----------------------------------------------------------------------------
 // ObjectComponents
-// (C) Copyright 1994 by Borland International, All Rights Reserved
+// Copyright 1994, 1996 by Borland International, All Rights Reserved
 //
 //   Definition of TOcStorage & TOcStream classes
 //----------------------------------------------------------------------------
 #if !defined(OCF_OCSTORAG_H)
 #define OCF_OCSTORAG_H
 
-#if !defined(OCF_OCDEFS_H)
-# include <ocf/ocdefs.h>
+#if !defined(OCF_DEFS_H)
+# include <ocf/defs.h>
 #endif
 
+//
 // Classes defined
 //
 class _ICLASS TOcStream;
 class _ICLASS TOcStorage;
 
+//
 // Classes referenced
 //
 class _ICLASS IRootStorage;
@@ -26,8 +27,8 @@ class _ICLASS ILockBytes;
 class _ICLASS IEnumSTATSTG;
 
 //----------------------------------------------------------------------------
-// Storage definitions & types
-//----------------------------------------------------------------------------
+// Storage specific definitions & types, primarily for use under Win16
+//
 #if !defined(HUGE)
 # if defined(BI_PLAT_WIN16)
 #   define HUGE  __huge
@@ -36,7 +37,7 @@ class _ICLASS IEnumSTATSTG;
 # endif
 #endif
 
-#if !defined(__WIN32__)
+#if !defined(BI_PLAT_WIN32)
 
 #if !defined(_COMPOBJ_H_)
   struct far ULARGE_INTEGER {unsigned long LowPart; unsigned long HighPart;};
@@ -137,11 +138,11 @@ class _ICLASS IRootStorage : public IUnknown {
 
 class _ICLASS ILockBytes : public IUnknown {};  // member functions not called
 #endif  // #if !defined(_STORAGE_H_)
-#endif  // #if !defined(__WIN32__)
+#endif  // #if !defined(BI_PLAT_WIN32)
 
 //
-//
-//
+// class TOcStream
+// ~~~~~ ~~~~~~~~~
 class _OCFCLASS TOcStream {
   public:
     TOcStream(TOcStorage& storage, const char far* name, bool create,
@@ -172,8 +173,8 @@ class _OCFCLASS TOcStream {
 };
 
 //
-//
-//
+// class TOcStorage
+// ~~~~~ ~~~~~~~~~~
 class _OCFCLASS TOcStorage {
   public:
     TOcStorage(const char far* fileName, bool create,
@@ -245,4 +246,3 @@ class _OCFCLASS TOcStorage {
 };
 
 #endif  // OCF_OCSTORAG_H
-

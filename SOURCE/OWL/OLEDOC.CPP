@@ -1,22 +1,39 @@
 //----------------------------------------------------------------------------
 // ObjectWindows
-// (C) Copyright 1994 by Borland International, All Rights Reserved
+// Copyright (c) 1994, 1996 by Borland International, All Rights Reserved
 //
-//   Implementation of TOleDocument. Doc/View document that supports Ole2
-//   using OCF TOcDocument
+//$Revision:   10.5  $
+//
+// Implementation of TOleDocument. Doc/View document that supports OLE 2
+// using OCF TOcDocument
 //----------------------------------------------------------------------------
 #define INC_OLE2
-#include <owl/owlpch.h>
-#include <owl/docmanag.h>
-#include <owl/olemdifr.h>
-#include <ocf/ocfpch.h>
-#include <ocf/ocdoc.h>
-#include <ocf/ocapp.h>
-#include <owl/oledoc.h>
-#include <owl/oleframe.h>
-#include <owl/oleview.h>
+#include <owl/pch.h>
+#if !defined(OWL_DOCMANAG_H)
+# include <owl/docmanag.h>
+#endif
+#if !defined(OWL_OLEMDIFR_H)
+# include <owl/olemdifr.h>
+#endif
+#if !defined(OCF_OCDOC_H)
+# include <ocf/ocdoc.h>
+#endif
+#if !defined(OCF_OCAPP_H)
+# include <ocf/ocapp.h>
+#endif
+#if !defined(OWL_OLEDOC_H)
+# include <owl/oledoc.h>
+#endif
+#if !defined(OWL_OLEFRAME_H)
+# include <owl/oleframe.h>
+#endif
+#if !defined(OWL_OLEVIEW_H)
+# include <owl/oleview.h>
+#endif
 
-
+//
+//
+//
 TOleDocument::TOleDocument(TDocument* parent)
 :
   TStorageDocument(parent),
@@ -40,9 +57,26 @@ TOleDocument::~TOleDocument()
 bool
 TOleDocument::CanClose()
 {
+	//
+	// if it's an open edit dll stop the closing process
+  TView* curView = GetViewList();
+  while (curView) {
+  	// get the ole view
+    TOleView* oleView = TYPESAFE_DOWNCAST(curView, TOleView);
+    if (oleView && oleView->IsOpenEditing() && !GetOcApp()->IsOptionSet(amExeMode)) {
+	    TOleFrame* olefr = TYPESAFE_DOWNCAST(oleView->GetApplication()->GetMainWindow(), TOleFrame);
+  	  CHECK(olefr);
+    	olefr->ShowWindow(SW_HIDE);
+    	oleView->OleShutDown();
+    	return false; // don't close
+    }
+    curView = curView->GetNextView();
+  }
+
   // Just say yes if we are already in the closing process, or are embedded,
   // or have multiple views open
   //
+
   if (Closing || IsEmbedded())
     return true;
 
@@ -106,7 +140,7 @@ TOleDocument::SetStorage(IStorage* stg, bool remember)
   //
   if (stg)
     Embedded = true;
-  
+
   OcDoc->SetStorage(stg, remember);
   TStorageDocument::SetStorage(stg, remember);
 
@@ -243,37 +277,6 @@ TOleDocument::Read()
   // Load the embedded objects, if any
   //
   return OcDoc->LoadParts();
-}
-
-//
-// Get a new IStorage, typically in a SaveAs
-// situation.
-//
-IStorage*
-TOleDocument::GetNewStorage()
-{
-  PRECONDITION(StorageI);
-
-  // Create another root storage based on the new doc path
-  // Should close the current document and open a new one.
-  //
-  IStorage* newStorage = 0;
-
-  HRESULT hres;
-  STATSTG stgInfo;
-  if (!SUCCEEDED(StorageI->Stat(&stgInfo, STATFLAG_NONAME)))
-    return 0;
-
-  hres = ::StgOpenStorage(OleStr(GetDocPath()), 0, stgInfo.grfMode, 0, 0, &newStorage);
-  if (!SUCCEEDED(hres))
-    hres = ::StgCreateDocfile(OleStr(GetDocPath()), stgInfo.grfMode, 0, &newStorage);
-
-  if (SUCCEEDED(hres)) {
-    StorageI->Release(); // Release the old root storage
-    StorageI = newStorage;
-  }
-
-  return newStorage;
 }
 
 //

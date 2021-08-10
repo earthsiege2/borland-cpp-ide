@@ -9,8 +9,8 @@
 ##*
 ##--END-- ? ClassMarker [[Search]]
 ##^BOL
-##(OLEType == CPPType) && (OLEType != "TAutoCurrency") && (OLEType != "TAutoDate")
+## (OLEType == CPPType) && (OLEType != "TAutoCurrency") && (OLEType != "TAutoDate")
 ##      :StripPtrRef(OLEType, [[StripType]]) [[AnyStripping]]
 ##      :StripType OLEType
 ##*
-    EXPOSE_PROPRW([[InternalName]], [[OLEType]], "[[InternalName]]", "[[Description]]", 0)
+  EXPOSE_PROPRW([[InternalName]], [[OLEType]], "[[InternalName]]", "[[Description]]", 0)

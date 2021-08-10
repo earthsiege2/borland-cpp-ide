@@ -1,0 +1,28 @@
+// ---------------------------------------------------------------------------
+// ObjectWindows
+// Copyright (C) 1995, 1995 by Borland International, All Rights Reserved
+// ---------------------------------------------------------------------------
+#include "SimBor.rh"
+
+IDM_MAINMENU MENU
+BEGIN
+	MENUITEM "&Dialog...", CM_DIALOG
+END
+
+
+IDD_SIMBORDLG DIALOG 18, 18, 173, 146
+STYLE DS_MODALFRAME | WS_POPUP | WS_VISIBLE | WS_CAPTION | WS_SYSMENU
+CAPTION "Simulated Borland Dialog"
+{
+ CTEXT "Hello World!", ID_MESSAGE, 39, 5, 87, 10
+ SCROLLBAR ID_SCROLLBAR, 26, 105, 120, 9, SBS_HORZ
+ LISTBOX ID_LISTBOX, 26, 19, 120, 82, LBS_NOTIFY | LBS_NOINTEGRALHEIGHT | WS_CHILD | WS_VISIBLE | WS_BORDER | WS_VSCROLL | WS_TABSTOP
+ PUSHBUTTON "&Ok", IDOK, 69, 123, 35, 14
+}
+
+
+IDB_DLGBRSH BITMAP "dlgbrush.bmp"
+
+
+IDB_SCRLBRSH BITMAP "scrlbrsh.bmp"
+

@@ -1,54 +1,57 @@
-#if !defined(__apxprint_h)              // Sentry use file only if it's not already included.
-#define __apxprint_h
-
+//----------------------------------------------------------------------------
 ##@QUERY_PRJ_NAME [[Project]]
-/*  Project [[Project]]
+//  Project [[Project]]
 ##@QUERY_PRJ_COMPANY [[CompanyName]] 2
 ##@QUERY_PRJ_COPYRIGHT [[Copyright]] 2
 ##\\Copyright Copyright 2
-    [[CompanyName]]
-    [[Copyright]]
-
+//  [[CompanyName]]
+//  [[Copyright]]
+//
 ##@QUERY_TARGET_NAME [[Target]]
-    SUBSYSTEM:    [[Target]] Application
-    FILE:         APXPrint.H
+//  SUBSYSTEM:    [[Target]] Application
+//  FILE:         apxprint.h
 ##@QUERY_PRJ_USER [[Author]]
-    AUTHOR:       [[Author]]
+//  AUTHOR:       [[Author]]
+//
+//  OVERVIEW
+//  ~~~~~~~~
+//  Class definition for TApxPrintout (TPrintout).
+//
+//----------------------------------------------------------------------------
+#if !defined(apxprint_h)  // Sentry use file only if it's not already included.
+#define apxprint_h
+
+#include <owl/printer.h>
 
 
-    OVERVIEW
-    ========
-    Class definition for APXPrintOut (TPrintOut).      
-*/
+class TApxPrintout : public TPrintout {
+  public:
+    TApxPrintout(TPrinter* printer, const char far* title, TWindow* window, bool scale = true)
+      : TPrintout(title)
+      {
+        Printer = printer;
+        Window = window;
+        Scale = scale;
+        MapMode = MM_ANISOTROPIC;
+      }
 
+    void GetDialogInfo(int& minPage, int& maxPage, int& selFromPage, int& selToPage);
+    void BeginPrinting();
+    void BeginPage(TRect& clientR);
+    void PrintPage(int page, TRect& rect, unsigned flags);
+    void EndPage();
+    void SetBanding(bool b)        { Banding = b; }
+    bool HasPage(int pageNumber);
 
-#include <owl\owlpch.h>
-#pragma hdrstop
+  protected:
+    TWindow*  Window;
+    bool      Scale;
+    TPrinter* Printer;
+    int       MapMode;
 
-
-class APXPrintOut : public TPrintout {
-public:
-    APXPrintOut (TPrinter *printer, const char far *title, TWindow* window, bool scale = true) : TPrintout(title)
-      { Printer = printer; Window = window; Scale = scale; MapMode = MM_ANISOTROPIC; }
-
-    void GetDialogInfo (int& minPage, int& maxPage, int& selFromPage, int& selToPage);
-    void BeginPrinting ();
-    void BeginPage (TRect &clientR);
-    void PrintPage (int page, TRect& rect, unsigned flags);
-    void EndPage ();
-    void SetBanding (bool b)        { Banding = b; }
-    bool HasPage (int pageNumber);
-
-protected:
-    TWindow     *Window;
-    bool        Scale;
-    TPrinter    *Printer;
-    int         MapMode;
-
-    int         PrevMode;
-    TSize       OldVExt, OldWExt;
-    TRect       OrgR;
+    int       PrevMode;
+    TSize     OldVExt, OldWExt;
+    TRect     OrgR;
 };
 
-
-#endif          // __apxprint_h sentry.
+#endif  // apxprint_h

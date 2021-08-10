@@ -1,0 +1,60 @@
+//----------------------------------------------------------------------------
+// ObjectWindows
+// Copyright (c) 1991, 1995 by Borland International, All Rights Reserved
+//----------------------------------------------------------------------------
+#if !defined(WORKSHOP_INVOKED)
+# include <windows.h>
+#endif
+#include <owl/except.rc>
+#include <owl/window.rh>
+#include <bwcc.h>
+#include "aclock.h"
+
+CUCKOO1   BITMAP "cuckoo1.bmp"
+CUCKOO2   BITMAP "cuckoo2.bmp"
+CUCKOO3   BITMAP "cuckoo3.bmp"
+CUCKOO4   BITMAP "cuckoo4.bmp"
+CUCKOO5   BITMAP "cuckoo5.bmp"
+CUCKOO6   BITMAP "cuckoo6.bmp"
+CUCKOO7   BITMAP "cuckoo7.bmp"
+CUCKOO8   BITMAP "cuckoo8.bmp"
+FACE_BMP  BITMAP "face_bmp.bmp"
+IDI_APP   ICON   "aclock.ico"
+
+TOOL_MENU MENU
+{
+ POPUP "&Effects"
+ {
+  MENUITEM "&Chime", CM_EFFECTCHIME
+  MENUITEM "C&uckoo", CM_EFFECTCUCKOO
+ }
+
+ POPUP "&Help", HELP
+ {
+  MENUITEM "&About", CM_ABOUT
+ }
+}
+
+IDD_ABOUT_BWCC DIALOG 16, 23, 171, 86
+STYLE DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CLASS BORGRAYCLASS
+CAPTION "About Cuckoo Clock"
+FONT 8, "MS Sans Serif"
+{
+ CTEXT "Created with Borland C++ and ObjectWindows", -1, 9, 45, 153, 9
+ CTEXT "Chimes Every Hour.", -1, 9, 9, 153, 9
+ CTEXT "Look out at Midnight!", -1, 9, 21, 153, 9
+ PUSHBUTTON "OK", IDOK, 61, 66, 48, 14, WS_CHILD | WS_VISIBLE | WS_TABSTOP
+ CONTROL "", -1, SHADE_CLASS, BSS_GROUP | BSS_CAPTION | BSS_LEFT | WS_CHILD | WS_VISIBLE, 6, 6, 159, 54
+}
+
+IDD_ABOUT DIALOG 16, 23, 168, 81
+STYLE DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU | DS_3DLOOK
+CAPTION "About Cuckoo Clock"
+FONT 8, "MS Sans Serif"
+{
+ CTEXT "Created with Borland C++ and ObjectWindows", -1, 6, 42, 156, 9
+ CTEXT "Chimes Every Hour.", -1, 6, 6, 156, 9
+ CTEXT "Look out at Midnight!", -1, 6, 18, 156, 9
+ PUSHBUTTON "OK", IDOK, 60, 60, 48, 14, WS_CHILD | WS_VISIBLE | WS_TABSTOP
+}

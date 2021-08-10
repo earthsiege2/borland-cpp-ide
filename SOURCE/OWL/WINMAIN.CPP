@@ -1,12 +1,18 @@
 //----------------------------------------------------------------------------
 // ObjectWindows
-// (C) Copyright 1991, 1994 by Borland International, All Rights Reserved
+// Copyright (c) 1991, 1996 by Borland International, All Rights Reserved
 //
-//   Implementation of WinMain for user exes
+//$Revision:   10.5  $
+//
+// Implementation of WinMain for user exes
 //----------------------------------------------------------------------------
-#include <owl/owlpch.h>
-#include <owl/applicat.h>
-#include <osl/locale.h>
+#include <owl/pch.h>
+#if !defined(OWL_APPLICAT_H)
+# include <owl/applicat.h>
+#endif
+#if !defined(WINSYS_LCLSTRNG_H)
+# include <winsys/lclstrng.h>
+#endif
 
 DIAG_DEFINE_GROUP_INIT(OWL_INI, OwlMain, true, 0);
 
@@ -16,9 +22,9 @@ DIAG_DEFINE_GROUP_INIT(OWL_INI, OwlMain, true, 0);
 int PASCAL
 WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, char far* cmdLine, int cmdShow)
 {
-  TRACEX(OwlMain, 0, "WinMain(" << hex << uint(hInstance) << ", " << 
-                                  hex << uint(hPrevInstance) << ", \"" << 
-                                  TResId(cmdLine) << "\", " << 
+  TRACEX(OwlMain, 0, "WinMain(" << hex << uint(hInstance) << ", " <<
+                                  hex << uint(hPrevInstance) << ", \"" <<
+                                  TResId(cmdLine) << "\", " <<
                                   cmdShow << ") called");
 
   // If no global ::Module ptr exists yet, provide a default now
@@ -27,10 +33,14 @@ WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, char far* cmdLine, int cmd
     static TModule module(0, hInstance);
     ::Module = &module;
   }
-  
+
   TApplication::SetWinMainParams(hInstance, hPrevInstance, cmdLine, cmdShow);
   TRY {
+#if defined(BI_COMP_BORLANDC)
     int retVal = OwlMain(_argc, _argv);
+#else
+    int retVal = OwlMain(__argc, __argv);
+#endif
     TRACEX(OwlMain, 0, "WinMain() returns " << retVal);
     return retVal;
   }

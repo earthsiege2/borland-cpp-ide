@@ -1,9 +1,8 @@
-//
 //----------------------------------------------------------------------------
 // ObjectComponents
-// (C) Copyright 1994 by Borland International, All Rights Reserved
+// Copyright (c) 1994, 1996 by Borland International, All Rights Reserved
 //
-//   Definition of TOcDocument Class
+// Definition of TOcDocument Class
 //----------------------------------------------------------------------------
 #if !defined(OCF_OCDOC_H)
 #define OCF_OCDOC_H
@@ -11,19 +10,22 @@
 #if !defined(OCF_OCPART_H)
 # include <ocf/ocpart.h>
 #endif
-
 #if !defined(OCF_LINK_H)
 # include <ocf/oclink.h>
 #endif
 
+//
 // Interfaces & Classes referenced
 //
 class _ICLASS IStorage;
 class _ICLASS TOcStorage;
 class _ICLASS TOcApp;
+class _ICLASS TOcControl;
 class _ICLASS TOcView;
 
 //
+// class TOcDocument
+// ~~~~~ ~~~~~~~~~~~
 // OC Document class, holds parts & is a owner of views
 //
 class _ICLASS TOcDocument {
@@ -32,10 +34,11 @@ class _ICLASS TOcDocument {
     TOcDocument(TOcApp& app, const char far* fileName, IStorage far* storageI);
    ~TOcDocument();
 
-    // collection management
+    // Collection management
     //
     TOcPartCollection& GetParts() {return PartCollection;}
-    TOcViewCollection& GetViews() {return ViewCollection;}
+    TOcLinkCollection& GetLinks() {return LinkCollection;}
+    TOcLinkCollection& GetViews() {return LinkCollection;} // Compatibility
 
     // Storage & streaming related
     //
@@ -63,27 +66,30 @@ class _ICLASS TOcDocument {
     string      GetName() const {return Name;}
     void        SetName(const string& newName);
 
+    int         AllocPartID() {return ++PartID;}
+    TOcApp&     GetOcApp() {return OcApp;}
+
   private:
     TOcView*       ActiveView;   // Active TOcView object
     TOcApp&        OcApp;        // Our OC application object
     TOcStorage*    Storage;      // root storage for embedded objects
     TOcStorage*    OrgStorage;   // original root storage for embedded objects
 
-    int            NumViews;     // number of views. used to help in numbering
     int            PartID;
 #if defined(BI_DATA_NEAR)
     string&        Name;         // Name of this document
-    TOcPartCollection&    PartCollection; // Collection of parts in this document
-    TOcViewCollection&    ViewCollection; // Collection of linked view in this document
+    TOcPartCollection& PartCollection; // Collection of parts in this document
+    TOcLinkCollection& LinkCollection; // Collection of link views in this document
 #else
     string         Name;
-    TOcPartCollection     PartCollection;
-    TOcViewCollection     ViewCollection;
+    TOcPartCollection  PartCollection;
+    TOcLinkCollection  LinkCollection;
 #endif
 
   friend TOcPartCollectionIter;      // To allow iterator access to collection
-  friend TOcViewCollectionIter;      // To allow iterator access to collection
-  friend TOcPart;
+  friend TOcLinkCollectionIter;      // To allow iterator access to collection
+//  friend TOcPart;
+  friend TOcControl;
   friend TOcView;
   friend TOcRemVie;
 };

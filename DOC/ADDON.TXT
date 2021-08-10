@@ -1,0 +1,331 @@
+ADDON.TXT For BCWADDON.DLL v1.0   doc rev 1.2   2/18/96  
+
+BCW 5.0 AddOn Interfaces 
+------------------------
+
+The BCW AddOn Interfaces provide a mechanism to help achieve tight integration
+between a third party addon application and the BCW C++ IDE. The interfaces
+are implemented using the OLE COM model and a basic understanding of COM 
+is essential to developing an addon using these interfaces. This document
+doesn't attempt to explain COM or cover all the interfaces in great detail. 
+It does provide an an overview of the types of services available and how to
+get started. In many cases, detailed reference material is provided in the 
+header files. In some cases, it may be necessary to take a close look at the 
+provided examples, since the documentation may not be complete yet. 
+
+Several of the interfaces have been brought forward from BC4.5's IDEHOOK
+implementation. They have minor changes that allow them to conform to 
+a new set of rules and to behave more like the new interfaces. In most 
+cases, if you have code that used IDEHOOK, that code can be brought forward
+without any major restructuring.
+
+As we add features and services to the addon wrapper dll, we will surface new
+interfaces to access those services, while leaving the old interfaces intact.
+
+AddOn Requirements:
+- Addons must be written as Win32 DLL's and will be loaded by the IDE's process 
+  (BCW.EXE) when properly registered with the system as being a BCW addon.
+- Addons must be written in a language that supports COM interfaces
+
+Notes:
+- At the time of this writing, only C++ headers are provided.
+- It is not required that the addon dll be written using OWL or be built
+  using Borland tools.
+- As an addon developer, you should be familiar with the concept and rules of 
+  reference counting as it is used in OLE programing. You should also have at
+  least some familiarity with COM interfaces.
+
+Services exposed through the AddOn interfaces
+- Commands and Menus
+- View mgmt
+- Editor buffers
+- Virtual file system
+- Make engine
+- Addon pages for option dialogs (MPD's)
+- Project mgmt
+- Status bar
+- Script engine
+- Target options
+- Tool mgmt
+- Custom Targets
+- Message window output
+
+Current Known Bugs 
+1) You must compile and link into your dll a provided file ADDON.RC if you 
+are creatign MPD pages. This file can be found in the include\ideaddon 
+directory.
+
+2) The top level project node sometimes returns info for its first child 
+instead of itself.
+
+3) Only the "Cstr" methods of IPolyString are currently hooked up.
+
+4) When using the NewFileMessage() or NewMessage() methods of IMessageFolder,
+passing strings to the pMsg argument larger than 230 bytes in length will crash 
+BCWADDON.DLL. We will fix this in a patch, but for now you must truncate the 
+strings before creating the poly string object that gets passed to the method.
+
+
+C++ IDE AddOn Interfaces
+------------------------
+File Locations
+Addon wrapper dll: bc5\bin\bcwaddon.dll
+Examples: bc5\examples\ide\addon\testbed
+Interfaces: bc5\include\ideaddon
+Registry tool: bc5\bin\addonreg.exe
+
+Getting Started 
+---------------
+- Registering your dll at install time -
+Add your addon dll key in the registry under the following key:
+
+HKEY_LOCAL_MACHINE
+ SOFTWARE
+  Borland
+    Borland C++
+     5.0
+      IDE
+        AddOns
+         (addon client keys...)
+    
+Key: "testbed example" (the name of your addon)
+  Value: "Path"   Data: "c:\bc5\bin\exaddon.dll" (full path to your dll)
+  Value: "Enabled"  Data: "Yes"
+    
+During development, you can use addonreg.exe to quickly add, delete, enable 
+and disable addon registry entries (or to see exactly what the entry should 
+look like).
+
+exaddon.dll (used in the above example) is our example testbed, which we’ll 
+talk about in a minute.
+
+Your dll MUST have one special entry point, which bcwaddon.dll will call to
+let you know that the IDE is waking up and shutting down:
+
+extern "C" void WINAPI __export BcwAddOnEntry( IIdeServer * pIdeServer ) {
+  if ( pIdeServer ) { // the ide is waking up
+   SetIdeServer( pIdeServer )
+   // do initialization stuff here...
+  }
+  else { // the ide is shutting down
+   // do cleanup stuff here...
+   ReleaseIdeServer();
+  }
+}
+   
+The code for SetIdeServer(), ReleaseIdeServer() and other handy things is
+provided in comhelp.h/cpp, which can be found in the include\ideaddon
+directory.
+
+Once your dll is registered, the addon wrapper, BCWADDON.DLL, will dynamically
+load your dll at startup time and call BcwAddOnEntry(). There is no way to
+specify that your dll will be loaded in any particular order with respect to
+other addon dll's. Once your dll is loaded, you can schedule scripts to run
+and register to receive events via one or more client interfaces. Server
+interfaces are provided to call into the IDE and to register client 
+interfaces. All server interfaces are available by querying the IIdeServer 
+pointer passed in to BcwAddOnEntry() or through the macro GET_INTERFACE().
+
+- Testbed -
+Since we’re trying to be efficient, we thought we’d combine the concept of
+example code with smoke testing and bug reproduction. We set up a small test
+framework for which we are providing source code (see the examples directory).
+As we add tests, they will appear in the source that is delivered to you.
+
+The testbed is built in the examples\ide\addon\testbed directory.
+
+To build and install the testbed:
+- Open the exaddon.ide project and build it
+- Copy exaddon.dll to your bc5 bin directory
+- Copy the *.spp files to your bc5 script directory
+- From the bin directory, launch ADDONREG.EXE and create a new entry
+  for exaddon.dll (pointing to the copy in the bin directory).
+- Shut down the ide and start it up again.  
+
+If properly installed, you should see a dialog box appear just before BCW does.
+From this dialog box, you can select a test object and run up to 4 sub-tests
+once the object has been initialized (with the initialize button). To run
+another set of tests, uninitialize the current object and select another one. An
+output window is right there in the dialog box which shows debug messages
+generated from exaddon.dll.
+
+It is very easy to add your own tests to this framework. The test
+harness is heavily commented in some places. See examples\tests.h/cpp and
+option.h/cpp to get started. A more advanced example is in project.h/cpp.
+One test which covers a lot of ground is the view management test.
+You’ll also notice some macros from include\ideaddon\comhelp.h used in these 
+examples to make the COM implementation simpler.
+
+- Interfaces -
+The interfaces are all in the include\ideaddon directory. You’ll notice that
+we’re using IPolyString whenever strings need to be passed across the
+interface. There are helper functions in use to make this easier to deal with.
+We need to stay away from using C++ constructs or structs across the interface
+and want to be able to accommodate BSTR usage (and Pascal strings) with a
+minimum of conversion overhead, hence, the IPolyString interface. Be sure to 
+read the doc in ipolystr.h before using them. (Note: only the 'c' string
+methods have been implemented at the time of this writing, the others are
+no-ops).
+
+- Script Interface -
+There are many ways to talk with the IDE through the IDE’s Object Script
+implementation and the script interface provides a way to run individual script
+commands and entire scripts through the AddOn interface. When the IDE is first
+coming up, you can schedule your startup script through the
+ScheduleScriptFile() method. You can issue short commands through
+RunScriptCommand() and load and unload script files with RunScriptFile() and
+UnloadScriptFile(). This is quite powerful, since you can expose flat function
+calls in your dlls that can be called directly from script and a lot of the
+internal API’s are already exposed as script objects. (Please take note
+of the warning in iscript.h regarding calling script from within anything
+but the UI thread).
+
+
+Interface Overview
+------------------
+IPolyString
+Utility used for string conversion-on-demand, ref counting/ownership
+Supports: c-style strings (pascal strings and BSTR support coming soon)
+File: IPolyStr.h
+
+IIde 
+Exposes: Application-wide methods, access to all server interfaces through 
+QueryInterface, and creation of miscellaneous object instances.
+File: IIde.h 
+
+IScriptServer
+Exposes: Access to the script engine
+File: IScript.h
+Notes: 
+  Run or schedule script files, issue script commands.
+
+IProjectServer, IProjectClient, IProjectNodeInfo
+Exposes: 
+  Project node attributes 
+  Node Iteration, Find by name 
+  Custom node properties 
+  Events: Open, Close, NodeAdd/Delete and others
+  Node Add/Remove
+  Selected nodes
+File: IProj.h
+
+ICommand, ICommandServer
+Exposes: Command creation, management
+File: ICmd.h
+Notes:
+  Enabler callback
+  Command implemented in script, can call back to your dll
+  Can register icon for speedbar
+
+IMenuItem, IMenuClient, IMenuServer
+Exposes: Frame, Project and Editor menus
+File: IMenu.h
+Notes:
+  Hook up menu items to ICommand objects
+  Event when a menu is about to open
+
+IViewClient, IViewParentWnd, IUserViewFactory, IViewType
+Exposes: Addon view management
+File: IView.h
+Notes:
+  Addon windows become descendants of an ide mdi client
+  Restore opportunity, your restore data saved with ide project
+  Polymorphic command support
+  View type can be added to the Font and Color property page list
+  View is managed (tile, cascade, etc.)
+
+IMpdPage, IMpdChapter, IMpdServer
+Exposes: Project and environment option dialogs
+File: IMpd.h
+Notes:
+  Addon chapters and pages for MultiPageDialog's  
+  (Chapter contains one or more pages)
+  Project MPD's are node-specific
+  OnCommand() event for mgmt, or can subclass
+
+IStatusBar
+Exposes: Ability to write text to status bar, status bar hwnd
+File: ISBar.h
+
+IToolImplementor, IToolInfo, IToolServer
+Exposes: Tool mgr
+File: ITool.h
+Notes:
+  Invoke any registered tool
+  Find tool by name
+  Register Addon callbacks as tools
+  Register standalone tools
+
+IVirtualFile
+Exposes: Virtual file system
+File: IVFile.h
+Notes:
+  Low-level file routines
+  Edit buffers are used for READING of files already loaded into an edit buffer
+  Disk files are used otherwise
+
+IEditorServer
+Exposes: Editor
+File: IEditor.h
+Notes:
+  Create and delete edit buffers
+  Manipulate text in buffer
+  Line editing
+  Iterate open buffers 
+  Create system (hidden) buffers
+  Save a buffer to disk
+  Regular expression searching and translation
+  Behavior can't be overridden in script
+  Undo/Redo access    
+
+IMakeClient, IMakeServer
+Exposes: Access to the make engine
+File: IMake.h 
+Notes:
+  Make Begin and End events
+  Node input/output age
+  Make node(s)
+
+IOptionServer
+Exposes: Build options for a node
+File: IOption.h
+Notes:
+  Set/Get the following build options:
+   Include path spec
+   Library path spec
+   Source path spec
+   Intermediate output path
+   Final output path
+   #defines
+   Command line override
+
+ITargetServer
+Exposes: Target add, query
+File: ITarg.h
+Notes:
+   Add a specified target 
+   Get target attributes
+   Find a node's target  
+
+IMessageSystem, IMessageFolder
+File: iMsgSys.h
+Notes: 
+  Allows you to Post messages to a folder in the message window
+
+
+ITargetManager
+File: iTx.h
+Notes:
+  Use this and the other interfaces in itx.h to create a custom target type
+  that will appear in the TargetExpert
+  
+
+Important Note
+--------------
+In order to provide you with the most comprehensive product information,
+updates, and service possible with this new release of Borland C++ and its
+associated products we are providing several online resources.
+
+For the location of these resources and information  on contacting Borland and
+support services offered by Borland, please read the file 'README.TXT' in your
+\BC5 directory.

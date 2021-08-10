@@ -1,0 +1,31 @@
+//----------------------------------------------------------------------------
+// ObjectWindows
+// Copyright (c) 1995, 1995 by Borland International, All Rights Reserved
+//----------------------------------------------------------------------------
+#include <owl/window.rh>
+#include <owl/inputdia.rc>
+#include <owl/except.rc>
+#include "hotkey.h"
+
+ID_APPMENU MENU
+{
+ POPUP "&Configure"
+ {
+  MENUITEM "&Hot Key...", IDM_HOTKEY
+ }
+}
+
+IDD_HOTKEYDLG DIALOG 16, 66, 207, 71
+STYLE DS_3DLOOK | DS_MODALFRAME | WS_POPUP | WS_VISIBLE | WS_CAPTION | WS_SYSMENU
+CAPTION "Hot Key"
+FONT 8, "MS Sans Serif"
+{
+#if defined(__FLAT__)
+ CONTROL "", IDC_HOTKEY, "msctls_hotkey32", 0 | WS_CHILD | WS_VISIBLE | WS_TABSTOP, 12, 17, 109, 38
+#else
+ CONTROL "", IDC_HOTKEY, "msctls_hotkey",   0 | WS_CHILD | WS_VISIBLE | WS_TABSTOP, 12, 17, 109, 38
+#endif
+ DEFPUSHBUTTON "OK", IDOK, 146, 17, 50, 14
+ PUSHBUTTON "Cancel", IDCANCEL, 146, 35, 50, 14
+ LTEXT "Enter Hot Key:", -1, 12, 5, 109, 9
+}

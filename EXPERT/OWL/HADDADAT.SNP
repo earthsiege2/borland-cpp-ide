@@ -2,7 +2,7 @@
 ##      --BEGIN-- "DECLARE_AUTOCLASS" [[MacroName]]
 ##          @QUERY_APPL_OLE != VALUE_NOOLE
 ##              --BEGIN-- QUERY_BASE_NAME [[BaseName]]
-##                  :(BaseName == "TApplication") 
+##                  :(BaseName == "TApplication")
 ##                      :\\"DECLARE_AUTOAGGREGATE" MacroName
 ##*
 ##              --END-- QUERY_BASE_NAME [[BaseName]]
@@ -22,7 +22,7 @@
 ##      --END-- "DECLARE_AUTOCLASS" [[MacroName]]
 ##      ^BOL
 //{{[[ClassName]]AUTO_DATA_BEGIN}}
-public:
+  public:
 //{{[[ClassName]]AUTO_DATA_END}}
 
 ##--END-- QUERY_CLASS_NAME [[ClassName]]
@@ -38,4 +38,4 @@ public:
 ##       : ^BOF
 ##       : ?\\"#include \""
 ##       : ^BOL
-[[IncludeFile]]     
+[[IncludeFile]]

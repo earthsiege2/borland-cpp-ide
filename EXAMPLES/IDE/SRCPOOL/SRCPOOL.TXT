@@ -4,47 +4,47 @@ Instructions for the IDE example SRCPOOL.IDE.
 // Copyright Borland International, 1994
 //
 
-This project demonstrates the use of a simple Source Pool by "reference
+This project demonstrates the use of a simple SourcePool by "reference
 copying" a set of source nodes within a project.
 
-Source Pools are abstract container objects that hold dependencies.
-Although Source Pools are not buildable and runnable by themselves,
+SourcePools are abstract container objects that hold dependencies.
+Although SourcePools are not buildable and runnable by themselves,
 they can be moved or copied (usually by reference) to real targets. When
 copied, they take on the options and target attributes of the context
 in which they are copied. When the project make facility is checking
 dependencies, or building a response table for linkers and librarians,
-the Source Pool itself becomes invisible and the nodes referenced by
-the Source Pool are seen as a direct dependency of the target.
+the SourcePool itself becomes invisible and the nodes referenced by
+the SourcePool are seen as a direct dependency of the target.
 
 Reference copying allows one node (and all of it's dependencies) to be
 referenced in many different places within the Project Tree. In this
-example we copy a Source Pool by reference to two different targets (a
-16-bit target and a 32-bit target, both called WHELLO.EXE). When you copy
-Source Pool by reference, all referenced copies are automatically updated
-whenever you add, delete, or modify the original Source Pool nodes.
+example we copy a SourcePool by reference to two different targets (a
+16-bit target and a 32-bit target, both called SRCPOOL.EXE). When you copy
+SourcePool by reference, all referenced copies are automatically updated
+whenever you add, delete, or modify the original SourcePool nodes.
 
 NOTE: The example here assumes that you've looked at the example in the
 'MultiTrg' directory and are familiar with creating several targets in a
 single project and setting local options on a target node.
 
-To create a Source Pool in an existing project:
+To create a SourcePool in an existing project:
 1) Select Project|New Target from the main menu
 2) Type a Target Name
 3) Select 'SourcePool' from the Target Type list
 4) Press OK to confirm your settings and create a SourcePool node
 5) Select that node in the Project window
 6) Press the Insert key to access the Add Item dialog box
-7) Select the files you want to add to the Source Pool
+7) Select the files you want to add to the SourcePool
 8) Press OK to confirm your selections and add the dependencies under
     the SourcePool node
 
 Once you've created your SourcePool node and dependencies, you can
 copy the node by reference to anywhere in your project:
    While holding down the Alt key, drag the SourcePool node to
-   the target node where the Source Pool is needed.
+   the target node where the SourcePool is needed.
 
-More advanced uses of Source Pools include nesting them, which allows
+More advanced uses of SourcePools include nesting them, which allows
 you to logically group source files without changing their location on
-disk. All nested Source Pools are 'flattened' during target dependency
+disk. All nested SourcePools are 'flattened' during target dependency
 checking and creation time.
 

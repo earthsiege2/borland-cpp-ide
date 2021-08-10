@@ -1,39 +1,65 @@
 //----------------------------------------------------------------------------
 // ObjectWindows
-// (C) Copyright 1994 by Borland International, All Rights Reserved
+// Copyright (c) 1994, 1996 by Borland International, All Rights Reserved
 //
-//   Implementation of TOleWindow. Window class that supports Ole2
-//   container & server using OCF TOcView & TOcRemView
+//$Revision:   10.14  $
+//
+// Implementation of TOleWindow. Window class that supports OLE 2
+// container & server using OCF TOcView & TOcRemView
 //----------------------------------------------------------------------------
 #define INC_OLE2
-#include <owl/owlpch.h>
-#include <owl/window.h>
-#include <owl/gdiobjec.h>
-#include <owl/uihandle.h>
-#include <owl/scroller.h>
-#include <ocf/ocdoc.h>
-#include <ocf/ocview.h>
+#include <owl/pch.h>
+#if !defined(OWL_WINDOW_H)
+# include <owl/window.h>
+#endif
+#if !defined(OWL_GDIOBJEC_H)
+# include <owl/gdiobjec.h>
+#endif
+#if !defined(OWL_SCROLLER_H)
+# include <owl/scroller.h>
+#endif
+#if !defined(OCF_OCDOC_H)
+# include <ocf/ocdoc.h>
+#endif
+#if !defined(OCF_OCVIEW_H)
+# include <ocf/ocview.h>
+#endif
+#if !defined(OCF_OCCTRL_H)
+# include <ocf/occtrl.h>
+#endif
+#if !defined(OWL_OLEFRAME_H)
+# include <owl/oleframe.h>
+#endif
+#if !defined(OWL_OLEWINDO_H)
+# include <owl/olewindo.h>
+#endif
+#if !defined(WINSYS_UIMETRIC_H)
+# include <winsys/uimetric.h>
+#endif
+#include <owl/edit.rh>
 #include <owl/docview.rh>
 #include <owl/oleview.rh>
-#include <owl/oleframe.h>
-#include <owl/olewindo.h>
-#include <owl/oledlg.h>
+
+DIAG_DECLARE_GROUP(OwlCmd);
 
 //----------------------------------------------------------------------------
 // Size of rectangle in two clks must occur to be a doubleClick
-//
-#if !defined(BI_PLAT_WIN32)
-  TSize DblClkDelta(3, 3);
-#else
-  TSize DblClkDelta(GetSystemMetrics(SM_CXDOUBLECLK)/2,
-                    GetSystemMetrics(SM_CYDOUBLECLK)/2);
-#endif
+// ---- moved in StartDrag ----
+//#if !defined(BI_PLAT_WIN32)
+//  TSize DblClkDelta(3, 3);
+//#else
+//  TSize DblClkDelta(TUIMetric::CxDoubleClk/2,
+//                    TUIMetric::CyDoubleClk/2);
+//#endif
 
 
 //----------------------------------------------------------------------------
 // TOleClientDC
 //
 
+//
+//
+//
 TOleClientDC::TOleClientDC(TOleWindow& win, bool scale)
 :
   TClientDC(win)
@@ -77,7 +103,9 @@ DEFINE_RESPONSE_TABLE1(TOleWindow, TWindow)
   EV_COMMAND(CM_EDITPASTELINK, CmEditPasteLink),
   EV_COMMAND_ENABLE(CM_EDITPASTELINK, CeEditPasteLink),
   EV_COMMAND(CM_EDITINSERTOBJECT, CmEditInsertObject),
+  EV_COMMAND(CM_EDITINSERTCONTROL, CmEditInsertControl),
   EV_COMMAND_ENABLE(CM_EDITINSERTOBJECT, CeEditInsertObject),
+  EV_COMMAND_ENABLE(CM_EDITINSERTCONTROL, CeEditInsertControl),
   EV_COMMAND_ENABLE(CM_EDITLINKS, CeEditLinks),
   EV_COMMAND(CM_EDITLINKS, CmEditLinks),
   EV_COMMAND_ENABLE(CM_EDITOBJECT, CeEditObject),
@@ -87,7 +115,7 @@ DEFINE_RESPONSE_TABLE1(TOleWindow, TWindow)
   EV_COMMAND(CM_EDITSHOWOBJECTS, CmEditShowObjects),
 
   EV_MESSAGE(WM_OCEVENT, EvOcEvent),
-//  EV_OC_VIEWDISCARDUNDO,  //!CQ not processing this yet...
+//  EV_OC_VIEWDISCARDUNDO,  
 
   // Container specific messages
   //
@@ -124,8 +152,64 @@ DEFINE_RESPONSE_TABLE1(TOleWindow, TWindow)
   EV_OC_VIEWSETLINK,
   EV_OC_VIEWBREAKLINK,
   EV_OC_VIEWDOVERB,
+
+  // Ambient properties
+  //
+  EV_OC_AMBIENT_GETBACKCOLOR,
+  EV_OC_AMBIENT_GETFORECOLOR,
+  EV_OC_AMBIENT_GETLOCALEID,
+  EV_OC_AMBIENT_GETTEXTALIGN,
+  EV_OC_AMBIENT_GETMESSAGEREFLECT,
+  EV_OC_AMBIENT_GETUSERMODE,
+  EV_OC_AMBIENT_GETUIDEAD,
+  EV_OC_AMBIENT_GETSHOWGRABHANDLES,
+  EV_OC_AMBIENT_GETSHOWHATCHING,
+  EV_OC_AMBIENT_GETDISPLAYASDEFAULT,
+  EV_OC_AMBIENT_GETSUPPORTSMNEMONICS,
+  EV_OC_AMBIENT_GETDISPLAYNAME,
+  EV_OC_AMBIENT_GETSCALEUNITS,
+  EV_OC_AMBIENT_GETFONT,
+  EV_OC_AMBIENT_SETBACKCOLOR,
+  EV_OC_AMBIENT_SETFORECOLOR,
+  EV_OC_AMBIENT_SETLOCALEID,
+  EV_OC_AMBIENT_SETTEXTALIGN,
+  EV_OC_AMBIENT_SETMESSAGEREFLECT,
+  EV_OC_AMBIENT_SETUSERMODE,
+  EV_OC_AMBIENT_SETUIDEAD,
+  EV_OC_AMBIENT_SETSHOWGRABHANDLES,
+  EV_OC_AMBIENT_SETSHOWHATCHING,
+  EV_OC_AMBIENT_SETDISPLAYASDEFAULT,
+  EV_OC_AMBIENT_SETSUPPORTSMNEMONICS,
+  EV_OC_AMBIENT_SETDISPLAYNAME,
+  EV_OC_AMBIENT_SETSCALEUNITS,
+  EV_OC_AMBIENT_SETFONT,
+
+  // Standard Events
+  //
+  EV_OC_CTRLEVENT_CLICK,
+  EV_OC_CTRLEVENT_DBLCLICK,
+
+
+  // Ctrl events
+  //
+  EV_OC_CTRLEVENT_CLICK,
+  EV_OC_CTRLEVENT_DBLCLICK,
+  EV_OC_CTRLEVENT_FOCUS,
+  EV_OC_CTRLEVENT_MOUSEDOWN,
+  EV_OC_CTRLEVENT_MOUSEMOVE,
+  EV_OC_CTRLEVENT_MOUSEUP,
+  EV_OC_CTRLEVENT_KEYDOWN,
+  EV_OC_CTRLEVENT_KEYUP,
+  EV_OC_CTRLEVENT_PROPERTYCHANGE,
+  EV_OC_CTRLEVENT_PROPERTYREQUESTEDIT,
+  EV_OC_CTRLEVENT_ERROREVENT,
+  EV_OC_CTRLEVENT_CUSTOMEVENT,
+
 END_RESPONSE_TABLE;
 
+//
+//
+//
 TOleWindow::TOleWindow(TWindow* parent, TModule* module)
 :
   TWindow(parent, 0, module),
@@ -133,6 +217,10 @@ TOleWindow::TOleWindow(TWindow* parent, TModule* module)
   Remote(false),
   ShowObjects(false)
 {
+  // Initialize virtual base, in case the derived-most used default ctor
+  //
+  TWindow::Init(parent, 0, module);
+
   // Derived class will need to create a OcDocument object to hold the ole
   // parts that we create and a OcView to provide ole services
   //
@@ -143,6 +231,9 @@ TOleWindow::TOleWindow(TWindow* parent, TModule* module)
   Init();
 }
 
+//
+//
+//
 void
 TOleWindow::Init()
 {
@@ -163,7 +254,6 @@ TOleWindow::Init()
   MinHeight = GetDeviceCaps(dc, LOGPIXELSY) / 4;
   ReleaseDC(0, dc);
 
-
   // Snag the OcApp from the TOleFrame object for quick reference
   //
   TOleFrame* olefr = TYPESAFE_DOWNCAST(GetApplication()->GetMainWindow(), TOleFrame);
@@ -172,6 +262,9 @@ TOleWindow::Init()
   OcApp->AddRef();
 }
 
+//
+//
+//
 TOleWindow::~TOleWindow()
 {
   // Let the OC objects go. They will delete themselves when they can
@@ -224,7 +317,7 @@ TOleWindow::CreateOcView(TRegLink* link, bool isRemote, IUnknown* outer)
     if (isRemote)
       OcView = new TOcRemView(*GetOcDoc(), regList, outer);
     else
-      OcView = new TOcView(*GetOcDoc(), regList, outer);
+      OcView = new TOcxView(*GetOcDoc(), regList, outer);
 
     Remote = isRemote;
   }
@@ -244,9 +337,9 @@ TOleWindow::EvCommandEnable(TCommandEnabler& commandEnabler)
     // Get the focus, in case it is a child that should receive the cmds
     // fall back to this window in case the Ole menu bar stole focus!
     //
-    HWND  hCmdTarget = ::GetFocus();
-    if (hCmdTarget != HWindow && !IsChild(hCmdTarget))
-      hCmdTarget = HWindow;
+    THandle  hCmdTarget = ::GetFocus();
+    if (hCmdTarget != GetHandle() && !IsChild(hCmdTarget))
+      hCmdTarget = GetHandle();
 
     RouteCommandEnable(hCmdTarget, commandEnabler);
   }
@@ -258,16 +351,21 @@ TOleWindow::EvCommandEnable(TCommandEnabler& commandEnabler)
 //
 // processing a range of command IDs for verbs
 //
-LRESULT
-TOleWindow::EvCommand(uint id, HWND hWndCtl, uint notifyCode)
+TResult
+TOleWindow::EvCommand(uint id, THandle hCtl, uint notifyCode)
 {
-  if (hWndCtl == 0) {
+#if !defined(_OWLDLL)
+  TRACEX(OwlCmd, 1, "TOleWindow::EvCommand - id(" << id << "), ctl(" <<\
+                     hex << uint(hCtl) << "), code(" << notifyCode  << ")");
+#endif
+
+  if (hCtl == 0) {
     if (CM_EDITFIRSTVERB <= id && id <= CM_EDITLASTVERB) {
       EvDoVerb(id - CM_EDITFIRSTVERB);
       return 0;
     }
   }
-  return TWindow::EvCommand(id, hWndCtl, notifyCode);
+  return TWindow::EvCommand(id, hCtl, notifyCode);
 }
 
 //
@@ -323,12 +421,18 @@ TOleWindow::CeFileClose(TCommandEnabler& ce)
 {
   // if open editing server, reflect the container's name in "close" option
   //
-  if (IsOpenEditing()) {
+  if (IsOpenEditing() && GetOcRemView() && GetOcRemView()->GetKind() != TOcRemView::Link) {
+    char strCloseMenu[128];
     string optName = GetModule()->LoadString(IDS_CLOSESERVER);
     TString title = GetOcRemView()->GetContainerTitle();
-    if (title.Length() > 0)
-      optName += title;
-    ce.SetText(optName.c_str());
+    if (title.Length() > 0) {
+      strcpy(strCloseMenu, optName.c_str());
+      strcat(strCloseMenu, title);
+      //const char far* str = title;
+      //optName += str;
+    }
+    //ce.SetText(optName.c_str());
+    ce.SetText(strCloseMenu);
   }
 }
 
@@ -337,6 +441,15 @@ TOleWindow::CeFileClose(TCommandEnabler& ce)
 //
 void
 TOleWindow::CeEditInsertObject(TCommandEnabler& ce)
+{
+  ce.Enable(OcApp && OcView);
+}
+
+//
+//
+//
+void
+TOleWindow::CeEditInsertControl(TCommandEnabler& ce)
 {
   ce.Enable(OcApp && OcView);
 }
@@ -379,7 +492,32 @@ TOleWindow::CmEditInsertObject()
   if (OcApp->Browse(initInfo)) {
     TRect rect;
     GetInsertPosition(rect);
-    SetSelection(new TOcPart(*GetOcDoc(), initInfo, rect));
+    TOcPart* part = new TOcPart (*GetOcDoc());
+    part->Init(&initInfo, rect);
+    SetSelection(part);
+
+    OcView->Rename();
+    InvalidatePart(invView);
+  }
+}
+
+//
+// Insert an OLE object into the view
+//
+void
+TOleWindow::CmEditInsertControl()
+{
+  PRECONDITION(OcView);
+  TOcInitInfo initInfo(OcView);
+
+  if (OcApp->BrowseControls(initInfo)) {
+    TRect rect;
+    GetInsertPosition(rect);
+    rect.right  = rect.left + 100;
+    rect.bottom = rect.top + 100;
+    TOcControl* ctrl = new TOcControl (*GetOcDoc());
+    ctrl->Init(&initInfo, rect);
+    SetSelection(ctrl);
 
     OcView->Rename();
     InvalidatePart(invView);
@@ -392,25 +530,34 @@ TOleWindow::CeEditDelete(TCommandEnabler& ce)
   ce.Enable(DragPart != 0);
 }
 
+//
+//
+//
 void
 TOleWindow::CmEditDelete()
 {
   if (!DragPart)
     return;
 
-  TOcPartChangeInfo changeInfo(DragPart, invData|invView);
+  TOcPartChangeInfo changeInfo(DragPart, TOcInvalidate(invData | invView));
   EvOcViewPartInvalid(changeInfo);
 
   DragPart->Delete();
   DragPart = 0;
 }
 
+//
+//
+//
 void
 TOleWindow::CeEditCut(TCommandEnabler& ce)
 {
   ce.Enable(DragPart != 0);
 }
 
+//
+//
+//
 void
 TOleWindow::CmEditCut()
 {
@@ -419,12 +566,18 @@ TOleWindow::CmEditCut()
   SetSelection(0);
 }
 
+//
+//
+//
 void
 TOleWindow::CeEditCopy(TCommandEnabler& ce)
 {
   ce.Enable(DragPart != 0);
 }
 
+//
+//
+//
 void
 TOleWindow::CmEditCopy()
 {
@@ -432,6 +585,9 @@ TOleWindow::CmEditCopy()
     OcApp->Copy(DragPart);
 }
 
+//
+//
+//
 void
 TOleWindow::CeEditPasteLink(TCommandEnabler& ce)
 {
@@ -439,12 +595,18 @@ TOleWindow::CeEditPasteLink(TCommandEnabler& ce)
   ce.Enable(OcApp->EnableEditMenu(meEnablePasteLink, OcView));
 }
 
+//
+//
+//
 void
 TOleWindow::CmEditPasteLink()
 {
    OcView->Paste(true);
 }
 
+//
+//
+//
 void
 TOleWindow::CeEditPaste(TCommandEnabler& ce)
 {
@@ -452,6 +614,9 @@ TOleWindow::CeEditPaste(TCommandEnabler& ce)
   ce.Enable(OcApp->EnableEditMenu(meEnablePaste, OcView));
 }
 
+//
+//
+//
 void
 TOleWindow::CmEditPaste()
 {
@@ -459,6 +624,9 @@ TOleWindow::CmEditPaste()
    InvalidatePart(invView);
 }
 
+//
+//
+//
 void
 TOleWindow::CeEditPasteSpecial(TCommandEnabler& ce)
 {
@@ -466,6 +634,9 @@ TOleWindow::CeEditPasteSpecial(TCommandEnabler& ce)
   ce.Enable(OcApp->EnableEditMenu(meEnableBrowseClipboard, OcView));
 }
 
+//
+//
+//
 void
 TOleWindow::CmEditPasteSpecial()
 {
@@ -545,6 +716,9 @@ TOleWindow::CeEditLinks(TCommandEnabler& ce)
   ce.Enable(OcApp->EnableEditMenu(meEnableBrowseLinks, OcView));
 }
 
+//
+//
+//
 void
 TOleWindow::CmEditLinks()
 {
@@ -552,12 +726,18 @@ TOleWindow::CmEditLinks()
   OcView->BrowseLinks();
 }
 
+//
+//
+//
 void
 TOleWindow::CeEditVerbs(TCommandEnabler& ce)
 {
   ce.Enable(DragPart != 0);
 }
 
+//
+//
+//
 void
 TOleWindow::CmEditShowObjects()
 {
@@ -565,6 +745,9 @@ TOleWindow::CmEditShowObjects()
   Invalidate();
 }
 
+//
+//
+//
 void
 TOleWindow::CeEditShowObjects(TCommandEnabler& ce)
 {
@@ -584,7 +767,7 @@ TOleWindow::HasActivePart()
 // Change cursor shape if within an embedded object
 //
 bool
-TOleWindow::EvSetCursor(HWND wnd, uint hitTest, uint mouseMsg)
+TOleWindow::EvSetCursor(THandle hWnd, uint hitTest, uint mouseMsg)
 {
   TPoint pt;
   GetCursorPos(pt);
@@ -622,17 +805,51 @@ TOleWindow::EvSetCursor(HWND wnd, uint hitTest, uint mouseMsg)
     return true;
   }
 
-  return ShowCursor(wnd, hitTest, mouseMsg);
+  return ShowCursor(hWnd, hitTest, mouseMsg);
 }
 
 //
 // Show cursor when it's not in an embedded object
 //
 bool
-TOleWindow::ShowCursor(HWND /*wnd*/, uint /*hitTest*/, uint /*mouseMsg*/)
+TOleWindow::ShowCursor(THandle /*hWnd*/, uint /*hitTest*/, uint /*mouseMsg*/)
 {
   ::SetCursor(::LoadCursor(0, IDC_ARROW));
   return true;
+}
+
+//
+// Find out if drag and drop needs to be started
+//
+bool
+TOleWindow::StartDrag(uint modKeys, TPoint& point)
+{
+	#if !defined(BI_PLAT_WIN32)
+	  static TSize DblClkDelta(3, 3);
+	#else
+	  static TSize DblClkDelta(TUIMetric::CxDoubleClk/2,
+	                    TUIMetric::CyDoubleClk/2);
+	#endif
+
+  // no part no drag
+	if (!DragPart)
+  	return false;
+
+  // maybe it was a double click
+	if (abs(point.x-DragStart.x) <= DblClkDelta.cx ||
+      			abs(point.y-DragStart.y) <= DblClkDelta.cy)
+  	return false;
+
+  // start drag and drop anyway if outside client area
+  if (!InClient(*DragDC, point))
+  	return true;
+
+  // start if ctrl or ctrl-shift is pressed but not if alt since move inside client area
+  // doesn't really make sense (a move is a move don't bother ole for that)
+	if ((modKeys & MK_CONTROL))
+  	return true;
+
+  return false;
 }
 
 //
@@ -652,12 +869,14 @@ TOleWindow::EvDropFiles(TDropInfo dropInfo)
 
     TRect rect;
     GetInsertPosition(rect);
-    SetSelection(new TOcPart(*GetOcDoc(), initInfo, rect));
+    TOcPart* part = new TOcPart (*GetOcDoc());
+    part->Init(&initInfo, rect);
+    SetSelection(part);
 
     OcView->Rename();
     InvalidatePart(invView);
 
-    delete [] filePath;
+    delete[] filePath;
   }
   dropInfo.DragFinish();
 }
@@ -869,20 +1088,13 @@ TOleWindow::EvMouseMove(uint modKeys, TPoint& point)
   if (DragHit == TUIHandle::MidCenter) {
     DragDC->DrawFocusRect(DragRect);   // erase old rect
 
-    // Account for case when the hand is a little shaky and a double click for
-    // open editing generates a move msg. as a side-effect
-    //
-    bool force = ((modKeys & MK_CONTROL) || (::GetKeyState(VK_MENU)&0x8000)) &&
-                  (abs(point.x-DragStart.x) > DblClkDelta.cx ||
-                   abs(point.y-DragStart.y) > DblClkDelta.cy);
-
-    // Start drag & drop if point is outside client, or Ctrl or Alt is pressed
-    //
-    if (DragPart && (!InClient(*DragDC, point) || force)) {
+		// check if initiate drag and drop
+    if (StartDrag(modKeys, point)) {
       TOcDropAction outAction;
-      OcApp->Drag(DragPart, daDropCopy | daDropMove | daDropLink, outAction);
+      OcApp->Drag(DragPart, TOcDropAction(daDropCopy | daDropMove | daDropLink),
+                  outAction);
 
-      TOcPartChangeInfo changeInfo(DragPart, invView | invData);
+      TOcPartChangeInfo changeInfo(DragPart, TOcInvalidate(invView | invData));
       EvOcViewPartInvalid(changeInfo);
       DragHit = TUIHandle::Outside;
       ReleaseCapture();
@@ -926,11 +1138,14 @@ TOleWindow::EvMouseMove(uint modKeys, TPoint& point)
   DragPt = point;
 }
 
+//
+//
+//
 void
 TOleWindow::EvLButtonUp(uint /*modKeys*/, TPoint& /*point*/)
 {
   if (DragPart) {
-    TOcPartChangeInfo changeInfo(DragPart, invView | invData);
+    TOcPartChangeInfo changeInfo(DragPart, TOcInvalidate(invView | invData));
 
     // All non-outside hits are moves or resizes
     //
@@ -969,13 +1184,14 @@ TOleWindow::EvSize(uint sizeType, TSize& size)
 // know that the view window has changed size
 //
 void
-TOleWindow::EvMDIActivate(HWND hWndActivated, HWND /*hWndDeactivated*/)
+TOleWindow::EvMDIActivate(THandle hActivated, THandle /*hDeactivated*/)
 {
-  OcView->EvActivate(hWndActivated == *Parent);
+  if (OcView)
+    OcView->EvActivate(hActivated == *Parent);
 }
 
 uint
-TOleWindow::EvMouseActivate(HWND topParent, uint /*hitCode*/, uint /*msg*/)
+TOleWindow::EvMouseActivate(THandle topParent, uint /*hitCode*/, uint /*msg*/)
 {
   if (topParent)
     ForwardMessage(topParent);
@@ -987,19 +1203,20 @@ TOleWindow::EvMouseActivate(HWND topParent, uint /*hitCode*/, uint /*msg*/)
 // May need to pass focus to an in-place server if there is one
 //
 void
-TOleWindow::EvSetFocus(HWND hWndLostFocus)
+TOleWindow::EvSetFocus(THandle hLostFocus)
 {
-  TWindow::EvSetFocus(hWndLostFocus);
-  OcView->EvSetFocus(true); // Maybe active part (if any) wants focus
+  TWindow::EvSetFocus(hLostFocus);
+  if (OcView)
+    OcView->EvSetFocus(true); // Maybe active part (if any) wants focus
 }
 
 //
 // response method for an incoming WM_VSCROLL message
 //
 void
-TOleWindow::EvHScroll(uint scrollCode, uint thumbPos, HWND hWndCtl)
+TOleWindow::EvHScroll(uint scrollCode, uint thumbPos, THandle hCtl)
 {
-  TWindow::EvHScroll(scrollCode, thumbPos, hWndCtl);
+  TWindow::EvHScroll(scrollCode, thumbPos, hCtl);
 
   InvalidatePart(invView);
 }
@@ -1008,22 +1225,21 @@ TOleWindow::EvHScroll(uint scrollCode, uint thumbPos, HWND hWndCtl)
 // response method for an incoming WM_VSCROLL message
 //
 void
-TOleWindow::EvVScroll(uint scrollCode, uint thumbPos, HWND hWndCtl)
+TOleWindow::EvVScroll(uint scrollCode, uint thumbPos, THandle hCtl)
 {
-  TWindow::EvVScroll(scrollCode, thumbPos, hWndCtl);
+  TWindow::EvVScroll(scrollCode, thumbPos, hCtl);
 
   InvalidatePart(invView);
 }
 
 //
 // Handle WM_MENUSELECT to provide hint text in the container's status bar
-// based on the menu item id. Treat popup items seperatly and ask them for
+// based on the menu item id. Treat popup items separatly and ask them for
 // their ids. Similar to code in TDecoratedFrame.
 //
 void
 TOleWindow::EvMenuSelect(uint menuItemId, uint flags, HMENU hMenu)
 {
-
   if (GetOcRemView()) {
     if (flags == 0xFFFF && hMenu == 0) {  // menu closing
       GetOcRemView()->SetContainerStatusText("");
@@ -1032,9 +1248,9 @@ TOleWindow::EvMenuSelect(uint menuItemId, uint flags, HMENU hMenu)
     else if (flags & MF_POPUP) {
       TMenu popupMenu(hMenu);
       int   count = popupMenu.GetMenuItemCount();
-      for (int pos = 0;
-           pos < count && popupMenu.GetSubMenu(pos) != HMENU(menuItemId);
-           pos++)
+      int   pos = 0;
+      for (;pos < count && popupMenu.GetSubMenu(pos) != HMENU(menuItemId);
+            pos++)
         ;
       menuItemId = popupMenu.GetMenuItemID(pos);
     }
@@ -1052,12 +1268,12 @@ TOleWindow::EvMenuSelect(uint menuItemId, uint flags, HMENU hMenu)
 //
 // Handle & sub-dispatch the OC event message.
 //
-LRESULT
-TOleWindow::EvOcEvent(WPARAM wParam, LPARAM lParam)
+TResult
+TOleWindow::EvOcEvent(TParam1 param1, TParam2 param2)
 {
-  TEventHandler::TEventInfo eventInfo(WM_OCEVENT, wParam);
+  TEventHandler::TEventInfo eventInfo(WM_OCEVENT, param1);
   if (Find(eventInfo))
-    return Dispatch(eventInfo, wParam, lParam);
+    return Dispatch(eventInfo, param1, param2);
   return 0;
 }
 
@@ -1080,7 +1296,13 @@ TOleWindow::EvOcViewTitle()
 void
 TOleWindow::EvOcViewSetTitle(const char far* title)
 {
-  Parent->SetWindowText(title);
+  if (title && *title)
+    Parent->SetWindowText(title);
+  else if (GetOcRemView() && GetOcRemView()->GetKind() == TOcRemView::Link) {
+    const char far* caption = GetFileName();
+    if (caption)
+      Parent->SetWindowText(caption);
+  }
 }
 
 //
@@ -1187,7 +1409,8 @@ TOleWindow::EvOcViewPasteObject(TOcInitInfo& init)
 {
   TRect rect;
   GetInsertPosition(rect);
-  new TOcPart(*GetOcDoc(), init, rect);
+  TOcPart* part = new TOcPart (*GetOcDoc());
+  part->Init(&init, rect);
   init.ReleaseDataObject();
   return true;
 }
@@ -1198,7 +1421,7 @@ TOleWindow::EvOcViewPasteObject(TOcInitInfo& init)
 bool
 TOleWindow::EvOcViewPaint(TOcViewPaint far& vp)
 {
-  // paint according to the view paint structure
+  // Paint according to the view paint structure
   //
   TDC dc(vp.DC);
   Pos = *vp.Pos;
@@ -1297,7 +1520,7 @@ TOleWindow::EvOcViewShowTools(TOcToolBarInfo far& tbi)
   TWindow* toolBar = mainWindow->ChildWithId(IDW_TOOLBAR);
   if (!toolBar)
     return false;
-  tbi.HTopTB = (HWND)*toolBar;
+  tbi.HTopTB = THandle(*toolBar);
   return true;
 }
 
@@ -1324,6 +1547,252 @@ TOleWindow::EvOcViewClipData(TOcFormatData far& /*format*/)
 //
 bool
 TOleWindow::EvOcViewSetData(TOcFormatData far& /*format*/)
+{
+  return false;
+}
+
+//
+// Get Ambient properties
+//
+bool
+TOleWindow::EvOcAmbientGetBackColor(long* /*backColor*/)
+{
+  return false;
+}
+
+bool
+TOleWindow::EvOcAmbientGetForeColor(long* /*foreColor*/)
+{
+  return false;
+}
+
+bool
+TOleWindow::EvOcAmbientGetLocaleID(long* /*localeId*/)
+{
+  return false;
+}
+
+bool
+TOleWindow::EvOcAmbientGetTextAlign(short* /*align*/)
+{
+  return false;
+}
+
+bool
+TOleWindow::EvOcAmbientGetMessageReflect(bool* /*reflectMessage*/)
+{
+  return false;
+}
+
+bool
+TOleWindow::EvOcAmbientGetUserMode(bool* /*userMode*/)
+{
+  return false;
+}
+
+bool
+TOleWindow::EvOcAmbientGetUIDead(bool* /*deadUI*/)
+{
+  return false;
+}
+
+bool
+TOleWindow::EvOcAmbientGetShowGrabHandles(bool* /*showGrabHandles*/)
+{
+  return false;
+}
+
+bool
+TOleWindow::EvOcAmbientGetShowHatching(bool* /*showHatching*/)
+{
+  return false;
+}
+
+bool
+TOleWindow::EvOcAmbientGetDisplayAsDefault(bool* /*displayAsDefault*/)
+{
+  return false;
+}
+
+bool
+TOleWindow::EvOcAmbientGetSupportsMnemonics(bool* /*supportMnemonics*/)
+{
+  return false;
+}
+
+bool
+TOleWindow::EvOcAmbientGetDisplayName(TString** /*name*/)
+{
+  return false;
+}
+
+bool
+TOleWindow::EvOcAmbientGetScaleUnits(TString** /*units*/)
+{
+  return false;
+}
+
+bool
+TOleWindow::EvOcAmbientGetFont(IDispatch** /*font*/)
+{
+  return false;
+}
+
+bool
+TOleWindow::EvOcAmbientSetBackColor(long /*backColor*/)
+{
+  return false;
+}
+
+bool
+TOleWindow::EvOcAmbientSetForeColor(long /*foreColor*/)
+{
+  return false;
+}
+
+bool
+TOleWindow::EvOcAmbientSetLocaleID(long /*localeId*/)
+{
+  return false;
+}
+
+bool
+TOleWindow::EvOcAmbientSetTextAlign(short /*align*/)
+{
+  return false;
+}
+
+bool
+TOleWindow::EvOcAmbientSetMessageReflect(bool /*reflect*/)
+{
+  return false;
+}
+
+bool
+TOleWindow::EvOcAmbientSetUserMode(bool /*userMode*/)
+{
+  return false;
+}
+
+bool
+TOleWindow::EvOcAmbientSetUIDead(bool /*dead*/)
+{
+  return false;
+}
+
+bool
+TOleWindow::EvOcAmbientSetShowGrabHandles(bool /*showHandles*/)
+{
+  return false;
+}
+
+bool
+TOleWindow::EvOcAmbientSetShowHatching(bool /*showHatching*/)
+{
+  return false;
+}
+
+bool
+TOleWindow::EvOcAmbientSetDisplayAsDefault(bool /*displayAsDefault*/)
+{
+  return false;
+}
+
+bool
+TOleWindow::EvOcAmbientSetSupportsMnemonics(bool /*supportMnemonics*/)
+{
+  return false;
+}
+
+bool
+TOleWindow::EvOcAmbientSetDisplayName(TString* /*name*/)
+{
+  return false;
+}
+
+bool
+TOleWindow::EvOcAmbientSetScaleUnits(TString* /*units*/)
+{
+  return false;
+}
+
+bool
+TOleWindow::EvOcAmbientSetFont(IDispatch* /*font*/)
+{
+  return false;
+}
+
+//
+// Control Event Dispatches
+//
+bool
+TOleWindow::EvOcCtrlClick(TCtrlEvent* /*pev*/)
+{
+  return false;
+}
+
+bool
+TOleWindow::EvOcCtrlDblClick(TCtrlEvent* /*pev*/)
+{
+  return false;
+}
+
+bool
+TOleWindow::EvOcCtrlMouseDown(TCtrlMouseEvent* /*pev*/)
+{
+  return false;
+}
+
+bool
+TOleWindow::EvOcCtrlMouseUp(TCtrlMouseEvent* /*pev*/)
+{
+  return false;
+}
+
+bool
+TOleWindow::EvOcCtrlMouseMove(TCtrlMouseEvent* /*pev*/)
+{
+  return false;
+}
+
+bool
+TOleWindow::EvOcCtrlKeyDown(TCtrlKeyEvent* /*pev*/)
+{
+  return false;
+}
+
+bool
+TOleWindow::EvOcCtrlKeyUp(TCtrlKeyEvent* /*pev*/)
+{
+  return false;
+}
+
+bool
+TOleWindow::EvOcCtrlErrorEvent(TCtrlErrorEvent* /*pev*/)
+{
+  return false;
+}
+
+bool
+TOleWindow::EvOcCtrlFocus(TCtrlFocusEvent* /*pev*/)
+{
+  return false;
+}
+
+bool
+TOleWindow::EvOcCtrlPropertyChange(TCtrlPropertyEvent* /*pev*/)
+{
+  return false;
+}
+
+bool
+TOleWindow::EvOcCtrlPropertyRequestEdit(TCtrlPropertyEvent* /*pev*/)
+{
+  return false;
+}
+
+bool
+TOleWindow::EvOcCtrlCustomEvent(TCtrlCustomEvent* /*pev*/)
 {
   return false;
 }
@@ -1573,6 +2042,14 @@ TOleWindow::EvOcViewDoVerb(uint /*verb*/)
   return false;
 }
 
+//
+// Perform the action indentified by verb
+//
+bool
+TOleWindow::EvOcViewTransformCoords(uint /*verb*/)
+{
+  return false;
+}
 
 //
 // Shut down the associated OCF partners if possible
@@ -1609,11 +2086,14 @@ TOleWindow::CleanupWindow()
   TWindow::CleanupWindow();
 }
 
+
+#if 0
 static void
 DoIdleAction(TWindow* win, void* idleCount)
 {
   win->IdleAction(*(long*)idleCount);
 }
+#endif
 
 //
 // TOleWindow processes idle action occurs once per block of messages
@@ -1621,12 +2101,24 @@ DoIdleAction(TWindow* win, void* idleCount)
 bool
 TOleWindow::IdleAction(long idleCount)
 {
+/*
   if (idleCount == 0) {
     // give child windows an opportunity to do any idle processing
     //
     ForEach(DoIdleAction, &idleCount);
   }
   return false;  // we don't need any more time for now
+*/ 
+
+  return TWindow::IdleAction(idleCount);
+}
+
+bool
+TOleWindow::PreProcessMsg(MSG& msg)
+{
+  if (TWindow::PreProcessMsg(msg))
+    return true;  // Processed accelerators
+  return false;
 }
 
 //

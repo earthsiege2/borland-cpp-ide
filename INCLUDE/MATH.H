@@ -1,3 +1,4 @@
+
 /*  math.h
 
     Definitions for the math floating point package.
@@ -5,9 +6,9 @@
 */
 
 /*
- *      C/C++ Run Time Library - Version 6.5
+ *      C/C++ Run Time Library - Version 7.0
  *
- *      Copyright (c) 1987, 1994 by Borland International
+ *      Copyright (c) 1987, 1996 by Borland International
  *      All Rights Reserved.
  *
  */
@@ -26,7 +27,7 @@
 #pragma warn -nak
 #endif
 
-#pragma option -a-
+#pragma pack(push, 1)
 
 #endif  /* !RC_INVOKED */
 
@@ -158,7 +159,7 @@ long double _RTLENTRY _EXPFUNC tanl   (long double __x);
 #endif
 
 
-#if !__STDC__
+#if !defined(__STDC__)
 
 #ifdef __cplusplus
 extern "C" {
@@ -168,8 +169,8 @@ double      _RTLENTRY _EXPFUNC hypot (double __x, double __y);
 int         _RTLENTRY _EXPFUNC _matherr (struct exception _FAR *__e);
 double      _RTLENTRY _EXPFUNC poly  (double __x, int __degree, double _FAR *__coeffs);
 double      _RTLENTRY _EXPFUNC pow10 (int __p);
-long double _RTLENTRY _EXPFUNC hypotl (long double __x, long double __y);
-long double _RTLENTRY _EXPFUNC polyl  (long double __x, int __degree, long double _FAR *__coeffs);
+long double _RTLENTRY          hypotl (long double __x, long double __y);
+long double _RTLENTRY          polyl  (long double __x, int __degree, long double _FAR *__coeffs);
 long double _RTLENTRY _EXPFUNC pow10l (int __p);
 
 #if !defined(__ABS_DEFINED)
@@ -190,8 +191,8 @@ int         _RTLENTRY _EXPFUNC _matherrl (struct _exceptionl _FAR *__e);
 
 long double _RTLENTRY          _atold (const char _FAR *__s);
 
-long double _RTLENTRY _EXPFUNC hypotl (long double __x, long double __y);
-long double _RTLENTRY _EXPFUNC polyl  (long double __x, int __degree, long double _FAR *__coeffs);
+long double _RTLENTRY          hypotl (long double __x, long double __y);
+long double _RTLENTRY          polyl  (long double __x, int __degree, long double _FAR *__coeffs);
 long double _RTLENTRY _EXPFUNC pow10l (int __p);
 
 #ifdef __cplusplus
@@ -312,7 +313,8 @@ long double _RTLENTRY _EXPFUNC pow10l  (int __p);
 
 #if !defined(RC_INVOKED)
 
-#pragma option -a. /* restore default packing */
+/* restore default packing */
+#pragma pack(pop)
 
 #if defined(__STDC__)
 #pragma warn .nak

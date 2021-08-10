@@ -5,20 +5,18 @@
 // Beginning of file dragdrop.c
 
 /* --------------------------------------------------------------
-   This is a code example using the Drag and Drop feature in
-   Windows 3.1 with C.  The example shows how to drop files
-   into the client area of the main window and then print out
-   the file names only if they were dropped in the client area.
-   The list of files will be kept in a linked list of structures.
-   The code is well commented with Steps to follow the creation
-   of the application as well as comments for common pitfalls
-   and important lines of code that affect the performance of
-   your application.
+   This is an example of implementing Drag and Drop.  When files
+   are dragged from the File Manager or Explorer and then dropped
+   into the client area of the main window, the filenames are
+   printed.  The list of files will be kept in a linked list of
+   structures.  The code is well commented with steps to follow
+   the creation of the application as well as comments for common
+   pitfalls and important lines of code that affect the
+   performance of your application.
  --------------------------------------------------------------- */
 
 char HelpText[]=
-"\n\rThis application must be run under Windows 3.1 or greater.\n\r \
-Bring up the File Manager or an equivalent file viewer.\n\r \
+"\n\rBring up the File Manager, Explorer or equivalent file viewer.\n\r \
 Select a file with the left mouse button and keep the button down.\n\r \
 Now drag the mouse over until it is on top of the drag\n\r \
 n' drop window client area.  Now release the left mouse\n\r \
@@ -76,12 +74,12 @@ void FileDrop( struct FileList* ptr, char *FileName , int px, int py,
 
 char *WhoAmI(struct FileList *ptr)
 {
-   static char buffer[ 80 ];
+   static char buffer[ 512 ];
 
    wsprintf( buffer, "File: %s [ %d , %d ] inClient: %d",
           (LPSTR)ptr->lpFileName, ptr->x , ptr->y, ptr->inClient );
 
-//WARNING!!:  Serious problem recognized:
+      //WARNING!!:  Serious problem recognized:
       //In the small model, without the typecast,
       //lpFileName was two bytes on the stack of which
       //wsprintf took 4.
@@ -186,10 +184,11 @@ void WMDropFiles( WPARAM WParam, HWND hWnd)
    Step 9:
    Release the memory shell allocated for this handle
    with DragFinish.
-   NOTE: This is a real easy step to forget and could
+   NOTE: This is an easy step to forget and could
    explain memory leaks and incorrect program performance.
 *************************************************************/
    DragFinish( Handle );
+   free(pszFileName);
 }
 
 /************************************************************/

@@ -10,22 +10,22 @@
 /*  with version 1.                                                       */
 /*                                                                        */
 /*------------------------------------------------------------------------*/
+#include <owl/pch.h>
+#include <owl/window.h>
+#include <owl/dc.h>
+#include <owl/applicat.h>
+#include <owl/framewin.h>
+#include <owl/dialog.h>
+#include <owl/opensave.h>       // Changed
 
-#include <owl\owlpch.h>
+#include <winsys/wsyscls.h>
+#include <winsys/geometry.h>
+
+#include <classlib/sets.h>
+#include <classlib/objstrm.h>   // Changed
 
 #include <new.h>
 #include <cstring.h>
-
-#include <classlib\sets.h>
-#include <classlib\objstrm.h>
-
-#include <owl\point.h>
-#include <owl\window.h>
-#include <owl\dc.h>
-#include <owl\applicat.h>
-#include <owl\framewin.h>
-#include <owl\dialog.h>
-#include <owl\opensave.h>
 
 #include "streams.h"
 
@@ -146,7 +146,7 @@ GraphicalObject::GraphicalObjectDC::GraphicalObjectDC( TDC& dc, int filled ) :
 {
     if( filled )        // Changed
         DC.SelectStockObject( BLACK_BRUSH );
-    else 
+    else
         DC.SelectStockObject( NULL_BRUSH );
 }
 
@@ -1099,11 +1099,13 @@ private:
     TWindow& Owner;
     int AllowPosition;
 
+public:
+
     class CaptionDialog : public TDialog
     {
     public:
         CaptionDialog( TWindow& parent, CaptionBuilder& builder );
-        BOOL CanClose();
+        bool CanClose();
         void SetupWindow();
     private:
         void TopClicked();
@@ -1172,12 +1174,12 @@ void CaptionBuilder::CaptionDialog::SetupWindow()
         }
 }
 
-BOOL CaptionBuilder::CaptionDialog::CanClose()
+bool CaptionBuilder::CaptionDialog::CanClose()
 {
     char buf[256];
     GetDlgItemText( IDD_INPUTEDITBOX, buf, sizeof(buf) );
     Builder.Caption = buf;
-    return TRUE;
+    return true;
 }
 
 void CaptionBuilder::CaptionDialog::TopClicked()
@@ -1402,7 +1404,7 @@ GraphicalObject *FilledEllipseBuilder::BuildObject( TPoint p1, TPoint p2 )
 /*                                                                        */
 /*          Initializes the window.                                       */
 /*                                                                        */
-/*      void Paint( TDC&, BOOL, TRect& );                                 */
+/*      void Paint( TDC&, bool, TRect& );                                 */
 /*                                                                        */
 /*          Called whenever the window receives a WM_PAINT message. Draws */
 /*          the objects by calling each of their Draw() functions.        */
@@ -1475,7 +1477,7 @@ public:
 
     TGraphWindow();
 
-    void Paint(TDC&, BOOL, TRect&);
+    void Paint(TDC&, bool, TRect&);
 
     void CmNew();
     void CmLine();
@@ -1496,7 +1498,7 @@ public:
     void EvRButtonDown( UINT modKeys, TPoint& point );
     void EvMouseMove( UINT modKeys, TPoint& point );
 
-    BOOL CanClose();
+    bool CanClose();
 
     TOpenSaveDialog::TData FileData;
 
@@ -1589,7 +1591,7 @@ void TGraphWindow::DrawObject( GraphicalObject &obj, void *ptr )
     obj.Draw( *(GraphWindowDC *)ptr );
 }
 
-void TGraphWindow::Paint( TDC& dc, BOOL, TRect& )
+void TGraphWindow::Paint( TDC& dc, bool, TRect& )
 {
     GraphWindowDC gdc(dc);
     Objects.ForEach( DrawObject, &gdc );
@@ -1757,7 +1759,7 @@ void TGraphWindow::CmAbout()
     dlg.Execute();
 }
 
-BOOL TGraphWindow::CanClose()
+bool TGraphWindow::CanClose()
 {
     return CheckAndClear();
 }
@@ -1815,7 +1817,7 @@ void TGraphWindow::EvMouseMove( UINT modKeys, TPoint& point )
         Builder->Drag( point );
 }
 
-class TStreamApp : public TApplication 
+class TStreamApp : public TApplication
 {
 
 public:

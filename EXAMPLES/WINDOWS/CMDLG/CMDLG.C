@@ -3,11 +3,10 @@
 // Cmdlg.c - Common Dialogs example in C
 
 /*********************************************************************
-This program has example code that makes use of the Common Dialogs
-available in Windows 3.1.  It is meant to be a simple example using the
-C programming language.
+This program demonstrates the use of Open, Color, and Font common
+dialogs which are available in Windows 3.1, Windows NT, and Windows 95.
 
-The main window will have menu selections for opening a file, changing the
+The main window has menu selections for opening a file, changing the
 font and changing the color used for the selected font.  When a file is
 selected the name will be displayed on the client area of the window.
 
@@ -17,6 +16,9 @@ cmdlg.h         Header file for application
 cmdlgr.h           Header file for application and resources
 cmdlg.c         Source file for application
 cmdlg.rc           Resource file for application
+
+For a more thorough treatment of the Open common dialog under Windows 95,
+see also \BC5\EXAMPLES\WIN95\COMDLG32.
 ***********************************************************************/
 
 #include <windowsx.h>
@@ -32,12 +34,12 @@ HINSTANCE hInst;  // current instance
 
 
 /*********************************************************************
-Using the OPENFILENAME structure and the Windows 3.1 API call
-GetOpenFileName() eases the selection of files for the programmer and for
-the user.  The WINHELP.EXE help file WIN31WH.HLP (found in the BORLANDC\BIN
-directory) contains a detailed description of the function call and its
-associated structure.  The Flags field of the structure is particularly
-useful when custimization is required.
+Using the OPENFILENAME structure and the Windows API call GetOpenFileName()
+eases the selection of files for the programmer and for the user.  The
+help file WIN31WH.HLP (found in the \BC5\HELP directory) contains a
+detailed description of the function call and its associated structure.
+The Flags field of the structure is particularly useful when
+customization is required.
 **********************************************************************/
 void CMUFileOpen( HWND hWnd )
 {
@@ -84,7 +86,7 @@ lStructSize member is not set the call to GetOpenFileName() will fail.
   ofnTemp.lpstrFileTitle = NULL;
   ofnTemp.nMaxFileTitle = 0;
   ofnTemp.lpstrInitialDir = NULL;
-  ofnTemp.lpstrTitle = "OPENFILENAME";  // Title for dialog
+  ofnTemp.lpstrTitle = "Open";  // Title for dialog
   ofnTemp.Flags = OFN_FILEMUSTEXIST | OFN_HIDEREADONLY | OFN_PATHMUSTEXIST;
   ofnTemp.nFileOffset = 0;
   ofnTemp.nFileExtension = 0;
@@ -111,7 +113,7 @@ to retrieve the type of error that occured.
 }
 
 /*************************************************************************
-Using the CHOOSECOLOR structure and the Windows 3.1 API call ChooseColor(),
+Using the CHOOSECOLOR structure and the Windows API call ChooseColor(),
 eases the selection of colors for the programmer and for the user.  The
 comments for the File Open dialog regarding the help file and the structure
 size also apply to the color dialog.
@@ -140,7 +142,7 @@ COMMDLG.DLL.
 }
 
 /**************************************************************************
-Using the CHOOSEFONT structure and the Windows 3.1 API call ChooseFont()
+Using the CHOOSEFONT structure and the Windows API call ChooseFont()
 eases the selection of fonts for the programmer and for the user.  The
 comments for the File Open dialog regarding the help file and the structure
 size also apply to the font dialog.

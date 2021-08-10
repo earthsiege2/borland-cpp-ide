@@ -1,53 +1,53 @@
 LIBRARY     MSVFW32.DLL
 
 EXPORTS
-    DitherInit                     @4   
-    DitherTerm                     @5   
-    DrawDibBegin                   @6   
-    DrawDibChangePalette           @7   
-    DrawDibClose                   @8   
-    DrawDibDraw                    @9   
-    DrawDibEnd                     @10  
-    DrawDibGetBuffer               @11  
-    DrawDibGetBufferOld            @12  
-    DrawDibGetPalette              @13  
-    DrawDibInit                    @14  
-    DrawDibOpen                    @15  
-    DrawDibProfileDisplay          @16  
-    DrawDibRealize                 @17  
-    DrawDibSetPalette              @18  
-    DrawDibStart                   @19  
-    DrawDibStop                    @20  
-    DrawDibTerm                    @21  
-    DrawDibTime                    @22  
-    GetOpenFileNamePreview         @23  
-    GetOpenFileNamePreviewA        @24  
-    GetOpenFileNamePreviewW        @25  
-    ICClose                        @26  
-    ICCompress                     @27  
-    ICCompressorChoose             @28  
-    ICCompressorFree               @29  
-    ICDecompress                   @30  
-    ICDraw                         @31  
-    ICDrawBegin                    @32  
-    ICGetDisplayFormat             @33  
-    ICGetInfo                      @34  
-    ICImageCompress                @35  
-    ICImageDecompress              @36  
-    ICInfo                         @37  
-    ICInstall                      @38  
-    ICLocate                       @39  
-    ICMThunk32                     @3   
-    ICOpen                         @40  
-    ICOpenFunction                 @41  
-    ICRemove                       @42  
-    ICSendMessage                  @43  
-    ICSeqCompressFrame             @44  
-    ICSeqCompressFrameEnd          @45  
-    ICSeqCompressFrameStart        @46  
-    MCIWndCreate                   @47  
-    MCIWndCreateA                  @48  
-    MCIWndCreateW                  @49  
-    MCIWndRegisterClass            @50  
-    StretchDIB                     @51  
-    VideoForWindowsVersion         @2   
+    DitherInit
+    DitherTerm
+    DrawDibBegin
+    DrawDibChangePalette
+    DrawDibClose
+    DrawDibDraw
+    DrawDibEnd
+    DrawDibGetBuffer
+    DrawDibGetBufferOld
+    DrawDibGetPalette
+    DrawDibInit
+    DrawDibOpen
+    DrawDibProfileDisplay
+    DrawDibRealize
+    DrawDibSetPalette
+    DrawDibStart
+    DrawDibStop
+    DrawDibTerm
+    DrawDibTime
+    GetOpenFileNamePreview
+    GetOpenFileNamePreviewA
+    GetOpenFileNamePreviewW
+    ICClose
+    ICCompress
+    ICCompressorChoose
+    ICCompressorFree
+    ICDecompress
+    ICDraw
+    ICDrawBegin
+    ICGetDisplayFormat
+    ICGetInfo
+    ICImageCompress
+    ICImageDecompress
+    ICInfo
+    ICInstall
+    ICLocate
+    ICMThunk32
+    ICOpen
+    ICOpenFunction
+    ICRemove
+    ICSendMessage
+    ICSeqCompressFrame
+    ICSeqCompressFrameEnd
+    ICSeqCompressFrameStart
+    MCIWndCreate
+    MCIWndCreateA
+    MCIWndCreateW
+    MCIWndRegisterClass
+    StretchDIB
+    VideoForWindowsVersion

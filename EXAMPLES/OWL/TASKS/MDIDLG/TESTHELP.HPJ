@@ -1,0 +1,11 @@
+[Config]
+BrowseButtons()
+
+[Options]
+Title=MDIDLG Help File
+
+[Files]
+TestHelp.rtf
+
+[Map]
+#include <helpids.hh>

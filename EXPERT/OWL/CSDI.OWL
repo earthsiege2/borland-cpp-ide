@@ -1,51 +1,50 @@
 ##{cheader.snp}
-#include <owl\owlpch.h>
-#pragma hdrstop
+#include <owl/pch.h>
 
-##@OPT_APPL_DRAGDROP 2
-#include <dir.h>
+##@OPT_APPL_TOOLBAR
+#include <owl/buttonga.h>
+##@OPT_APPL_STATUSBAR
+#include <owl/statusba.h>
+##@QUERY_APPL_OLE_AUTO 2
+#include <owl/olefacto.h>
+#include <ocf/ocreg.h>
+##@OPT_APPL_REGISTRY 2
+#include <classlib/cmdline.h>
+#include <winsys/registry.h>
+#include <stdio.h>
 
-##--BEGIN-- !@OPT_APPL_DRAGDROP
-##:     QUERY_WIND_CLIENT [[Client]]
-##:     <<*Client QUERY_BASE_NAME [[BaseClient]]
-##:     BaseClient == "TListBox"
-#include <dir.h>
-
-##--END-- !@OPT_APPL_DRAGDROP
 ##QUERY_FILE_H [[FileName]]
 #include "[[FileName]]"
 ##QUERY_WIND_CLIENT [[Client]]
 ##<<*Client QUERY_FILE_H [[Filename]]
-#include "[[Filename]]"                        // Definition of client class.       
+#include "[[Filename]]"                        // Definition of client class.
 ##--BEGIN-- ((@QUERY_APPL_MODEL != VALUE_DIALOG) || ((@QUERY_APPL_MODEL == VALUE_DIALOG) && @QUERY_APPL_DLGCLIENT_MENU))
 ##      :<<TDialog QUERY_FILE_H [[Filename]]
-#include "[[Filename]]"                        // Definition of about dialog.       
+#include "[[Filename]]"                        // Definition of about dialog.
 ##--END-- ((@QUERY_APPL_MODEL != VALUE_DIALOG) || ((@QUERY_APPL_MODEL == VALUE_DIALOG) && @QUERY_APPL_DLGCLIENT_MENU))
 
 
 ##--BEGIN-- @OPT_APPL_HELP
-##--BEGIN-- @QUERY_APPL_COMMENT == VALUE_VERBOSE
+##@QUERY_APPL_COMMENT == VALUE_VERBOSE 3
 //
 // Generated help file.
 //
-##--END-- @QUERY_APPL_COMMENT == VALUE_VERBOSE
 ##@QUERY_APPL_HELP [[HelpFile]]
 const char HelpFileName[] = "[[HelpFile]].hlp";
 
 
 ##--END-- @OPT_APPL_HELP
-##{cdragdrp.owl}
 //{{[[TApplication]] Implementation}}
 
 
-##--BEGIN-- @QUERY_APPL_OLE_AUTO 
+##--BEGIN-- @QUERY_APPL_OLE_AUTO
 //
 // OLE's ITypeInfo browses this symbol table for a list of all data,
 // properties, and methods exposed by this automated class.
 //
 DEFINE_AUTOCLASS([[TApplication]])
-    EXPOSE_APPLICATION([[TApplication]], "Application", "Application object", 0)
-    EXPOSE_QUIT("Quit", "Quit application", 0)
+  EXPOSE_APPLICATION([[TApplication]], "Application", "Application object", 0)
+  EXPOSE_QUIT("Quit", "Quit application", 0)
 //{{[[TApplication]]SYM_TBL_BEGIN}}
 //{{[[TApplication]]SYM_TBL_END}}
 END_AUTOCLASS([[TApplication]], tfAppObject | tfCanCreate, "[[TApplication]]", 0, 0);
@@ -54,35 +53,37 @@ END_AUTOCLASS([[TApplication]], tfAppObject | tfCanCreate, "[[TApplication]]", 0
 DEFINE_APP_DICTIONARY(AppDictionary);
 static TPointer<TRegistrar> Registrar;
 
-REGISTRATION_FORMAT_BUFFER(100)
+REGISTRATION_FORMAT_BUFFER(200)
 
 BEGIN_REGISTRATION(ApplicationReg)
 ##@QUERY_OLE_GUID [[GUID]]
-    REGDATA(clsid, "{[[GUID]]}")
+  REGDATA(clsid, "{[[GUID]]}")
 ##--BEGIN-- @QUERY_PRJ_NAME [[AppTitle]]
-    REGDATA(progid, "[[AppTitle]].Application.1")
-    REGDATA(appname, "[[AppTitle]] Server")
-    REGDATA(description, "[[AppTitle]] Server Application")
-    REGDATA(cmdline, "/Automation")
-//    REGDATA(debugger, "TDW")
+  REGDATA(progid, "[[AppTitle]].Application.1")
+  REGDATA(appname, "[[AppTitle]] Server")
+  REGDATA(description, "[[AppTitle]] Server Application")
+  REGDATA(cmdline, "/Automation")
+//  REGDATA(debugger, "TDW")
 ##--END-- @QUERY_PRJ_NAME [[AppTitle]]
 END_REGISTRATION
 
 
-##--END-- @QUERY_APPL_OLE_AUTO 
-##--BEGIN-- @QUERY_APPL_COMMENT == VALUE_VERBOSE
+##--END-- @QUERY_APPL_OLE_AUTO
+##@QUERY_APPL_COMMENT == VALUE_VERBOSE 4
 //
 // Build a response table for all messages/commands handled
 // by the application.
 //
-##--END-- @QUERY_APPL_COMMENT == VALUE_VERBOSE
+##(@OPT_APPL_MRU) && (@QUERY_APPL_MODEL != VALUE_DIALOG)
+DEFINE_RESPONSE_TABLE2([[TApplication]], TRecentFiles, TApplication)
+##(!@OPT_APPL_MRU) || (@QUERY_APPL_MODEL == VALUE_DIALOG)
 DEFINE_RESPONSE_TABLE1([[TApplication]], TApplication)
 //{{[[TApplication]]RSP_TBL_BEGIN}}
 ##--BEGIN-- @QUERY_APPL_MODEL != VALUE_DIALOG
 ##:DBResponse(\\"[[TApplication]]", "CM_FILENEW", "CmFileNew", "", "COMMAND")
 ##:DBResponse(\\"[[TApplication]]", "CM_FILEOPEN", "CmFileOpen", "", "COMMAND")
-    EV_COMMAND(CM_FILENEW, CmFileNew),
-    EV_COMMAND(CM_FILEOPEN, CmFileOpen),
+  EV_COMMAND(CM_FILENEW, CmFileNew),
+  EV_COMMAND(CM_FILEOPEN, CmFileOpen),
 ##@OPT_APPL_PRINTING 6
 ##:DBResponse(\\"[[TApplication]]", "CM_FILEPRINT", "CmFilePrint", "", "COMMAND")
 ##:DBResponse(\\"[[TApplication]]", "CM_FILEPRINTERSETUP", "CmFilePrintSetup", "", "COMMAND")
@@ -90,295 +91,326 @@ DEFINE_RESPONSE_TABLE1([[TApplication]], TApplication)
 ##:DBResponse(\\"[[TApplication]]", "CM_FILEPRINT", "CmPrintEnable", "", "ENABLER")
 ##:DBResponse(\\"[[TApplication]]", "CM_FILEPRINTERSETUP", "CmPrintEnable", "", "ENABLER")
 ##:DBResponse(\\"[[TApplication]]", "CM_FILEPRINTPREVIEW", "CmPrintEnable", "", "ENABLER")
-    EV_COMMAND(CM_FILEPRINT, CmFilePrint),
-    EV_COMMAND(CM_FILEPRINTERSETUP, CmFilePrintSetup),
-    EV_COMMAND(CM_FILEPRINTPREVIEW, CmFilePrintPreview),
-    EV_COMMAND_ENABLE(CM_FILEPRINT, CmPrintEnable),
-    EV_COMMAND_ENABLE(CM_FILEPRINTERSETUP, CmPrintEnable),
-    EV_COMMAND_ENABLE(CM_FILEPRINTPREVIEW, CmPrintEnable),
+  EV_COMMAND(CM_FILEPRINT, CmFilePrint),
+  EV_COMMAND(CM_FILEPRINTERSETUP, CmFilePrintSetup),
+  EV_COMMAND(CM_FILEPRINTPREVIEW, CmFilePrintPreview),
+  EV_COMMAND_ENABLE(CM_FILEPRINT, CmPrintEnable),
+  EV_COMMAND_ENABLE(CM_FILEPRINTERSETUP, CmPrintEnable),
+  EV_COMMAND_ENABLE(CM_FILEPRINTPREVIEW, CmPrintEnable),
 ##--END-- @QUERY_APPL_MODEL != VALUE_DIALOG
 ##@OPT_APPL_HELP 2
 ##:DBResponse(\\"[[TApplication]]", "CM_HELPCONTENTS", "CmHelpContents", "", "COMMAND")
 ##:DBResponse(\\"[[TApplication]]", "CM_HELPUSING", "CmHelpUsing", "", "COMMAND")
-    EV_COMMAND(CM_HELPCONTENTS, CmHelpContents),
-    EV_COMMAND(CM_HELPUSING, CmHelpUsing),
+  EV_COMMAND(CM_HELPCONTENTS, CmHelpContents),
+  EV_COMMAND(CM_HELPUSING, CmHelpUsing),
 ##:DBResponse(\\"[[TApplication]]", "CM_HELPABOUT", "CmHelpAbout", "", "COMMAND")
-    EV_COMMAND(CM_HELPABOUT, CmHelpAbout),
+  EV_COMMAND(CM_HELPABOUT, CmHelpAbout),
 ##@OPT_APPL_DRAGDROP
 ##:DBResponse(\\"[[TApplication]]", "", "", "WM_DROPFILES", "")
-    EV_WM_DROPFILES,
+  EV_WM_DROPFILES,
 ##@OPT_APPL_PRINTING
 ##:DBResponse(\\"[[TApplication]]", "", "", "WM_WININICHANGE", "")
-    EV_WM_WININICHANGE,
+  EV_WM_WININICHANGE,
+##(@OPT_APPL_MRU) && (@QUERY_APPL_MODEL != VALUE_DIALOG)
+  EV_REGISTERED(MruFileMessage, CmFileSelected),
 //{{[[TApplication]]RSP_TBL_END}}
 END_RESPONSE_TABLE;
 
 
 ##--END-- (@QUERY_APPL_MODEL == VALUE_SDI) && !@OPT_APPL_DOCVIEW
-##--BEGIN-- @QUERY_APPL_COMMENT == VALUE_VERBOSE
-//////////////////////////////////////////////////////////
+##@QUERY_APPL_COMMENT == VALUE_VERBOSE 3
+//--------------------------------------------------------
 // [[TApplication]]
-// =====
 //
-##--END-- @QUERY_APPL_COMMENT == VALUE_VERBOSE
-##@QUERY_APPL_OLE_AUTO
-[[TApplication]]::[[TApplication]] () : TApplication(::ApplicationReg["appname"], ::Module, &::AppDictionary)
-##!@QUERY_APPL_OLE_AUTO
+##--BEGIN-- @QUERY_APPL_OLE_AUTO
 ##QUERY_WIND_TITLE [[Title]]
-[[TApplication]]::[[TApplication]] () : TApplication("[[Title]]")
+##@QUERY_TARGET_NAME [[Target]]
+##(@OPT_APPL_MRU) && (@QUERY_APPL_MODEL != VALUE_DIALOG)
+[[TApplication]]::[[TApplication]]() : TApplication(::ApplicationReg["appname"], ::Module, &::AppDictionary), TRecentFiles(".\\[[Target]].ini", 4)
+##(!@OPT_APPL_MRU) || (@QUERY_APPL_MODEL == VALUE_DIALOG)
+[[TApplication]]::[[TApplication]]() : TApplication(::ApplicationReg["appname"], ::Module, &::AppDictionary)
+##--END-- @QUERY_APPL_OLE_AUTO
+##--BEGIN-- !@QUERY_APPL_OLE_AUTO
+##QUERY_WIND_TITLE [[Title]]
+##@QUERY_TARGET_NAME [[Target]]
+##(@OPT_APPL_MRU) && (@QUERY_APPL_MODEL != VALUE_DIALOG)
+[[TApplication]]::[[TApplication]]() : TApplication("[[Title]]"), TRecentFiles(".\\[[Target]].ini", 4)
+##QUERY_WIND_TITLE [[Title]]
+##(!@OPT_APPL_MRU) || (@QUERY_APPL_MODEL == VALUE_DIALOG)
+[[TApplication]]::[[TApplication]]() : TApplication("[[Title]]")
+##--END-- !@QUERY_APPL_OLE_AUTO
 {
 ##@OPT_APPL_HELP 3
-    HelpState = false;
-    ContextHelp = false;
-    HelpCursor = 0;
+  HelpState = false;
+  ContextHelp = false;
+  HelpCursor = 0;
 
 ##@OPT_APPL_PRINTING 3
-    Printer = 0;
-    Printing = 0;
+  Printer = 0;
+  Printing = 0;
 
 ##--BEGIN-- @QUERY_APPL_MODEL != VALUE_DIALOG
-##@QUERY_APPL_COMMENT == VALUE_VERBOSE 2
-    // Common file file flags and filters for Open/Save As dialogs.  Filename and directory are
-    // computed in the member functions CmFileOpen, and CmFileSaveAs.
-    FileData.Flags = OFN_FILEMUSTEXIST | OFN_HIDEREADONLY | OFN_OVERWRITEPROMPT;
+##@QUERY_APPL_COMMENT == VALUE_VERBOSE 3
+  // Common file file flags and filters for Open/Save As dialogs.  Filename and directory are
+  // computed in the member functions CmFileOpen, and CmFileSaveAs.
+  //
+  FileData.Flags = OFN_FILEMUSTEXIST | OFN_HIDEREADONLY | OFN_OVERWRITEPROMPT;
 ##OPT_DV_RESET
 ##OPT_DV_NEXT
 ##QUERY_DV_DESCR [[Descr]]
 ##--BEGIN-- QUERY_DV_FILTER [[Filter]]
-##(Filter != "*.*") && (Descr != "All Files (*.*)"
-    FileData.SetFilter("[[Descr]]|[[Filter]]|All Files (*.*)|*.*|");
-##(Filter == "*.*") && (Descr == "All Files (*.*)"
-    FileData.SetFilter("All Files (*.*)|*.*|");
+## (Filter != "*.*") || (Descr != "All Files")
+  FileData.SetFilter("[[Descr]] ([[Filter]])|[[Filter]]|All Files (*.*)|*.*|");
+## (Filter == "*.*") && (Descr == "All Files")
+  FileData.SetFilter("All Files (*.*)|*.*|");
+##QUERY_DV_EXT [[Ext]]
+  FileData.DefExt = "[[Ext]]";
 
 ##--END-- QUERY_DV_FILTER [[Filter]]
 ##--END-- @QUERY_APPL_MODEL != VALUE_DIALOG
-    // INSERT>> Your constructor code here.
+  // INSERT>> Your constructor code here.
 }
 
 
-[[TApplication]]::~[[TApplication]] ()
+[[TApplication]]::~[[TApplication]]()
 {
-##@OPT_APPL_PRINTING 3
-    if (Printer)
-        delete Printer;
+##@OPT_APPL_PRINTING 2
+  delete Printer;
 
-    // INSERT>> Your destructor code here.
+  // INSERT>> Your destructor code here.
 }
 
 
 ##--BEGIN-- @OPT_APPL_HELP
-bool [[TApplication]]::CanClose ()
+bool [[TApplication]]::CanClose()
 {
-    bool result = TApplication::CanClose();
+  bool result = TApplication::CanClose();
 
-##--BEGIN-- @QUERY_APPL_COMMENT == VALUE_VERBOSE
-    //
-    // Close the help engine if we used it.
-    //
-##--END-- @QUERY_APPL_COMMENT == VALUE_VERBOSE
-    if (result && HelpState)
-        GetMainWindow()->WinHelp(HelpFileName, HELP_QUIT, 0L);
- 
-    return result;
+##@QUERY_APPL_COMMENT == VALUE_VERBOSE 2
+  // Close the help engine if we used it.
+  //
+  if (result && HelpState)
+    GetMainWindow()->WinHelp(HelpFileName, HELP_QUIT, 0);
+
+  return result;
 }
 
 
 ##--END-- @OPT_APPL_HELP
-##(((@QUERY_APPL_MODEL == VALUE_DIALOG) && @QUERY_APPL_DLGCLIENT_MENU) || (@QUERY_APPL_MODEL != VALUE_DIALOG))
+## (((@QUERY_APPL_MODEL == VALUE_DIALOG) && @QUERY_APPL_DLGCLIENT_MENU) || (@QUERY_APPL_MODEL != VALUE_DIALOG))
 ##--BEGIN-- @OPT_APPL_TOOLBAR
-void [[TApplication]]::SetupSpeedBar (TDecoratedFrame *frame)
-{ 
-##--BEGIN-- @QUERY_APPL_COMMENT == VALUE_VERBOSE
-    //
-    // Create default toolbar New and associate toolbar buttons with commands.
-    //   
-##--END-- @QUERY_APPL_COMMENT == VALUE_VERBOSE
-    TControlBar* cb = new TControlBar(frame);
+void [[TApplication]]::SetupSpeedBar(TDecoratedFrame* frame)
+{
+  ApxHarbor = new THarbor(*frame);
+
+##@QUERY_APPL_COMMENT == VALUE_VERBOSE 2
+  // Create default toolbar New and associate toolbar buttons with commands.
+  //
+  TDockableControlBar* cb = new TDockableControlBar(frame);
 ##@QUERY_APPL_MODEL == VALUE_SDI 2
-    cb->Insert(*new TButtonGadget(CM_FILENEW, CM_FILENEW));
-    cb->Insert(*new TButtonGadget(CM_FILEOPEN, CM_FILEOPEN));
-    cb->Insert(*new TButtonGadget(CM_FILESAVE, CM_FILESAVE));
-    cb->Insert(*new TSeparatorGadget(6));
-    cb->Insert(*new TButtonGadget(CM_EDITCUT, CM_EDITCUT));
-    cb->Insert(*new TButtonGadget(CM_EDITCOPY, CM_EDITCOPY));
-    cb->Insert(*new TButtonGadget(CM_EDITPASTE, CM_EDITPASTE));
-    cb->Insert(*new TSeparatorGadget(6));
-    cb->Insert(*new TButtonGadget(CM_EDITUNDO, CM_EDITUNDO));
-    cb->Insert(*new TSeparatorGadget(6));
-    cb->Insert(*new TButtonGadget(CM_EDITFIND, CM_EDITFIND));
-    cb->Insert(*new TButtonGadget(CM_EDITFINDNEXT, CM_EDITFINDNEXT));
+  cb->Insert(*new TButtonGadget(CM_FILENEW, CM_FILENEW));
+  cb->Insert(*new TButtonGadget(CM_FILEOPEN, CM_FILEOPEN));
+  cb->Insert(*new TButtonGadget(CM_FILESAVE, CM_FILESAVE));
+  cb->Insert(*new TSeparatorGadget(6));
+  cb->Insert(*new TButtonGadget(CM_EDITCUT, CM_EDITCUT));
+  cb->Insert(*new TButtonGadget(CM_EDITCOPY, CM_EDITCOPY));
+  cb->Insert(*new TButtonGadget(CM_EDITPASTE, CM_EDITPASTE));
+  cb->Insert(*new TSeparatorGadget(6));
+  cb->Insert(*new TButtonGadget(CM_EDITUNDO, CM_EDITUNDO));
+  cb->Insert(*new TSeparatorGadget(6));
+  cb->Insert(*new TButtonGadget(CM_EDITFIND, CM_EDITFIND));
+  cb->Insert(*new TButtonGadget(CM_EDITFINDNEXT, CM_EDITFINDNEXT));
 ##@OPT_APPL_PRINTING 3
-    cb->Insert(*new TSeparatorGadget(6));
-    cb->Insert(*new TButtonGadget(CM_FILEPRINT, CM_FILEPRINT));
-    cb->Insert(*new TButtonGadget(CM_FILEPRINTPREVIEW, CM_FILEPRINTPREVIEW));
+  cb->Insert(*new TSeparatorGadget(6));
+  cb->Insert(*new TButtonGadget(CM_FILEPRINT, CM_FILEPRINT));
+  cb->Insert(*new TButtonGadget(CM_FILEPRINTPREVIEW, CM_FILEPRINTPREVIEW));
 ##@OPT_APPL_HELP 2
-    cb->Insert(*new TSeparatorGadget(6));
-    cb->Insert(*new TButtonGadget(CM_HELPCONTENTS, CM_HELPCONTENTS));
+  cb->Insert(*new TSeparatorGadget(6));
+  cb->Insert(*new TButtonGadget(CM_HELPCONTENTS, CM_HELPCONTENTS));
 
-##@QUERY_APPL_COMMENT == VALUE_VERBOSE
-    // Add fly-over help hints.
-    cb->SetHintMode(TGadgetWindow::EnterHints);
+##@QUERY_APPL_COMMENT == VALUE_VERBOSE 2
+  // Add caption and fly-over help hints.
+  //
+  cb->SetCaption("Toolbar");
+  cb->SetHintMode(TGadgetWindow::EnterHints);
 
-    frame->Insert(*cb, TDecoratedFrame::Top);
+  ApxHarbor->Insert(*cb, alTop);
 }
 
 
 ##--END-- @OPT_APPL_TOOLBAR
 ##--BEGIN-- @QUERY_APPL_COMMENT == VALUE_VERBOSE
-//////////////////////////////////////////////////////////
+//--------------------------------------------------------
 // [[TApplication]]
-// =====
+// ~~~~~
 // Application intialization.
 //
 ##--END-- @QUERY_APPL_COMMENT == VALUE_VERBOSE
-void [[TApplication]]::InitMainWindow ()
+void [[TApplication]]::InitMainWindow()
 {
-    if (nCmdShow != SW_HIDE)
+  if (nCmdShow != SW_HIDE)
 ##@QUERY_APPL_STARTUP == VALUE_NORMAL
-        nCmdShow = (nCmdShow != SW_SHOWMINNOACTIVE) ? SW_SHOWNORMAL : nCmdShow;
+    nCmdShow = (nCmdShow != SW_SHOWMINNOACTIVE) ? SW_SHOWNORMAL : nCmdShow;
 ##@QUERY_APPL_STARTUP == VALUE_MIN
-        nCmdShow = (nCmdShow != SW_SHOWMINNOACTIVE) ? SW_SHOWMINIMIZED : nCmdShow;
+    nCmdShow = (nCmdShow != SW_SHOWMINNOACTIVE) ? SW_SHOWMINIMIZED : nCmdShow;
 ##@QUERY_APPL_STARTUP == VALUE_MAX
-        nCmdShow = (nCmdShow != SW_SHOWMINNOACTIVE) ? SW_SHOWMAXIMIZED : nCmdShow;
+    nCmdShow = (nCmdShow != SW_SHOWMINNOACTIVE) ? SW_SHOWMAXIMIZED : nCmdShow;
 
-##@OPT_APPL_STATUSBAR 
-    SDIDecFrame *frame = new SDIDecFrame(0, GetName(), 0, true);
+##@OPT_APPL_STATUSBAR
+  TSDIDecFrame* frame = new TSDIDecFrame(0, GetName(), 0, true);
 ##!@OPT_APPL_STATUSBAR
-    SDIDecFrame *frame = new SDIDecFrame(0, GetName(), 0, false);
+  TSDIDecFrame* frame = new TSDIDecFrame(0, GetName(), 0, false);
 ##@QUERY_APPL_MODEL == VALUE_DIALOG
-    frame->SetFlag(wfShrinkToClient);
+  frame->SetFlag(wfShrinkToClient);
 
 ##QUERY_WIND_STYLE [[StyleAttributes]]
-##StyleAttributes != "" 3
-    // Override the default window style for the main window.
-[[StyleAttributes]]
+##StyleAttributes != "" 4
+  // Override the default window style for the main window.
+  //
+  [[StyleAttributes]]
 
-##QUERY_WIND_BACKGRND [[BackgroundColor]]
-##BackgroundColor != "" 3
-    // Change the window's background color
-    frame->SetBkgndColor([[BackgroundColor]]);
+##@OPT_APPL_DRAGDROP 4
+  // Enable acceptance of dropped files
+  //
+  frame->Attr.ExStyle |= WS_EX_ACCEPTFILES;
 
-##--BEGIN-- @QUERY_APPL_COMMENT == VALUE_VERBOSE
-    //
-    // Assign ICON w/ this application.
-    //
-##--END-- @QUERY_APPL_COMMENT == VALUE_VERBOSE
-    frame->SetIcon(this, IDI_SDIAPPLICATION);
+##{fwndbkgd.snp}
+##@QUERY_APPL_COMMENT == VALUE_VERBOSE 2
+  // Assign ICON w/ this application.
+  //
+  frame->SetIcon(this, IDI_SDIAPPLICATION);
+  frame->SetIconSm(this, IDI_SDIAPPLICATION);
 
-##(((@QUERY_APPL_MODEL == VALUE_DIALOG) && @QUERY_APPL_DLGCLIENT_MENU)  || (@QUERY_APPL_MODEL != VALUE_DIALOG))
-##--BEGIN-- @QUERY_APPL_COMMENT == VALUE_VERBOSE
-    //
-    // Menu associated with window and accelerator table associated with table.
-    //
-##--END-- @QUERY_APPL_COMMENT == VALUE_VERBOSE
-##(((@QUERY_APPL_MODEL == VALUE_DIALOG) && @QUERY_APPL_DLGCLIENT_MENU)  || (@QUERY_APPL_MODEL != VALUE_DIALOG)) 2
-    frame->AssignMenu(SDI_MENU);
-    
-##(((@QUERY_APPL_MODEL == VALUE_DIALOG) && @QUERY_APPL_DLGCLIENT_MENU)  || (@QUERY_APPL_MODEL != VALUE_DIALOG))
-##--BEGIN-- @QUERY_APPL_COMMENT == VALUE_VERBOSE
-    //
-    // Associate with the accelerator table.
-    //
-##--END-- @QUERY_APPL_COMMENT == VALUE_VERBOSE
-##(((@QUERY_APPL_MODEL == VALUE_DIALOG) && @QUERY_APPL_DLGCLIENT_MENU)  || (@QUERY_APPL_MODEL != VALUE_DIALOG)) 2
-    frame->Attr.AccelTable = SDI_MENU;
+## (((@QUERY_APPL_MODEL == VALUE_DIALOG) && @QUERY_APPL_DLGCLIENT_MENU)  || (@QUERY_APPL_MODEL != VALUE_DIALOG))
+##@QUERY_APPL_COMMENT == VALUE_VERBOSE 2
+  // Menu associated with window and accelerator table associated with table.
+  //
+## (((@QUERY_APPL_MODEL == VALUE_DIALOG) && @QUERY_APPL_DLGCLIENT_MENU)  || (@QUERY_APPL_MODEL != VALUE_DIALOG)) 2
+  frame->AssignMenu(IDM_SDI);
+## (((@QUERY_APPL_MODEL == VALUE_DIALOG) && @QUERY_APPL_DLGCLIENT_MENU)  || (@QUERY_APPL_MODEL != VALUE_DIALOG))
+##@QUERY_APPL_COMMENT == VALUE_VERBOSE 3
 
-##(((@QUERY_APPL_MODEL == VALUE_DIALOG) && @QUERY_APPL_DLGCLIENT_MENU) || (@QUERY_APPL_MODEL != VALUE_DIALOG))
+  // Associate with the accelerator table.
+  //
+## (((@QUERY_APPL_MODEL == VALUE_DIALOG) && @QUERY_APPL_DLGCLIENT_MENU)  || (@QUERY_APPL_MODEL != VALUE_DIALOG)) 2
+  frame->Attr.AccelTable = IDM_SDI;
+
+## (((@QUERY_APPL_MODEL == VALUE_DIALOG) && @QUERY_APPL_DLGCLIENT_MENU) || (@QUERY_APPL_MODEL != VALUE_DIALOG))
 ##@OPT_APPL_TOOLBAR
-    SetupSpeedBar(frame);
+  SetupSpeedBar(frame);
 ##@OPT_APPL_STATUSBAR 7
 
-    TStatusBar *sb = new TStatusBar(frame, TGadget::Recessed,
-                                    TStatusBar::CapsLock        |
-                                    TStatusBar::NumLock         |
-                                    TStatusBar::ScrollLock      |
-                                    TStatusBar::Overtype);
-    frame->Insert(*sb, TDecoratedFrame::Bottom);
-  
-    SetMainWindow(frame);
+  TStatusBar* sb = new TStatusBar(frame, TGadget::Recessed,
+                                  TStatusBar::CapsLock        |
+                                  TStatusBar::NumLock         |
+                                  TStatusBar::ScrollLock);
+  frame->Insert(*sb, TDecoratedFrame::Bottom);
 
-##(((@QUERY_APPL_MODEL == VALUE_DIALOG) && @QUERY_APPL_DLGCLIENT_MENU)  || (@QUERY_APPL_MODEL != VALUE_DIALOG))
-    frame->SetMenuDescr(TMenuDescr(SDI_MENU));
+  SetMainWindow(frame);
+
+## (((@QUERY_APPL_MODEL == VALUE_DIALOG) && @QUERY_APPL_DLGCLIENT_MENU)  || (@QUERY_APPL_MODEL != VALUE_DIALOG))
+  frame->SetMenuDescr(TMenuDescr(IDM_SDI));
 ##--BEGIN-- @QUERY_APPL_CONTROL==VALUE_3D
 
-##--BEGIN-- @QUERY_APPL_COMMENT == VALUE_VERBOSE
-    //
-    // Windows 3-D controls.
-    //
-##--END-- @QUERY_APPL_COMMENT == VALUE_VERBOSE
-    EnableCtl3d(true);
+##@QUERY_APPL_COMMENT == VALUE_VERBOSE 2
+  // Windows 3-D controls.
+  //
+  EnableCtl3d(true);
 ##--END-- @QUERY_APPL_CONTROL==VALUE_3D
 ##--BEGIN-- @QUERY_APPL_CONTROL==VALUE_BWCC
 
-##--BEGIN-- @QUERY_APPL_COMMENT == VALUE_VERBOSE
-    //
-    // Borland Windows custom controls.
-    //
-##--END-- @QUERY_APPL_COMMENT == VALUE_VERBOSE
-    EnableBWCC();
+##@QUERY_APPL_COMMENT == VALUE_VERBOSE 2
+  // Borland Windows custom controls.
+  //
+  EnableBWCC();
 ##--END-- @QUERY_APPL_CONTROL==VALUE_BWCC
 }
 
 
+##--BEGIN-- @OPT_APPL_REGISTRY
+##--BEGIN-- @QUERY_APPL_COMMENT == VALUE_VERBOSE
+//--------------------------------------------------------
+// [[TApplication]]
+// ~~~~~
+// Application instance initialization.
+//
+##--END-- @QUERY_APPL_COMMENT == VALUE_VERBOSE
+void [[TApplication]]::InitInstance()
+{
+  TApplication::InitInstance();
+
+  ProcessCmdLine(lpCmdLine);
+}
+
+
+##--END-- @OPT_APPL_REGISTRY
+##{registry.snp}
 ##--BEGIN-- @QUERY_APPL_MODEL != VALUE_DIALOG
 ##--BEGIN-- @QUERY_APPL_COMMENT == VALUE_VERBOSE
-//////////////////////////////////////////////////////////
+//--------------------------------------------------------
 // [[TApplication]]
-// ===========
+// ~~~~~~~~~~~
 // Menu File New command
+//
 ##--END-- @QUERY_APPL_COMMENT == VALUE_VERBOSE
-void [[TApplication]]::CmFileNew ()
+void [[TApplication]]::CmFileNew()
 {
 ##QUERY_WIND_CLIENT [[ClientClass]]
 ##--BEGIN-- <<*ClientClass QUERY_BASE_NAME [[BaseClient]]
 ##BaseClient == "TEditFile" 2
-    [[ClientClass]] *client = TYPESAFE_DOWNCAST(GetMainWindow()->GetClientWindow(), [[ClientClass]]);     // Client window for the frame.
-    client->NewFile();
+  [[ClientClass]]* client = TYPESAFE_DOWNCAST(GetMainWindow()->GetClientWindow(), [[ClientClass]]);     // Client window for the frame.
+  client->NewFile();
 ##BaseClient == "TListBox" 3
-    [[ClientClass]] *client = TYPESAFE_DOWNCAST(GetMainWindow()->GetClientWindow(), [[ClientClass]]);     // Client window for the frame.
-    if (client->CanClose())
-        client->ClearList();
+  [[ClientClass]]* client = TYPESAFE_DOWNCAST(GetMainWindow()->GetClientWindow(), [[ClientClass]]);     // Client window for the frame.
+  if (client->CanClose())
+    client->ClearList();
 ##--END-- <<*ClientClass QUERY_BASE_NAME [[BaseClient]]
 }
 
 
 ##--BEGIN-- @QUERY_APPL_COMMENT == VALUE_VERBOSE
-//////////////////////////////////////////////////////////
+//--------------------------------------------------------
 // [[TApplication]]
-// ===========
+// ~~~~~~~~~~~
 // Menu File Open command
+//
 ##--END-- @QUERY_APPL_COMMENT == VALUE_VERBOSE
-void [[TApplication]]::CmFileOpen ()
+void [[TApplication]]::CmFileOpen()
 {
-##--BEGIN-- @QUERY_APPL_COMMENT == VALUE_VERBOSE
-    //
-    // Display standard Open dialog box to select a file name.
-    //
-##--END-- @QUERY_APPL_COMMENT == VALUE_VERBOSE
-    *FileData.FileName = 0;
+##@QUERY_APPL_COMMENT == VALUE_VERBOSE 2
+  // Display standard Open dialog box to select a file name.
+  //
+  *FileData.FileName = 0;
 
 ##QUERY_WIND_CLIENT [[ClientClass]]
-    [[ClientClass]] *client = TYPESAFE_DOWNCAST(GetMainWindow()->GetClientWindow(), [[ClientClass]]);     // Client window for the frame.
-    if (client->CanClose())
-        if (TFileOpenDialog(GetMainWindow(), FileData).Execute() == IDOK)
-            OpenFile();
+  [[ClientClass]]* client = TYPESAFE_DOWNCAST(GetMainWindow()->GetClientWindow(), [[ClientClass]]);     // Client window for the frame.
+  if (client->CanClose())
+    if (TFileOpenDialog(GetMainWindow(), FileData).Execute() == IDOK)
+      OpenFile();
 }
 
 
-void [[TApplication]]::OpenFile (const char *fileName)
+void [[TApplication]]::OpenFile(const char* fileName)
 {
-    if (fileName)
-        strcpy(FileData.FileName, fileName);
+  if (fileName)
+    strcpy(FileData.FileName, fileName);
 
 ##QUERY_WIND_CLIENT [[ClientName]]
 ##--BEGIN-- <<*ClientName QUERY_BASE_NAME [[BaseClient]]
 ##BaseClient == "TEditFile" 2
-    [[ClientName]] *client = TYPESAFE_DOWNCAST(GetMainWindow()->GetClientWindow(), [[ClientName]]);     // Client window for the frame.
-    client->ReplaceWith(FileData.FileName);
+  [[ClientName]]* client = TYPESAFE_DOWNCAST(GetMainWindow()->GetClientWindow(), [[ClientName]]);     // Client window for the frame.
+  client->ReplaceWith(FileData.FileName);
 ##BaseClient == "TListBox" 3
-    [[ClientName]] *client = TYPESAFE_DOWNCAST(GetMainWindow()->GetClientWindow(), [[ClientName]]);     // Client window for the frame.
-    client->ClearList();
-    LoadTextFile();
+  [[ClientName]]* client = TYPESAFE_DOWNCAST(GetMainWindow()->GetClientWindow(), [[ClientName]]);     // Client window for the frame.
+  client->ClearList();
+  LoadTextFile();
+##--BEGIN-- (@OPT_APPL_MRU) && (@QUERY_APPL_MODEL != VALUE_DIALOG)
+
+##:@QUERY_APPL_COMMENT == VALUE_VERBOSE 2
+  // Add the file to the MRU list.
+  //
+  SaveMenuChoice(FileData.FileName);
+##--END-- (@OPT_APPL_MRU) && (@QUERY_APPL_MODEL != VALUE_DIALOG)
 ##--END-- <<*ClientName QUERY_BASE_NAME [[BaseClient]]
 }
 
@@ -386,87 +418,87 @@ void [[TApplication]]::OpenFile (const char *fileName)
 ##QUERY_WIND_CLIENT [[ClientName]]
 ##--BEGIN-- <<*ClientName QUERY_BASE_NAME [[BaseClient]]
 ##--BEGIN-- BaseClient == "TListBox"
-##:     @QUERY_APPL_COMMENT == VALUE_VERBOSE
+##:@QUERY_APPL_COMMENT == VALUE_VERBOSE 2
 // Used by ListBox client to read a text file into the list box.
-void [[TApplication]]::LoadTextFile ()
+//
+void [[TApplication]]::LoadTextFile()
 {
-    char            buf[255+1];
-    ifstream        *inStream;
+  TListBox*   client = TYPESAFE_DOWNCAST(GetMainWindow()->GetClientWindow(), TListBox);
 
-    TListBox        *client = TYPESAFE_DOWNCAST(GetMainWindow()->GetClientWindow(), TListBox);
+##:@QUERY_APPL_COMMENT == VALUE_VERBOSE 2
+  // Only work if the client class is a TListBox.
+  //
+  if (client) {
+    TAPointer<char> buf = new char[255+1];
+    ifstream   inStream(FileData.FileName);
 
-##:     @QUERY_APPL_COMMENT == VALUE_VERBOSE
-    // Only work if the client class is a TListBox.
-    if (client) {
-        client->ClearList();
-        inStream = new ifstream(FileData.FileName);
-        while (inStream->good()) {
-            inStream->getline(buf, sizeof(buf) - 1);
-            if (inStream->good())
-                client->AddString(buf);
-        }
-
-##:     @QUERY_APPL_COMMENT == VALUE_VERBOSE
-        // Return an error message if we had a stream error and it wasn't the eof.
-        if (inStream->bad() && !inStream->eof()) {
-            string msgTemplate(*this, IDS_UNABLEREAD);
-            char*  msg = new char[MAXPATH + msgTemplate.length()];
-            wsprintf(msg, msgTemplate.c_str(), *FileData.FileName);
-            GetMainWindow()->MessageBox(msg, GetName(), MB_ICONEXCLAMATION | MB_OK);
-            delete msg;
-        }
-
-        delete inStream;
+    client->ClearList();
+    while (inStream.good()) {
+      inStream.getline(buf, 255);
+      if (inStream.good())
+        client->AddString(buf);
     }
+
+##:@QUERY_APPL_COMMENT == VALUE_VERBOSE 2
+    // Return an error message if we had a stream error and it wasn't the eof.
+    //
+    if (inStream.bad() && !inStream.eof()) {
+      string msgTemplate(*this, IDS_UNABLEREAD);
+      char*  msg = new char[_MAX_PATH + msgTemplate.length()];
+      sprintf(msg, msgTemplate.c_str(), *FileData.FileName);
+      GetMainWindow()->MessageBox(msg, GetName(), MB_ICONEXCLAMATION | MB_OK);
+      delete msg;
+    }
+  }
 }
 
 
 ##--END-- BaseClient == "TListBox"
 ##--END-- <<*ClientName QUERY_BASE_NAME [[BaseClient]]
 ##--END-- @QUERY_APPL_MODEL != VALUE_DIALOG
-//{{SDIDecFrame Implementation}}
+//{{TSDIDecFrame Implementation}}
 
 
-SDIDecFrame::SDIDecFrame (TWindow *parent, const char far *title, TWindow *clientWnd, bool trackMenuSelection, TModule *module)
+TSDIDecFrame::TSDIDecFrame(TWindow* parent, const char far* title, TWindow* clientWnd, bool trackMenuSelection, TModule* module)
+:
 ##QUERY_WIND_CLIENT [[ClientClass]]
 ##--BEGIN-- <<*ClientClass QUERY_BASE_NAME [[BaseClient]]
 ##BaseClient == "TEditFile"
-    : TDecoratedFrame(parent, title, clientWnd == 0 ? new [[ClientClass]](0, 0, 0) : clientWnd, trackMenuSelection, module)
+  TDecoratedFrame(parent, title, !clientWnd ? new [[ClientClass]](0, 0, 0) : clientWnd, trackMenuSelection, module)
 ##BaseClient == "TListBox"
-    : TDecoratedFrame(parent, title, clientWnd == 0 ? new [[ClientClass]](0, 0, 0, 0, 100, 100) : clientWnd, trackMenuSelection, module)
+  TDecoratedFrame(parent, title, !clientWnd ? new [[ClientClass]](0, 0, 0, 0, 100, 100) : clientWnd, trackMenuSelection, module)
 ##BaseClient == "TWindow"
-    : TDecoratedFrame(parent, title, clientWnd == 0 ? new [[ClientClass]](0, "") : clientWnd, trackMenuSelection, module)
+  TDecoratedFrame(parent, title, !clientWnd ? new [[ClientClass]](0, "") : clientWnd, trackMenuSelection, module)
 ##BaseClient == "TDialog"
-    : TDecoratedFrame(parent, title, clientWnd == 0 ? new [[ClientClass]](0) : clientWnd, trackMenuSelection, module)
+  TDecoratedFrame(parent, title, !clientWnd ? new [[ClientClass]](0) : clientWnd, trackMenuSelection, module)
 ##--END-- <<*ClientClass QUERY_BASE_NAME [[BaseClient]]
 {
-    // INSERT>> Your constructor code here.
+  // INSERT>> Your constructor code here.
 
 }
 
 
-SDIDecFrame::~SDIDecFrame ()
+TSDIDecFrame::~TSDIDecFrame()
 {
-    // INSERT>> Your destructor code here.
+  // INSERT>> Your destructor code here.
 
 }
 ##--BEGIN-- ((@QUERY_APPL_MODEL == VALUE_DIALOG) && (@OPT_APPL_TOOLBAR || @OPT_APPL_STATUSBAR))
 
 
-void SDIDecFrame::SetupWindow ()
+void TSDIDecFrame::SetupWindow()
 {
-    TDecoratedFrame::SetupWindow();
-    
-    TRect  r;
-    GetWindowRect(r);
+  TDecoratedFrame::SetupWindow();
+  TRect  r;
+  GetWindowRect(r);
 
 ##@OPT_APPL_TOOLBAR && @OPT_APPL_STATUSBAR && @QUERY_APPL_DLGCLIENT_MENU
-    r.bottom += 60;
-##((!@QUERY_APPL_DLGCLIENT_MENU && @OPT_APPL_STATUSBAR) || (@QUERY_APPL_DLGCLIENT_MENU && @OPT_APPL_TOOLBAR && !OPT_APPL_STATUSBAR))
-    r.bottom += 30;
-    SetWindowPos(0, r, SWP_NOZORDER | SWP_NOMOVE);
+  r.bottom += 60;
+## ((!@QUERY_APPL_DLGCLIENT_MENU && @OPT_APPL_STATUSBAR) || (@QUERY_APPL_DLGCLIENT_MENU && @OPT_APPL_TOOLBAR && !OPT_APPL_STATUSBAR))
+  r.bottom += 30;
+  SetWindowPos(0, r, SWP_NOZORDER | SWP_NOMOVE);
 
-    // INSERT>> Your code here.
+  // INSERT>> Your code here.
 
 }
 ##--END-- ((@QUERY_APPL_MODEL == VALUE_DIALOG) && (@OPT_APPL_TOOLBAR || @OPT_APPL_STATUSBAR))
@@ -474,224 +506,258 @@ void SDIDecFrame::SetupWindow ()
 
 
 ##--BEGIN-- @QUERY_APPL_COMMENT == VALUE_VERBOSE
-//////////////////////////////////////////////////////////
+//--------------------------------------------------------
 // [[TApplication]]
-// ==========
+// ~~~~~~~~~~
 // Menu File Print command
+//
 ##--END-- @QUERY_APPL_COMMENT == VALUE_VERBOSE
-void [[TApplication]]::CmFilePrint ()
+void [[TApplication]]::CmFilePrint()
 {
-##--BEGIN-- @QUERY_APPL_COMMENT == VALUE_VERBOSE
-    //
-    // Create Printer object if not already created.
-    // 
-##--END-- @QUERY_APPL_COMMENT == VALUE_VERBOSE
-    if (!Printer)
-        Printer = new TPrinter(this);
+##@QUERY_APPL_COMMENT == VALUE_VERBOSE 2
+  // Create Printer object if not already created.
+  //
+  if (!Printer)
+    Printer = new TPrinter(this);
+
+  TAPointer<char> docName = new char[_MAX_PATH];
+  GetMainWindow()->GetWindowText(docName, _MAX_PATH);
+
+##@QUERY_APPL_COMMENT == VALUE_VERBOSE 2
+  // Create Printout window and set characteristics.
+  //
+  TApxPrintout printout(Printer, docName, GetMainWindow()->GetClientWindow());
+  printout.SetBanding(true);
+
+  Printing++;
+
+##@QUERY_APPL_COMMENT == VALUE_VERBOSE 2
+  // Bring up the Print dialog and print the document.
+  //
+  Printer->Print(GetWindowPtr(GetActiveWindow()), printout, true);
+
+  Printing--;
+}
+
 
 ##--BEGIN-- @QUERY_APPL_COMMENT == VALUE_VERBOSE
-    //
-    // Create Printout window and set characteristics.
-    //
+//--------------------------------------------------------
+// [[TApplication]]
+// ~~~~~~~~~~
+// Menu File Print Setup command
+//
 ##--END-- @QUERY_APPL_COMMENT == VALUE_VERBOSE
-    APXPrintOut printout(Printer, "Title", GetMainWindow()->GetClientWindow());
-    printout.SetBanding(true);
+void [[TApplication]]::CmFilePrintSetup()
+{
+  if (!Printer)
+    Printer = new TPrinter(this);
+
+##@QUERY_APPL_COMMENT == VALUE_VERBOSE 2
+  // Bring up the Print Setup dialog.
+  //
+  Printer->Setup(GetMainWindow());
+}
+
+
+##--BEGIN-- @QUERY_APPL_COMMENT == VALUE_VERBOSE
+//--------------------------------------------------------
+// [[TApplication]]
+// ~~~~~~~~~~
+// Menu File Print Preview command
+//
+##--END-- @QUERY_APPL_COMMENT == VALUE_VERBOSE
+void [[TApplication]]::CmFilePrintPreview()
+{
+  TSDIDecFrame* sdiFrame = TYPESAFE_DOWNCAST(GetMainWindow(), TSDIDecFrame);
+  if (sdiFrame) {
+    if (!Printer)
+      Printer = new TPrinter(this);
 
     Printing++;
 
-##--BEGIN-- @QUERY_APPL_COMMENT == VALUE_VERBOSE
+    TApxPreviewWin* prevW = new TApxPreviewWin(sdiFrame, Printer, sdiFrame->GetClientWindow(), "Print Preview", new TLayoutWindow(0));
+    prevW->Create();
+
+##:@QUERY_APPL_COMMENT == VALUE_VERBOSE 3
+    // Here we resize the preview window to take the size of the MainWindow, then
+    // hide the MainWindow.
     //
-    // Bring up the Print dialog and print the document.
+    TFrameWindow * mainWindow =  GetMainWindow();
+    TRect r = mainWindow->GetWindowRect();
+    prevW->MoveWindow(r);
+    prevW->ShowWindow(SW_SHOWNORMAL);
+    mainWindow->ShowWindow(SW_HIDE);
+
+    BeginModal(GetMainWindow());
+
+##:@QUERY_APPL_COMMENT == VALUE_VERBOSE 3
+    // After the user closes the preview Window, we take its size and use it
+    // to size the MainWindow, then show the MainWindow again.
     //
-##--END-- @QUERY_APPL_COMMENT == VALUE_VERBOSE
-    Printer->Print(GetWindowPtr(GetActiveWindow()), printout, true);
+    r = prevW->GetWindowRect();
+    mainWindow->MoveWindow(r);
+    mainWindow->ShowWindow(SW_SHOWNORMAL);
 
     Printing--;
-}
 
-
-##--BEGIN-- @QUERY_APPL_COMMENT == VALUE_VERBOSE
-//////////////////////////////////////////////////////////
-// [[TApplication]]
-// ==========
-// Menu File Print Setup command
-##--END-- @QUERY_APPL_COMMENT == VALUE_VERBOSE
-void [[TApplication]]::CmFilePrintSetup ()
-{
-    if (!Printer)
-        Printer = new TPrinter(this);
-
-##--BEGIN-- @QUERY_APPL_COMMENT == VALUE_VERBOSE
+##@QUERY_APPL_COMMENT == VALUE_VERBOSE 2
+    // Now that printing is off we can invalidate because the edit window to repaint.
     //
-    // Bring up the Print Setup dialog.
+    GetMainWindow()->SetRedraw(true);
+    GetMainWindow()->Invalidate();
+
+##:@QUERY_APPL_COMMENT == VALUE_VERBOSE 3
+    // We must destroy the preview window explicitly.  Otherwise, the window will
+    // not be destroyed until it's parent the MainWindow is destroyed.
     //
-##--END-- @QUERY_APPL_COMMENT == VALUE_VERBOSE
-    Printer->Setup(GetMainWindow());
+    prevW->Destroy();
+    delete prevW;
+  }
 }
 
 
 ##--BEGIN-- @QUERY_APPL_COMMENT == VALUE_VERBOSE
-//////////////////////////////////////////////////////////
+//--------------------------------------------------------
 // [[TApplication]]
-// ==========
-// Menu File Print Preview command
-##--END-- @QUERY_APPL_COMMENT == VALUE_VERBOSE
-void [[TApplication]]::CmFilePrintPreview ()
-{
-    SDIDecFrame *sdiFrame = TYPESAFE_DOWNCAST(GetMainWindow(), SDIDecFrame); 
-    if (sdiFrame) {
-        if (!Printer)
-            Printer = new TPrinter(this);
-
-        Printing++;
-
-        PreviewWindow *prevW = new PreviewWindow(sdiFrame, Printer, sdiFrame->GetClientWindow(), "Print Preview", new TLayoutWindow(0));
-        prevW->Create();
-
-        BeginModal(GetMainWindow());
-
-        Printing--;
-
-##:@QUERY_APPL_COMMENT == VALUE_VERBOSE
-        // Now that printing is off we can invalidate because the edit window to repaint.
-        GetMainWindow()->SetRedraw(true);
-        GetMainWindow()->Invalidate();
-
-##:@QUERY_APPL_COMMENT == VALUE_VERBOSE 2
-        // We must destroy the preview window explicitly.  Otherwise, the window will not be destroyed until
-        // it's parent the MainWindow is destroyed.
-        prevW->Destroy();
-        delete prevW;
-    }
-}
-
-
-##--BEGIN-- @QUERY_APPL_COMMENT == VALUE_VERBOSE
-//////////////////////////////////////////////////////////
-// [[TApplication]]
-// ==========
+// ~~~~~~~~~~
 // Menu enabler used by Print, Print Setup and Print Preview.
+//
 ##--END-- @QUERY_APPL_COMMENT == VALUE_VERBOSE
-void [[TApplication]]::CmPrintEnable (TCommandEnabler &tce)
+void [[TApplication]]::CmPrintEnable(TCommandEnabler& tce)
 {
-##--BEGIN-- @QUERY_APPL_COMMENT == VALUE_VERBOSE
-    // If we have a Printer already created just test if all is okay.
-    // Otherwise create a Printer object and make sure the printer
-    // really exists and then delete the Printer object.
-##--END-- @QUERY_APPL_COMMENT == VALUE_VERBOSE
-    if (!Printer) {
-        Printer = new TPrinter(this);
-        
-        tce.Enable(Printer->GetSetup().Error == 0);
-    } else
-        tce.Enable(Printer->GetSetup().Error == 0);
+##@QUERY_APPL_COMMENT == VALUE_VERBOSE 4
+  // If we have a Printer already created just test if all is okay.
+  // Otherwise create a Printer object and make sure the printer really exists
+  // and then delete the Printer object.
+  //
+  if (!Printer) {
+    Printer = new TPrinter(this);
+      tce.Enable(!Printer->GetSetup().Error);
+  }
+  else
+    tce.Enable(!Printer->GetSetup().Error);
 }
 ##--END-- @OPT_APPL_PRINTING
 ##--BEGIN-- @OPT_APPL_HELP
 
 
 ##--BEGIN-- @QUERY_APPL_COMMENT == VALUE_VERBOSE
-//////////////////////////////////////////////////////////
+//--------------------------------------------------------
 // [[TApplication]]
-// =====
+// ~~~~~
 // Menu Help Contents command
+//
 ##--END-- @QUERY_APPL_COMMENT == VALUE_VERBOSE
-void [[TApplication]]::CmHelpContents ()
+void [[TApplication]]::CmHelpContents()
 {
-##--BEGIN-- @QUERY_APPL_COMMENT == VALUE_VERBOSE
-    //
-    // Show the help table of contents.
-    //
-##--END-- @QUERY_APPL_COMMENT == VALUE_VERBOSE
-    HelpState = GetMainWindow()->WinHelp(HelpFileName, HELP_CONTENTS, 0L);
+##@QUERY_APPL_COMMENT == VALUE_VERBOSE 2
+  // Show the help table of contents.
+  //
+  HelpState = GetMainWindow()->WinHelp(HelpFileName, HELP_CONTENTS, 0);
 }
 
 
 ##--BEGIN-- @QUERY_APPL_COMMENT == VALUE_VERBOSE
-//////////////////////////////////////////////////////////
+//--------------------------------------------------------
 // [[TApplication]]
-// =====
+// ~~~~~
 // Menu Help Using Help command
+//
 ##--END-- @QUERY_APPL_COMMENT == VALUE_VERBOSE
-void [[TApplication]]::CmHelpUsing ()
+void [[TApplication]]::CmHelpUsing()
 {
-##--BEGIN-- @QUERY_APPL_COMMENT == VALUE_VERBOSE
-    //
-    // Display the contents of the Windows help file.
-    //
-##--END-- @QUERY_APPL_COMMENT == VALUE_VERBOSE
-    HelpState = GetMainWindow()->WinHelp(HelpFileName, HELP_HELPONHELP, 0L);
+##@QUERY_APPL_COMMENT == VALUE_VERBOSE 2
+  // Display the contents of the Windows help file.
+  //
+  HelpState = GetMainWindow()->WinHelp(HelpFileName, HELP_HELPONHELP, 0);
 }
 ##--END-- @OPT_APPL_HELP
 
 
 ##--BEGIN-- @QUERY_APPL_COMMENT == VALUE_VERBOSE
-//////////////////////////////////////////////////////////
+//--------------------------------------------------------
 // [[TApplication]]
-// ===========
+// ~~~~~~~~~~~
 ##--END-- @QUERY_APPL_COMMENT == VALUE_VERBOSE
 ##@QUERY_TARGET_NAME [[Target]]
 // Menu Help About [[Target]] command
-void [[TApplication]]::CmHelpAbout ()
+//
+void [[TApplication]]::CmHelpAbout()
 {
 ##"" [[TDialog]]
 ##--BEGIN-- ((@QUERY_APPL_MODEL != VALUE_DIALOG) || ((@QUERY_APPL_MODEL == VALUE_DIALOG) && @QUERY_APPL_DLGCLIENT_MENU))
-##--BEGIN-- @QUERY_APPL_COMMENT == VALUE_VERBOSE
-    //
-    // Show the modal dialog.
-    //
-##--END-- @QUERY_APPL_COMMENT == VALUE_VERBOSE
+##@QUERY_APPL_COMMENT == VALUE_VERBOSE 2
+  // Show the modal dialog.
+  //
 ##      :<<TDialog QUERY_CLASS_NAME TDialog
-    [[TDialog]](MainWindow).Execute();
+  [[TDialog]](MainWindow).Execute();
 ##--END-- ((@QUERY_APPL_MODEL != VALUE_DIALOG) || ((@QUERY_APPL_MODEL == VALUE_DIALOG) && @QUERY_APPL_DLGCLIENT_MENU))
 }
 ##--BEGIN-- @OPT_APPL_DRAGDROP
 
 
-void [[TApplication]]::InitInstance ()
+void [[TApplication]]::EvDropFiles(TDropInfo drop)
 {
-    TApplication::InitInstance();
+##@QUERY_APPL_COMMENT == VALUE_VERBOSE 2
+  // Tell DragQueryFile the file interested in (0) and the length of your buffer.
+  //
+  int    namelen = drop.DragQueryFileNameLen(0) + 1;
+  char*  fileName = new char[namelen];
 
-##:@QUERY_APPL_COMMENT == VALUE_VERBOSE
-    // Accept files via drag/drop in the frame window.
-    GetMainWindow()->DragAcceptFiles(true);
+  drop.DragQueryFile(0, fileName, namelen);
+
+##@QUERY_APPL_COMMENT == VALUE_VERBOSE 2
+  // Open the file that was dropped.
+  //
+  AddFile(fileName);
+
+##@QUERY_APPL_COMMENT == VALUE_VERBOSE 2
+  // Release the memory allocated for this handle with DragFinish.
+  //
+  drop.DragFinish();
+  delete[] fileName;
 }
 
 
-void [[TApplication]]::EvDropFiles (TDropInfo drop)
+void [[TApplication]]::AddFile(const char* FileName)
 {
-##@QUERY_APPL_COMMENT == VALUE_VERBOSE
-	// Tell DragQueryFile the file interested in (0) and the length of your buffer.
-	int     fileLength = drop.DragQueryFileNameLen(0) + 1;
-	char    *fileName = new char[fileLength];
-
-	drop.DragQueryFile(0, fileName, fileLength);
-
-##@QUERY_APPL_COMMENT == VALUE_VERBOSE
-	// Open the file that was dropped.
-	AddFile(fileName);
-##@QUERY_APPL_COMMENT == VALUE_VERBOSE
-    // Release the memory allocated for this handle with DragFinish.
-    drop.DragFinish();
-}
-
-
-void [[TApplication]]::AddFile (const char *FileName)
-{
-    strcpy(FileData.FileName, FileName);
-
-##@QUERY_APPL_COMMENT == VALUE_VERBOSE
-    // Open the file dragged in.
+##@QUERY_APPL_COMMENT == VALUE_VERBOSE 2
+  // Open the file dragged in.
+  //
 ##QUERY_WIND_CLIENT [[ClientClass]]
 ##--BEGIN-- <<*ClientClass QUERY_BASE_NAME [[BaseClient]]
-##BaseClient == "TEditFile" 2
-    [[ClientClass]] *client = TYPESAFE_DOWNCAST(GetMainWindow()->GetClientWindow(), [[ClientClass]]);
+  [[ClientClass]]* client = TYPESAFE_DOWNCAST(GetMainWindow()->GetClientWindow(), [[ClientClass]]);
+  if (client->CanClose()) {
+    strcpy(FileData.FileName, FileName);
+##BaseClient == "TEditFile"
     client->ReplaceWith(FileData.FileName);
-##BaseClient == "TListBox" 3
-    [[ClientClass]] *client = TYPESAFE_DOWNCAST(GetMainWindow()->GetClientWindow(), [[ClientClass]]);
+##BaseClient == "TListBox" 2
     client->ClearList();
     LoadTextFile();
+##--BEGIN-- (@OPT_APPL_MRU) && (@QUERY_APPL_MODEL != VALUE_DIALOG)
+
+##:@QUERY_APPL_COMMENT == VALUE_VERBOSE 2
+    // Add the file to the MRU list.
+    //
+    SaveMenuChoice(FileData.FileName);
+##--END-- (@OPT_APPL_MRU) && (@QUERY_APPL_MODEL != VALUE_DIALOG)
+  }
 ##--END-- <<*ClientClass QUERY_BASE_NAME [[BaseClient]]
 }
 ##--END-- @OPT_APPL_DRAGDROP
+##--BEGIN-- (@OPT_APPL_MRU) && (@QUERY_APPL_MODEL != VALUE_DIALOG)
+
+
+int32 [[TApplication]]::CmFileSelected(uint wp, int32)
+{
+  TAPointer<char> text = new char[_MAX_PATH];
+
+  GetMenuText(wp, text, _MAX_PATH);
+
+  OpenFile(text);
+  return 0;
+}
+##--END-- (@OPT_APPL_MRU) && (@QUERY_APPL_MODEL != VALUE_DIALOG)
+
+
 ##{main.owl}

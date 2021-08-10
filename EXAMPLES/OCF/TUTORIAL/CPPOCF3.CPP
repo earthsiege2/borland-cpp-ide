@@ -2,10 +2,11 @@
 // Copyright (C) 1994 Borland International
 // Simple OLE Container using OCF
 // ---------------------------------------------------------------------------
-#include <ocf/ocfpch.h>
+#include <ocf/pch.h>
 #include <ocf/ocapp.h>
 #include <ocf/ocdoc.h>
 #include <ocf/ocview.h>
+#include <ocf/ocremvie.h>
 #include <ocf/ocpart.h>
 #include <ocf/ocstorag.h>
 #include <classlib/arrays.h>
@@ -235,7 +236,7 @@ MainWnd_SetMenu(HWND hwnd, HMENU hMenu, int winIndex = 0)
     hMenu = FrameMenu;
 
   if (IsWindow(Client)) {
-    FORWARD_WM_MDISETMENU(Client, FALSE, hMenu, GetSubMenu(hMenu, winIndex),
+    FORWARD_WM_MDISETMENU(Client, TRUE /*FALSE*/, hMenu, GetSubMenu(hMenu, winIndex),
                           SendMessage);
     DrawMenuBar(hwnd);
   }
@@ -1074,8 +1075,8 @@ PenDlg_OnCommand(HWND hwnd, int id, HWND /*hwndCtl*/, uint /*codeNotify*/)
   switch (id) {
     case IDOK: {
       int penSize;
-      bool translated;
-      penSize = GetDlgItemInt(hwnd, IDC_PENSIZE, &translated, false);
+      int translated;
+      penSize = GetDlgItemInt(hwnd, IDC_PENSIZE, &translated, FALSE);
 
 #if !defined(NDEBUG)
       wsprintf(FileName, "ps = %d\n\r", penSize);

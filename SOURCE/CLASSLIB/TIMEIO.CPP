@@ -1,37 +1,22 @@
-/*------------------------------------------------------------------------*/
-/*                                                                        */
-/*  TIMEIO.CPP                                                            */
-/*                                                                        */
-/*  Copyright (c) 1993, 1994 Borland International                        */
-/*  All Rights Reserved                                                   */
-/*                                                                        */
-/*------------------------------------------------------------------------*/
-
-#if !defined( __STDIO_H )
-#include <stdio.h>
-#endif
-
-#if !defined( __STRSTREA_H )
-#include <strstrea.h>
-#endif
-
-#if !defined( __IOMANIP_H )
-#include <iomanip.h>
-#endif
-
-#if !defined( __CSTRING_H )
-#include <cstring.h>
-#endif
-
-#if !defined( CLASSLIB_TIME_H )
+//----------------------------------------------------------------------------
+// Borland Class Library
+// Copyright (c) 1993, 1996 by Borland International, All Rights Reserved
+//
+//$Revision:   5.4  $
+//
+// TTime class IO and conversion implementation
+//----------------------------------------------------------------------------
+#include <classlib/pch.h>
 #include <classlib/time.h>
-#endif
-
-#if !defined( CLASSLIB_FILE_H )
 #include <classlib/file.h>
-#endif
+#include <services/checks.h>
+#include <stdio.h>
+#include <strstrea.h>
+#include <iomanip.h>
 
+//
 // Static variable intialization:
+//
 int TTime::PrintDateFlag = 1;
 
 string TTime::AsString() const
@@ -49,9 +34,11 @@ ostream _BIDSFAR & _BIDSFUNC operator << ( ostream _BIDSFAR & s, const TTime _BI
 
     // We use an ostrstream to format into buf so that
     // we don't affect the ostream's width setting.
+    //
     ostrstream out( buf, sizeof(buf) );
   
     // First print the date if requested:
+    //
     if(TTime::PrintDateFlag) 
         out << TDate(t) << " ";
 
@@ -63,6 +50,7 @@ ostream _BIDSFAR & _BIDSFUNC operator << ( ostream _BIDSFAR & s, const TTime _BI
 
     // now we write out the formatted buffer, and the ostream's
     // width setting will control the actual width of the field.
+    //
     s << buf;
     return s;
 }
@@ -84,5 +72,3 @@ ostream _BIDSFAR & _BIDSFUNC operator << ( ostream _BIDSFAR & os, const TFileSta
     os << " attributes: " << (int)status.attribute << '\n';
     return os;
 }
-
-

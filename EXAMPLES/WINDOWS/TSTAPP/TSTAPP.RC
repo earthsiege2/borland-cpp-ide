@@ -1,6 +1,8 @@
 // Borland C++ - (C) Copyright 1991 by Borland International
 
+#if !defined (WORKSHOP_INVOKED)
 # include <windows.h>
+#endif
 # include "tstapp.h"
 # include "msgproc.h"
 

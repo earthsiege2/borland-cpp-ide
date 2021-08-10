@@ -6,9 +6,9 @@
 */
 
 /*
- *      C/C++ Run Time Library - Version 6.5
+ *      C/C++ Run Time Library - Version 7.0
  *
- *      Copyright (c) 1987, 1994 by Borland International
+ *      Copyright (c) 1987, 1996 by Borland International
  *      All Rights Reserved.
  *
  */
@@ -32,7 +32,7 @@ typedef void _FAR *va_list;
 #define va_arg(ap, type) (*(type _FAR *)(((*(char _FAR *_FAR *)&(ap))+=__size(type))-(__size(type))))
 #define va_end(ap)          ((void)0)
 
-#if !__STDC__
+#if !defined(__STDC__)
 #define _va_ptr             (...)
 #endif
 

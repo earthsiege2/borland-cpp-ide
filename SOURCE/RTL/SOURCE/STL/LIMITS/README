@@ -1,0 +1,137 @@
+
+We've made the following assumptions in our current implementation
+of numeric_limits.  If any of these assumptions aren't true, please
+contact us so we can rectify the situation.
+
+
+   //**********************************************************************
+   //
+   // Assumptions made in this implementation:
+   //
+   //   1) numeric_limits<int>::radix equals numeric_limits<T>::radix
+   //      for all integral T specialized in this file;
+   //
+   //   2) numeric_limits<int>::is_modulo equals numeric_limits<T>::is_modulo
+   //      for all signed integral T specialized in this file, except
+   //      numeric_limits<bool>::is_modulo, which is assumed to be false;
+   //
+   //   3) numeric_limits<T>::traps == false for all builtin integral T.
+   //
+   // Does there exist a machine for which these aren't true?
+   //
+   //**********************************************************************
+
+
+Here are some comments in src/limits/limits.cpp:
+
+
+   //**********************************************************************
+   //
+   // Vendors MUST set the following functions to their proper values.
+   //
+   //**********************************************************************
+
+   float numeric_limits<float>::round_error   () { return .5F;   }
+   float numeric_limits<float>::infinity      () { return 0;     }
+   float numeric_limits<float>::quiet_NaN     () { return 0;     }
+   float numeric_limits<float>::signaling_NaN () { return 0;     }
+   float numeric_limits<float>::denorm_min    () { return min(); }
+
+   double numeric_limits<double>::round_error   () { return .5;    }
+   double numeric_limits<double>::infinity      () { return 0;     }
+   double numeric_limits<double>::quiet_NaN     () { return 0;     }
+   double numeric_limits<double>::signaling_NaN () { return 0;     }
+   double numeric_limits<double>::denorm_min    () { return min(); }
+
+   long double numeric_limits<long double>::round_error   () { return .5L;   }
+   long double numeric_limits<long double>::infinity      () { return 0;     }
+   long double numeric_limits<long double>::quiet_NaN     () { return 0;     }
+   long double numeric_limits<long double>::signaling_NaN () { return 0;     }
+   long double numeric_limits<long double>::denorm_min    () { return min(); }
+
+
+   #ifndef RWSTD_NO_OVERLOAD_WCHAR
+   wchar_t numeric_limits<wchar_t>::min () { return INT_MIN; }
+   wchar_t numeric_limits<wchar_t>::max () { return INT_MAX; }
+   #endif
+
+
+   //**********************************************************************
+   //
+   // End of functions needing to be set by vendors.
+   //
+   // If your compiler does NOT handle in-class initialization of static
+   // constant data members then you MUST fill in the proper values in the
+   // following section.
+   //
+   // If your compiler DOES handle in-class initialization of static
+   // constant data members then the ONLY things you should need to change
+   // in this file are the function definitions in the preceding section.
+   //
+   //**********************************************************************
+
+   const bool numeric_limits<float>::has_infinity           __RW_INIT(false);
+   const bool numeric_limits<float>::has_quiet_NaN          __RW_INIT(false);
+   const bool numeric_limits<float>::has_signaling_NaN      __RW_INIT(false);
+   const bool numeric_limits<float>::is_iec559              __RW_INIT(false);
+   const bool numeric_limits<float>::is_modulo              __RW_INIT(false);
+   const bool numeric_limits<float>::has_denorm             __RW_INIT(false);
+   const bool numeric_limits<float>::traps                  __RW_INIT(false);
+   const bool numeric_limits<float>::tinyness_before        __RW_INIT(false);
+
+   const bool numeric_limits<double>::has_infinity           __RW_INIT(false);
+   const bool numeric_limits<double>::has_quiet_NaN          __RW_INIT(false);
+   const bool numeric_limits<double>::has_signaling_NaN      __RW_INIT(false);
+   const bool numeric_limits<double>::is_iec559              __RW_INIT(false);
+   const bool numeric_limits<double>::is_modulo              __RW_INIT(false);
+   const bool numeric_limits<double>::has_denorm             __RW_INIT(false);
+   const bool numeric_limits<double>::traps                  __RW_INIT(false);
+   const bool numeric_limits<double>::tinyness_before        __RW_INIT(false);
+
+   const bool numeric_limits<long double>::has_infinity      __RW_INIT(false);
+   const bool numeric_limits<long double>::has_quiet_NaN     __RW_INIT(false);
+   const bool numeric_limits<long double>::has_signaling_NaN __RW_INIT(false);
+   const bool numeric_limits<long double>::is_iec559         __RW_INIT(false);
+   const bool numeric_limits<long double>::is_modulo         __RW_INIT(false);
+   const bool numeric_limits<long double>::has_denorm        __RW_INIT(false);
+   const bool numeric_limits<long double>::traps             __RW_INIT(false);
+   const bool numeric_limits<long double>::tinyness_before   __RW_INIT(false);
+
+   const int  numeric_limits<int>::radix                     __RW_INIT(2);
+   const bool numeric_limits<int>::is_modulo                 __RW_INIT(false);
+
+   #ifndef RWSTD_NO_OVERLOAD_WCHAR
+   const bool numeric_limits<wchar_t>::is_signed             __RW_INIT(true);
+   #endif
+
+   //**********************************************************************
+   //
+   // End of section of static const data members needing to be set.
+   //
+   // NOTHING should need to be changed below this point.
+   //
+   //**********************************************************************
+
+
+The following are some important comments in include/limits.  Only
+vendors whose compiler supports in-class initialization of static
+constant data members need bother setting values inside
+include/limits.
+
+
+  //**********************************************************************
+  //
+  // If your compiler allows in-class initialization of static const data
+  // members of integral type, then look for all lines having a comment of
+  // the form
+  //
+  //       // VENDOR
+  //
+  // and set the value on that line to the proper one for your environment.
+  //
+  // If your compiler does NOT allow in-class initialization of static const
+  // data members of integral type, then you'll need to set the values in
+  // stdlib/src/limits/limits.cpp so they're properly archived into the
+  // Standard Library.
+  //
+  //**********************************************************************

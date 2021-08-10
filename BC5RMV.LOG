@@ -1,0 +1,6998 @@
+[General
+ProductName Borland C++ 5.0
+]
+[Dirs
+D:\BC5\
+]
+[INI
+Section Diagnostics
+Key OwlApp
+Value 1 0
+File C:\WINNT35\OWL.INI
+]
+[INI
+Section Diagnostics
+Key OwlWin
+Value 1 0
+File C:\WINNT35\OWL.INI
+]
+[INI
+Section Diagnostics
+Key OwlMsg
+Value 1 0
+File C:\WINNT35\OWL.INI
+]
+[INI
+Section Diagnostics
+Key OwlGDI
+Value 1 0
+File C:\WINNT35\OWL.INI
+]
+[INI
+Section Diagnostics
+Key OwlGDIOrphan
+Value 1 0
+File C:\WINNT35\OWL.INI
+]
+[INI
+Section Diagnostics
+Key OwlDocView
+Value 1 0
+File C:\WINNT35\OWL.INI
+]
+[Files
+C:\WINNT35\BC5RMV.EXE
+C:\WINNT35\SYSTEM32\bw320007.dll
+bw320009.dll
+bw32000c.dll
+bwcc32.dll
+ctl3d32.dll
+bocof.dll
+wsihk32.dll
+wsiwin32.dll
+C:\WINNT35\SYSTEM\bocole.dll
+bwcc.dll
+bwcc0007.dll
+bwcc0009.dll
+bwcc000c.dll
+ctl3dv2.dll
+bivbx30.dll
+bivbx30.32c
+bivbx30.32n
+bivbx30c.dll
+bivbx30n.exe
+vtss.lic
+vtssonly.vbx
+mhrun300.dll
+mhal200.vbx
+mhcd200.vbx
+mhcl200.vbx
+mhdc200.vbx
+mhga200.vbx
+mhmq200.vbx
+mhsl200.vbx
+mhsn200.vbx
+mhcards.dll
+vbtbl.lic
+vtssdbw.dll
+vtssdll.dll
+vtssapp.exe
+bdt50acc.vbx
+bdt50ctl.vbx
+bdt50ex.dll
+bdt50exf.dll
+D:\BC5\unreg.exe
+uninst.ini
+unreg.ini
+D:\BC5\BGI\att.bgi
+cga.bgi
+egavga.bgi
+herc.bgi
+ibm8514.bgi
+pc3270.bgi
+bgidemo.c
+bold.chr
+euro.chr
+goth.chr
+lcom.chr
+litt.chr
+sans.chr
+scri.chr
+simp.chr
+trip.chr
+tscr.chr
+bgiobj.exe
+bgidemo.ide
+D:\BC5\BIN\bcwaddon.dll
+addonreg.exe
+bdt50c.dll
+bdt50.tlb
+bdt50cf.dll
+bdt5032.tlb
+ole_err.dll
+ole_errf.dll
+bids50.dll
+bids50f.dll
+bids50t.dll
+bcc.exe
+cpp.exe
+bcc32.exe
+bcc32i.exe
+cpp32.exe
+tdstrp32.exe
+tlink32.exe
+b32tools.pif
+make.exe
+maker.exe
+objxref.exe
+tdmem.exe
+tdstrip.exe
+tdump.exe
+touch.exe
+trigraph.exe
+builtins.mak
+rtm.exe
+dpmi16bi.ovl
+windpmi.386
+32rtm.exe
+makeswap.exe
+dpmi32vm.ovl
+bcwimprt.dll
+bcwkbd.dll
+bcwmsgdb.dll
+bcwres.dll
+bcwxprts.dll
+bcwdbg.dll
+bcwdbgv.dll
+bcwdbk32.dll
+bcwdki.dll
+bcw.exe
+bcwedit.dll
+bcwobj.dll
+bcwoutl.dll
+bcwpages.dll
+bcwprj.dll
+bcws16.dll
+bcws32.dll
+bcws32i.dll
+bcwtxcl.dll
+bcwtxsrv.dll
+capdos32.exe
+c.tok
+c32.tok
+cm.dll
+cmcore.dll
+codegen.dll
+comp32.dll
+comp32i.dll
+idead.dll
+ideae.dll
+ideam.dll
+ideas.dll
+idebidf.dll
+ideowlf.dll
+idevm.dll
+idewin.dll
+menuhook.dll
+miscscr.dll
+msgview.dll
+owldbres.dll
+pane.dll
+search.dll
+tbrowser.dll
+owl50.dll
+owl50f.dll
+owl50t.dll
+autogen.exe
+dllrun.exe
+guidgen.exe
+macrogen.exe
+register.exe
+regist32.exe
+owlcvt.exe
+bc500rtl.dll
+cw3220.dll
+cw3220mt.dll
+loadbwcc.exe
+rw32core.dll
+rw32ui.dll
+rwaddon.dll
+rwctls.dll
+rwdesign.dll
+rwimged.dll
+rwinspct.dll
+rwres.dll
+hc.bat
+hc31.err
+hc31.exe
+implib.exe
+rlink.exe
+tlink.exe
+locale.bll
+grep.com
+workopt.dos
+brc.exe
+brc32.exe
+brcc.exe
+brcc32.exe
+impdef.exe
+tlib.exe
+workopt.w32
+rlink32.dll
+jitime.exe
+td32.exe
+td32inst.exe
+td32.ico
+td32inst.ico
+td32help.tdh
+dual8514.dll
+stb.dll
+svga.dll
+svga32.dll
+tdkbd32.dll
+tdvid16.dll
+tdwgui.dll
+tdwinth.dll
+tdwini.exe
+td.exe
+tdinst.exe
+tddos.ico
+tdosinst.ico
+td.pif
+tdhelp.tdh
+tdremote.exe
+tdrf.exe
+tddebug.386
+tdcon32.exe
+tdw.exe
+tdwinst.exe
+tdw.ico
+tdwinst.ico
+tdwhelp.tdh
+tprof.exe
+tprof.ico
+tfhelp.tfh
+tfinst.exe
+tfremote.exe
+tprofw.exe
+tfwhelp.tfh
+vbxgen.exe
+bdt50.reg
+buildsym.exe
+exemap.exe
+fconvert.exe
+tmapsym.exe
+port.dll
+compress.exe
+hcrtf.exe
+hcw.exe
+regload.exe
+dfa.exe
+winspctr.exe
+winstub.exe
+tdrf.exe
+wremote.exe
+wrsetup.exe
+ws32.exe
+D:\BC5\cleanini.exe
+CONTEST.TXT
+D:\BC5\DOC\owlstyle.doc
+addon.txt
+intldemo.txt
+ole_errs.txt
+owl5.txt
+pe.txt
+redist.txt
+resfmt.txt
+tdump.txt
+owldoc.wri
+vdbt.wri
+helpme.wri
+td_asm.txt
+td_hdwbp.txt
+td_rdme.txt
+td_utils.txt
+VDBT.TXT
+D:\BC5\EXAMPLES\bidsmake.gen
+makefile.gen
+ocfmake.gen
+owlmake.gen
+owlocfmk.gen
+D:\BC5\EXAMPLES\CLASSLIB\BIDSAPI\ARRAYS\makefile
+array.cpp
+iarray.cpp
+isarray.cpp
+sarray.cpp
+arrays.ide
+D:\BC5\EXAMPLES\CLASSLIB\BIDSAPI\ASSOCS\makefile
+assocdd.cpp
+assocdi.cpp
+associd.cpp
+associdd.cpp
+associi.cpp
+assocs.ide
+D:\BC5\EXAMPLES\CLASSLIB\BIDSAPI\BAGS\makefile
+bag.cpp
+ibag.cpp
+bags.ide
+D:\BC5\EXAMPLES\CLASSLIB\BIDSAPI\myclass.cpp
+myclass.h
+D:\BC5\EXAMPLES\CLASSLIB\BIDSAPI\BINTREES\makefile
+bintree.cpp
+ibintree.cpp
+bintrees.ide
+D:\BC5\EXAMPLES\CLASSLIB\BIDSAPI\DATES\makefile
+datex.cpp
+dates.ide
+D:\BC5\EXAMPLES\CLASSLIB\BIDSAPI\DEQUES\makefile
+deqlist.cpp
+deque.cpp
+ideqlist.cpp
+ideque.cpp
+deques.ide
+D:\BC5\EXAMPLES\CLASSLIB\BIDSAPI\HASHTBLS\makefile
+hash.cpp
+ihash.cpp
+hashtbls.ide
+D:\BC5\EXAMPLES\CLASSLIB\BIDSAPI\LISTS\makefile
+dlist.cpp
+idlist.cpp
+ilist.cpp
+isdlist.cpp
+islist.cpp
+listx.cpp
+sdlist.cpp
+slist.cpp
+lists.ide
+D:\BC5\EXAMPLES\CLASSLIB\BIDSAPI\QUEUES\makefile
+iquelist.cpp
+iqueue.cpp
+quelist.cpp
+queue.cpp
+queues.ide
+D:\BC5\EXAMPLES\CLASSLIB\BIDSAPI\SETS\makefile
+iset.cpp
+setx.cpp
+sets.ide
+D:\BC5\EXAMPLES\CLASSLIB\BIDSAPI\STACKS\makefile
+istack.cpp
+istklist.cpp
+stack.cpp
+stklist.cpp
+stacks.ide
+D:\BC5\EXAMPLES\CLASSLIB\BIDSAPI\STREAMS\makefile
+stream0.cpp
+stream1.cpp
+stream2.cpp
+stream3.cpp
+strmpnt.cpp
+strmpnt.h
+streams.ide
+D:\BC5\EXAMPLES\CLASSLIB\BIDSAPI\THREADS\makefile
+thread.cpp
+threads.ide
+D:\BC5\EXAMPLES\CLASSLIB\BIDSAPI\VECTORS\makefile
+ivector.cpp
+vector.cpp
+vectors.ide
+D:\BC5\EXAMPLES\CLASSLIB\buildall.bat
+D:\BC5\EXAMPLES\CLASSLIB\LABELS\makefile
+labels.cpp
+master.dat
+labels.ide
+newsub.txt
+D:\BC5\EXAMPLES\CLASSLIB\LOOKUP\makefile
+lookup.cpp
+lookup.ide
+D:\BC5\EXAMPLES\CLASSLIB\PSTREAM\makefile
+stream0.cpp
+stream1.cpp
+stream2.cpp
+ellipse.cur
+line.cur
+rect.cur
+stream0.def
+stream1.def
+stream2.def
+streams.h
+pstream.ide
+streams.rc
+D:\BC5\EXAMPLES\CLASSLIB\QUEUETST\makefile
+queuetst.cpp
+queuetst.ide
+D:\BC5\EXAMPLES\CLASSLIB\REVERSE\makefile
+reverse.cpp
+reverse.ide
+D:\BC5\EXAMPLES\CLASSLIB\STRNGMAX\makefile
+strngmax.cpp
+strngmax.ide
+D:\BC5\EXAMPLES\CLASSLIB\TESTDIR\makefile
+filedata.cpp
+testdir.cpp
+filedata.h
+testdir.ide
+D:\BC5\EXAMPLES\CLASSLIB\TODO\makefile
+tododlgs.cpp
+todolist.cpp
+todowin.cpp
+todo.def
+tododefs.h
+tododlgs.h
+todolist.h
+todowin.h
+todo.ide
+todowin.rc
+D:\BC5\EXAMPLES\CLASSLIB\XREF\makefile
+xref.cpp
+text.dat
+trivial.dat
+xref.ide
+D:\BC5\EXAMPLES\DOS\barchart.c
+getopt.c
+hello.c
+myfuncs.cpp
+mymain.cpp
+vcirc.cpp
+vpoint.cpp
+myfuncs.h
+vpoint.h
+makeall.ide
+readme.txt
+D:\BC5\EXAMPLES\IDE\ADDON\TESTBED\closfold.bmp
+cmdtest1.bmp
+cmdtest2.bmp
+file.bmp
+openfold.bmp
+aoexguid.cpp
+aoexpch.cpp
+cmdtest.cpp
+edittest.cpp
+edittool.cpp
+filetest.cpp
+maketest.cpp
+menutest.cpp
+mpdenv.cpp
+mpdprj.cpp
+mpdtest.cpp
+msgtest.cpp
+msgview.cpp
+option.cpp
+pdview.cpp
+pdwin.cpp
+prjview.cpp
+prjwin.cpp
+project.cpp
+propview.cpp
+script.cpp
+target.cpp
+testdlg.cpp
+tests.cpp
+textview.cpp
+tool2.cpp
+toolsrvr.cpp
+txowl.cpp
+viewtest.cpp
+addonpg.h
+aoexpch.h
+cmdtest.h
+edittest.h
+edittool.h
+filetest.h
+maketest.h
+menutest.h
+mpdtest.h
+msgtest.h
+msgview.h
+option.h
+pdview.h
+pdwin.h
+prjview.h
+prjwin.h
+project.h
+propview.h
+script.h
+target.h
+testdlg.h
+tests.h
+textview.h
+tool2.h
+toolsrvr.h
+txowl.h
+viewtest.h
+tests.hrc
+icon1.ico
+exaddon.ide
+testdlg.rc
+ssinit.spp
+sstest.spp
+txowl.uid
+D:\BC5\EXAMPLES\IDE\DELIVER\deliver.cpp
+deliver.ide
+deliver.txt
+D:\BC5\EXAMPLES\IDE\MULTITRG\multitrg.cpp
+multitrg.ico
+multitrg.ide
+multitrg.rc
+multitrg.txt
+D:\BC5\EXAMPLES\IDE\SRCPOOL\srcpool.cpp
+srcpool.ico
+srcpool.ide
+srcpool.rc
+srcpool.txt
+D:\BC5\EXAMPLES\IDE\STYLESHT\stylesht.cpp
+stylesht.ico
+stylesht.ide
+stylesht.rc
+stylesht.txt
+D:\BC5\EXAMPLES\OCF\AUTOCALC\makefile
+acalcger.bas
+autocalc.bas
+autocalc.cpp
+callcalc.cpp
+winmain.cpp
+autocalc.h
+autocalc.hh
+acalcger.hpj
+autocalc.hpj
+autocalc.ide
+autocalc.rc
+callcalc.rc
+autocalc.rh
+callcalc.rh
+acalcger.rtf
+autocalc.rtf
+readme.txt
+D:\BC5\EXAMPLES\OCF\LOCALIZE\makefile
+localize.cpp
+localize.ide
+localize.rc
+localize.rh
+D:\BC5\EXAMPLES\OCF\buildall.bat
+D:\BC5\EXAMPLES\OCF\REGTEST\makefile
+regtest.cpp
+regtest.ide
+regtest.rc
+regtest.rh
+D:\BC5\EXAMPLES\OCF\TUTORIAL\makefile
+cppocf0.cpp
+cppocf1.cpp
+cppocf2.cpp
+cppocf3.cpp
+ocfhlpr.cpp
+cppocf0.h
+cppocf1.h
+cppocf2.h
+cppocf3.h
+ocfevx.h
+ocfhlpr.h
+cppocf.ide
+cppocf0.rc
+cppocf1.rc
+cppocf2.rc
+cppocf3.rc
+cppocf0.rh
+cppocf1.rh
+cppocf2.rh
+cppocf3.rh
+ocfhlpr.rh
+D:\BC5\EXAMPLES\OWL\APPS\ACLOCK\makefile
+cuckoo1.bmp
+cuckoo2.bmp
+cuckoo3.bmp
+cuckoo4.bmp
+cuckoo5.bmp
+cuckoo6.bmp
+cuckoo7.bmp
+cuckoo8.bmp
+face_bmp.bmp
+aclock.cpp
+aclock.h
+aclock.ico
+aclock.ide
+aclock.rc
+readme.txt
+D:\BC5\EXAMPLES\OWL\APPS\APPLAUNC\makefile
+appbtn.cpp
+appbtnba.cpp
+applaunc.cpp
+appmgr.cpp
+appwin.cpp
+dialogs.cpp
+exitwin.cpp
+dragbtn.cur
+appbtn.h
+appbtnba.h
+appmgr.h
+appwin.h
+dialogs.h
+applaunc.hpj
+applaunc.ico
+exitwin.ico
+applaunc.ide
+applaunc.rc
+exitwin.rc
+applaunc.rh
+applaunc.rtf
+readme.txt
+D:\BC5\EXAMPLES\OWL\APPS\BLAZER\makefile
+ball.bmp
+splslogo.bmp
+about.cpp
+blazer.cpp
+client.cpp
+propdlgs.cpp
+blazer.h
+propdlgs.h
+helpids.hh
+blazer.hlp
+blazer.hpj
+blazer.ide
+blazer.rc
+blazer.rh
+blazer.rtf
+readme.txt
+boing.wav
+engine.wav
+D:\BC5\EXAMPLES\OWL\APPS\BMPVIEW\makefile
+read1.bmp
+read2.bmp
+sbsml256.bmp
+sb_bw.bmp
+bmpview.cpp
+bmpview.h
+bmpview.ide
+bmpview.rc
+readme.txt
+D:\BC5\EXAMPLES\OWL\APPS\CALC\makefile
+calc.cpp
+calc.ico
+calc.ide
+calc.rc
+readme.txt
+D:\BC5\EXAMPLES\OWL\APPS\CURSOR\makefile
+cursor.cpp
+cursor.h
+cursor.ico
+cursor.ide
+cursor.rc
+readme.txt
+D:\BC5\EXAMPLES\OWL\APPS\DRAW\makefile
+draw.cpp
+draw.ide
+draw.rc
+draw.rh
+readme.txt
+D:\BC5\EXAMPLES\OWL\APPS\FILEBROW\makefile
+filebrow.cpp
+filebrow.ide
+filebrow.rc
+filebrow.rh
+readme.txt
+D:\BC5\EXAMPLES\OWL\APPS\GDIDEMO\makefile
+backgrnd.bmp
+monoship.bmp
+ship.bmp
+arty.cpp
+bitblt.cpp
+fontx.cpp
+gdidemo.cpp
+line.cpp
+arty.h
+artypriv.h
+bitblt.h
+demobase.h
+fontx.h
+line.h
+gdidemo.ide
+gdidemo.rc
+readme.txt
+D:\BC5\EXAMPLES\OWL\APPS\HELLO\makefile
+helloapp.cpp
+helloapp.ide
+helloapp.rc
+readme.txt
+D:\BC5\EXAMPLES\OWL\APPS\INTLDEMO\makefile
+english.bas
+french.bas
+german.bas
+calldemo.cpp
+filelist.cpp
+intldemo.cpp
+intldemo.cxx
+calldemo.h
+filelist.h
+intldemo.h
+intldemo.hh
+english.hpj
+french.hpj
+german.hpj
+intldemo.hxx
+world.ico
+intldemo.ide
+apieng.rc
+apifra.rc
+apiger.rc
+calldemo.rc
+intldemo.rc
+english.rtf
+french.rtf
+german.rtf
+readme.txt
+test.txt
+D:\BC5\EXAMPLES\OWL\APPS\LED\makefile
+led0.bmp
+led1.bmp
+led2.bmp
+led3.bmp
+led4.bmp
+led5.bmp
+led6.bmp
+led7.bmp
+led8.bmp
+led9.bmp
+ledcol.bmp
+led.cpp
+ledwind.cpp
+ledwind.h
+led.ico
+led.ide
+led.rc
+ledwind.txt
+D:\BC5\EXAMPLES\OWL\APPS\MDIFILE\makefile
+mdifile.cpp
+mdifile.h
+mdifile.ide
+mdifile.rc
+readme.txt
+D:\BC5\EXAMPLES\OWL\APPS\MTHREAD\makefile
+arty.cpp
+line.cpp
+mthread.cpp
+arty.h
+artypriv.h
+demobase.h
+line.h
+mthread.ide
+mthread.rc
+readme.txt
+D:\BC5\EXAMPLES\OWL\APPS\NOTEBOOK\makefile
+hscroll.cpp
+nb.cpp
+notebook.cpp
+utils.cpp
+vscroll.cpp
+notebook.doc
+hscroll.h
+nb.h
+notebook.h
+utils.h
+vscroll.h
+notebook.ide
+nb.rc
+readme.txt
+D:\BC5\EXAMPLES\OWL\APPS\buildall.bat
+D:\BC5\EXAMPLES\OWL\APPS\OWLCMD\makefile
+owlcmd.cpp
+owlcmd.ide
+readme.txt
+D:\BC5\EXAMPLES\OWL\APPS\PAINT\makefile
+dibattr.cpp
+paint.cpp
+ellipse.cur
+fellipse.cur
+fill.cur
+frect.cur
+pen.cur
+rect.cur
+dibattr.h
+ellipse.ico
+fellipse.ico
+fill.ico
+frect.ico
+owlpaint.ico
+pen.ico
+rect.ico
+paint.ide
+paint.rc
+paint.rh
+readme.txt
+D:\BC5\EXAMPLES\OWL\APPS\PEEPER\makefile
+peeper.cpp
+peeper.h
+peeper.ide
+peeper.rc
+peeper.rh
+readme.txt
+D:\BC5\EXAMPLES\OWL\APPS\SCRNSAVE\makefile
+owlscrn.cpp
+tscrnsav.cpp
+owlscrn.def
+owlscrn.h
+tscrnsav.h
+owlscrn.ide
+owlscrn.rc
+readme.txt
+D:\BC5\EXAMPLES\OWL\APPS\SDIFILE\makefile
+sdifile.cpp
+sdifile.ide
+sdifile.rc
+readme.txt
+D:\BC5\EXAMPLES\OWL\CLASSES\ANIMCTL\makefile
+animctlx.cpp
+animctl.h
+animctl.ide
+animctl.rc
+readme.txt
+D:\BC5\EXAMPLES\OWL\CLASSES\BUTTON\makefile
+buttonx.cpp
+button.ide
+readme.txt
+D:\BC5\EXAMPLES\OWL\CLASSES\CHECKLST\makefile
+checklsx.cpp
+checklst.ide
+checklst.rc
+D:\BC5\EXAMPLES\OWL\CLASSES\CMDENABL\makefile
+cmdenab1.cpp
+cmdenab2.cpp
+cmdenab3.cpp
+cmdenab4.cpp
+cmdenabl.h
+cmdenabl.ide
+cmdenabl.rc
+readme.txt
+D:\BC5\EXAMPLES\OWL\CLASSES\COLMNHDR\makefile
+colmnhdx.cpp
+colmnhdr.h
+colmnhdr.ide
+colmnhdr.rc
+readme.txt
+D:\BC5\EXAMPLES\OWL\CLASSES\COMBOBOX\makefile
+combobxx.cpp
+combobox.ide
+combobox.rc
+combobox.rh
+readme.txt
+D:\BC5\EXAMPLES\OWL\CLASSES\COMMDLG\makefile
+commdlgx.cpp
+commdlg.ide
+commdlgx.rc
+commdlgx.rh
+readme.txt
+D:\BC5\EXAMPLES\OWL\CLASSES\CTXTHELP\makefile
+ctxthelp.cpp
+helpids.hh
+testhelp.hpj
+ctxthelp.ide
+ctxthelp.rc
+ctxthelp.rh
+testhelp.rtf
+readme.txt
+D:\BC5\EXAMPLES\OWL\CLASSES\DIBITMAP\makefile
+ball.bmp
+dibitmax.cpp
+dibitmap.ide
+dibitmap.rc
+dibitmap.rh
+readme.txt
+D:\BC5\EXAMPLES\OWL\CLASSES\DOCKING\makefile
+dockingx.cpp
+docking.h
+docking.ide
+docking.rc
+docking.rh
+readme.txt
+D:\BC5\EXAMPLES\OWL\CLASSES\DOCVIEW\makefile
+docviewx.cpp
+dumpview.cpp
+dvloader.cpp
+editlist.cpp
+infoview.cpp
+linedoc.cpp
+odlistbx.cpp
+odlistvw.cpp
+xcptview.cpp
+dumpview.h
+odlistbx.h
+docview.ide
+docviewx.rc
+dumpview.rc
+dvloader.rc
+editlist.rc
+infoview.rc
+linedoc.rc
+odlistvw.rc
+xcptview.rc
+readme.txt
+D:\BC5\EXAMPLES\OWL\CLASSES\DRAGLIST\makefile
+draglisx.cpp
+draglist.ide
+draglist.rc
+readme.txt
+D:\BC5\EXAMPLES\OWL\CLASSES\EDITSEAR\makefile
+editseax.cpp
+editsear.ide
+editsear.rc
+readme.txt
+D:\BC5\EXAMPLES\OWL\CLASSES\EDIT\makefile
+editx.cpp
+edit.ide
+edit.rc
+edit.rh
+readme.txt
+D:\BC5\EXAMPLES\OWL\CLASSES\GADGETS\makefile
+gadgets.cpp
+gadgets.ide
+gadgets.rc
+gadgets.rh
+readme.txt
+D:\BC5\EXAMPLES\OWL\CLASSES\GAUGE\makefile
+gaugex.cpp
+gauge.ide
+gauge.rc
+readme.txt
+D:\BC5\EXAMPLES\OWL\CLASSES\GLYPHBTN\makefile
+glyphbtx.cpp
+glyphbtn.h
+glyphbtn.ide
+glyphbtn.rc
+readme.txt
+D:\BC5\EXAMPLES\OWL\CLASSES\GROUPBOX\makefile
+groupbxx.cpp
+groupbox.ide
+readme.txt
+D:\BC5\EXAMPLES\OWL\CLASSES\HOTKEY\makefile
+hotkeyx.cpp
+hotkey.h
+hotkey.ide
+hotkey.rc
+readme.txt
+D:\BC5\EXAMPLES\OWL\CLASSES\IMAGELST\makefile
+celapp.cpp
+drawcel.cpp
+drawcel.ide
+celapp.rc
+chesspcs.rc
+drawcel.rc
+celapp.rh
+chesspcs.rh
+drawcel.rh
+D:\BC5\EXAMPLES\OWL\CLASSES\LAYOUT\makefile
+laydia.cpp
+layout.cpp
+laydia.h
+layout.h
+layout.ide
+layout.rc
+layout.rh
+readme.txt
+D:\BC5\EXAMPLES\OWL\CLASSES\LISTBOX\makefile
+listboxx.cpp
+listbox.ide
+listbox.rc
+listbox.rh
+readme.txt
+D:\BC5\EXAMPLES\OWL\CLASSES\LISTWIND\makefile
+listwinx.cpp
+listwind.ide
+listwind.rc
+listwind.rh
+readme.txt
+D:\BC5\EXAMPLES\OWL\CLASSES\MDI\makefile
+mdi.cpp
+mdi.ide
+mdi.rc
+readme.txt
+D:\BC5\EXAMPLES\OWL\CLASSES\METAFILE\makefile
+metafilx.cpp
+metafile.ide
+metafile.rc
+readme.txt
+D:\BC5\EXAMPLES\OWL\CLASSES\MRU\makefile
+mru.cpp
+mru.ide
+mru.rc
+readme.txt
+D:\BC5\EXAMPLES\OWL\CLASSES\buildall.bat
+D:\BC5\EXAMPLES\OWL\CLASSES\PALETTE\makefile
+newtion.bmp
+palettex.cpp
+palette.h
+palette.ide
+palette.rc
+readme.txt
+D:\BC5\EXAMPLES\OWL\CLASSES\PICKLIST\makefile
+picklisx.cpp
+picklist.ide
+picklist.rc
+picklist.rh
+readme.txt
+D:\BC5\EXAMPLES\OWL\CLASSES\PICTWIND\makefile
+sample.bmp
+pictwinx.cpp
+pictwind.ide
+pictwind.rc
+pictwind.rh
+readme.txt
+D:\BC5\EXAMPLES\OWL\CLASSES\PRINTING\makefile
+printing.cpp
+printing.ide
+printing.rc
+readme.txt
+D:\BC5\EXAMPLES\OWL\CLASSES\PRNTPREV\makefile
+spaceshi.bmp
+prntprev.cpp
+prntprev.ide
+prntprev.rc
+prntprev.rh
+readme.txt
+D:\BC5\EXAMPLES\OWL\CLASSES\PROPSHT\makefile
+propshtx.cpp
+propsht.h
+color.ico
+size.ico
+propsht.ide
+propsht.rc
+readme.txt
+D:\BC5\EXAMPLES\OWL\CLASSES\RICHEDIT\makefile
+richedap.cpp
+richedap.h
+richedit.ide
+richedap.rc
+readme.txt
+D:\BC5\EXAMPLES\OWL\CLASSES\ROLLDIAL\makefile
+rolldlgx.cpp
+rolldial.ide
+rolldlgx.rc
+rolldlgx.rh
+readme.txt
+D:\BC5\EXAMPLES\OWL\CLASSES\SCROLLBA\makefile
+scrollbx.cpp
+scrollba.ide
+readme.txt
+D:\BC5\EXAMPLES\OWL\CLASSES\SCROLLER\makefile
+scrollex.cpp
+scroller.ide
+readme.txt
+D:\BC5\EXAMPLES\OWL\CLASSES\SHELL\makefile
+new.bmp
+aboutdlg.cpp
+mdichild.cpp
+mdiclien.cpp
+shellapp.cpp
+shellwin.cpp
+shellapp.def
+aboutdlg.h
+mdichild.h
+mdiclien.h
+shellapp.h
+shellwin.h
+shellapp.ico
+shell.ide
+shellapp.rc
+shellapp.rh
+D:\BC5\EXAMPLES\OWL\CLASSES\SLIDER\makefile
+sliderx.cpp
+slider.ide
+slider.rc
+readme.txt
+D:\BC5\EXAMPLES\OWL\CLASSES\SPLASH\makefile
+splslogo.bmp
+splashx.cpp
+splash.ide
+readme.txt
+D:\BC5\EXAMPLES\OWL\CLASSES\SPLITTER\makefile
+splitter.cpp
+splitter.ide
+splitter.rc
+splitter.rh
+readme.txt
+D:\BC5\EXAMPLES\OWL\CLASSES\STATIC\makefile
+staticx.cpp
+static.ide
+readme.txt
+D:\BC5\EXAMPLES\OWL\CLASSES\TABCTRL\makefile
+tabctrlx.cpp
+tabctrl.h
+tabctrl.ide
+tabctrl.rc
+readme.txt
+D:\BC5\EXAMPLES\OWL\CLASSES\TOOLBOX\makefile
+toolboxx.cpp
+toolbox.rc
+toolbox.rh
+D:\BC5\EXAMPLES\OWL\CLASSES\TOOLBRES\makefile
+toolbres.cpp
+toolbres.ide
+toolbres.rc
+readme.txt
+D:\BC5\EXAMPLES\OWL\CLASSES\TOOLTIP\makefile
+tooltipx.cpp
+tooltip.h
+tooltip.ide
+tooltip.rc
+readme.txt
+D:\BC5\EXAMPLES\OWL\CLASSES\TREEWIND\makefile
+treewinx.cpp
+treewind.ide
+treewind.rc
+readme.txt
+D:\BC5\EXAMPLES\OWL\CLASSES\UIBORDER\makefile
+uibordex.cpp
+uiborder.ide
+readme.txt
+D:\BC5\EXAMPLES\OWL\CLASSES\UIFACE\makefile
+uiface.bmp
+uifacex.cpp
+uiface.ide
+uiface.rc
+uiface.rh
+readme.txt
+D:\BC5\EXAMPLES\OWL\CLASSES\UPDOWN\makefile
+updownx.cpp
+updown.ide
+updown.rc
+readme.txt
+D:\BC5\EXAMPLES\OWL\CLASSES\VALIDATE\makefile
+validatx.cpp
+validate.ide
+validate.rc
+readme.txt
+D:\BC5\EXAMPLES\OWL\CLASSES\VBXCTL\gauge.vbx
+pict.vbx
+switch.vbx
+makefile
+vbxctlx.cpp
+vbxctl.h
+vbxctl.ide
+vbxctl.rc
+readme.txt
+D:\BC5\EXAMPLES\OWL\CLASSES\VERINFO\makefile
+verinfo.cpp
+verinfo.ide
+verinfo.rc
+verinfo.rh
+readme.txt
+D:\BC5\EXAMPLES\OWL\CLASSES\WINSOCK\makefile
+dlgaddr.cpp
+dlgdgrm.cpp
+dlglistn.cpp
+dlgsrvc.cpp
+dlgstrm.cpp
+sockbout.cpp
+sockdemo.cpp
+dlgaddr.h
+dlgdgrm.h
+dlglstn.h
+dlgsrvc.h
+dlgstrm.h
+sockbout.h
+sockdemo.h
+owlsock.ico
+winsock.ico
+winsock.ide
+sockdemo.rc
+sockdemo.rh
+readme.txt
+D:\BC5\EXAMPLES\OWL\EXPERTS\APXDLGDV\makefile
+apxdlgdv.apx
+hslider.bmp
+vslider.bmp
+apxdlddc.cpp
+apxdlgda.cpp
+apxdlgda.def
+apxdlddc.h
+apxdlgda.h
+appldocv.ico
+apxdlgdv.ide
+apxdlgda.rc
+apxdlgda.rh
+D:\BC5\EXAMPLES\OWL\EXPERTS\APXDLG\makefile
+apxdlg.apx
+hslider.bmp
+vslider.bmp
+apxdlgap.cpp
+apxdlgdc.cpp
+apxdlgap.def
+apxdlgap.h
+apxdlgdc.h
+applsdi.ico
+apxdlg.ide
+apxdlgap.rc
+apxdlgap.rh
+D:\BC5\EXAMPLES\OWL\EXPERTS\APXMDIDV\makefile
+apxmdidv.apx
+copy.bmp
+cut.bmp
+find.bmp
+findnext.bmp
+hslider.bmp
+new.bmp
+next.bmp
+open.bmp
+paste.bmp
+preview.bmp
+preview1.bmp
+preview2.bmp
+previous.bmp
+prexit.bmp
+print.bmp
+save.bmp
+undo.bmp
+vslider.bmp
+apmdmdi1.cpp
+apmdmdic.cpp
+apxmddad.cpp
+apxmddev.cpp
+apxmddva.cpp
+apxprev.cpp
+apxprint.cpp
+apxmddva.def
+apmdmdi1.h
+apmdmdic.h
+apxmddad.h
+apxmddev.h
+apxmddva.h
+apxprev.h
+apxprint.h
+appldocv.ico
+mdichild.ico
+apxmdidv.ide
+apxmddva.rc
+apxmddva.rh
+D:\BC5\EXAMPLES\OWL\EXPERTS\APXMDI\makefile
+apxmdi.apx
+copy.bmp
+cut.bmp
+find.bmp
+findnext.bmp
+hslider.bmp
+new.bmp
+next.bmp
+open.bmp
+paste.bmp
+preview.bmp
+preview1.bmp
+preview2.bmp
+previous.bmp
+prexit.bmp
+print.bmp
+save.bmp
+undo.bmp
+vslider.bmp
+apxmdabd.cpp
+apxmdapp.cpp
+apxmdedf.cpp
+apxmmdi1.cpp
+apxmmdic.cpp
+apxprev.cpp
+apxprint.cpp
+apxmdapp.def
+apxmdabd.h
+apxmdapp.h
+apxmdedf.h
+apxmmdi1.h
+apxmmdic.h
+apxprev.h
+apxprint.h
+applmdi.ico
+mdichild.ico
+apxmdi.ide
+apxmdapp.rc
+apxmdapp.rh
+D:\BC5\EXAMPLES\OWL\EXPERTS\APXOLE\makefile
+apxole.apx
+copy.bmp
+cut.bmp
+find.bmp
+findnext.bmp
+hslider.bmp
+new.bmp
+next.bmp
+open.bmp
+paste.bmp
+preview.bmp
+preview1.bmp
+preview2.bmp
+previous.bmp
+prexit.bmp
+print.bmp
+save.bmp
+undo.bmp
+vslider.bmp
+apxolabd.cpp
+apxolapp.cpp
+apxololv.cpp
+apxomdi1.cpp
+apxomdic.cpp
+apxprev.cpp
+apxprint.cpp
+apxolapp.def
+apxolabd.h
+apxolapp.h
+apxololv.h
+apxomdi1.h
+apxomdic.h
+apxprev.h
+apxprint.h
+appldocv.ico
+mdichild.ico
+apxole.ide
+apxolapp.rc
+apxolapp.rh
+D:\BC5\EXAMPLES\OWL\EXPERTS\APXSDIDV\makefile
+apxsdidv.apx
+copy.bmp
+cut.bmp
+find.bmp
+findnext.bmp
+hslider.bmp
+new.bmp
+next.bmp
+open.bmp
+paste.bmp
+preview.bmp
+preview1.bmp
+preview2.bmp
+previous.bmp
+prexit.bmp
+print.bmp
+save.bmp
+undo.bmp
+vslider.bmp
+apxprev.cpp
+apxprint.cpp
+apxsddad.cpp
+apxsddev.cpp
+apxsddva.cpp
+apxsddva.def
+apxprev.h
+apxprint.h
+apxsddad.h
+apxsddev.h
+apxsddva.h
+appldocv.ico
+apxsdidv.ide
+apxsddva.rc
+apxsddva.rh
+D:\BC5\EXAMPLES\OWL\EXPERTS\APXSDI\makefile
+apxsdi.apx
+copy.bmp
+cut.bmp
+find.bmp
+findnext.bmp
+hslider.bmp
+new.bmp
+next.bmp
+open.bmp
+paste.bmp
+preview.bmp
+preview1.bmp
+preview2.bmp
+previous.bmp
+prexit.bmp
+print.bmp
+save.bmp
+undo.bmp
+vslider.bmp
+apxprev.cpp
+apxprint.cpp
+apxsdabd.cpp
+apxsdapp.cpp
+apxsdedf.cpp
+apxsdapp.def
+apxprev.h
+apxprint.h
+apxsdabd.h
+apxsdapp.h
+apxsdedf.h
+applsdi.ico
+apxsdi.ide
+apxsdapp.rc
+apxsdapp.rh
+D:\BC5\EXAMPLES\OWL\EXPERTS\buildall.bat
+D:\BC5\EXAMPLES\OWL\GAMES\BLAKJACK\makefile
+blakjack.cpp
+owlmain.cpp
+blakjack.def
+blakjack.h
+mhcd2001.h
+owlmain.h
+blakjack.ico
+blakjack.ide
+blakjack.rc
+card.rh
+read.txt
+readme.txt
+D:\BC5\EXAMPLES\OWL\GAMES\BLOCKS\makefile
+blocks.cpp
+blocks.def
+blocks.ide
+blocks.rc
+blocks.rh
+readme.txt
+D:\BC5\EXAMPLES\OWL\GAMES\CHESS\makefile
+bbishop.bmp
+bkbrush.bmp
+bking.bmp
+bkngt.bmp
+bmask.bmp
+bpawn.bmp
+bqueen.bmp
+brook.bmp
+kmask.bmp
+ktmask.bmp
+pmask.bmp
+qmask.bmp
+rmask.bmp
+wbishop.bmp
+wking.bmp
+wkngt.bmp
+wpawn.bmp
+wqueen.bmp
+wrook.bmp
+board.cpp
+colors.cpp
+display.cpp
+drag.cpp
+edit.cpp
+evalu.cpp
+info.cpp
+movgen.cpp
+pvalue.cpp
+saverest.cpp
+search.cpp
+small.cpp
+talk.cpp
+timelib.cpp
+wchess.cpp
+wchess.def
+colors.h
+edit.h
+externs.h
+info.h
+pvalue.h
+wcdefs.h
+wchess.h
+chess.ico
+chess.ide
+opening.mvs
+wchess.rc
+D:\BC5\EXAMPLES\OWL\GAMES\CRIBBAGE\makefile
+board.bmp
+cutcards.bmp
+deck.bmp
+empty.bmp
+board.cpp
+carddisp.cpp
+cards.cpp
+cribbage.cpp
+dialogs.cpp
+cribbage.def
+board.h
+carddisp.h
+cards.h
+cribbage.h
+dialogs.h
+mhcd2001.h
+cribbage.ide
+cribbage.rc
+cribbage.rh
+readme.txt
+D:\BC5\EXAMPLES\OWL\GAMES\buildall.bat
+D:\BC5\EXAMPLES\OWL\GAMES\METEOR\makefile
+meteor.cpp
+sprite.cpp
+meteor.def
+sprite.h
+meteor.ide
+meteor.rc
+meteor.rh
+meteor.txt
+readme.txt
+D:\BC5\EXAMPLES\OWL\GAMES\SWAT\make
+makefile
+board.bmp
+board2.bmp
+dead.bmp
+dead2.bmp
+gameove2.bmp
+gameover.bmp
+live.bmp
+live2.bmp
+swat.cpp
+malet.cur
+malet2.cur
+maletdo2.cur
+maletdow.cur
+swat.h
+critter.ico
+critter2.ico
+swat.ide
+swat.rc
+swat2.rc
+readme.txt
+D:\BC5\EXAMPLES\OWL\GAMES\TTT2\makefile
+ttt.cpp
+ttt.h
+ttt.ide
+ttt.rc
+readme.txt
+D:\BC5\EXAMPLES\OWL\GAMES\TTT\makefile
+ttt.cpp
+ttt.h
+ttt.ico
+ttt.ide
+ttt.rc
+readme.txt
+D:\BC5\EXAMPLES\OWL\OCF\MDIOLE\makefile
+mdiole.cpp
+sampcont.cpp
+mdiole.h
+sampcont.h
+mdiole.ide
+mdiole.rc
+sampcont.rc
+readme.txt
+D:\BC5\EXAMPLES\OWL\OCF\OCXDLG\makefile
+ocxdlg.cpp
+ocxdlgap.cpp
+ocxdlgap.def
+ocxdlg.h
+ocxdlgap.h
+applsdi.ico
+ocxdlg.ide
+ocxdlgap.rc
+ocxdlgap.rh
+readme.txt
+D:\BC5\EXAMPLES\OWL\OCF\buildall.bat
+D:\BC5\EXAMPLES\OWL\OCF\SDIOLE\makefile
+sampcont.cpp
+sdiole.cpp
+sampcont.h
+sdiole.h
+sdiole.ide
+sampcont.rc
+sdiole.rc
+readme.txt
+D:\BC5\EXAMPLES\OWL\OCF\TTT\makefile
+ttt.cpp
+ttt.h
+ttt.ide
+ttt.rc
+readme.txt
+D:\BC5\EXAMPLES\OWL\buildall.bat
+D:\BC5\EXAMPLES\OWL\TASKS\COLORDLG\makefile
+cctltest.cpp
+colordlg.cpp
+usecdll2.cpp
+cdlgdll.def
+cctltest.h
+colordlg.h
+usecdll2.h
+colordlg.ide
+cctltest.rc
+colordlg.rc
+colordlg.rh
+readme.txt
+D:\BC5\EXAMPLES\OWL\TASKS\DLLHELLO\makefile
+calldll.cpp
+dllhello.cpp
+resource.cpp
+dllhello.def
+resource.def
+calldll.h
+dllhello.h
+dllhello.ide
+calldll.rc
+resource.rc
+readme.txt
+D:\BC5\EXAMPLES\OWL\TASKS\DYNAMENU\makefile
+app.cpp
+dmdecfr.cpp
+dynmnu.cpp
+dynmnu.h
+dynmnu.ide
+dynmnu.rc
+dynmnu.rh
+readme.txt
+D:\BC5\EXAMPLES\OWL\TASKS\INSTANCE\makefile
+instance.cpp
+instance.ide
+readme.txt
+D:\BC5\EXAMPLES\OWL\TASKS\MDIDLG\makefile
+app.cpp
+client.cpp
+mdidlg.cpp
+test.cpp
+mdidlg.h
+test.h
+helpids.hh
+testhelp.hpj
+mdidlg.ide
+test.rc
+test.rh
+testhelp.rtf
+D:\BC5\EXAMPLES\OWL\TASKS\MDISTRM\makefile
+mdistrm.cpp
+mdistrm.h
+mdistrm.ide
+mdistrm.rc
+readme.txt
+D:\BC5\EXAMPLES\OWL\TASKS\MODALWIN\makefile
+modalwin.cpp
+modalwin.h
+modalwin.ide
+modalwin.rc
+readme.txt
+D:\BC5\EXAMPLES\OWL\TASKS\NOTIFY\makefile
+notify.cpp
+notify.h
+notify.ide
+notify.rc
+readme.txt
+D:\BC5\EXAMPLES\OWL\TASKS\OWNERDRA\makefile
+ownerdra.cpp
+ownerdra.h
+ownerdra.ide
+ownerdra.rc
+readme.txt
+D:\BC5\EXAMPLES\OWL\TASKS\POPUP\makefile
+popup.cpp
+popup.ide
+popup.rc
+readme.txt
+D:\BC5\EXAMPLES\OWL\TASKS\SIMBOR\makefile
+dlgbrush.bmp
+scrlbrsh.bmp
+app.cpp
+bordlg.cpp
+simbor.cpp
+simbor.h
+simbor.ide
+simbor.rc
+simbor.rh
+readme.txt
+D:\BC5\EXAMPLES\OWL\TASKS\buildall.bat
+D:\BC5\EXAMPLES\OWL\TASKS\TBEXPERT\makefile
+app.cpp
+dynbtnga.cpp
+gadgfact.cpp
+gadgtmgr.cpp
+gmplace.cpp
+statmgr.cpp
+tbexpert.cpp
+tbexpert.h
+tbexpert.ide
+tbexpert.rc
+tbexpert.rh
+D:\BC5\EXAMPLES\OWL\TASKS\TRANSFER\makefile
+transfer.cpp
+transfer.h
+transfer.ide
+transfer.rc
+readme.txt
+D:\BC5\EXAMPLES\OWL\TOOLS\DIAGXPRT\makefile
+cback.cpp
+diagxprt.cpp
+serialze.cpp
+setup.cpp
+toolhelp.cpp
+diagxprt.h
+serialze.h
+setup.h
+diagxprt.ide
+diagxprt.rc
+diagxprt.rh
+readme.txt
+D:\BC5\EXAMPLES\OWL\TOOLS\OUTDEB32\makefile
+outdeb32.cpp
+outdeb32.ide
+readme.txt
+D:\BC5\EXAMPLES\OWL\TOOLS\buildall.bat
+D:\BC5\EXAMPLES\OWL\TUTORIAL\OLE\makefile
+owlole1.cpp
+owlole2.cpp
+owlole3.cpp
+owlole.ide
+owlole1.rc
+owlole2.rc
+owlole3.rc
+readme.txt
+D:\BC5\EXAMPLES\OWL\TUTORIAL\step13.cpp
+step13dv.cpp
+step13.rc
+step13dv.rc
+step14.cpp
+step14dv.cpp
+step14.rc
+step14dv.rc
+step15.cpp
+step15dv.cpp
+step15.rc
+step15dv.rc
+cntrl16.cpp
+step16.cpp
+step16dv.cpp
+step16.cxx
+step16.h
+step16dv.h
+step16.hxx
+step16.rc
+step16dv.rc
+step16.rh
+cntrl17.cpp
+step17.cpp
+step17dv.cpp
+step17.cxx
+step17.h
+step17dv.h
+step17.hxx
+step17.rc
+step17dv.rc
+cntrl18.cpp
+step18.cpp
+step18dv.cpp
+step18.cxx
+step18.h
+step18dv.h
+step18.hxx
+step18.rc
+step18dv.rc
+makefile
+buildall.bat
+cntrller.cpp
+step01.cpp
+step02.cpp
+step03.cpp
+step04.cpp
+step05.cpp
+step06.cpp
+step07.cpp
+step08.cpp
+step09.cpp
+step10.cpp
+step11.cpp
+step11dv.cpp
+step12.cpp
+step12dv.cpp
+cntrller.def
+steps.ide
+step05.rc
+step06.rc
+step07.rc
+step08.rc
+step09.rc
+step10.rc
+step11.rc
+step11dv.rc
+step12.rc
+step12dv.rc
+readme.txt
+D:\BC5\EXAMPLES\OWL\WINAPI\DRAGDROP\makefile
+dragdrop.cpp
+dragdrop.ide
+dragdrop.rc
+readme.txt
+D:\BC5\EXAMPLES\OWL\WINAPI\DRAWEDGE\makefile
+drawedge.cpp
+drawedge.ide
+drawedge.rc
+drawedge.rh
+D:\BC5\EXAMPLES\OWL\WINAPI\DRAWSTAT\makefile
+drawstat.cpp
+drawstat.ide
+drawstat.rc
+drawstat.rh
+D:\BC5\EXAMPLES\OWL\WINAPI\HELP\makefile
+help.cpp
+help.hpj
+help.ide
+help.rc
+help.rh
+help.rtf
+readme.txt
+D:\BC5\EXAMPLES\OWL\WINAPI\MCISOUND\makefile
+mcisound.cpp
+mcisound.h
+mcisound.ide
+mcisound.rc
+readme.txt
+D:\BC5\EXAMPLES\OWL\WINAPI\MCIWND\makefile
+mciwnd.cpp
+mciwndx.cpp
+mciwndx.def
+mciwnd.h
+mciwndx.h
+mciwndx.rc
+readme.txt
+D:\BC5\EXAMPLES\OWL\WINAPI\buildall.bat
+D:\BC5\EXAMPLES\OWL\WINAPI\PROGMAN\makefile
+progmanx.cpp
+progmanx.h
+progman.ide
+progmanx.rc
+D:\BC5\EXAMPLES\OWL\WINAPI\SYSINFO\makefile
+sysinfo.cpp
+sysinfo.h
+sysinfo.ide
+sysinfo.rc
+D:\BC5\EXAMPLES\OWL\WINAPI\SYSMETRI\makefile
+sysmetri.cpp
+sysmetri.ide
+D:\BC5\EXAMPLES\OWL\WINAPI\TRUETYPE\makefile
+truetype.cpp
+truetype.h
+truetype.ico
+truetype.ide
+font.rc
+truetype.rc
+D:\BC5\EXAMPLES\SCRIPT\SOURCE\miscscr.cpp
+miscscr.ide
+D:\BC5\EXAMPLES\SCRIPT\SRCHREP\srchrpl.cpp
+search.h
+srchrep.ide
+search.rc
+readme.txt
+D:\BC5\EXAMPLES\SERIES\ANALOG\makefile
+about.c
+analog.c
+copier.c
+dispatch.c
+init.c
+misc.c
+winmain.c
+copier.h
+globals.h
+resource.h
+analog.ico
+analog.ide
+analog.rc
+readme.txt
+D:\BC5\EXAMPLES\SERIES\BARMDI\makefile
+toolbar.bmp
+about.c
+barmdi.c
+dispatch.c
+init.c
+mdichild.c
+misc.c
+statbar.c
+toolbar.c
+winmain.c
+globals.h
+resource.h
+statbar.h
+toolbar.h
+barmdi.ico
+child.ico
+barmdi.ide
+barmdi.rc
+readme.txt
+D:\BC5\EXAMPLES\SERIES\BARSDI\makefile
+toolbar.bmp
+about.c
+barsdi.c
+dispatch.c
+init.c
+misc.c
+statbar.c
+toolbar.c
+winmain.c
+globals.h
+resource.h
+statbar.h
+toolbar.h
+barsdi.ico
+barsdi.ide
+barsdi.rc
+readme.txt
+D:\BC5\EXAMPLES\SERIES\BLANDMDI\makefile
+about.c
+blandmdi.c
+dispatch.c
+init.c
+mdichild.c
+misc.c
+winmain.c
+turboc.cfg
+globals.h
+resource.h
+version.h
+win16ext.h
+blandmdi.ico
+child.ico
+blandmdi.ide
+blandmdi.rc
+readme.txt
+D:\BC5\EXAMPLES\SERIES\CLIPTEXT\makefile
+about.c
+cliptext.c
+dispatch.c
+init.c
+misc.c
+winmain.c
+globals.h
+resource.h
+version.h
+win16ext.h
+cliptext.ico
+cliptext.ide
+cliptext.rc
+readme.txt
+D:\BC5\EXAMPLES\SERIES\COMMONDG\makefile
+about.c
+commondg.c
+dispatch.c
+filedlg.c
+finddlg.c
+init.c
+misc.c
+optdlg.c
+printdlg.c
+winmain.c
+globals.h
+resource.h
+version.h
+win16ext.h
+commondg.ico
+commondg.ide
+commondg.rc
+readme.txt
+D:\BC5\EXAMPLES\SERIES\DIALOG\makefile
+about.c
+dialog.c
+dispatch.c
+init.c
+misc.c
+modal.c
+modeless.c
+winmain.c
+globals.h
+modal.h
+modeless.h
+resource.h
+version.h
+win16ext.h
+dialog.ico
+dialog.ide
+dialog.rc
+readme.txt
+D:\BC5\EXAMPLES\SERIES\DLLSKEL\makefile
+about.c
+appskel.c
+dispatch.c
+dllmain.c
+exports.c
+init.c
+misc.c
+winmain.c
+dllglob.h
+dllskel.h
+globals.h
+appskel.ico
+dllskel.ide
+appskel.rc
+dllskel.rc
+readme.txt
+D:\BC5\EXAMPLES\SERIES\EDITSDI\makefile
+about.c
+dispatch.c
+editsdi.c
+file.c
+filedlg.c
+finddlg.c
+init.c
+misc.c
+print.c
+printdlg.c
+search.c
+winmain.c
+turboc.cfg
+globals.h
+resource.h
+version.h
+win16ext.h
+editsdi.ico
+editsdi.ide
+editsdi.rc
+readme.txt
+D:\BC5\EXAMPLES\SERIES\FILESYS\makefile
+about.c
+demo.c
+dispatch.c
+filesys.c
+init.c
+misc.c
+winmain.c
+demo.h
+globals.h
+resource.h
+filesys.ico
+filesys.ide
+filesys.rc
+readme.txt
+D:\BC5\EXAMPLES\SERIES\GDIDIB\makefile
+toolbar.bmp
+about.c
+brushdlg.c
+client.c
+colordlg.c
+dibutil.c
+dispatch.c
+filedlg.c
+fileio.c
+filenew.c
+gdidib.c
+infodlg.c
+init.c
+misc.c
+palctrl.c
+palette.c
+pendlg.c
+print.c
+statbar.c
+toolbar.c
+winmain.c
+brushdlg.h
+colordlg.h
+dibutil.h
+filenew.h
+globals.h
+infodlg.h
+init.h
+palctrl.h
+palette.h
+pendlg.h
+resource.h
+statbar.h
+toolbar.h
+gdidib.ico
+gdidib.ide
+gdidib.rc
+readme.txt
+D:\BC5\EXAMPLES\SERIES\GDIINPUT\makefile
+toolbar.bmp
+about.c
+brushdlg.c
+client.c
+dispatch.c
+gdiinput.c
+init.c
+misc.c
+pendlg.c
+statbar.c
+toolbar.c
+winmain.c
+brushdlg.h
+globals.h
+pendlg.h
+resource.h
+statbar.h
+toolbar.h
+gdiinput.ico
+gdiinput.ide
+gdiinput.rc
+readme.txt
+D:\BC5\EXAMPLES\SERIES\GDIMETA\makefile
+toolbar.bmp
+about.c
+brushdlg.c
+client.c
+colordlg.c
+dispatch.c
+file.c
+filedlg.c
+gdimeta.c
+infodlg.c
+init.c
+metafile.c
+misc.c
+palctrl.c
+palette.c
+pendlg.c
+statbar.c
+toolbar.c
+winmain.c
+brushdlg.h
+colordlg.h
+globals.h
+infodlg.h
+metafile.h
+palctrl.h
+palette.h
+pendlg.h
+resource.h
+statbar.h
+toolbar.h
+gdimeta.ico
+gdimeta.ide
+gdimeta.rc
+readme.txt
+D:\BC5\EXAMPLES\SERIES\GDIOUT\makefile
+about.c
+dispatch.c
+gdiout.c
+init.c
+misc.c
+winmain.c
+globals.h
+resource.h
+version.h
+win16ext.h
+gdiout.ico
+gdiout.ide
+gdiout.rc
+readme.txt
+D:\BC5\EXAMPLES\SERIES\GDIPAL\makefile
+toolbar.bmp
+about.c
+brushdlg.c
+client.c
+colordlg.c
+dispatch.c
+gdipal.c
+infodlg.c
+init.c
+misc.c
+palctrl.c
+palette.c
+pendlg.c
+statbar.c
+toolbar.c
+winmain.c
+brushdlg.h
+colordlg.h
+globals.h
+infodlg.h
+palctrl.h
+palette.h
+pendlg.h
+resource.h
+statbar.h
+toolbar.h
+gdipal.ico
+gdipal.ide
+gdipal.rc
+readme.txt
+D:\BC5\EXAMPLES\SERIES\GDIPRINT\makefile
+toolbar.bmp
+about.c
+brushdlg.c
+client.c
+colordlg.c
+dibutil.c
+dispatch.c
+filedlg.c
+fileio.c
+filenew.c
+gdiprint.c
+infodlg.c
+init.c
+misc.c
+palctrl.c
+palette.c
+pendlg.c
+print.c
+statbar.c
+toolbar.c
+winmain.c
+brushdlg.h
+colordlg.h
+dibutil.h
+filenew.h
+globals.h
+infodlg.h
+init.h
+palctrl.h
+palette.h
+pendlg.h
+print.h
+resource.h
+statbar.h
+toolbar.h
+gdiprint.ico
+gdiprint.ide
+gdiprint.rc
+readme.txt
+D:\BC5\EXAMPLES\SERIES\GEN32\makefile
+about.c
+dispatch.c
+generic.c
+init.c
+misc.c
+winmain.c
+globals.h
+resource.h
+generic.ico
+generic.ide
+generic.rc
+readme.txt
+D:\BC5\EXAMPLES\SERIES\GENERIC\makefile
+about.c
+dispatch.c
+generic.c
+init.c
+misc.c
+winmain.c
+globals.h
+resource.h
+version.h
+win16ext.h
+generic.ico
+generic.ide
+generic.rc
+readme.txt
+D:\BC5\EXAMPLES\SERIES\IATHREAD\makefile
+about.c
+dispatch.c
+iathread.c
+init.c
+mdichild.c
+misc.c
+priority.c
+winmain.c
+globals.h
+resource.h
+child.ico
+iathread.ico
+iathread.ide
+iathread.rc
+readme.txt
+D:\BC5\EXAMPLES\SERIES\INITREE\makefile
+entryn.bmp
+entrys.bmp
+ini.bmp
+key.bmp
+about.c
+dispatch.c
+ini.c
+init.c
+initree.c
+misc.c
+winmain.c
+globals.h
+resource.h
+initree.ico
+initree.ide
+initree.rc
+readme.txt
+D:\BC5\EXAMPLES\SERIES\INPUT\makefile
+dispatch.c
+init.c
+input.c
+winmain.c
+globals.h
+resource.h
+version.h
+win16ext.h
+input.ico
+input.ide
+input.rc
+readme.txt
+D:\BC5\EXAMPLES\SERIES\LISTCTRL\makefile
+chkboxs.bmp
+about.c
+dispatch.c
+init.c
+listctrl.c
+listview.c
+misc.c
+stckinfo.c
+winmain.c
+globals.h
+listview.h
+resource.h
+chip.ico
+disk.ico
+dollar.ico
+film.ico
+listctrl.ico
+windows.ico
+listctrl.ide
+listctrl.rc
+state.rst
+readme.txt
+D:\BC5\EXAMPLES\SERIES\MENU95\makefile
+checkoff.bmp
+checkon.bmp
+dot.bmp
+dispatch.c
+init.c
+menu.c
+ownrdraw.c
+popup.c
+winmain.c
+globals.h
+resource.h
+menu.ico
+menu.ide
+menu.rc
+readme.txt
+D:\BC5\EXAMPLES\SERIES\MINIHELP\makefile
+minihelp.bmp
+about.c
+dispatch.c
+init.c
+minihelp.c
+misc.c
+winmain.c
+minihelp.err
+globals.h
+resource.h
+version.h
+win16ext.h
+minihelp.hpj
+minihelp.ico
+minihelp.ide
+minihelp.rc
+minihelp.rtf
+readme.txt
+D:\BC5\EXAMPLES\SERIES\MIXTREE\makefile
+custom.bmp
+destline.bmp
+fader.bmp
+list.bmp
+meter.bmp
+number.bmp
+slider.bmp
+srcline.bmp
+switch.bmp
+time.bmp
+about.c
+dispatch.c
+init.c
+iteminfo.c
+misc.c
+mixinfo.c
+mixline.c
+mixtree.c
+winmain.c
+globals.h
+iteminfo.h
+mixinfo.h
+mixline.h
+resource.h
+mixtree.ico
+mixtree.ide
+mixtree.rc
+readme.txt
+D:\BC5\EXAMPLES\SERIES\MULTIPAD\makefile
+toolbar.bmp
+about.c
+dispatch.c
+file.c
+filedlg.c
+finddlg.c
+init.c
+mdichild.c
+misc.c
+multipad.c
+print.c
+printdlg.c
+search.c
+statbar.c
+toolbar.c
+winmain.c
+globals.h
+mdichild.h
+resource.h
+statbar.h
+toolbar.h
+child.ico
+multipad.ico
+multipad.ide
+multipad.rc
+readme.txt
+D:\BC5\EXAMPLES\SERIES\OUTPUT\makefile
+init.c
+output.c
+winmain.c
+globals.h
+resource.h
+version.h
+win16ext.h
+output.ico
+output.ide
+output.rc
+readme.txt
+D:\BC5\EXAMPLES\SERIES\PROPSHET\makefile
+about.c
+dispatch.c
+init.c
+misc.c
+propshet.c
+winmain.c
+globals.h
+resource.h
+backcolo.ico
+propshet.ico
+rectcolo.ico
+propshet.ide
+propshet.rc
+readme.txt
+D:\BC5\EXAMPLES\SERIES\PVIEW95\makefile
+toolbar.bmp
+about.c
+dispatch.c
+init.c
+listview.c
+misc.c
+procthrd.c
+pview95.c
+toolbar.c
+winmain.c
+resize.cur
+globals.h
+listview.h
+procthrd.h
+resource.h
+toolbar.h
+pview95.ico
+pview95.ide
+pview95.rc
+readme.txt
+D:\BC5\EXAMPLES\SERIES\RTFEDIT\makefile
+about.c
+dispatch.c
+init.c
+misc.c
+rtfedit.c
+winmain.c
+globals.h
+resource.h
+rtfedit.ico
+rtfedit.ide
+rtfedit.rc
+readme.txt
+D:\BC5\EXAMPLES\SERIES\SIMPLE\makefile
+init.c
+simple.c
+winmain.c
+globals.h
+resource.h
+version.h
+win16ext.h
+simple.ico
+simple.ide
+simple.rc
+readme.txt
+D:\BC5\EXAMPLES\SERIES\readme.wri
+D:\BC5\EXAMPLES\SERIES\TABCTRL\makefile
+circles.bmp
+images.bmp
+leaves.bmp
+shapes.bmp
+strmer.bmp
+about.c
+demo.c
+dispatch.c
+init.c
+misc.c
+tabctrl.c
+winmain.c
+demo.h
+globals.h
+resource.h
+tabctrl.ico
+tabctrl.ide
+tabctrl.rc
+readme.txt
+D:\BC5\EXAMPLES\SERIES\THREADS\makefile
+about.c
+dispatch.c
+init.c
+misc.c
+threads.c
+winmain.c
+globals.h
+resource.h
+threads.ico
+threads.ide
+threads.rc
+readme.txt
+D:\BC5\EXAMPLES\SERIES\WRITEPAD\makefile
+ruler.bmp
+toolbar.bmp
+about.c
+dispatch.c
+file.c
+filedlg.c
+finddlg.c
+init.c
+mdichild.c
+misc.c
+preview.c
+print.c
+printdlg.c
+rtf.c
+ruler.c
+search.c
+statbar.c
+toolbar.c
+winmain.c
+writepad.c
+globals.h
+mdichild.h
+resource.h
+rtf.h
+ruler.h
+statbar.h
+toolbar.h
+child.ico
+writepad.ico
+writepad.ide
+writepad.rc
+readme.txt
+D:\BC5\EXAMPLES\STDLIB\makefile
+accum.cpp
+adj_diff.cpp
+advance.cpp
+auto_ptr.cpp
+binders.cpp
+bitset.cpp
+b_search.cpp
+complex.cpp
+copyex.cpp
+count.cpp
+deque.cpp
+distance.cpp
+eqlrange.cpp
+equal.cpp
+exceptio.cpp
+fill.cpp
+find.cpp
+find_f_o.cpp
+for_each.cpp
+funct_ob.cpp
+generate.cpp
+heap_ops.cpp
+includes.cpp
+inr_prod.cpp
+ins_itr.cpp
+lex_comp.cpp
+limits.cpp
+list.cpp
+max.cpp
+max_elem.cpp
+merge.cpp
+mismatch.cpp
+multiset.cpp
+mutex.cpp
+negator.cpp
+nthelem.cpp
+partsort.cpp
+partsum.cpp
+permute.cpp
+pnt2fnct.cpp
+prtition.cpp
+p_queue.cpp
+queue.cpp
+remove.cpp
+replace.cpp
+reverse.cpp
+rev_itr.cpp
+rndshufl.cpp
+rotate.cpp
+search.cpp
+setex.cpp
+set_diff.cpp
+set_intr.cpp
+set_s_di.cpp
+set_unin.cpp
+stack.cpp
+string.cpp
+swap.cpp
+trnsform.cpp
+ul_bound.cpp
+unique.cpp
+vector.cpp
+makeincl.inc
+D:\BC5\EXAMPLES\TPROF\makefile
+calltest.c
+plost.c
+prime0.c
+prime1.c
+prime2.c
+prime3.c
+prime4.c
+prime5.c
+ptoll.c
+tprfsmpl.ide
+D:\BC5\EXAMPLES\VDBT\ANIMALS\makefile
+anmlsdlc.cpp
+beastwin.cpp
+beastwin.def
+anmlsdlc.h
+beastwin.h
+animals.ico
+animals.ide
+beastwin.rc
+beastwin.rh
+D:\BC5\EXAMPLES\VDBT\CALCFLD\makefile
+calcfld.cpp
+calc16.def
+calc32.def
+calcfld.ide
+D:\BC5\EXAMPLES\VDBT\EXCEL\query.xls
+table.xls
+D:\BC5\EXAMPLES\VDBT\FISHFACT\makefile
+ffactwin.cpp
+fshtdlgc.cpp
+ffactwin.def
+ffactwin.h
+fshtdlgc.h
+ffactwin.ico
+fishfact.ide
+ffactwin.rc
+ffactwin.rh
+D:\BC5\EXAMPLES\VDBT\OWLQRY\makefile
+owlqry.cpp
+owlqry16.def
+owlqry32.def
+resource.h
+owlqry.ico
+owlqry.ide
+owlqry.rc
+D:\BC5\EXAMPLES\VDBT\OWLRANGE\makefile
+owlrange.cpp
+print.cpp
+print.h
+resource.h
+owlrange.ico
+owlrange.ide
+owlrange.rc
+D:\BC5\EXAMPLES\VDBT\OWLTAB\makefile
+owltab.cpp
+owltab16.def
+owltab32.def
+resource.h
+owltab.ico
+owltab.ide
+owltab.rc
+D:\BC5\EXAMPLES\VDBT\QUERY\makefile
+query.cpp
+query16.def
+query32.def
+resource.h
+query.ico
+query.ide
+query.rc
+D:\BC5\EXAMPLES\VDBT\RW\biolife2.rc
+D:\BC5\EXAMPLES\VDBT\SAMPLEDB\biolife.db
+biosite.db
+dest.db
+divecust.db
+diveitem.db
+diveords.db
+divestok.db
+msghelp.db
+possdest.db
+qbemap.db
+qbeval.db
+shipvia.db
+shipwrck.db
+sites.db
+animals.dbf
+animals.dbt
+biolife.mb
+shipwrck.mb
+sites.mb
+animals.mdx
+biolife.px
+biosite.px
+dest.px
+divecust.px
+diveitem.px
+diveords.px
+divestok.px
+msghelp.px
+possdest.px
+qbemap.px
+qbeval.px
+shipvia.px
+shipwrck.px
+sites.px
+divecust.val
+diveitem.val
+diveords.val
+dest.x02
+diveords.x02
+sites.x02
+msghelp.x05
+dest.y02
+diveords.y02
+sites.y02
+msghelp.y05
+D:\BC5\EXAMPLES\VDBT\TABLE\makefile
+table.cpp
+table16.def
+table32.def
+resource.h
+table.ico
+table.ide
+table.rc
+D:\BC5\EXAMPLES\WIN95\COMDLG32\makefile
+comdlg32.c
+comdlg32.h
+resource.h
+comdlg32.ico
+comdlg32.ide
+comdlg32.rc
+readme.txt
+D:\BC5\EXAMPLES\WIN95\DROPEXT\makefile
+defclsf.c
+dropext.c
+dropext.def
+dropext.h
+priv.h
+dropext.ide
+dropext.reg
+readme.txt
+D:\BC5\EXAMPLES\WIN95\EXPERT\makefile
+expert.c
+expert.h
+resource.h
+expert.ico
+expert.ide
+expert.rc
+readme.txt
+D:\BC5\EXAMPLES\WIN95\TRAYNOT\makefile
+app32.c
+app32.h
+resource.h
+app32.ico
+state11.ico
+state12.ico
+state21.ico
+state22.ico
+state31.ico
+state32.ico
+app32.ide
+app32.rc
+app32.rv
+readme.txt
+D:\BC5\EXAMPLES\WINDOWS\CHELP\makefile
+chelp.c
+chelp.def
+chelpm.h
+chelpr.h
+chelp.hpj
+chelp.ide
+chelp.rc
+chelp.rtf
+readme.txt
+D:\BC5\EXAMPLES\WINDOWS\CMDLG\makefile
+cmdlg.c
+cmdlg.h
+cmdlgr.h
+cmdlg.ide
+cmdlg.rc
+readme.txt
+D:\BC5\EXAMPLES\WINDOWS\DBUGDEMO\makefile
+dbugdemo.bug
+s_paint.c
+s_paint.exe
+dbugdemo.h
+dbugdemo.ico
+dbugdemo.ide
+dbugdemo.rc
+readme.txt
+D:\BC5\EXAMPLES\WINDOWS\DLLDEMO\makefile
+dlldemo1.bmp
+dlldemo2.bmp
+bitmap.cpp
+dlldemo.cpp
+dllshell.cpp
+bitmap.h
+dlldemo.ico
+dlldemo.ide
+bitmap.rc
+dlldemo.rc
+readme.txt
+D:\BC5\EXAMPLES\WINDOWS\DRAGDROP\makefile
+dragdrop.c
+dragdrop.ico
+dragdrop.ide
+dragdrop.rc
+readme.txt
+D:\BC5\EXAMPLES\WINDOWS\FFIND\makefile
+ffind.c
+ffind.h
+ffind.ico
+ffind.ide
+ffind.rc
+readme.txt
+D:\BC5\EXAMPLES\WINDOWS\makeall.ide
+makeall.txt
+D:\BC5\EXAMPLES\WINDOWS\HDUMP\makefile
+hdump.c
+hdump.h
+hdump.ico
+hdump.ide
+hdump.rc
+readme.txt
+D:\BC5\EXAMPLES\WINDOWS\HELPEX\makefile
+bullet.bmp
+chkboff.bmp
+chkbon.bmp
+codec.bmp
+continue.bmp
+done.bmp
+helpicon.bmp
+helpex.c
+help.cur
+helpex.dlg
+helpex.h
+helpids.h
+helpex.hpj
+helpex.ide
+helpex.rc
+helpex.rtf
+keys.rtf
+terms.rtf
+readme.txt
+D:\BC5\EXAMPLES\WINDOWS\SOUNDER\makefile
+sounder.c
+sounder.h
+sounder.ico
+sounder.ide
+sounder.rc
+readme.txt
+sounder.txt
+sounder.wav
+D:\BC5\EXAMPLES\WINDOWS\TRUETYPE\makefile
+truetype.c
+truetype.dlg
+truetype.h
+truetype.ico
+truetype.ide
+truetype.rc
+readme.txt
+D:\BC5\EXAMPLES\WINDOWS\TSTAPP\makefile
+ddeclnt.c
+ddepack.c
+ddesrvr.c
+msgproc.c
+msgwnd.c
+tstapp.c
+msgwnd.def
+ddeclnt.h
+ddepack.h
+ddesrvr.h
+msgproc.h
+msgwnd.h
+tstapp.h
+msgwnd.ico
+tstapp.ico
+tstapp.ide
+msgwnd.rc
+tstapp.rc
+readme.txt
+D:\BC5\EXAMPLES\WINDOWS\VBDIALOG\makefile
+vbdialog.c
+vbdialog.h
+vbdialog.ide
+vbdialog.rc
+readme.txt
+gauge.vbx
+pict.vbx
+switch.vbx
+D:\BC5\EXAMPLES\WINDOWS\WHELLO\makefile
+whello.cpp
+whello.ico
+whello.ide
+whello.rc
+readme.txt
+D:\BC5\EXPERT\OWL\owldb.apx
+borabout.bmp
+copy.bmp
+cut.bmp
+find.bmp
+findnext.bmp
+help.bmp
+helpicon.bmp
+hslider.bmp
+new.bmp
+next.bmp
+open.bmp
+paste.bmp
+preview.bmp
+preview1.bmp
+preview2.bmp
+previous.bmp
+prexit.bmp
+print.bmp
+save.bmp
+undo.bmp
+vslider.bmp
+apxprev.cpp
+apxprint.cpp
+help.cur
+apxprev.h
+apxprint.h
+appldocv.ico
+applmdi.ico
+applsdi.ico
+mdichild.ico
+cmdi.owl
+cmdidocv.owl
+csdi.owl
+csdidocv.owl
+hmdi.owl
+hmdidocv.owl
+hsdi.owl
+hsdidocv.owl
+main.owl
+make.owl
+rc.owl
+tapplica.owl
+tdialog.owl
+tdlgclie.owl
+teditfil.owl
+teditvie.owl
+tlistbox.owl
+tlistvie.owl
+tmdichil.owl
+tmdiclie.owl
+toleview.owl
+twindow.owl
+twindowv.owl
+keys.rtf
+mainhelp.rtf
+toolbar.rtf
+addauto.snp
+adddata.snp
+adddocv.snp
+addoledv.snp
+aregdel.snp
+autoclas.snp
+autoreg.snp
+caddcxfr.snp
+cadddata.snp
+caddmeth.snp
+caddprop.snp
+caddrsp.snp
+caddsxfr.snp
+caddsym.snp
+cheader.snp
+chkauto.snp
+class.snp
+clientcg.snp
+cresauto.snp
+cvbx.snp
+cvbx2.snp
+delauto.snp
+delautoc.snp
+deldata.snp
+delevent.snp
+docview.snp
+event.snp
+find.snp
+findauto.snp
+finddata.snp
+finddocv.snp
+findfunc.snp
+fndclass.snp
+fndevent.snp
+fndhdr.snp
+fwndbkgd.snp
+haddadat.snp
+haddamet.snp
+haddapro.snp
+haddauto.snp
+haddcxfr.snp
+hadddata.snp
+haddmet1.snp
+haddmeth.snp
+haddprop.snp
+haddrsp.snp
+haddsxfr.snp
+haddvir2.snp
+haddvirt.snp
+hautocla.snp
+hfooter.snp
+hheader.snp
+hresauto.snp
+hvbx.snp
+methrip.snp
+navauto.snp
+registry.snp
+rename.snp
+renamrsp.snp
+rescan.snp
+resdvole.snp
+useclass.snp
+usenew.snp
+vbx.snp
+vbxinit.snp
+verify.snp
+virtual.snp
+wndbkgd.snp
+xfrstate.snp
+D:\BC5\HELP\classlib.cnt
+classlib.hlp
+clslibpg.toc
+clslibrg.toc
+help.ico
+bcpp.cnt
+bcpp.hlp
+bcpppg.toc
+bcpprg.toc
+bcvdtref.cnt
+bcvdtref.hlp
+bcvdtgui.toc
+bcvdtref.toc
+bwcc.cnt
+bwcc.hlp
+bwcc.toc
+guide.cnt
+guide.hlp
+kbase.cnt
+kbase.hlp
+mapi.cnt
+mapi.hlp
+mm.cnt
+mm.hlp
+opengl.cnt
+opengl.hlp
+openhelp.cfg
+openhelp.cnt
+openhelp.hlp
+openhelp.mst
+openhelp.toc
+whatsnew.toc
+rpc.cnt
+rpc.hlp
+bctools.cnt
+bctools.hlp
+bctools.toc
+vfw.hlp
+win32sdk.cfg
+win32.cnt
+win32sdk.cnt
+win32.hlp
+win32sdk.toc
+winsys.cnt
+winsys.hlp
+winsys.toc
+win32s.cnt
+win31wh.hlp
+win32s.hlp
+bcdos.cnt
+bcdos.hlp
+bcdos.toc
+bcw.cnt
+openkbd.dll
+bcw.hlp
+bcw.toc
+ctl3d.hlp
+bcerrmsg.cnt
+bcerrmsg.hlp
+bcerrmsg.toc
+winsight.cnt
+winspctr.cnt
+winsight.hlp
+winspctr.hlp
+winsight.toc
+winspctr.toc
+owl50.cnt
+owl50.hlp
+owlpg.toc
+owlrg.toc
+script.cnt
+script.hlp
+scriptc.toc
+scriptr.toc
+stl.cnt
+stl.hlp
+stlpg.toc
+stlref.toc
+tdwini.hlp
+ole.cnt
+ole.hlp
+ocf.cnt
+ocf.hlp
+ocflr.toc
+ocfpg.toc
+workshop.cnt
+workshop.hlp
+workshop.toc
+hcw.cnt
+hw32.cnt
+uiguide.cnt
+hcw.hlp
+hw32.hlp
+mc.hlp
+ole2view.hlp
+rc.hlp
+rlman.hlp
+shed.hlp
+uiguide.hlp
+vbt300.hlp
+vtss.hlp
+D:\BC5\INCLUDE\CLASSLIB\alloctr.h
+arrays.h
+assoc.h
+bags.h
+binimp.h
+cmdline.h
+date.h
+defs.h
+deques.h
+dict.h
+dlistimp.h
+file.h
+filename.h
+fixedpnt.h
+hashimp.h
+heapsel.h
+listimp.h
+memmgr.h
+objstrm.h
+pch.h
+pointer.h
+queues.h
+resource.h
+sets.h
+shddel.h
+stacks.h
+stdtempl.h
+streambl.h
+thread.h
+time.h
+timer.h
+vectimp.h
+version.h
+voidp.h
+D:\BC5\INCLUDE\CLASSLIB\OBSOLETE\abstarry.h
+array.h
+assoc.h
+bag.h
+btree.h
+clsdefs.h
+clstypes.h
+collect.h
+contain.h
+dbllist.h
+deque.h
+dict.h
+hashtbl.h
+ldate.h
+list.h
+ltime.h
+object.h
+priortyq.h
+queue.h
+set.h
+sortable.h
+sortarry.h
+stack.h
+strng.h
+D:\BC5\INCLUDE\GL\gl.h
+glaux.h
+glu.h
+D:\BC5\INCLUDE\ctl3d.h
+D:\BC5\INCLUDE\IDEADDON\comhelp.cpp
+ideguid.cpp
+comhelp.h
+common.h
+icmd.h
+ieditor.h
+iide.h
+imake.h
+imenu.h
+impd.h
+imsgsys.h
+ioption.h
+ipolystr.h
+iproj.h
+isbar.h
+iscript.h
+itarg.h
+itool.h
+itx.h
+ivfile.h
+iview.h
+addon.rc
+icmd.uid
+ieditor.uid
+iide.uid
+imakesvr.uid
+imenu.uid
+impd.uid
+imsgsys.uid
+ioption.uid
+ipolystr.uid
+iproj.uid
+iprojevt.uid
+iprojnod.uid
+isbar.uid
+iscript.uid
+itarg.uid
+itool.uid
+itoolexe.uid
+itoolinf.uid
+itx.uid
+ivfile.uid
+iview.uid
+D:\BC5\INCLUDE\string.cc
+algorith.h
+alloc.h
+assert.h
+bcd.h
+bios.h
+bitset.h
+bwcc.h
+checks.h
+complex.h
+compnent.h
+conio.h
+constrea.h
+cstring.h
+ctype.h
+dbdaoid.h
+deque.h
+dir.h
+direct.h
+dirent.h
+dos.h
+errno.h
+except.h
+fcntl.h
+float.h
+fstream.h
+ftsiface.h
+function.h
+generic.h
+graphics.h
+intshcut.h
+io.h
+iomanip.h
+iostream.h
+isguids.h
+iterator.h
+limits.h
+limits.h
+list.h
+locale.h
+malloc.h
+map.h
+math.h
+mem.h
+memory.h
+new.h
+numeric.h
+penwin.h
+penwoem.h
+print.h
+process.h
+queue.h
+random.h
+ref.h
+regexp.h
+search.h
+set.h
+setjmp.h
+share.h
+signal.h
+stack.h
+stdarg.h
+stdcomp.h
+stddef.h
+stddefs.h
+stdexcep.h
+stdgen.h
+stdio.h
+stdiostr.h
+stdlib.h
+stdmutex.h
+stdwind.h
+stress.h
+string.h
+string.h
+strstrea.h
+svrapi.h
+systypes.h
+tchar.h
+time.h
+toolhelp.h
+tree.h
+typeinfo.h
+utility.h
+utime.h
+values.h
+varargs.h
+vector.h
+ver.h
+winmem32.h
+winwlx.h
+_defs.h
+_nfile.h
+_null.h
+mmsystem.inc
+toolhelp.inc
+windows.inc
+atalkwsh.h
+avicap.h
+basetyps.h
+cderr.h
+cguid.h
+cobjps.h
+coguid.h
+colordlg.h
+commctrl.h
+commdlg.h
+compobj.h
+cpl.h
+cplext.h
+custcntl.h
+dbt.h
+dde.h
+ddeml.h
+digitalv.h
+dispatch.h
+dispdib.h
+dlcapi.h
+dlgs.h
+drivinit.h
+dvobj.h
+error.h
+exchext.h
+excpt.h
+idf.h
+imessage.h
+imm.h
+initguid.h
+initoid.h
+lm.h
+lmaccess.h
+lmalert.h
+lmapibuf.h
+lmat.h
+lmaudit.h
+lmbrowsr.h
+lmchdev.h
+lmconfig.h
+lmcons.h
+lmerr.h
+lmerrlog.h
+lmmsg.h
+lmremutl.h
+lmrepl.h
+lmserver.h
+lmshare.h
+lmsname.h
+lmstats.h
+lmsvc.h
+lmuse.h
+lmuseflg.h
+lmwksta.h
+lzexpand.h
+mapi.h
+mapicode.h
+mapidbg.h
+mapidefs.h
+mapiform.h
+mapiguid.h
+mapihook.h
+mapinls.h
+mapioid.h
+mapispi.h
+mapitags.h
+mapiutil.h
+mapival.h
+mapiwin.h
+mapiwz.h
+mapix.h
+mciavi.h
+mcx.h
+mgmtapi.h
+midles.h
+mmreg.h
+mmsystem.h
+moniker.h
+msacm.h
+msacmdlg.h
+msfs.h
+mspab.h
+mspst.h
+msviddrv.h
+msvideo.h
+nb30.h
+nddeapi.h
+nddesec.h
+nspapi.h
+oaidl.h
+objbase.h
+objidl.h
+ole.h
+ole1cls.h
+ole2.h
+ole2dbg.h
+ole2ver.h
+oleauto.h
+olectl.h
+olectlid.h
+oledlg.h
+oleguid.h
+oleidl.h
+olenls.h
+pbt.h
+pcrt32.h
+pdkver.h
+penwin.h
+penwoem.h
+plan32.h
+poppack.h
+print.h
+prsht.h
+pshpack1.h
+pshpack2.h
+pshpack4.h
+pshpack8.h
+ras.h
+raserror.h
+recguids.h
+reconcil.h
+regstr.h
+richedit.h
+richole.h
+rpc.h
+rpcdce.h
+rpcdce2.h
+rpcdcep.h
+rpcndr.h
+rpcnsi.h
+rpcnsip.h
+rpcnterr.h
+rpcproxy.h
+scode.h
+shellapi.h
+shlguid.h
+shlobj.h
+smpab.h
+smpms.h
+smpxp.h
+snmp.h
+storage.h
+stress.h
+svcguid.h
+tapi.h
+tlhelp32.h
+tnef.h
+toolhelp.h
+tspi.h
+unknwn.h
+variant.h
+vcr.h
+vdmdbg.h
+ver.h
+vfw.h
+w32sut.h
+wdbgexts.h
+wfext.h
+winbase.h
+wincon.h
+windef.h
+windows.h
+windowsx.h
+winerror.h
+wing.h
+wingdi.h
+winioctl.h
+winmem32.h
+winnetwk.h
+winnls.h
+winnt.h
+winperf.h
+winreg.h
+winsock.h
+winspool.h
+winsvc.h
+winuser.h
+winver.h
+wownt16.h
+wownt32.h
+wshisotp.h
+wsipx.h
+wsnetbs.h
+wsnwlink.h
+wtypes.h
+xcmc.h
+xcmcext.h
+xcmcmsx2.h
+xcmcmsxt.h
+mmsystem.inc
+toolhelp.inc
+windows.inc
+D:\BC5\INCLUDE\OCF\boleintf.h
+appdesc.h
+autodefs.h
+automacr.h
+defs.h
+ocapp.h
+ocbocole.h
+occtrl.h
+ocdata.h
+ocdefs.h
+ocdoc.h
+ocfpch.h
+oclink.h
+ocobject.h
+ocpart.h
+ocreg.h
+ocremvie.h
+ocstorag.h
+ocview.h
+oleutil.h
+pch.h
+ocf.rc
+ocapp.rh
+D:\BC5\INCLUDE\OSL\defs.h
+except.h
+geometry.h
+inlines.h
+locale.h
+ustring.h
+locale.rh
+D:\BC5\INCLUDE\OWLCVT\filedial.dlg
+inputdia.dlg
+stdwnds.dlg
+appdict.h
+applicat.h
+bbutton.h
+bchkbox.h
+bdivider.h
+bgrpbox.h
+bradio.h
+bstatbmp.h
+bstatic.h
+button.h
+bwindow.h
+checkbox.h
+combobox.h
+control.h
+dialog.h
+edit.h
+editwnd.h
+filedial.h
+filewnd.h
+groupbox.h
+inputdia.h
+listbox.h
+mdi.h
+module.h
+objstrm.h
+owl.h
+owldefs.h
+owlhdr.h
+owlrc.h
+radiobut.h
+safepool.h
+scrollba.h
+scroller.h
+static.h
+tcollect.h
+windobj.h
+window.h
+editacc.rc
+editmenu.rc
+fileacc.rc
+filemenu.rc
+D:\BC5\INCLUDE\OWL\animctrl.h
+appdict.h
+applicat.h
+bitmapga.h
+bitset.h
+button.h
+buttonga.h
+celarray.h
+checkbox.h
+checklst.h
+chooseco.h
+choosefo.h
+clipboar.h
+clipview.h
+colmnhdr.h
+color.h
+combobox.h
+commctrl.h
+commdial.h
+compat.h
+contain.h
+control.h
+controlb.h
+controlg.h
+dc.h
+decframe.h
+decmdifr.h
+defs.h
+dialog.h
+dibitmap.h
+dispatch.h
+docking.h
+docmanag.h
+doctpl.h
+docview.h
+draglist.h
+edit.h
+editfile.h
+editsear.h
+editview.h
+eventhan.h
+except.h
+filedoc.h
+findrepl.h
+floatfra.h
+framewin.h
+gadget.h
+gadgetwi.h
+gauge.h
+gdibase.h
+gdiobjec.h
+glyphbtn.h
+groupbox.h
+hlpmanag.h
+hotkey.h
+imagelst.h
+inputdia.h
+layoutco.h
+layoutwi.h
+listbox.h
+listview.h
+listwind.h
+mailer.h
+mci.h
+mdi.h
+mdichild.h
+menu.h
+menugadg.h
+messageb.h
+metafile.h
+modegad.h
+module.h
+notetab.h
+ocfevent.h
+oledialg.h
+oledoc.h
+olefacto.h
+oleframe.h
+olemdifr.h
+oleview.h
+olewindo.h
+opensave.h
+owlall.h
+owlcore.h
+owldefs.h
+owlpch.h
+panespli.h
+pch.h
+picklist.h
+pictwind.h
+point.h
+preview.h
+prevwin.h
+printdia.h
+printer.h
+profile.h
+propsht.h
+radiobut.h
+rcntfile.h
+resource.h
+richedit.h
+richedpr.h
+rolldial.h
+scrollba.h
+scroller.h
+serialze.h
+shellitm.h
+signatur.h
+slider.h
+splashwi.h
+splitter.h
+static.h
+statusba.h
+stgdoc.h
+tabctrl.h
+textgadg.h
+timegadg.h
+tinycapt.h
+toolbox.h
+tooltip.h
+treewind.h
+treewn16.h
+uihandle.h
+uihelper.h
+updown.h
+validate.h
+vbxctl.h
+version.h
+window.h
+windowev.h
+wing.h
+winsock.h
+wskaddr.h
+wskerr.h
+wskhostm.h
+wskservm.h
+wsksock.h
+wsksockd.h
+wsksockm.h
+docview.rc
+editfile.rc
+editsear.rc
+editview.rc
+except.rc
+inputdia.rc
+listview.rc
+oleview.rc
+owlapp.rc
+panespli.rc
+picklist.rc
+prevwin.rc
+printer.rc
+propsht.rc
+slider.rc
+statusba.rc
+validate.rc
+winsock.rc
+docview.rh
+edit.rh
+editfile.rh
+editsear.rh
+editview.rh
+except.rh
+inputdia.rh
+listview.rh
+mdi.rh
+oleview.rh
+panespli.rh
+picklist.rh
+prevwin.rh
+printer.rh
+propsht.rh
+slider.rh
+statusba.rh
+validate.rh
+window.rh
+winsock.rh
+D:\BC5\INCLUDE\SERVICES\PRIVATE\checks.h
+cstring.h
+defs.h
+D:\BC5\INCLUDE\SERVICES\borlandc.h
+checks.h
+cstring.h
+defs.h
+dir.h
+except.h
+memory.h
+msc.h
+ole2inc.h
+posclass.h
+preclass.h
+ref.h
+regexp.h
+win95_16.h
+wsysinc.h
+D:\BC5\INCLUDE\SYS\locking.h
+stat.h
+timeb.h
+types.h
+D:\BC5\INCLUDE\bivbx.h
+D:\BC5\INCLUDE\VDBT\dbchkbx.h
+dbcombo.h
+dbcontrl.h
+dbdefs.h
+dbedit.h
+dbevent.h
+dbgrid.h
+dbimage.h
+dblist.h
+dblkupcb.h
+dblkuplb.h
+dbmemo.h
+dbmisc.h
+dbnvgtr.h
+dbpme.h
+dbradio.h
+dbtext.h
+dbtype.h
+bdti.h
+bdtc.h
+bdte.h
+bdtf.h
+bdto.h
+D:\BC5\INCLUDE\WIN16\cderr.h
+cobjps.h
+coguid.h
+colordlg.h
+commdlg.h
+compobj.h
+cpl.h
+custcntl.h
+dde.h
+ddeml.h
+dispatch.h
+dlgs.h
+drivinit.h
+dvobj.h
+initguid.h
+lzexpand.h
+moniker.h
+ole.h
+ole1cls.h
+ole2.h
+ole2dbg.h
+ole2ver.h
+oleguid.h
+olenls.h
+penwin.h
+penwoem.h
+print.h
+scode.h
+shellapi.h
+storage.h
+stress.h
+toolhelp.h
+variant.h
+ver.h
+wfext.h
+windows.h
+windowsx.h
+winmem32.h
+D:\BC5\INCLUDE\WIN32\atalkwsh.h
+basetyps.h
+cderr.h
+cguid.h
+colordlg.h
+commdlg.h
+compobj.h
+cpl.h
+cplext.h
+custcntl.h
+dbdaoid.h
+dbt.h
+dde.h
+ddeml.h
+dispatch.h
+dlcapi.h
+dlgs.h
+drivinit.h
+dvobj.h
+error.h
+exchext.h
+ftsiface.h
+idf.h
+imessage.h
+imm.h
+initoid.h
+intshcut.h
+isguids.h
+lm.h
+lmaccess.h
+lmalert.h
+lmapibuf.h
+lmat.h
+lmaudit.h
+lmbrowsr.h
+lmchdev.h
+lmconfig.h
+lmcons.h
+lmerr.h
+lmerrlog.h
+lmmsg.h
+lmremutl.h
+lmrepl.h
+lmserver.h
+lmshare.h
+lmsname.h
+lmstats.h
+lmsvc.h
+lmuse.h
+lmuseflg.h
+lmwksta.h
+lzexpand.h
+mapi.h
+mapiform.h
+mapiguid.h
+mapihook.h
+mapioid.h
+mapispi.h
+mapitags.h
+mapival.h
+mapiwz.h
+mapix.h
+mciavi.h
+mcx.h
+mgmtapi.h
+midles.h
+mmreg.h
+moniker.h
+msacmdlg.h
+msfs.h
+mspab.h
+mspst.h
+msviddrv.h
+nb30.h
+nddeapi.h
+nddesec.h
+nspapi.h
+objerror.h
+objidl.h
+ole.h
+ole2.h
+ole2ver.h
+oledlg.h
+oleidl.h
+pbt.h
+pcrt32.h
+pdkver.h
+plan32.h
+ras.h
+raserror.h
+recguids.h
+reconcil.h
+regstr.h
+richole.h
+rpc.h
+rpcdce.h
+rpcdce2.h
+rpcdcep.h
+rpcndr.h
+rpcnsi.h
+rpcnsip.h
+rpcnterr.h
+rpcproxy.h
+scode.h
+scrnsave.h
+shellapi.h
+shlobj.h
+smpab.h
+smpms.h
+smpxp.h
+snmp.h
+storage.h
+svcguid.h
+tapi.h
+tlhelp32.h
+tnef.h
+tspi.h
+unknwn.h
+variant.h
+vcr.h
+vdmdbg.h
+ver.h
+wdbgexts.h
+wfext.h
+winbase.h
+wincon.h
+windows.h
+windowsx.h
+wingdi.h
+winioctl.h
+winnetwk.h
+winnls.h
+winnt.h
+winperf.h
+winreg.h
+winspool.h
+winsvc.h
+winuser.h
+winver.h
+winwlx.h
+xcmc.h
+xcmcext.h
+xcmcmsx2.h
+xcmcmsxt.h
+D:\BC5\INCLUDE\WINSYS\color.h
+defs.h
+exbase.h
+geometry.h
+lclstrng.h
+msgthred.h
+pch.h
+profile.h
+registry.h
+string.h
+system.h
+uimetric.h
+wsyscls.h
+wsysinc.h
+lclstrng.rh
+D:\BC5\INSTALL.TXT
+D:\BC5\LIB\16BIT\files.c
+files2.c
+matherr.c
+matherrl.c
+wildargs.obj
+D:\BC5\LIB\32BIT\files.c
+files2.c
+matherr.c
+matherrl.c
+fileinfo.obj
+gp.obj
+wildargs.obj
+D:\BC5\LIB\bdtawrl.lib
+bdtci.lib
+bdtawrf.lib
+bdtcfi.lib
+graphics.lib
+bidsi.lib
+bidsc.lib
+bidsh.lib
+bidsl.lib
+bidsm.lib
+bidss.lib
+bidsfi.lib
+bidsti.lib
+bidsf.lib
+bidst.lib
+cc.lib
+mathc.lib
+noehc.lib
+c0c.obj
+c0fc.obj
+D:\BC5\LIB\COMPAT\edits.obj
+framelin.obj
+owlmathd.obj
+owlmathl.obj
+setjmp.obj
+swapst.obj
+swndobjd.obj
+swndobjl.obj
+sysint.obj
+tgrmv.obj
+ttprvlns.obj
+tvcursor.obj
+tvexposd.obj
+tvwrite.obj
+versiond.obj
+versionl.obj
+D:\BC5\LIB\bdto.lib
+bdtof.lib
+default.def
+emu.lib
+fp87.lib
+ch.lib
+mathh.lib
+noehh.lib
+c0fh.obj
+c0h.obj
+ole2w16.lib
+ctl3dv2.lib
+ctl3d32.lib
+cl.lib
+mathl.lib
+noehl.lib
+c0fl.obj
+c0l.obj
+cm.lib
+mathm.lib
+noehm.lib
+c0fm.obj
+c0m.obj
+owlwi.lib
+owlwiu.lib
+owlwfi.lib
+owlwti.lib
+ocfwi.lib
+ocfwiu.lib
+ocfwl.lib
+ocfwlu.lib
+ocfwf.lib
+ocfwfi.lib
+ocfwt.lib
+ocfwti.lib
+owlwl.lib
+owlwlu.lib
+owlwf.lib
+owlwt.lib
+crtldll.lib
+cw32i.lib
+cw32mti.lib
+cs.lib
+maths.lib
+noehs.lib
+c0fs.obj
+c0s.obj
+D:\BC5\LIB\STARTUP\rules.asi
+c0.asm
+c0d.asm
+c0w.asm
+buildc0.bat
+D:\BC5\LIB\ct.lib
+c0ft.obj
+c0t.obj
+bivbx.lib
+bivbx32.lib
+cwc.lib
+mathwc.lib
+noehwc.lib
+c0dc.obj
+c0wc.obj
+bwcc32.lib
+cw32.lib
+cw32mt.lib
+import32.lib
+msextra.lib
+ole2w32.lib
+rpcextra.lib
+w32sut16.lib
+w32sut32.lib
+c0d32.obj
+c0w32.obj
+c0x32.obj
+cwl.lib
+mathwl.lib
+noehwl.lib
+c0dl.obj
+c0wl.obj
+cwm.lib
+mathwm.lib
+noehwm.lib
+c0dm.obj
+c0wm.obj
+cws.lib
+mathws.lib
+noehws.lib
+c0ds.obj
+c0ws.obj
+bwcc.lib
+import.lib
+obsolete.lib
+overlay.lib
+D:\BC5\PIPELINE\PIPELINE.INI
+wallppr.bmp
+mailform.ctl
+regprint.ctl
+cramapi.dll
+pipeline.dll
+pipermd.dll
+sslib.dll
+register.exe
+regrmdr.exe
+remind.exe
+slidshow.fss
+sdkintro.gif
+thanks.gif
+remind.sch
+D:\BC5\README.TXT
+D:\BC5\SCRIPT\EXAMPLES\autosave.cfg
+codelib.cfg
+fastopen.cfg
+revisit.cfg
+sound.cfg
+sppman.cfg
+apiexp.dat
+codecpp.dat
+codegen.dat
+codeowl.dat
+codespp.dat
+codew32.dat
+nethelp.dat
+prjnotes.dat
+sppman.dat
+aligneq.spp
+apiexp.spp
+auto.spp
+autosave.spp
+codelib.spp
+comment.spp
+config.spp
+crtl.spp
+dirtool.spp
+editsize.spp
+edonly.spp
+evaltips.spp
+fastopen.spp
+file.spp
+fileinsr.spp
+findtabs.spp
+foreach.spp
+intnatl.spp
+keyassgn.spp
+list.spp
+loadlast.spp
+loadproj.spp
+longline.spp
+misc.spp
+mlist.spp
+modlist.spp
+msg.spp
+nethelp.spp
+openhdr.spp
+popup.spp
+prjnotes.spp
+revisit.spp
+shiftblk.spp
+sort.spp
+sound.spp
+sppdir.spp
+sppman.spp
+srchall.spp
+test.spp
+viewlocs.spp
+readme.txt
+D:\BC5\SCRIPT\brief.kbd
+classic.kbd
+default.kbd
+epsilon.kbd
+block.spp
+briefex.spp
+debug.spp
+edit.spp
+ed_brief.spp
+ed_clssc.spp
+ed_dflt.spp
+ed_epsln.spp
+exscr.spp
+filters.spp
+filtstub.spp
+ide.spp
+keymaps.spp
+mate.spp
+menuhook.spp
+miscscr.spp
+openfile.spp
+startup.spp
+D:\BC5\SDKTOOLS\RPC\oaidl.h
+objidl.h
+oleidl.h
+unknwn.h
+wtypes.h
+oaidl.idl
+objidl.idl
+oleidl.idl
+unknwn.idl
+wtypes.idl
+D:\BC5\SDKTOOLS\defo2v32.dll
+rcdll.dll
+bind.exe
+dobjview.exe
+irotview.exe
+mc.exe
+midl.exe
+mktyplib.exe
+mrbc.exe
+ole2vw32.exe
+porttool.exe
+pstat.exe
+rc.exe
+rebase.exe
+rlman.exe
+shed.exe
+thunk.exe
+port.ini
+sr32test.reg
+D:\BC5\SDKTOOLS\WIN16\mars.dll
+dib.drv
+msmouse.drv
+vgap.drv
+yesmouse.drv
+markmidi.exe
+mars.mob
+D:\BC5\SDKTOOLS\WIN95\dbwin.dll
+stress.dll
+cl32test.exe
+dbwin.exe
+ddespy.exe
+heapwalk.exe
+hw32.exe
+pview95.exe
+sr32test.exe
+stress.exe
+tb13.exe
+tb14.exe
+D:\BC5\SDKTOOLS\WINNT\cl32test.exe
+ddespy.exe
+pview.exe
+sr32test.exe
+winobj.exe
+D:\BC5\SOURCE\CLASSLIB\makefile
+binimp.cpp
+castable.cpp
+clasmain.cpp
+cmdline.cpp
+color.cpp
+date.cpp
+dateio.cpp
+datep.cpp
+diaginit.cpp
+exbase.cpp
+file.cpp
+filename.cpp
+geometrp.cpp
+geometrs.cpp
+geometry.cpp
+heapsel.cpp
+locale.cpp
+localeco.cpp
+localeid.cpp
+memory.cpp
+msgthred.cpp
+objstrm.cpp
+profile.cpp
+regheap.cpp
+registry.cpp
+reglink.cpp
+system.cpp
+thread.cpp
+time.cpp
+timeio.cpp
+timep.cpp
+timer.cpp
+uimetric.cpp
+ustring.cpp
+version.cpp
+wsyscls.cpp
+wsysclsp.cpp
+wsysclss.cpp
+version.rc
+D:\BC5\SOURCE\CLASSLIB\OBSOLETE\abstarry.cpo
+array.cpo
+assoc.cpo
+babstary.cpo
+bdict.cpo
+bsortary.cpo
+btree.cpo
+btreeinn.cpo
+btreelfn.cpo
+collect.cpo
+contain.cpo
+dbllist.cpo
+deque.cpo
+dict.cpo
+hashtbl.cpo
+ldate.cpo
+list.cpo
+ltime.cpo
+object.cpo
+sortarry.cpo
+stack.cpo
+strng.cpo
+D:\BC5\SOURCE\OCF\BOCOLE\makefile.
+morph.bat
+bconnpnt.cpp
+bhatch.cpp
+bocxctrl.cpp
+boleclip.cpp
+bolecman.cpp
+bolecomp.cpp
+bolecont.cpp
+bolectrl.cpp
+boledata.cpp
+boledoc.cpp
+bolefact.cpp
+bolefont.cpp
+boleguid.cpp
+bolehelp.cpp
+boleips.cpp
+bolepart.cpp
+bolepict.cpp
+bolesite.cpp
+bolesvc.cpp
+bolever.cpp
+hashtbl.cpp
+movewin.cpp
+oledebug.cpp
+oledll.cpp
+olenew.cpp
+utils.cpp
+bocof.def
+bocofw.def
+bocole.def
+bcom.h
+bconnpnt.h
+bhatch.h
+bocxctrl.h
+bole.h
+bole32.h
+bolecman.h
+bolecomp.h
+bolecont.h
+bolectrl.h
+boledata.h
+boledefs.h
+boledoc.h
+bolefact.h
+bolefont.h
+boleintf.h
+boleips.h
+bolepart.h
+bolepict.h
+bolesite.h
+bolesvc.h
+bolever.h
+hashtbl.h
+movewin.h
+oledebug.h
+portdefs.h
+utils.h
+make.inc
+bocof.rc
+bocofw.rc
+bocole.rc
+D:\BC5\SOURCE\OCF\BOCOLE\BOLEUI32\ansiapi.h
+bolestd.h
+common.h
+ole2ui.h
+boleui32.lib
+boleui32.res
+D:\BC5\SOURCE\OCF\BOCOLE\BOLEUI\common.h
+ole2ui.h
+olestd.h
+boleui.res
+D:\BC5\SOURCE\OCF\makefile
+appdesc.cpp
+autocli.cpp
+autodisp.cpp
+autosrv.cpp
+autoval.cpp
+ocapp.cpp
+occtrl.cpp
+ocdata.cpp
+ocdoc.cpp
+ocguid.cpp
+oclink.cpp
+ocpart.cpp
+ocreg.cpp
+ocremvie.cpp
+ocstorag.cpp
+ocview.cpp
+oleutil.cpp
+typelib.cpp
+D:\BC5\SOURCE\OCTOOLS\AUTOGEN\makefile
+autogen.cpp
+autogen.rc
+autogen.rh
+D:\BC5\SOURCE\OCTOOLS\DLLRUN\makefile
+dllrun.cpp
+D:\BC5\SOURCE\OCTOOLS\GUIDGEN\makefile
+guidgen.cpp
+guidgen.rc
+D:\BC5\SOURCE\OCTOOLS\MACROGEN\makefile
+macrogen.cpp
+D:\BC5\SOURCE\OCTOOLS\REGISTER\makefile
+register.cpp
+register.rc
+register.rh
+D:\BC5\SOURCE\OWL\makefile
+dibblt16.asm
+dibblt32.asm
+buildowl.bat
+animctrl.cpp
+appdict.cpp
+applicat.cpp
+bitmap.cpp
+bitmapga.cpp
+bitset.cpp
+brush.cpp
+button.cpp
+buttonga.cpp
+celarray.cpp
+checkbox.cpp
+checklst.cpp
+chooseco.cpp
+choosefo.cpp
+clipboar.cpp
+clipview.cpp
+colmnhdr.cpp
+combobox.cpp
+commctrl.cpp
+commdial.cpp
+compat.cpp
+contain.cpp
+control.cpp
+controlb.cpp
+controlg.cpp
+createdc.cpp
+cursor.cpp
+datetime.cpp
+dc.cpp
+decframe.cpp
+decmdifr.cpp
+dialog.cpp
+dib.cpp
+dibdc.cpp
+dibitmap.cpp
+dispatch.cpp
+docking.cpp
+docmanag.cpp
+doctpl.cpp
+document.cpp
+draglist.cpp
+edit.cpp
+editfile.cpp
+editsear.cpp
+editview.cpp
+eventhan.cpp
+except.cpp
+filedoc.cpp
+filtval.cpp
+findrepl.cpp
+floatfra.cpp
+font.cpp
+framewin.cpp
+gadget.cpp
+gadgetli.cpp
+gadgetwi.cpp
+gauge.cpp
+gdibase.cpp
+gdiobjec.cpp
+global.cpp
+glyphbtn.cpp
+groupbox.cpp
+hlpmanag.cpp
+hotkey.cpp
+hslider.cpp
+icon.cpp
+imagelst.cpp
+inputdia.cpp
+layoutwi.cpp
+libmain.cpp
+listbox.cpp
+listview.cpp
+listwind.cpp
+lookval.cpp
+mailer.cpp
+mci.cpp
+mciwav.cpp
+mdichild.cpp
+mdiclien.cpp
+mdiframe.cpp
+memorydc.cpp
+menu.cpp
+menudesc.cpp
+menugadg.cpp
+messageb.cpp
+metafile.cpp
+metafldc.cpp
+modegad.cpp
+module.cpp
+moduleob.cpp
+modversi.cpp
+notetab.cpp
+oledialg.cpp
+oledoc.cpp
+oleframe.cpp
+olemdifr.cpp
+oleview.cpp
+olewindo.cpp
+opensave.cpp
+owl.cpp
+owlmain.cpp
+paintdc.cpp
+palette.cpp
+panespli.cpp
+pen.cpp
+picklist.cpp
+pictval.cpp
+pictwind.cpp
+preview.cpp
+prevwin.cpp
+printdc.cpp
+printdia.cpp
+printer.cpp
+printout.cpp
+propsht.cpp
+radiobut.cpp
+rangeval.cpp
+rcntfile.cpp
+region.cpp
+resource.cpp
+richedit.cpp
+richedpr.cpp
+rolldial.cpp
+scrollba.cpp
+scroller.cpp
+serialze.cpp
+shellitm.cpp
+slider.cpp
+splashwi.cpp
+static.cpp
+statusba.cpp
+stgdoc.cpp
+swindow.cpp
+tabctrl.cpp
+textgadg.cpp
+timegadg.cpp
+tinycapt.cpp
+tmplins1.cpp
+tmplins2.cpp
+tmplins3.cpp
+tmplins4.cpp
+tmplinst.cpp
+toolbox.cpp
+tooltip.cpp
+treewind.cpp
+treewn16.cpp
+uiborder.cpp
+uiface.cpp
+uihandle.cpp
+uipart.cpp
+updown.cpp
+validate.cpp
+vbxctl.cpp
+version.cpp
+view.cpp
+vslider.cpp
+window.cpp
+windowdc.cpp
+wing.cpp
+winmain.cpp
+winsock.cpp
+wskaddr.cpp
+wskerr.cpp
+wskhostm.cpp
+wskservm.cpp
+wsksock.cpp
+wsksockd.cpp
+wsksockm.cpp
+owl16.ord
+owl.rc
+version.rc
+D:\BC5\SOURCE\OWL\O\DWFI\dibblt32.obj
+D:\BC5\SOURCE\OWL\O\DWF\dibblt32.obj
+D:\BC5\SOURCE\OWL\O\DWIU\dibblt16.obj
+D:\BC5\SOURCE\OWL\O\DWI\dibblt16.obj
+D:\BC5\SOURCE\OWL\O\DWLU\dibblt16.obj
+D:\BC5\SOURCE\OWL\O\DWL\dibblt16.obj
+D:\BC5\SOURCE\OWL\O\WFI\dibblt32.obj
+D:\BC5\SOURCE\OWL\O\WF\dibblt32.obj
+D:\BC5\SOURCE\OWL\O\WIU\dibblt16.obj
+D:\BC5\SOURCE\OWL\O\WI\dibblt16.obj
+D:\BC5\SOURCE\OWL\O\WLU\dibblt16.obj
+D:\BC5\SOURCE\OWL\O\WL\dibblt16.obj
+D:\BC5\SOURCE\VDBT\BDTAWR\makefile
+dbchkbx.cpp
+dbcombo.cpp
+dbcontrl.cpp
+dbedit.cpp
+dbevent.cpp
+dbgrid.cpp
+dbimage.cpp
+dblist.cpp
+dblkupcb.cpp
+dblkuplb.cpp
+dbmemo.cpp
+dbmisc.cpp
+dbnvgtr.cpp
+dbradio.cpp
+dbtext.cpp
+D:\BC5\SOURCE\VDBT\BDTO\bdto16.cfg
+bdto32.cfg
+base.cpp
+batch.cpp
+bdtevent.cpp
+database.cpp
+dataset.cpp
+datasour.cpp
+field.cpp
+fielddef.cpp
+functor.cpp
+indexdef.cpp
+param.cpp
+query.cpp
+session.cpp
+storedpr.cpp
+stream.cpp
+strings.cpp
+table.cpp
+varrec.cpp
+wrapit.cpp
+misc.h
+wrapit.h
+bdto.mak
+D:\BC5\UNPAQ.EXE
+D:\BDE32\DOC\bde32.cnt
+localsql.cnt
+bde32.hlp
+localsql.hlp
+bde32.tok
+bde32tok.txt
+D:\BDE32\EXAMPLES\C\ADDRESS\makefile
+adrcmdlg.c
+adr_data.c
+adr_dlgs.c
+adr_main.c
+adr_util.c
+engine.c
+macro.c
+address.def
+address.h
+id_defs.h
+macro.h
+address.ico
+address.ide
+address.rc
+D:\BDE32\EXAMPLES\C\DBPING\makefile
+dbping.c
+dbping.def
+dbping.h
+dbping.ico
+dbping.ide
+dbping.rc
+D:\BDE32\EXAMPLES\C\INVENTRY\makefile
+engine.c
+inv_data.c
+inv_main.c
+inv_util.c
+macro.c
+inventry.def
+id_defs.h
+inventry.h
+macro.h
+inventry.ico
+inventry.ide
+inventry.rc
+D:\BDE32\EXAMPLES\QUERY\makefile
+display.c
+engine.c
+macro.c
+qry_data.c
+query.c
+query.def
+macro.h
+query.h
+query.ico
+query32.ide
+big_ordr.qbe
+cust.qbe
+hi_ordrs.qbe
+pricey.qbe
+query.rc
+query.rh
+cust.sql
+ibcat.sql
+ibpx.sql
+join.sql
+oracat.sql
+orders.sql
+two_word.sql
+query.txt
+D:\BDE32\EXAMPLES\SNIPIT\makefile
+addalias.c
+aliases.c
+batmove.c
+blobio.c
+blobsmpl.c
+block.c
+bookmark.c
+callback.c
+config.c
+cr8dbtbl.c
+cr8pxtbl.c
+cr8txtbl.c
+dbio.c
+dblogin.c
+drvcaps.c
+errval.c
+fieldmap.c
+filtcomp.c
+filtcont.c
+filter.c
+filter2.c
+format.c
+idxdbase.c
+idxexpr.c
+idxpdox.c
+initeng.c
+inmemtbl.c
+input.c
+inputreq.c
+keyupdt.c
+langdrv.c
+lnkcrsr.c
+lsql.c
+lsqljoin.c
+lsqllive.c
+navigate.c
+optdbpar.c
+optparam.c
+password.c
+prdxsort.c
+qbe.c
+qbe2.c
+range.c
+rdolock.c
+reclock.c
+recupdat.c
+refinteg.c
+search.c
+secdesc.c
+session.c
+snipdata.c
+snipmain.c
+sniptool.c
+softdel.c
+sqlbind.c
+storproc.c
+sysinfo.c
+tblinfo.c
+tbllist.c
+tbllock.c
+tblopen.c
+tbrstrct.c
+test.c
+textexp.c
+textimp.c
+transact.c
+updtcrnt.c
+upsize.c
+valcheck.c
+snipit.def
+id_defs.h
+snipit.h
+snipit.ico
+snipit.ide
+snipit.rc
+snipit.txt
+D:\BDE32\EXAMPLES\TABLES\contacts.db
+customer.db
+orders.db
+personel.db
+stock.db
+vendors.db
+cust.dbf
+stock.mb
+cust.mdx
+contacts.px
+customer.px
+orders.px
+personel.px
+stock.px
+vendors.px
+customer.val
+orders.val
+personel.val
+orders.x02
+stock.x02
+customer.xg0
+orders.xg0
+orders.y02
+stock.y02
+customer.yg0
+orders.yg0
+D:\BDE32\INCLUDE\idapi.h
+D:\BDE32\LIB\idapi32.lib
+D:\BDE32\REDIST\bdecfg32.cnt
+bdecfg32.exe
+bdecfg32.hlp
+D:\IDAPI32\ceeurope.bll
+charset.bll
+europe.bll
+other.bll
+usa.bll
+bdecfg32.hlp
+bdecfg32.cnt
+blw32.dll
+dbg32.dll
+idapi32.dll
+idasci32.dll
+idbat32.dll
+iddbas32.dll
+iddr32.dll
+idodbc32.dll
+idpdx32.dll
+idqbe32.dll
+idr20009.dll
+idsql32.dll
+bdecfg32.exe
+dllswp32.exe
+idapi32.cnf
+iduninst.exe
+]
+[Dirs
+D:\BC5\BIN\
+]
+[Registry
+Key 3
+Subkey SOFTWARE\Microsoft\Windows NT\CurrentVersion\App Paths\BCW.EXE
+Value 
+Data z:\compiler\BC5\BIN\BCW.EXE
+Type 1
+]
+[Registry
+Key 3
+Subkey SOFTWARE\Microsoft\Windows NT\CurrentVersion\App Paths\BCW.EXE
+Value Path
+Data z:\compiler\BC5\BIN;E:\BC5\BIN;V:\LATEST\CUT\VULCAN\CD\BC5\BIN;C:\BC5\BIN;L
+Type 1
+]
+[Registry
+Key 3
+Subkey SOFTWARE\Borland\Borland C++
+Value CurrentVersion
+Data 
+Type 0
+]
+[Registry
+Key 2
+Subkey Software\Borland\Borland C++\5.0\Scripting
+Value InstallExamples
+Data 0
+Type 1
+]
+[Registry
+Key 3
+Subkey SOFTWARE\Borland\Borland C++\5.0
+Value Local Configuration Path
+Data 
+Type 0
+]
+[Registry
+Key 3
+Subkey SOFTWARE\Borland\Borland C++\5.0
+Value BCRoot Path
+Data 
+Type 0
+]
+[Registry
+Key 3
+Subkey SOFTWARE\Borland\Borland C++\5.0
+Value Include Path
+Data 
+Type 0
+]
+[Registry
+Key 3
+Subkey SOFTWARE\Borland\Borland C++\5.0
+Value Lib Path
+Data 
+Type 0
+]
+[Registry
+Key 3
+Subkey SOFTWARE\Borland\Borland C++\5.0
+Value Examples Path
+Data 
+Type 0
+]
+[Registry
+Key 3
+Subkey SOFTWARE\Borland\Borland C++\5.0
+Value BGI Path
+Data 
+Type 0
+]
+[Registry
+Key 3
+Subkey SOFTWARE\Borland\Borland C++\5.0
+Value OWL Source Path
+Data 
+Type 0
+]
+[Registry
+Key 3
+Subkey SOFTWARE\Borland\Borland C++\5.0
+Value OCF Source Path
+Data 
+Type 0
+]
+[Registry
+Key 3
+Subkey SOFTWARE\Borland\Borland C++\5.0
+Value Class Library Source Path
+Data 
+Type 0
+]
+[Registry
+Key 3
+Subkey SOFTWARE\Borland\Borland C++\5.0
+Value VDBT Source Path
+Data 
+Type 0
+]
+[Registry
+Key 1
+Subkey .ide
+Value 
+Data idefile
+Type 1
+]
+[Registry
+Key 1
+Subkey idefile
+Value 
+Data Borland C++ Project
+Type 1
+]
+[Registry
+Key 1
+Subkey idefile\Shell\Build
+Value 
+Data &Build
+Type 1
+]
+[Registry
+Key 1
+Subkey idefile\Shell\Build\command
+Value 
+Data z:\compiler\BC5\BIN\BCW.EXE
+Type 1
+]
+[Registry
+Key 1
+Subkey idefile\Shell\Build\ddeexec
+Value 
+Data IDE.FileOpen("%1"); IDE.ProjectBuild();
+Type 1
+]
+[Registry
+Key 1
+Subkey idefile\Shell\Build\ddeexec\Application
+Value 
+Data BCW
+Type 1
+]
+[Registry
+Key 1
+Subkey idefile\Shell\Build\ddeexec\ifexec
+Value 
+Data IDE.FileOpen("%1"); IDE.ProjectBuild();
+Type 1
+]
+[Registry
+Key 1
+Subkey idefile\Shell\Build\ddeexec\topic
+Value 
+Data System
+Type 1
+]
+[Registry
+Key 1
+Subkey idefile\Shell\Make
+Value 
+Data &Make
+Type 1
+]
+[Registry
+Key 1
+Subkey idefile\Shell\Make\command
+Value 
+Data z:\compiler\BC5\BIN\BCW.EXE
+Type 1
+]
+[Registry
+Key 1
+Subkey idefile\Shell\Make\ddeexec
+Value 
+Data IDE.FileOpen("%1"); IDE.ProjectMake();
+Type 1
+]
+[Registry
+Key 1
+Subkey idefile\Shell\Make\ddeexec\Application
+Value 
+Data BCW
+Type 1
+]
+[Registry
+Key 1
+Subkey idefile\Shell\Make\ddeexec\ifexec
+Value 
+Data IDE.FileOpen("%1"); IDE.ProjectMake();
+Type 1
+]
+[Registry
+Key 1
+Subkey idefile\Shell\Make\ddeexec\topic
+Value 
+Data System
+Type 1
+]
+[Registry
+Key 1
+Subkey idefile\Shell\Open
+Value 
+Data &Open
+Type 1
+]
+[Registry
+Key 1
+Subkey idefile\Shell\Open\command
+Value 
+Data z:\compiler\BC5\BIN\BCW.EXE
+Type 1
+]
+[Registry
+Key 1
+Subkey idefile\Shell\Open\ddeexec
+Value 
+Data IDE.FileOpen("%1");
+Type 1
+]
+[Registry
+Key 1
+Subkey idefile\Shell\Open\ddeexec\Application
+Value 
+Data BCW
+Type 1
+]
+[Registry
+Key 1
+Subkey idefile\Shell\Open\ddeexec\ifexec
+Value 
+Data IDE.FileOpen("%1");
+Type 1
+]
+[Registry
+Key 1
+Subkey idefile\Shell\Open\ddeexec\topic
+Value 
+Data System
+Type 1
+]
+[Registry
+Key 1
+Subkey idefile\DefaultIcon
+Value 
+Data z:\compiler\BC5\BIN\BCW.EXE,-5
+Type 1
+]
+[Registry
+Key 1
+Subkey BorlandIDE.Application
+Value 
+Data 
+Type 0
+]
+[Registry
+Key 1
+Subkey BorlandIDE.Application\CLSID
+Value 
+Data 
+Type 0
+]
+[Registry
+Key 1
+Subkey BorlandIDE.Application\DefaultIcon
+Value 
+Data 
+Type 0
+]
+[Registry
+Key 1
+Subkey CLSID\{DFCF3100-89A3-11CE-A2A6-0020AF05ED04}
+Value 
+Data Borland C++
+Type 1
+]
+[Registry
+Key 1
+Subkey CLSID\{DFCF3100-89A3-11CE-A2A6-0020AF05ED04}\LocalServer32
+Value 
+Data z:\compiler\BC5\BIN\BCW.EXE /automation
+Type 1
+]
+[Registry
+Key 1
+Subkey CLSID\{DFCF3100-89A3-11CE-A2A6-0020AF05ED04}\ProgID
+Value 
+Data BorlandIDE.Application
+Type 1
+]
+[Registry
+Key 1
+Subkey CLSID\{DFCF3100-89A3-11CE-A2A6-0020AF05ED04}\Version
+Value 
+Data 5.0
+Type 1
+]
+[Registry
+Key 1
+Subkey .rc
+Value 
+Data rcfile
+Type 1
+]
+[Registry
+Key 1
+Subkey rcfile
+Value 
+Data Resource Script
+Type 1
+]
+[Registry
+Key 1
+Subkey rcfile\Shell\Open
+Value 
+Data &Open
+Type 1
+]
+[Registry
+Key 1
+Subkey rcfile\Shell\Open\command
+Value 
+Data z:\compiler\BC5\BIN\BCW.EXE
+Type 1
+]
+[Registry
+Key 1
+Subkey rcfile\Shell\Open\ddeexec
+Value 
+Data IDE.FileOpen("%1");
+Type 1
+]
+[Registry
+Key 1
+Subkey rcfile\Shell\Open\ddeexec\Application
+Value 
+Data BCW
+Type 1
+]
+[Registry
+Key 1
+Subkey rcfile\Shell\Open\ddeexec\ifexec
+Value 
+Data IDE.FileOpen("%1");
+Type 1
+]
+[Registry
+Key 1
+Subkey rcfile\Shell\Open\ddeexec\topic
+Value 
+Data System
+Type 1
+]
+[Registry
+Key 1
+Subkey rcfile\Shell\Edit
+Value 
+Data &Edit
+Type 1
+]
+[Registry
+Key 1
+Subkey rcfile\Shell\Edit\command
+Value 
+Data NOTEPAD.EXE %1
+Type 1
+]
+[Registry
+Key 1
+Subkey rcfile\DefaultIcon
+Value 
+Data z:\compiler\BC5\BIN\BCW.EXE,-6
+Type 1
+]
+[Registry
+Key 1
+Subkey .res
+Value 
+Data resfile
+Type 1
+]
+[Registry
+Key 1
+Subkey resfile
+Value 
+Data Resources
+Type 1
+]
+[Registry
+Key 1
+Subkey resfile\Shell\Open
+Value 
+Data &Open
+Type 1
+]
+[Registry
+Key 1
+Subkey resfile\Shell\Open\command
+Value 
+Data z:\compiler\BC5\BIN\BCW.EXE
+Type 1
+]
+[Registry
+Key 1
+Subkey resfile\Shell\Open\ddeexec
+Value 
+Data IDE.FileOpen("%1");
+Type 1
+]
+[Registry
+Key 1
+Subkey resfile\Shell\Open\ddeexec\Application
+Value 
+Data BCW
+Type 1
+]
+[Registry
+Key 1
+Subkey resfile\Shell\Open\ddeexec\ifexec
+Value 
+Data IDE.FileOpen("%1");
+Type 1
+]
+[Registry
+Key 1
+Subkey resfile\Shell\Open\ddeexec\topic
+Value 
+Data System
+Type 1
+]
+[Registry
+Key 1
+Subkey resfile\DefaultIcon
+Value 
+Data z:\compiler\BC5\BIN\BCW.EXE,-6
+Type 1
+]
+[Registry
+Key 1
+Subkey exefile\Shell\debug
+Value 
+Data &Debug
+Type 1
+]
+[Registry
+Key 1
+Subkey exefile\Shell\debug\command
+Value 
+Data z:\compiler\BC5\BIN\BCW.EXE
+Type 1
+]
+[Registry
+Key 1
+Subkey exefile\Shell\Debug\ddeexec
+Value 
+Data IDE.DebugLoad("%1");
+Type 1
+]
+[Registry
+Key 1
+Subkey exefile\Shell\Debug\ddeexec\Application
+Value 
+Data BCW
+Type 1
+]
+[Registry
+Key 1
+Subkey exefile\Shell\Debug\ddeexec\ifexec
+Value 
+Data IDE.DebugLoad("%1");
+Type 1
+]
+[Registry
+Key 1
+Subkey exefile\Shell\Debug\ddeexec\topic
+Value 
+Data System
+Type 1
+]
+[Registry
+Key 1
+Subkey .c
+Value 
+Data cfile
+Type 1
+]
+[Registry
+Key 1
+Subkey cfile
+Value 
+Data C Source File
+Type 1
+]
+[Registry
+Key 1
+Subkey cfile\Shell\Open
+Value 
+Data &Open
+Type 1
+]
+[Registry
+Key 1
+Subkey cfile\Shell\Open\command
+Value 
+Data z:\compiler\BC5\BIN\BCW.EXE
+Type 1
+]
+[Registry
+Key 1
+Subkey cfile\Shell\Open\ddeexec
+Value 
+Data IDE.FileOpen("%1");
+Type 1
+]
+[Registry
+Key 1
+Subkey cfile\Shell\Open\ddeexec\Application
+Value 
+Data BCW
+Type 1
+]
+[Registry
+Key 1
+Subkey cfile\Shell\Open\ddeexec\ifexec
+Value 
+Data IDE.FileOpen("%1");
+Type 1
+]
+[Registry
+Key 1
+Subkey cfile\Shell\Print
+Value 
+Data &Print
+Type 1
+]
+[Registry
+Key 1
+Subkey cfile\Shell\Print\command
+Value 
+Data NOTEPAD.EXE /p %1
+Type 1
+]
+[Registry
+Key 1
+Subkey cfile\DefaultIcon
+Value 
+Data z:\compiler\BC5\BIN\BCW.EXE,-4
+Type 1
+]
+[Registry
+Key 1
+Subkey .cpp
+Value 
+Data cppfile
+Type 1
+]
+[Registry
+Key 1
+Subkey cppfile
+Value 
+Data C++ Source File
+Type 1
+]
+[Registry
+Key 1
+Subkey cppfile\Shell\Open
+Value 
+Data &Open
+Type 1
+]
+[Registry
+Key 1
+Subkey cppfile\Shell\Open\command
+Value 
+Data z:\compiler\BC5\BIN\BCW.EXE
+Type 1
+]
+[Registry
+Key 1
+Subkey cppfile\Shell\Open\ddeexec
+Value 
+Data IDE.FileOpen("%1");
+Type 1
+]
+[Registry
+Key 1
+Subkey cppfile\Shell\Open\ddeexec\Application
+Value 
+Data BCW
+Type 1
+]
+[Registry
+Key 1
+Subkey cppfile\Shell\Open\ddeexec\ifexec
+Value 
+Data IDE.FileOpen("%1");
+Type 1
+]
+[Registry
+Key 1
+Subkey cppfile\Shell\Print\command
+Value 
+Data NOTEPAD.EXE /p %1
+Type 1
+]
+[Registry
+Key 1
+Subkey cppfile\DefaultIcon
+Value 
+Data z:\compiler\BC5\BIN\BCW.EXE,-4
+Type 1
+]
+[Registry
+Key 1
+Subkey .h
+Value 
+Data CHeaderFile
+Type 1
+]
+[Registry
+Key 1
+Subkey .hpp
+Value 
+Data CHeaderFile
+Type 1
+]
+[Registry
+Key 1
+Subkey CHeaderFile
+Value 
+Data C/C++ Header File
+Type 1
+]
+[Registry
+Key 1
+Subkey CHeaderFile\Shell\Open
+Value 
+Data &Open
+Type 1
+]
+[Registry
+Key 1
+Subkey CHeaderFile\Shell\Open\command
+Value 
+Data z:\compiler\BC5\BIN\BCW.EXE
+Type 1
+]
+[Registry
+Key 1
+Subkey CHeaderFile\Shell\Open\ddeexec
+Value 
+Data IDE.FileOpen("%1");
+Type 1
+]
+[Registry
+Key 1
+Subkey CHeaderFile\Shell\Open\ddeexec\Application
+Value 
+Data BCW
+Type 1
+]
+[Registry
+Key 1
+Subkey CHeaderFile\Shell\Open\ddeexec\ifexec
+Value 
+Data IDE.FileOpen("%1");
+Type 1
+]
+[Registry
+Key 1
+Subkey CHeaderFile\Shell\Print
+Value 
+Data &Print
+Type 1
+]
+[Registry
+Key 1
+Subkey CHeaderFile\Shell\Print\command
+Value 
+Data NOTEPAD.EXE /p %1
+Type 1
+]
+[Registry
+Key 1
+Subkey CHeaderFile\DefaultIcon
+Value 
+Data z:\compiler\BC5\BIN\BCW.EXE,-4
+Type 1
+]
+[Registry
+Key 1
+Subkey TypeLib\{2647E000-91D6-11CE-8857-0020AF05B19B}\1.0
+Value 
+Data Borland Visual Database Tools
+Type 1
+]
+[Registry
+Key 1
+Subkey TypeLib\{2647E000-91D6-11CE-8857-0020AF05B19B}\1.0\HELPDIR
+Value 
+Data 
+Type 0
+]
+[Registry
+Key 1
+Subkey TypeLib\{2647E000-91D6-11CE-8857-0020AF05B19B}\1.0\409\win16
+Value 
+Data bdt50.lib
+Type 1
+]
+[Registry
+Key 1
+Subkey TypeLib\{2647E000-91D6-11CE-8857-0020AF05B19B}\1.0\409\win32
+Value 
+Data bdt5032.lib
+Type 1
+]
+[Registry
+Key 1
+Subkey TypeLib\{2647E000-91D6-11CE-8857-0020AF05B19B}\1.0\FLAGS
+Value 
+Data 0
+Type 1
+]
+[Registry
+Key 1
+Subkey BDT50.TDataSource
+Value 
+Data 
+Type 0
+]
+[Registry
+Key 1
+Subkey BDT50.TDataSource\Clsid
+Value 
+Data 
+Type 0
+]
+[Registry
+Key 1
+Subkey CLSID\{2647E013-91D6-11CE-8857-0020AF05B19B}
+Value 
+Data Borland Visual Database Tools TDataSource
+Type 1
+]
+[Registry
+Key 1
+Subkey CLSID\{2647E013-91D6-11CE-8857-0020AF05B19B}\ProgID
+Value 
+Data BDT50.TDataSource
+Type 1
+]
+[Registry
+Key 1
+Subkey CLSID\{2647E013-91D6-11CE-8857-0020AF05B19B}\InProcServer
+Value 
+Data bdt50c.dll
+Type 1
+]
+[Registry
+Key 1
+Subkey CLSID\{2647E013-91D6-11CE-8857-0020AF05B19B}\InProcServer32
+Value 
+Data bdt50cf.dll
+Type 1
+]
+[Registry
+Key 1
+Subkey BDT50.TTable
+Value 
+Data 
+Type 0
+]
+[Registry
+Key 1
+Subkey BDT50.TTable\Clsid
+Value 
+Data 
+Type 0
+]
+[Registry
+Key 1
+Subkey CLSID\{2647E043-91D6-11CE-8857-0020AF05B19B}
+Value 
+Data Borland Visual Database Tools TTable
+Type 1
+]
+[Registry
+Key 1
+Subkey CLSID\{2647E043-91D6-11CE-8857-0020AF05B19B}\ProgID
+Value 
+Data BDT50.TTable
+Type 1
+]
+[Registry
+Key 1
+Subkey CLSID\{2647E043-91D6-11CE-8857-0020AF05B19B}\InProcServer
+Value 
+Data bdt50c.dll
+Type 1
+]
+[Registry
+Key 1
+Subkey CLSID\{2647E043-91D6-11CE-8857-0020AF05B19B}\InProcServer32
+Value 
+Data bdt50cf.dll
+Type 1
+]
+[Registry
+Key 1
+Subkey BDT50.TQuery
+Value 
+Data 
+Type 0
+]
+[Registry
+Key 1
+Subkey BDT50.TQuery\Clsid
+Value 
+Data 
+Type 0
+]
+[Registry
+Key 1
+Subkey CLSID\{2647E053-91D6-11CE-8857-0020AF05B19B}
+Value 
+Data Borland Visual Database Tools TQuery
+Type 1
+]
+[Registry
+Key 1
+Subkey CLSID\{2647E053-91D6-11CE-8857-0020AF05B19B}\ProgID
+Value 
+Data BDT50.TQuery
+Type 1
+]
+[Registry
+Key 1
+Subkey CLSID\{2647E053-91D6-11CE-8857-0020AF05B19B}\InProcServer
+Value 
+Data bdt50c.dll
+Type 1
+]
+[Registry
+Key 1
+Subkey CLSID\{2647E053-91D6-11CE-8857-0020AF05B19B}\InProcServer32
+Value 
+Data bdt50cf.dll
+Type 1
+]
+[Registry
+Key 1
+Subkey BDT50.TStoredProc
+Value 
+Data 
+Type 0
+]
+[Registry
+Key 1
+Subkey BDT50.TStoredProc\Clsid
+Value 
+Data 
+Type 0
+]
+[Registry
+Key 1
+Subkey CLSID\{2647E063-91D6-11CE-8857-0020AF05B19B}
+Value 
+Data Borland Visual Database Tools TStoredProc
+Type 1
+]
+[Registry
+Key 1
+Subkey CLSID\{2647E063-91D6-11CE-8857-0020AF05B19B}\ProgID
+Value 
+Data BDT50.TStoredProc
+Type 1
+]
+[Registry
+Key 1
+Subkey CLSID\{2647E063-91D6-11CE-8857-0020AF05B19B}\InProcServer
+Value 
+Data bdt50c.dll
+Type 1
+]
+[Registry
+Key 1
+Subkey CLSID\{2647E063-91D6-11CE-8857-0020AF05B19B}\InProcServer32
+Value 
+Data bdt50cf.dll
+Type 1
+]
+[Registry
+Key 1
+Subkey BDT50.TDatabase
+Value 
+Data 
+Type 0
+]
+[Registry
+Key 1
+Subkey BDT50.TDatabase\Clsid
+Value 
+Data 
+Type 0
+]
+[Registry
+Key 1
+Subkey CLSID\{2647E073-91D6-11CE-8857-0020AF05B19B}
+Value 
+Data Borland Visual Database Tools TDatabase
+Type 1
+]
+[Registry
+Key 1
+Subkey CLSID\{2647E073-91D6-11CE-8857-0020AF05B19B}\ProgID
+Value 
+Data BDT50.TDatabase
+Type 1
+]
+[Registry
+Key 1
+Subkey CLSID\{2647E073-91D6-11CE-8857-0020AF05B19B}\InProcServer
+Value 
+Data bdt50c.dll
+Type 1
+]
+[Registry
+Key 1
+Subkey CLSID\{2647E073-91D6-11CE-8857-0020AF05B19B}\InProcServer32
+Value 
+Data bdt50cf.dll
+Type 1
+]
+[Registry
+Key 1
+Subkey BDT50.TBatchMove
+Value 
+Data 
+Type 0
+]
+[Registry
+Key 1
+Subkey BDT50.TBatchMove\Clsid
+Value 
+Data 
+Type 0
+]
+[Registry
+Key 1
+Subkey CLSID\{2647E083-91D6-11CE-8857-0020AF05B19B}
+Value 
+Data Borland Visual Database Tools TBatchMove
+Type 1
+]
+[Registry
+Key 1
+Subkey CLSID\{2647E083-91D6-11CE-8857-0020AF05B19B}\ProgID
+Value 
+Data BDT50.TBatchMove
+Type 1
+]
+[Registry
+Key 1
+Subkey CLSID\{2647E083-91D6-11CE-8857-0020AF05B19B}\InProcServer
+Value 
+Data bdt50c.dll
+Type 1
+]
+[Registry
+Key 1
+Subkey CLSID\{2647E083-91D6-11CE-8857-0020AF05B19B}\InProcServer32
+Value 
+Data bdt50cf.dll
+Type 1
+]
+[Registry
+Key 1
+Subkey BDT50.TSession
+Value 
+Data 
+Type 0
+]
+[Registry
+Key 1
+Subkey BDT50.TSession\Clsid
+Value 
+Data 
+Type 0
+]
+[Registry
+Key 1
+Subkey CLSID\{2647E0A3-91D6-11CE-8857-0020AF05B19B}
+Value 
+Data Borland Visual Database Tools TSession
+Type 1
+]
+[Registry
+Key 1
+Subkey CLSID\{2647E0A3-91D6-11CE-8857-0020AF05B19B}\ProgID
+Value 
+Data BDT50.TSession
+Type 1
+]
+[Registry
+Key 1
+Subkey CLSID\{2647E0A3-91D6-11CE-8857-0020AF05B19B}\InProcServer
+Value 
+Data bdt50c.dll
+Type 1
+]
+[Registry
+Key 1
+Subkey CLSID\{2647E0A3-91D6-11CE-8857-0020AF05B19B}\InProcServer32
+Value 
+Data bdt50cf.dll
+Type 1
+]
+[Registry
+Key 1
+Subkey BDT50.TField
+Value 
+Data 
+Type 0
+]
+[Registry
+Key 1
+Subkey BDT50.TField\Clsid
+Value 
+Data 
+Type 0
+]
+[Registry
+Key 1
+Subkey CLSID\{2647E0B3-91D6-11CE-8857-0020AF05B19B}
+Value 
+Data Borland Visual Database Tools TField
+Type 1
+]
+[Registry
+Key 1
+Subkey CLSID\{2647E0B3-91D6-11CE-8857-0020AF05B19B}\ProgID
+Value 
+Data BDT50.TField
+Type 1
+]
+[Registry
+Key 1
+Subkey CLSID\{2647E0B3-91D6-11CE-8857-0020AF05B19B}\InProcServer
+Value 
+Data bdt50c.dll
+Type 1
+]
+[Registry
+Key 1
+Subkey CLSID\{2647E0B3-91D6-11CE-8857-0020AF05B19B}\InProcServer32
+Value 
+Data bdt50cf.dll
+Type 1
+]
+[Registry
+Key 1
+Subkey BDT50.TFieldDef
+Value 
+Data 
+Type 0
+]
+[Registry
+Key 1
+Subkey BDT50.TFieldDef\Clsid
+Value 
+Data 
+Type 0
+]
+[Registry
+Key 1
+Subkey CLSID\{2647E0D3-91D6-11CE-8857-0020AF05B19B}
+Value 
+Data Borland Visual Database Tools TFieldDef
+Type 1
+]
+[Registry
+Key 1
+Subkey CLSID\{2647E0D3-91D6-11CE-8857-0020AF05B19B}\ProgID
+Value 
+Data BDT50.TFieldDef
+Type 1
+]
+[Registry
+Key 1
+Subkey CLSID\{2647E0D3-91D6-11CE-8857-0020AF05B19B}\InProcServer
+Value 
+Data bdt50c.dll
+Type 1
+]
+[Registry
+Key 1
+Subkey CLSID\{2647E0D3-91D6-11CE-8857-0020AF05B19B}\InProcServer32
+Value 
+Data bdt50cf.dll
+Type 1
+]
+[Registry
+Key 1
+Subkey BDT50.TFieldDefs
+Value 
+Data 
+Type 0
+]
+[Registry
+Key 1
+Subkey BDT50.TFieldDefs\Clsid
+Value 
+Data 
+Type 0
+]
+[Registry
+Key 1
+Subkey CLSID\{2647E0E3-91D6-11CE-8857-0020AF05B19B}
+Value 
+Data Borland Visual Database Tools TFieldDefs
+Type 1
+]
+[Registry
+Key 1
+Subkey CLSID\{2647E0E3-91D6-11CE-8857-0020AF05B19B}\ProgID
+Value 
+Data BDT50.TFieldDefs
+Type 1
+]
+[Registry
+Key 1
+Subkey CLSID\{2647E0E3-91D6-11CE-8857-0020AF05B19B}\InProcServer
+Value 
+Data bdt50c.dll
+Type 1
+]
+[Registry
+Key 1
+Subkey CLSID\{2647E0E3-91D6-11CE-8857-0020AF05B19B}\InProcServer32
+Value 
+Data bdt50cf.dll
+Type 1
+]
+[Registry
+Key 1
+Subkey BDT50.TIndexDef
+Value 
+Data 
+Type 0
+]
+[Registry
+Key 1
+Subkey BDT50.TIndexDef\Clsid
+Value 
+Data 
+Type 0
+]
+[Registry
+Key 1
+Subkey CLSID\{2647E0F3-91D6-11CE-8857-0020AF05B19B}
+Value 
+Data Borland Visual Database Tools TIndexDef
+Type 1
+]
+[Registry
+Key 1
+Subkey CLSID\{2647E0F3-91D6-11CE-8857-0020AF05B19B}\ProgID
+Value 
+Data BDT50.TIndexDef
+Type 1
+]
+[Registry
+Key 1
+Subkey CLSID\{2647E0F3-91D6-11CE-8857-0020AF05B19B}\InProcServer
+Value 
+Data bdt50c.dll
+Type 1
+]
+[Registry
+Key 1
+Subkey CLSID\{2647E0F3-91D6-11CE-8857-0020AF05B19B}\InProcServer32
+Value 
+Data bdt50cf.dll
+Type 1
+]
+[Registry
+Key 1
+Subkey BDT50.TIndexDefs
+Value 
+Data 
+Type 0
+]
+[Registry
+Key 1
+Subkey BDT50.TIndexDefs\Clsid
+Value 
+Data 
+Type 0
+]
+[Registry
+Key 1
+Subkey CLSID\{2647E103-91D6-11CE-8857-0020AF05B19B}
+Value 
+Data Borland Visual Database Tools TIndexDefs
+Type 1
+]
+[Registry
+Key 1
+Subkey CLSID\{2647E103-91D6-11CE-8857-0020AF05B19B}\ProgID
+Value 
+Data BDT50.TIndexDefs
+Type 1
+]
+[Registry
+Key 1
+Subkey CLSID\{2647E103-91D6-11CE-8857-0020AF05B19B}\InProcServer
+Value 
+Data bdt50c.dll
+Type 1
+]
+[Registry
+Key 1
+Subkey CLSID\{2647E103-91D6-11CE-8857-0020AF05B19B}\InProcServer32
+Value 
+Data bdt50cf.dll
+Type 1
+]
+[Registry
+Key 1
+Subkey BDT50.TParam
+Value 
+Data 
+Type 0
+]
+[Registry
+Key 1
+Subkey BDT50.TParam\Clsid
+Value 
+Data 
+Type 0
+]
+[Registry
+Key 1
+Subkey CLSID\{2647E113-91D6-11CE-8857-0020AF05B19B}
+Value 
+Data Borland Visual Database Tools TParam
+Type 1
+]
+[Registry
+Key 1
+Subkey CLSID\{2647E113-91D6-11CE-8857-0020AF05B19B}\ProgID
+Value 
+Data BDT50.TParam
+Type 1
+]
+[Registry
+Key 1
+Subkey CLSID\{2647E113-91D6-11CE-8857-0020AF05B19B}\InProcServer
+Value 
+Data bdt50c.dll
+Type 1
+]
+[Registry
+Key 1
+Subkey CLSID\{2647E113-91D6-11CE-8857-0020AF05B19B}\InProcServer32
+Value 
+Data bdt50cf.dll
+Type 1
+]
+[Registry
+Key 1
+Subkey BDT50.TParams
+Value 
+Data 
+Type 0
+]
+[Registry
+Key 1
+Subkey BDT50.TParams\Clsid
+Value 
+Data 
+Type 0
+]
+[Registry
+Key 1
+Subkey CLSID\{2647E123-91D6-11CE-8857-0020AF05B19B}
+Value 
+Data Borland Visual Database Tools TParams
+Type 1
+]
+[Registry
+Key 1
+Subkey CLSID\{2647E123-91D6-11CE-8857-0020AF05B19B}\ProgID
+Value 
+Data BDT50.TParams
+Type 1
+]
+[Registry
+Key 1
+Subkey CLSID\{2647E123-91D6-11CE-8857-0020AF05B19B}\InProcServer
+Value 
+Data bdt50c.dll
+Type 1
+]
+[Registry
+Key 1
+Subkey CLSID\{2647E123-91D6-11CE-8857-0020AF05B19B}\InProcServer32
+Value 
+Data bdt50cf.dll
+Type 1
+]
+[Registry
+Key 1
+Subkey BDT50.TStrings
+Value 
+Data 
+Type 0
+]
+[Registry
+Key 1
+Subkey BDT50.TStrings\Clsid
+Value 
+Data 
+Type 0
+]
+[Registry
+Key 1
+Subkey CLSID\{2647E133-91D6-11CE-8857-0020AF05B19B}
+Value 
+Data Borland Visual Database Tools TStrings
+Type 1
+]
+[Registry
+Key 1
+Subkey CLSID\{2647E133-91D6-11CE-8857-0020AF05B19B}\ProgID
+Value 
+Data BDT50.TStrings
+Type 1
+]
+[Registry
+Key 1
+Subkey CLSID\{2647E133-91D6-11CE-8857-0020AF05B19B}\InProcServer
+Value 
+Data bdt50c.dll
+Type 1
+]
+[Registry
+Key 1
+Subkey CLSID\{2647E133-91D6-11CE-8857-0020AF05B19B}\InProcServer32
+Value 
+Data bdt50cf.dll
+Type 1
+]
+[Registry
+Key 1
+Subkey BDT50.TStream
+Value 
+Data 
+Type 0
+]
+[Registry
+Key 1
+Subkey BDT50.TStream\Clsid
+Value 
+Data 
+Type 0
+]
+[Registry
+Key 1
+Subkey CLSID\{2647E143-91D6-11CE-8857-0020AF05B19B}
+Value 
+Data Borland Visual Database Tools TStream
+Type 1
+]
+[Registry
+Key 1
+Subkey CLSID\{2647E143-91D6-11CE-8857-0020AF05B19B}\ProgID
+Value 
+Data BDT50.TStream
+Type 1
+]
+[Registry
+Key 1
+Subkey CLSID\{2647E143-91D6-11CE-8857-0020AF05B19B}\InProcServer
+Value 
+Data bdt50c.dll
+Type 1
+]
+[Registry
+Key 1
+Subkey CLSID\{2647E143-91D6-11CE-8857-0020AF05B19B}\InProcServer32
+Value 
+Data bdt50cf.dll
+Type 1
+]
+[Registry
+Key 1
+Subkey BDT50.TAnyString
+Value 
+Data 
+Type 0
+]
+[Registry
+Key 1
+Subkey BDT50.TAnyString\Clsid
+Value 
+Data 
+Type 0
+]
+[Registry
+Key 1
+Subkey CLSID\{2647E153-91D6-11CE-8857-0020AF05B19B}
+Value 
+Data Borland Visual Database Tools TAnyString
+Type 1
+]
+[Registry
+Key 1
+Subkey CLSID\{2647E153-91D6-11CE-8857-0020AF05B19B}\ProgID
+Value 
+Data BDT50.TAnyString
+Type 1
+]
+[Registry
+Key 1
+Subkey CLSID\{2647E153-91D6-11CE-8857-0020AF05B19B}\InProcServer
+Value 
+Data bdt50c.dll
+Type 1
+]
+[Registry
+Key 1
+Subkey CLSID\{2647E153-91D6-11CE-8857-0020AF05B19B}\InProcServer32
+Value 
+Data bdt50cf.dll
+Type 1
+]
+[INI
+Section files
+Key WIN31WH.HLP 
+Value D:\BC5\HELP
+File C:\WINNT35\WINHELP.INI
+]
+[INI
+Section files
+Key WIN32S.HLP 
+Value D:\BC5\HELP
+File C:\WINNT35\WINHELP.INI
+]
+[INI
+Section files
+Key OPENGL.HLP 
+Value D:\BC5\HELP
+File C:\WINNT35\WINHELP.INI
+]
+[INI
+Section files
+Key RPC.HLP 
+Value D:\BC5\HELP
+File C:\WINNT35\WINHELP.INI
+]
+[INI
+Section files
+Key WIN32.HLP 
+Value D:\BC5\HELP
+File C:\WINNT35\WINHELP.INI
+]
+[INI
+Section files
+Key HCW.HLP 
+Value D:\BC5\HELP
+File C:\WINNT35\WINHELP.INI
+]
+[INI
+Section files
+Key HW32.HLP 
+Value D:\BC5\HELP
+File C:\WINNT35\WINHELP.INI
+]
+[INI
+Section files
+Key MC.HLP 
+Value D:\BC5\HELP
+File C:\WINNT35\WINHELP.INI
+]
+[INI
+Section files
+Key RC.HLP 
+Value D:\BC5\HELP
+File C:\WINNT35\WINHELP.INI
+]
+[INI
+Section files
+Key RLMAN.HLP 
+Value D:\BC5\HELP
+File C:\WINNT35\WINHELP.INI
+]
+[INI
+Section files
+Key SHED.HLP 
+Value D:\BC5\HELP
+File C:\WINNT35\WINHELP.INI
+]
+[INI
+Section files
+Key UIGUIDE.HLP 
+Value D:\BC5\HELP
+File C:\WINNT35\WINHELP.INI
+]
+[INI
+Section files
+Key BCDOS.HLP 
+Value D:\BC5\HELP
+File C:\WINNT35\WINHELP.INI
+]
+[INI
+Section files
+Key BCW.HLP 
+Value D:\BC5\HELP
+File C:\WINNT35\WINHELP.INI
+]
+[INI
+Section files
+Key BCPP.HLP 
+Value D:\BC5\HELP
+File C:\WINNT35\WINHELP.INI
+]
+[INI
+Section files
+Key WINSIGHT.HLP 
+Value D:\BC5\HELP
+File C:\WINNT35\WINHELP.INI
+]
+[INI
+Section files
+Key WINSPCTR.HLP 
+Value D:\BC5\HELP
+File C:\WINNT35\WINHELP.INI
+]
+[INI
+Section files
+Key OWL50.HLP 
+Value D:\BC5\HELP
+File C:\WINNT35\WINHELP.INI
+]
+[INI
+Section files
+Key WORKSHOP.HLP 
+Value D:\BC5\HELP
+File C:\WINNT35\WINHELP.INI
+]
+[INI
+Section files
+Key BWCC.HLP 
+Value D:\BC5\HELP
+File C:\WINNT35\WINHELP.INI
+]
+[INI
+Section files
+Key CLASSLIB.HLP 
+Value D:\BC5\HELP
+File C:\WINNT35\WINHELP.INI
+]
+[INI
+Section files
+Key OCF.HLP 
+Value D:\BC5\HELP
+File C:\WINNT35\WINHELP.INI
+]
+[INI
+Section files
+Key OLE.HLP 
+Value D:\BC5\HELP
+File C:\WINNT35\WINHELP.INI
+]
+[INI
+Section files
+Key CTL3D.HLP 
+Value D:\BC5\HELP
+File C:\WINNT35\WINHELP.INI
+]
+[INI
+Section files
+Key BCERRMSG.HLP 
+Value D:\BC5\HELP
+File C:\WINNT35\WINHELP.INI
+]
+[INI
+Section files
+Key BCTOOLS.HLP 
+Value D:\BC5\HELP
+File C:\WINNT35\WINHELP.INI
+]
+[INI
+Section files
+Key SCRIPT.HLP 
+Value D:\BC5\HELP
+File C:\WINNT35\WINHELP.INI
+]
+[INI
+Section files
+Key BCVDTREF.HLP 
+Value D:\BC5\HELP
+File C:\WINNT35\WINHELP.INI
+]
+[INI
+Section files
+Key TDWINI.HLP 
+Value D:\BC5\HELP
+File C:\WINNT35\WINHELP.INI
+]
+[INI
+Section files
+Key VBT300.HLP 
+Value D:\BC5\HELP
+File C:\WINNT35\WINHELP.INI
+]
+[INI
+Section files
+Key GUIDE.HLP 
+Value D:\BC5\HELP
+File C:\WINNT35\WINHELP.INI
+]
+[INI
+Section files
+Key KBASE.HLP 
+Value D:\BC5\HELP
+File C:\WINNT35\WINHELP.INI
+]
+[INI
+Section files
+Key MAPI.HLP 
+Value D:\BC5\HELP
+File C:\WINNT35\WINHELP.INI
+]
+[INI
+Section files
+Key MM.HLP 
+Value D:\BC5\HELP
+File C:\WINNT35\WINHELP.INI
+]
+[INI
+Section files
+Key STL.HLP 
+Value D:\BC5\HELP
+File C:\WINNT35\WINHELP.INI
+]
+[INI
+Section files
+Key WINSYS.HLP 
+Value D:\BC5\HELP
+File C:\WINNT35\WINHELP.INI
+]
+[INI
+Section files
+Key OPENHELP.HLP 
+Value D:\BC5\HELP
+File C:\WINNT35\WINHELP.INI
+]
+[INI
+Section Tooldir
+Key BcInclude
+Value D:\BC5\INCLUDE
+File C:\WINNT35\BCW5.INI
+]
+[INI
+Section Tooldir
+Key BcLib
+Value D:\BC5\LIB
+File C:\WINNT35\BCW5.INI
+]
+[INI
+Section IDE
+Key DefaultDesktopDir
+Value D:\BC5\BIN
+File C:\WINNT35\BCW5.INI
+]
+[Files
+C:\WINNT35\BCW5.INI
+]
+[INI
+Section IDE
+Key HelpDir
+Value D:\BC5\HELP
+File C:\WINNT35\BCW5.INI
+]
+[INI
+Section TurboDebugger
+Key DEBUGGERDLL
+Value D:\BC5\BIN\TDWINTH.DLL
+File C:\WINNT35\TDW.INI
+]
+[INI
+Section TurboDebugger
+Key VIDEODLL
+Value D:\BC5\BIN\TDWGUI.DLL
+File C:\WINNT35\TDW.INI
+]
+[Dirs
+D:\BC5\BIN\
+]
+[Files
+D:\BC5\BIN\TLINK.CFG
+]
+[Files
+D:\BC5\BIN\TURBOC.CFG
+]
+[Files
+D:\BC5\BIN\TLINK32.CFG
+]
+[Files
+D:\BC5\BIN\BCC32.CFG
+]
+[Files
+D:\BC5\BIN\BCROOT.INC
+]
+[Dirs
+D:\BC5\EXAMPLES\IDE\MULTITRG\OUT16\
+]
+[Dirs
+D:\BC5\EXAMPLES\IDE\MULTITRG\OUT32\
+]
+[Dirs
+D:\BC5\EXAMPLES\IDE\SRCPOOL\OUT16\
+]
+[Dirs
+D:\BC5\EXAMPLES\IDE\SRCPOOL\OUT32\
+]
+[Dirs
+D:\BC5\EXAMPLES\IDE\STYLESHT\OUT16\
+]
+[Dirs
+D:\BC5\EXAMPLES\IDE\STYLESHT\OUT32\
+]
+[Dirs
+D:\BC5\EXAMPLES\VDBT\ANIMALS\OUT16\
+]
+[Dirs
+D:\BC5\EXAMPLES\VDBT\ANIMALS\OUT32\
+]
+[Dirs
+D:\BC5\EXAMPLES\VDBT\CALCFLD\OUT16\
+]
+[Dirs
+D:\BC5\EXAMPLES\VDBT\CALCFLD\OUT32\
+]
+[Dirs
+D:\BC5\EXAMPLES\VDBT\FISHFACT\OUT16\
+]
+[Dirs
+D:\BC5\EXAMPLES\VDBT\FISHFACT\OUT32\
+]
+[Dirs
+D:\BC5\EXAMPLES\VDBT\OWLQRY\OUT16\
+]
+[Dirs
+D:\BC5\EXAMPLES\VDBT\OWLQRY\OUT32\
+]
+[Dirs
+D:\BC5\EXAMPLES\VDBT\OWLRANGE\OUT16\
+]
+[Dirs
+D:\BC5\EXAMPLES\VDBT\OWLRANGE\OUT32\
+]
+[Dirs
+D:\BC5\EXAMPLES\VDBT\OWLTAB\OUT16\
+]
+[Dirs
+D:\BC5\EXAMPLES\VDBT\OWLTAB\OUT32\
+]
+[Dirs
+D:\BC5\EXAMPLES\VDBT\QUERY\OUT16\
+]
+[Dirs
+D:\BC5\EXAMPLES\VDBT\QUERY\OUT32\
+]
+[Dirs
+D:\BC5\EXAMPLES\VDBT\TABLE\OUT16\
+]
+[Dirs
+D:\BC5\EXAMPLES\VDBT\TABLE\OUT32\
+]
+[PMItem Borland C++
+PMGroup Borland C++ 5.0
+ShowMin OFF
+]
+[PMItem WinSight for Win32
+PMGroup Borland C++ 5.0
+ShowMin OFF
+]
+[PMItem WinSpector
+PMGroup Borland C++ 5.0
+ShowMin OFF
+]
+[PMItem Turbo Debugger for Win32
+PMGroup Borland C++ 5.0
+ShowMin OFF
+]
+[PMItem TD32 Configuration
+PMGroup Borland C++ 5.0
+ShowMin OFF
+]
+[PMItem Just In Time Debugging
+PMGroup Borland C++ 5.0
+ShowMin OFF
+]
+[PMItem TD Video Configuration
+PMGroup Borland C++ 5.0
+ShowMin OFF
+]
+[PMItem Turbo Debugger for Windows
+PMGroup Borland C++ 5.0
+ShowMin OFF
+]
+[PMItem TDW Configuration
+PMGroup Borland C++ 5.0
+ShowMin OFF
+]
+[PMItem Turbo Profiler for Windows
+PMGroup Borland C++ 5.0
+ShowMin OFF
+]
+[PMItem Turbo Debugger for DOS
+PMGroup Borland C++ 5.0
+ShowMin OFF
+]
+[PMItem TD Configuration
+PMGroup Borland C++ 5.0
+ShowMin OFF
+]
+[PMItem Turbo Profiler
+PMGroup Borland C++ 5.0
+ShowMin OFF
+]
+[PMItem FConvert
+PMGroup Borland C++ 5.0
+ShowMin OFF
+]
+[PMItem Register Borland C++ 5.0
+PMGroup Borland C++ 5.0
+ShowMin OFF
+]
+[PMItem BDE Configuration Utility
+PMGroup Borland C++ 5.0
+ShowMin OFF
+]
+[PMItem Borland C++ 5.0 Uninstaller
+PMGroup Borland C++ 5.0
+ShowMin OFF
+]
+[PMItem Borland C++ DOS Reference
+PMGroup Borland C++ 5.0
+ShowMin OFF
+]
+[PMItem Borland C++ User's Guide
+PMGroup Borland C++ 5.0
+ShowMin OFF
+]
+[PMItem Borland C++ Programmer's Guide
+PMGroup Borland C++ 5.0
+ShowMin OFF
+]
+[PMItem Windows API Reference
+PMGroup Borland C++ 5.0
+ShowMin OFF
+]
+[PMItem Win32 Online Help
+PMGroup Borland C++ 5.0
+ShowMin OFF
+]
+[PMItem Win32s Reference
+PMGroup Borland C++ 5.0
+ShowMin OFF
+]
+[PMItem ObjectWindows Reference
+PMGroup Borland C++ 5.0
+ShowMin OFF
+]
+[PMItem Class Library Reference
+PMGroup Borland C++ 5.0
+ShowMin OFF
+]
+[PMItem ObjectComponent Reference
+PMGroup Borland C++ 5.0
+ShowMin OFF
+]
+[PMItem OLE2 Online Help
+PMGroup Borland C++ 5.0
+ShowMin OFF
+]
+[PMItem Resource Workshop Reference
+PMGroup Borland C++ 5.0
+ShowMin OFF
+]
+[PMItem WinSight Reference
+PMGroup Borland C++ 5.0
+ShowMin OFF
+]
+[PMItem WinSpector Reference
+PMGroup Borland C++ 5.0
+ShowMin OFF
+]
+[PMItem Control 3D Reference
+PMGroup Borland C++ 5.0
+ShowMin OFF
+]
+[PMItem Borland C++ Error Messages
+PMGroup Borland C++ 5.0
+ShowMin OFF
+]
+[PMItem Borland C++ Tools
+PMGroup Borland C++ 5.0
+ShowMin OFF
+]
+[PMItem Object Scripting Help
+PMGroup Borland C++ 5.0
+ShowMin OFF
+]
+[PMItem Visual Database Tools Help
+PMGroup Borland C++ 5.0
+ShowMin OFF
+]
+[PMItem Windows Developer's Guide
+PMGroup Borland C++ 5.0
+ShowMin OFF
+]
+[PMItem OLE Knowledge Base
+PMGroup Borland C++ 5.0
+ShowMin OFF
+]
+[PMItem MAPI Programmer's Reference
+PMGroup Borland C++ 5.0
+ShowMin OFF
+]
+[PMItem Multimedia API Reference
+PMGroup Borland C++ 5.0
+ShowMin OFF
+]
+[PMItem Standard Template Library
+PMGroup Borland C++ 5.0
+ShowMin OFF
+]
+[PMItem Windows System Class Reference
+PMGroup Borland C++ 5.0
+ShowMin OFF
+]
+[PMItem Borland Custom Controls
+PMGroup Borland C++ 5.0
+ShowMin OFF
+]
+[Files
+D:\IDAPI32\IDAPI.CFG
+]
+[Files
+D:\IDAPI32\IDAPI.CFG
+]
+[Launch
+D:\IDAPI32\iduninst /bdereg
+]
+[Registry
+Key 3
+Subkey SOFTWARE\Microsoft\Windows\Help
+Value bdecfg32.hlp
+Data Z:\PROGRAM FILES\BORLAND\COMMON FILES\BDE
+Type 1
+]
+[Launch
+D:\BC5\CLEANINI
+]
+[Launch
+D:\BC5\UNREG -d -fD:\BC5\UNINST.INI
+]
+[Files
+D:\BC5\BIN\BAMGR.LOG
+]
+[Files
+D:\BC5\BIN\BCCONFIG.BCW
+]
+[Files
+D:\BC5\BIN\BCWDEF.~DE
+]
+[Files
+D:\BC5\BIN\BCWDEF.BCW
+]
+[Files
+D:\BC5\BIN\BCWDEF.DSW
+]
+[Files
+D:\BC5\BIN\BCWDEF.MBT
+]
+[Files
+D:\BC5\BIN\BCWDEF.MRT
+]
+[Files
+D:\BC5\BIN\TD.TR
+]
+[Files
+D:\BC5\BIN\TD32.TR2
+]
+[Files
+D:\BC5\BIN\TDCONFIG.TD
+]
+[Files
+D:\BC5\BIN\TDCONFIG.TD2
+]
+[Files
+D:\BC5\BIN\TDCONFIG.TDW
+]
+[Files
+D:\BC5\BIN\TDW.TRW
+]
+[Files
+D:\BC5\BIN\TDDEBUG.386
+]
+[Files
+D:\BC5\BIN\PVCS.GID
+]
+[Files
+D:\BC5\BIN\TFCONFIG.TF
+]
+[Files
+D:\BC5\BIN\TPROF.TP
+]
+[Files
+D:\BC5\SCRIPT\DEBUG.SPX
+]
+[Files
+D:\BC5\SCRIPT\BCWJAVA.SPX
+]
+[Files
+D:\BC5\SCRIPT\DEFAULT.SPP
+]
+[Files
+D:\BC5\SCRIPT\DEFAULT.SPX
+]
+[Files
+D:\BC5\SCRIPT\DEFAULT.BAK
+]
+[Files
+D:\BC5\SCRIPT\EDIT.SPX
+]
+[Files
+D:\BC5\SCRIPT\FILTSTUB.SPX
+]
+[Files
+D:\BC5\SCRIPT\IDE.SPX
+]
+[Files
+D:\BC5\SCRIPT\ISHIELD.SPX
+]
+[Files
+D:\BC5\SCRIPT\KEYMAPS.SPX
+]
+[Files
+D:\BC5\SCRIPT\MATE.SPX
+]
+[Files
+D:\BC5\SCRIPT\MISCSCR.SPX
+]
+[Files
+D:\BC5\SCRIPT\ED_DFLT.SPX
+]
+[Files
+D:\BC5\PIPELINE\PIPEDLG.DAT
+]
+[Files
+D:\BC5\PIPELINE\SYSTEM.INF
+]
+[Files
+D:\BC5\PIPELINE\REMIND.EXE
+]
+[Files
+D:\BC5\SCRIPT\STARTUP.SPX
+]
+[Files
+D:\BC5\SCRIPT\FILTERS.SPX
+]
+[Files
+D:\BC5\SCRIPT\EXSCR.SPX
+]
+[Files
+D:\BC5\SCRIPT\MENUHOOK.SPX
+]
+[Files
+D:\BC5\SCRIPT\VCS.SPX
+]
+[Files
+D:\BC5\SCRIPT\EXAMPLES\FOREACH.SPX
+]
+[Files
+D:\BC5\HELP\WIN32SDK.GID
+]
+[Files
+D:\BC5\HELP\BCWJAVA.GID
+]
+[Files
+D:\IDAPI32\IDAPINEW.CFG
+]
+[Files
+C:\WINNT35\WINSIGHT.INI
+]
+[Files
+C:\WINNT35\WORKSHOP.INI
+]
+[Files
+C:\WINNT35\BCW5.INI
+]
+[Files
+C:\WINNT35\TDW.INI
+]
+[Files
+C:\WINNT35\HELP.ICO
+]

@@ -8,7 +8,7 @@
 ##          :YPos() EndLine
 ##          :^@StartLine
 ##          :^BOL
-##          --FOR-- AutoEntry = 1 TO ((EndLine - StartLine) + 1)
+##          --FOR-- AutoEntry = 1 TO((EndLine - StartLine) + 1)
 ##              :ScanCPPAuto([[InternalName]], [[OLEType]], [[OLEArgs]])
 ##              --BEGIN-- TRUE
 ##                  :InternalName == ""

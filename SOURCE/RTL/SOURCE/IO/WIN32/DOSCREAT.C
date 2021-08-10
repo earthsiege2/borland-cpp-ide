@@ -7,9 +7,9 @@
  *--------------------------------------------------------------------------*/
 
 /*
- *      C/C++ Run Time Library - Version 1.5
+ *      C/C++ Run Time Library - Version 2.0
  *
- *      Copyright (c) 1991, 1994 by Borland International
+ *      Copyright (c) 1991, 1996 by Borland International
  *      All Rights Reserved.
  *
  */
@@ -72,7 +72,7 @@ static unsigned DosCreate(char *pathP, DWORD attr, int *handlep, DWORD disp)
      * Save the NT file handle in the table, return the table index.
      */
     oflag = O_BINARY;
-    if (__isatty((int)handle))
+    if (__isatty_osfhandle((long)handle))
         oflag |= O_DEVICE;
     if ((attr & FILE_ATTRIBUTE_READONLY) == 0)
         oflag |= _O_WRITABLE;       /* fstat() uses this bit */

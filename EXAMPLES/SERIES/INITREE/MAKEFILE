@@ -1,0 +1,15 @@
+#----------------------------------------------------------------------------
+# Borland C++
+# Copyright (c) 1987, 1996 Borland International Inc.  All Rights Reserved.
+#   examples\series\initree\makefile
+#----------------------------------------------------------------------------
+
+SYSTEMS = WIN32
+OSMAJOR = 4
+OSMINOR = 0
+EXERES  = initree
+CPCH    = -Hc -H"windows.h" -H=initree.csm
+OBJEXE  = initree.obj winmain.obj init.obj about.obj dispatch.obj misc.obj\
+          ini.obj
+
+!include $(BCEXAMPLEDIR)\makefile.gen

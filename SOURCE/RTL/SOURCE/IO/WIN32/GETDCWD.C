@@ -6,9 +6,9 @@
  *--------------------------------------------------------------------------*/
 
 /*
- *      C/C++ Run Time Library - Version 1.5
+ *      C/C++ Run Time Library - Version 2.0
  *
- *      Copyright (c) 1991, 1994 by Borland International
+ *      Copyright (c) 1991, 1996 by Borland International
  *      All Rights Reserved.
  *
  */
@@ -57,6 +57,7 @@ char * _RTLENTRY _EXPFUNC _getdcwd(int drive, char *bufP, int bufL)
     int     size;
     char    bufI[_MAX_DIR + 3];
     char    envname[4];
+    char   *filename;
     unsigned drivemask;
 
     /* If the default drive is specified, simply use GetCurrentDirectory.
@@ -90,31 +91,15 @@ char * _RTLENTRY _EXPFUNC _getdcwd(int drive, char *bufP, int bufL)
         drivemask = GetLogicalDrives();
         if (drivemask & (1 << (drive-1)))
         {
-                
-            /* Construct environment variable name for the specified drive.
-             */
-            envname[0] = '=';
-            envname[1] = drive + 'A' - 1;
-            envname[2] = ':';
-            envname[3] = '\0';
-
-            /* The environment variable =D:, where D is the drive, contains
-             * the current directory for that drive.
-             */
-            if (GetEnvironmentVariable(envname, bufI, sizeof(bufI)) == 0)
-            {
-                /*  The environment variable was not found, assume the current
-                 * directory is the root.
-                 */
-                bufI[0] = envname[1];
-                bufI[1] = ':';
-                bufI[2] = '\\';
-                bufI[3] = '\0';
-            }
+	    /* Use envname to store drive spec */
+            envname[0] = drive + 'A' - 1;
+            envname[1] = ':';
+            envname[2] = '\0';
+	    GetFullPathName(envname, sizeof(bufI), bufI, &filename);
         }
         else
             return NULL;
-                
+
     }
 
     /* If the buffer length is too small to contain the directory name,

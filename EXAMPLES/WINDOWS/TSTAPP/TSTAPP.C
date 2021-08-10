@@ -408,7 +408,11 @@ LRESULT CALLBACK _export TstAppWndProc(HWND hWnd, UINT message,
             MAKEINTRESOURCE(ABOUT),
             hWnd,
             (DLGPROC)lpproc);
-        FreeProcInstance(lpproc);
+
+#ifndef __FLAT__
+        FreeProcInstance(lpproc);  // required for 16-bit applications only
+#endif
+
         break;
 
     case IDM_MESSAGE:

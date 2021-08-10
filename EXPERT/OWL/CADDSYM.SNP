@@ -32,9 +32,9 @@
 ##          --END-- QUERY_BASE_NAME [[BaseName]]
 [[DefineMacro]]
 ##          <<TApplication QUERY_CLASS_NAME [[TApplicationName]] 2
-    EXPOSE_APPLICATION([[TApplicationName]], "Application", "Application object", 0)
+  EXPOSE_APPLICATION([[TApplicationName]], "Application", "Application object", 0)
 ##          TApplicationName == ClassName
-    EXPOSE_QUIT("Quit", "Quit application", 0)
+  EXPOSE_QUIT("Quit", "Quit application", 0)
 //{{[[ClassName]]SYM_TBL_BEGIN}}
 //{{[[ClassName]]SYM_TBL_END}}
 [[EndMacro]]([[ClassName]], [[Flags]], "[[ClassName]]", 0, 0);

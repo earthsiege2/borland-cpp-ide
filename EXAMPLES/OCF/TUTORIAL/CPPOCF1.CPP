@@ -2,7 +2,7 @@
 // Copyright (C) 1994 Borland International
 // CppOcf1.cpp
 // ---------------------------------------------------------------------------
-#include <ocf/ocfpch.h>
+#include <ocf/pch.h>
 #include <ocf/ocapp.h>
 #include <windowsx.h>
 #include <ocf/ocdoc.h>
@@ -270,13 +270,16 @@ ViewWnd_OnDestroy(HWND /*hwnd*/)
     p.Activate(false);
   }
 
-  if (OcView)
+  if (OcView) {
+    OcView->EvClose();
     OcView->ReleaseObject();
+  }
 
   OcDoc->Close();
 
-  if (OcApp)
+  if (OcApp) {
     OcApp->Release();
+  }
 
   delete OcDoc;
 }

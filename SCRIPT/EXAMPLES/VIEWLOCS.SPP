@@ -1,0 +1,36 @@
+//--------------------------------------------------------------------------
+// Object Scripting
+// Copyright (c) 1996 by Borland International, All Rights Reserved
+//
+// VIEWLOCS.SPP: View Locals. Inspects local variables if the debugger has
+//   a process.
+//
+// USE: Run script.
+//
+// FILES: MSG.SPP
+//--------------------------------------------------------------------------
+print "viewlocs.spp";
+
+//
+// IDE imports.
+//
+import scriptEngine;
+import debugger;
+
+//
+// Load support module(s).
+//
+if (!scriptEngine.IsLoaded("msg.spp")) scriptEngine.Load("msg.spp");
+
+viewlocs()
+{
+  declare msg = new TMsg();
+
+  if (debugger.HasProcess) {  // Process is under debugger.
+    debugger.Inspect("$Locals", NULL, 1, 1);
+  }
+  else {
+    msg.Info("There is no process running.");
+  }
+}
+

@@ -1,0 +1,17 @@
+#----------------------------------------------------------------------------
+# Borland C++
+# Copyright (c) 1987, 1996 Borland International Inc.  All Rights Reserved.
+#   examples\series\gdimeta\makefile
+#----------------------------------------------------------------------------
+
+SYSTEMS = WIN32
+OSMAJOR = 4
+OSMINOR = 0
+EXERES  = gdimeta
+CPCH    = -Hc -H"windows.h" -H=gdimeta.csm
+OBJEXE  = about.obj brushdlg.obj client.obj colordlg.obj dispatch.obj\
+          file.obj filedlg.obj gdimeta.obj infodlg.obj init.obj\
+          metafile.obj misc.obj palctrl.obj palette.obj pendlg.obj\
+          statbar.obj toolbar.obj winmain.obj\
+
+!include $(BCEXAMPLEDIR)\makefile.gen

@@ -159,7 +159,6 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
 
 ****************************************************************************/
 
-#pragma warn -eff
 LRESULT CALLBACK _export MainWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
    DLGPROC lpProcAbout;
@@ -239,7 +238,12 @@ LRESULT CALLBACK _export MainWndProc(HWND hWnd, UINT message, WPARAM wParam, LPA
            "AboutBox",
            hWnd,
            lpProcAbout);
+
+       #ifndef __FLAT__
        FreeProcInstance((FARPROC)lpProcAbout);
+       // required for 16-bit applications only
+       #endif
+
        break;
 
          default:
@@ -354,7 +358,6 @@ LRESULT CALLBACK _export MainWndProc(HWND hWnd, UINT message, WPARAM wParam, LPA
 
    return 0L;
 }
-#pragma warn .eff
 
 /****************************************************************************
 

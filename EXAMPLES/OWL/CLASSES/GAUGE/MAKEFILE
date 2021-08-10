@@ -1,0 +1,11 @@
+#----------------------------------------------------------------------------
+# ObjectWindows
+# Copyright (c) 1993, 1995 by Borland International, All Rights Reserved
+#----------------------------------------------------------------------------
+
+MODELS=lfdt
+
+EXERES = gauge
+OBJEXE = gaugex.obj
+
+!include $(BCEXAMPLEDIR)\owlmake.gen

@@ -1,24 +1,29 @@
 //----------------------------------------------------------------------------
 // ObjectWindows
-// (C) Copyright 1993, 1994 by Borland International, All Rights Reserved
+// Copyright (c) 1993, 1996 by Borland International, All Rights Reserved
 //
-//   Implements class TEditView
+//$Revision:   10.6  $
+//
+// Implementation of class TEditView
 //----------------------------------------------------------------------------
 #pragma hdrignore SECTION
-#include <owl/owlpch.h>
-#include <owl/editview.h>
-#include <owl/docview.rh>
-#include <owl/editview.rh>
+#include <owl/pch.h>
+#if !defined(OWL_EDITVIEW_H)
+# include <owl/editview.h>
+#endif
+#if !defined(OWL_DOCVIEW_RH)
+# include <owl/docview.rh>
+#endif
+#if !defined(OWL_EDITVIEW_RH)
+# include <owl/editview.rh>
+#endif
 
 DIAG_DECLARE_GROUP(OwlDocView);        // General Doc/View diagnostic group
 
 #if !defined(SECTION) || SECTION == 1
 
-#define MAX_EDIT_BUF (30000)  // can't add new chars after 30,000 bytes
-
 //
-//  class TEditView
-//  ----- ---------
+// TEditView response table
 //
 DEFINE_RESPONSE_TABLE1(TEditView, TEditSearch)
   EV_VN_DOCCLOSED,
@@ -29,9 +34,12 @@ DEFINE_RESPONSE_TABLE1(TEditView, TEditSearch)
   EV_WM_NCDESTROY,
 END_RESPONSE_TABLE;
 
+//
+//
+//
 TEditView::TEditView(TDocument& doc, TWindow* parent)
 :
-  TEditSearch(parent, GetNextViewId()),
+  TEditSearch(parent, GetNextViewId(), (const char*)0),
   TView(doc),
   Origin(0)
 {
@@ -40,6 +48,9 @@ TEditView::TEditView(TDocument& doc, TWindow* parent)
     SetViewMenu(new TMenuDescr(IDM_EDITVIEW, 0,2,0,0,0,1, GetModule()));
 }
 
+//
+//
+//
 void
 TEditView::EvNCDestroy()
 {
@@ -55,10 +66,25 @@ TEditView::EvNCDestroy()
 #endif
 }
 
+//
+//
+//
 TEditView::~TEditView()
 {
 }
 
+//
+// Does a given HWND belong to this view? Yes if it is us, or a child of us
+//
+bool
+TEditView::VnIsWindow(HWND hWnd)
+{
+  return hWnd == TWindow::GetHandle() || IsChild(hWnd);
+}
+
+//
+//
+//
 bool
 TEditView::VnDocClosed(int omode)
 {
@@ -77,6 +103,9 @@ TEditView::VnDocClosed(int omode)
   return true;
 }
 
+//
+//
+//
 bool
 TEditView::LoadData()
 {
@@ -88,11 +117,21 @@ TEditView::LoadData()
   inStream->seekg(0L, ios::end);
   unsigned long total = inStream->tellg();
   inStream->seekg(0L, ios::beg);
-  uint count = (total > MAX_EDIT_BUF) ? MAX_EDIT_BUF : (uint)total;
+
+  // Buffer Limit
+  //
+  uint MaxEditBuf = 32000;
+#if defined(BI_PLAT_WIN32)
+  if (TSystem::IsNT()) {
+    MaxEditBuf = 2000000;
+  }
+#endif
+
+  uint count = (total > MaxEditBuf) ? MaxEditBuf : (uint)total;
   char far* buf = LockBuffer(count + 1);
   if (!buf) {
     delete inStream;
-//    THROW( TXOutOfMemory() );
+//    TXOutOfMemory::Raise();
     Doc->PostError(IDS_NOMEMORYFORVIEW, MB_OK);
     return false;
   }
@@ -123,18 +162,21 @@ TEditView::LoadData()
   return status;
 }
 
+//
+//
+//
 bool
 TEditView::Create()
 {
   TRY {
     TEditSearch::Create();   // throws exception TWindow::TXWindow
   }
-  CATCH( (TXOwl& x) {
+  CATCH( (TXOwl&) {
     Doc->PostError(IDS_NOMEMORYFORVIEW, MB_OK);
     NotOK();
     return true;   // cannot return false - throws another exception
   })
-  if (Doc->GetDocPath() == 0) {  
+  if (Doc->GetDocPath() == 0) {
     return true;           // new file, no data to display
   }
   if (!LoadData())
@@ -142,36 +184,43 @@ TEditView::Create()
   return true;
 }
 
+//
+//
+//
 void
 TEditView::PerformCreate(int menuOrId)
 {
 #if defined(BI_PLAT_WIN32)
-  HINSTANCE hInst = *GetModule();
+  TEdit::PerformCreate(menuOrId);
 #else
-  HGLOBAL hdl = ::GlobalAlloc(GHND, 256);  // will grow as needed
-  if (!hdl) {
-//  Doc->PostError(IDS_NOMEMORYFORVIEW, MB_OK);
-//  return;
-    THROW( TXOutOfMemory() );
+  HGLOBAL hGlobal = ::GlobalAlloc(GHND, 256);  // will grow as needed
+  if (!hGlobal) {
+    TXOutOfMemory::Raise();
   }
-  uint16 editDS = FP_SEG(::GlobalLock(hdl));
-  ::LocalInit(editDS, 0, 0);
-  ::GlobalUnlock(hdl);
-  HINSTANCE hInst = (HINSTANCE)hdl;
-#endif
+  uint16 editDS = FP_SEG(::GlobalLock(hGlobal));
+  ::LocalInit(editDS, 0, 128);
+  ::GlobalUnlock(hGlobal);
+  HINSTANCE hInst = HINSTANCE(hGlobal);
 
-// if (doc readonly || size too large) Attr.Style |= ES_READONLY;
-  HWindow = CreateWindowEx(Attr.ExStyle,
+
+  // Different than TWindows in that we pass our alloc'd DS as the hInst
+  //
+  TWindow::SetHandle(::CreateWindowEx(Attr.ExStyle,
                            GetClassName(),
                            Title,
                            Attr.Style,
                            Attr.X, Attr.Y, Attr.W, Attr.H,
-                           Parent ? Parent->HWindow : 0,
-                           (HMENU)menuOrId,
+                           Parent ? Parent->GetHandle() : 0,
+                           REINTERPRET_CAST(HMENU,menuOrId),
                            hInst,
-                           Attr.Param);
+                           Attr.Param)
+                    );
+#endif
 }
 
+//
+//
+//
 bool
 TEditView::VnCommit(bool force)
 {
@@ -215,6 +264,9 @@ TEditView::VnCommit(bool force)
   return status;
 }
 
+//
+//
+//
 bool
 TEditView::VnRevert(bool clear)
 {
@@ -228,6 +280,11 @@ TEditView::VnRevert(bool clear)
 
 IMPLEMENT_STREAMABLE2(TEditView, TEditSearch, TView);
 
+#if !defined(BI_NO_OBJ_STREAMING)
+
+//
+//
+//
 void*
 TEditView::Streamer::Read(ipstream& is, uint32 /*version*/) const
 {
@@ -237,6 +294,9 @@ TEditView::Streamer::Read(ipstream& is, uint32 /*version*/) const
   return GetObject();
 }
 
+//
+//
+//
 void
 TEditView::Streamer::Write(opstream& os) const
 {
@@ -244,5 +304,7 @@ TEditView::Streamer::Write(opstream& os) const
   WriteBaseObject((TView*)GetObject(), os);
   os << GetObject()->Origin;
 }
+
+#endif  // if !defined(BI_NO_OBJ_STREAMING)
 
 #endif

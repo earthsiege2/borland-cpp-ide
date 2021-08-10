@@ -1,15 +1,14 @@
-//
 //----------------------------------------------------------------------------
 // ObjectComponents
-// (C) Copyright 1994 by Borland International, All Rights Reserved
+// Copyright (c) 1994, 1996 by Borland International, All Rights Reserved
 //
-//   Definition of TOcLinkView Class
+// Definition of TOcLinkView Class
 //----------------------------------------------------------------------------
 #if !defined(OCF_OCLINK_H)
 #define OCF_OCLINK_H
 
-#if !defined(OCF_BOLEINTF_H)
-# include <ocf/boleintf.h>
+#if !defined(OCF_OCBOCOLE_H)
+# include <ocf/ocbocole.h>
 #endif
 #if !defined(OCF_OCREG_H)
 # include <ocf/ocreg.h>
@@ -20,17 +19,20 @@
 #if !defined(CLASSLIB_VECTIMP_H)
 # include <classlib/vectimp.h>
 #endif
-#if !defined(OSL_GEOMETRY_H)
-# include <osl/geometry.h>
+#if !defined(WINSYS_GEOMETRY_H)
+# include <winsys/geometry.h>
 #endif
 
 class _ICLASS TOcView;
 
 //
+// class TOcLinkView
+// ~~~~~ ~~~~~~~~~~~
 // Link Viewer object for a server document
 //
 class _ICLASS TOcLinkView : public TUnknown,
-                            private IBPart {
+//                            public IBPart2 {
+                            public IBPart {
   public:
     TOcLinkView(TOcView* ocView, TRegList* regList = 0, IUnknown* outer = 0);
     int Detach();
@@ -42,8 +44,8 @@ class _ICLASS TOcLinkView : public TUnknown,
 
     // Misc status accessors, etc.
     //
-    void GetLinkRect();
-    void   SetMoniker(const char far* name);
+    void     GetLinkRect();
+    void     SetMoniker(const char far* name);
     TString& GetMoniker() {return Moniker;};
 
     // Object reference & lifetime managment
@@ -63,30 +65,31 @@ class _ICLASS TOcLinkView : public TUnknown,
     uint     _IFUNC CountFormats();
     HRESULT  _IFUNC GetFormat(uint index, TOcFormatInfo far* fmt);
 
-    // IBDataProvider implementation
+    // IBDataProvider2 implementation
     //
     HANDLE  _IFUNC  GetFormatData(TOcFormatInfo far*);
     HRESULT _IFUNC  Draw(HDC, const RECTL far*, const RECTL far*, TOcAspect, TOcDraw bd);
     HRESULT _IFUNC  GetPartSize(TSize far*);
-    HRESULT _IFUNC  Save(IStorage*, bool sameAsLoad, bool remember);
+    HRESULT _IFUNC  Save(IStorage*, BOOL sameAsLoad, BOOL remember);
+//    HRESULT _IFUNC  SetFormatData(TOcFormatInfo far* fmt, HANDLE data, bool release);
 
-    // IBPart implementation
+    // IBPart2 implementation
     //
     HRESULT _IFUNC  Init(IBSite far*, TOcInitInfo far*);
     HRESULT _IFUNC  Close();
     HRESULT _IFUNC  CanOpenInPlace();
     HRESULT _IFUNC  SetPartSize(TSize far*);
     HRESULT _IFUNC  SetPartPos(TRect far*);
-    HRESULT _IFUNC  Activate(bool);
-    HRESULT _IFUNC  Show(bool);
-    HRESULT _IFUNC  Open(bool);
+    HRESULT _IFUNC  Activate(BOOL);
+    HRESULT _IFUNC  Show(BOOL);
+    HRESULT _IFUNC  Open(BOOL);
     HRESULT _IFUNC  EnumVerbs(TOcVerb far*);
     HRESULT _IFUNC  DoVerb(uint);
     HWND    _IFUNC  OpenInPlace(HWND);
     HRESULT _IFUNC  InsertMenus(HMENU, TOcMenuWidths far*);
-    HRESULT _IFUNC  ShowTools(bool);
-    void    _IFUNC  FrameResized(const TRect far*, bool);
-    HRESULT _IFUNC  DragFeedback(TPoint far*, bool);
+    HRESULT _IFUNC  ShowTools(BOOL);
+    void    _IFUNC  FrameResized(const TRect far*, BOOL);
+    HRESULT _IFUNC  DragFeedback(TPoint far*, BOOL);
     HRESULT _IFUNC  GetPalette(LOGPALETTE far* far*);
     HRESULT _IFUNC  SetHost(IBContainer far* objContainer);
     HRESULT _IFUNC  DoQueryInterface(const IID far& iid, void far* far* pif);
@@ -103,8 +106,8 @@ class _ICLASS TOcLinkView : public TUnknown,
   private:
    ~TOcLinkView();
 
-    TOcView*        OcView;
-    IUnknown*       BSite;           // In-place site helper
+    TOcView*        OcView;          // Our hosting view that link is on
+    IUnknown*       BSite;           // In-place site helper object
     IBSite*         BSiteI;          // Site interface
     IBApplication*  BAppI;           // Site's application interface
 
@@ -114,20 +117,21 @@ class _ICLASS TOcLinkView : public TUnknown,
     TString         Moniker;
 #endif
 
-  friend class TOcViewCollection;
+  friend class TOcLinkCollection;
 };
 
-
 //
-// Container of views with iterator
+// class TOcLinkCollection
+// ~~~~~ ~~~~~~~~~~~~~~~~~
+// Container of link views with iterator
 //
-class TOcViewCollection : private TCVectorImp<TOcLinkView*> {
+class TOcLinkCollection : private TCVectorImp<TOcLinkView*> {
   private:
     typedef TCVectorImp<TOcLinkView*> Base;
-    friend class TOcViewCollectionIter;
+    friend class TOcLinkCollectionIter;
   public:
-    TOcViewCollection();
-   ~TOcViewCollection();
+    TOcLinkCollection();
+   ~TOcLinkCollection();
     void operator delete(void* ptr) {TStandardAllocator::operator delete(ptr);}
 
     void Clear();
@@ -138,15 +142,18 @@ class TOcViewCollection : private TCVectorImp<TOcLinkView*> {
     int Detach(TOcLinkView* const& view, int del = 0);
     TOcLinkView* Find(TString const moniker) const;
 };
+typedef TOcLinkCollection TOcViewCollection;  // For compatibility only
 
 //
+// class TOcLinkCollectionIter
+// ~~~~~ ~~~~~~~~~~~~~~~~~~~~~
+// Iterator for view collection
 //
-//
-class TOcViewCollectionIter : private TCVectorIteratorImp<TOcLinkView*> {
+class TOcLinkCollectionIter : private TCVectorIteratorImp<TOcLinkView*> {
   private:
     typedef TCVectorIteratorImp<TOcLinkView*> Base;
   public:
-    TOcViewCollectionIter(const TOcViewCollection& c) : Base(c) {}
+    TOcLinkCollectionIter(const TOcLinkCollection& c) : Base(c) {}
     operator int() const {return Base::operator int();}
     TOcLinkView* Current() const {return Base::Current();}
     TOcLinkView* operator ++(int) {return Base::operator ++(0);}
@@ -154,7 +161,6 @@ class TOcViewCollectionIter : private TCVectorIteratorImp<TOcLinkView*> {
     void Restart() {Base::Restart();}
     void Restart(unsigned start, unsigned stop) {Base::Restart(start, stop);}
 };
+typedef TOcLinkCollectionIter TOcViewCollectionIter;  // For compatibility only
 
 #endif  // OCF_OCLINK_H
-
-

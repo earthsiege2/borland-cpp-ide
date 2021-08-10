@@ -6,9 +6,9 @@
  *--------------------------------------------------------------------------*/
 
 /*
- *      C/C++ Run Time Library - Version 1.5
+ *      C/C++ Run Time Library - Version 2.0
  *
- *      Copyright (c) 1987, 1994 by Borland International
+ *      Copyright (c) 1987, 1996 by Borland International
  *      All Rights Reserved.
  *
  */
@@ -35,8 +35,7 @@ Description     The environment consists of a series of entries that
                 getenv searches the environment for the entry corresponding
                 to envvar, then returns a pointer to string.
 
-                The string  comparison is case-sensitive, in  the usual "C"
-                tradition.
+                The string  comparison is NOT case-sensitive.
 
 Return value    On  success,   getenv  returns  a  pointer   to  the  value
                 associated with envvar.
@@ -51,9 +50,9 @@ char * _RTLENTRYF _EXPFUNC getenv(const char *nameP)
     len = strlen(nameP);            /* save length of name */
 
     _lock_env();                    /* lock out other users of 'environ' */
-    
+
     for (envP = environ; *envP != NULL; envP++)
-        if (strncmp(*envP,nameP,len) == 0 && (*envP)[len] == '=')
+        if (strnicmp(*envP,nameP,len) == 0 && (*envP)[len] == '=')
             break;
 
     _unlock_env();

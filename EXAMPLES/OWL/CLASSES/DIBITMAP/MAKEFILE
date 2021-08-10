@@ -1,0 +1,11 @@
+#----------------------------------------------------------------------------
+# ObjectWindows
+# Copyright (c) 1995, 1995 by Borland International, All Rights Reserved
+#----------------------------------------------------------------------------
+
+MODELS = ldft
+EXERES = dibitmap
+OBJEXE = dibitmax.obj
+
+!include $(BCEXAMPLEDIR)\owlmake.gen
+

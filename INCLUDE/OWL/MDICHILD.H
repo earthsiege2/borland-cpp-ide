@@ -1,8 +1,10 @@
 //----------------------------------------------------------------------------
 // ObjectWindows
-// (C) Copyright 1991, 1994 by Borland International, All Rights Reserved
+// Copyright (c) 1991, 1996 by Borland International, All Rights Reserved
 //
-//   Declaration of class TMDIChild.
+//$Revision:   10.2  $
+//
+// Definition of class TMDIChild.
 //----------------------------------------------------------------------------
 #if !defined(OWL_MDICHILD_H)
 #define OWL_MDICHILD_H
@@ -11,12 +13,16 @@
 # include <owl/framewin.h>
 #endif
 
+// Generic definitions/compiler options (eg. alignment) preceeding the 
+// definition of classes
+#include <services/preclass.h>
+
+
 class _OWLCLASS TMDIClient;
 
 //
-//  class TMDIChild
-//  ----- ---------
-//
+// class TMDIChild
+// ~~~~~ ~~~~~~~~~
 class _OWLCLASS TMDIChild : virtual public TFrameWindow {
   public:
     TMDIChild(TMDIClient&     parent,
@@ -27,10 +33,9 @@ class _OWLCLASS TMDIChild : virtual public TFrameWindow {
 
     TMDIChild(HWND hWnd, TModule* module = 0);
 
-   ~TMDIChild() {}
+   ~TMDIChild();
 
-    //
-    // override virtual methods defined by TWindow
+    // Override virtual methods defined by TWindow
     //
     bool       PreProcessMsg(MSG& msg);
     bool       ShowWindow(int cmdShow);
@@ -39,14 +44,12 @@ class _OWLCLASS TMDIChild : virtual public TFrameWindow {
 
   protected:
     void       PerformCreate(int menuOrId);
-    LRESULT    DefWindowProc(uint msg, WPARAM wParam, LPARAM lParam);
-    void       EvMDIActivate(HWND hWndActivated,
-                             HWND hWndDeactivated);
+    TResult    DefWindowProc(uint msg, TParam1 param1, TParam2 param2);
+    void       EvMDIActivate(HWND hWndActivated, HWND hWndDeactivated);
     bool       EvNCActivate(bool active);
 
   private:
-    //
-    // hidden to prevent accidental copying or assignment
+    // Hidden to prevent accidental copying or assignment
     //
     TMDIChild(const TMDIChild&);
     TMDIChild& operator =(const TMDIChild&);
@@ -54,5 +57,11 @@ class _OWLCLASS TMDIChild : virtual public TFrameWindow {
   DECLARE_RESPONSE_TABLE(TMDIChild);
   DECLARE_STREAMABLE(_OWLCLASS, TMDIChild, 1);
 };
+
+// Generic definitions/compiler options (eg. alignment) following the 
+// definition of classes
+#include <services/posclass.h>
+
+typedef TMDIChild TMdiChild;
 
 #endif  // OWL_MDICHILD_H

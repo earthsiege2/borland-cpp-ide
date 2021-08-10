@@ -1,26 +1,39 @@
 //----------------------------------------------------------------------------
 // ObjectWindows
-// (C) Copyright 1992, 1994 by Borland International, All Rights Reserved
+// Copyright (c) 1992, 1996 by Borland International, All Rights Reserved
 //
-//   Implementation of class TDecoratedFrame
+//$Revision:   10.15  $
+//
+// Implementation of class TDecoratedFrame
 //----------------------------------------------------------------------------
 #pragma hdrignore SECTION
-#include <owl/owlpch.h>
-#include <owl/decframe.h>
-#include <owl/messageb.h>
+#include <owl/pch.h>
+#if !defined(OWL_DECFRAME_H)
+# include <owl/decframe.h>
+#endif
+#if !defined(OWL_MESSAGEB_H)
+# include <owl/messageb.h>
+#endif
+#if !defined(OWL_TOOLTIP_H)
+# include <owl/tooltip.h>
+#endif
 
-DIAG_DECLARE_GROUP(OwlWin);  // diagnostic group for windows
+DIAG_DECLARE_GROUP(OwlWin);   // diagnostic group for windows
+DIAG_DECLARE_GROUP(OwlCmd);   // diagnostic group for commands
 
 #if !defined(SECTION) || SECTION == 1
 
 DEFINE_RESPONSE_TABLE2(TDecoratedFrame, TFrameWindow, TLayoutWindow)
   EV_WM_ENTERIDLE,
   EV_WM_MENUSELECT,
-  EV_WM_SIZE,           // inline in decframe.h
+  EV_WM_SIZE,
 END_RESPONSE_TABLE;
 
 const uint  BLANK_HELP = UINT_MAX;
 
+//
+//
+//
 TDecoratedFrame::TDecoratedFrame(TWindow*        parent,
                                  const char far* title,
                                  TWindow*        clientWnd,
@@ -29,7 +42,6 @@ TDecoratedFrame::TDecoratedFrame(TWindow*        parent,
 :
   TLayoutWindow(parent, title, module)
 {
-  //
   // Initialize virtual bases, in case the derived-most used default ctor
   //
   TWindow::Init(parent, title, module);
@@ -60,19 +72,22 @@ TDecoratedFrame::TDecoratedFrame(TWindow*        parent,
   SetChildLayoutMetrics(*ClientWnd, metrics);
 }
 
+//
+// Override SetupWindow in order to layout & position decorations
+//
 void
 TDecoratedFrame::SetupWindow()
 {
-  TRect  clientRect = GetClientRect();
-
   TFrameWindow::SetupWindow();
 
-  //
-  // size/position child windows. don't wait until we get the WM_SIZE event
+  // Size/position child windows. Don't wait until we get the WM_SIZE event
   // because by then the windows will have been displayed on the screen
   //
+  TRect  clientRect = GetClientRect();
+
   ClientSize.cx = clientRect.right;
   ClientSize.cy = clientRect.bottom;
+
   Layout();
 }
 
@@ -92,7 +107,7 @@ TDecoratedFrame::SetClientWindow(TWindow* clientWnd)
   SetChildLayoutMetrics(*clientWnd, metrics);
 
   TWindow* oldWnd = GetClientWindow();
-  
+
   // Make sure that all child metrics that were based on the old client window
   // get updated to the new client
   //
@@ -122,7 +137,7 @@ TDecoratedFrame::SetClientWindow(TWindow* clientWnd)
   SettingClient = true;
   oldWnd = TFrameWindow::SetClientWindow(clientWnd);
   SettingClient = false;
-  if (HIWORD(oldWnd->Title) && oldWnd->Title[0] == 007) {
+  if (HiUint16(uint32(oldWnd->Title)) && oldWnd->Title[0] == 007) {
     oldWnd->Destroy();
     delete oldWnd;
     oldWnd = 0;
@@ -150,21 +165,21 @@ TDecoratedFrame::RemoveChild(TWindow* child)
   TLayoutWindow::RemoveChild(child);
 }
 
+//
+// Give the decorations an opportunity to do pre-processing. Don't bother
+// checking the client window since it is typically in the focus chain and
+// will be given an opportunity to do pre-processing
+//
 bool
 TDecoratedFrame::PreProcessMsg(MSG& msg)
 {
-  //
-  // give the decorations an opportunity to do pre-processing. don't bother
-  // checking the client window since it is typically in the focus chain and
-  // will be given an opportunity to do pre-processing
-  //
   TWindow*  firstChild = GetFirstChild();
 
   if (firstChild) {
     TWindow*  child = firstChild;
 
     do {
-      if (child != ClientWnd && child->HWindow &&
+      if (child != ClientWnd && child->GetHandle() &&
          (child->GetWindowLong(GWL_STYLE) & WS_VISIBLE) &&
           child->PreProcessMsg(msg))
         return true;
@@ -177,6 +192,103 @@ TDecoratedFrame::PreProcessMsg(MSG& msg)
 }
 
 //
+// Retrieves the hint text associated with a particular Id
+//
+int
+TDecoratedFrame::GetHintText(uint id, char* buf, int size,
+                          THintText hintType) const
+{
+
+  int numBytes = 0;
+  if (hintType == htTooltip) {
+    // For tooltips, we first look if the same id exists on the
+    // window's menu and use the associated menu string.
+    //
+    if (::IsMenu(GetMenu()) &&
+        TUser::GetMenuString(GetMenu(), id, buf, size, MF_BYCOMMAND)) {
+      // Trim accelerator text e.g., '\tCtrl+X' (if any)
+      //
+      char* c = strchr(buf, '\t');
+      if (c)
+        *c = 0;
+
+      // Accelerator can be \b instead of \t (NOTE: \a in .rc make a \b 
+      // in res)
+      //
+      c = strchr(buf, '\b');
+      if (c)
+        *c = 0;
+
+      // Trim trailing dots, e.g., '...' (if any)
+      //
+      int i;
+      for (i = strlen(buf) - 1; i >= 0; i--)
+        if (buf[i] == '.')
+          buf[i] = 0;
+        else
+          break;
+
+      // Eliminate '&' (just emliminate first one)
+      //
+      i = -1;
+      while(buf[++i])
+        if (buf[i] == '&') {
+          do {
+            buf[i] = buf[i+1];
+            i++;
+          } while (buf[i]);
+          break;
+        }
+      numBytes = strlen(buf);
+    }
+    else {
+      // If the tip text cannot be retrieved from the menu, we then look
+      // for a string resource - The resource is expected to contain a
+      // longer status text followed by a '\n' and the tip text.
+      //
+      char resStr[256];
+      int len = GetModule()->LoadString(id, resStr, sizeof(resStr));
+      if (len == 0 && MergeModule != 0)
+          len = MergeModule->LoadString(id, resStr, sizeof(resStr));
+
+      WARNX(OwlWin, len == 0, 0,
+          "TDecoratedFrame::GetHintText LoadString("
+          << *GetModule() << "," << id << ") Failed");
+
+      char* pLF;
+      if (len && (pLF = strchr(resStr, '\n')) != 0) {
+        strncpy(buf, pLF+1, size);
+        numBytes = strlen(buf);
+      }
+    }
+  }
+
+  if (hintType == htStatus) {
+    numBytes = GetModule()->LoadString(id, buf, size);
+    if (numBytes == 0 && MergeModule != 0)
+        numBytes = MergeModule->LoadString(id, buf, size);
+
+    WARNX(OwlWin, numBytes == 0, 0,
+         "TDecoratedFrame::GetHintText LoadString("
+         << *GetModule() << "," << id << ") Failed");
+
+    if (numBytes) {
+
+      // Clear beyond the '\n' in case this string resource contains both
+      // a status and a tooltip hint text.
+      //
+      char* pLF = strchr(buf, '\n');
+      if (pLF) {
+        *pLF = 0;
+        numBytes = (pLF - buf) -1;
+      }
+    }
+  }
+  return numBytes;
+}
+
+
+//
 // Handle WM_MENUSELECT to provide hint text in the status bar based on the
 // menu item id. Treat popup items seperatly and ask them for their ids.
 //
@@ -184,21 +296,21 @@ void
 TDecoratedFrame::EvMenuSelect(uint menuItemId, uint flags, HMENU hMenu)
 {
   if (TrackMenuSelection) {
-    if (flags == 0xFFFF && hMenu == 0) {  // menu closing
-      TMessageBar*  messageBar = (TMessageBar*)ChildWithId(IDW_STATUSBAR);
-      CHECK(messageBar);
-
-      messageBar->SetHintText(0);
-      MenuItemId = 0;           // restore status bar to normal look
+    if (flags == 0xFFFF && hMenu == 0) {  // Menu closing
+      TMessageBar*  messageBar = TYPESAFE_DOWNCAST(ChildWithId(IDW_STATUSBAR),
+                                                   TMessageBar);
+      if (messageBar)
+        messageBar->SetHintText(0);       // Restore text of status bar    
+      MenuItemId = 0;                     //  ""  ""  ""  ""  ""  ""  
     }
     else if (flags & MF_POPUP) {
-      TMenu popupMenu(hMenu);
-      int   count = popupMenu.GetMenuItemCount();
-      for (int pos = 0;
-           pos < count && popupMenu.GetSubMenu(pos) != HMENU(menuItemId);
-           pos++)
-        ;
-      MenuItemId = popupMenu.GetMenuItemID(pos);
+
+#if 0 
+#else
+      // Retrieve id of popup menu
+      //
+      MenuItemId = TMenu(hMenu).GetMenuItemID(menuItemId);
+#endif
     }
     else if (flags & (MF_SEPARATOR | MF_MENUBREAK | MF_MENUBARBREAK)
       || (menuItemId >= IDW_FIRSTMDICHILD && menuItemId < IDW_FIRSTMDICHILD+9)) {
@@ -211,42 +323,49 @@ TDecoratedFrame::EvMenuSelect(uint menuItemId, uint flags, HMENU hMenu)
   }
 }
 
+//
+// Forward our size event to the layout window base, and not the frame base
+//
 void
-TDecoratedFrame::EvEnterIdle(uint source, HWND hWndDlg)
+TDecoratedFrame::EvSize(uint sizeType, TSize& size)
+{
+  TLayoutWindow::EvSize(sizeType, size);
+}
+
+//
+// Handle WM_ENTERIDLE in order to display help hints on the messsage bar if
+// there is a hint pending & this frame has a message bar.
+//
+void
+TDecoratedFrame::EvEnterIdle(uint source, THandle hDlg)
 {
   if (source == MSGF_MENU && MenuItemId) {
-    char          buf[128];
-    TMessageBar*  messageBar = (TMessageBar*)ChildWithId(IDW_STATUSBAR);
-    CHECK(messageBar);
-
-    if (MenuItemId != BLANK_HELP) {
-      int numBytes = GetModule()->LoadString(MenuItemId, buf, sizeof(buf));
-      if (numBytes == 0 && MergeModule != 0)
-          numBytes = MergeModule->LoadString(MenuItemId, buf, sizeof(buf));
-
-      WARNX(OwlWin, numBytes == 0, 0,
-           "TDecoratedFrame::EvEnterIdle LoadString("
-           << *GetModule() << "," << MenuItemId << ") Failed");
+    TMessageBar*  messageBar = TYPESAFE_DOWNCAST(ChildWithId(IDW_STATUSBAR),
+                                                 TMessageBar);
+    if (messageBar) {
+      char  buf[128];
+      if ((MenuItemId == BLANK_HELP) ||
+          !GetHintText(MenuItemId, buf, sizeof(buf), htStatus))
+        *buf = 0;
+      messageBar->SetHintText(buf);
     }
-    else
-      *buf = 0;
-    messageBar->SetHintText(buf);
     MenuItemId = 0;             // Don't repaint on subsequent EvEnterIdle's
   }
-  TFrameWindow::EvEnterIdle(source, hWndDlg);
+  TFrameWindow::EvEnterIdle(source, hDlg);
 }
 
 //
 // Get or set location codes stashed in the style long for a decoration
 //
-inline TDecoratedFrame::TLocation
-GetLocation(TWindow& w) {
-  return TDecoratedFrame::TLocation(uint16(w.Attr.Style) & 0x0F00);
+const uint32 locMask  = 0x0F00;
+const int    locShift = 8;
+
+inline TDecoratedFrame::TLocation GetLocation(TWindow& w) {
+  return TDecoratedFrame::TLocation(uint16((w.Attr.Style & locMask) >> locShift));
 }
 
-inline void
-SetLocation(TWindow& w, TDecoratedFrame::TLocation loc) {
-  w.Attr.Style = (w.Attr.Style&~0x0F00) | loc;
+inline void SetLocation(TWindow& w, TDecoratedFrame::TLocation loc) {
+  w.Attr.Style = (w.Attr.Style&~locMask) | (uint32(loc) << locShift);
 }
 
 //
@@ -265,8 +384,12 @@ struct TSiblingSearch {
   }
 };
 
+//
+// FirstThat callback function to help EvCommand find decorations that are
+// at a given location & that are visible.
+//
 static bool
-FindSibling(TWindow* win, void* param)
+findSibling(TWindow* win, void* param)
 {
   TSiblingSearch*  search = (TSiblingSearch*)param;
 
@@ -279,9 +402,15 @@ FindSibling(TWindow* win, void* param)
   return false;
 }
 
-LRESULT
-TDecoratedFrame::EvCommand(uint id, HWND hWndCtl, uint notifyCode)
+//
+//
+//
+TResult
+TDecoratedFrame::EvCommand(uint id, THandle hWndCtl, uint notifyCode)
 {
+  TRACEX(OwlCmd, 1, "TDecoratedFrame:EvCommand - id(" << id << "), ctl(" <<\
+                     hex << uint(hWndCtl) << "), code(" << notifyCode  << ")");
+
   if (hWndCtl == 0) {
     TWindow*  decoration = ChildWithId(id);
 
@@ -290,12 +419,11 @@ TDecoratedFrame::EvCommand(uint id, HWND hWndCtl, uint notifyCode)
       TLocation       location = GetLocation(*decoration);
 
       TSiblingSearch  search(decoration, location);
-      FirstThat(FindSibling, &search);
+      FirstThat(findSibling, &search);
       if (!search.Sibling)
         search.Sibling = ClientWnd;
 
-      //
-      // toggle the window's visibility
+      // Toggle the window's visibility
       //
       if (visible)
         RemoveChildLayoutMetrics(*decoration);
@@ -320,7 +448,7 @@ TDecoratedFrame::EvCommand(uint id, HWND hWndCtl, uint notifyCode)
         }
 
       Layout();
-      decoration->ShowWindow(visible ? SW_HIDE : SW_SHOW);
+      decoration->ShowWindow(visible ? SW_HIDE : SW_SHOWNA);
       return 0;
     }
   }
@@ -328,10 +456,31 @@ TDecoratedFrame::EvCommand(uint id, HWND hWndCtl, uint notifyCode)
   return TFrameWindow::EvCommand(id, hWndCtl, notifyCode);
 }
 
+//
+//
+//
 void
 TDecoratedFrame::EvCommandEnable(TCommandEnabler& commandEnabler)
 {
+  // Provide default command text to TooltipEnablers
+  //
+  if (TYPESAFE_DOWNCAST(&commandEnabler, TTooltipEnabler)) {
+    char tipText[50];
+    if (GetHintText(commandEnabler.GetId(), tipText, sizeof(tipText), htTooltip)) {
+      commandEnabler.SetText(tipText);
+      return;
+    }
+  }
+
+#if 0
+  TWindow*  decoration;
+  if (DocAreaTop)
+    decoration = DocAreaTop->ChildWithId(commandEnabler.Id);
+  else
+    decoration = ChildWithId(commandEnabler.Id);
+#else
   TWindow*  decoration = ChildWithId(commandEnabler.Id);
+#endif
 
   if (!decoration)
     TFrameWindow::EvCommandEnable(commandEnabler);
@@ -344,22 +493,24 @@ TDecoratedFrame::EvCommandEnable(TCommandEnabler& commandEnabler)
   }
 }
 
+//
+// Insert a decoration window at the top of the client area, possibly above
+// another given decoration or the client
+//
 void
 TDecoratedFrame::InsertAtTop(TWindow& decoration, TWindow* insertAbove)
 {
   TLayoutMetrics   metrics;
   TWindow*         insertBelow;
 
-  //
-  // get the layout metrics for "insertAbove" (the window the decoration is
+  // Get the layout metrics for "insertAbove" (the window the decoration is
   // going to be inserted above)
   //
   GetChildLayoutMetrics(*insertAbove, metrics);
 
   insertBelow = metrics.Y.RelWin;
 
-  //
-  // if "insertAbove" has a border then set its top edge to be the same as
+  // If "insertAbove" has a border then set its top edge to be the same as
   // the decoration's bottom edge; otherwise place its top edge below the
   // decoration's bottom edge
   //
@@ -368,40 +519,40 @@ TDecoratedFrame::InsertAtTop(TWindow& decoration, TWindow* insertAbove)
                 &decoration, lmBottom);
   SetChildLayoutMetrics(*insertAbove, metrics);
 
+  // Now set the layout metrics for the decoration so its top edge is the same
+  // as or below the bottom edge of "insertBelow" (they overlap if WS_BORDER)
   //
-  // now set the layout metrics for the decoration so its top edge is the same
-  // as the bottom edge of "insertBelow"(i.e. they overlap)
-  //
-  if (!insertBelow)
-    metrics.Y.SameAs(lmParent, lmTop);
+  bool overlap = (decoration.Attr.Style & WS_BORDER);
 
-  else
-    metrics.Y.Set(lmTop, lmSameAs, insertBelow, lmBottom);
+  metrics.Y.Set(lmTop, overlap ? lmSameAs : lmBelow,
+                insertBelow, insertBelow ? lmBottom : lmTop);
 
-  metrics.Height.MyEdge = lmHeight;
-  metrics.Height.Relationship = lmAsIs;
-  metrics.X.Set(lmLeft, lmSameAs, lmParent, lmLeft);
-  metrics.Width.Set(lmRight, lmSameAs, lmParent, lmRight);
+  metrics.Height.AsIs(lmHeight);
+  metrics.X.Set(lmLeft, overlap ? lmSameAs : lmRightOf, lmParent, lmLeft);
+  metrics.Width.Set(lmRight, overlap ? lmSameAs : lmLeftOf, lmParent, lmRight);
 
   SetChildLayoutMetrics(decoration, metrics);
 }
 
+//
+// Insert a decoration window at the bottom of the client area, possibly below
+// another given decoration or the client
+//
 void
 TDecoratedFrame::InsertAtBottom(TWindow& decoration, TWindow* insertBelow)
 {
   TLayoutMetrics  metrics;
   TWindow*        insertAbove;
 
-  //
-  // get the layout metrics for "insertBelow"(the window the decoration is
+  // Get the layout metrics for "insertBelow"(the window the decoration is
   // going to be inserted below)
   //
   GetChildLayoutMetrics(*insertBelow, metrics);
 
   if (insertBelow == ClientWnd) {
     insertAbove = metrics.Height.RelWin;
-    //
-    // if the client window has a border then set the client window's bottom
+
+    // If the client window has a border then set the client window's bottom
     // to be the same as the top edge of the decoration; otherwise set the
     // client window's bottom edge to be above the decoration's top edge
     //
@@ -411,48 +562,47 @@ TDecoratedFrame::InsertAtBottom(TWindow& decoration, TWindow* insertBelow)
   }
   else {
     insertAbove = metrics.Y.RelWin;
-    //
-    // set the bottom edge of "insertBelow" to be the same as the top edge of
+
+    // Set the bottom edge of "insertBelow" to be the same as the top edge of
     // the decoration
     //
     metrics.Y.Set(lmBottom, lmSameAs, &decoration, lmTop);
   }
   SetChildLayoutMetrics(*insertBelow, metrics);
 
-  //
-  // now set the layout metrics for the decoration so its bottom edge is the
+  // Now set the layout metrics for the decoration so its bottom edge is the
   // same as the top edge of "insertAbove"
   //
-  if (!insertAbove)
-    metrics.Y.SameAs(lmParent, lmBottom);
+  bool overlap = (decoration.Attr.Style & WS_BORDER);
 
-  else
-    metrics.Y.Set(lmBottom, lmSameAs, insertAbove, lmTop);
+  metrics.Y.Set(lmBottom, overlap ? lmSameAs : lmAbove, insertAbove,
+                insertAbove ? lmTop : lmBottom);
 
-  metrics.Height.MyEdge = lmHeight;
-  metrics.Height.Relationship = lmAsIs;
-  metrics.X.Set(lmLeft, lmSameAs, lmParent, lmLeft);
-  metrics.Width.Set(lmRight, lmSameAs, lmParent, lmRight);
+  metrics.Height.AsIs(lmHeight);
+  metrics.X.Set(lmLeft, overlap ? lmSameAs : lmRightOf, lmParent, lmLeft);
+  metrics.Width.Set(lmRight, overlap ? lmSameAs : lmLeftOf, lmParent, lmRight);
 
   SetChildLayoutMetrics(decoration, metrics);
 }
 
+//
+// Insert a decoration window at the left of the client area, possibly to the
+// left of another given decoration or the client
+//
 void
 TDecoratedFrame::InsertAtLeft(TWindow& decoration, TWindow* insertLeftOf)
 {
   TLayoutMetrics  metrics;
   TWindow*        insertRightOf;
 
-  //
-  // get the layout metrics for "insertLeftOf"(the window the decoration is
+  // Get the layout metrics for "insertLeftOf"(the window the decoration is
   // going to be inserted to the left of)
   //
   GetChildLayoutMetrics(*insertLeftOf, metrics);
 
   insertRightOf = metrics.X.RelWin;
 
-  //
-  // if "insertLeftOf" has a border then set its left edge to be the same as
+  // If "insertLeftOf" has a border then set its left edge to be the same as
   // the decoration's right edge; otherwise place its left edge one pixel to
   // the right of the decoration's right edge
   //
@@ -461,54 +611,59 @@ TDecoratedFrame::InsertAtLeft(TWindow& decoration, TWindow* insertLeftOf)
                 &decoration, lmRight);
   SetChildLayoutMetrics(*insertLeftOf, metrics);
 
-  //
-  // now set the layout metrics for the decoration so it's left edge is the
+  // Now set the layout metrics for the decoration so it's left edge is the
   // same as the right edge of "insertRightOf"
   //
-  if (!insertRightOf)
-    metrics.X.SameAs(lmParent, lmLeft);
+  bool overlap = (decoration.Attr.Style & WS_BORDER);
 
-  else
-    metrics.X.Set(lmLeft, lmSameAs, insertRightOf, lmRight);
+  metrics.X.Set(lmLeft, overlap ? lmSameAs : lmRightOf, insertRightOf,
+                insertRightOf ? lmRight : lmLeft);
 
-  metrics.Width.MyEdge = lmWidth;
-  metrics.Width.Relationship = lmAsIs;
+  metrics.Width.AsIs(lmWidth);
+
+  // If the client window & decoration both have or don't have borders then
+  // place the decoration so its "y" and "bottom" are the same as the client
+  // windows; otherwise place its "y" above/below the client window's "y" and
+  // its "bottom" below/above the client window's "bottom" based on who's has
+  // borders & who doesn't
   //
-  // if the client window has a border then place the decoration so its
-  // "y" and "bottom" are the same as the client windows; otherwise place
-  // its "y" above the client window's "y" and its "bottom" below the client
-  // window's "bottom"
-  //
-  // this way if there are top or bottom decorations they will be tiled
+  // This way if there are top or bottom decorations they will be tiled
   // over/under the left/right decorations
   //
-  if (ClientWnd->Attr.Style & WS_BORDER) {
+  if (ToBool(ClientWnd->Attr.Style & WS_BORDER) == overlap) {
     metrics.Y.SameAs(ClientWnd, lmTop);
     metrics.Height.SameAs(ClientWnd, lmBottom);
   }
-  else {
+  else if (overlap) {
     metrics.Y.Set(lmTop, lmAbove, ClientWnd, lmTop);
     metrics.Height.Set(lmBottom, lmBelow, ClientWnd, lmBottom);
+  }
+  else {
+    metrics.Y.Set(lmTop, lmBelow, ClientWnd, lmTop);
+    metrics.Height.Set(lmBottom, lmAbove, ClientWnd, lmBottom);
   }
   SetChildLayoutMetrics(decoration, metrics);
 }
 
+//
+// Insert a decoration window at the right of the client area, possibly to the
+// right of another given decoration or the client
+//
 void
 TDecoratedFrame::InsertAtRight(TWindow& decoration, TWindow* insertRightOf)
 {
   TLayoutMetrics  metrics;
   TWindow*        insertLeftOf;
 
-  //
-  // get the layout metrics for "insertRightOf"(the window the decoration is
+  // Get the layout metrics for "insertRightOf" (the window the decoration is
   // going to be inserted to the right of)
   //
   GetChildLayoutMetrics(*insertRightOf, metrics);
 
   if (insertRightOf == ClientWnd) {
     insertLeftOf = metrics.Width.RelWin;
-    //
-    // if the client window has a border then set the client window's right
+
+    // If the client window has a border then set the client window's right
     // edge to be the same as the left edge of the decoration; otherwise set
     // the client window's right edge to be one pixel to the left of the
     // decoration's left edge
@@ -519,42 +674,44 @@ TDecoratedFrame::InsertAtRight(TWindow& decoration, TWindow* insertRightOf)
   }
   else {
     insertLeftOf = metrics.X.RelWin;
-    //
-    // set the right edge of "insertRightOf" to be the same as the left edge of
+
+    // Set the right edge of "insertRightOf" to be the same as the left edge of
     // the decoration
     //
     metrics.X.Set(lmRight, lmSameAs, &decoration, lmLeft);
   }
   SetChildLayoutMetrics(*insertRightOf, metrics);
 
-  //
-  // now set the layout metrics for the decoration so its right edge is the
+  // Now set the layout metrics for the decoration so its right edge is the
   // same as the left edge of "insertLeftOf"
   //
-  if (!insertLeftOf)
-    metrics.X.Set(lmRight, lmSameAs, lmParent, lmRight);
+  bool overlap = (decoration.Attr.Style & WS_BORDER);
 
-  else
-    metrics.X.Set(lmRight, lmSameAs, insertLeftOf, lmLeft);
+  metrics.X.Set(lmRight, overlap ? lmSameAs : lmLeftOf, insertLeftOf,
+                insertLeftOf ? lmLeft : lmRight);
 
-  metrics.Width.MyEdge = lmWidth;
-  metrics.Width.Relationship = lmAsIs;
+  metrics.Width.AsIs(lmWidth);
+
+  // If the client window & decoration both have or don't have borders then
+  // place the decoration so its "y" and "bottom" are the same as the client
+  // windows; otherwise place its "y" above/below the client window's "y" and
+  // its "bottom" below/above the client window's "bottom" based on who's has
+  // borders & who doesn't
   //
-  // if the client window has a border then place the decoration so its
-  // "y" and "bottom" are the same as the client windows; otherwise place
-  // its "y" above the client window's "y" and its "bottom" below the client
-  // window's "bottom"
-  //
-  // this way if there are top or bottom decorations they will be tiled
+  // This way if there are top or bottom decorations they will be tiled
   // over/under the left/right decorations
   //
-  if (ClientWnd->Attr.Style & WS_BORDER) {
+  if (ToBool(ClientWnd->Attr.Style & WS_BORDER) == overlap) {
     metrics.Y.SameAs(ClientWnd, lmTop);
     metrics.Height.SameAs(ClientWnd, lmBottom);
   }
-  else {
+  else if (overlap) {
     metrics.Y.Set(lmTop, lmAbove, ClientWnd, lmTop);
     metrics.Height.Set(lmBottom, lmBelow, ClientWnd, lmBottom);
+  }
+  else {
+    metrics.Y.Set(lmTop, lmBelow, ClientWnd, lmTop);
+    metrics.Height.Set(lmBottom, lmAbove, ClientWnd, lmBottom);
   }
   SetChildLayoutMetrics(decoration, metrics);
 }
@@ -569,33 +726,31 @@ TDecoratedFrame::Insert(TWindow& decoration, TLocation location)
 
   // Make sure the decoration has clipsiblings style, since our rearranging
   // causes corners to overlap sometimes.
-  // 
+  //
   decoration.Attr.Style |= WS_CLIPSIBLINGS;
-  if (decoration.HWindow)
+  if (decoration.GetHandle())
     decoration.SetWindowLong(GWL_STYLE,
                              decoration.GetWindowLong(GWL_STYLE)|WS_CLIPSIBLINGS);
 
   decoration.SetParent(this);
   RemoveChildLayoutMetrics(decoration); // in case this is a re-insert
 
-  if (decoration.Attr.Style & WS_VISIBLE)
+  if (decoration.Attr.Style & WS_VISIBLE) {
     switch (location) {
       case Top:
         InsertAtTop(decoration, ClientWnd);
         break;
-
       case Bottom:
         InsertAtBottom(decoration, ClientWnd);
         break;
-
       case Left:
         InsertAtLeft(decoration, ClientWnd);
         break;
-
       case Right:
         InsertAtRight(decoration, ClientWnd);
         break;
     }
+  }
 }
 
 #endif
@@ -603,6 +758,11 @@ TDecoratedFrame::Insert(TWindow& decoration, TLocation location)
 
 IMPLEMENT_STREAMABLE3(TDecoratedFrame, TFrameWindow, TLayoutWindow, TWindow);
 
+#if !defined(BI_NO_OBJ_STREAMING)
+
+//
+//
+//
 void*
 TDecoratedFrame::Streamer::Read(ipstream& is, uint32 /*version*/) const
 {
@@ -611,11 +771,16 @@ TDecoratedFrame::Streamer::Read(ipstream& is, uint32 /*version*/) const
   return GetObject();
 }
 
+//
+//
+//
 void
 TDecoratedFrame::Streamer::Write(opstream& os) const
 {
   WriteVirtualBase((TFrameWindow*)GetObject(), os);
   WriteBaseObject((TLayoutWindow*)GetObject(), os);
 }
+
+#endif  // if !defined(BI_NO_OBJ_STREAMING)
 
 #endif

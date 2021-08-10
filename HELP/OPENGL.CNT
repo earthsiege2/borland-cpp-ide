@@ -1,0 +1,808 @@
+:TITLE OpenGL Programmer's Guide
+:INDEX OpenGL = opengl.hlp
+:LINK opengl.hlp
+:INCLUDE win32sdk.cfg
+:BASE opengl.hlp
+1 OpenGL
+2 Introduction to OpenGL
+3 Introduction to OpenGL = _Introduction_to_OpenGL@OPENGL.HLP
+3 OpenGL Fundamentals = _OpenGL_Fundamentals@OPENGL.HLP
+3 Procedural versus Descriptive = _Primitives_and_Commands@OPENGL.HLP
+3 Execution Model = _Execution_Model@OPENGL.HLP
+3 Basic OpenGL Operation = _Basic_OpenGL_Operation@OPENGL.HLP
+
+2 Commands and Routines
+3 Overview of Commands and Routines = _Overview_of_Commands_and_Routines@OPENGL.HLP
+3 OpenGL Processing Pipeline = _OpenGL_Processing_Pipeline@OPENGL.HLP
+3 Vertices = _Vertices@OPENGL.HLP
+3 Matrix Transformations = _Input_Data@OPENGL.HLP
+3 Lighting and Coloring = _Lighting_and_Coloring@OPENGL.HLP
+3 Generating Texture Coordinates = _Generating_Texture_Coordinates@OPENGL.HLP
+3 Primitive Assembly = _Primitive_Assembly@OPENGL.HLP
+3 Primitives = _Primitives@OPENGL.HLP
+3 Clipping = _Clipping@OPENGL.HLP
+3 Transforming to Window Coordinates = _Transforming_to_Window_Coordinates@OPENGL.HLP
+3 Rasterization = _Rasterization@OPENGL.HLP
+3 Fragments = _Fragments@OPENGL.HLP
+3 Pixel Ownership Test = _Pixel_Ownership_Test@OPENGL.HLP
+3 Scissor Test = _Scissor_Test@OPENGL.HLP
+3 Alpha Test = _Alpha_Test@OPENGL.HLP
+3 Stencil Test = _Stencil_Test@OPENGL.HLP
+3 Depth Buffer Test = _Depth_Buffer_Test@OPENGL.HLP
+3 Blending = _Blending@OPENGL.HLP
+3 Dithering = _Dithering@OPENGL.HLP
+3 Logical Operations = _Logical_Operations@OPENGL.HLP
+3 Pixels = _Pixels@OPENGL.HLP
+3 Frame Buffer Operations = _Frame_Buffer_Operations@OPENGL.HLP
+3 Reading or Copying Pixels = _Reading_or_Copying_Pixels@OPENGL.HLP
+3 Additional OpenGL Commands = _Additional_OpenGL_Commands@OPENGL.HLP
+3 Using Evaluators = _Using_Evaluators@OPENGL.HLP
+3 Performing Selection and Feedback = _Performing_Selection_and_Feedback@OPENGL.HLP
+3 Selection = _Selection@OPENGL.HLP
+3 Feedback = _Feedback@OPENGL.HLP
+3 Using Display Lists = _Using_Display_Lists@OPENGL.HLP
+3 Managing Modes and Execution = _Managing_Modes_and_Execution@OPENGL.HLP
+3 Obtaining State Information = _Obtaining_State_Information@OPENGL.HLP
+3 OpenGL Utility Library = _OpenGL_Utility_Library@OPENGL.HLP
+3 Manipulating Images for Use in Texturing = _Manipulating_Images_for_Use_in_Texturing@OPENGL.HLP
+3 Transforming Coordinates = _Transforming_Coordinates@OPENGL.HLP
+3 Polygon Tessellation = _Polygon_Tessellation@OPENGL.HLP
+3 Rendering Simple Surfaces = _Rendering_Simple_Surfaces@OPENGL.HLP
+3 NURBS Curves and Surfaces = _NURBS_Curves_and_Surfaces@OPENGL.HLP
+3 Handling Errors = _Handling_Errors@OPENGL.HLP
+
+2 OpenGL on Windows NT
+3 OpenGL on Windows NT = _OpenGL_on_Windows_NT@OPENGL.HLP
+3 About OpenGL = _About_OpenGL@OPENGL.HLP
+3 OpenGL in Windows NT = _OpenGL_in_Windows_NT@OPENGL.HLP
+3 Components = _Components@OPENGL.HLP
+3 Generic Implementation and Hardware Implementations = _Generic_Implementation_and_Hardware_Implementations@OPENGL.HLP
+3 Limitations = _Limitations@OPENGL.HLP
+3 Guide To Documentation = _Guide_To_Documentation@OPENGL.HLP
+3 Rendering Contexts
+4 Rendering Contexts = _Rendering_Contexts@OPENGL.HLP
+4 Rendering Context Functions = _Rendering_Context_Functions@OPENGL.HLP
+3 Pixel Formats
+4 Pixel Formats = _Pixel_Formats@OPENGL.HLP
+4 Pixel Format Functions = _Pixel_Format_Functions@OPENGL.HLP
+3 Front, Back, and Other Buffers
+4 Front, Back, and Other Buffers = _Front_Back_and_Other_Buffers@OPENGL.HLP
+4 Buffer Functions = _Buffer_Functions@OPENGL.HLP
+3 Fonts and Text
+4 Fonts and Text = _Fonts_and_Text@OPENGL.HLP
+4 Font and Text Functions = _Font_and_Text_Functions@OPENGL.HLP
+3 OpenGL Color Modes and Windows Palette Management
+4 OpenGL Color Modes and Windows Palette Management = _OpenGL_Color_Modes_and_Windows_Palette_Management@OPENGL.HLP
+4 Palettes and the Palette Manager = _Palettes_and_the_Palette_Manager@OPENGL.HLP
+4 Palette Awareness = _Palette_Awareness@OPENGL.HLP
+4 Reading Color Values from the Frame Buffer = _Reading_Color_Values_from_the_Frame_Buffer@OPENGL.HLP
+4 Choosing Between RGBA and Color-Index Mode = _Choosing_Between_RGBA_and_Color_Index_Mode@OPENGL.HLP
+4 RGBA Mode and Windows Palette Management = _RGBA_Mode_and_Windows_Palette_Management@OPENGL.HLP
+4 Color-Indexed Mode and Windows Palette Management = _Color_Indexed_Mode_and_Windows_Palette_Management@OPENGL.HLP
+4 Overlay, Underlay, and Main Planes = _Overlay_Underlay_and_Main_Planes@OPENGL.HLP
+4 Sharing Display Lists = _Sharing_Display_Lists@OPENGL.HLP
+3 Extending OpenGL Functions
+4 Extending OpenGL Functions = _Extending_OpenGL_Functions@OPENGL.HLP
+4 GLX and WGL/Win32 = _GLX_and_WGL_Win32@OPENGL.HLP
+3 Using OpenGL on Windows NT
+4 Using OpenGL on Windows NT = _Using_OpenGL_on_Windows_NT@OPENGL.HLP
+4 Header Files = _Header_Files@OPENGL.HLP
+3 Some Pixel Format Tasks
+4 Some Pixel Format Tasks = _Some_Pixel_Format_Tasks@OPENGL.HLP
+4 Choosing and Setting a Best-Match Pixel Format = _Choosing_and_Setting_a_Best_Match_Pixel_Format@OPENGL.HLP
+4 Examining A Device Context's Current Pixel Format = _Examining_A_Device_Contexts_Current_Pixel_Format@OPENGL.HLP
+4 Examining A Device's Supported Pixel Formats = _Examining_A_Devices_Supported_Pixel_Formats@OPENGL.HLP
+4 Some Rendering Context Tasks = _Some_Rendering_Context_Tasks@OPENGL.HLP
+4 Creating a Rendering Context and Making It Current = _Creating_a_Rendering_Context_and_Making_It_Current@OPENGL.HLP
+4 Making a Rendering Context Not Current = _Making_a_Rendering_Context_Not_Current@OPENGL.HLP
+4 Deleting a Rendering Context = _Deleting_a_Rendering_Context@OPENGL.HLP
+4 Drawing with Double Buffers = _Drawing_with_Double_Buffers@OPENGL.HLP
+4 Drawing Text in a Double-Buffered OpenGL Window = _Drawing_Text_in_a_Double_Buffered_OpenGL_Window@OPENGL.HLP
+4 Printing an OpenGL Image = _Printing_an_OpenGL_Image@OPENGL.HLP
+4 Printing on a Monochrome Printer = _Printing_on_a_Monochrome_Printer@OPENGL.HLP
+4 Copying an OpenGL Image to the Clipboard = _Copying_an_OpenGL_Image_to_the_Clipboard@OPENGL.HLP
+4 Multi-Threaded OpenGL Drawing Strategies = _Multi_Threaded_OpenGL_Drawing_Strategies@OPENGL.HLP
+3 Using the Auxiliary Library
+4 Using the Auxiliary Library = _Using_the_Auxiliary_Library@OPENGL.HLP
+
+2 Lists of Functions and Structures
+3 Lists of Functions and Structures = _Lists_of_Functions_and_Structures@OPENGL.HLP
+3 ChoosePixelFormat = _ChoosePixelFormat@OPENGL.HLP
+3 DescribePixelFormat = _DescribePixelFormat@OPENGL.HLP
+3 GetPixelFormat = _GetPixelFormat@OPENGL.HLP
+3 PIXELFORMATDESCRIPTOR = _PIXELFORMATDESCRIPTOR@OPENGL.HLP
+3 SetPixelFormat = _SetPixelFormat@OPENGL.HLP
+3 SwapBuffers = _SwapBuffers@OPENGL.HLP
+3 wglCreateContext = _wglCreateContext@OPENGL.HLP
+3 wglDeleteContext = _wglDeleteContext@OPENGL.HLP
+3 wglGetCurrentContext = _wglGetCurrentContext@OPENGL.HLP
+3 wglGetCurrentDC = _wglGetCurrentDC@OPENGL.HLP
+3 wglGetProcAddress = _wglGetProcAddress@OPENGL.HLP
+3 wglMakeCurrent = _wglMakeCurrent@OPENGL.HLP
+3 wglShareLists = _wglShareLists@OPENGL.HLP
+3 wglUseFontBitmaps = _wglUseFontBitmaps@OPENGL.HLP
+3 wglUseFontOutlines = _wglUseFontOutlines@OPENGL.HLP
+3 GLYPHMETRICSFLOAT = _GLYPHMETRICSFLOAT@OPENGL.HLP
+3 POINTFLOAT = _POINTFLOAT@OPENGL.HLP
+
+2 The OpenGL Utility Library
+3 The OpenGL Utility Library = _The_OpenGL_Utility_Library@OPENGL.HLP
+3 Manipulating Images for Use in Texturing = _Manipulating_Images_for_Use_in_Texturing_2@OPENGL.HLP
+3 Transforming Coordinates = _Transforming_Coordinates_2@OPENGL.HLP
+3 Tessellation = _Tessellation@OPENGL.HLP
+3 The Callback Mechanism = _The_Callback_Mechanism@OPENGL.HLP
+3 The Tessellation Object = _The_Tessellation_Object@OPENGL.HLP
+3 Specifying Callbacks = _Specifying_Callbacks@OPENGL.HLP
+3 Describing the Polygon to Be Tessellated = _Describing_the_Polygon_to_Be_Tessellated@OPENGL.HLP
+3 Rendering Spheres, Cylinders, and Disks = _Rendering_Spheres_Cylinders_and_Disks_2@OPENGL.HLP
+3 NURBS Curves and Surfaces = _NURBS_Curves_and_Surfaces_2@OPENGL.HLP
+3 Describing Errors = _Describing_Errors@OPENGL.HLP
+
+2 Programming Tips
+3 Programming Tips = _Programming_Tips@OPENGL.HLP
+3 OpenGL Correctness Tips = _OpenGL_Correctness_Tips@OPENGL.HLP
+3 OpenGL Performance Tips = _OpenGL_Performance_Tips@OPENGL.HLP
+
+2 The Query Commands
+3 The Query Commands = _The_Query_Commands@OPENGL.HLP
+
+2 Error Handling
+3 Error Handling = _Error_Handling@OPENGL.HLP
+
+2 OpenGL Error Codes
+3 OpenGL Error Codes = _OpenGL_Error_Codes@OPENGL.HLP
+
+2 Saving and Restoring Sets of State Variables
+3 Saving and Restoring Sets of State Variables = _Saving_and_Restoring_Sets_of_State_Variables@OPENGL.HLP
+2 Attribute Groups
+3 Attribute Groups = _Attribute_Groups@OPENGL.HLP
+
+2 OpenGL State Variables
+3 OpenGL State Variables = _OpenGL_State_Variables@OPENGL.HLP
+3 State Variables for Current Values and Associated Data
+4 State Variables for Current Values and Associated Data = _State_Variables_for_Current_Values_and_Associated_Data@OPENGL.HLP
+4 GL_CURRENT_COLOR GL_CURRENT_INDEX = GL_CURRENT_COLOR@OPENGL.HLP
+4 GL_CURRENT_INDEX GL_CURRENT_TEXTURE_COORDS = GL_CURRENT_INDEX@OPENGL.HLP
+4 GL_CURRENT_TEXTURE_COORDS GL_CURRENT_NORMAL = GL_CURRENT_TEXTURE_COORDS@OPENGL.HLP
+4 GL_CURRENT_NORMAL GL_CURRENT_RASTER_POSITION = GL_CURRENT_NORMAL@OPENGL.HLP
+4 GL_CURRENT_RASTER POSITION GL_CURRENT_RASTER_DISTANCE = GL_CURRENT_RASTER_POSITION@OPENGL.HLP
+4 GL_CURRENT_RASTER_DISTANCE GL_CURRENT_RASTER_COLOR = GL_CURRENT_RASTER_DISTANCE@OPENGL.HLP
+4 GL_CURRENT_RASTER_COLOR GL_CURRENT_RASTER_INDEX = GL_CURRENT_RASTER_COLOR@OPENGL.HLP
+4 GL_CURRENT_RASTER_INDEX GL_CURRENT_RASTER_TEXTURE_COORDS = GL_CURRENT_RASTER_INDEX@OPENGL.HLP
+4 GL_CURRENT_RASTER_TEXTURE_COORDS GL_CURRENT_RASTER_POSITION_VALID = GL_CURRENT_RASTER_TEXTURE_COORDS@OPENGL.HLP
+4 GL_CURRENT_RASTER_POSITION_VALID GL_EDGE_FLAG = GL_CURRENT_RASTER_POSITION_VALID@OPENGL.HLP
+4 GL_EDGE_FLAG = GL_EDGE_FLAG@OPENGL.HLP
+
+3 Transformation State Variables
+4 Transformation State Variables = _Transformation_State_Variables@OPENGL.HLP
+4 GL_MODELVIEW_MATRIX GL_PROJECTION_MATRIX = GL_MODELVIEW_MATRIX@OPENGL.HLP
+4 GL_PROJECTION_MATRIX GL_TEXTURE_MATRIX = GL_PROJECTION_MATRIX@OPENGL.HLP
+4 GL_TEXTURE_MATRIX GL_VIEWPORT = GL_TEXTURE_MATRIX@OPENGL.HLP
+4 GL_VIEWPORT GL_DEPTH_RANGE = GL_VIEWPORT@OPENGL.HLP
+4 GL_DEPTH_RANGE GL_MODELVIEW_STACK_DEPTH = GL_DEPTH_RANGE@OPENGL.HLP
+4 GL_MODELVIEW_STACK_DEPTH GL_PROJECTION_STACK_DEPTH = GL_MODELVIEW_STACK_DEPTH@OPENGL.HLP
+4 GL_PROJECTION_STACK_DEPTH GL_TEXTURE_STACK_DEPTH = GL_PROJECTION_STACK_DEPTH@OPENGL.HLP
+4 GL_TEXTURE_STACK_DEPTH GL_MATRIX_MODE = GL_TEXTURE_STACK_DEPTH@OPENGL.HLP
+4 GL_MATRIX_MODE GL_NORMALIZE = GL_MATRIX_MODE@OPENGL.HLP
+4 GL_NORMALIZE GL_CLIP_PLANEi = GL_NORMALIZE@OPENGL.HLP
+4 GL_CLIP_PLANEi = GL_CLIP_PLANEi@OPENGL.HLP
+
+3 Coloring State Variables
+4 Coloring State Variables = _Coloring_State_Variables@OPENGL.HLP
+4 GL_FOG_COLOR GL_FOG_INDEX = GL_FOG_COLOR@OPENGL.HLP
+4 GL_FOG_INDEX GL_FOG_DENSITY = GL_FOG_INDEX@OPENGL.HLP
+4 GL_FOG_DENSITY GL_FOG_START = GL_FOG_DENSITY@OPENGL.HLP
+4 GL_FOG_START GL_FOG_END = GL_FOG_START@OPENGL.HLP
+4 GL_FOG_END GL_FOG_MODE = GL_FOG_END@OPENGL.HLP
+4 GL_FOG_MODE GL_FOG = GL_FOG_MODE@OPENGL.HLP
+4 GL_FOG GL_SHADE_MODEL = GL_FOG@OPENGL.HLP
+4 GL_SHADE_MODEL = GL_SHADE_MODEL@OPENGL.HLP
+
+3 Lighting State Variables
+4 Lighting State Variables = _Lighting_State_Variables@OPENGL.HLP
+4 GL_LIGHTING GL_COLOR_MATERIAL = GL_LIGHTING@OPENGL.HLP
+4 GL_COLOR_MATERIAL GL_COLOR_MATERIAL_PARAMETER = GL_COLOR_MATERIAL@OPENGL.HLP
+4 GL_COLOR_MATERIAL_PARAMETER GL_COLOR_MATERIAL_FACE = GL_COLOR_MATERIAL_PARAMETER@OPENGL.HLP
+4 GL_COLOR_MATERIAL_FACE GL_AMBIENT_1 = GL_COLOR_MATERIAL_FACE@OPENGL.HLP
+4 GL_AMBIENT GL_DIFFUSE = GL_AMBIENT_1@OPENGL.HLP
+4 GL_DIFFUSE GL_SPECULAR_1 = GL_DIFFUSE@OPENGL.HLP
+4 GL_SPECULAR GL_EMISSION = GL_SPECULAR_1@OPENGL.HLP
+4 GL_EMISSION GL_SHININESS = GL_EMISSION@OPENGL.HLP
+4 GL_SHININESS GL_LIGHT_MODEL_AMBIENT = GL_SHININESS@OPENGL.HLP
+4 GL_LIGHT_MODEL_AMBIENT GL_LIGHT_MODEL_LOCAL_VIEWER = GL_LIGHT_MODEL_AMBIENT@OPENGL.HLP
+4 GL_LIGHT_MODEL_LOCAL_VIEWER GL_LIGHT_MODEL_TWO_SIDE = GL_LIGHT_MODEL_LOCAL_VIEWER@OPENGL.HLP
+4 GL_LIGHT_MODEL_TWO_SIDE GL_AMBIENT = GL_LIGHT_MODEL_TWO_SIDE@OPENGL.HLP
+4 GL_AMBIENT GL_DIFFUSE_1 = GL_AMBIENT@OPENGL.HLP
+4 GL_DIFFUSE GL_SPECULAR = GL_DIFFUSE_1@OPENGL.HLP
+4 GL_SPECULAR GL_POSITION = GL_SPECULAR@OPENGL.HLP
+4 GL_POSITION GL_CONSTANT_ATTENUATION = GL_POSITION@OPENGL.HLP
+4 GL_CONSTANT_ATTENUATION GL_LINEAR_ATTENUATION = GL_CONSTANT_ATTENUATION@OPENGL.HLP
+4 GL_LINEAR_ATTENUATION GL_QUADRATIC_ATTENUATION = GL_LINEAR_ATTENUATION@OPENGL.HLP
+4 GL_QUADRATIC_ATTENUATION GL_SPOT_DIRECTION = GL_QUADRATIC_ATTENUATION@OPENGL.HLP
+4 GL_SPOT_DIRECTION GL_SPOT_EXPONENT = GL_SPOT_DIRECTION@OPENGL.HLP
+4 GL_SPOT_EXPONENT GL_SPOT_CUTOFF = GL_SPOT_EXPONENT@OPENGL.HLP
+4 GL_SPOT_CUTOFF GL_LIGHTi = GL_SPOT_CUTOFF@OPENGL.HLP
+4 GL_LIGHTi GL_COLOR_INDEXES = GL_LIGHTi@OPENGL.HLP
+4 GL_COLOR_INDEXES = GL_COLOR_INDEXES@OPENGL.HLP
+
+3 Rasterization State Variables
+4 Rasterization State Variables = _Rasterization_State_Variables@OPENGL.HLP
+4 GL_POINT_SIZE GL_POINT_SMOOTH = GL_POINT_SIZE@OPENGL.HLP
+4 GL_POINT_SMOOTH GL_LINE_WIDTH = GL_POINT_SMOOTH@OPENGL.HLP
+4 GL_LINE_WIDTH GL_LINE_SMOOTH = GL_LINE_WIDTH@OPENGL.HLP
+4 GL_LINE_SMOOTH GL_LINE_STIPPLE_PATTERN = GL_LINE_SMOOTH@OPENGL.HLP
+4 GL_LINE_STIPPLE_PATTERN GL_LINE_STIPPLE_REPEAT = GL_LINE_STIPPLE_PATTERN@OPENGL.HLP
+4 GL_LINE_STIPPLE_REPEAT GL_LINE_STIPPLE = GL_LINE_STIPPLE_REPEAT@OPENGL.HLP
+4 GL_LINE_STIPPLE GL_CULL_FACE = GL_LINE_STIPPLE@OPENGL.HLP
+4 GL_CULL_FACE GL_CULL_FACE_MODE = GL_CULL_FACE@OPENGL.HLP
+4 GL_CULL_FACE_MODE GL_FRONT_FACE = GL_CULL_FACE_MODE@OPENGL.HLP
+4 GL_FRONT_FACE GL_POLYGON_SMOOTH = GL_FRONT_FACE@OPENGL.HLP
+4 GL_POLYGON_SMOOTH GL_POLYGON_MODE = GL_POLYGON_SMOOTH@OPENGL.HLP
+4 GL_POLYGON_MODE GL_POLYGON_STIPPLE = GL_POLYGON_MODE@OPENGL.HLP
+4 GL_POLYGON_STIPPLE = GL_POLYGON_STIPPLE@OPENGL.HLP
+
+3 Texturing State Variables
+4 Texturing State Variables = _Texturing_State_Variables@OPENGL.HLP
+4 GL_TEXTURE_x GL_TEXTURE = GL_TEXTURE_x@OPENGL.HLP
+4 GL_TEXTURE GL_TEXTURE_WIDTH = GL_TEXTURE@OPENGL.HLP
+4 GL_TEXTURE_WIDTH GL_TEXTURE_HEIGHT = GL_TEXTURE_WIDTH@OPENGL.HLP
+4 GL_TEXTURE_HEIGHT GL_TEXTURE_BORDER = GL_TEXTURE_HEIGHT@OPENGL.HLP
+4 GL_TEXTURE_BORDER GL_TEXTURE_COMPONENTS = GL_TEXTURE_BORDER@OPENGL.HLP
+4 GL_TEXTURE_COMPONENTS GL_TEXTURE_BORDER_COLOR = GL_TEXTURE_COMPONENTS@OPENGL.HLP
+4 GL_TEXTURE_BORDER_COLOR GL_TEXTURE_MIN_FILTER = GL_TEXTURE_BORDER_COLOR@OPENGL.HLP
+4 GL_TEXTURE_MIN_FILTER GL_TEXTURE_MAG_FILTER = GL_TEXTURE_MIN_FILTER@OPENGL.HLP
+4 GL_TEXTURE_MAG_FILTER GL_TEXTURE_WRAP_x = GL_TEXTURE_MAG_FILTER@OPENGL.HLP
+4 GL_TEXTURE_WRAP_x GL_TEXTURE_ENV_MODE = GL_TEXTURE_WRAP_x@OPENGL.HLP
+4 GL_TEXTURE_ENV_MODE GL_TEXTURE_ENV_COLOR = GL_TEXTURE_ENV_MODE@OPENGL.HLP
+4 GL_TEXTURE_ENV_COLOR GL_TEXTURE_GEN_x = GL_TEXTURE_ENV_COLOR@OPENGL.HLP
+4 GL_TEXTURE_GEN_x GL_EYE_LINEAR = GL_TEXTURE_GEN_x@OPENGL.HLP
+4 GL_EYE_LINEAR GL_OBJECT_LINEAR = GL_EYE_LINEAR@OPENGL.HLP
+4 GL_OBJECT_LINEAR GL_TEXTURE_GEN_MODE = GL_OBJECT_LINEAR@OPENGL.HLP
+4 GL_TEXTURE_GEN_MODE = GL_TEXTURE_GEN_MODE@OPENGL.HLP
+
+3 Pixel Operations
+4 Pixel Operations = _Pixel_Operations@OPENGL.HLP
+4 GL_SCISSOR_TEST GL_SCISSOR_BOX = GL_SCISSOR_TEST@OPENGL.HLP
+4 GL_SCISSOR_BOX GL_STENCIL_TEST = GL_SCISSOR_BOX@OPENGL.HLP
+4 GL_STENCIL_TEST GL_STENCIL_FUNC = GL_STENCIL_TEST@OPENGL.HLP
+4 GL_STENCIL_FUNC GL_STENCIL_VALUE_MASK = GL_STENCIL_FUNC@OPENGL.HLP
+4 GL_STENCIL_VALUE_MASK GL_STENCIL_REF = GL_STENCIL_VALUE_MASK@OPENGL.HLP
+4 GL_STENCIL_REF GL_STENCIL_FAIL = GL_STENCIL_REF@OPENGL.HLP
+4 GL_STENCIL_FAIL GL_STENCIL_PASS_DEPTH_FAIL = GL_STENCIL_FAIL@OPENGL.HLP
+4 GL_STENCIL_PASS_DEPTH_FAIL GL_STENCIL_PASS_DEPTH_PASS = GL_STENCIL_PASS_DEPTH_FAIL@OPENGL.HLP
+4 GL_STENCIL_PASS_DEPTH_PASS GL_ALPHA_TEST = GL_STENCIL_PASS_DEPTH_PASS@OPENGL.HLP
+4 GL_ALPHA_TEST GL_ALPHA_TEST_FUNC = GL_ALPHA_TEST@OPENGL.HLP
+4 GL_ALPHA_TEST_FUNC GL_ALPHA_TEST_REF = GL_ALPHA_TEST_FUNC@OPENGL.HLP
+4 GL_ALPHA_TEST_REF GL_DEPTH_TEST = GL_ALPHA_TEST_REF@OPENGL.HLP
+4 GL_DEPTH_TEST GL_DEPTH_FUNC = GL_DEPTH_TEST@OPENGL.HLP
+4 GL_DEPTH_FUNC GL_BLEND = GL_DEPTH_FUNC@OPENGL.HLP
+4 GL_BLEND GL_BLENC_SRC = GL_BLEND@OPENGL.HLP
+4 GL_BLENC_SRC GL_BLEND_DST = GL_BLENC_SRC@OPENGL.HLP
+4 GL_BLEND_DST GL_LOGIC_OP = GL_BLEND_DST@OPENGL.HLP
+4 GL_LOGIC_OP GL_LOGIC_OP_MODE = GL_LOGIC_OP@OPENGL.HLP
+4 GL_LOGIC_OP_MODE GL_DITHER = GL_LOGIC_OP_MODE@OPENGL.HLP
+4 GL_DITHER = GL_DITHER@OPENGL.HLP
+
+3 Framebuffer Control State Variables
+4 Framebuffer Control State Variables = _Framebuffer_Control_State_Variables@OPENGL.HLP
+4 GL_DRAW_BUFFER GL_INDEX_WRITEMASK = GL_DRAW_BUFFER@OPENGL.HLP
+4 GL_INDEX_WRITEMASK GL_COLOR_WRITEMASK = GL_INDEX_WRITEMASK@OPENGL.HLP
+4 GL_COLOR_WRITEMASK GL_DEPTH_WRITEMASK = GL_COLOR_WRITEMASK@OPENGL.HLP
+4 GL_DEPTH_WRITEMASK GL_STENCIL_WRITEMASK = GL_DEPTH_WRITEMASK@OPENGL.HLP
+4 GL_STENCIL_WRITEMASK GL_COLOR_CLEAR_VALUE = GL_STENCIL_WRITEMASK@OPENGL.HLP
+4 GL_COLOR_CLEAR_VALUE GL_INDEX_CLEAR_VALUE = GL_COLOR_CLEAR_VALUE@OPENGL.HLP
+4 GL_INDEX_CLEAR_VALUE GL_DEPTH_CLEAR_VALUE = GL_INDEX_CLEAR_VALUE@OPENGL.HLP
+4 GL_DEPTH_CLEAR_VALUE GL_STENCIL_CLEAR_VALUE = GL_DEPTH_CLEAR_VALUE@OPENGL.HLP
+4 GL_STENCIL_CLEAR_VALUE GL_ACCUM_CLEAR_VALUE = GL_STENCIL_CLEAR_VALUE@OPENGL.HLP
+4 GL_ACCUM_CLEAR_VALUE = GL_ACCUM_CLEAR_VALUE@OPENGL.HLP
+
+3 Pixel State Variables
+3 Pixel State Variables = _Pixel_State_Variables@OPENGL.HLP
+4 GL_UNPACK_SWAP_BYTES GL_UNPACK_LSB_FIRST = GL_UNPACK_SWAP_BYTES@OPENGL.HLP
+4 GL_UNPACK_LSB_FIRST GL_UNPACK_ROW_LENGTH = GL_UNPACK_LSB_FIRST@OPENGL.HLP
+4 GL_UNPACK_ROW_LENGTH GL_UNPACK_SKIP_ROWS = GL_UNPACK_ROW_LENGTH@OPENGL.HLP
+4 GL_UNPACK_SKIP_ROWS GL_UNPACK_SKIP_PIXELS = GL_UNPACK_SKIP_ROWS@OPENGL.HLP
+4 GL_UNPACK_SKIP_PIXELS GL_UNPACK_ALIGNMENT = GL_UNPACK_SKIP_PIXELS@OPENGL.HLP
+4 GL_UNPACK_ALIGNMENT GL_PACK_SWAP_BYTES = GL_UNPACK_ALIGNMENT@OPENGL.HLP
+4 GL_PACK_SWAP_BYTES GL_PACK_LSB_FIRST = GL_PACK_SWAP_BYTES@OPENGL.HLP
+4 GL_PACK_LSB_FIRST GL_PACK_ROW_LENGTH = GL_PACK_LSB_FIRST@OPENGL.HLP
+4 GL_PACK_ROW_LENGTH GL_PACK_SKIP_ROWS = GL_PACK_ROW_LENGTH@OPENGL.HLP
+4 GL_PACK_SKIP_ROWS GL_PACK_SKIP_PIXELS = GL_PACK_SKIP_ROWS@OPENGL.HLP
+4 GL_PACK_SKIP_PIXELS GL_PACK_ALIGNMENT = GL_PACK_SKIP_PIXELS@OPENGL.HLP
+4 GL_PACK_ALIGNMENT GL_MAP_COLOR = GL_PACK_ALIGNMENT@OPENGL.HLP
+4 GL_MAP_COLOR GL_MAP_STENCIL = GL_MAP_COLOR@OPENGL.HLP
+4 GL_MAP_STENCIL GL_INDEX_SHIFT = GL_MAP_STENCIL@OPENGL.HLP
+4 GL_INDEX_SHIFT GL_INDEX_OFFSET = GL_INDEX_SHIFT@OPENGL.HLP
+4 GL_INDEX_OFFSET GL_x_SCALE = GL_INDEX_OFFSET@OPENGL.HLP
+4 GL_x_SCALE GL_x_BIAS = GL_x_SCALE@OPENGL.HLP
+4 GL_x_BIAS GL_ZOOM_X = GL_x_BIAS@OPENGL.HLP
+4 GL_ZOOM_X GL_ZOOM_Y = GL_ZOOM_X@OPENGL.HLP
+4 GL_ZOOM_Y GL_x = GL_ZOOM_Y@OPENGL.HLP
+4 GL_x GL_x_SIZE = GL_x@OPENGL.HLP
+4 GL_x_SIZE GL_READ_BUFFER = GL_x_SIZE@OPENGL.HLP
+4 GL_READ_BUFFER = GL_READ_BUFFER@OPENGL.HLP
+
+3 Evaluator State Variables
+4 Evaluator State Variables = _Evaluator_State_Variables@OPENGL.HLP
+4 GL_ORDER GL_COEFF = GL_ORDER@OPENGL.HLP
+4 GL_COEFF GL_DOMAIN = GL_COEFF@OPENGL.HLP
+4 GL_DOMAIN GL_MAP1_x = GL_DOMAIN@OPENGL.HLP
+4 GL_MAP1_x GL_MAP2_x = GL_MAP1_x@OPENGL.HLP
+4 GL_MAP2_x GL_MAP1_GRID_DOMAIN = GL_MAP2_x@OPENGL.HLP
+4 GL_MAP1_GRID_DOMAIN GL_MAP2_GRID_DOMAIN = GL_MAP1_GRID_DOMAIN@OPENGL.HLP
+4 GL_MAP2_GRID_DOMAIN GL_MAP1_GRID_SEGMENTS = GL_MAP2_GRID_DOMAIN@OPENGL.HLP
+4 GL_MAP1_GRID_SEGMENTS GL_AUTO_NORMAL = GL_MAP1_GRID_SEGMENTS@OPENGL.HLP
+4 GL_AUTO_NORMAL = GL_AUTO_NORMAL@OPENGL.HLP
+
+3 Hint State Variables
+4 Hint State Variables = _Hint_State_Variables@OPENGL.HLP
+4 GL_PERSPECTIVE_CORRECTION_HINT GL_POINT_SMOOTH_HINT = GL_PERSPECTIVE_CORRECTION_HINT@OPENGL.HLP
+4 GL_POINT_SMOOTH_HINT GL_LINE_SMOOTH_HINT = GL_POINT_SMOOTH_HINT@OPENGL.HLP
+4 GL_LINE_SMOOTH_HINT GL_POLYGON_SMOOTH_HINT = GL_LINE_SMOOTH_HINT@OPENGL.HLP
+4 GL_POLYGON_SMOOTH_HINT GL_FOG_HINT = GL_POLYGON_SMOOTH_HINT@OPENGL.HLP
+4 GL_FOG_HINT = GL_FOG_HINT@OPENGL.HLP
+
+3 Implementation-Dependent State Variables
+4 Implementation-Dependent State Variables = _Implementation_Dependent_State_Variables@OPENGL.HLP
+4 GL_MAX_LIGHTS GL_MAX_CLIP_PLANES = GL_MAX_LIGHTS@OPENGL.HLP
+4 GL_MAX_CLIP_PLANES GL_MAX_MODELVIEW_STACK_DEPTH = GL_MAX_CLIP_PLANES@OPENGL.HLP
+4 GL_MAX_MODELVIEW_STACK_DEPTH GL_MAX_PROJECTION_STACK_DEPTH = GL_MAX_MODELVIEW_STACK_DEPTH@OPENGL.HLP
+4 GL_MAX_PROJECTION_STACK_DEPTH GL_MAX_MAX_TEXTURE_STACK_DEPTH = GL_MAX_PROJECTION_STACK_DEPTH@OPENGL.HLP
+4 GL_MAX_MAX_TEXTURE_STACK_DEPTH GL_SUBPIXEL_BITS = GL_MAX_MAX_TEXTURE_STACK_DEPTH@OPENGL.HLP
+4 GL_SUBPIXEL_BITS GL_MAX_TEXTURE_SIZE = GL_SUBPIXEL_BITS@OPENGL.HLP
+4 GL_MAX_TEXTURE_SIZE GL_MAX_PIXEL_MAP_TABLE = GL_MAX_TEXTURE_SIZE@OPENGL.HLP
+4 GL_MAX_PIXEL_MAP_TABLE GL_MAX_NAME_STACK_DEPTH = GL_MAX_PIXEL_MAP_TABLE@OPENGL.HLP
+4 GL_MAX_NAME_STACK_DEPTH GL_MAX_LIST_NESTING = GL_MAX_NAME_STACK_DEPTH@OPENGL.HLP
+4 GL_MAX_LIST_NESTING GL_MAX_EVAL_ORDER = GL_MAX_LIST_NESTING@OPENGL.HLP
+4 GL_MAX_EVAL_ORDER GL_MAX_VIEWPORT_DIMS = GL_MAX_EVAL_ORDER@OPENGL.HLP
+4 GL_MAX_VIEWPORT_DIMS GL_MAX_ATTRIB_STACK_DEPTH = GL_MAX_VIEWPORT_DIMS@OPENGL.HLP
+4 GL_MAX_ATTRIB_STACK_DEPTH GL_AUX_BUFFERS = GL_MAX_ATTRIB_STACK_DEPTH@OPENGL.HLP
+4 GL_AUX_BUFFERS GL_RGBA_MODE = GL_AUX_BUFFERS@OPENGL.HLP
+4 GL_RGBA_MODE GL_INDEX_MODE = GL_RGBA_MODE@OPENGL.HLP
+4 GL_INDEX_MODE GL_DOUBLEBUFFER = GL_INDEX_MODE@OPENGL.HLP
+4 GL_DOUBLEBUFFER GL_STEREO = GL_DOUBLEBUFFER@OPENGL.HLP
+4 GL_STEREO GL_POINT_SIZE_RANGE = GL_STEREO@OPENGL.HLP
+4 GL_POINT_SIZE_RANGE GL_POINT_SIZE_GRANULARITY = GL_POINT_SIZE_RANGE@OPENGL.HLP
+4 GL_POINT_SIZE_GRANULARITY GL_LINE_WIDTH_RANGE = GL_POINT_SIZE_GRANULARITY@OPENGL.HLP
+4 GL_LINE_WIDTH_RANGE GL_LINE_WIDTH_GRANULARITY = GL_LINE_WIDTH_RANGE@OPENGL.HLP
+4 GL_LINE_WIDTH_GRANULARITY = GL_LINE_WIDTH_GRANULARITY@OPENGL.HLP
+
+3 Implementation-Dependent Pixel-Depth State Variables
+4 Implementation-Dependent Pixel-Depth State Variables = _Implementation_Dependent_Pixel_Depth_State_Variables@OPENGL.HLP
+4 GL_RED_BITS GL_GREEN_BITS = GL_RED_BITS@OPENGL.HLP
+4 GL_GREEN_BITS GL_BLUE_BITS = GL_GREEN_BITS@OPENGL.HLP
+4 GL_BLUE_BITS GL_ALPHA_BITS = GL_BLUE_BITS@OPENGL.HLP
+4 GL_ALPHA_BITS GL_INDEX_BITS = GL_ALPHA_BITS@OPENGL.HLP
+4 GL_INDEX_BITS GL_DEPTH_BITS = GL_INDEX_BITS@OPENGL.HLP
+4 GL_DEPTH_BITS GL_STENCIL_BITS = GL_DEPTH_BITS@OPENGL.HLP
+4 GL_STENCIL_BITS GL_ACCUM_RED_BITS = GL_STENCIL_BITS@OPENGL.HLP
+4 GL_ACCUM_RED_BITS GL_ACCUM_GREEN_BITS = GL_ACCUM_RED_BITS@OPENGL.HLP
+4 GL_ACCUM_GREEN_BITS GL_ACCUM_BLUE_BITS = GL_ACCUM_GREEN_BITS@OPENGL.HLP
+4 GL_ACCUM_BLUE_BITS GL_ACCUM_ALPHA_BITS_2 = GL_ACCUM_BLUE_BITS@OPENGL.HLP
+4 GL_ACCUM_ALPHA_BITS = GL_ACCUM_ALPHA_BITS_2@OPENGL.HLP
+
+3 Miscellaneous State Variables
+4 Miscellaneous State Variables = _Miscellaneous_State_Variables@OPENGL.HLP
+4 GL_LIST_BASE GL_LIST_INDEX = GL_LIST_BASE@OPENGL.HLP
+4 GL_LIST_INDEX GL_LIST_MODE = GL_LIST_INDEX@OPENGL.HLP
+4 GL_LIST_MODE GL_ATTRIB_STACK_DEPTH = GL_LIST_MODE@OPENGL.HLP
+4 GL_ATTRIB_STACK_DEPTH GL_NAME_STACK_DEPTH = GL_ATTRIB_STACK_DEPTH@OPENGL.HLP
+4 GL_NAME_STACK_DEPTH GL_RENDER_MODE = GL_NAME_STACK_DEPTH@OPENGL.HLP
+4 GL_RENDER_MODE = GL_RENDER_MODE@OPENGL.HLP
+2 OpenGL Reference
+3 glAccum = glAccum@OPENGL.HLP
+3 glAddSwapHintRectWIN = _glAddSwapHintRectWIN@OPENGL.HLP
+3 glAlphaFunc = glAlphaFunc@OPENGL.HLP
+3 glArrayElementEXT = glArrayElementEXT@OPENGL.HLP
+3 glBegin = glBegin@OPENGL.HLP
+3 glBitmap = glBitmap@OPENGL.HLP
+3 glBlendFunc = glBlendFunc@OPENGL.HLP
+3 glCallList = glCallList@OPENGL.HLP
+3 glCallLists = glCallLists@OPENGL.HLP
+3 glClear = glClear@OPENGL.HLP
+3 glClearAccum = glClearAccum@OPENGL.HLP
+3 glClearColor = glClearColor@OPENGL.HLP
+3 glClearDepth = glClearDepth@OPENGL.HLP
+3 glClearIndex = glClearIndex@OPENGL.HLP
+3 glClearStencil = glClearStencil@OPENGL.HLP
+3 glClipPlane = glClipPlane@OPENGL.HLP
+3 glColor = glColor@OPENGL.HLP
+3 glColorMask = glColorMask@OPENGL.HLP
+3 glColorMaterial = glColorMaterial@OPENGL.HLP
+3 glColorPointerEXT = glColorPointerEXT@OPENGL.HLP
+3 glCopyPixels = glCopyPixels@OPENGL.HLP
+3 glCullFace = glCullFace@OPENGL.HLP
+3 glDeleteLists = glDeleteLists@OPENGL.HLP
+3 glDepthFunc = glDepthFunc@OPENGL.HLP
+3 glDepthMask = glDepthMask@OPENGL.HLP
+3 glDepthRange = glDepthRange@OPENGL.HLP
+3 glDrawArraysEXT = glDrawArraysEXT@OPENGL.HLP
+3 glDrawBuffer = glDrawBuffer@OPENGL.HLP
+3 glDrawPixels = glDrawPixels@OPENGL.HLP
+3 glEdgeFlag = glEdgeFlag@OPENGL.HLP
+3 glEdgeFlagPointerEXT = glEdgeFlagPointerEXT@OPENGL.HLP
+3 glEnable = glEnable@OPENGL.HLP
+3 glEvalCoord = glEvalCoord@OPENGL.HLP
+3 glEvalMesh = glEvalMesh@OPENGL.HLP
+3 glEvalPoint = glEvalPoint@OPENGL.HLP
+3 glFeedbackBuffer = glFeedbackBuffer@OPENGL.HLP
+3 glFinish = glFinish@OPENGL.HLP
+3 glFlush = glFlush@OPENGL.HLP
+3 glFog = glFog@OPENGL.HLP
+3 glFrontFace = glFrontFace@OPENGL.HLP
+3 glFrustum = glFrustum@OPENGL.HLP
+3 glGenLists = glGenLists@OPENGL.HLP
+3 glGet = glGet@OPENGL.HLP
+3 glGetClipPlane = glGetClipPlane@OPENGL.HLP
+3 glGetError = glGetError@OPENGL.HLP
+3 glGetLight = glGetLight@OPENGL.HLP
+3 glGetMap = glGetMap@OPENGL.HLP
+3 glGetMaterial = glGetMaterial@OPENGL.HLP
+3 glGetPixelMap = glGetPixelMap@OPENGL.HLP
+3 glGetPointervEXT = glGetPointervEXT@OPENGL.HLP
+3 glGetPolygonStipple = glGetPolygonStipple@OPENGL.HLP
+3 glGetString = glGetString@OPENGL.HLP
+3 glGetTexEnv = glGetTexEnv@OPENGL.HLP
+3 glGetTexGen = glGetTexGen@OPENGL.HLP
+3 glGetTexImage = glGetTexImage@OPENGL.HLP
+3 glGetTexLevelParameter = glGetTexLevelParameter@OPENGL.HLP
+3 glGetTexParameter = glGetTexParameter@OPENGL.HLP
+3 glHint = glHint@OPENGL.HLP
+3 glIndex = glIndex@OPENGL.HLP
+3 glIndexMask = glIndexMask@OPENGL.HLP
+3 glIndexPointerEXT = glIndexPointerEXT@OPENGL.HLP
+3 glInitNames = glInitNames@OPENGL.HLP
+3 glIsEnabled = glIsEnabled@OPENGL.HLP
+3 glIsList = glIsList@OPENGL.HLP
+3 glLight = glLight@OPENGL.HLP
+3 glLightModel = glLightModel@OPENGL.HLP
+3 glLineStipple = glLineStipple@OPENGL.HLP
+3 glLineWidth = glLineWidth@OPENGL.HLP
+3 glListBase = glListBase@OPENGL.HLP
+3 glLoadIdentity = glLoadIdentity@OPENGL.HLP
+3 glLoadMatrix = glLoadMatrix@OPENGL.HLP
+3 glLoadName = glLoadName@OPENGL.HLP
+3 glLogicOp = glLogicOp@OPENGL.HLP
+3 glMap1 = glMap1@OPENGL.HLP
+3 glMap2 = glMap2@OPENGL.HLP
+3 glMapGrid = glMapGrid@OPENGL.HLP
+3 glMaterial = glMaterial@OPENGL.HLP
+3 glMatrixMode = glMatrixMode@OPENGL.HLP
+3 glMultMatrix = glMultMatrix@OPENGL.HLP
+3 glNewList = glNewList@OPENGL.HLP
+3 glNormal = glNormal@OPENGL.HLP
+3 glNormalPointerEXT = glNormalPointerEXT@OPENGL.HLP
+3 glOrtho = glOrtho@OPENGL.HLP
+3 glPassThrough = glPassThrough@OPENGL.HLP
+3 glPixelMap = glPixelMap@OPENGL.HLP
+3 glPixelStore = glPixelStore@OPENGL.HLP
+3 glPixelTransfer = glPixelTransfer@OPENGL.HLP
+3 glPixelZoom = glPixelZoom@OPENGL.HLP
+3 glPointSize = glPointSize@OPENGL.HLP
+3 glPolygonMode = glPolygonMode@OPENGL.HLP
+3 glPolygonStipple = glPolygonStipple@OPENGL.HLP
+3 glPushAttrib = glPushAttrib@OPENGL.HLP
+3 glPushMatrix = glPushMatrix@OPENGL.HLP
+3 glPushName = glPushName@OPENGL.HLP
+3 glRasterPos = glRasterPos@OPENGL.HLP
+3 glReadBuffer = glReadBuffer@OPENGL.HLP
+3 glReadPixels = glReadPixels@OPENGL.HLP
+3 glRect = glRect@OPENGL.HLP
+3 glRenderMode = glRenderMode@OPENGL.HLP
+3 glRotate = glRotate@OPENGL.HLP
+3 glScale = glScale@OPENGL.HLP
+3 glScissor = glScissor@OPENGL.HLP
+3 glSelectBuffer = glSelectBuffer@OPENGL.HLP
+3 glShadeModel = glShadeModel@OPENGL.HLP
+3 glStencilFunc = glStencilFunc@OPENGL.HLP
+3 glStencilMask = glStencilMask@OPENGL.HLP
+3 glStencilOp = glStencilOp@OPENGL.HLP
+3 glTexCoord = glTexCoord@OPENGL.HLP
+3 glTexCoordPointerEXT = glTexCoordPointerEXT@OPENGL.HLP
+3 glTexEnv = glTexEnv@OPENGL.HLP
+3 glTexGen = glTexGen@OPENGL.HLP
+3 glTexImage1D = glTexImage1D@OPENGL.HLP
+3 glTexImage2D = glTexImage2D@OPENGL.HLP
+3 glTexParameter = glTexParameter@OPENGL.HLP
+3 glTranslate = glTranslate@OPENGL.HLP
+3 glVertex = glVertex@OPENGL.HLP
+3 glVertexPointerEXT = glVertexPointerEXT@OPENGL.HLP
+3 glViewport = glViewport@OPENGL.HLP
+3 gluBeginCurve, gluEndCurve = gluBeginCurve@OPENGL.HLP
+3 gluBeginPolygon, gluEndPolygon = gluBeginPolygon@OPENGL.HLP
+3 gluBeginSurface, gluEndSurface = gluBeginSurface@OPENGL.HLP
+3 gluBeginTrim, gluEndTrim = gluBeginTrim@OPENGL.HLP
+3 gluBuild1DMipmaps = gluBuild1DMipmaps@OPENGL.HLP
+3 gluBuild2DMipmaps = gluBuild2DMipmaps@OPENGL.HLP
+3 gluCylinder = gluCylinder@OPENGL.HLP
+3 gluDeleteNurbsRenderer = gluDeleteNurbsRenderer@OPENGL.HLP
+3 gluDeleteQuadric = gluDeleteQuadric@OPENGL.HLP
+3 gluDeleteTess = gluDeleteTess@OPENGL.HLP
+3 gluDisk = gluDisk@OPENGL.HLP
+3 gluErrorString = gluErrorString@OPENGL.HLP
+3 gluGetNurbsProperty = gluGetNurbsProperty@OPENGL.HLP
+3 gluGetString = gluGetString@OPENGL.HLP
+3 gluGetTessProperty = gluGetTessProperty@OPENGL.HLP
+3 gluLoadSamplingMatrices = gluLoadSamplingMatrices@OPENGL.HLP
+3 gluLookAt = gluLookAt@OPENGL.HLP
+3 gluNewNurbsRenderer = gluNewNurbsRenderer@OPENGL.HLP
+3 gluNewQuadric = gluNewQuadric@OPENGL.HLP
+3 gluNewTess = gluNewTess@OPENGL.HLP
+3 gluNextContour = gluNextContour@OPENGL.HLP
+3 gluNurbsCallback = gluNurbsCallback@OPENGL.HLP
+3 gluNurbsCurve = gluNurbsCurve@OPENGL.HLP
+3 gluNurbsProperty = gluNurbsProperty@OPENGL.HLP
+3 gluNurbsSurface = gluNurbsSurface@OPENGL.HLP
+3 gluOrtho2D = gluOrtho2D@OPENGL.HLP
+3 gluPartialDisk = gluPartialDisk@OPENGL.HLP
+3 gluPerspective = gluPerspective@OPENGL.HLP
+3 gluPickMatrix = gluPickMatrix@OPENGL.HLP
+3 gluProject = gluProject@OPENGL.HLP
+3 gluPwlCurve = gluPwlCurve@OPENGL.HLP
+3 gluQuadricCallback = gluQuadricCallback@OPENGL.HLP
+3 gluQuadricDrawStyle = gluQuadricDrawStyle@OPENGL.HLP
+3 gluQuadricNormals = gluQuadricNormals@OPENGL.HLP
+3 gluQuadricOrientation = gluQuadricOrientation@OPENGL.HLP
+3 gluQuadricTexture = gluQuadricTexture@OPENGL.HLP
+3 gluScaleImage = gluScaleImage@OPENGL.HLP
+3 gluSphere = gluSphere@OPENGL.HLP
+3 gluTessBeginContour, gluTessEndContour = gluTessBeginContour@OPENGL.HLP
+3 gluTessBeginPolygon, gluTessEndPolygon = gluTessBeginPolygon@OPENGL.HLP
+3 gluTessCallback = gluTessCallback@OPENGL.HLP
+3 gluTessNormal = gluTessNormal@OPENGL.HLP
+3 gluTessProperty = gluTessProperty@OPENGL.HLP
+3 gluTessVertex = gluTessVertex@OPENGL.HLP
+3 gluUnProject = gluUnProject@OPENGL.HLP
+
+2 Introduction to Porting to OpenGL for Windows NT
+3 Introduction to Porting to OpenGL for Windows NT = _Introduction_to_Porting_to_OpenGL_for_Windows_NT@OPENGL.HLP
+3 Porting X Window System Applications = _Porting_X_Window_System_Applications@OPENGL.HLP
+3 Translating the GLX library = _Translating_the_GLX_library@OPENGL.HLP
+3 Porting Device Contexts and Pixel Formats
+4 Porting Device Contexts and Pixel Formats = _Porting_Device_Contexts_and_Pixel_Formats@OPENGL.HLP
+4 GLX Pixel Format Code Sample = _GLX_Pixel_Format_Code_Sample@OPENGL.HLP
+4 Win32 Pixel Format Code Sample = _Win32_Pixel_Format_Code_Sample@OPENGL.HLP
+3 Porting Rendering Contexts
+4 Porting Rendering Contexts = _Porting_Rendering_Contexts@OPENGL.HLP
+4 GLX Rendering Context Code Sample = _GLX_Rendering_Context_Code_Sample@OPENGL.HLP
+4 Win32 Rendering Context Code Sample = _Win32_Rendering_Context_Code_Sample@OPENGL.HLP
+3 Porting GLX Pixmap and Font Code
+4 Porting GLX Pixmap and Font Code = _Porting_GLX_Pixmap_and_Font_Code@OPENGL.HLP
+3 Porting Other GLX Code
+4 Porting Other GLX Code = _Porting_Other_GLX_Code@OPENGL.HLP
+3 A Porting Sample
+4 A Porting Sample = _A_Porting_Sample@OPENGL.HLP
+3 An X Windows System OpenGL Program
+4 An X Windows System OpenGL Program = _An_X_Windows_System_OpenGL_Program@OPENGL.HLP
+4 The Program Ported to Win32 = _The_Program_Ported_to_Win32@OPENGL.HLP
+3 Porting Applications from IRIS GL
+4 Porting Applications from IRIS GL = _Porting_Applications_from_IRIS_GL@OPENGL.HLP
+4 Special IRIS GL Porting Issues = _Special_IRIS_GL_Porting_Issues@OPENGL.HLP
+4 Porting greset = _Porting_greset@OPENGL.HLP
+4 Porting IRIS GL 'Get' Functions = _Porting_IRIS_GL_Get_Functions@OPENGL.HLP
+3 Porting Code that Requires a Current Graphics Position
+4 Porting Code that Requires a Current Graphics Position = _Porting_Code_that_Requires_a_Current_Graphics_Position@OPENGL.HLP
+4 Porting Screen and Buffer Clearing Commands = _Porting_Screen_and_Buffer_Clearing_Commands@OPENGL.HLP
+4 Porting Matrix and Transformation Functions = _Porting_Matrix_and_Transformation_Functions@OPENGL.HLP
+4 Porting MSINGLE Mode Code = _Porting_MSINGLE_Mode_Code@OPENGL.HLP
+4 Porting Functions that Get Matrixes and Transformations = _Porting_Functions_that_Get_Matrixes_and_Transformations@OPENGL.HLP
+4 Porting Viewports, Screenmasks, and Scrboxes = _Porting_Viewports_Screenmasks_and_Scrboxes@OPENGL.HLP
+4 Porting Clipping Planes = _Porting_Clipping_Planes@OPENGL.HLP
+4 Porting Drawing Functions = _Porting_Drawing_Functions@OPENGL.HLP
+3 The IRIS GL Sphere Library
+4 The IRIS GL Sphere Library = _The_IRIS_GL_Sphere_Library@OPENGL.HLP
+4 Porting v Functions = _Porting_v_Functions@OPENGL.HLP
+4 Porting bgn/end Commands = _Porting_bgn_end_Commands@OPENGL.HLP
+4 Porting Points = _Porting_Points@OPENGL.HLP
+4 Porting Lines = _Porting_Lines@OPENGL.HLP
+4 Porting Polygons and Quadrilaterals = _Porting_Polygons_and_Quadrilaterals@OPENGL.HLP
+4 Porting Triangles = _Porting_Polygon_Modes@OPENGL.HLP
+4 Porting Arcs and Circles = _Porting_Arcs_and_Circles@OPENGL.HLP
+4 Porting Spheres = _Porting_Spheres@OPENGL.HLP
+4 Porting Color, Shading, and Writemask Code = _Porting_Color_Shading_and_Writemask_Code@OPENGL.HLP
+4 Porting Color Calls = _Porting_Color_Calls@OPENGL.HLP
+4 Porting Shading Models = _Porting_Shading_Models@OPENGL.HLP
+4 Porting Pixel Operations = _Porting_Pixel_Operations@OPENGL.HLP
+4 Porting Depth Cueing and Fog Commands = _Porting_Depth_Cueing_and_Fog_Commands@OPENGL.HLP
+4 Porting Curve and Surface Functions = _Porting_Curve_and_Surface_Functions@OPENGL.HLP
+4 Porting NURBS Objects = _Porting_NURBS_Objects@OPENGL.HLP
+4 Porting NURBS Curves = _Porting_NURBS_Curves@OPENGL.HLP
+4 Porting Trimming Curves = _Porting_Trimming_Curves@OPENGL.HLP
+4 Porting NURBS Surfaces = _Porting_NURBS_Surfaces@OPENGL.HLP
+4 Porting Antialiasing Calls = _Porting_Antialiasing_Calls@OPENGL.HLP
+4 Porting Blending Code = _Porting_Blending_Code@OPENGL.HLP
+4 Porting afunction Test Functions = _Porting_afunction_Test_Functions@OPENGL.HLP
+4 Antialiasing = _Porting_Antialiasing_Calls_2@OPENGL.HLP
+4 Porting Accumulation Buffer Calls = _Porting_Accumulation_Buffer_Calls@OPENGL.HLP
+4 Porting Stencil Plane Calls = _Porting_Stencil_Plane_Calls@OPENGL.HLP
+4 Porting Display Lists = _Porting_Display_Lists@OPENGL.HLP
+4 Porting the bbox2 Function = _Porting_the_bbox2_Function@OPENGL.HLP
+4 Porting Edited Display Lists = _Porting_Edited_Display_Lists@OPENGL.HLP
+4 A Sample Port of a Display Lists = _A_Sample_Port_of_a_Display_Lists@OPENGL.HLP
+4 Porting Defs, Binds, and Sets = _IRIS_GL_Sample_Display_List_Code@OPENGL.HLP
+4 Porting Lighting and Materials Functions = _Porting_Lighting_and_Materials_Functions@OPENGL.HLP
+4 Porting Texture Functions = _Porting_Texture_Functions@OPENGL.HLP
+4 Translating tevdef = _Translating_tevdef@OPENGL.HLP
+4 Translating texdef = _Translating_texdef@OPENGL.HLP
+4 Translating texgen = _Translating_texgen@OPENGL.HLP
+4 Porting Picking Functions = _Porting_Picking_Functions@OPENGL.HLP
+4 Porting Feedback Functions = _Porting_Feedback_Functions@OPENGL.HLP
+
+3 OpenGL Commands and Their IRIS GL Equivalents
+4 OpenGL Commands and Their IRIS GL Equivalents = _OpenGL_Commands_and_Their_IRIS_GL_Equivalents@OPENGL.HLP
+4 IRIS GL and OpenGL Differences = _IRIS_GL_and_OpenGL_Differences@OPENGL.HLP
+
+2 OpenGL Glossary
+3 OpenGL Glossary = GLOSS_OGL_OpenGL_Glossary@OPENGL.HLP
+3 GLOSS_OGL_aliasing = GLOSS_OGL_A@OPENGL.HLP
+3 alpha GLOSS_OGL_animation = GLOSS_OGL_alpha@OPENGL.HLP
+3 animation GLOSS_OGL_antialiasing = GLOSS_OGL_animation@OPENGL.HLP
+3 antialiasing GLOSS_OGL_application_specific_clipping = GLOSS_OGL_antialiasing@OPENGL.HLP
+3 application-specific clipping GLOSS_OGL_B = GLOSS_OGL_application_specific_clipping@OPENGL.HLP
+3 GLOSS_OGL_back_face = GLOSS_OGL_B@OPENGL.HLP
+3 bit GLOSS_OGL_bitmap = GLOSS_OGL_bit@OPENGL.HLP
+3 bitmap GLOSS_OGL_bitplane = GLOSS_OGL_bitmap@OPENGL.HLP
+3 bitplane GLOSS_OGL_blending = GLOSS_OGL_bitplane@OPENGL.HLP
+3 blending GLOSS_OGL_buffer = GLOSS_OGL_blending@OPENGL.HLP
+3 buffer GLOSS_OGL_C = GLOSS_OGL_buffer@OPENGL.HLP
+3 GLOSS_OGL_client = GLOSS_OGL_C@OPENGL.HLP
+3 client memory GLOSS_OGL_clip_coordinates = GLOSS_OGL_client_memory@OPENGL.HLP
+3 clip coordinates GLOSS_OGL_clipping = GLOSS_OGL_clip_coordinates@OPENGL.HLP
+3 clipping GLOSS_OGL_color_index = GLOSS_OGL_clipping@OPENGL.HLP
+3 color index GLOSS_OGL_color_index_mode = GLOSS_OGL_color_index@OPENGL.HLP
+3 color-index mode GLOSS_OGL_color_map = GLOSS_OGL_color_index_mode@OPENGL.HLP
+3 color map GLOSS_OGL_component = GLOSS_OGL_color_map@OPENGL.HLP
+3 component GLOSS_OGL_context = GLOSS_OGL_component@OPENGL.HLP
+3 context GLOSS_OGL_convex = GLOSS_OGL_context@OPENGL.HLP
+3 convex GLOSS_OGL_convex_hull = GLOSS_OGL_convex@OPENGL.HLP
+3 convex hull GLOSS_OGL_coordinate_system = GLOSS_OGL_convex_hull@OPENGL.HLP
+3 coordinate system GLOSS_OGL_culling = GLOSS_OGL_coordinate_system@OPENGL.HLP
+3 culling GLOSS_OGL_current_matrix = GLOSS_OGL_culling@OPENGL.HLP
+3 current matrix GLOSS_OGL_current_raster_position = GLOSS_OGL_current_matrix@OPENGL.HLP
+3 current raster position GLOSS_OGL_D = GLOSS_OGL_current_raster_position@OPENGL.HLP
+3 GLOSS_OGL_depth = GLOSS_OGL_D@OPENGL.HLP
+3 depth-cueing GLOSS_OGL_display_list = GLOSS_OGL_depth_cueing@OPENGL.HLP
+3 display list GLOSS_OGL_dithering = GLOSS_OGL_display_list@OPENGL.HLP
+3 dithering GLOSS_OGL_double_buffering = GLOSS_OGL_dithering@OPENGL.HLP
+3 double-buffering GLOSS_OGL_E = GLOSS_OGL_double_buffering@OPENGL.HLP
+3 GLOSS_OGL_element = GLOSS_OGL_E@OPENGL.HLP
+3 evaluation GLOSS_OGL_execute = GLOSS_OGL_evaluation@OPENGL.HLP
+3 execute GLOSS_OGL_eye_coordinates = GLOSS_OGL_execute@OPENGL.HLP
+3 eye coordinates GLOSS_OGL_F = GLOSS_OGL_eye_coordinates@OPENGL.HLP
+3 GLOSS_OGL_face = GLOSS_OGL_F@OPENGL.HLP
+3 flat shading GLOSS_OGL_fog = GLOSS_OGL_flat_shading@OPENGL.HLP
+3 fog GLOSS_OGL_font = GLOSS_OGL_fog@OPENGL.HLP
+3 font GLOSS_OGL_fragment = GLOSS_OGL_font@OPENGL.HLP
+3 fragment GLOSS_OGL_framebuffer = GLOSS_OGL_fragment@OPENGL.HLP
+3 framebuffer GLOSS_OGL_front_face = GLOSS_OGL_framebuffer@OPENGL.HLP
+3 front face GLOSS_OGL_frustum = GLOSS_OGL_front_face@OPENGL.HLP
+3 frustum GLOSS_OGL_G = GLOSS_OGL_frustum@OPENGL.HLP
+3 GLOSS_OGL_gamma_correction = GLOSS_OGL_G@OPENGL.HLP
+3 geometric model GLOSS_OGL_geometric_object = GLOSS_OGL_geometric_model@OPENGL.HLP
+3 geometric object GLOSS_OGL_geometric_primitive = GLOSS_OGL_geometric_object@OPENGL.HLP
+3 geometric primitive GLOSS_OGL_Gouraud_shading = GLOSS_OGL_geometric_primitive@OPENGL.HLP
+3 Gouraud shading GLOSS_OGL_group = GLOSS_OGL_Gouraud_shading@OPENGL.HLP
+3 group GLOSS_OGL_H = GLOSS_OGL_group@OPENGL.HLP
+3 GLOSS_OGL_half_space = GLOSS_OGL_H@OPENGL.HLP
+3 homogenous coordinates GLOSS_OGL_I = GLOSS_OGL_homogenous_coordinates@OPENGL.HLP
+3 GLOSS_OGL_image = GLOSS_OGL_I@OPENGL.HLP
+3 image primitive GLOSS_OGL_immediate_mode = GLOSS_OGL_image_primitive@OPENGL.HLP
+3 immediate mode GLOSS_OGL_index = GLOSS_OGL_immediate_mode@OPENGL.HLP
+3 index GLOSS_OGL_IRIS_GL = GLOSS_OGL_index@OPENGL.HLP
+3 IRIS GL GLOSS_OGL_JKL = GLOSS_OGL_IRIS_GL@OPENGL.HLP
+3 GLOSS_OGL_jaggies = GLOSS_OGL_JKL@OPENGL.HLP
+3 GLOSS_OGL_lighting = GLOSS_OGL_L@OPENGL.HLP
+3 line GLOSS_OGL_luminance = GLOSS_OGL_line@OPENGL.HLP
+3 luminance GLOSS_OGL_M = GLOSS_OGL_luminance@OPENGL.HLP
+3 GLOSS_OGL_matrices = GLOSS_OGL_M@OPENGL.HLP
+3 matrix GLOSS_OGL_modelview_matrix = GLOSS_OGL_matrix@OPENGL.HLP
+3 modelview matrix GLOSS_OGL_monitor = GLOSS_OGL_modelview_matrix@OPENGL.HLP
+3 monitor GLOSS_OGL_motion_blurring = GLOSS_OGL_monitor@OPENGL.HLP
+3 motion blurring GLOSS_OGL_N = GLOSS_OGL_motion_blurring@OPENGL.HLP
+3 GLOSS_OGL_network = GLOSS_OGL_N@OPENGL.HLP
+3 nonconvex GLOSS_OGL_normal = GLOSS_OGL_nonconvex@OPENGL.HLP
+3 normal GLOSS_OGL_normalize = GLOSS_OGL_normal@OPENGL.HLP
+3 normalize GLOSS_OGL_normal_vector = GLOSS_OGL_normalize@OPENGL.HLP
+3 normal vector GLOSS_OGL_NURBS = GLOSS_OGL_normal_vector@OPENGL.HLP
+3 NURBS GLOSS_OGL_O = GLOSS_OGL_NURBS@OPENGL.HLP
+3 GLOSS_OGL_object = GLOSS_OGL_O@OPENGL.HLP
+3 object coordinates GLOSS_OGL_orthographic = GLOSS_OGL_object_coordinates@OPENGL.HLP
+3 orthographic GLOSS_OGL_P = GLOSS_OGL_orthographic@OPENGL.HLP
+3 GLOSS_OGL_parameter = GLOSS_OGL_P@OPENGL.HLP
+3 perspective division GLOSS_OGL_pixel = GLOSS_OGL_perspective_division@OPENGL.HLP
+3 pixel GLOSS_OGL_point = GLOSS_OGL_pixel@OPENGL.HLP
+3 point GLOSS_OGL_polygon = GLOSS_OGL_point@OPENGL.HLP
+3 polygon GLOSS_OGL_primitive = GLOSS_OGL_polygon@OPENGL.HLP
+3 primitive GLOSS_OGL_projection_matrix = GLOSS_OGL_primitive@OPENGL.HLP
+3 projection matrix GLOSS_OGL_Q = GLOSS_OGL_projection_matrix@OPENGL.HLP
+3 GLOSS_OGL_quadrilateral = GLOSS_OGL_Q@OPENGL.HLP
+3 GLOSS_OGL_rasterize = GLOSS_OGL_R@OPENGL.HLP
+3 rectangle GLOSS_OGL_rendering = GLOSS_OGL_rectangle@OPENGL.HLP
+3 rendering GLOSS_OGL_RGBA = GLOSS_OGL_rendering@OPENGL.HLP
+3 RGBA GLOSS_OGL_RGBA_mode = GLOSS_OGL_RGBA@OPENGL.HLP
+3 RGBA mode GLOSS_OGL_S = GLOSS_OGL_RGBA_mode@OPENGL.HLP
+3 GLOSS_OGL_server = GLOSS_OGL_S@OPENGL.HLP
+3 shading GLOSS_OGL_single_buffering = GLOSS_OGL_shading@OPENGL.HLP
+3 single-buffering GLOSS_OGL_stipple = GLOSS_OGL_single_buffering@OPENGL.HLP
+3 stipple GLOSS_OGL_T = GLOSS_OGL_stipple@OPENGL.HLP
+3 GLOSS_OGL_tessellation = GLOSS_OGL_T@OPENGL.HLP
+3 texel GLOSS_OGL_texture = GLOSS_OGL_texel@OPENGL.HLP
+3 texture GLOSS_OGL_texture_mapping = GLOSS_OGL_texture@OPENGL.HLP
+3 texture mapping GLOSS_OGL_texture_matrix = GLOSS_OGL_texture_mapping@OPENGL.HLP
+3 texture matrix GLOSS_OGL_transformation = GLOSS_OGL_texture_matrix@OPENGL.HLP
+3 transformation GLOSS_OGL_triangle = GLOSS_OGL_transformation@OPENGL.HLP
+3 triangle GLOSS_OGL_UV = GLOSS_OGL_triangle@OPENGL.HLP
+3 GLOSS_OGL_vertex = GLOSS_OGL_UV@OPENGL.HLP
+3 vertices GLOSS_OGL_viewpoint = GLOSS_OGL_vertices@OPENGL.HLP
+3 viewpoint GLOSS_OGL_view_volume = GLOSS_OGL_viewpoint@OPENGL.HLP
+3 view volume GLOSS_OGL_W = GLOSS_OGL_view_volume@OPENGL.HLP
+3 GLOSS_OGL_window = GLOSS_OGL_W@OPENGL.HLP
+3 window-aligned GLOSS_OGL_window_coordinates = GLOSS_OGL_window_aligned@OPENGL.HLP
+3 window coordinates GLOSS_OGL_wireframe = GLOSS_OGL_window_coordinates@OPENGL.HLP
+3 wireframe GLOSS_OGL_XYZ = GLOSS_OGL_wireframe@OPENGL.HLP
+3 GLOSS_OGL_X_Window_System = GLOSS_OGL_XYZ@OPENGL.HLP
+
+2 BOOK code
+3 BOOK = _opengl_BOOK_code@OPENGL.HLP
+3 MAKEFILE  (BOOK Sample) = _opengl_MAKEFILE_.28.BOOK_OpenGL_Sample.29_code@OPENGL.HLP
+3 ACCANTI.C  (BOOK Sample) = _opengl_ACCANTI..C_.28.BOOK_OpenGL_Sample.29_code@OPENGL.HLP
+3 ACCNOT.C  (BOOK Sample) = _opengl_ACCNOT..C_.28.BOOK_OpenGL_Sample.29_code@OPENGL.HLP
+3 ACCPERSP.C  (BOOK Sample) = _opengl_ACCPERSP..C_.28.BOOK_OpenGL_Sample.29_code@OPENGL.HLP
+3 ACCUM.C  (BOOK Sample) = _opengl_ACCUM..C_.28.BOOK_OpenGL_Sample.29_code@OPENGL.HLP
+3 AIM.C  (BOOK Sample) = _opengl_AIM..C_.28.BOOK_OpenGL_Sample.29_code@OPENGL.HLP
+3 ALPHA.C  (BOOK Sample) = _opengl_ALPHA..C_.28.BOOK_OpenGL_Sample.29_code@OPENGL.HLP
+3 ALPHA3D.C  (BOOK Sample) = _opengl_ALPHA3D..C_.28.BOOK_OpenGL_Sample.29_code@OPENGL.HLP
+3 ANTI.C  (BOOK Sample) = _opengl_ANTI..C_.28.BOOK_OpenGL_Sample.29_code@OPENGL.HLP
+3 ANTINDX.C  (BOOK Sample) = _opengl_ANTINDX..C_.28.BOOK_OpenGL_Sample.29_code@OPENGL.HLP
+3 ANTIPNDX.C  (BOOK Sample) = _opengl_ANTIPNDX..C_.28.BOOK_OpenGL_Sample.29_code@OPENGL.HLP
+3 ANTIPNT.C  (BOOK Sample) = _opengl_ANTIPNT..C_.28.BOOK_OpenGL_Sample.29_code@OPENGL.HLP
+3 ANTIPOLY.C  (BOOK Sample) = _opengl_ANTIPOLY..C_.28.BOOK_OpenGL_Sample.29_code@OPENGL.HLP
+3 BEZCURVE.C  (BOOK Sample) = _opengl_BEZCURVE..C_.28.BOOK_OpenGL_Sample.29_code@OPENGL.HLP
+3 BEZMESH.C  (BOOK Sample) = _opengl_BEZMESH..C_.28.BOOK_OpenGL_Sample.29_code@OPENGL.HLP
+3 BEZSURF.C  (BOOK Sample) = _opengl_BEZSURF..C_.28.BOOK_OpenGL_Sample.29_code@OPENGL.HLP
+3 CHECKER.C  (BOOK Sample) = _opengl_CHECKER..C_.28.BOOK_OpenGL_Sample.29_code@OPENGL.HLP
+3 CHECKER2.C  (BOOK Sample) = _opengl_CHECKER2..C_.28.BOOK_OpenGL_Sample.29_code@OPENGL.HLP
+3 CHESS.C  (BOOK Sample) = _opengl_CHESS..C_.28.BOOK_OpenGL_Sample.29_code@OPENGL.HLP
+3 CLIP.C  (BOOK Sample) = _opengl_CLIP..C_.28.BOOK_OpenGL_Sample.29_code@OPENGL.HLP
+3 COLORMAT.C  (BOOK Sample) = _opengl_COLORMAT..C_.28.BOOK_OpenGL_Sample.29_code@OPENGL.HLP
+3 CONE.C  (BOOK Sample) = _opengl_CONE..C_.28.BOOK_OpenGL_Sample.29_code@OPENGL.HLP
+3 CUBE.C  (BOOK Sample) = _opengl_CUBE..C_.28.BOOK_OpenGL_Sample.29_code@OPENGL.HLP
+3 CURVE.C  (BOOK Sample) = _opengl_CURVE..C_.28.BOOK_OpenGL_Sample.29_code@OPENGL.HLP
+3 DEPTHCUE.C  (BOOK Sample) = _opengl_DEPTHCUE..C_.28.BOOK_OpenGL_Sample.29_code@OPENGL.HLP
+3 DISK.C  (BOOK Sample) = _opengl_DISK..C_.28.BOOK_OpenGL_Sample.29_code@OPENGL.HLP
+3 DOF.C  (BOOK Sample) = _opengl_DOF..C_.28.BOOK_OpenGL_Sample.29_code@OPENGL.HLP
+3 DOFNOT.C  (BOOK Sample) = _opengl_DOFNOT..C_.28.BOOK_OpenGL_Sample.29_code@OPENGL.HLP
+3 DOUBLE.C  (BOOK Sample) = _opengl_DOUBLE..C_.28.BOOK_OpenGL_Sample.29_code@OPENGL.HLP
+3 DRAWF.C  (BOOK Sample) = _opengl_DRAWF..C_.28.BOOK_OpenGL_Sample.29_code@OPENGL.HLP
+3 FEEDBACK.C  (BOOK Sample) = _opengl_FEEDBACK..C_.28.BOOK_OpenGL_Sample.29_code@OPENGL.HLP
+3 FOG.C  (BOOK Sample) = _opengl_FOG..C_.28.BOOK_OpenGL_Sample.29_code@OPENGL.HLP
+3 FOGINDEX.C  (BOOK Sample) = _opengl_FOGINDEX..C_.28.BOOK_OpenGL_Sample.29_code@OPENGL.HLP
+3 FONT.C  (BOOK Sample) = _opengl_FONT..C_.28.BOOK_OpenGL_Sample.29_code@OPENGL.HLP
+3 GLOS.H  (BOOK Sample) = _opengl_GLOS..H_.28.BOOK_OpenGL_Sample.29_code@OPENGL.HLP
+3 JITTER.H  (BOOK Sample) = _opengl_JITTER..H_.28.BOOK_OpenGL_Sample.29_code@OPENGL.HLP
+3 LIGHT.C  (BOOK Sample) = _opengl_LIGHT..C_.28.BOOK_OpenGL_Sample.29_code@OPENGL.HLP
+3 LINELIST.C  (BOOK Sample) = _opengl_LINELIST..C_.28.BOOK_OpenGL_Sample.29_code@OPENGL.HLP
+3 LINES.C  (BOOK Sample) = _opengl_LINES..C_.28.BOOK_OpenGL_Sample.29_code@OPENGL.HLP
+3 LIST.C  (BOOK Sample) = _opengl_LIST..C_.28.BOOK_OpenGL_Sample.29_code@OPENGL.HLP
+3 LIST2.C  (BOOK Sample) = _opengl_LIST2..C_.28.BOOK_OpenGL_Sample.29_code@OPENGL.HLP
+3 MAPLIGHT.C  (BOOK Sample) = _opengl_MAPLIGHT..C_.28.BOOK_OpenGL_Sample.29_code@OPENGL.HLP
+3 MATERIAL.C  (BOOK Sample) = _opengl_MATERIAL..C_.28.BOOK_OpenGL_Sample.29_code@OPENGL.HLP
+
+2 PIPES code
+3 PIPES = _opengl_PIPES_code@OPENGL.HLP
+3 MAKEFILE  (PIPES Sample) = _opengl_MAKEFILE_.28.PIPES_OpenGL_Sample.29_code@OPENGL.HLP
+3 MATERIAL.H  (PIPES Sample) = _opengl_MATERIAL..H_.28.PIPES_OpenGL_Sample.29_code@OPENGL.HLP
+3 MATERIAL.C  (PIPES Sample) = _opengl_MATERIAL..C_.28.PIPES_OpenGL_Sample.29_code@OPENGL.HLP
+3 OBJECTS.H  (PIPES Sample) = _opengl_OBJECTS..H_.28.PIPES_OpenGL_Sample.29_code@OPENGL.HLP
+3 OBJECTS.C  (PIPES Sample) = _opengl_OBJECTS..C_.28.PIPES_OpenGL_Sample.29_code@OPENGL.HLP
+3 PIPES.H  (PIPES Sample) = _opengl_PIPES..H_.28.PIPES_OpenGL_Sample.29_code@OPENGL.HLP
+3 PIPES.C  (PIPES Sample) = _opengl_PIPES..C_.28.PIPES_OpenGL_Sample.29_code@OPENGL.HLP
+3 RESOURCE.H  (PIPES Sample) = _opengl_RESOURCE..H_.28.PIPES_OpenGL_Sample.29_code@OPENGL.HLP
+3 SSPIPES.H  (PIPES Sample) = _opengl_SSPIPES..H_.28.PIPES_OpenGL_Sample.29_code@OPENGL.HLP
+3 SSPIPES.RC  (PIPES Sample) = _opengl_SSPIPES..RC_.28.PIPES_OpenGL_Sample.29_code@OPENGL.HLP
+3 SSPIPES.C  (PIPES Sample) = _opengl_SSPIPES..C_.28.PIPES_OpenGL_Sample.29_code@OPENGL.HLP
+3 TEXTURE.H  (PIPES Sample) = _opengl_TEXTURE..H_.28.PIPES_OpenGL_Sample.29_code@OPENGL.HLP
+3 TEXTURE.C  (PIPES Sample) = _opengl_TEXTURE..C_.28.PIPES_OpenGL_Sample.29_code@OPENGL.HLP
+3 UTIL.H  (PIPES Sample) = _opengl_UTIL..H_.28.PIPES_OpenGL_Sample.29_code@OPENGL.HLP
+3 UTIL.C  (PIPES Sample) = _opengl_UTIL..C_.28.PIPES_OpenGL_Sample.29_code@OPENGL.HLP
+

@@ -9,19 +9,20 @@
 /*  Builds objects but doesn't stream them.                               */
 /*                                                                        */
 /*------------------------------------------------------------------------*/
-#include <owl\owlpch.h>
-    
+#include <owl/pch.h>
+#include <owl/window.h>
+#include <owl/dc.h>
+#include <owl/applicat.h>
+#include <owl/framewin.h>
+#include <owl/dialog.h>
+
+#include <winsys/wsyscls.h>
+#include <winsys/geometry.h>
+
+#include <classlib/sets.h>
+
 #include <new.h>
 #include <cstring.h>
-
-#include <classlib\sets.h>
-
-#include <owl\point.h>
-#include <owl\window.h>
-#include <owl\dc.h>
-#include <owl\applicat.h>
-#include <owl\framewin.h>
-#include <owl\dialog.h>
 
 #include "streams.h"
 
@@ -613,7 +614,7 @@ protected:
 
 private:
 
-    class BuilderDC : public TClientDC
+    class _CALLCNVN BuilderDC : public TClientDC
     {
     public:
         BuilderDC( HWND wnd );
@@ -923,11 +924,13 @@ private:
     TWindow& Owner;
     int AllowPosition;
 
+  public:
+
     class CaptionDialog : public TDialog
     {
     public:
         CaptionDialog( TWindow& parent, CaptionBuilder& builder );
-        BOOL CanClose();
+        bool CanClose();
         void SetupWindow();
     private:
         void TopClicked();
@@ -996,12 +999,12 @@ void CaptionBuilder::CaptionDialog::SetupWindow()
         }
 }
 
-BOOL CaptionBuilder::CaptionDialog::CanClose()
+bool CaptionBuilder::CaptionDialog::CanClose()
 {
     char buf[256];
     GetDlgItemText( IDD_INPUTEDITBOX, buf, sizeof(buf) );
     Builder.Caption = buf;
-    return TRUE;
+    return true;
 }
 
 void CaptionBuilder::CaptionDialog::TopClicked()
@@ -1140,7 +1143,7 @@ GraphicalObject *CaptionedEllipseBuilder::BuildObject( TPoint p1, TPoint p2 )
 /*                                                                        */
 /*          Initializes the window.                                       */
 /*                                                                        */
-/*      void Paint( TDC&, BOOL, TRect& );                                 */
+/*      void Paint( TDC&, bool, TRect& );                                 */
 /*                                                                        */
 /*          Called whenever the window receives a WM_PAINT message. Draws */
 /*          the objects by calling each of their Draw() functions.        */
@@ -1213,7 +1216,7 @@ public:
 
     TGraphWindow();
 
-    void Paint(TDC&, BOOL, TRect&);
+    void Paint(TDC&, bool, TRect&);
 
     void CmNew();
     void CmLine();
@@ -1298,7 +1301,7 @@ void TGraphWindow::DrawObject( GraphicalObject &obj, void *ptr )
     obj.Draw( *(GraphWindowDC *)ptr );
 }
 
-void TGraphWindow::Paint( TDC& dc, BOOL, TRect& )
+void TGraphWindow::Paint( TDC& dc, bool, TRect& )
 {
     GraphWindowDC gdc(dc);
     Objects.ForEach( DrawObject, &gdc );
@@ -1392,7 +1395,7 @@ void TGraphWindow::EvMouseMove( UINT modKeys, TPoint& point )
         Builder->Drag( point );
 }
 
-class TStreamApp : public TApplication 
+class TStreamApp : public TApplication
 {
 
 public:

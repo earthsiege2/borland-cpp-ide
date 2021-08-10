@@ -1,0 +1,7 @@
+:Base BCERRMSG.HLP
+:Title Borland C++ Error Messages and Warnings
+:Include OPENHELP.CFG
+:Include BCERRMSG.TOC
+:Link BCPP.HLP
+:Link BCW.HLP
+

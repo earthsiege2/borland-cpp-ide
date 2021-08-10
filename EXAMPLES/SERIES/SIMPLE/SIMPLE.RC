@@ -1,0 +1,68 @@
+#include "resource.h"
+
+#if !defined (WORKSHOP_INVOKED)
+#include <windows.h>
+#endif
+
+#include "globals.h"
+#include "version.h"
+
+IDI_APPICON             ICON    DISCARDABLE     "SIMPLE.ICO"
+
+SIMPLE MENU DISCARDABLE 
+BEGIN
+    POPUP "&File"
+    BEGIN
+        MENUITEM "E&xit",                       IDM_EXIT
+    END
+END
+
+SIMPLE ACCELERATORS MOVEABLE PURE 
+BEGIN
+    "Q",            IDM_EXIT,               VIRTKEY, CONTROL
+END
+
+
+VS_VERSION_INFO VERSIONINFO
+ FILEVERSION 4,0,0,0
+ PRODUCTVERSION 4,0,0,0
+ FILEFLAGSMASK 0x3fL
+#ifdef _DEBUG
+ FILEFLAGS 0xbL
+#else
+ FILEFLAGS 0xaL
+#endif
+ FILEOS 0x10001L
+ FILETYPE 0x1L
+ FILESUBTYPE 0x0L
+BEGIN
+    BLOCK "StringFileInfo"
+    BEGIN
+        BLOCK "040904e4"
+        BEGIN
+            VALUE "CompanyName", "Microsoft Corporation\0"
+            VALUE "FileDescription", "Simple Example Application\0"
+            VALUE "FileVersion", "Version 4.0\0"
+            VALUE "InternalName", "Simple\0"
+            VALUE "LegalCopyright", "Copyright \251 Microsoft Corp. 1990-1995\0"
+            VALUE "LegalTrademarks", "Microsoft\256 is a registered trademark of Microsoft Corporation. Windows(TM) is a trademark of Microsoft Corporation\0"
+            VALUE "OriginalFilename", "\0"
+            VALUE "ProductName", "Simple\0"
+            VALUE "ProductVersion", "\0"
+            VALUE "ProductVersion", "Version 4.0\0"
+        END
+    END
+    BLOCK "VarFileInfo"
+    BEGIN
+        VALUE "Translation", 0x409, 1252
+    END
+END
+
+
+STRINGTABLE DISCARDABLE 
+BEGIN
+    IDS_APPNAME             "Simple"
+    IDS_DESCRIPTION         "Simple Example Application"
+END
+
+

@@ -4,9 +4,9 @@
  *-----------------------------------------------------------------------*/
 
 /*
- *      C/C++ Run Time Library - Version 1.5
+ *      C/C++ Run Time Library - Version 2.0
  *
- *      Copyright (c) 1990, 1994 by Borland International
+ *      Copyright (c) 1990, 1996 by Borland International
  *      All Rights Reserved.
  *
  */
@@ -18,10 +18,7 @@
 #include <cstring.h>
 #include <except.h>
 
-xalloc __xalloc( "Out of memory", 0 );
-
-void xnew_handler() { throw __xalloc; }
-new_handler _new_handler = xnew_handler;
+extern new_handler _new_handler;
 
 new_handler _RTLENTRY _EXPFUNC set_new_handler(new_handler p)
 {

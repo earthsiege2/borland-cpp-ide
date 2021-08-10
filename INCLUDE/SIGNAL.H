@@ -5,9 +5,9 @@
 */
 
 /*
- *      C/C++ Run Time Library - Version 6.5
+ *      C/C++ Run Time Library - Version 7.0
  *
- *      Copyright (c) 1988, 1994 by Borland International
+ *      Copyright (c) 1988, 1996 by Borland International
  *      All Rights Reserved.
  *
  */
@@ -66,7 +66,7 @@ void (_USERENTRY * _RTLENTRY _EXPFUNC32 signal(int __sig, void (_USERENTRY * __f
 void (_USERENTRY * _RTLENTRY _EXPFUNC32 signal(int __sig, void (_USERENTRY * __func)())) (int);
 #endif
 
-#if !__STDC__
+#if !defined(__STDC__)
 #define NSIG   23      /* highest defined signal no. + 1 */
 #endif
 

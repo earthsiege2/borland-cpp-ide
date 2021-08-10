@@ -1,12 +1,10 @@
-/*------------------------------------------------------------------------*/
-/*                                                                        */
-/*  QUEUES.H                                                              */
-/*                                                                        */
-/*  Copyright (c) 1991, 1994 Borland International                        */
-/*  All Rights Reserved                                                   */
-/*                                                                        */
-/*------------------------------------------------------------------------*/
-
+//----------------------------------------------------------------------------
+// Borland BIDS Container Library
+// Copyright (c) 1991, 1996 by Borland International, All Rights Reserved
+//
+//$Revision:   5.4  $
+//
+//----------------------------------------------------------------------------
 #if !defined( CLASSLIB_QUEUES_H )
 #define CLASSLIB_QUEUES_H
 
@@ -522,7 +520,7 @@ public:
         {
         }
 
-}
+};
 
 template <class T> class TQueueIterator :
     public TQueueAsVectorIterator<T>
@@ -545,4 +543,3 @@ public:
 #pragma option -Vo.
 
 #endif  // CLASSLIB_QUEUES_H
-

@@ -8,9 +8,9 @@
 /*[]------------------------------------------------------------[]*/
 
 /*
- *      C/C++ Run Time Library - Version 6.5
+ *      C/C++ Run Time Library - Version 7.0
  *
- *      Copyright (c) 1990, 1994 by Borland International
+ *      Copyright (c) 1990, 1996 by Borland International
  *      All Rights Reserved.
  *
  */
@@ -42,11 +42,12 @@ ostream _FAR & ostream::operator<< (long double d)
     else
         format = 'g';
 
-    char* prefix = 0;
-    if( ! (d < 0.0)  &&  (flags() & ios::showpos) )
-        prefix = "+";
-
     __realcvt(&d, precision(), buf, format, (flags() & ios::showpoint) ? 1 : 0, F_10byteFloat);
+
+    char* prefix = 0;
+    if (buf[0] != '-' && (flags() & ios::showpos))
+	prefix = "+";
+
 
     // now we have a formatted string for output, to be possibly padded
     outstr(buf, prefix);

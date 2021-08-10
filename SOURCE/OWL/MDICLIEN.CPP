@@ -1,18 +1,23 @@
 //----------------------------------------------------------------------------
 // ObjectWindows
-// (C) Copyright 1991, 1994 by Borland International, All Rights Reserved
+// Copyright (c) 1991, 1996 by Borland International, All Rights Reserved
 //
-//   Implementation of class TMDIClient.  This defines the basic behavior
-//   of all MDI client windows.
+//$Revision:   10.5  $
+//
+// Implementation of class TMDIClient.  This defines the basic behavior
+// of all MDI client windows.
 //----------------------------------------------------------------------------
 #pragma hdrignore SECTION
-#include <owl/owlpch.h>
-#include <owl/mdi.h>
+#include <owl/pch.h>
+#if !defined(OWL_MDI_H)
+# include <owl/mdi.h>
+#endif
 
-// Define to work around here in the client, the 'creating MDI child maximized
-// corrupts the menu bar' bug 
 //
-#define MDIMAX_WORKAROUND
+// Define to not work around here in the client, the 'creating MDI child
+// maximized corrupts the menu bar' bug
+//
+//#define NO_MDIMAX_WORKAROUND
 
 #if !defined(SECTION) || SECTION == 1
 
@@ -30,12 +35,13 @@ DEFINE_RESPONSE_TABLE1(TMDIClient, TWindow)
   EV_COMMAND_ENABLE(CM_CLOSECHILDREN, CmChildActionEnable),
   EV_WM_MDICREATE,
   EV_WM_MDIDESTROY,
+  EV_WM_DROPFILES,
 END_RESPONSE_TABLE;
 
 //
-// constructor for a TMDIClient
+// Constructor for a TMDIClient
 //
-// allocates space for the CLIENTCREATESTRUCT on the heap and sets
+// Allocates a CLIENTCREATESTRUCT on the heap and
 // ClientAttr to point to this space
 //
 TMDIClient::TMDIClient(TModule* module)
@@ -46,85 +52,115 @@ TMDIClient::TMDIClient(TModule* module)
 
   Attr.Id = IDW_MDICLIENT;
 
-  // allow client area to grow scroll bars if necessary
+  // Allow client area to grow scroll bars if necessary
   //
   Attr.Style |= MDIS_ALLCHILDSTYLES | WS_GROUP | WS_TABSTOP | WS_CLIPCHILDREN|
                 WS_CLIPSIBLINGS | WS_VSCROLL | WS_HSCROLL | WS_BORDER;
-  ClientAttr = new CLIENTCREATESTRUCT; // far
+
+  if (TSystem::Has3dUI()) {
+    Attr.Style &= ~WS_BORDER;
+    Attr.ExStyle |= 0x200L;  //WS_EX_CLIENTEDGE;
+  }
+
+  ClientAttr = new CLIENTCREATESTRUCT;
   ClientAttr->hWindowMenu = 0;
   ClientAttr->idFirstChild = IDW_FIRSTMDICHILD;
+
   Attr.Param = (LPSTR)ClientAttr;
   SetFlag(wfStreamTop);
 }
 
 //
-// constructor for a TMDIClient which is being used in a DLL as an alias
+// Constructor for a TMDIClient which is being used in a DLL as an alias
 // for a non-OWL window. This ctor is generally not used by derived
 // classes
 //
-TMDIClient::TMDIClient(HWND hWnd, TModule* module)
+TMDIClient::TMDIClient(THandle handle, TModule* module)
 :
-  TWindow(hWnd, module)
+  TWindow(handle, module)
 {
   ClientAttr = 0;
   SetFlag(wfStreamTop);
 }
 
 //
-// frees the memory associated with ClientAttr
+// Frees the memory associated with ClientAttr
 //
 TMDIClient::~TMDIClient()
 {
   delete ClientAttr;
 }
 
+//
+// Return the Window's defined class name for MDI clients
+//
 char far*
 TMDIClient::GetClassName()
 {
   return "MDICLIENT";
 }
 
+//
+// Use the Windows message to get the active mdi child, and then down cast
+// to our MDI child derived class before returning it.
+//
 TMDIChild*
 TMDIClient::GetActiveMDIChild()
 {
-  HWND hWnd = (HWND)HandleMessage(WM_MDIGETACTIVE);
+  THandle hWnd = THandle(HandleMessage(WM_MDIGETACTIVE));
 
-  return TYPESAFE_DOWNCAST(GetWindowPtr(hWnd),TMDIChild);
+  return TYPESAFE_DOWNCAST(GetWindowPtr(hWnd), TMDIChild);
 }
 
+//
+//
+//
 void
 TMDIClient::ArrangeIcons()
 {
   HandleMessage(WM_MDIICONARRANGE);
 }
 
+//
+//
+//
 void
 TMDIClient::CascadeChildren()
 {
   HandleMessage(WM_MDICASCADE);
 }
 
+//
+//
+//
 void
 TMDIClient::TileChildren(int tile)
 {
   HandleMessage(WM_MDITILE, tile);
 }
 
+//
+// Preprocess messages in order to translate MDI accelerator keys
+//
 bool
 TMDIClient::PreProcessMsg(MSG& msg)
 {
   if (msg.message == WM_KEYDOWN || msg.message == WM_SYSKEYDOWN)
-    return TranslateMDISysAccel(HWindow, &msg);
+    return TranslateMDISysAccel(GetHandle(), &msg);
 
   else
     return false;
 }
 
+//
+// Performs actual THandle creation. Fills in child menu handle by querying the
+// frame for it.
+//
 bool
 TMDIClient::Create()
 {
   TMDIFrame*  frame = TYPESAFE_DOWNCAST(Parent,TMDIFrame);
-  
+
   CHECK(frame);
 
   ClientAttr->hWindowMenu = frame->FindChildMenu(frame->GetMenu());
@@ -132,7 +168,7 @@ TMDIClient::Create()
 }
 
 //
-// creates a valid new MDI child window after calling InitChild() to construct
+// Creates a valid new MDI child window after calling InitChild() to construct
 // a new MDI child window object
 //
 TWindow*
@@ -145,6 +181,10 @@ TMDIClient::CreateChild()
   return 0;
 }
 
+//
+// Can be overriden by derived classes to construct an instance of a
+// user-defined TMDIChild derived class as an MDI child window
+//
 TMDIChild*
 TMDIClient::InitChild()
 {
@@ -152,30 +192,30 @@ TMDIClient::InitChild()
 }
 
 static bool
-CannotClose(TWindow* win, void*)
+sCannotClose(TWindow* win, void*)
 {
   return !win->CanClose();
 }
 
 static void
-CloseChild(TWindow* win, void*)
+sCloseChild(TWindow* win, void*)
 {
   win->Destroy();
   delete win;
 }
 
 //
-// closes each MDI child, after calling the child's CanClose() method to
+// Closes each MDI child, after calling the child's CanClose() method to
 // ensure that it is Ok to do so
 //
-// returns true if all children are closed(or there were no children),
+// Returns true if all children are closed(or there were no children),
 // false if any child can't be closed
 //
 bool
 TMDIClient::CloseChildren()
 {
-  if (!FirstThat(CannotClose)) {
-    ForEach(CloseChild);
+  if (!FirstThat(sCannotClose)) {
+    ForEach(sCloseChild);
     return true;
   }
   return false;
@@ -184,7 +224,7 @@ TMDIClient::CloseChildren()
 //
 // Handle WM_MDICREATE to perform actual creation of MDI children.
 //
-LRESULT
+TResult
 TMDIClient::EvMDICreate(MDICREATESTRUCT far& createStruct)
 {
   // Fill in default child window styles if they request style 0 since this
@@ -205,13 +245,13 @@ TMDIClient::EvMDICreate(MDICREATESTRUCT far& createStruct)
     createStruct.style &= ~(WS_MAXIMIZE | WS_VISIBLE);
 #endif
 
-  LRESULT result = DefaultProcessing();
+  TResult result = DefaultProcessing();
 
   // Finish up maximized MDI child workaround
   //
 #if defined(MDIMAX_WORKAROUND)
-  if (HWND(result) && (origStyle & WS_MAXIMIZE)) {
-    HandleMessage(WM_MDIMAXIMIZE, WPARAM(result));
+  if (THandle(result) && (origStyle & WS_MAXIMIZE)) {
+    HandleMessage(WM_MDIMAXIMIZE, TParam1(result));
 #if defined(BI_PLAT_WIN32)
     HandleMessage(WM_MDIREFRESHMENU);
 #else
@@ -230,12 +270,12 @@ TMDIClient::EvMDICreate(MDICREATESTRUCT far& createStruct)
 //
 static void sUnHide(TWindow* win, void* hWnd)
 {
-  if (*win == (HWND)hWnd)
+  if (*win == TWindow::THandle(hWnd))
     return;
   if (!win->IsWindowVisible()) {
     win->SetWindowPos(0, 0, 0, 0, 0,
-                      SWP_NOMOVE|SWP_NOSIZE|SWP_SHOWWINDOW|SWP_NOZORDER|
-                      SWP_NOACTIVATE|SWP_NOREDRAW);
+                      SWP_NOACTIVATE|SWP_NOMOVE|SWP_NOREDRAW|SWP_NOSIZE|
+                      SWP_NOZORDER|SWP_SHOWWINDOW);
     win->SetFlag(wfUnHidden);
   }
   if (!win->IsWindowEnabled()) {
@@ -244,6 +284,9 @@ static void sUnHide(TWindow* win, void* hWnd)
   }
 }
 
+//
+//
+//
 static void sReHide(TWindow* win, void*)
 {
   if (!*win)
@@ -258,10 +301,15 @@ static void sReHide(TWindow* win, void*)
   }
 }
 
+//
+// Destroy an MDI child window. Must temporarily unhide any hidden children,
+// and then rehide them after the destruction. Otherwise Window's MDI client
+// gets confused
+//
 void
-TMDIClient::EvMDIDestroy(HWND hWnd)
+TMDIClient::EvMDIDestroy(THandle THandle)
 {
-  ForEach(sUnHide, (void*)hWnd);
+  ForEach(sUnHide, (void*)THandle);
   DefaultProcessing();
   ForEach(sReHide);
 #if defined(BI_PLAT_WIN32)
@@ -269,6 +317,17 @@ TMDIClient::EvMDIDestroy(HWND hWnd)
 #else
   HandleMessage(WM_MDISETMENU, true);
 #endif
+}
+
+//
+// Forward dropped file messages by default to the parent (MDI Frame) where
+// they can be handled, or allowed to forward to the app where they can be
+// handled easier.
+//
+void
+TMDIClient::EvDropFiles(TDropInfo)
+{
+  Parent->ForwardMessage();
 }
 
 //
@@ -286,15 +345,18 @@ TMDIClient::CmChildActionEnable(TCommandEnabler& commandEnabler)
 
 IMPLEMENT_STREAMABLE1(TMDIClient, TWindow);
 
+#if !defined(BI_NO_OBJ_STREAMING)
+
 //
-// reads an instance of TMDIClient from the passed ipstream
+// Reads an instance of TMDIClient from the passed ipstream
 //
 void*
 TMDIClient::Streamer::Read(ipstream& is, uint32 /*version*/) const
 {
   ReadBaseObject((TWindow*)GetObject(), is);
 
-  GetObject()->ClientAttr = new CLIENTCREATESTRUCT;  //far
+  if (GetObject()->ClientAttr == 0)
+    GetObject()->ClientAttr = new CLIENTCREATESTRUCT;  //far
 
   uint idFirstChild;  // Need temp for near data model since ClientAttr is far
   is >> idFirstChild;
@@ -306,7 +368,7 @@ TMDIClient::Streamer::Read(ipstream& is, uint32 /*version*/) const
 }
 
 //
-// writes the TMDIClient to the passed opstream
+// Writes the TMDIClient to the passed opstream
 //
 void
 TMDIClient::Streamer::Write(opstream& os) const
@@ -314,5 +376,7 @@ TMDIClient::Streamer::Write(opstream& os) const
   WriteBaseObject((TWindow*)GetObject(), os);
   os << GetObject()->ClientAttr->idFirstChild;
 }
+
+#endif  // if !defined(BI_NO_OBJ_STREAMING)
 
 #endif

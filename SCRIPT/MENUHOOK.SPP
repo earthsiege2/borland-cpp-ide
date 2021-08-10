@@ -1,0 +1,20 @@
+import "MENUHOOK.DLL" {
+	int i_assign_to_view_menu( char *,char *, char *, char *);
+	int i_release_view_menu_item(char *,char * );
+   int i_define_button( char *, char *, char *, char *, int );
+}
+
+assign_to_view_menu( view, menu_text, script_text, hint_text )
+{
+	 i_assign_to_view_menu( view, menu_text, script_text, hint_text );
+}
+
+remove_view_menu_item( view, menu_text )
+{
+	 i_release_view_menu_item( view, menu_text );
+}
+
+define_button( button_name, script_text, hint_text, tooltip_text, button_index)
+{
+    i_define_button( button_name, script_text, hint_text, tooltip_text, button_index);
+}

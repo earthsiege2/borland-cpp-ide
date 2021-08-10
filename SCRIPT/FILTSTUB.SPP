@@ -1,0 +1,61 @@
+//----------------------------------------------------------------------------
+// cScript
+// (C) Copyright 1995 by Borland International, All Rights Reserved
+//
+// FILTSTUB.SPP
+//   The TransferOutputExists event is generated internally by the IDE when
+//   a transfer operation has been completed.  It is the Transfer Object's
+//   responsibility to package its output into a TransferOutput object and
+//   invoke this event.
+//
+// $Revision:   1.13  $
+//
+//----------------------------------------------------------------------------
+
+import IDE;
+
+// mark this module as being a library module
+library;
+
+// This handler examines the supplied TransferOutput object to determine
+// if the output came from one of the "builtin" transfer tools.  If so, it
+// dispatches the object to the correct script for handling that output.
+// Note: the names of filter routines are preloaded in startup.spp
+//
+on IDE:>TransferOutputExists(output){
+   declare String str(output.Provider);
+   declare Tool = str.Upper();
+   print("On handler invoke for Transfer output exists event");
+   switch(Tool.Text){
+	  case "BORL2MSG":
+	  case "BORL2MSG.DLL":
+		 return ParseBorlandMessages(output);
+
+	  case "GREP2MSG":
+	  case "GREP2MSG.DLL":
+		 return ParseGrepMessages(output);
+
+	  case "HC312MSG":
+	  case "HC312MSG.DLL":
+		 return ParseHelpCompilerMessages(output);
+
+	  case "RC2MSG":
+	  case "RC2MSG.DLL":
+		 return ParseResourceCompilerMessages(output);
+
+	  case "TASM2MSG":
+	  case "TASM2MSG.DLL":
+		 return ParseAssemblerMessages(output);
+
+	  case "GENERIC":
+	  case "GENERIC.DLL":
+		 return ParseGenericMessages(output);
+
+	  case "FILENAME":
+	  case "FILENAME.DLL":
+		 return ParseFilenameMessages(output);
+   }
+
+   // See if anyone else knows what to do
+   return pass(output);
+}

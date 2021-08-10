@@ -1,14 +1,14 @@
 //----------------------------------------------------------------------------
 // ObjectWindows - (C) Copyright 1991, 1993 by Borland International
 //----------------------------------------------------------------------------
-#include <owl\owlpch.h>
-#include <owl\applicat.h>
-#include <owl\framewin.h>
-#include <owl\dialog.h>
-#include <owl\dc.h>
-#include <owl\choosefo.h>
-#include <owl\printer.h>
-#include <owl\editfile.rh>
+#include <owl/pch.h>
+#include <owl/applicat.h>
+#include <owl/framewin.h>
+#include <owl/dialog.h>
+#include <owl/dc.h>
+#include <owl/choosefo.h>
+#include <owl/printer.h>
+#include <owl/editfile.rh>
 #include <string.h>
 #include <math.h>
 #include "truetype.h"
@@ -28,7 +28,7 @@ class TWindowPrintout : public TPrintout {
                                int& selFromPage, int& selToPage);
     void PrintPage(int page, TRect& rect, unsigned flags);
     void SetBanding(BOOL b) {Banding = b;}
-    BOOL HasPage(int pageNumber) {return pageNumber == 1;}
+    bool HasPage(int pageNumber) {return pageNumber == 1;}
 
   protected:
     TWindow* Window;
@@ -87,9 +87,13 @@ TWindowPrintout::GetDialogInfo(int& minPage, int& maxPage,
 class TFontWindow: public TFrameWindow {
   public:
     TFontWindow(TWindow* parent, const char* title);
+   ~TFontWindow()
+    {
+      delete Printer;
+    }
 
   protected:
-    void Paint(TDC&, BOOL erase, TRect&);
+    void Paint(TDC&, bool erase, TRect&);
 
     void EvGetMinMaxInfo(MINMAXINFO far&);
     void EvSize(UINT, TSize&);
@@ -203,7 +207,7 @@ const int   Radius = 100;
 const float Deg2Rad = M_PI / 18;
 
 void
-TFontWindow::Paint(TDC& dc, BOOL, TRect&)
+TFontWindow::Paint(TDC& dc, bool, TRect&)
 {
   const char* p = ArcText;
   int fanTextLen = strlen(FanText);
@@ -232,7 +236,7 @@ TFontWindow::Paint(TDC& dc, BOOL, TRect&)
   fontRec = MainFontRec;
   font = new TFont(&fontRec);
   dc.SelectObject(*font);
-  
+
   UINT fmSize = ::GetOutlineTextMetrics(HDC(dc), 0, 0);
   OUTLINETEXTMETRIC* fontMetric = (OUTLINETEXTMETRIC*)new char[fmSize];
   fontMetric->otmpFamilyName = 0;

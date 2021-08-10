@@ -1,0 +1,25 @@
+#----------------------------------------------------------------------------
+# ObjectWindows
+# Copyright (c) 1991, 1995 by Borland International, All Rights Reserved
+#----------------------------------------------------------------------------
+!if !$d(MODEL)
+  MODEL = d
+!endif
+
+!if !$d(WIN16) && !$d(WIN32)
+  WIN32 = 1
+!endif
+
+MODELS = d          # force DLLs
+SYSTEMS = WIN16 WIN32
+EXERES = calldll
+LIBEXE = dllhello.lib
+DLLRES = dllhello                     # use this target for generating DLLRULE
+DLLALL = dllhello.dll resource.dll
+DLLMAKE= $(DLLHELLO) $(RESOURCE)
+
+DLLHELLO = $(DLLRULE:dllhello.res=)     # no resource for this DLL
+RESOURCE = $(DLLRULE:dllhello=resource) # no code module used for resource DLL
+#TEMPRULE = $(DLLRULE:dllhello=resource) # change name for the other DLL
+#RESOURCE = $(TEMPRULE:resource.obj=)    # no code module used for resource DLL
+!include $(BCEXAMPLEDIR)\owlmake.gen

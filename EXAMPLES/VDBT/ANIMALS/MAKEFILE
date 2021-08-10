@@ -1,0 +1,21 @@
+#-----------------------------------------------------------------------------
+# Borland C++ - (C) Copyright 1996 by Borland International
+#   examples\vdbt\animals\makefile
+#----------------------------------------------------------------------------
+
+SYSTEMS = WIN16 WIN32
+
+!if $(SYSTEM)==WIN16
+MODEL=l
+USERLIBS =bivbx.lib
+!else
+USERLIBS =bivbx32.lib
+!endif
+
+DEBUG = 1
+DEFEXE = beastwin.def
+EXERES = animals
+OBJEXE = beastwin.obj anmlsdlc.obj
+RESEXE = beastwin.res
+USERLIBPATH = $(BCEXAMPLEDIR)\..\lib
+!include $(BCEXAMPLEDIR)\owlmake.gen

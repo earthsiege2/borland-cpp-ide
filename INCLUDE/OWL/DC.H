@@ -1,8 +1,12 @@
 //----------------------------------------------------------------------------
 // ObjectWindows
-// (C) Copyright 1992, 1994 by Borland International, All Rights Reserved
+// Copyright (c) 1992, 1996 by Borland International, All Rights Reserved
 //
-//   Definition of DC classes
+//$Revision:   10.12  $
+//
+// Definition of GDI DC encapsulation classes:
+//   TDC, TWindowDC, TScreenDC, TDesktopDC, TClientDC, TPaintDC, TMetaFileDC,
+//   TCreatedDC, TIC, TMemoryDC, TDibDC, TPrintDC
 //----------------------------------------------------------------------------
 #if !defined(OWL_DC_H)
 #define OWL_DC_H
@@ -20,40 +24,55 @@ class _OWLCLASS TFont;
 class _OWLCLASS TBitmap;
 class _OWLCLASS TPalette;
 class _OWLCLASS TIcon;
+class _OWLCLASS TCursor;
 class _OWLCLASS TDib;
 class _OWLCLASS TRegion;
 class _OWLCLASS TMetaFilePict;
-
 #if defined(BI_PLAT_WIN32)
-// # define OLDFONTENUMPROC FONTENUMPROC
-#else
-  // Win 32 object defines for 16 bit GetCurrentObject emulation
+class _OWLCLASS TEnhMetaFilePict;
+#endif
+
+// Win 32 object defines for 16 bit GetCurrentObject emulation
+//
+#if defined(BI_PLAT_WIN16)
 # define OBJ_PEN         1
 # define OBJ_BRUSH       2
 # define OBJ_PAL         5
 # define OBJ_FONT        6
 #endif
 
+// Generic definitions/compiler options (eg. alignment) preceeding the 
+// definition of classes
+#include <services/preclass.h>
+
 //
 // class TDC
-// ----- ---
+// ~~~~~ ~~~
+// Root class for GDI DC.  This class can be instantiated, or specialized
+// derived classes can be used to get specific behavior.
 //
-// Root class for GDI DC.  This class can be instantiated, or
-// specialized subclasses can be used to get specific behavior.
-// Tracks & restores handles of first GDI objects that are replaced by
-// ::SelectObject()
+// Tracks & restores on destruction handles of first GDI objects that are
+// replaced by ::SelectObject()
+//
 // Can be used as an interface to a borrowed handle.
 //
 class _OWLCLASS TDC : private TGdiBase {
   public:
     // Constructors / destructor
+    //
     TDC(HDC handle);  // use an existing DC, doesn't auto delete it
     virtual    ~TDC();
 
     // Type Conversion Operators
-    operator    HDC() const {return HDC(Handle);}  // Must assume const is OK
+    //
+    operator    HDC() const;  // Must assume const is OK
+
+    // Validation routine - used mainly for diagnostic purposes
+    //
+    bool        IsDC() const;
 
     // DC functions
+    //
     bool         GetDCOrg(TPoint& point) const;
     virtual int  SaveDC() const;
     virtual bool RestoreDC(int savedDC = -1);
@@ -61,6 +80,7 @@ class _OWLCLASS TDC : private TGdiBase {
     virtual bool ResetDC(DEVMODE far& devMode);
 
     // Select GDI objects into this DC and restore them to original
+    //
     void         SelectObject(const TBrush& brush);
     void         SelectObject(const TPen& pen);
     virtual void SelectObject(const TFont& font);
@@ -77,22 +97,25 @@ class _OWLCLASS TDC : private TGdiBase {
     HANDLE       GetCurrentObject(uint objectType) const;
 
     // Drawing tool functions
+    //
     bool         GetBrushOrg(TPoint& point) const;
     bool         SetBrushOrg(const TPoint& origin, TPoint far* oldOrg=0);
     int          EnumObjects(uint objectType, GOBJENUMPROC proc, void far* data) const;
 
     // Color and palette functions
-    TColor       GetNearestColor(TColor Color) const;
+    //
+    TColor       GetNearestColor(const TColor& color) const;
     int          RealizePalette();
     void         UpdateColors();
-    uint         GetSystemPaletteEntries(int start, int num, 
+    uint         GetSystemPaletteEntries(int start, int num,
                                          PALETTEENTRY far* entries) const;
     uint         GetSystemPaletteUse() const;
     int          SetSystemPaletteUse(int usage);
 
     // Drawing attribute functions
+    //
     TColor         GetBkColor() const;
-    virtual TColor SetBkColor(TColor color);
+    virtual TColor SetBkColor(const TColor& color);
     int          GetBkMode() const;
     int          SetBkMode(int mode);
     int          GetPolyFillMode() const;
@@ -102,13 +125,14 @@ class _OWLCLASS TDC : private TGdiBase {
     int          GetStretchBltMode() const;
     int          SetStretchBltMode(int mode);
     TColor         GetTextColor() const;
-    virtual TColor SetTextColor(TColor color);
+    virtual TColor SetTextColor(const TColor& color);
 
 #if defined(BI_PLAT_WIN32)
     bool         SetMiterLimit(float newLimit, float* oldLimit=0);
 #endif
 
     // Viewport & window mapping functions
+    //
     int          GetMapMode() const;
     virtual int  SetMapMode(int mode);
 
@@ -140,10 +164,14 @@ class _OWLCLASS TDC : private TGdiBase {
                                 TSize far* oldExtent=0);
 
     // Coordinate functions
+    //
     bool        DPtoLP(TPoint* points, int count = 1) const;
+    bool        DPtoLP(TRect& rect) const;
     bool        LPtoDP(TPoint* points, int count = 1) const;
+    bool        LPtoDP(TRect& rect) const;
 
     // Clip & Update Rect & Rgn functions
+    //
     int         GetClipBox(TRect& rect) const;
     TRect       GetClipBox() const;
     int         ExcludeClipRect(const TRect& rect);
@@ -158,23 +186,49 @@ class _OWLCLASS TDC : private TGdiBase {
     bool        GetClipRgn(TRegion& region) const;
 
     // MetaFile functions
+    //
     int         EnumMetaFile(const TMetaFilePict& metaFile,
                              MFENUMPROC callback, void far* data) const;
     bool        PlayMetaFile(const TMetaFilePict& metaFile);
-    void        PlayMetaFileRecord(HANDLETABLE far& Handletable,
+    void        PlayMetaFileRecord(HANDLETABLE far& handletable,
                                    METARECORD far& metaRecord, int count);
+#if defined(BI_PLAT_WIN32)
+    int         EnumEnhMetaFile(const TEnhMetaFilePict& metaFile,
+                                ENHMFENUMPROC callback, void* data,
+                                const TRect* rect) const;
+    bool        PlayEnhMetaFile(const TEnhMetaFilePict& metaFile, const TRect* rect);
+    void        PlayEnhMetaFileRecord(HANDLETABLE& handletable,
+                                      ENHMETARECORD& metaRecord, uint count);
+#endif
 
     // Output functions- Current position
+    //
     bool        GetCurrentPosition(TPoint& point) const;
     bool        MoveTo(int x, int y);
     bool        MoveTo(const TPoint& point);
     bool        MoveTo(const TPoint& point, TPoint& oldPoint);
 
-    // Output functions- Icons
+    // Output functions- Icons & cursors
+    //
     bool        DrawIcon(int x, int y, const TIcon& icon);
     bool        DrawIcon(const TPoint& point, const TIcon& icon);
+    bool        DrawCursor(int x, int y, const TCursor& cursor);
+    bool        DrawCursor(const TPoint& point, const TCursor& cursor);
+#if defined(BI_PLAT_WIN32)
+    bool        DrawIcon(int x, int y, const TIcon& icon, int w, int h,
+                         int aniStep=0, HBRUSH bkBr=0, uint flags=DI_NORMAL);
+    bool        DrawIcon(const TPoint& point, const TIcon& icon,
+                         const TSize& size, int aniStep=0, HBRUSH bkBr=0,
+                         uint flags=DI_NORMAL);
+    bool        DrawCursor(int x, int y, const TCursor& cursor, int w, int h,
+                           int aniStep=0, HBRUSH bkBr=0, uint flags=DI_NORMAL);
+    bool        DrawCursor(const TPoint& point, const TCursor& cursor,
+                           const TSize& size, int aniStep=0, HBRUSH bkBr=0,
+                           uint flags=DI_NORMAL);
+#endif
 
     // Output functions- Rects
+    //
     bool        FrameRect(int x1, int y1, int x2, int y2, const TBrush& brush);
     bool        FrameRect(const TRect& rect, const TBrush& brush);
     bool        FillRect(int x1, int y1, int x2, int y2, const TBrush& brush);
@@ -185,21 +239,25 @@ class _OWLCLASS TDC : private TGdiBase {
     bool        DrawFocusRect(const TRect& rect);
 
     // Filled rect using ExtTextOut, no dithered colors & uses or sets BkColor
+    //
     bool        TextRect(int x1, int y1, int x2, int y2);
     bool        TextRect(const TRect& rect);
-    bool        TextRect(int x1, int y1, int x2, int y2, TColor color);
-    bool        TextRect(const TRect& rect, TColor color);
+    bool        TextRect(int x1, int y1, int x2, int y2, const TColor& color);
+    bool        TextRect(const TRect& rect, const TColor& color);
 
-    // 
+    //
+    //
     void        OWLFastWindowFrame(TBrush &brush, TRect &r, int xWidth, int yWidth);
-    
+
     // Output functions- Regions
+    //
     bool        FrameRgn(const TRegion& region, const TBrush& brush, const TPoint& p);
     bool        FillRgn(const TRegion& region, const TBrush& brush);
     bool        InvertRgn(const TRegion& region);
     bool        PaintRgn(const TRegion& region);
 
     // Output functions- Shapes
+    //
 #if defined(BI_PLAT_WIN32)
     bool        AngleArc(int x, int y, uint32 radius, float startAngle,
                          float sweepAngle);
@@ -243,10 +301,11 @@ class _OWLCLASS TDC : private TGdiBase {
     bool        RoundRect(const TRect& rect, const TPoint& rad);
 
     // Output functions- bitmaps & blitting
+    //
     TColor      GetPixel(int x, int y) const;
     TColor      GetPixel(const TPoint& point) const;
-    TColor      SetPixel(int x, int y, TColor color);
-    TColor      SetPixel(const TPoint& p, TColor color);
+    TColor      SetPixel(int x, int y, const TColor& color);
+    TColor      SetPixel(const TPoint& p, const TColor& color);
     bool        BitBlt(int dstX, int dstY, int w, int h, const TDC& srcDC,
                        int srcX, int srcY, uint32 rop=SRCCOPY);
     bool        BitBlt(const TRect& dst, const TDC& srcDC,
@@ -269,18 +328,18 @@ class _OWLCLASS TDC : private TGdiBase {
                         const TPoint& maskPos, uint32 rop=SRCCOPY);
     bool        PlgBlt(const TPoint& dst, const TDC& srcDC,
                        const TRect& src, const TBitmap& maskBm,
-                       const TPoint& maskPos, uint32 rop=SRCCOPY);
+                       const TPoint& maskPos);
 #endif
-    bool        GetDIBits(const TBitmap& bitmap, uint16 startScan, uint16 numScans,
+    bool        GetDIBits(const TBitmap& bitmap, uint startScan, uint numScans,
                           void HUGE* bits, const BITMAPINFO far& info,
                           uint16 usage);
     bool        GetDIBits(const TBitmap& bitmap, TDib& dib);
-    bool        SetDIBits(TBitmap& bitmap, uint16 startScan, uint16 numScans,
+    bool        SetDIBits(TBitmap& bitmap, uint startScan, uint numScans,
                           const void HUGE* bits, const BITMAPINFO far& Info,
                           uint16 usage);
     bool        SetDIBits(TBitmap& bitmap, const TDib& dib);
     bool        SetDIBitsToDevice(const TRect& dst, const TPoint& src,
-                                  uint16 startScan, uint16 numScans,
+                                  uint startScan, uint numScans,
                                   const void HUGE* bits,
                                   const BITMAPINFO far& bitsInfo, uint16 usage);
     bool        SetDIBitsToDevice(const TRect& dst, const TPoint& src,
@@ -291,10 +350,16 @@ class _OWLCLASS TDC : private TGdiBase {
                               uint16 usage, uint32 rop=SRCCOPY);
     bool        StretchDIBits(const TRect& dst, const TRect& src,
                               const TDib& dib, uint32 rop=SRCCOPY);
-    bool        FloodFill(const TPoint& point, TColor color);
-    bool        ExtFloodFill(const TPoint& point, TColor color, uint16 fillType);
+
+#if defined(BI_PLAT_WIN32)
+    HBITMAP     CreateDIBSection(const BITMAPINFO& info, uint usage, void** bits, HANDLE section=0, uint32 offset=0);
+#endif
+
+    bool        FloodFill(const TPoint& point, const TColor& color);
+    bool        ExtFloodFill(const TPoint& point, const TColor& color, uint16 fillType);
 
     // Output functions- text
+    //
     virtual bool TextOut(int x, int y, const char far* str, int count=-1);
     bool         TextOut(const TPoint& p, const char far* str, int count=-1);
     virtual bool ExtTextOut(int x, int y, uint16 options, const TRect* r,
@@ -315,6 +380,7 @@ class _OWLCLASS TDC : private TGdiBase {
                             const char far* str, int count, const TRect& r);
 
     // Text functions
+    //
     bool        GetTextExtent(const char far* str, int stringLen, TSize& size);
     TSize       GetTextExtent(const char far* str, int stringLen);
     bool        GetTabbedTextExtent(const char far* str, int stringLen,
@@ -333,13 +399,10 @@ class _OWLCLASS TDC : private TGdiBase {
                                 uint32 buffSize, void far* buffer,
                                 const MAT2 far& mat2);
     int         GetKerningPairs(int pairs, KERNINGPAIR far* krnPair);
-#if defined(BI_PLAT_WIN32)
-    uint32      GetOutlineTextMetrics(uint data, OUTLINETEXTMETRIC far& otm);
-#else
-    uint16      GetOutlineTextMetrics(uint data, OUTLINETEXTMETRIC far& otm);
-#endif
+    uint        GetOutlineTextMetrics(uint data, OUTLINETEXTMETRIC far& otm);
 
     // Font functions
+    //
     bool        GetCharWidth(uint firstChar, uint lastChar, int* buffer);
     uint32      SetMapperFlags(uint32 flag);
     bool        GetAspectRatioFilter(TSize& size) const;
@@ -351,6 +414,7 @@ class _OWLCLASS TDC : private TGdiBase {
     bool        GetCharABCWidths(uint firstChar, uint lastChar, ABC* abc);
 
     // Path functions
+    //
 #if defined(BI_PLAT_WIN32)
     bool        BeginPath();
     bool        CloseFigure();
@@ -364,7 +428,17 @@ class _OWLCLASS TDC : private TGdiBase {
     HRGN        PathToRegion();
 #endif
 
+    // Override to implement a twin DC object, like TPrintPreviewDC
+    //
+    virtual HDC GetAttributeHDC() const;
+    HDC         GetHDC() const;
+
   protected:
+    TDC();          // For use by derived classes only
+    TDC(HDC handle, TAutoDelete autoDelete); //use an existing DC
+    void        Init();
+
+  protected_data:
     TGdiBase::CheckValid;       // make this function available to derivatives
     TGdiBase::Handle;           // The handle of this DC
     TGdiBase::ShouldDelete;     // Should object delete the Handle in dtor?
@@ -377,17 +451,8 @@ class _OWLCLASS TDC : private TGdiBase {
     HBRUSH      OrgTextBrush;
 #endif
 
-    TDC();          // For use by derived classes only
-    TDC(HDC handle, TAutoDelete autoDelete); //use an existing DC
-    void        Init();
-
-               // Override to implement a twin DC object, like TPrintPreviewDC
-    virtual HDC GetAttributeHDC() const;
-            HDC GetHDC() const {return HDC(Handle);}
-
   private:
-    //
-    // hidden to prevent accidental copying or assignment
+    // Hidden to prevent accidental copying or assignment
     //
     TDC(const TDC&);
     TDC& operator =(const TDC&);
@@ -395,8 +460,7 @@ class _OWLCLASS TDC : private TGdiBase {
 
 //
 // class TWindowDC
-// ----- ---------
-//
+// ~~~~~ ~~~~~~~~~
 // A DC class that provides access to the entire area owned by a window. Is
 // the base for any DC class that Releases its handle when done.
 //
@@ -416,8 +480,7 @@ class _OWLCLASS TWindowDC : public TDC {
 
 //
 // class TScreenDC
-// ----- ---------
-//
+// ~~~~~ ~~~~~~~~~
 // A DC class that provides direct access to the screen bitmap.  Gets a DC for
 // Window handle 0, which is for the whole screen w/ no clipping, etc. will
 // paint on top of everything.
@@ -433,10 +496,9 @@ class _OWLCLASS TScreenDC : public TWindowDC {
 
 //
 // class TDesktopDC
-// ----- ----------
-//
+// ~~~~~ ~~~~~~~~~~
 // A DC class that provides access to the desktop window's client area which
-// is the screen behind all other windows.
+// is the window behind all other windows.
 //
 class _OWLCLASS TDesktopDC : public TWindowDC {
   public:
@@ -449,8 +511,7 @@ class _OWLCLASS TDesktopDC : public TWindowDC {
 
 //
 // class TClientDC
-// ----- ---------
-//
+// ~~~~~ ~~~~~~~~~
 // A DC class that provides access to the client area owned by a window
 //
 class _OWLCLASS TClientDC : public TWindowDC {
@@ -464,8 +525,7 @@ class _OWLCLASS TClientDC : public TWindowDC {
 
 //
 // class TPaintDC
-// ----- --------
-//
+// ~~~~~ ~~~~~~~~
 // A DC class that wraps begin and end paint calls for use in an WM_PAINT
 // response function.
 //
@@ -486,26 +546,40 @@ class _OWLCLASS TPaintDC : public TDC {
 
 //
 // class TMetaFileDC
-// ----- -----------
-//
+// ~~~~~ ~~~~~~~~~~~
 // A DC class that provides access to a DC with a metafile selected into it
 // for drawing on (into).
 //
 class _OWLCLASS TMetaFileDC : public TDC {
   public:
     TMetaFileDC(const char far* filename = 0);
+#if defined(BI_PLAT_WIN32)
+    TMetaFileDC(const TDC& dc, const char far* filename = 0, TRect* rect = 0,
+                const char far* description = 0);
+#endif
    ~TMetaFileDC();
 
     HMETAFILE Close();
 
+#if defined(BI_PLAT_WIN32)
+    HENHMETAFILE CloseEnh();
+    bool Comment(uint bytes, const void* data);
+#endif
+
+    bool IsEnhanced() const;
+
   private:
+    bool Enhanced;
+
     TMetaFileDC(const TMetaFileDC&);
     TMetaFileDC& operator =(const TMetaFileDC&);
 };
 
 //
 // class TCreatedDC
-// ----- ----------
+// ~~~~~ ~~~~~~~~~~
+// Base class for DC classes that create DC handles vs. getting them from the
+// cache
 //
 class _OWLCLASS TCreatedDC : public TDC {
   public:
@@ -525,12 +599,14 @@ class _OWLCLASS TCreatedDC : public TDC {
 
 //
 // class TIC
-// ----- ---
+// ~~~~~ ~~~
+// An information only device context
 //
 class _OWLCLASS TIC : public TCreatedDC {
   public:
     TIC(const char far* driver, const char far* device,
         const char far* output, const DEVMODE far* initData=0);
+   ~TIC();
 
   private:
     TIC(const TIC&);
@@ -539,60 +615,88 @@ class _OWLCLASS TIC : public TCreatedDC {
 
 //
 // class TMemoryDC
-// ----- ---------
-//
+// ~~~~~ ~~~~~~~~~
 // A DC class that provides access to a memory DC
 //
 class _OWLCLASS TMemoryDC : public TCreatedDC {
   public:
     TMemoryDC();
     TMemoryDC(const TDC& DC); // Make it compatible with an existing DC
-    TMemoryDC(HDC handle, TAutoDelete autoDelete);  // use an existing DC
+    TMemoryDC(HDC handle, TAutoDelete autoDelete);  // wrap an existing DC
+    TMemoryDC(TBitmap& bitmap);                  // Select a bitmap right away
    ~TMemoryDC();
 
     // Select GDI objects into this DC and restore them to original
-    void        SelectObject(const TBrush& brush) {TDC::SelectObject(brush);}
-    void        SelectObject(const TPen& pen) {TDC::SelectObject(pen);}
-    void        SelectObject(const TFont& font) {TDC::SelectObject(font);}
-    void        SelectObject(const TPalette& palette, bool forceBackground=false)
-      {TDC::SelectObject(palette, forceBackground);}
+    //
+    void        SelectObject(const TBrush& brush);
+    void        SelectObject(const TPen& pen);
+    void        SelectObject(const TFont& font);
+    void        SelectObject(const TPalette& palette, bool forceBackground=false);
     void        SelectObject(const TBitmap& bitmap);
 
     void        RestoreBitmap();
-    void        RestoreObjects() {TDC::RestoreObjects(); RestoreBitmap();}
+    void        RestoreObjects();
 
   protected:
+    TMemoryDC(const char far* driver, const char far* device,
+              const char far* output, const DEVMODE far* initData=0);
+
     HBITMAP     OrgBitmap;
 
   private:
+    void Init();
+
     TMemoryDC(const TMemoryDC&);
     TMemoryDC& operator =(const TMemoryDC&);
 };
 
 //
 // class TDibDC
-// ----- ------
+// ~~~~~ ~~~~~~
+// A DC class that provides access to DIBs using DIBSection, WinG, or the
+// DIB.DRV driver
 //
-// A DC class that provides access to DIBs using the DIB.DRV driver
-//
-class _OWLCLASS TDibDC : public TCreatedDC {
+class _OWLCLASS TDibDC : public TMemoryDC {
   public:
+    TDibDC();
+    TDibDC(const TBitmap& bitmap);
     TDibDC(const TDib& dib);
 
+    uint        GetDIBColorTable(uint start, uint entries, RGBQUAD far* colors);
+    uint        SetDIBColorTable(uint start, uint entries, const RGBQUAD far* colors);
+
+    // Screen Update BitBlt's.  DC for display must be the destination.
+    //
+    bool BitBltToScreen(TDC& dstDC, const TRect& dst, const TPoint& src) const;
+    bool BitBltToScreen(TDC& dstDC, int dstX, int dstY, int dstW, int dstH,
+                        int srcX=0, int srcY=0) const;
+    bool StretchBltToScreen(TDC& dstDC, const TRect& dst, const TRect& src) const;
+    bool StretchBltToScreen(TDC& dstDC, int dstX, int dstY, int dstW, int dstH,
+                            int srcX, int srcY, int srcW, int srcH) const;
+
   private:
+    // prevent accidental copying of object
+    //
     TDibDC(const TDibDC&);
     TDibDC& operator =(const TDibDC&);
 };
 
-//----------------------------------------------------------------------------
-// A DC class that provides access to a printer
 //
-struct TBandInfo {    // Equivalent to BANDINFOSTRUCT
+// struct TBandInfo
+// ~~~~~~ ~~~~~~~~~
+// Equivalent to BANDINFOSTRUCT
+//
+struct TBandInfo {
   bool  HasGraphics;
   bool  HasText;
   TRect GraphicsRect;
 };
 
+//
+// class TPrintDC
+// ~~~~~ ~~~~~~~~
+// A DC class that provides access to a printer
+//
 class _OWLCLASS TPrintDC : public TCreatedDC {
   public:
     TPrintDC(HDC handle, TAutoDelete autoDelete = NoAutoDelete);
@@ -623,6 +727,10 @@ class _OWLCLASS TPrintDC : public TCreatedDC {
                                     int capability, char far* output=0,
                                     LPDEVMODE devmode=0);
   protected:
+    DOCINFO&    GetDocInfo();
+    void        SetDocInfo(const DOCINFO& docinfo);
+
+  protected_data:
     DOCINFO     DocInfo;
 
   private:
@@ -630,9 +738,13 @@ class _OWLCLASS TPrintDC : public TCreatedDC {
     TPrintDC& operator =(const TPrintDC&);
 };
 
+// Generic definitions/compiler options (eg. alignment) following the 
+// definition of classes
+#include <services/posclass.h>
+
 //----------------------------------------------------------------------------
 // Inlines for DC classes
-//----------------------------------------------------------------------------
+//
 
 //
 // Get the GDI object headers so that we have access to conversion operators,
@@ -645,8 +757,39 @@ class _OWLCLASS TPrintDC : public TCreatedDC {
 # include <owl/metafile.h>
 #endif
 
+//
+// Return the handle of the device context.
+//
+inline TDC::operator HDC() const
+{
+  return HDC(Handle);
+}
 
-inline bool TDC::GetDCOrg(TPoint& point) const {
+//
+// Return the handle of the device context.
+//
+inline HDC TDC::GetHDC()const
+{
+  return HDC(Handle);
+}
+
+//
+// Attempt to validate the device context handle and return true if the
+// validation succeeded, or false otherwise.
+//
+inline bool TDC::IsDC() const
+{
+#if   defined(BI_PLAT_WIN32)
+  //
+  return ::GetObjectType(GetHDC()) != 0;
+#elif defined(BI_PLAT_WIN16)
+  return ::IsGDIObject(GetHDC()) != 0;
+#endif
+}
+
+//
+inline bool TDC::GetDCOrg(TPoint& point) const
+{
 #if defined(BI_PLAT_WIN32)
   return ::GetDCOrgEx(GetAttributeHDC(), &point);
 #else
@@ -655,11 +798,15 @@ inline bool TDC::GetDCOrg(TPoint& point) const {
 #endif
 }
 
-inline bool TDC::GetBrushOrg(TPoint& point) const {
+//
+inline bool TDC::GetBrushOrg(TPoint& point) const
+{
   return ::GetBrushOrgEx(GetHDC(), &point);
 }
 
-inline bool TDC::SetBrushOrg(const TPoint& org, TPoint far* oldOrg) {
+//
+inline bool TDC::SetBrushOrg(const TPoint& org, TPoint far* oldOrg)
+{
 #if defined(BI_PLAT_WIN32)
   return ::SetBrushOrgEx(GetHDC(), org.x, org.y, oldOrg);
 #else
@@ -671,101 +818,143 @@ inline bool TDC::SetBrushOrg(const TPoint& org, TPoint far* oldOrg) {
 #endif
 }
 
-inline int TDC::EnumObjects(uint objectType, GOBJENUMPROC proc, void far* data) const {
+//
+inline int TDC::EnumObjects(uint objectType, GOBJENUMPROC proc, void far* data) const
+{
   return ::EnumObjects(GetHDC(), objectType, proc, (LPARAM)data);
 }
 
-inline TColor TDC::GetNearestColor(TColor color) const {
+//
+inline TColor TDC::GetNearestColor(const TColor& color) const
+{
   return ::GetNearestColor(GetAttributeHDC(), color);
 }
 
-inline int TDC::RealizePalette() {
+//
+inline int TDC::RealizePalette()
+{
   return ::RealizePalette(GetHDC());
 }
 
-inline void TDC::UpdateColors() {
+//
+inline void TDC::UpdateColors()
+{
   ::UpdateColors(GetHDC());
 }
 
-inline uint TDC::GetSystemPaletteEntries(int start, int num, PALETTEENTRY far* entries) const {
+//
+inline uint TDC::GetSystemPaletteEntries(int start, int num, PALETTEENTRY far* entries) const
+{
   return ::GetSystemPaletteEntries(GetHDC(), start, num, entries);
 }
 
-inline uint TDC::GetSystemPaletteUse() const {
+//
+inline uint TDC::GetSystemPaletteUse() const
+{
   return ::GetSystemPaletteUse(GetHDC());
 }
 
-inline int TDC::SetSystemPaletteUse(int usage) {
+//
+inline int TDC::SetSystemPaletteUse(int usage)
+{
   return ::SetSystemPaletteUse(GetHDC(), usage);
 }
 
-inline TColor TDC::GetBkColor() const {
+//
+inline TColor TDC::GetBkColor() const
+{
   return ::GetBkColor(GetAttributeHDC());
 }
 
-inline int TDC::GetBkMode() const {
+//
+inline int TDC::GetBkMode() const
+{
   return ::GetBkMode(GetAttributeHDC());
 }
 
-inline int TDC::SetBkMode(int mode) {
+//
+inline int TDC::SetBkMode(int mode)
+{
   if (GetHDC() != GetAttributeHDC())
     ::SetBkMode(GetHDC(), mode);
   return ::SetBkMode(GetAttributeHDC(), mode);
 }
 
-inline int TDC::GetPolyFillMode() const {
+//
+inline int TDC::GetPolyFillMode() const
+{
   return ::GetPolyFillMode(GetAttributeHDC());
 }
 
-inline int TDC::SetPolyFillMode(int mode) {
+//
+inline int TDC::SetPolyFillMode(int mode)
+{
   if (GetHDC() != GetAttributeHDC())
     ::SetPolyFillMode(GetHDC(), mode);
   return ::SetPolyFillMode(GetAttributeHDC(), mode);
 }
 
-inline int TDC::GetROP2() const {
+//
+inline int TDC::GetROP2() const
+{
   return ::GetROP2(GetAttributeHDC());
 }
 
-inline int TDC::SetROP2(int mode) {
+//
+inline int TDC::SetROP2(int mode)
+{
   if (GetHDC() != GetAttributeHDC())
     ::SetROP2(GetHDC(), mode);
   return ::SetROP2(GetAttributeHDC(), mode);
 }
 
-inline int TDC::GetStretchBltMode() const {
+//
+inline int TDC::GetStretchBltMode() const
+{
   return ::GetStretchBltMode(GetAttributeHDC());
 }
 
-inline int TDC::SetStretchBltMode(int mode) {
+//
+inline int TDC::SetStretchBltMode(int mode)
+{
   if (GetHDC() != GetAttributeHDC())
     ::SetStretchBltMode(GetHDC(), mode);
   return ::SetStretchBltMode(GetAttributeHDC(), mode);
 }
 
-inline TColor TDC::GetTextColor() const {
+//
+inline TColor TDC::GetTextColor() const
+{
   return ::GetTextColor(GetAttributeHDC());
 }
 
-inline int TDC::GetMapMode() const {
+//
+inline int TDC::GetMapMode() const
+{
   return ::GetMapMode(GetAttributeHDC());
 }
 
 #if defined(BI_PLAT_WIN32)
 
-inline bool TDC::SetMiterLimit(float newLimit, float* oldLimit) {
+//
+inline bool TDC::SetMiterLimit(float newLimit, float* oldLimit)
+{
   if (GetHDC() != GetAttributeHDC())
     ::SetMiterLimit(GetHDC(), newLimit, oldLimit);
   return ::SetMiterLimit(GetAttributeHDC(), newLimit, oldLimit);
 }
 
-inline bool TDC::SetWorldTransform(XFORM far& xform) {
+//
+inline bool TDC::SetWorldTransform(XFORM far& xform)
+{
   if (GetHDC() != GetAttributeHDC())
     ::SetWorldTransform(GetHDC(), &xform);
   return ::SetWorldTransform(GetAttributeHDC(), &xform);
 }
 
-inline bool TDC::ModifyWorldTransform(XFORM far& xform, uint32 mode) {
+//
+inline bool TDC::ModifyWorldTransform(XFORM far& xform, uint32 mode)
+{
   if (GetHDC() != GetAttributeHDC())
     ::ModifyWorldTransform(GetHDC(), &xform, mode);
   return ::ModifyWorldTransform(GetAttributeHDC(), &xform, mode);
@@ -773,11 +962,15 @@ inline bool TDC::ModifyWorldTransform(XFORM far& xform, uint32 mode) {
 
 #endif  // defined(BI_PLAT_WIN32)
 
-inline bool TDC::GetViewportOrg(TPoint& point) const {
+//
+inline bool TDC::GetViewportOrg(TPoint& point) const
+{
   return ::GetViewportOrgEx(GetAttributeHDC(), &point);
 }
 
-inline TPoint TDC::GetViewportOrg() const {
+//
+inline TPoint TDC::GetViewportOrg() const
+{
 #if defined(BI_PLAT_WIN32)
   TPoint point;
   ::GetViewportOrgEx(GetAttributeHDC(), &point);
@@ -787,11 +980,15 @@ inline TPoint TDC::GetViewportOrg() const {
 #endif
 }
 
-inline bool TDC::GetViewportExt(TSize& extent) const {
+//
+inline bool TDC::GetViewportExt(TSize& extent) const
+{
   return ::GetViewportExtEx(GetAttributeHDC(), &extent);
 }
 
-inline TSize TDC::GetViewportExt() const {
+//
+inline TSize TDC::GetViewportExt() const
+{
 #if defined(BI_PLAT_WIN32)
   TSize extent;
   ::GetViewportExtEx(GetAttributeHDC(), &extent);
@@ -801,11 +998,15 @@ inline TSize TDC::GetViewportExt() const {
 #endif
 }
 
-inline bool TDC::GetWindowOrg(TPoint& point) const {
+//
+inline bool TDC::GetWindowOrg(TPoint& point) const
+{
   return ::GetWindowOrgEx(GetAttributeHDC(), &point);
 }
 
-inline TPoint TDC::GetWindowOrg() const {
+//
+inline TPoint TDC::GetWindowOrg() const
+{
 #if defined(BI_PLAT_WIN32)
   TPoint point;
   ::GetWindowOrgEx(GetAttributeHDC(), &point);
@@ -815,11 +1016,15 @@ inline TPoint TDC::GetWindowOrg() const {
 #endif
 }
 
-inline bool TDC::GetWindowExt(TSize& extent) const {
+//
+inline bool TDC::GetWindowExt(TSize& extent) const
+{
   return ::GetWindowExtEx(GetAttributeHDC(), &extent);
 }
 
-inline TSize TDC::GetWindowExt() const {
+//
+inline TSize TDC::GetWindowExt() const
+{
 #if defined(BI_PLAT_WIN32)
   TSize extent;
   ::GetWindowExtEx(GetAttributeHDC(), &extent);
@@ -829,356 +1034,600 @@ inline TSize TDC::GetWindowExt() const {
 #endif
 }
 
-inline bool TDC::DPtoLP(TPoint* points, int count) const {
+//
+inline bool TDC::DPtoLP(TPoint* points, int count) const
+{
   return ::DPtoLP(GetAttributeHDC(), points, count);
 }
 
-inline bool TDC::LPtoDP(TPoint* points, int count) const {
-  return ::LPtoDP(GetHDC(), points, count);
+//
+inline bool TDC::DPtoLP(TRect& rect) const
+{
+  return ::DPtoLP(GetAttributeHDC(), (LPPOINT)&rect, 2);
 }
 
-inline int TDC::GetClipBox(TRect& rect) const {
+//
+inline bool TDC::LPtoDP(TPoint* points, int count) const
+{
+  return ::LPtoDP(GetAttributeHDC(), points, count);
+}
+
+//
+inline bool TDC::LPtoDP(TRect& rect) const
+{
+  return ::LPtoDP(GetAttributeHDC(), (LPPOINT)&rect, 2);
+}
+
+//
+inline int TDC::GetClipBox(TRect& rect) const
+{
   return ::GetClipBox(GetHDC(), &rect);
 }
 
-inline TRect TDC::GetClipBox() const {
+//
+inline TRect TDC::GetClipBox() const
+{
   TRect rect;
   ::GetClipBox(GetHDC(), &rect);
   return rect;
 }
 
-inline int TDC::ExcludeClipRect(const TRect& rect) {
+//
+inline int TDC::ExcludeClipRect(const TRect& rect)
+{
   return ::ExcludeClipRect(GetHDC(), rect.left, rect.top, rect.right, rect.bottom);
 }
 
-inline int TDC::ExcludeUpdateRgn(HWND Wnd) {
+//
+inline int TDC::ExcludeUpdateRgn(HWND Wnd)
+{
   return ::ExcludeUpdateRgn(GetHDC(), Wnd);
 }
 
-inline int TDC::IntersectClipRect(const TRect& rect) {
+//
+inline int TDC::IntersectClipRect(const TRect& rect)
+{
   return ::IntersectClipRect(GetHDC(), rect.left, rect.top, rect.right, rect.bottom);
 }
 
-inline int TDC::OffsetClipRgn(const TPoint& delta) {
+//
+inline int TDC::OffsetClipRgn(const TPoint& delta)
+{
   return ::OffsetClipRgn(GetHDC(), delta.x, delta.y);
 }
 
-inline int TDC::SelectClipRgn(const TRegion& region) {
+//
+inline int TDC::SelectClipRgn(const TRegion& region)
+{
   return ::SelectClipRgn(GetHDC(), region);
 }
 
-inline bool TDC::PtVisible(const TPoint& point) const {
+//
+inline bool TDC::PtVisible(const TPoint& point) const
+{
   return ::PtVisible(GetHDC(), point.x, point.y);
 }
 
-inline bool TDC::RectVisible(const TRect& rect) const {
+//
+inline bool TDC::RectVisible(const TRect& rect) const
+{
   return ::RectVisible(GetHDC(), &rect);
 }
 
-inline bool TDC::GetBoundsRect(TRect& bounds, uint16 flags) const {
+//
+inline bool TDC::GetBoundsRect(TRect& bounds, uint16 flags) const
+{
   return ::GetBoundsRect(GetHDC(), &bounds, flags);
 }
 
-inline uint TDC::SetBoundsRect(TRect& bounds, uint flags) {
+//
+inline uint TDC::SetBoundsRect(TRect& bounds, uint flags)
+{
   return ::SetBoundsRect(GetHDC(), &bounds, flags);
 }
 
 #if defined(BI_PLAT_WIN32)
-inline bool TDC::GetClipRgn(TRegion& region) const {
+//
+inline bool TDC::GetClipRgn(TRegion& region) const
+{
   return ::GetClipRgn(GetHDC(), region);
 }
 #endif
 
+//
 inline int TDC::EnumMetaFile(const TMetaFilePict& metafile, MFENUMPROC callback,
-                             void far* data) const {
+                             void far* data) const
+{
   return ::EnumMetaFile(GetHDC(), metafile, callback, (long)data);
 }
 
-inline bool TDC::PlayMetaFile(const TMetaFilePict& metafile) {
+//
+inline bool TDC::PlayMetaFile(const TMetaFilePict& metafile)
+{
   return ::PlayMetaFile(GetHDC(), metafile);
 }
 
+//
 inline void TDC::PlayMetaFileRecord(HANDLETABLE far& handletable,
-                                    METARECORD far& metaRecord, int count) {
+                                    METARECORD far& metaRecord, int count)
+{
   ::PlayMetaFileRecord(GetHDC(), &handletable, &metaRecord, count);
 }
 
-inline bool TDC::GetCurrentPosition(TPoint& point) const {
+#if defined(BI_PLAT_WIN32)
+//
+// Enumerate through the enhanced metafile records.
+//
+inline int TDC::EnumEnhMetaFile(const TEnhMetaFilePict& metafile, ENHMFENUMPROC callback,
+                                void far* data, const TRect* rect) const
+{
+  return ::EnumEnhMetaFile(GetHDC(), metafile, callback, data, rect);
+}
+
+//
+// Play the enhanced metafile onto this device context.
+//
+inline bool TDC::PlayEnhMetaFile(const TEnhMetaFilePict& metafile, const TRect* rect)
+{
+  return ::PlayEnhMetaFile(GetHDC(), metafile, rect);
+}
+
+//
+// Play one record from the enhanced metafile onto this DC.
+//
+inline void TDC::PlayEnhMetaFileRecord(HANDLETABLE far& handletable,
+                                       ENHMETARECORD far& metaRecord, uint count)
+{
+  ::PlayEnhMetaFileRecord(GetHDC(), &handletable, &metaRecord, count);
+}
+#endif
+
+//
+inline bool TDC::GetCurrentPosition(TPoint& point) const
+{
   return ::GetCurrentPositionEx(GetHDC(), &point);
 }
 
-inline bool TDC::MoveTo(int x, int y) {
+//
+inline bool TDC::MoveTo(int x, int y)
+{
   return ::MoveToEx(GetHDC(), x, y, 0);
 }
 
-inline bool TDC::MoveTo(const TPoint& point) {
+//
+inline bool TDC::MoveTo(const TPoint& point)
+{
   return ::MoveToEx(GetHDC(), point.x, point.y, 0);
 }
 
-inline bool TDC::MoveTo(const TPoint& point, TPoint& OldPoint) {
+//
+inline bool TDC::MoveTo(const TPoint& point, TPoint& OldPoint)
+{
   return ::MoveToEx(GetHDC(), point.x, point.y, &OldPoint);
 }
 
-inline bool TDC::DrawIcon(int x, int y, const TIcon& icon) {
+//
+inline bool TDC::DrawIcon(int x, int y, const TIcon& icon)
+{
   return ::DrawIcon(GetHDC(), x, y, icon);
 }
 
-inline bool TDC::DrawIcon(const TPoint& point, const TIcon& icon) {
+//
+inline bool TDC::DrawIcon(const TPoint& point, const TIcon& icon)
+{
   return ::DrawIcon(GetHDC(), point.x, point.y, icon);
 }
 
-inline bool TDC::FrameRect(int x1, int y1, int x2, int y2, const TBrush& brush) {
+//
+inline bool TDC::DrawCursor(int x, int y, const TCursor& cursor)
+{
+  return ::DrawIcon(GetHDC(), x, y, HICON(HCURSOR(cursor)));
+}
+
+//
+inline bool TDC::DrawCursor(const TPoint& point, const TCursor& cursor)
+{
+  return ::DrawIcon(GetHDC(), point.x, point.y, HICON(HCURSOR(cursor)));
+}
+
+#if defined(BI_PLAT_WIN32)
+//
+inline bool TDC::DrawIcon(int x, int y, const TIcon& icon, int w, int h,
+                          int aniStep, HBRUSH bkBr, uint flags)
+{
+  return ::DrawIconEx(GetHDC(), x, y, icon, w, h, aniStep, bkBr, flags);
+}
+
+inline bool TDC::DrawIcon(const TPoint& point, const TIcon& icon,
+                          const TSize& size, int aniStep, HBRUSH bkBr, uint flags)
+{
+  return ::DrawIconEx(GetHDC(), point.x, point.y, icon, size.cx, size.cy,
+                      aniStep, bkBr, flags);
+}
+
+inline bool TDC::DrawCursor(int x, int y, const TCursor& cursor, int w, int h,
+                            int aniStep, HBRUSH bkBr, uint flags)
+{
+  return ::DrawIconEx(GetHDC(), x, y, HICON(HCURSOR(cursor)), w, h, aniStep,
+                      bkBr, flags);
+}
+
+inline bool TDC::DrawCursor(const TPoint& point, const TCursor& cursor,
+                            const TSize& size, int aniStep, HBRUSH bkBr, uint flags)
+{
+  return ::DrawIconEx(GetHDC(), point.x, point.y, HICON(HCURSOR(cursor)),
+                      size.cx, size.cy, aniStep, bkBr, flags);
+}
+#endif
+
+//
+inline bool TDC::FrameRect(int x1, int y1, int x2, int y2, const TBrush& brush)
+{
   return ::FrameRect(GetHDC(), &TRect(x1, y1, x2, y2), brush);
 }
 
-inline bool TDC::FrameRect(const TRect& rect, const TBrush& brush) {
+//
+inline bool TDC::FrameRect(const TRect& rect, const TBrush& brush)
+{
   return ::FrameRect(GetHDC(), &rect, brush);
 }
 
-inline bool TDC::FillRect(int x1, int y1, int x2, int y2, const TBrush& brush) {
+//
+inline bool TDC::FillRect(int x1, int y1, int x2, int y2, const TBrush& brush)
+{
   return ::FillRect(GetHDC(), &TRect(x1, y1, x2, y2), brush);
 }
 
-inline bool TDC::FillRect(const TRect& rect, const TBrush& brush) {
+//
+inline bool TDC::FillRect(const TRect& rect, const TBrush& brush)
+{
   return ::FillRect(GetHDC(), &rect, brush);
 }
 
 //
-// rect must be normalized for inverRect
+// Rect must be normalized for inverRect
 //
-inline bool TDC::InvertRect(int x1, int y1, int x2, int y2) {
+//
+inline bool TDC::InvertRect(int x1, int y1, int x2, int y2)
+{
   ::InvertRect(GetHDC(), &TRect(x1, y1, x2, y2));
   return true;
 }
 
-inline bool TDC::InvertRect(const TRect& rect) {
+//
+inline bool TDC::InvertRect(const TRect& rect)
+{
   ::InvertRect(GetHDC(), &rect);
   return true;
 }
 
-inline bool TDC::DrawFocusRect(int x1, int y1, int x2, int y2) {
+//
+inline bool TDC::DrawFocusRect(int x1, int y1, int x2, int y2)
+{
   ::DrawFocusRect(GetHDC(), &TRect(x1, y1, x2, y2));
   return true;
 }
 
-inline bool TDC::DrawFocusRect(const TRect& rect) {
+//
+inline bool TDC::DrawFocusRect(const TRect& rect)
+{
   ::DrawFocusRect(GetHDC(), &rect);
   return true;
 }
 
-inline bool TDC::TextRect(int x1, int y1, int x2, int y2) {
+//
+inline bool TDC::TextRect(int x1, int y1, int x2, int y2)
+{
   return ::ExtTextOut(GetHDC(), 0, 0, ETO_OPAQUE, &TRect(x1, y1, x2, y2), 0, 0, 0);
 }
 
-inline bool TDC::TextRect(const TRect& rect) {
+//
+inline bool TDC::TextRect(const TRect& rect)
+{
   return ::ExtTextOut(GetHDC(), 0, 0, ETO_OPAQUE, &rect, 0, 0, 0);
 }
 
-inline bool TDC::TextRect(int x1, int y1, int x2, int y2, TColor color) {
+//
+inline bool TDC::TextRect(int x1, int y1, int x2, int y2, const TColor& color)
+{
   SetBkColor(color);
   return ::ExtTextOut(GetHDC(), 0, 0, ETO_OPAQUE, &TRect(x1, y1, x2, y2), 0, 0, 0);
 }
 
-inline bool TDC::TextRect(const TRect& rect, TColor color) {
+//
+inline bool TDC::TextRect(const TRect& rect, const TColor& color)
+{
   SetBkColor(color);
   return ::ExtTextOut(GetHDC(), 0, 0, ETO_OPAQUE, &rect, 0, 0, 0);
 }
 
-inline bool TDC::FrameRgn(const TRegion& region, const TBrush& brush, const TPoint& p) {
+//
+inline bool TDC::FrameRgn(const TRegion& region, const TBrush& brush, const TPoint& p)
+{
   return ::FrameRgn(GetHDC(), region, brush, p.x, p.y);
 }
 
-inline bool TDC::FillRgn(const TRegion& region, const TBrush& brush) {
+//
+inline bool TDC::FillRgn(const TRegion& region, const TBrush& brush)
+{
   return ::FillRgn(GetHDC(), region, brush);
 }
 
-inline bool TDC::InvertRgn(const TRegion& region) {
+//
+inline bool TDC::InvertRgn(const TRegion& region)
+{
   return ::InvertRgn(GetHDC(), region);
 }
 
-inline bool TDC::PaintRgn(const TRegion& region) {
+//
+inline bool TDC::PaintRgn(const TRegion& region)
+{
   return ::PaintRgn(GetHDC(), region);
 }
 
 #if defined(BI_PLAT_WIN32)
-inline bool TDC::AngleArc(int x, int y, uint32 radius, float startAngle, float sweepAngle) {
+//
+inline bool TDC::AngleArc(int x, int y, uint32 radius, float startAngle, float sweepAngle)
+{
   return ::AngleArc(GetHDC(), x, y, radius, startAngle, sweepAngle);
 }
 
-inline bool TDC::AngleArc(const TPoint& Center, uint32 radius, float StartAngle, float SweepAngle) {
+//
+inline bool TDC::AngleArc(const TPoint& Center, uint32 radius, float StartAngle, float SweepAngle)
+{
   return ::AngleArc(GetHDC(), Center.x, Center.y, radius, StartAngle, SweepAngle);
 }
 #endif
 
-inline bool TDC::Arc(int x1, int y1, int x2, int y2, int x3, int y3, int x4, int y4) {
+//
+inline bool TDC::Arc(int x1, int y1, int x2, int y2, int x3, int y3, int x4, int y4)
+{
   return ::Arc(GetHDC(), x1, y1, x2, y2, x3, y3, x4, y4);
 }
 
-inline bool TDC::Arc(const TRect& rect, const TPoint& start, const TPoint& end) {
+//
+inline bool TDC::Arc(const TRect& rect, const TPoint& start, const TPoint& end)
+{
   return ::Arc(GetHDC(), rect.left, rect.top, rect.right, rect.bottom, start.x, start.y, end.x, end.y);
 }
 
-inline bool TDC::Chord(int x1, int y1, int x2, int y2, int x3, int y3, int x4, int y4) {
+//
+inline bool TDC::Chord(int x1, int y1, int x2, int y2, int x3, int y3, int x4, int y4)
+{
   return ::Chord(GetHDC(), x1, y1, x2, y2, x3, y3, x4, y4);
 }
 
-inline bool TDC::Chord(const TRect& rect, const TPoint& start, const TPoint& end) {
+//
+inline bool TDC::Chord(const TRect& rect, const TPoint& start, const TPoint& end)
+{
   return ::Chord(GetHDC(), rect.left, rect.top, rect.right, rect.bottom, start.x, start.y, end.x, end.y);
 }
 
-inline bool TDC::Pie(int x1, int y1, int x2, int y2, int x3, int y3, int x4, int y4) {
+//
+inline bool TDC::Pie(int x1, int y1, int x2, int y2, int x3, int y3, int x4, int y4)
+{
   return ::Pie(GetHDC(), x1, y1, x2, y2, x3, y3, x4, y4);
 }
 
-inline bool TDC::Pie(const TRect& rect, const TPoint& start, const TPoint& end) {
+//
+inline bool TDC::Pie(const TRect& rect, const TPoint& start, const TPoint& end)
+{
   return ::Pie(GetHDC(), rect.left, rect.top, rect.right, rect.bottom, start.x, start.y, end.x, end.y);
 }
 
-inline bool TDC::Ellipse(int x1, int y1, int x2, int y2) {
+//
+inline bool TDC::Ellipse(int x1, int y1, int x2, int y2)
+{
   return ::Ellipse(GetHDC(), x1, y1, x2, y2);
 }
 
-inline bool TDC::Ellipse(const TPoint& p1, const TPoint& p2) {
+//
+inline bool TDC::Ellipse(const TPoint& p1, const TPoint& p2)
+{
   return ::Ellipse(GetHDC(), p1.x, p1.y, p2.x, p2.y);
 }
 
-inline bool TDC::Ellipse(const TPoint& p, const TSize& s) {
+//
+inline bool TDC::Ellipse(const TPoint& p, const TSize& s)
+{
   return ::Ellipse(GetHDC(), p.x, p.y, p.x+s.cx, p.y+s.cy);
 }
 
-inline bool TDC::Ellipse(const TRect& rect) {
+//
+inline bool TDC::Ellipse(const TRect& rect)
+{
   return ::Ellipse(GetHDC(), rect.left, rect.top, rect.right, rect.bottom);
 }
 
-inline bool TDC::LineTo(int x, int y) {
+//
+inline bool TDC::LineTo(int x, int y)
+{
   return ::LineTo(GetHDC(), x, y);
 }
 
-inline bool TDC::LineTo(const TPoint& point) {
+//
+inline bool TDC::LineTo(const TPoint& point)
+{
   return ::LineTo(GetHDC(), point.x, point.y);
 }
 
-inline bool TDC::Polyline(const TPoint* points, int count) {
+//
+inline bool TDC::Polyline(const TPoint* points, int count)
+{
   return ::Polyline(GetHDC(), points, count);
 }
 
-inline bool TDC::Polygon(const TPoint* points, int count) {
+//
+inline bool TDC::Polygon(const TPoint* points, int count)
+{
   return ::Polygon(GetHDC(), (TPoint*)points, count);
 }
 
-inline bool TDC::PolyPolygon(const TPoint* points, const int* polyCounts, int count) {
+//
+inline bool TDC::PolyPolygon(const TPoint* points, const int* polyCounts, int count)
+{
   return ::PolyPolygon(GetHDC(), (TPoint*)points, (int*)polyCounts, count); // API typecast
 }
 
 #if defined(BI_PLAT_WIN32)
-inline bool TDC::PolyPolyline(const TPoint* points, const int* polyCounts, int count) {
+//
+inline bool TDC::PolyPolyline(const TPoint* points, const int* polyCounts, int count)
+{
   return ::PolyPolyline(GetHDC(), (TPoint*)points, (uint32*)polyCounts, count); // API typecast
 }
 
-inline bool TDC::PolyBezier(const TPoint* points, int count) {
+//
+inline bool TDC::PolyBezier(const TPoint* points, int count)
+{
   return ::PolyBezier(GetHDC(), (TPoint*)points, count);
 }
 
-inline bool TDC::PolyBezierTo(const TPoint* points, int count) {
+//
+inline bool TDC::PolyBezierTo(const TPoint* points, int count)
+{
   return ::PolyBezierTo(GetHDC(), (TPoint*)points, count);
 }
 
-inline bool TDC::PolyDraw(const TPoint* points, uint8* types, int count) {
+//
+inline bool TDC::PolyDraw(const TPoint* points, uint8* types, int count)
+{
   return ::PolyDraw(GetHDC(), (TPoint*)points, types, count);
 }
 
-inline bool TDC::PolylineTo(const TPoint* points, int count) {
+//
+inline bool TDC::PolylineTo(const TPoint* points, int count)
+{
   return ::PolylineTo(GetHDC(), (TPoint*)points, count);
 }
 #endif
 
-inline bool TDC::Rectangle(int x1, int y1, int x2, int y2) {
+//
+inline bool TDC::Rectangle(int x1, int y1, int x2, int y2)
+{
   return ::Rectangle(GetHDC(), x1, y1, x2, y2);
 }
 
-inline bool TDC::Rectangle(const TPoint& p1, const TPoint& p2) {
+//
+inline bool TDC::Rectangle(const TPoint& p1, const TPoint& p2)
+{
   return ::Rectangle(GetHDC(), p1.x, p1.y, p2.x, p2.y);
 }
 
-inline bool TDC::Rectangle(const TPoint& p, const TSize& s) {
+//
+inline bool TDC::Rectangle(const TPoint& p, const TSize& s)
+{
   return ::Rectangle(GetHDC(), p.x, p.y, p.x+s.cx, p.y+s.cy);
 }
 
-inline bool TDC::Rectangle(const TRect& rect) {
+//
+inline bool TDC::Rectangle(const TRect& rect)
+{
   return ::Rectangle(GetHDC(), rect.left, rect.top, rect.right, rect.bottom);
 }
 
-inline bool TDC::RoundRect(int x1, int y1, int x2, int y2, int x3, int y3) {
+//
+inline bool TDC::RoundRect(int x1, int y1, int x2, int y2, int x3, int y3)
+{
   return ::RoundRect(GetHDC(), x1, y1, x2, y2, x3, y3);
 }
 
-inline bool TDC::RoundRect(const TPoint& p1, const TPoint& p2, const TPoint& rad) {
+//
+inline bool TDC::RoundRect(const TPoint& p1, const TPoint& p2, const TPoint& rad)
+{
   return ::RoundRect(GetHDC(), p1.x, p1.y, p2.x, p2.y, rad.x, rad.y);
 }
 
-inline bool TDC::RoundRect(const TPoint& p, const TSize& s, const TPoint& rad) {
+//
+inline bool TDC::RoundRect(const TPoint& p, const TSize& s, const TPoint& rad)
+{
   return ::RoundRect(GetHDC(), p.x, p.y, p.x+s.cx, p.y+s.cy, rad.x, rad.y);
 }
 
-inline bool TDC::RoundRect(const TRect& rect, const TPoint& rad) {
+//
+inline bool TDC::RoundRect(const TRect& rect, const TPoint& rad)
+{
   return ::RoundRect(GetHDC(), rect.left, rect.top, rect.right, rect.bottom,
                      rad.x, rad.y);
 }
 
-inline TColor TDC::GetPixel(int x, int y) const {
+//
+inline TColor TDC::GetPixel(int x, int y) const
+{
   return ::GetPixel(GetHDC(), x, y);
 }
 
-inline TColor TDC::GetPixel(const TPoint& point) const {
+//
+inline TColor TDC::GetPixel(const TPoint& point) const
+{
   return ::GetPixel(GetHDC(), point.x, point.y);
 }
 
-inline TColor TDC::SetPixel(int x, int y, TColor color) {
+//
+inline TColor TDC::SetPixel(int x, int y, const TColor& color)
+{
   return ::SetPixel(GetHDC(), x, y, color);
 }
 
-inline TColor TDC::SetPixel(const TPoint& point, TColor color) {
+//
+inline TColor TDC::SetPixel(const TPoint& point, const TColor& color)
+{
   return ::SetPixel(GetHDC(), point.x, point.y, color);
 }
 
+//
 inline bool TDC::BitBlt(int dstX, int dstY, int w, int h, const TDC& srcDC,
-                       int srcX, int srcY, uint32 rop) {
+                        int srcX, int srcY, uint32 rop)
+{
   return ::BitBlt(GetHDC(), dstX, dstY, w, h, srcDC, srcX, srcY, rop);
 }
 
+//
 inline bool TDC::BitBlt(const TRect& dst, const TDC& srcDC, const TPoint& src,
-                        uint32 rop) {
+                        uint32 rop)
+{
   return ::BitBlt(GetHDC(), dst.left, dst.top, dst.Width(), dst.Height(),
                   srcDC, src.x, src.y, rop);
 }
 
-inline bool TDC::PatBlt(int x, int y, int w, int h, uint32 rop) {
+//
+inline bool TDC::PatBlt(int x, int y, int w, int h, uint32 rop)
+{
   return ::PatBlt(GetHDC(), x, y, w, h, rop);
 }
 
-inline bool TDC::PatBlt(const TRect& dst, uint32 rop) {
+//
+inline bool TDC::PatBlt(const TRect& dst, uint32 rop)
+{
   return ::PatBlt(GetHDC(), dst.left, dst.top, dst.Width(), dst.Height(), rop);
 }
 
+//
 inline bool TDC::ScrollDC(int dx, int dy, const TRect& scroll, const TRect& clip,
-                          TRegion& updateRgn, TRect& updateRect) {
+                          TRegion& updateRgn, TRect& updateRect)
+{
   return ::ScrollDC(GetHDC(), dx, dy, &scroll, &clip, updateRgn, &updateRect);
 }
 
+//
 inline bool TDC::ScrollDC(const TPoint& delta, const TRect& scroll, const TRect& clip,
-                          TRegion& updateRgn, TRect& updateRect) {
+                          TRegion& updateRgn, TRect& updateRect)
+{
   return ::ScrollDC(GetHDC(), delta.x, delta.y, &scroll, &clip, updateRgn, &updateRect);
 }
 
+//
 inline bool TDC::StretchBlt(int dstX, int dstY, int dstW, int dstH,
                            const TDC& srcDC, int srcX, int srcY, int srcW,
-                           int srcH, uint32 rop) {
+                           int srcH, uint32 rop)
+{
   return ::StretchBlt(GetHDC(), dstX, dstY, dstW, dstH,
                       srcDC, srcX, srcY, srcW, srcH, rop);
 }
 
+//
 inline bool TDC::StretchBlt(const TRect& dst, const TDC& srcDC,
-                            const TRect& src, uint32 rop) {
+                            const TRect& src, uint32 rop)
+{
   return ::StretchBlt(GetHDC(),
                       dst.left, dst.top, dst.Width(), dst.Height(),
                       srcDC, src.left, src.top,
@@ -1186,54 +1635,68 @@ inline bool TDC::StretchBlt(const TRect& dst, const TDC& srcDC,
 }
 
 #if defined(BI_PLAT_WIN32)
+//
 inline bool TDC::MaskBlt(const TRect& dst,
                          const TDC& srcDC, const TPoint& src,
                          const TBitmap& maskBm, const TPoint& maskPos,
-                         uint32 rop) {
+                         uint32 rop)
+{
   return ::MaskBlt(GetHDC(), dst.left, dst.top, dst.Width(), dst.Height(),
                    srcDC, src.x, src.y, maskBm, maskPos.x, maskPos.y,
                    rop);
 }
 
+//
 inline bool TDC::PlgBlt(const TPoint& dst,
                         const TDC& srcDC, const TRect& src,
-                        const TBitmap& maskBm, const TPoint& maskPos, uint32 rop) {
+                        const TBitmap& maskBm, const TPoint& maskPos)
+{
   return ::PlgBlt(GetHDC(), (TPoint*)&dst,
                   srcDC, src.left, src.top, src.Width(), src.Height(),
                   maskBm, maskPos.x, maskPos.y);
 }
 #endif
 
-inline bool TDC::GetDIBits(const TBitmap& bitmap, uint16 startScan, uint16 numScans,
+//
+inline bool TDC::GetDIBits(const TBitmap& bitmap, uint startScan, uint numScans,
                            void HUGE* bits, const BITMAPINFO far& info,
-                           uint16 usage) {
+                           uint16 usage)
+{
   return ::GetDIBits(GetHDC(), bitmap, startScan, numScans, bits,
                     (BITMAPINFO far*)&info, usage);
 }
 
-inline bool TDC::GetDIBits(const TBitmap& bitmap, TDib& dib) {
+//
+inline bool TDC::GetDIBits(const TBitmap& bitmap, TDib& dib)
+{
   return ::GetDIBits(GetHDC(), bitmap, dib.StartScan(), dib.NumScans(),
                      dib.GetBits(), dib.GetInfo(), dib.Usage());
 }
 
-inline bool TDC::SetDIBits(TBitmap& bitmap, uint16 startScan, uint16 numScans,
+//
+inline bool TDC::SetDIBits(TBitmap& bitmap, uint startScan, uint numScans,
                            const void HUGE* bits, const BITMAPINFO far& info,
-                           uint16 usage) {
+                           uint16 usage)
+{
   return ::SetDIBits(GetHDC(), bitmap, startScan, numScans,
                      bits, (BITMAPINFO far*)&info, usage);
                      // API typecast
 }
 
-inline bool TDC::SetDIBits(TBitmap& bitmap, const TDib& dib) {
+//
+inline bool TDC::SetDIBits(TBitmap& bitmap, const TDib& dib)
+{
   return ::SetDIBits(GetHDC(), bitmap, dib.StartScan(), dib.NumScans(),
                      dib.GetBits(), (BITMAPINFO far*)dib.GetInfo(), dib.Usage());
                                    // API typecast
 }
 
+//
 inline bool TDC::SetDIBitsToDevice(const TRect& dst, const TPoint& src,
-                                   uint16 startScan, uint16 numScans,
+                                   uint startScan, uint numScans,
                                    const void HUGE* bits,
-                                   const BITMAPINFO far& info, uint16 usage) {
+                                   const BITMAPINFO far& info, uint16 usage)
+{
   return ::SetDIBitsToDevice(
              GetHDC(), dst.left, dst.top,
              dst.Width(), dst.Height(), src.x, src.y,
@@ -1242,8 +1705,10 @@ inline bool TDC::SetDIBitsToDevice(const TRect& dst, const TPoint& src,
          );                  // API typecast
 }
 
+//
 inline bool TDC::SetDIBitsToDevice(const TRect& dst, const TPoint& src,
-                                   const TDib& dib) {
+                                   const TDib& dib)
+{
   return ::SetDIBitsToDevice(
              GetHDC(),
              dst.left, dst.top, dst.Width(), dst.Height(),
@@ -1254,10 +1719,12 @@ inline bool TDC::SetDIBitsToDevice(const TRect& dst, const TPoint& src,
          );                  // API typecast
 }
 
+//
 inline bool TDC::StretchDIBits(const TRect& dst, const TRect& src,
                                const void HUGE* bits,
                                const BITMAPINFO far& info,
-                               uint16 usage, uint32 rop) {
+                               uint16 usage, uint32 rop)
+{
   return ::StretchDIBits(
              GetHDC(), dst.left, dst.top, dst.Width(), dst.Height(),
              src.left, src.top, src.Width(), src.Height(),
@@ -1266,8 +1733,10 @@ inline bool TDC::StretchDIBits(const TRect& dst, const TRect& src,
          // API typecast
 }
 
+//
 inline bool TDC::StretchDIBits(const TRect& dst, const TRect& src,
-                               const TDib& dib, uint32 rop) {
+                               const TDib& dib, uint32 rop)
+{
   return ::StretchDIBits(
              GetHDC(),
              dst.left, dst.top, dst.Width(), dst.Height(),
@@ -1279,36 +1748,60 @@ inline bool TDC::StretchDIBits(const TRect& dst, const TRect& src,
              // API typecast
 }
 
-inline bool TDC::FloodFill(const TPoint& point, TColor C) {
-  return ::FloodFill(GetHDC(), point.x, point.y, C);
+#if defined(BI_PLAT_WIN32)
+//
+// Create a fast DIB under Win32.
+//
+inline HBITMAP TDC::CreateDIBSection(const BITMAPINFO& info, uint usage, void** bits, HANDLE section, uint32 offset)
+{
+  return ::CreateDIBSection(GetHDC(), &info, usage, bits, section, offset);
+}
+#endif
+
+//
+inline bool TDC::FloodFill(const TPoint& point, const TColor& color)
+{
+  return ::FloodFill(GetHDC(), point.x, point.y, color);
 }
 
-inline bool TDC::ExtFloodFill(const TPoint& point, TColor color, uint16 fillType) {
+//
+inline bool TDC::ExtFloodFill(const TPoint& point, const TColor& color, uint16 fillType)
+{
   return ::ExtFloodFill(GetHDC(), point.x, point.y, color, fillType);
 }
 
-inline bool TDC::TextOut(const TPoint& p, const char far* str, int count) {
+//
+inline bool TDC::TextOut(const TPoint& p, const char far* str, int count)
+{
   return TextOut(p.x, p.y, str, count);
 }
 
+//
 inline bool TDC::ExtTextOut(const TPoint& p, uint16 options, const TRect* rect,
-                            const char far* str, int count, const int far* dx) {
+                            const char far* str, int count, const int far* dx)
+{
   return ExtTextOut(p.x, p.y, options, rect, str, count, dx);
 }
 
+//
 inline bool TDC::TabbedTextOut(const TPoint& p, const char far* str, int count,
                                int numPositions, const int far* positions,
-                               int tabOrigin) {
+                               int tabOrigin)
+{
   TSize size;
   TabbedTextOut(p, str, count, numPositions, positions, tabOrigin, size);
   return true;
 }
 
-inline bool TDC::GetTextExtent(const char far* str, int stringLen, TSize& size) {
+//
+inline bool TDC::GetTextExtent(const char far* str, int stringLen, TSize& size)
+{
   return ::GetTextExtentPoint(GetAttributeHDC(), str, stringLen, &size);
 }
 
-inline TSize TDC::GetTextExtent(const char far* str, int stringLen) {
+//
+inline TSize TDC::GetTextExtent(const char far* str, int stringLen)
+{
 #if defined(BI_PLAT_WIN32)
   TSize size;
   ::GetTextExtentPoint(GetAttributeHDC(), str, stringLen, &size);
@@ -1318,204 +1811,367 @@ inline TSize TDC::GetTextExtent(const char far* str, int stringLen) {
 #endif
 }
 
+//
 inline bool TDC::GetTabbedTextExtent(const char far* str, int strLen,
                                      int numPositions, const int far* positions,
-                                     TSize& size) const {
+                                     TSize& size) const
+{
   size = ::GetTabbedTextExtent(GetAttributeHDC(), str, strLen, numPositions,
                                (int far*)positions);   // API Typecast
   return true;
 }
 
+//
 inline TSize TDC::GetTabbedTextExtent(const char far* str, int strLen,
-                                      int numPositions, 
-                                      const int far* positions) const {
+                                      int numPositions,
+                                      const int far* positions) const
+{
   return ::GetTabbedTextExtent(GetAttributeHDC(), str, strLen, numPositions,
                                (int far*)positions);   // API Typecast
 }
 
-inline uint TDC::GetTextAlign() const {
+//
+inline uint TDC::GetTextAlign() const
+{
   return ::GetTextAlign(GetAttributeHDC());
 }
 
-inline uint TDC::SetTextAlign(uint flags) {
+//
+inline uint TDC::SetTextAlign(uint flags)
+{
   if (GetHDC() != GetAttributeHDC())
     ::SetTextAlign(GetHDC(), flags);
   return ::SetTextAlign(GetAttributeHDC(), flags);
 }
 
-inline int TDC::GetTextCharacterExtra() const {
+//
+inline int TDC::GetTextCharacterExtra() const
+{
   return ::GetTextCharacterExtra(GetAttributeHDC());
 }
 
-inline int TDC::SetTextCharacterExtra(int extra) {
+//
+inline int TDC::SetTextCharacterExtra(int extra)
+{
   if (GetHDC() != GetAttributeHDC())
     ::SetTextCharacterExtra(GetHDC(), extra);
   return ::SetTextCharacterExtra(GetAttributeHDC(), extra);
 }
 
-inline bool TDC::SetTextJustification(int breakExtra, int breakCount) {
+//
+inline bool TDC::SetTextJustification(int breakExtra, int breakCount)
+{
   return ::SetTextJustification(GetAttributeHDC(), breakExtra, breakCount);
 }
 
-inline int TDC::GetTextFace(int count, char far* facename) const {
+//
+inline int TDC::GetTextFace(int count, char far* facename) const
+{
   return ::GetTextFace(GetAttributeHDC(), count, facename);
 }
 
-inline bool TDC::GetTextMetrics(TEXTMETRIC far& metrics) const {
+//
+inline bool TDC::GetTextMetrics(TEXTMETRIC far& metrics) const
+{
   return ::GetTextMetrics(GetAttributeHDC(), &metrics);
 }
 
+//
 inline uint32 TDC::GetGlyphOutline(uint chr, uint format, GLYPHMETRICS far& gm,
                                   uint32 buffSize, void far* buffer,
-                                  const MAT2 far& mat2) {
+                                  const MAT2 far& mat2)
+{
   return ::GetGlyphOutline(GetAttributeHDC(), chr, format, &gm, buffSize,
                            buffer, (MAT2*)&mat2);
 }
 
-inline int TDC::GetKerningPairs(int pairs, KERNINGPAIR far* krnPair) {
+//
+inline int TDC::GetKerningPairs(int pairs, KERNINGPAIR far* krnPair)
+{
   return ::GetKerningPairs(GetAttributeHDC(), pairs, krnPair);
 }
 
-#if defined(BI_PLAT_WIN32)
-  inline uint32
-#else
-  inline uint16
-#endif
+//
+inline uint
 TDC::GetOutlineTextMetrics(uint data, OUTLINETEXTMETRIC far& otm)
 {
   return ::GetOutlineTextMetrics(GetAttributeHDC(), data, &otm);
 }
 
-inline bool TDC::GetCharWidth(uint firstChar, uint lastChar, int* buffer) {
+//
+inline bool TDC::GetCharWidth(uint firstChar, uint lastChar, int* buffer)
+{
   return ::GetCharWidth(GetAttributeHDC(), firstChar, lastChar, buffer);
 }
 
-inline uint32 TDC::SetMapperFlags(uint32 flag) {
+//
+inline uint32 TDC::SetMapperFlags(uint32 flag)
+{
   if (GetHDC() != GetAttributeHDC())
     ::SetMapperFlags(GetHDC(), flag);
   return ::SetMapperFlags(GetAttributeHDC(), flag);
 }
 
-inline bool TDC::GetAspectRatioFilter(TSize& size) const {
+//
+inline bool TDC::GetAspectRatioFilter(TSize& size) const
+{
   return ::GetAspectRatioFilterEx(GetAttributeHDC(), &size);
 }
 
-inline int TDC::EnumFonts(const char far* faceName, OLDFONTENUMPROC callback, void far* data) const {
+//
+inline int TDC::EnumFonts(const char far* faceName, OLDFONTENUMPROC callback, void far* data) const
+{
   return ::EnumFonts(GetAttributeHDC(), faceName, callback, LPARAM(data));
 }
 
-inline bool TDC::GetCharABCWidths(uint firstChar, uint lastChar, ABC* abc) {
+//
+inline bool TDC::GetCharABCWidths(uint firstChar, uint lastChar, ABC* abc)
+{
   return ::GetCharABCWidths(GetAttributeHDC(), firstChar, lastChar, abc);
 }
 
-inline int TDC::EnumFontFamilies(const char far* familyName, FONTENUMPROC callback, void far* data) const {
+//
+inline int TDC::EnumFontFamilies(const char far* familyName, FONTENUMPROC callback, void far* data) const
+{
   return ::EnumFontFamilies(GetAttributeHDC(), familyName, callback, LPARAM(data));
 }
 
-inline uint32 TDC::GetFontData(uint32 table, uint32 offset, void* buffer, long data) {
+//
+inline uint32 TDC::GetFontData(uint32 table, uint32 offset, void* buffer, long data)
+{
   return ::GetFontData(GetAttributeHDC(), table, offset, buffer, data);
 }
 
 #if defined(BI_PLAT_WIN32)
-inline bool TDC::BeginPath() {
+//
+inline bool TDC::BeginPath()
+{
   return ::BeginPath(GetHDC());
 }
 
-inline bool TDC::CloseFigure() {
+//
+inline bool TDC::CloseFigure()
+{
   return ::CloseFigure(GetHDC());
 }
 
-inline bool TDC::EndPath() {
+//
+inline bool TDC::EndPath()
+{
   return ::EndPath(GetHDC());
 }
 
-inline bool TDC::FlattenPath() {
+//
+inline bool TDC::FlattenPath()
+{
   return ::FlattenPath(GetHDC());
 }
 
-inline bool TDC::WidenPath() {
+//
+inline bool TDC::WidenPath()
+{
   return ::WidenPath(GetHDC());
 }
 
-inline bool TDC::FillPath() {
+//
+inline bool TDC::FillPath()
+{
   return ::FillPath(GetHDC());
 }
 
-inline bool TDC::StrokePath() {
+//
+inline bool TDC::StrokePath()
+{
   return ::StrokePath(GetHDC());
 }
 
-inline bool TDC::StrokeAndFillPath() {
+//
+inline bool TDC::StrokeAndFillPath()
+{
   return ::StrokeAndFillPath(GetHDC());
 }
 
-inline bool TDC::SelectClipPath(int mode) {
+//
+inline bool TDC::SelectClipPath(int mode)
+{
   return ::SelectClipPath(GetHDC(), mode);
 }
 
-inline HRGN TDC::PathToRegion() {
+//
+inline HRGN TDC::PathToRegion()
+{
   return ::PathToRegion(GetHDC());
 }
 #endif
 
+//
+inline void TMemoryDC::SelectObject(const TBrush& brush)
+{
+  TDC::SelectObject(brush);
+}
 
-inline HMETAFILE TMetaFileDC::Close() {
+//
+inline void TMemoryDC::SelectObject(const TPen& pen)
+{
+  TDC::SelectObject(pen);
+}
+
+//
+inline void TMemoryDC::SelectObject(const TFont& font)
+{
+  TDC::SelectObject(font);
+}
+
+//
+inline void TMemoryDC::SelectObject(const TPalette& palette,
+                                    bool forceBackground)
+{
+  TDC::SelectObject(palette, forceBackground);
+}
+
+//
+inline void TMemoryDC::RestoreObjects()
+{
+  TDC::RestoreObjects();
+  RestoreBitmap();
+}
+
+//
+inline HMETAFILE TMetaFileDC::Close()
+{
   HMETAFILE mf = ::CloseMetaFile(GetHDC());
   Handle = 0;
   return mf;
 }
 
-inline int TPrintDC::Escape(int esc, int count, const void* inData, void* outData) {
+//
+// Returns true if the device context contains an enhanced metafile.
+//
+inline bool TMetaFileDC::IsEnhanced() const
+{
+  return Enhanced;
+}
+
+#if defined(BI_PLAT_WIN32)
+//
+// Closes the enhanced metafile DC.
+//
+inline HENHMETAFILE TMetaFileDC::CloseEnh()
+{
+  HENHMETAFILE emf = ::CloseEnhMetaFile(GetHDC());
+  Handle = 0;
+  return emf;
+}
+
+//
+// Insert a comment record into the enhanced metafile.
+//
+inline bool TMetaFileDC::Comment(uint bytes, const void* data) {
+  if (IsEnhanced()) {
+    return ::GdiComment(GetHDC(), bytes, (const BYTE*)data);
+  }
+  return false;
+}
+
+#endif
+
+#if !defined(BI_PLAT_WIN32) && !defined(OWL_WING_H)
+# include <owl/wing.h>
+#endif
+
+//
+// Return the DOCINFO structure.
+//
+inline DOCINFO& TPrintDC::GetDocInfo()
+{
+  return DocInfo;
+}
+
+//
+// Sets the DOCINFO structure.
+//
+inline void TPrintDC::SetDocInfo(const DOCINFO& docinfo)
+{
+  DocInfo = docinfo;
+}
+
+//
+inline int TPrintDC::Escape(int esc, int count, const void* inData, void* outData)
+{
   return ::Escape(GetHDC(), esc, count, (const char far*)inData, outData);
                                         // API type cast
 }
 
-inline int TPrintDC::SetAbortProc(ABORTPROC proc) {
+//
+inline int TPrintDC::SetAbortProc(ABORTPROC proc)
+{
   return ::SetAbortProc(GetHDC(), proc);
 }
 
-inline int TPrintDC::StartDoc(const char far* docName, const char far* output) {
+//
+inline int TPrintDC::StartDoc(const char far* docName, const char far* output)
+{
   DocInfo.lpszDocName = (char far*)docName;
   DocInfo.lpszOutput = (char far*)output;
   return ::StartDoc(GetHDC(), &DocInfo);
 }
 
-inline int TPrintDC::StartPage() {  // Only call if not banding
+//
+inline int TPrintDC::StartPage()
+{
+  // Only call if not banding
   return ::StartPage(GetHDC());
 }
 
-inline int TPrintDC::BandInfo(TBandInfo& bandInfo) {
+//
+inline int TPrintDC::BandInfo(TBandInfo& bandInfo)
+{
   return Escape(BANDINFO, sizeof(TBandInfo), 0, (LPSTR)&bandInfo);
 }
 
-inline int TPrintDC::NextBand(TRect& rect) {
+//
+inline int TPrintDC::NextBand(TRect& rect)
+{
   return Escape(NEXTBAND, 0, 0, (void*)&rect);
 }
 
-inline int TPrintDC::EndPage() {  // Only call if not banding
+//
+inline int TPrintDC::EndPage()
+{
+  // Only call if not banding
   RestoreObjects();  // Make sure this TDC stays in sync with HDC
   return ::EndPage(GetHDC());
 }
 
-inline int TPrintDC::AbortDoc() {
+//
+inline int TPrintDC::AbortDoc()
+{
   return ::AbortDoc(GetHDC());
 }
 
-inline int TPrintDC::EndDoc() {
+//
+inline int TPrintDC::EndDoc()
+{
   return ::EndDoc(GetHDC());
 }
 
 #if defined(BI_PLAT_WIN16)
-inline bool TPrintDC::QueryAbort(int rsvd) {
+//
+inline bool TPrintDC::QueryAbort(int rsvd)
+{
   return ::QueryAbort(GetHDC(), rsvd);
 }
 #endif
 
-inline uint TPrintDC::QueryEscSupport(int escapeNum) {
+//
+inline uint TPrintDC::QueryEscSupport(int escapeNum)
+{
   return Escape(QUERYESCSUPPORT, sizeof(int), &escapeNum);
 }
 
-inline int TPrintDC::SetCopyCount(int reqestCopies, int& actualCopies) {
+//
+inline int TPrintDC::SetCopyCount(int reqestCopies, int& actualCopies)
+{
   return Escape(SETCOPYCOUNT, sizeof(int), &reqestCopies, &actualCopies);
 }
 

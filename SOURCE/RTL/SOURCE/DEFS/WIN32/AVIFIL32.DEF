@@ -1,68 +1,78 @@
 LIBRARY     AVIFIL32.DLL
 
 EXPORTS
-    AVIBuildFilterA                @1   
-    AVIBuildFilterW                @2   
-    AVIClearClipboard              @3   
-    AVIFileAddRef                  @4   
-    AVIFileCreateStream            @5   
-    AVIFileEndRecord               @6   
-    AVIFileExit                    @7   
-    AVIFileGetStream               @8   
-    AVIFileInfoA                   @9   
-    AVIFileInfoW                   @10  
-    AVIFileInit                    @11  
-    AVIFileOpenA                   @12  
-    AVIFileOpenW                   @13  
-    AVIFileReadData                @14  
-    AVIFileRelease                 @15  
-    AVIFileWriteData               @16  
-    AVIGetFromClipboard            @17  
-    AVIMakeCompressedStream        @18  
-    AVIMakeFileFromStreams         @19  
-    AVIMakeStreamFromClipboard     @20  
-    AVIPutFileOnClipboard          @21  
-    AVISaveA                       @22  
-    AVISaveOptions                 @23  
-    AVISaveOptionsFree             @24  
-    AVISaveVA                      @25  
-    AVISaveVW                      @26  
-    AVISaveW                       @27  
-    AVIStreamAddRef                @28  
-    AVIStreamBeginStreaming        @29  
-    AVIStreamCreate                @30  
-    AVIStreamEndStreaming          @31  
-    AVIStreamFindSample            @32  
-    AVIStreamGetFrame              @33  
-    AVIStreamGetFrameClose         @34  
-    AVIStreamGetFrameOpen          @35  
-    AVIStreamInfoA                 @36  
-    AVIStreamInfoW                 @37  
-    AVIStreamLength                @38  
-    AVIStreamOpenFromFileA         @39  
-    AVIStreamOpenFromFileW         @40  
-    AVIStreamRead                  @41  
-    AVIStreamReadData              @42  
-    AVIStreamReadFormat            @43  
-    AVIStreamRelease               @44  
-    AVIStreamSampleToTime          @45  
-    AVIStreamSetFormat             @46  
-    AVIStreamStart                 @47  
-    AVIStreamTimeToSample          @48  
-    AVIStreamWrite                 @49  
-    AVIStreamWriteData             @50  
-    CreateEditableStream           @51  
-    DllCanUnloadNow                @52  
-    DllGetClassObject              @53  
-    EditStreamClone                @54  
-    EditStreamCopy                 @55  
-    EditStreamCut                  @56  
-    EditStreamPaste                @57  
-    EditStreamSetInfoA             @58  
-    EditStreamSetInfoW             @59  
-    EditStreamSetNameA             @60  
-    EditStreamSetNameW             @61  
-    IID_IAVIEditStream             @62  
-    IID_IAVIFile                   @63  
-    IID_IAVIStream                 @64  
-    IID_IGetFrame                  @65  
+    AVIBuildFilter
+    AVIBuildFilterA
+    AVIBuildFilterW
+    AVIClearClipboard
+    AVIFileAddRef
+    AVIFileCreateStream
+    AVIFileCreateStreamA
+    AVIFileCreateStreamW
+    AVIFileEndRecord
+    AVIFileExit
+    AVIFileGetStream
+    AVIFileInfo
+    AVIFileInfoA
+    AVIFileInfoW
+    AVIFileInit
+    AVIFileOpen
+    AVIFileOpenA
+    AVIFileOpenW
+    AVIFileReadData
+    AVIFileRelease
+    AVIFileWriteData
+    AVIGetFromClipboard
+    AVIMakeCompressedStream
+    AVIMakeFileFromStreams
+    AVIMakeStreamFromClipboard
+    AVIPutFileOnClipboard
+    AVISave
+    AVISaveA
+    AVISaveOptions
+    AVISaveOptionsFree
+    AVISaveV
+    AVISaveVA
+    AVISaveVW
+    AVISaveW
+    AVIStreamAddRef
+    AVIStreamBeginStreaming
+    AVIStreamCreate
+    AVIStreamEndStreaming
+    AVIStreamFindSample
+    AVIStreamGetFrame
+    AVIStreamGetFrameClose
+    AVIStreamGetFrameOpen
+    AVIStreamInfo
+    AVIStreamInfoA
+    AVIStreamInfoW
+    AVIStreamLength
+    AVIStreamOpenFromFile
+    AVIStreamOpenFromFileA
+    AVIStreamOpenFromFileW
+    AVIStreamRead
+    AVIStreamReadData
+    AVIStreamReadFormat
+    AVIStreamRelease
+    AVIStreamSampleToTime
+    AVIStreamSetFormat
+    AVIStreamStart
+    AVIStreamTimeToSample
+    AVIStreamWrite
+    AVIStreamWriteData
+    CLSID_AVISimpleUnMarshal
+    CreateEditableStream
+    EditStreamClone
+    EditStreamCopy
+    EditStreamCut
+    EditStreamPaste
+    EditStreamSetInfo
+    EditStreamSetInfoA
+    EditStreamSetInfoW
+    EditStreamSetName
+    EditStreamSetNameA
+    EditStreamSetNameW
+    IID_IAVIEditStream
+    IID_IAVIFile
+    IID_IAVIStream
+    IID_IGetFrame

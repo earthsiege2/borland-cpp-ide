@@ -8,7 +8,7 @@
  *
  *      Copyright (c) 1993, 1994 by Borland International
  *      All Rights Reserved.
- *
+ *      $Revision:   9.13  $
  */
 
 #ifndef __BIVBX_H
@@ -67,18 +67,18 @@ typedef struct VBXEVENT {
   (((HLSTR FAR *)(event)->ParamList)[(event)->NumParams - (index) - 1])
   
 /* Initialization */
-BOOL WINAPI VBXInit(HINSTANCE instance, LPCSTR classPrefix);
-void WINAPI VBXTerm(void);
-BOOL WINAPI VBXEnableDLL(HINSTANCE instApp, HINSTANCE instDLL);
+BOOL      WINAPI VBXInit(HINSTANCE instance, LPCSTR classPrefix);
+void      WINAPI VBXTerm(void);
+BOOL      WINAPI VBXEnableDLL(HINSTANCE instApp, HINSTANCE instDLL);
 
 /* Controls */
-HCTL WINAPI VBXGetHctl(HWND window);
-HWND WINAPI VBXGetHwnd(HCTL control);
-HCTL WINAPI VBXCreate(HWND windowParent, UINT id,
-                                  LPCSTR library, LPCSTR cls,
-                                  LPCSTR title, DWORD style,
-                                  int x, int y, int w, int h,
-                                  HFORMFILE file);
+HCTL      WINAPI VBXGetHctl(HWND window);
+HWND      WINAPI VBXGetHwnd(HCTL control);
+HCTL      WINAPI VBXCreate(HWND windowParent, UINT id,
+                           LPCSTR library, LPCSTR cls,
+                           LPCSTR title, DWORD style,
+                           int x, int y, int w, int h,
+                           HFORMFILE file);
 
 /* Dialogs */
 BOOL WINAPI VBXInitDialog(HWND window, HINSTANCE instance, LPSTR id);
@@ -102,7 +102,7 @@ BOOL   WINAPI VBXGetArrayProp(HCTL control, int index, int element, LPVOID value
 BOOL   WINAPI VBXGetArrayPropByName(HCTL control, LPSTR name, int element, LPVOID value);
 int    WINAPI VBXGetNumProps(HCTL control);
 BOOL   WINAPI VBXGetProp(HCTL control, int index, LPVOID value);
-ERR    WINAPI VBXGetPropByName(HCTL control, LPSTR name, LPVOID value);
+BOOL   WINAPI VBXGetPropByName(HCTL control, LPSTR name, LPVOID value);
 int    WINAPI VBXGetPropIndex(HCTL control, LPCSTR name);
 int    WINAPI VBXGetPropNameBuf(HCTL control, int index, LPSTR buffer, int len);
 USHORT WINAPI VBXGetPropType(HCTL control, int index);
@@ -110,27 +110,30 @@ BOOL   WINAPI VBXIsArrayProp(HCTL control, int index);
 BOOL   WINAPI VBXSetArrayProp(HCTL control, int index, int element, LONG value);
 BOOL   WINAPI VBXSetArrayPropByName(HCTL control, LPSTR name, int element, LONG value);
 BOOL   WINAPI VBXSetProp(HCTL control, int index, LONG value);
-ERR    WINAPI VBXSetPropByName(HCTL control, LPSTR name, LONG value);
+BOOL   WINAPI VBXSetPropByName(HCTL control, LPSTR name, LONG value);
 
 /* Events */
 int    WINAPI VBXGetEventIndex(HCTL control, LPCSTR name);
 int    WINAPI VBXGetEventNameBuf(HCTL control, int index, LPSTR buffer, int len);
 int    WINAPI VBXGetNumEvents(HCTL control);
 
-/* methods */
+/* Methods */
 BOOL   WINAPI VBXMethodAddItem(HCTL control, int index, LPCSTR item);
+BOOL   WINAPI VBXMethodClear(HCTL control);
 BOOL   WINAPI VBXMethodDrag(HCTL control, int action);
+BOOL   WINAPI VBXMethodLinkSend(HCTL control);
 BOOL   WINAPI VBXMethodMove(HCTL control, long x, long y, long w, long h);
 BOOL   WINAPI VBXMethodRefresh(HCTL control);
 BOOL   WINAPI VBXMethodRemoveItem(HCTL control, int item);
+BOOL   WINAPI VBXMethodZOrder(HCTL control, int position);
 
-/* pixel/twips conversions */
+/* Pixel/twips conversions */
 SHORT  WINAPI VBXTwp2PixY(LONG twips);
 SHORT  WINAPI VBXTwp2PixX(LONG twips);
 LONG   WINAPI VBXPix2TwpY(SHORT pixels);
 LONG   WINAPI VBXPix2TwpX(SHORT pixels);
 
-/* dynamic strings (HSZ) */
+/* Dynamic strings (HSZ) */
 HSZ    WINAPI VBXCreateCString(HANDLE segment, LPSTR string);
 HSZ    WINAPI VBXDestroyCString(HSZ string);
 int    WINAPI VBXGetCStringBuf(HSZ string, LPSTR buffer, int len);
@@ -138,11 +141,12 @@ int    WINAPI VBXGetCStringLength(HSZ string);
 int    WINAPI VBXLockCStringBuf(HSZ string, LPSTR buffer, int len);
 VOID   WINAPI VBXUnlockCString(HSZ string);
        
-/* color properties */
+/* Color properties */
 #define COLOR_SYSCOLOR          0x80000000L
 #define MAKESYSCOLOR(iColor)    ((COLORREF)((iColor)|COLOR_SYSCOLOR))
 
-/* pictures */
+#ifndef NO_VBX_PICTURES
+/* Pictures */
 typedef struct PICTURE {
   BYTE Type;
   union {
@@ -163,18 +167,19 @@ typedef struct PICTURE {
   BYTE unused1;
   BYTE unused2;
   BYTE unused3;
-} PICTURE;
+} PICTURE, FAR * LPPICTURE, NEAR * NPPICTURE;
 
 #define PICTURE_EMPTY       0
 #define PICTURE_BMP         1
 #define PICTURE_META        2
 #define PICTURE_ICON        3
 
-HPIC   WINAPI VBXCreatePicture(PICTURE FAR * picture);
+HPIC   WINAPI VBXCreatePicture(LPPICTURE picture);
 VOID   WINAPI VBXDestroyPicture(HPIC pic);
-HPIC   WINAPI VBXGetPicture(HPIC pic, PICTURE FAR * picture);
+HPIC   WINAPI VBXGetPicture(HPIC pic, LPPICTURE picture);
 ERR    WINAPI VBXGetPictureFromClipboard(HPIC FAR *pic, HANDLE data, WORD format);
 HPIC   WINAPI VBXReferencePicture(HPIC pic);
+#endif
 
 /* Basic language strings (HLSTR) */
 HLSTR  WINAPI VBXCreateBasicString(LPVOID buffer, USHORT len);
@@ -183,9 +188,17 @@ int    WINAPI VBXGetBasicStringBuf(HLSTR string, LPSTR buffer, int len);
 USHORT WINAPI VBXGetBasicStringLength(HLSTR string);
 ERR    WINAPI VBXSetBasicString(HLSTR far *string, LPVOID buffer, USHORT len);
 
-/* form files */
+/* Form files */
 HFORMFILE WINAPI VBXCreateFormFile(LONG len, LPVOID data);
 BOOL      WINAPI VBXDeleteFormFile(HFORMFILE file);
+
+/* Errors */
+BOOL      WINAPI VBXGetErrorMessage( ERR FAR * lpErr, LPSTR lpszBuf, int nMax );
+
+/* Miscellaneous */
+BOOL      WINAPI VBXCopy( HCTL hCtl );
+BOOL      WINAPI VBXPaste( HCTL hCtl );
+HCTL      WINAPI VBXGetDataSourceControl( HCTL hCtl, BOOL FAR * pbIsRegistered );
 
 /*
  * obsolete functions - these functions are limited to 16-bit only
@@ -232,3 +245,4 @@ typedef struct ELEMENTSTRUCT {
 
 #endif  /* __BIVBX_H */
 
+

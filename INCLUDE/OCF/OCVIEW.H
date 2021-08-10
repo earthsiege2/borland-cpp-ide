@@ -1,7 +1,6 @@
-//
 //----------------------------------------------------------------------------
 // ObjectComponents
-// (C) Copyright 1994 by Borland International, All Rights Reserved
+// Copyright (c) 1994, 1996 by Borland International, All Rights Reserved
 //
 //   Definition of Compound Document TOcView Class
 //----------------------------------------------------------------------------
@@ -16,12 +15,24 @@
 # include <ocf/ocapp.h>      // Client related
 #endif
 
+//
 // Classes referenced
 //
+class _ICLASS TOcControl;
 class _ICLASS TOcStorage;
 class _ICLASS TOcDataProvider;
-class TRegList;
+class         TRegList;
 
+//
+// OCF Mixin classes for users derived application class
+//
+#if !defined(_OCMCLASS)
+# define _OCMCLASS
+#endif
+class _OCMCLASS TOcContainerHost;
+class _OCMCLASS TOcServerHost;
+
+//
 // View options flags, set with SetOption
 //
 enum TOcViewOptions {
@@ -31,6 +42,8 @@ enum TOcViewOptions {
 };
 
 //
+// class TOcFormat
+// ~~~~~ ~~~~~~~~~
 // Clipboard format wrapper
 //
 class TOcFormat {
@@ -75,6 +88,8 @@ class TOcFormat {
 };
 
 //
+// class TOcFormatList
+// ~~~~~ ~~~~~~~~~~~~~
 // Container of clipboard formats with iterator
 //
 class TOcFormatList : private TICVectorImp<TOcFormat> {
@@ -99,8 +114,8 @@ class TOcFormatList : private TICVectorImp<TOcFormat> {
 };
 
 //
-//
-//
+// class TOcFormatListIter
+// ~~~~~ ~~~~~~~~~~~~~~~~~
 class TOcFormatListIter : public TICVectorIteratorImp<TOcFormat> {
   private:
     typedef TICVectorIteratorImp<TOcFormat> Base;
@@ -114,11 +129,9 @@ class TOcFormatListIter : public TICVectorIteratorImp<TOcFormat> {
     void       Restart(unsigned start, unsigned stop) {Base::Restart(start, stop);}
 };
 
-//----------------------------------------------------------------------------
-
 //
 // class TOcView
-// ----- -------
+// ~~~~~ ~~~~~~~
 // The TOcView partner is a container (viewer) of a given (server/client)
 // document.
 //
@@ -127,9 +140,14 @@ class _ICLASS TOcView : public TUnknown,
                         public IBContains,
                         public IBDropDest {
   public:
+    TOcView(TOcDocument& doc, TOcContainerHost* ch, TOcServerHost* sh,
+            TRegList* regList=0, IUnknown* outer=0);
+
     TOcView(TOcDocument& doc, TRegList* regList=0, IUnknown* outer=0);
 
-    virtual void   ReleaseObject();
+    void         SetupWindow(HWND hWin, bool embedded = false);
+
+    virtual void ReleaseObject();
 
     TOcDocument& GetOcDocument() {return OcDocument;}
 
@@ -148,13 +166,12 @@ class _ICLASS TOcView : public TUnknown,
 
     // View related
     //
-    void         SetupWindow(HWND hWin, bool embedded = false);
     TPoint       GetOrigin() const {return Origin;}
     TRect        GetWindowRect() const;
     void         ScrollWindow(int dx, int dy);
     void         InvalidatePart(TOcPartChangeInfo& changeInfo);
     virtual void Rename();
-    TOcLinkView* GetDocLink();
+    TOcLinkView* GetDocLink(const char far* name=0);
     bool         IsOptionSet(uint32 option) const;
     void         SetOption(uint32 bit, bool state);
 
@@ -244,9 +261,11 @@ class _ICLASS TOcView : public TUnknown,
     TOcApp&         OcApp;        // Our OC application object
     TOcDocument&    OcDocument;   // Our OC document object
 
+    TOcContainerHost* ContainerHost; // The hosting app's container object
+    TOcServerHost*    ServerHost;    // The hosting app's server object
+
     // App side support
     //
-    HWND            Win;          // Actual app container window
     TOcPart*        ActivePart;   // Currently active part, if any
 
     uint32          Options;
@@ -268,6 +287,8 @@ class _ICLASS TOcView : public TUnknown,
     TRegList*        RegList;
     TOcDataProvider* OcData;       // Dataprovider representing this view
 
+  friend class _ICLASS TOcControl;
+  friend class _ICLASS TOcControlEvent;
   friend class _ICLASS TOcPart;
   friend class _ICLASS TOcDataProvider;
   friend class _ICLASS TOcLinkView;
@@ -276,50 +297,18 @@ class _ICLASS TOcView : public TUnknown,
 //----------------------------------------------------------------------------
 
 //
-// Subdispatch IDs for TOcApp clients
+// For viewdrop & viewdrag
 //
-#define OC_VIEWTITLE          0x0200  // Get view window title
-#define OC_VIEWSETTITLE       0x0201  // Set view window title
-#define OC_VIEWBORDERSPACEREQ 0x0202  // Request/Set border space in view
-#define OC_VIEWBORDERSPACESET 0x0203  // Request/Set border space in view
-#define OC_VIEWDROP           0x0204  // Accept a drop
-#define OC_VIEWDRAG           0x0205  // Provide drag feedback (c&s)
-#define OC_VIEWSCROLL         0x0206  // scroll view
-#define OC_VIEWPARTINVALID    0x0207  // a part needs repainting
-
-#define OC_VIEWPAINT          0x0300  // paint remote view. Like WM_PAINT + extra
-#define OC_VIEWLOADPART       0x0301  // ask server to load document
-#define OC_VIEWSAVEPART       0x0302  // ask server to save document
-#define OC_VIEWCLOSE          0x0303  // Tell server to close this remote view
-#define OC_VIEWINSMENUS       0x0304  // ask server to insert its menus in mbar
-#define OC_VIEWSHOWTOOLS      0x0305  // ask server to show its tools
-#define OC_VIEWGETPALETTE     0x0306  //
-#define OC_VIEWCLIPDATA       0x0307  // ask server for a clip data in a format
-#define OC_VIEWSETDATA        0x0308  // set format data into server
-#define OC_VIEWPARTSIZE       0x0309  // ask server for a its extent
-#define OC_VIEWOPENDOC        0x030A  // ask server for a its extent
-#define OC_VIEWATTACHWINDOW   0x030B  // ask server to attach to its owner window
-#define OC_VIEWSETSCALE       0x030C  // ask server to handle scaling
-#define OC_VIEWGETSCALE       0x030D  // ask container to give scaling info
-#define OC_VIEWGETSITERECT    0x030E  // ask container for the site rect
-#define OC_VIEWSETSITERECT    0x030F  // ask container to set the site rect
-#define OC_VIEWGETITEMNAME    0x0310  // ask server to name its content or selection
-#define OC_VIEWSETLINK        0x0311  // ask server to establish link to item
-#define OC_VIEWBREAKLINK      0x0312  // ask server to break link to item
-#define OC_VIEWPARTACTIVATE   0x0313  // let container know the part is activated
-#define OC_VIEWPASTEOBJECT    0x0314  // let container know a part is pasted
-#define OC_VIEWDOVERB         0x0315  // ask server to do a verb
-
-#define OC_USEREVENT          0xF000  // User defined events
-
-
-struct TOcDragDrop {   // for viewdrop & viewdrag
+struct TOcDragDrop {
   TOcInitInfo far*  InitInfo;  // ViewDrop event only, else 0
   TPoint*           Where;
   TRect*            Pos;
 };
 
-struct TOcViewPaint {   // for part adornment painting over part, & painting views
+//
+// For part adornment painting over part, & painting views
+//
+struct TOcViewPaint {
   HDC        DC;
   TRect*     Pos;
   TRect*     Clip;
@@ -334,12 +323,13 @@ struct TOcViewPaint {   // for part adornment painting over part, & painting vie
 // Use when doing parts save and load
 //
 class TOcSaveLoad {
-public:
-  TOcSaveLoad()
-    : StorageI(0), SameAsLoad(false), Remember(true), SaveSelection(false),
-      UserData(0) {}
-  TOcSaveLoad(IStorage* storageI, bool sameAsLoad = true, bool remember = false,
-              bool saveSelection = false, void* userData = 0) {
+  public:
+    TOcSaveLoad()
+      : StorageI(0), SameAsLoad(false), Remember(true), SaveSelection(false),
+        UserData(0) {}
+    TOcSaveLoad(IStorage* storageI, bool sameAsLoad = true, bool remember = false,
+                bool saveSelection = false, void* userData = 0)
+    {
       StorageI      = storageI;
       SameAsLoad    = sameAsLoad;
       Remember      = remember;
@@ -347,14 +337,17 @@ public:
       UserData      = userData;
     }
 
-public:
-  IStorage far* StorageI;
-  bool          SameAsLoad;      // Same IStorage as one used for loading
-  bool          Remember;        // whether to keep the IStorage ptr after save/load
-  bool          SaveSelection;   // whether to save only the selection
-  void*         UserData;        // User data
+  public:
+    IStorage far* StorageI;
+    bool          SameAsLoad;      // Same IStorage as one used for loading
+    bool          Remember;        // whether to keep the IStorage ptr after save/load
+    bool          SaveSelection;   // whether to save only the selection
+    void*         UserData;        // User data
 };
 
+//
+//
+//
 struct TOcToolBarInfo {
   bool  Show;        // whether this is a show or a hide
   HWND  HFrame;      // Container frame for show, Server frame for hide
@@ -368,83 +361,93 @@ struct TOcToolBarInfo {
 // Used to obtain the size of the rectangle that encloses the selection
 //
 class TOcPartSize {
-public:
-  TOcPartSize() : PartRect(0, 0, 0, 0), Selection(false), Moniker(0), UserData(0) {};
-  TOcPartSize(TRect rect, bool selection = false, TString* moniker = 0, void* userData = 0) {
-    PartRect  = rect;
-    Selection = selection;
-    Moniker   = moniker;
-    UserData  = userData;
-  }
-  TOcPartSize(bool selection, TString* moniker = 0, void* userData = 0)
-    : PartRect(0, 0, 0, 0) {
-    Selection = selection;
-    Moniker   = moniker;
-    UserData  = userData;
-  }
+  public:
+    TOcPartSize()
+    :
+      PartRect(0, 0, 0, 0),
+      Selection(false),
+      Moniker(0),
+      UserData(0)
+    {
+    }
 
-public:
-  TRect    PartRect;     // rect enclosing the whole/part of the embedded object
-  bool     Selection;    // whether we want rect for the whole or part(selection)
-  TString* Moniker;      // we want the selection rect for moniker
-  void*    UserData;     // User data
+    TOcPartSize(TRect rect, bool selection = false, TString* moniker = 0, void* userData = 0)
+    :
+      PartRect(rect),
+      Selection(selection),
+      Moniker(moniker),
+      UserData(userData)
+    {
+    }
+
+    TOcPartSize(bool selection, TString* moniker = 0, void* userData = 0)
+    :
+      PartRect(0, 0, 0, 0),
+      Selection(selection),
+      Moniker(moniker),
+      UserData(userData)
+    {
+    }
+
+  public:
+    TRect    PartRect;     // rect enclosing the whole/part of the embedded object
+    bool     Selection;    // whether we want rect for the whole or part(selection)
+    TString* Moniker;      // we want the selection rect for moniker
+    void*    UserData;     // User data
 };
 
 //
 // Used to obtain the item name for building monikers
 //
 class TOcItemName {
-public:
-  TOcItemName() : Selection(false) {};
-  TOcItemName(bool selection) {
-    Selection = selection;
-  }
+  public:
+    TOcItemName() : Selection(false) {}
+    TOcItemName(bool selection) : Selection(selection) {}
 
-public:
-  TString Name;        // item moniker
-  bool    Selection;   // whether we want name for the whole or part(selection)
+  public:
+    TString Name;        // Item moniker
+    bool    Selection;   // Whether we want name for the whole or part(selection)
 };
 
 //
 // Used to obtain the native clipboard format data
 //
 class TOcFormatData {
-public:
-  TOcFormatData(TOcFormat& format, void* userData = 0, HANDLE handle = 0,
-                bool paste = false, TPoint far* where = 0)
-    : Format(format), UserData(userData), Handle(handle),
+  public:
+    TOcFormatData(TOcFormat& format, void* userData = 0, HANDLE handle = 0,
+                  bool paste = false, TPoint far* where = 0)
+    :
+      Format(format), UserData(userData), Handle(handle),
       Paste(paste), Where(where) {}
 
-public:
-  TOcFormat&  Format;        // Clipboard format
-  void*       UserData;      // User data for mapping to a selection
-  HANDLE      Handle;        // clipboard data in handle
-  bool        Paste;         // are we doing a paste?
-  TPoint far* Where;         // Where to drop this data
+  public:
+    TOcFormat&  Format;        // Clipboard format
+    void*       UserData;      // User data for mapping to a selection
+    HANDLE      Handle;        // clipboard data in handle
+    bool        Paste;         // are we doing a paste?
+    TPoint far* Where;         // Where to drop this data
 };
 
 //
 // Used to obtain the item name for building monikers
 //
 class TOcItemLink {
-public:
-  TOcItemLink(const char far* moniker, TOcLinkView* view){
-    Moniker    = moniker;
-    OcLinkView = view;
-  };
+  public:
+    TOcItemLink(const char far* moniker, TOcLinkView* view)
+    :
+      Moniker(moniker),
+      OcLinkView(view)
+    {
+    }
 
-public:
-
-  const char far*  Moniker;      // item moniker
-  TOcLinkView*     OcLinkView;   // view associated with the link
+  public:
+    const char far*  Moniker;      // item moniker
+    TOcLinkView*     OcLinkView;   // view associated with the link
 };
-
-//----------------------------------------------------------------------------
 
 //
 // class TOcScaleFactor
-// ----- --------------
-//
+// ~~~~~ ~~~~~~~~~~~~~~
 class TOcScaleFactor {
   public:
     TOcScaleFactor();
@@ -465,11 +468,396 @@ class TOcScaleFactor {
     TSize        PartSize;
 };
 
+//
+// class TOcSiteRect
+// ~~~~~ ~~~~~~~~~~~
+class TOcSiteRect {
+  public:
+    TOcSiteRect();
+    TOcSiteRect(TOcPart *part, const TRect& rect);
+    TRect     Rect;
+    TOcPart*  Part;
+};
 
+//----------------------------------------------------------------------------
+
+//
+// class TOcContainerHost
+// ~~~~~ ~~~~~~~~~~~~~~~~
+class _OCMCLASS TOcContainerHost {
+  public:
+    // OC-Host support
+    //
+    virtual void  ReleaseOcObject() = 0;
+  
+    // Container methods
+    //
+    virtual bool   EvOcViewOpenDoc(const char far* path) = 0;
+    virtual const char far* EvOcViewTitle() = 0;
+    virtual void   EvOcViewSetTitle(const char far* title) = 0;
+
+    virtual bool   EvOcViewBorderSpaceReq(const TRect far* rect) = 0;
+    virtual bool   EvOcViewBorderSpaceSet(const TRect far* rect) = 0;
+    virtual bool   EvOcViewDrag(TOcDragDrop far& ddInfo) = 0;
+    virtual bool   EvOcViewDrop(TOcDragDrop far& ddInfo) = 0;
+    virtual bool   EvOcViewScroll(TOcScrollDir scrollDir) = 0;
+    virtual bool   EvOcPartInvalid(TOcPartChangeInfo& part) = 0;
+    virtual bool   EvOcViewPasteObject(TOcInitInfo& init) = 0;
+
+    // From site (TOcPart)
+    //
+//    virtual bool   EvOcViewGetSiteRect(TRect far* rect) = 0;
+//    virtual bool   EvOcViewSetSiteRect(TRect far* rect) = 0;
+    virtual bool   EvOcViewGetSiteRect(TOcSiteRect& sr) = 0;
+    virtual bool   EvOcViewSetSiteRect(TOcSiteRect& sr) = 0;
+    virtual bool   EvOcViewPartActivate(TOcPart& ocPart) = 0;
+    virtual bool   EvOcViewGetScale(TOcScaleFactor& scaleFactor) = 0;
+
+    virtual HWND   EvOcGetWindow() const = 0;
+
+    // For compatibility, don't need to implement
+    //
+    virtual void  SetWindow(HWND) {}
+};
+
+/*
+//
+// class TOcCtrlContainerHost
+// ~~~~~ ~~~~~~~~~~~~~~~~~~~~
+class _OCMCLASS TOcCtrlContainerHost {
+  public:
+    // OC-Host support
+    //
+    virtual void  ReleaseOcObject() = 0;
+  
+    // Control methods
+    //
+    virtual bool   EvOcViewTransformCoords(uint verb) = 0;
+
+    // Ambient property methods
+    //
+    virtual bool   EvOcAmbientGetBackColor(long* rgb) = 0;
+    virtual bool   EvOcAmbientGetForeColor(long* rgb) = 0;
+    virtual bool   EvOcAmbientGetLocaleID(long* locale) = 0;
+    virtual bool   EvOcAmbientGetTextAlign(short* align) = 0;
+    virtual bool   EvOcAmbientGetMessageReflect(bool* msgReflect) = 0;
+    virtual bool   EvOcAmbientGetUserMode(bool* mode) = 0;
+    virtual bool   EvOcAmbientGetUIDead(bool* dead) = 0;
+    virtual bool   EvOcAmbientGetShowGrabHandles(bool* show) = 0;
+    virtual bool   EvOcAmbientGetShowHatching(bool* show) = 0;
+    virtual bool   EvOcAmbientGetSupportsMnemonics(bool* support) = 0;
+    virtual bool   EvOcAmbientGetDisplayName(TString** name) = 0;
+    virtual bool   EvOcAmbientGetScaleUnits(TString** units) = 0;
+    virtual bool   EvOcAmbientGetFont(IDispatch** font) = 0;
+
+    virtual bool   EvOcAmbientSetBackColor(long rgb) = 0;
+    virtual bool   EvOcAmbientSetForeColor(long rgb) = 0;
+    virtual bool   EvOcAmbientSetLocaleID(long locale) = 0;
+    virtual bool   EvOcAmbientSetTextAlign(short align) = 0;
+    virtual bool   EvOcAmbientSetMessageReflect(bool msgReflect) = 0;
+    virtual bool   EvOcAmbientSetUserMode(bool mode) = 0;
+    virtual bool   EvOcAmbientSetUIDead(bool dead) = 0;
+    virtual bool   EvOcAmbientSetShowGrabHandles(bool show) = 0;
+    virtual bool   EvOcAmbientSetShowHatching(bool show) = 0;
+    virtual bool   EvOcAmbientSetSupportsMnemonics(bool support) = 0;
+    virtual bool   EvOcAmbientSetDisplayName(TString* name) = 0;
+    virtual bool   EvOcAmbientSetScaleUnits(TString* units) = 0;
+    virtual bool   EvOcAmbientSetFont(IDispatch* font) = 0;
+
+    // Ctrl event methods
+    //
+    virtual bool   EvOcCtrlClick(TCtrlEvent* pev) = 0;
+    virtual bool   EvOcCtrlDblClick(TCtrlEvent* pev) = 0;
+    virtual bool   EvOcCtrlMouseDown(TCtrlMouseEvent* pev) = 0;
+    virtual bool   EvOcCtrlMouseMove(TCtrlMouseEvent* pev) = 0;
+    virtual bool   EvOcCtrlMouseUp(TCtrlMouseEvent* pev) = 0;
+    virtual bool   EvOcCtrlKeyDown(TCtrlKeyEvent* pev) = 0;
+    virtual bool   EvOcCtrlKeyUp(TCtrlKeyEvent* pev) = 0;
+    virtual bool   EvOcCtrlErrorEvent(TCtrlErrorEvent* pev) = 0;
+    virtual bool   EvOcCtrlFocus(TCtrlFocusEvent* pev) = 0;
+    virtual bool   EvOcCtrlPropertyChange(TCtrlPropertyEvent* pev) = 0;
+    virtual bool   EvOcCtrlPropertyRequestEdit(TCtrlPropertyEvent* pev) = 0;
+    virtual bool   EvOcCtrlCustomEvent(TCtrlCustomEvent* pev) = 0;
+};
+*/
+
+//
+// class TOcServerHost
+// ~~~~~ ~~~~~~~~~~~~~
+class _OCMCLASS TOcServerHost {
+  public:
+    // OC-Host support
+    //
+    virtual void  ReleaseOcObject() = 0;
+  
+    // Data server methods
+    //
+    virtual bool   EvOcViewGetItemName(TOcItemName& item) = 0;
+    virtual bool   EvOcViewClipData(TOcFormatData far& format) = 0;
+    virtual bool   EvOcViewSetData(TOcFormatData far& format) = 0;
+    virtual bool   EvOcViewPartSize(TOcPartSize far& size) = 0;
+    virtual bool   EvOcViewSavePart(TOcSaveLoad far& ocSave) = 0;
+    virtual bool   EvOcViewPaint(TOcViewPaint far& vp) = 0;
+
+    // Link server methods
+    //
+    virtual bool   EvOcViewAttachWindow(bool attach) = 0;
+    virtual void   EvOcViewSetTitle(const char far* title) = 0; // Open editing
+    virtual bool   EvOcViewDrag(TOcDragDrop far& ddInfo) = 0;   // drag from server
+    virtual bool   EvOcViewSetLink(TOcLinkView& view) = 0;
+    virtual bool   EvOcViewBreakLink(TOcLinkView& view) = 0;
+    virtual bool   EvOcViewGetPalette(LOGPALETTE far* far* palette) = 0;
+
+    // Embed server methods
+    //
+    virtual bool   EvOcViewLoadPart(TOcSaveLoad far& ocLoad) = 0;
+    virtual bool   EvOcViewInsMenus(TOcMenuDescr far& sharedMenu) = 0;
+    virtual bool   EvOcViewShowTools(TOcToolBarInfo far& tbi) = 0;
+
+    virtual bool   EvOcViewClose() = 0;
+    virtual bool   EvOcViewSetScale(TOcScaleFactor& scaleFactor) = 0;
+    virtual bool   EvOcViewDoVerb(uint verb) = 0;
+
+    virtual HWND   EvOcGetWindow() const = 0;
+
+    // For compatibility, don't need to implement
+    //
+    virtual void  SetWindow(HWND) {}
+};
+
+//----------------------------------------------------------------------------
+
+//
+// class TOcContainerHostMsg
+// ~~~~~ ~~~~~~~~~~~~~~~~~~~
+class _OCMCLASS TOcContainerHostMsg : public TOcContainerHost {
+  public:
+    TOcContainerHostMsg() : Wnd(0) {}
+
+    // OC-Host support
+    //
+    virtual void  ReleaseOcObject() {delete this;}
+  
+    // Container methods
+    //
+    virtual bool   EvOcViewOpenDoc(const char far* path);
+    virtual const char far* EvOcViewTitle();
+    virtual void   EvOcViewSetTitle(const char far* title);
+
+    virtual bool   EvOcViewBorderSpaceReq(const TRect far* rect);
+    virtual bool   EvOcViewBorderSpaceSet(const TRect far* rect);
+    virtual bool   EvOcViewDrag(TOcDragDrop far& ddInfo);
+    virtual bool   EvOcViewDrop(TOcDragDrop far& ddInfo);
+    virtual bool   EvOcViewScroll(TOcScrollDir scrollDir);
+    virtual bool   EvOcPartInvalid(TOcPartChangeInfo& part);
+    virtual bool   EvOcViewPasteObject(TOcInitInfo& init);
+
+    // From site (TOcPart)
+    //
+//    virtual bool   EvOcViewGetSiteRect(TRect far* rect);
+//    virtual bool   EvOcViewSetSiteRect(TRect far* rect);
+    virtual bool   EvOcViewGetSiteRect(TOcSiteRect& sr);
+    virtual bool   EvOcViewSetSiteRect(TOcSiteRect& sr);
+    virtual bool   EvOcViewPartActivate(TOcPart& ocPart);
+    virtual bool   EvOcViewGetScale(TOcScaleFactor& scaleFactor);
+
+    virtual HWND   EvOcGetWindow() const {return Wnd;}
+
+    // For compatibility
+    //
+    virtual void  SetWindow(HWND hWnd) {Wnd = hWnd;}
+
+  protected:
+    uint32 ForwardEvent(int eventId, const void far* param);
+    uint32 ForwardEvent(int eventId, uint32 param = 0);
+
+  private:
+    HWND   Wnd;  // For sending messages to real host window, & window ops
+
+  friend TOcView;  
+};
+
+//
+// class TOcServerHostMsg
+// ~~~~~ ~~~~~~~~~~~~~~~~
+class _OCMCLASS TOcServerHostMsg : public TOcServerHost {
+  public:
+    TOcServerHostMsg() : Wnd(0) {}
+
+    // OC-Host support
+    //
+    virtual void  ReleaseOcObject() {delete this;}
+  
+    // Data server methods
+    //
+    virtual bool   EvOcViewGetItemName(TOcItemName& item);
+    virtual bool   EvOcViewClipData(TOcFormatData far& format);
+    virtual bool   EvOcViewSetData(TOcFormatData far& format);
+    virtual bool   EvOcViewPartSize(TOcPartSize far& size);
+    virtual bool   EvOcViewSavePart(TOcSaveLoad far& ocSave);
+    virtual bool   EvOcViewPaint(TOcViewPaint far& vp);
+
+    // Link server methods
+    //
+    virtual bool   EvOcViewAttachWindow(bool attach);
+    virtual void   EvOcViewSetTitle(const char far* title); // Open editing
+    virtual bool   EvOcViewDrag(TOcDragDrop far& ddInfo);   // drag from server
+    virtual bool   EvOcViewSetLink(TOcLinkView& view);
+    virtual bool   EvOcViewBreakLink(TOcLinkView& view);
+    virtual bool   EvOcViewGetPalette(LOGPALETTE far* far* palette);
+
+    // Embed server methods
+    //
+    virtual bool   EvOcViewLoadPart(TOcSaveLoad far& ocLoad);
+    virtual bool   EvOcViewInsMenus(TOcMenuDescr far& sharedMenu);
+    virtual bool   EvOcViewShowTools(TOcToolBarInfo far& tbi);
+
+    virtual bool   EvOcViewClose();
+    virtual bool   EvOcViewSetScale(TOcScaleFactor& scaleFactor);
+    virtual bool   EvOcViewDoVerb(uint verb);
+
+    virtual HWND   EvOcGetWindow() const {return Wnd;}
+
+    // For compatibility
+    //
+    virtual void  SetWindow(HWND hWnd) {Wnd = hWnd;}
+
+  protected:
+    uint32 ForwardEvent(int eventId, const void far* param);
+    uint32 ForwardEvent(int eventId, uint32 param = 0);
+
+  private:
+    HWND   Wnd;  // For sending messages to real host window
+};
+
+//
+inline uint32
+TOcView::ForwardEvent(int eventId, const void far* param)
+{
+  return dynamic_cast<TOcContainerHostMsg*>(ContainerHost)->
+           ForwardEvent(eventId, param);
+}
+
+inline uint32
+TOcView::ForwardEvent(int eventId, uint32 param)
+{
+  return dynamic_cast<TOcContainerHostMsg*>(ContainerHost)->
+           ForwardEvent(eventId, param);
+}
+
+
+//----------------------------------------------------------------------------
+// Subdispatch IDs for TOcView clients
+//
+                                    // Container
+#define OC_VIEWOPENDOC        0x0200  // ask container to open itself
+#define OC_VIEWTITLE          0x0201  // Get view window title
+#define OC_VIEWSETTITLE       0x0202  // Set view window title
+#define OC_VIEWBORDERSPACEREQ 0x0203  // Request/Set border space in view
+#define OC_VIEWBORDERSPACESET 0x0204  // Request/Set border space in view
+#define OC_VIEWDRAG           0x0205  // Provide drag feedback (c&s)
+#define OC_VIEWDROP           0x0206  // Accept a drop
+#define OC_VIEWSCROLL         0x0207  // Scroll view
+#define OC_VIEWPARTINVALID    0x0208  // a part needs repainting
+#define OC_VIEWPASTEOBJECT    0x0209  // let container know a part is pasted
+
+#define OC_VIEWGETSITERECT    0x020A  // Ask container for the site rect
+#define OC_VIEWSETSITERECT    0x020B  // Ask container to set the site rect
+#define OC_VIEWPARTACTIVATE   0x020C  // Let container know the part is activated
+#define OC_VIEWGETSCALE       0x020D  // Ask container to give scaling info
+
+                                    // Data Server
+#define OC_VIEWGETITEMNAME    0x0301  // Ask container to name its content or selection
+#define OC_VIEWCLIPDATA       0x0302  // Ask for a clip data
+#define OC_VIEWSETDATA        0x0303  // Set format data into server
+#define OC_VIEWPARTSIZE       0x0304  // Ask server for a its extent
+#define OC_VIEWSAVEPART       0x0305  // Ask server to save document
+#define OC_VIEWPAINT          0x0306  // Paint remote view. Like WM_PAINT + extra
+
+                                    // Link Server
+#define OC_VIEWATTACHWINDOW   0x0310  // RL: ask server to attach to its owner window
+#define OC_VIEWSETLINK        0x0311  // Ask to establish link to item
+#define OC_VIEWBREAKLINK      0x0312  // Ask server to break link to item
+#define OC_VIEWGETPALETTE     0x0313  // RL: ask server for its logical palette
+
+                                    // Embed Server
+#define OC_VIEWLOADPART       0x0321  // R: ask server to load document
+#define OC_VIEWINSMENUS       0x0322  // R: ask server to insert its menus in mbar
+#define OC_VIEWSHOWTOOLS      0x0323  // R: ask server to show its tools
+#define OC_VIEWCLOSE          0x0324  // R: tell server to close this remote view
+#define OC_VIEWSETSCALE       0x0325  // R: ask server to handle scaling
+#define OC_VIEWDOVERB         0x0326  // R: ask server to do a verb
+
+// Control event notification from control part to container view
+//
+#define OC_VIEWTRANSFORMCOORDS         0x0330 // C: view to transform ctrl coords
+#define OC_CTRLEVENT_FOCUS             0x0340  // Ctrl got/lost focus notify
+#define OC_CTRLEVENT_PROPERTYCHANGE    0x0341  // Ctrl prop changed notify
+#define OC_CTRLEVENT_PROPERTYREQUESTEDIT 0x0342// Ctrl prop request edit
+#define OC_CTRLEVENT_CLICK             0x0343  // Ctrl click notify
+#define OC_CTRLEVENT_DBLCLICK          0x0344  // Ctrl dblclick notify
+#define OC_CTRLEVENT_MOUSEDOWN         0x0345  // Ctrl mouse down notify
+#define OC_CTRLEVENT_MOUSEMOVE         0x0346  // Ctrl mouse move notify
+#define OC_CTRLEVENT_MOUSEUP           0x0347  // Ctrl mouse up notify
+#define OC_CTRLEVENT_KEYDOWN           0x0348  // Ctrl key down notify
+#define OC_CTRLEVENT_KEYUP             0x0349  // Ctrl key up notify
+#define OC_CTRLEVENT_ERROREVENT        0x034A  // Ctrl error event notify
+#define OC_CTRLEVENT_CUSTOMEVENT       0x034B  // Ctrl custom event notify
+
+// Control request for view ambient properties from container view
+//
+#define OC_AMBIENT_GETBACKCOLOR        0x0350
+#define OC_AMBIENT_GETFORECOLOR        0x0351
+#define OC_AMBIENT_GETSHOWGRABHANDLES  0x0352
+#define OC_AMBIENT_GETUIDEAD           0x0353
+#define OC_AMBIENT_GETSUPPORTSMNEMONICS 0x0354
+#define OC_AMBIENT_GETSHOWHATCHING     0x0355
+#define OC_AMBIENT_GETDISPLAYASDEFAULT 0x0356
+#define OC_AMBIENT_GETTEXTALIGN        0x0357
+#define OC_AMBIENT_GETMESSAGEREFLECT   0x0358
+#define OC_AMBIENT_GETLOCALEID         0x0359
+#define OC_AMBIENT_GETUSERMODE         0x035A
+#define OC_AMBIENT_GETDISPLAYNAME      0x035B
+#define OC_AMBIENT_GETSCALEUNITS       0x035C
+#define OC_AMBIENT_GETFONT             0x035D
+
+// Control set view ambient properties
+//
+#define OC_AMBIENT_SETBACKCOLOR        0x0360
+#define OC_AMBIENT_SETFORECOLOR        0x0361
+#define OC_AMBIENT_SETSHOWGRABHANDLES  0x0362
+#define OC_AMBIENT_SETUIDEAD           0x0363
+#define OC_AMBIENT_SETSUPPORTSMNEMONICS 0x0364
+#define OC_AMBIENT_SETSHOWHATCHING     0x0365
+#define OC_AMBIENT_SETDISPLAYASDEFAULT 0x0366
+#define OC_AMBIENT_SETTEXTALIGN        0x0367
+#define OC_AMBIENT_SETMESSAGEREFLECT   0x0368
+#define OC_AMBIENT_SETLOCALEID         0x0369
+#define OC_AMBIENT_SETUSERMODE         0x036A
+#define OC_AMBIENT_SETDISPLAYNAME      0x036B
+#define OC_AMBIENT_SETSCALEUNITS       0x036C
+#define OC_AMBIENT_SETFONT             0x036D
+
+#define OC_USEREVENT                   0xF000  // User defined events
+
+//----------------------------------------------------------------------------
+// Inline Implementations
+//
+
+//
 inline bool TOcView::IsOptionSet(uint32 option) const
-               {return ToBool(Options & option);}
+{
+  return ToBool(Options & option);
+}
+
+//
 inline void TOcView::SetOption(uint32 bit, bool state)
-               {if (state) Options |= bit; else Options &= ~bit;}
+{
+  if (state)
+    Options |= bit;
+  else
+    Options &= ~bit;
+}
 
 #endif  // OCF_OCVIEW_H
 

@@ -6,9 +6,9 @@
  *-----------------------------------------------------------------------*/
 
 /*
- *      C/C++ Run Time Library - Version 1.5
+ *      C/C++ Run Time Library - Version 2.0
  *
- *      Copyright (c) 1991, 1994 by Borland International
+ *      Copyright (c) 1991, 1996 by Borland International
  *      All Rights Reserved.
  *
  */
@@ -45,4 +45,24 @@ int _RTLENTRY __isatty(int handle)
         return 0;
 
     return (GetFileType((HANDLE)_handles[handle]) == FILE_TYPE_CHAR);
+}
+
+
+/*-----------------------------------------------------------------------*
+
+Name            __isatty_osfhandle - checks for device type (raw OS handle)
+
+Usage           int __isatty(long handle);
+
+Prototype in    _io.h
+
+Description     see __isatty
+
+Return value    If  the  device is character device, returns a non-zero
+		integer. If it is not such a device, returns 0.
+
+*------------------------------------------------------------------------*/
+int _RTLENTRY __isatty_osfhandle(long handle)
+{
+    return (GetFileType((HANDLE)handle) == FILE_TYPE_CHAR);
 }

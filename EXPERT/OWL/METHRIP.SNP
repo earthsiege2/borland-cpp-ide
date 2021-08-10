@@ -48,9 +48,6 @@
 ##              :OLEType == "TAutoDate"
 ##                  :"TAutoDate" Type
 ##*
-##              :OLEType == "TAutoBool"
-##                  :"TAutoBool" Type
-##*
 ##              :\\"AUTOFUNC[[Count]]([[InternalName]], [[InternalName]], [[Type]][[Arg1]][[Arg2]][[Arg3]][[Arg4]][[Arg5]][[Arg6]][[Arg7]][[Arg8]][[Arg9]][[Arg10]], )" AutoFuncLine
 ##          --END-- OLEType != "TAutoVoid"
 ##      --END--AutoCount() [[Count]]

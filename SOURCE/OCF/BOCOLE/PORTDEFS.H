@@ -1,13 +1,12 @@
+//----------------------------------------------------------------------------
+// ObjectComponents
+// Copyright (c) 1991, 1996 by Borland International, All Rights Reserved
 //
-//**************************************************************************
-// 
+// $Revision:   2.3  $
+//
 // PortDefs.h -- Contains some portability macros which are used to compile
 //               the same Bolero codebase for Win3.1 and Win32.
-//
-// Copyright (c) 1993,94 by Borland International, Inc. All rights reserved
-//
-//**************************************************************************
-
+//----------------------------------------------------------------------------
 #ifndef _portdefs_h
 #define _portdefs_h
 
@@ -99,13 +98,15 @@
 #endif
 
 // String operations on default character set (Unicode)
-#define strcpy(a,b)    lstrcpy(a,b)
-#define strlen(a)      lstrlen(a)
-#define strcat(a,b)    lstrcat(a,b)
+// #define strcpy(a,b)    lstrcpy(a,b)
+// #define strcat(a,b)    lstrcat(a,b)
 #define strcmp(a,b)    lstrcmp(a,b)
 #define strcmpi(a,b)   lstrcmpi(a,b)
 #define strupr(a)      CharUpper(a)
 #define strlwr(a)      CharLower(a)
+#ifdef UNICODE
+#define strlen(a)      lstrlen(a)
+#endif
 
 // String operations on ANSI
 #define strcpyA(a,b)    lstrcpyA(a,b)
@@ -188,4 +189,3 @@
 #endif
 
 #endif
-

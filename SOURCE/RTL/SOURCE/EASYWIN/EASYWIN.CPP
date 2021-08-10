@@ -4,7 +4,13 @@
  * Easy Windows functions
  *-----------------------------------------------------------------------*/
 
-/* $Copyright: 1991$ */
+/*
+ *      C/C++ Run Time Library - Version 7.0
+ *
+ *      Copyright (c) 1991, 1996 by Borland International
+ *      All Rights Reserved.
+ *
+ */
 
 #define STRICT
 #include <windows.h>
@@ -491,6 +497,7 @@ static void OpenOutputFile()
             wsprintf (buf, "OpenFile returned error code %d.  Output file will not be used.", ofs.nErrCode);
             ::MessageBox (CrtWindow, buf, "EasyWin", MB_TASKMODAL | MB_OK );
             _OutputFileName = 0;
+            OutputFile = 0;
         }
     }
 }
@@ -530,7 +537,8 @@ static void WriteRemainingBuffer()
             l -= _BufferSize.y;
     }
 
-    _lclose (OutputFile);
+    if (OutputFile)
+	_lclose (OutputFile);
 }
 
 // Update text on cursor line

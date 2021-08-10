@@ -4,7 +4,7 @@
 ##"" [[ClientBase]]
 ##--BEGIN-- (BaseName == "TMDIFrame") || (BaseName == "TDecoratedMDIFrame")
 ##:  <<*Client QUERY_BASE_NAME ClientBase
-##(Client != "TMDIClient") && (ClientBase != "TMDIClient")
+## (Client != "TMDIClient") && (ClientBase != "TMDIClient")
 ##:     QUERY_CLASS_NAME [[ClassName]]
 ##:     %\\"The class [[ClassName]]'s client can only be a TMDIClient type class.  "
 ##*
@@ -20,7 +20,7 @@
 ##\\QUERY_CONSTR_DEF ConstructorParam
 ##*
 ##--END-- QUERY_DLOG [[Constant]]
-##"#if !defined(__" [[AnyClass]]
+##"#if !defined(" [[AnyClass]]
 ##^BOF
 ##--BEGIN-- ? AnyClass [[AnotherClass]]
 ##--BEGIN-- QUERY_CLASS_NAME [[ClassName]]
@@ -39,9 +39,9 @@
 ##:     ^EOF
 ##*
 ##--BEGIN-- QUERY_BASE_NAME [[BaseName]]
-#include <owl\owlpch.h>
-#pragma hdrstop
 
+##QUERY_INCLUDE [[IncludeFile]]
+#include <owl/[[IncludeFile]]>
 ##QUERY_WIND_CLIENT [[Client]]
 ##Client != ""
 ##:     GetIncludeFile(\\"[[Client]]") [[ClientIncludeFile]]
@@ -54,17 +54,17 @@
 //{{[[BaseName]] = [[ClassName]]}}
 class [[ClassName]] : public [[BaseName]] {
 ##--END-- QUERY_BASE_NAME [[BaseName]]
-public:
-    [[ClassName]] [[ConstructorParam]];
-    virtual ~[[ClassName]] ();
+  public:
+    [[ClassName]][[ConstructorParam]];
+    virtual ~[[ClassName]]();
 ##--BEGIN-- QUERY_BASE_NAME == "TView"
 
     static const char far* StaticName() { return "[[ClassName]] View"; }
 
 //{{[[ClassName]]VIRTUAL_BEGIN}}
-protected:
+  protected:
 ##:DBVirtual(\\"[[ClassName]]", "GetViewName")
-    virtual const char far* GetViewName ();
+    virtual const char far* GetViewName();
 //{{[[ClassName]]VIRTUAL_END}}
 ##--END-- QUERY_BASE_NAME == "TView"
 };    //{{[[ClassName]]}}
@@ -79,7 +79,7 @@ protected:
 
 <<[CPP]
 ##^EOF
-##(YPos() != 1) 3
+## (YPos() != 1) 3
 
 
 
@@ -92,8 +92,7 @@ protected:
 ##QUERY_WIND_TITLE [[Title]]
 ##QUERY_BASE_NAME [[BaseName]]
 ##--BEGIN-- QUERY_CLASS_NAME [[ClassName]]
-#include <owl\owlpch.h>
-#pragma hdrstop
+#include <owl/pch.h>
 
 ##QUERY_FILENAME_H [[FileName]]
 #include "[[FileName]].h"
@@ -102,10 +101,11 @@ protected:
 //{{[[ClassName]] Implementation}}
 
 
-##ConstructorFParam != ""
-[[ClassName]]::[[ClassName]] [[ConstructorFParam]]:
+##ConstructorFParam != "" 2
+[[ClassName]]::[[ClassName]][[ConstructorFParam]]
+:
 ##ConstructorFParam == ""
-[[ClassName]]::[[ClassName]] ()
+[[ClassName]]::[[ClassName]]()
 ##--BEGIN-- QUERY_WIND_CLIENT [[ClientClass]]
 ##ClientClass != ""
 ##:     \\QUERY_WIND_CLIENT_PARAM [[ClientParam]]
@@ -120,35 +120,44 @@ protected:
 {
 ##--BEGIN-- QUERY_WINDOW_BASE
 ##QUERY_WIND_STYLE [[StyleAttributes]]
-##StyleAttributes != "" 3
-    // Override the default window style for [[BaseName]].
-[[StyleAttributes]]
+##StyleAttributes != "" 4
+  // Override the default window style for [[BaseName]].
+  //
+  [[StyleAttributes]]
 
 ##QUERY_WIND_BACKGRND [[BackgroundColor]]
-##BackgroundColor != "" 3
-    // Change the window's background color
-    SetBkgndColor([[BackgroundColor]]);
+##QUERY_WIND_BACKCONSTANT [[BackgroundConstant]]
+##--BEGIN-- (BackgroundColor != "") || (BackgroundConstant != "")
+  // Change the window's background color
+  //
+##  --BEGIN-- (BackgroundColor != "")
+  SetBkgndColor([[BackgroundColor]]);
+##  --END-- (BackgroundColor != "")
+##  --BEGIN-- (BackgroundConstant != "")
+  SetBkgndColor(GetSysColor([[BackgroundConstant]]));
+##  --END-- (BackgroundConstant != "")
 
+##--END-- (BackgroundColor != "") || (BackgroundConstant != "")
 ##--END-- QUERY_WINDOW_BASE
-    // INSERT>> Your constructor code here.
+  // INSERT>> Your constructor code here.
 
 }
 
 
-[[ClassName]]::~[[ClassName]] ()
+[[ClassName]]::~[[ClassName]]()
 {
 ##QUERY_WINDOW_BASE 2
-    Destroy();
+  Destroy();
 
-    // INSERT>> Your destructor code here.
+  // INSERT>> Your destructor code here.
 
 }
 ##--BEGIN-- BaseName == "TView"
 
 
-const char far* [[ClassName]]::GetViewName ()
+const char far* [[ClassName]]::GetViewName()
 {
-    return StaticName();
+  return StaticName();
 }
 ##--END-- BaseName == "TView"
 ##--END-- QUERY_CLASS_NAME [[ClassName]]

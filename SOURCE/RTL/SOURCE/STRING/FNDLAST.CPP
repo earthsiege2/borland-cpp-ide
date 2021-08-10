@@ -7,9 +7,9 @@
 /*------------------------------------------------------------------------*/
 
 /*
- *      C/C++ Run Time Library - Version 6.5
+ *      C/C++ Run Time Library - Version 7.0
  *
- *      Copyright (c) 1992, 1994 by Borland International
+ *      Copyright (c) 1992, 1996 by Borland International
  *      All Rights Reserved.
  *
  */
@@ -28,10 +28,12 @@ static void __debug(void){}
 
 size_t string::find_last_of( const string _FAR &s, size_t pos ) const throw()
 {
-    if( pos == 0 )
+    size_t len = length();
+
+    if( pos == 0 || len == 0 )
         return NPOS;
-    if( pos > length() )
-        pos = length();
+    if( pos > len )
+        pos = len;
     else
         pos++;
     const char *target = s.c_str();
@@ -43,5 +45,4 @@ size_t string::find_last_of( const string _FAR &s, size_t pos ) const throw()
         }
     return NPOS;
 }
-
 

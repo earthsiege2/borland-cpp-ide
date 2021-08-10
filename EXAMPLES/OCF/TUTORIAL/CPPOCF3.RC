@@ -77,4 +77,3 @@ FONT 8, "MS Sans Serif"
  PUSHBUTTON "Help", IDHELP, 132, 55, 50, 14
 }
 
-

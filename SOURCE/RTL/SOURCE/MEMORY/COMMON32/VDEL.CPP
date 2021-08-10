@@ -6,9 +6,9 @@
  *-----------------------------------------------------------------------*/
 
 /*
- *      C/C++ Run Time Library - Version 1.5
+ *      C/C++ Run Time Library - Version 2.0
  *
- *      Copyright (c) 1990, 1994 by Borland International
+ *      Copyright (c) 1990, 1996 by Borland International
  *      All Rights Reserved.
  *
  */
@@ -18,7 +18,7 @@
 
 typedef void _cdecl    (* destCdecl)   (void *, int);
 typedef void _pascal   (* destPascal)  (int, void *);
-typedef void _fastcall (* destFastcall)(int, void *);
+typedef void _fastcall (* destFastcall)(void *, int);
 typedef void _stdcall  (* destStdcall) (void *, int);
 #if defined(__OS2__)
 typedef void _syscall  (* destSyscall) (void *, int);
@@ -69,7 +69,7 @@ void * _RTLENTRY _vector_delete_(
             {
             case 1: (*(destCdecl)    dest)((void *) p, 2); break;
             case 2: (*(destPascal)   dest)(2, (void *) p); break;
-            case 3: (*(destFastcall) dest)(2, (void *) p); break;
+            case 3: (*(destFastcall) dest)((void *) p, 2); break;
             case 5: (*(destStdcall)  dest)((void *) p, 2); break;
 #if defined(__OS2__)
             case 6: (*(destSyscall)  dest)((void *) p, 2); break;

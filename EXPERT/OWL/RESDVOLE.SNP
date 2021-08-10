@@ -7,7 +7,7 @@
 ##          :^@StartLine
 ##          :^BOL
 ##          :0 [[CurrViewLine]]
-##          :--FOR-- ViewEntry = 1 TO ((EndLine - StartLine) + 1)
+##          :--FOR-- ViewEntry = 1 TO((EndLine - StartLine) + 1)
 ##              :ScanViewEntry([[Template]], [[TDocument]], [[TView]]) [[viewResult]]
 ##              :YPos() CurrViewLine
 ##              :? "//{{DOC_MANAGER}}"

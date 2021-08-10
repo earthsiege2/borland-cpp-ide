@@ -2,14 +2,14 @@
 ##--BEGIN-- QUERY_CLASS_NAME [[ClassName]]
 ##TRUE [[Search2]]
 ##^BOF
-##"#include <owl\\vbxctl.h>" [[IncludeFile]]
+##"#include <owl/vbxctl.h>" [[IncludeFile]]
 ##--BEGIN-- ? IncludeFile [[Search1]]
 ##Search1 == FALSE
 ##:     ? "#include" Search2
 ##Search2 == FALSE
-##:         %\\"[[ClassName]] missing #include <owl\\vbxctl.h> for VBX control.  "
+##:         %\\"[[ClassName]] missing #include <owl/vbxctl.h> for VBX control.  "
 ##*
-##(Search1 == FALSE) && (Search2 == TRUE) 2 
+## (Search1 == FALSE) && (Search2 == TRUE) 2 
 ##:     ^BOL
 ##:     ^2
 

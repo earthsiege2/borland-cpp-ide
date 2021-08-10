@@ -1,14 +1,22 @@
 //----------------------------------------------------------------------------
 // ObjectWindows
-// (C) Copyright 1991, 1994 by Borland International, All Rights Reserved
+// Copyright (c) 1991, 1996 by Borland International, All Rights Reserved
 //
-//   Implementation of class TScroller.
+//$Revision:   10.4  $
+//
+// Implementation of class TScroller.
 //----------------------------------------------------------------------------
 #pragma hdrignore SECTION
-#include <owl/owlpch.h>
-#include <owl/scroller.h>
-#include <owl/window.h>
-#include <owl/dc.h>
+#include <owl/pch.h>
+#if !defined(OWL_SCROLLER_H)
+# include <owl/scroller.h>
+#endif
+#if !defined(OWL_WINDOW_H)
+# include <owl/window.h>
+#endif
+#if !defined(OWL_DC_H)
+# include <owl/dc.h>
+#endif
 #include <stdlib.h>
 
 #define max(a,b)   (((a) > (b)) ? (a) : (b))
@@ -31,6 +39,8 @@ TScroller::TScroller(TWindow* window,
   YUnit = yUnit;
   XRange = xRange;
   YRange = yRange;
+  XTotalUnits = 0;
+  YTotalUnits = 0;
   XLine = 1;  YLine = 1;
   XPage = 1;  YPage = 1;
   AutoMode = true;
@@ -64,11 +74,27 @@ TScroller::SetPageSize()
     int width = clientRect.Width();
     int height = clientRect.Height();
 
-    if (width && XUnit > 0)
+    if (width && XUnit > 0) {
       XPage = max(1, (width+1) / XUnit - 1);
+#if defined(BI_PLAT_WIN32)
+      if (XTotalUnits && XTotalUnits > width) {
+        Window->SetScrollPage(SB_HORZ, width / XTotalUnits * XRange, true);
+      }
+      else
+        Window->SetScrollPage(SB_HORZ, XUnit, false);
+#endif
+    }
 
-    if (height && YUnit > 0)
+    if (height && YUnit > 0) {
       YPage = max(1, (height+1) / YUnit - 1);
+#if defined(BI_PLAT_WIN32)
+      if (YTotalUnits && YTotalUnits > height) {
+        Window->SetScrollPage(SB_VERT, height / YTotalUnits * YRange, true);
+      }
+      else
+        Window->SetScrollPage(SB_VERT, YUnit, false);
+#endif
+    }
   }
 }
 
@@ -81,6 +107,18 @@ TScroller::SetRange(long xRange, long yRange)
 {
   XRange = xRange;
   YRange = yRange;
+  SetSBarRange();
+  ScrollTo(XPos, YPos);
+}
+
+//
+// Sets the total units of the window
+//
+void
+TScroller::SetTotalRangeOfUnits(long xTotalUnits, long yTotalUnits)
+{
+  XTotalUnits = xTotalUnits;
+  YTotalUnits = yTotalUnits;
   SetSBarRange();
   ScrollTo(XPos, YPos);
 }
@@ -353,6 +391,8 @@ TScroller::AutoScroll()
 
 IMPLEMENT_STREAMABLE(TScroller);
 
+#if !defined(BI_NO_OBJ_STREAMING)
+
 //
 // reads an instance of TScroller from the passed ipstream
 //
@@ -390,6 +430,8 @@ TScroller::Streamer::Write(opstream& os) const
       o->HasHScrollBar << o->HasVScrollBar;
 }
 
+
+#endif  // if !defined(BI_NO_OBJ_STREAMING)
 
 #endif
 

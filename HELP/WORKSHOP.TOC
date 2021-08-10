@@ -1,0 +1,274 @@
+:Base WORKSHOP.HLP
+1 Essentials
+2 Getting started with Resource Workshop=HowToStart@workshop.hlp>main
+2 What is a resource?=WhatIsAResource@workshop.hlp>main
+2 Why you should link resources to your applications=WhyYouShouldLinkResourcesToYourApplications@workshop.hlp>main
+2 What is a resource script (.RC) file?=WhatIsAResourceScriptFile@workshop.hlp>main
+2 What is a binary resource (.RES) file?=WhatIsABinaryResourceFile@workshop.hlp>main
+2 Starting Resource Workshop=StartingResourceWorkShop@workshop.hlp>main
+2 Setting preferences=SettingPreferences@workshop.hlp>main
+2 Undoing mistakes=UndoMistakes@workshop.hlp>main
+1 Working with resource projects
+2 Working with resource projects=AboutProjects@workshop.hlp>main
+2 Creating a new resource project=CreateProject@workshop.hlp>TaskWin
+2 Opening an existing resource project=OpenExistingProject@workshop.hlp>TaskWin
+2 Saving a resource project=SaveProject@workshop.hlp>TaskWin
+2 Embedding a resource in a resource project=AddEmbeddedResources@workshop.hlp>TaskWin
+2 Linking a resource to a resource project=AddLinkedResources@workshop.hlp>TaskWin
+2 Using the Resource Project window=ProjectWindow@workshop.hlp>TaskWin
+1 Resources
+2 About resources
+3 Working with resources=AboutResources@workshop.hlp>Main
+3 Resource file types=ResourceFileTypes@workshop.hlp>Main
+3 Using a resource editor=ResourceEditor@workshop.hlp>TaskWin
+3 Renaming a resource=RenameResource@workshop.hlp>TaskWin
+3 Deleting a resource=DeleteResource@workshop.hlp>TaskWin
+3 Specifying resource memory options=LoadMemoryOptions@workshop.hlp>TaskWin
+3 Moving a resource=MoveResource@workshop.hlp>TaskWin
+3 16-bit vs. 32-bit resources=Create32BitResources@workshop.hlp>TaskWin
+4 Saving a resource=SavingAResource@workshop.hlp>TaskWin
+4 Saving a resource in a resource script file=SavingAResourceInAResourceScriptFile@workshop.hlp>TaskWin
+4 Saving a bitmapped resource as a file=SavingABitmappedResourceAsAFile@workshop.hlp>TaskWin
+4 Editing a resource as text= EditingAResourceAsText@workshop.hlp>TaskWin
+4 Using the Text editor=UsingTheScriptEditor@workshop.hlp>TaskWin
+4 Creating resources with the Text editor=CreatingResourcesWithTheScriptEditor@workshop.hlp>TaskWin
+4 Writing resource scripts=WritingResourceScripts@workshop.hlp>TaskWin
+2 Graphic resources
+3 Bitmaps
+4 Working with bitmaps=AboutBitmaps@workshop.hlp>main
+4 Creating a new bitmap=CreateBitmap@workshop.hlp>TaskWin
+4 Creating a new bitmap in a standalone file=CreatingANewBitmapInAStandAloneFile@workshop.hlp>TaskWin
+4 Editing an existing bitmap=EditBitmap@workshop.hlp>TaskWin
+4 Changing the attributes of a bitmap=ChangeBitmapAttributes@workshop.hlp>TaskWin
+4 Deleting a bitmap resource=DeletingABitmapResource@workshop.hlp>TaskWin
+4 Testing a bitmap=TestBitmap@workshop.hlp>TaskWin
+4 Programming a bitmap with OWL=ProgrammingABitmapWithOwl@workshop.hlp>TaskWin
+4 Programming a bitmap with the Windows API=ProgrammingABitmapWithTheWindowsAPI@workshop.hlp>TaskWin
+3 Cursors
+4 Working with cursors=AboutCursors@workshop.hlp>main
+4 Creating a new cursor=CreatingANewCursor@workshop.hlp>TaskWin
+4 Creating a new cursor in a standalone file=CreateNewCursorStandAlone@workshop.hlp>TaskWin
+4 Editing an existing cursor=EditCursor@workshop.hlp>TaskWin
+4 Setting the hot spot for a cursor=CursorHotSpot@workshop.hlp>TaskWin
+4 Copying a cursor image to a new color format=CopyCursorImage@workshop.hlp>TaskWin
+4 Adding an image to a cursor resource=AddImageToCursorResource@workshop.hlp>TaskWin
+4 Changing the attributes of a cursor=ChooseCursorAttributes@workshop.hlp>TaskWin
+4 Deleting a cursor=DeleteCursor@workshop.hlp>TaskWin
+4 Testing a cursor=TestingACursor@workshop.hlp>TaskWin
+4 Programming a cursor with OWL=ProgrammingACursorWithOWL@workshop.hlp>TaskWin
+4 Programming a cursor with the Windows API=ProgrammingACursorWithTheWindowsAPI@workshop.hlp>TaskWin
+3 Icons
+4 Working with icons=AboutIcons@workshop.hlp>main
+4 Creating a new icon=CreateIcon@workshop.hlp>TaskWin
+4 Creating a new icon in a standalone file=CreateNewIconStandAlone@workshop.hlp>TaskWin
+4 Editing an existing icon=EditIcon@workshop.hlp>TaskWin
+4 Adding an image to an icon resource=AddImageToIconResource@workshop.hlp>TaskWin
+4 Changing the attributes of an icon=ChooseIconAttributes@workshop.hlp>TaskWin
+4 Copying an icon image to a new color format=CopyIconImage@workshop.hlp>TaskWin
+4 Deleting an icon resource or image=DeleteIconsAndImages@workshop.hlp>TaskWin
+4 Testing an icon=TestIcon@workshop.hlp>TaskWin
+4 Programming an icon with OWL=ProgrammingAnIconWithOWL@workshop.hlp>TaskWin
+4 Programming an icon with the Windows API=ProgrammingAnIconWithTheWindowsAPI@workshop.hlp>TaskWin
+3 The Graphics editor
+4 Using the Graphics editor=AboutGraphicsEditor@workshop.hlp>main
+4 Parts of the Graphics editor
+5 Tool palette
+6 About the Tool palette=IDH_PEToolsPalette@workshop.hlp>main
+6 Pick Rectangle tool=PickRectangleTool@workshop.hlp>main
+6 Scissors tool=ScissorsTool@workshop.hlp>main
+6 Zoom tool=ZoomTool@workshop.hlp>main
+6 Eraser tool=EraserTool@workshop.hlp>main
+6 Pen tool=PenTool@workshop.hlp>main
+6 Paintbrush tool=PaintbrushTool@workshop.hlp>main
+6 Airbrush tool=AirbrushTool@workshop.hlp>main
+6 Paint Can tool=PaintCanTool@workshop.hlp>main
+6 Line tool=LineTool@workshop.hlp>main
+6 Text tool=TextTool@workshop.hlp>main
+6 Ellipse tool=EllipseTool@workshop.hlp>main
+6 Rectange tool=RectangleTool@workshop.hlp>main
+6 Rounded Rectangle tool=RoundedRectangleTool@workshop.hlp>main
+6 Filled Ellipse tool=FilledEllipseTool@workshop.hlp>main
+6 Filled Rectangle tool=FilledRectangleTool@workshop.hlp>main
+6 Filled Rounded Rectangle tool=FilledRoundedRectangleTool@workshop.hlp>main
+6 Eyedropper tool=EyedropperTool@workshop.hlp>main
+6 Arc tool=ArcTool@workshop.hlp>main
+6 Hand tool=HandTool@workshop.hlp>main
+6 Pattern style=PatternStyle@workshop.hlp>main
+6 Pen style=PenStyle@workshop.hlp>main
+6 Airbrush shape=AirbrushShape@workshop.hlp>main
+6 Paintbrush shape=PaintbrushShape@workshop.hlp>main
+6 Hiding and showing the Tools palette=HideShowToolsPalette@workshop.hlp>main
+5 Colors palette
+6 Using the Color palette=IDH_PEColorsPalette@workshop.hlp>main
+6 Hiding and showing the Color palette=HideShowPalette@workshop.hlp>TaskWin
+6 Customing colors=CustomizeColors@workshop.hlp>TaskWin
+6 Choosing the number of colors for a resource=ChooseNumberColors@workshop.hlp>TaskWin
+4 Selecting colors
+5 Selecting a foreground color=ForegroundColor@workshop.hlp>TaskWin
+5 Selecting a background color=BackgroundColor@workshop.hlp>TaskWin
+3 Coloring a transparent or inverted area=TransparentInvertedAreas@workshop.hlp>TaskWin
+3 Selecting a pen style=SelectingAPenStyle@workshop.hlp>TaskWin
+3 Selecting a brush shape=SelectingABrushShape@workshop.hlp>TaskWin
+3 Selecting a paint pattern=SelectingAPaintPattern@workshop.hlp>TaskWin
+3 Drawing and painting=DrawingAndPainting@workshop.hlp>TaskWin
+3 Drawing a line=DrawingALine@workshop.hlp>TaskWin
+3 Drawing a shape=DrawingAShape@workshop.hlp>TaskWin
+3 Filling an area with color=FillingAnAreaWithColor@workshop.hlp>TaskWin
+3 Adding text=AddingText@workshop.hlp>TaskWin
+3 Erasing an area=ErasingAnArea@workshop.hlp>TaskWin
+3 Selecting an area=SelectingAnArea@workshop.hlp>TaskWin
+3 Aligning an area=AligningAnArea@workshop.hlp>TaskWin
+3 Moving or resizing an area=MovingOrResizingAnArea@workshop.hlp>TaskWin
+3 Copying an area=CopyingAnArea@workshop.hlp>TaskWin
+3 Removing an area=RemovingAnArea@workshop.hlp>TaskWin
+3 Zooming in or out=ZoomingInOrOut@workshop.hlp>TaskWin
+3 Moving a graphic in the drawing area=MovingAGraphicAround@workshop.hlp>TaskWin
+2 Dialog boxes
+3 About dialog boxes
+4 Working with dialog boxes=WorkWithDialogBoxes@workshop.hlp>main
+4 Using DLGINIT resources=UsingDLGINITResources@workshop.hlp>TaskWin
+4 Creating a new dialog box=CreateDBox@workshop.hlp>TaskWin
+4 Creating a new dialog box in a resource script file=CreateDBoxAsFile@workshop.hlp>TaskWin
+4 Editing an existing dialog box=EditDBox@workshop.hlp>TaskWin
+4 Adding a caption to a dialog box=AddDBoxCaption@workshop.hlp>TaskWin
+4 Including a menu in a dialog box=IncludeDBoxMenu@workshop.hlp>TaskWin
+4 Choosing a window type, frame style, and dialog box style=ChooseDBoxStyle@workshop.hlp>TaskWin
+4 Specifying dialog box fonts=SpecifyDBoxFonts@workshop.hlp>TaskWin
+4 Assigning a custom class to a dialog box=AssignDBoxtoCustomClass@workshop.hlp>TaskWin
+4 Setting the position of a dialog box=SetDBoxPosition@workshop.hlp>TaskWin
+4 Testing a dialog box=TestDBox@workshop.hlp>TaskWin
+4 Programming a dialog box with OWL=ProgrammingADialogBoxWithOwl@workshop.hlp>TaskWin
+4 Programming a dialog box with the Windows API=ProgrammingADialogBoxWithTheWindowsAPI@workshop.hlp>TaskWin
+3 About controls
+4 Working with controls=WorkWithControls@workshop.hlp>main
+4 Adding controls to a dialog box=AddControls@workshop.hlp>TaskWin
+4 Working with custom controls=WorkWithCustomControls@workshop.hlp>TaskWIn
+4 Duplicating a control=DuplicateControls@workshop.hlp>TaskWin
+4 Moving and resizing a single control=MoveResizeControls@workshop.hlp>TaskWin
+4 Selecting multiple controls=SelectControls@workshop.hlp>TaskWin
+4 Aligning multiple controls=AlignMultipleControls@workshop.hlp>TaskWin
+4 Resizing multiple controls=ResizeControls@workshop.hlp>TaskWin
+4 Reordering controls=ReorderControls@workshop.hlp>TaskWin
+4 Grouping controls=GroupControls@workshop.hlp>TaskWin
+4 Specifying which controls are tab stops=SpecifyControlTabStops@workshop.hlp>TaskWin
+4 Editing control properties=EditControls@workshop.hlp>TaskWin 
+3 The Dialog editor
+4 Using the Dialog editor=UseDialogEditor@workshop.hlp>main
+4 Using the Property Inspector=UsePropertyInspector@workshop.hlp>main
+4 Displaying the Property Inspector=DisplayPropertyInspector@workshop.hlp>main
+4 The Control palette
+4 About the Control Palette=ControlPalette@workshop.hlp>main
+4 Standard page of the Control palette
+5 About the Standard page of the Control palette=StandardControlPalette@workshop.hlp>main
+5 Selector tool=SelectorTool@workshop.hlp>main
+5 Push Button tool=PushButtonTool@workshop.hlp>main
+5 Radio Button tool=RadioButtonTool@workshop.hlp>main
+5 Check Box tool=CheckBoxTool@workshop.hlp>main
+5 Static Text tool=StaticTextTool@workshop.hlp>main
+5 Text Edit tool=TextEditTool@workshop.hlp>main
+5 List Box tool=ListBoxTool@workshop.hlp>main
+5 Combo Box tool=ComboBoxTool@workshop.hlp>main
+5 Horizontal Scroll Bar tool=HorzScrollBarTool@workshop.hlp>main
+5 Vertical Scroll Bar tool=VertScrollBarTool@workshop.hlp>main
+5 Group Box tool=GroupBoxTool@workshop.hlp>main
+5 Static Frame tool=StaticFrameTool@workshop.hlp>main
+5 Static Rectangle tool=StaticRectTool@workshop.hlp>main
+5 Static Horizontal Line tool=HorzStaticLineTool@workshop.hlp>main
+5 Static Vertical Line tool=VertStaticLineTool@workshop.hlp>main
+5 Static Picture tool=StaticPictureTool@workshop.hlp>main
+4 Common page of the Control palette
+5 About the Common page of the Control palette=CommonControlPalette@workshop.hlp>main
+5 Selector tool=SelectorTool@workshop.hlp>main
+5 Animation tool=AnimationTOol@workshop.hlp>main
+5 Tab Control tool=TabControlTool@workshop.hlp>main
+5 Tree View tool=TreeViewTool@workshop.hlp>main
+5 List View tool=ListViewTool@workshop.hlp>main
+5 Hot Key tool=HotKeyTool@workshop.hlp>main
+5 Progress Bar tool=ProgressBarTool@workshop.hlp>main
+5 Up-Down tool=UpDownTool@workshop.hlp>main
+5 Track Bar tool=TrackBarTool@workshop.hlp>main
+5 Status Window tool=StatusBarTool@workshop.hlp>main
+5 Tool Bar tool=ToolBarTool@workshop.hlp>main
+5 Header tool=HeaderTool@workshop.hlp>main
+5 Rich Text Edit tool=RichTextTool@workshop.hlp>main
+4 BWCC page of the Control palette
+5 About the BWCC page of the Control palette=BWCCControlPalette@workshop.hlp>main
+5 Selector tool=SelectorTool@workshop.hlp>main
+5 Push Button tool=BWCCPushButtonTool@workshop.hlp>main
+5 Radio Button tool=BWCCRadioButtonTool@workshop.hlp>main
+5 Check Box tool=BWCCCheckBoxTool@workshop.hlp>main
+5 Group Box tool=BWCCGroupBoxTool@workshop.hlp>main
+5 Horizontal Line tool=BWCCHorzLineTool@workshop.hlp>main
+5 Vertical Line tool=BWCCVertLineTool@workshop.hlp>main
+5 Static Text tool=BWCCStaticTextTool@workshop.hlp>main
+4 Custom page of the Control palette
+5 About the Custom page of the Control palette=CustomControlPalette@workshop.hlp>main
+4 Data Aware page of the Control palette
+5 About the Data Aware page of the Control palette=DataAwareControlPalette@workshop.hlp>main
+4 Data Access page of the Control palette
+5 About the Data Access page of the Control palette=DataAccessControlPalette@workshop.hlp>main
+4 Tool palette
+5 About the Tool palette=AlignmentPalette@workshop.hlp>main
+5 Left Sides tool=LeftAlignmentTool@workshop.hlp>main
+5 Horizontal Center tool=HorizontalCenterSizingFrameTool@workshop.hlp>main
+5 Horizontal Center in Dialog tool=HorizontalCenterDialogBoxTool@workshop.hlp>main
+5 Space Horizontally Equal tool=SpaceHorzEqualTool@workshop.hlp >main
+5 Right Sides tool=RightAlignmentTool@workshop.hlp>main
+5 Vertical Center tool=VerticalCenterSizingFrameTool@workshop.hlp>main
+5 Vertical Center in Dialog tool=VerticalCenterDialogBoxTool@workshop.hlp>main
+5 Space Vertically Equal tool=SpaceVertEqualTool@workshop.hlp >main
+5 Tops tool=TopAlignmentTool@workshop.hlp>main
+5 Bottoms tool=BottomAlignmentTool@workshop.hlp>main
+2 Menus
+3 Working with menus=AboutMenus@workshop.hlp>main
+3 Using the Menu editor=UseMenuEditor@workshop.hlp>TaskWin
+3 Creating a new menu=CreateMenu@workshop.hlp>TaskWin
+3 Editing an existing menu=EditMenu@workshop.hlp>TaskWin
+3 Moving and copying menu statements=MoveCopyStatements@workshop.hlp>TaskWin
+3 Adding menu items and separators=AddMenuItemAndSeparator@workshop.hlp>TaskWin
+3 Deleting a menu item=DeleteMenuStatement@workshop.hlp>TaskWin
+3 Creating a pop-up menu=CreateFloatingMenu@workshop.hlp>TaskWin
+3 Adding accelerator text to menus=AddAcceleratorText@workshop.hlp>TaskWin
+3 Testing a menu=TestMenu@workshop.hlp>TaskWin
+3 Programming menus and accelerators with OWL=ProgrammingMenusWithOWL@workshop.hlp>taskwin
+3 Programming menus with the Windows API=ProgrammingMenusWithTheWindowsAPI@workshop.hlp>taskwin
+2 User-defined resources
+3 Working with user-defined resources=AboutUserDefResources@workshop.hlp>main
+3 Creating a resource type=CreateUserDefinedResourceType@workshop.hlp>TaskWin
+3 Adding a user-defined resource=AddUserDefinedResource@workshop.hlp>TaskWin
+3 Using the RCDATA resource type=UseRCDATAResourceType@workshop.hlp>TaskWin
+3 Editing a user-defined resource=EditUserDefinedResource@workshop.hlp>TaskWin
+3 Embedding resource data in a project file=EmbedResourceDataInProjectFile@workshop.hlp>TaskWin
+3 Entering data in the resource script=EnterDataInResourceScript@workshop.hlp>TaskWin
+3 Testing a user-defined resource=TestUserDefinedResource@workshop.hlp>TaskWin
+1 Resource script files
+2 Working with resource script files=AboutResourceScriptFiles@workshop.hlp>main
+2 Creating a resource script file=CreatingAResourceScriptFile@workshop.hlp>TaskWin
+2 Adding resource scripts=AddingResourceScripts@workshop.hlp>TaskWin
+2 Adding a new resource script indirectly=AddingANewResourceScriptIndirectly@workshop.hlp>TaskWin
+2 Adding a new resource script directly=AddingANewResourceScriptDirectly@workshop.hlp>TaskWin
+2 Adding an existing resource script indirectly=AddingAnExistingResourceScriptIndirectly@workshop.hlp>TaskWin
+2 Adding an existing resource script directly=AddingAnExistingResourceScriptDirectly@workshop.hlp>TaskWin
+2 Editing a resource script file=EditingAResourceScriptFile@workshop.hlp>TaskWin
+2 Removing a resource script=RemovingAResourceScript@workshop.hlp>TaskWin
+2 Generating binary resources from a resource script file=GeneratingBinaryResourcesFromAResourceScriptFile@workshop.hlp>TaskWin
+1 Identifiers
+2 Working with identifiers=Identifiers@workshop.hlp>main
+2 Creating an identifier file=CreateIdentifierFile@workshop.hlp>TaskWin
+2 Adding identifiers=AddIdentifiers@workshop.hlp>TaskWin
+2 Editing identifiers=EditIdentifiers@workshop.hlp>TaskWin
+2 Moving identifiers from one file to another=MoveIdentifiers@workshop.hlp>TaskWin
+2 Deleting identifiers=DeleteIdentifiers@workshop.hlp>TaskWin
+2 Listing identifiers=ListIdentifiers@workshop.hlp>TaskWin
+2 Managing identifiers=ManageIdentifiers@workshop.hlp>TaskWin
+1 Working with existing applications and DLLs
+2 Executable and dynamic-link files=ExecutableFiles@workshop.hlp>main
+2 Working with binary files=WorkWithBinaryFile@workshop.hlp>TaskWin
+1 Command-line resource tools
+2 Using command-line resource tools=ResourceTools@workshop.hlp>main
+2 Resource compiler (BRCC32)=BRCC32@workshop.hlp>main
+2 Resource linkers (RLINK AND RLINK32)=RLINK@workshop.hlp>main
+2 Resource shell (BRC32)=BRC32@workshop.hlp>main
+1 Glossary
+2 Glossary=glos_A@workshop.hlp>main
+

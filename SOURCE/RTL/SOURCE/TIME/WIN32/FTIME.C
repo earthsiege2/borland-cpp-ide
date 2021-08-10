@@ -6,9 +6,9 @@
  *-----------------------------------------------------------------------*/
 
 /*
- *      C/C++ Run Time Library - Version 1.5
+ *      C/C++ Run Time Library - Version 2.0
  *
- *      Copyright (c) 1991, 1994 by Borland International
+ *      Copyright (c) 1991, 1996 by Borland International
  *      All Rights Reserved.
  *
  */
@@ -42,8 +42,8 @@ void _RTLENTRY _EXPFUNC ftime(struct timeb *TimeStructPtr)
      * Set daylight savings indicator.
      * Convert NT date and time to UNIX style time and store in structure.
      */
-    TimeStructPtr->timezone = (short)(timezone / 60L);
-    TimeStructPtr->dstflag  = daylight && _isDST( date.wHour, date.wDay,
+    TimeStructPtr->timezone = (short)(_timezone / 60L);
+    TimeStructPtr->dstflag  = _daylight && _isDST( date.wHour, date.wDay,
                                  date.wMonth, date.wYear-1970);
 
     TimeStructPtr->time = (long)_totalsec((date.wYear - 1900), date.wMonth-1,

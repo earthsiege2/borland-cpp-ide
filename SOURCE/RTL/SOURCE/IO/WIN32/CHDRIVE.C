@@ -7,9 +7,9 @@
  *--------------------------------------------------------------------------*/
 
 /*
- *      C/C++ Run Time Library - Version 1.5
+ *      C/C++ Run Time Library - Version 2.0
  *
- *      Copyright (c) 1991, 1994 by Borland International
+ *      Copyright (c) 1991, 1996 by Borland International
  *      All Rights Reserved.
  *
  */
@@ -39,54 +39,17 @@ Note            Compatible with MSC. Not the same as setdisk().
 
 int _RTLENTRY _EXPFUNC _chdrive(int drive)
 {
-    int     rc;
-    char    envname[4];
-    char    *buf;
+    char    buf[3];
 
-    /* Allocate a buffer big enough to hold the value of a "drive"
-     * environment variable.
+    /* Set the current drive by setting the current directory to "X:".
      */
-    if ((buf = malloc(MAX_PATH)) == NULL)
-    {
-enomem:
-        errno = ENOMEM;
-        return -1;
-    }
+    buf[0] = drive + 'A' - 1;
+    buf[1] = ':';
+    buf[2] = '\0';
 
-    /* Construct environment variable name for the specified drive.
-     */
-    envname[0] = '=';
-    envname[1] = drive + 'A' - 1;
-    envname[2] = ':';
-    envname[3] = '\0';
-
-    /* The value of the environment variable =D:, where D is the drive,
-     * is the current directory for that drive.
-     */
-    if (GetEnvironmentVariable(envname, buf, MAX_PATH) == 0)
-    {
-        /* An environment variable for this drive has not been defined.
-         * Create one with the root directory as its value.
-         */
-        buf[0] = envname[1];
-        buf[1] = ':';
-        buf[2] = '\\';
-        buf[3] = '\0';
-        if (SetEnvironmentVariable(envname, buf) != TRUE)
-        {
-            free(buf);
-            return (__NTerror());
-        }
-    }
-
-    /* Set the current drive by setting the current directory.
-     */
     if (SetCurrentDirectory(buf) != TRUE)
-        rc = __NTerror();
-    else
-        rc = 0;
-    free(buf);
-    return (rc);
+        return(__NTerror());
+    return 0;
 }
 
 /*--------------------------------------------------------------------------*
@@ -130,13 +93,13 @@ enomem:
     drive = buf[0];
     if (buf[1] == ':')
     {
+	drive = toupper(drive);
         if (drive >= 'A' && drive <= 'Z')
             drive = drive - 'A' + 1;
-        else if (drive >= 'a' && drive <= 'z')
-            drive = drive - 'a' + 1;
         else
             drive = 0;      /* something strange about the drive name */
     }
     free(buf);
     return (drive);
 }
+

@@ -1,30 +1,26 @@
-/*------------------------------------------------------------------------*/
-/*                                                                        */
-/*  SETS.H                                                                */
-/*                                                                        */
-/*  Copyright (c) 1991, 1994 Borland International                        */
-/*  All Rights Reserved                                                   */
-/*                                                                        */
-/*------------------------------------------------------------------------*/
-
-#if !defined( CLASSLIB_SETS_H )
+//----------------------------------------------------------------------------
+// Borland BIDS Container Library
+// Copyright (c) 1991, 1996 by Borland International, All Rights Reserved
+//
+//$Revision:   5.3  $
+//
+//----------------------------------------------------------------------------
+#if !defined(CLASSLIB_SETS_H)
 #define CLASSLIB_SETS_H
 
-#if !defined( __CHECKS_H )
-#include <checks.h>
+#if !defined(CLASSLIB_DEFS_H)
+# include <classlib/defs.h>
 #endif
-
-#if !defined( CLASSLIB_DEFS_H )
-#include <classlib/defs.h>
+#if !defined(CLASSLIB_BAGS_H)
+# include <classlib/bags.h>
 #endif
-
-#if !defined( CLASSLIB_BAGS_H )
-#include <classlib/bags.h>
+#if !defined(SERVICES_CHECKS_H)
+# include <services/checks.h>
 #endif
 
 #pragma option -Vo-
 #if defined( BI_CLASSLIB_NO_po )
-#pragma option -po-
+# pragma option -po-
 #endif
 
 /*------------------------------------------------------------------------*/

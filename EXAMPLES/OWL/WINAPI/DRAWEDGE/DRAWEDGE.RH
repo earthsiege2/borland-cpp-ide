@@ -1,0 +1,26 @@
+/****************************************************************************
+
+
+drawedge.rh
+
+produced by Borland Resource Workshop
+
+
+*****************************************************************************/
+
+#define IDD_DRAWEDGE	101
+#define IDC_FL_FLAT	113
+#define IDC_FL_MONO	114
+#define IDC_SAMPLE	125
+#define IDC_FL_ADJUST	112
+#define IDC_FL_SOFT	111
+#define IDC_FL_MID	110
+#define IDC_FL_DIAG	109
+#define IDC_FL_BOTTOM	108
+#define IDC_FL_RIGHT	107
+#define IDC_FL_TOP	106
+#define IDC_FL_LEFT	105
+#define IDC_EDGE_SI	104
+#define IDC_EDGE_RI	103
+#define IDC_EDGE_SO	102
+#define IDC_EDGE_RO	101

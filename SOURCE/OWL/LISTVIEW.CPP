@@ -1,15 +1,23 @@
 //----------------------------------------------------------------------------
 // ObjectWindows
-// (C) Copyright 1993, 1994 by Borland International, All Rights Reserved
+// Copyright (c) 1993, 1996 by Borland International, All Rights Reserved
 //
-//   Implements class TListView
+//$Revision:   10.7  $
+//
+// Implementation of class TListView
 //----------------------------------------------------------------------------
 #pragma hdrignore SECTION
-#include <owl/owlpch.h>
-#include <owl/listview.h>
+#include <owl/pch.h>
+#if !defined(OWL_LISTVIEW_H)
+# include <owl/listview.h>
+#endif
+#if !defined(OWL_INPUTDIA_H)
+# include <owl/inputdia.h>
+#endif
 #include <owl/listview.rh>
 #include <owl/docview.rh>
-#include <owl/inputdia.h>
+#include <owl/edit.rh>
+#include <stdio.h>
 
 DIAG_DECLARE_GROUP(OwlDocView);        // General Doc/View diagnostic group
 
@@ -17,9 +25,6 @@ DIAG_DECLARE_GROUP(OwlDocView);        // General Doc/View diagnostic group
 
 const char VirtualLastLineStr[] = "---";  // Last virtual line appended to list
 
-//  class TListView
-//  ----- ---------
-//
 DEFINE_RESPONSE_TABLE1(TListView, TListBox)
   EV_COMMAND(CM_EDITUNDO,   CmEditUndo),
   EV_COMMAND(CM_EDITCUT,    CmEditCut),
@@ -39,6 +44,9 @@ DEFINE_RESPONSE_TABLE1(TListView, TListBox)
   EV_VN_REVERT,
 END_RESPONSE_TABLE;
 
+//
+//
+//
 TListView::TListView(TDocument& doc, TWindow* parent)
 :
   TView(doc),
@@ -54,6 +62,10 @@ TListView::TListView(TDocument& doc, TWindow* parent)
     SetViewMenu(new TMenuDescr(IDM_LISTVIEW, 0,1,0,0,0,1, GetModule()));
 }
 
+//
+// Add a string into the view.
+// Return the index at which the string is added.
+//
 int
 TListView::AddString(const char far* str)
 {
@@ -68,24 +80,27 @@ TListView::AddString(const char far* str)
   return TListBox::AddString(str);
 }
 
+//
+//
+//
 void
 TListView::SetExtent(const char far* str)
 {
-  int len;
-  if ((len = strlen(str)) == 0)
+  int len = strlen(str);
+  if (len == 0)
     return;
 
-  HDC hdc = ::GetDC(HWindow);
-  TSize extent;
-  ::GetTextExtentPoint(hdc, str, len, &extent);
+  TClientDC  clientDC(*this);
+  TSize extent = clientDC.GetTextExtent(str, len);
   extent.cx += 2; // room for focus rectangle
 
   if (extent.cx > MaxWidth)
     SetHorizontalExtent(MaxWidth = extent.cx);
-
-  ::ReleaseDC(HWindow, hdc);
 }
 
+//
+//
+//
 bool
 TListView::VnDocClosed(int omode)
 {
@@ -97,6 +112,9 @@ TListView::VnDocClosed(int omode)
   return true;
 }
 
+//
+//
+//
 bool
 TListView::LoadData(int top, int sel)
 {
@@ -133,6 +151,9 @@ TListView::LoadData(int top, int sel)
   return status;
 }
 
+//
+//
+//
 bool
 TListView::Create()
 {
@@ -152,6 +173,9 @@ TListView::Create()
   return true;
 }
 
+//
+//
+//
 bool
 TListView::VnCommit(bool force)
 {
@@ -183,6 +207,9 @@ TListView::VnCommit(bool force)
   return status;
 }
 
+//
+//
+//
 bool
 TListView::VnRevert(bool clear)
 {
@@ -193,6 +220,9 @@ TListView::VnRevert(bool clear)
   return true;
 }
 
+//
+//
+//
 uint
 TListView::EvGetDlgCode(MSG far*)
 {
@@ -201,12 +231,18 @@ TListView::EvGetDlgCode(MSG far*)
   return retVal;
 }
 
+//
+//
+//
 void
 TListView::CmEditUndo()
 {
   MessageBox("Feature not implemented", "Undo", MB_OK);
 }
 
+//
+//
+//
 void
 TListView::CmEditCut()
 {
@@ -214,6 +250,9 @@ TListView::CmEditCut()
   CmEditDelete();
 }
 
+//
+//
+//
 void
 TListView::CmEditCopy()
 {
@@ -233,6 +272,9 @@ TListView::CmEditCopy()
   }
 }
 
+//
+//
+//
 void
 TListView::CmEditPaste()
 {
@@ -254,6 +296,9 @@ TListView::CmEditPaste()
   }
 }
 
+//
+//
+//
 void
 TListView::CmEditDelete()
 {
@@ -267,6 +312,9 @@ TListView::CmEditDelete()
   DirtyFlag = true;
 }
 
+//
+//
+//
 void
 TListView::CmEditClear()
 {
@@ -287,12 +335,15 @@ static int linePrompt(TWindow* parent, int index, UINT id,
                       char far* buf, int buflen)
 {
   char msg[41];
-  wsprintf(msg, parent->GetModule()->LoadString(IDS_LISTNUM).c_str(), index);
+  sprintf(msg, parent->GetModule()->LoadString(IDS_LISTNUM).c_str(), index);
   return TInputDialog(parent, msg,
                       parent->GetModule()->LoadString(id).c_str(),
                       buf, buflen).Execute();
 }
 
+//
+//
+//
 void
 TListView::CmEditAdd()
 {
@@ -311,11 +362,21 @@ TListView::CmEditAdd()
   }
 }
 
+//
+//
+//
 void
 TListView::CmEditItem()
 {
   int index = GetSelIndex();
-  if (index < 0 || index >= GetCount()-1)
+  int count = GetCount();
+
+  if (index == count-1) {
+    CmEditAdd();
+    return;
+  }
+
+  if (index < 0 || index >= count-1)
     return;
 
   char inputText[101];
@@ -330,11 +391,24 @@ TListView::CmEditItem()
   }
 }
 
+//
+// To prevent interpreting as unprocessed accelerator
+//
+void
+TListView::CmSelChange()
+{
+}
+
 #endif
 #if !defined(SECTION) || SECTION == 2
 
 IMPLEMENT_STREAMABLE2(TListView, TListBox, TView);
 
+#if !defined(BI_NO_OBJ_STREAMING)
+
+//
+//
+//
 void*
 TListView::Streamer::Read(ipstream& is, uint32 /*version*/) const
 {
@@ -344,6 +418,9 @@ TListView::Streamer::Read(ipstream& is, uint32 /*version*/) const
   return GetObject();
 }
 
+//
+//
+//
 void
 TListView::Streamer::Write(opstream &os) const
 {
@@ -351,5 +428,7 @@ TListView::Streamer::Write(opstream &os) const
   WriteBaseObject((TView*)GetObject(), os);
   os << GetObject()->Origin;
 }
+
+#endif  // if !defined(BI_NO_OBJ_STREAMING)
 
 #endif

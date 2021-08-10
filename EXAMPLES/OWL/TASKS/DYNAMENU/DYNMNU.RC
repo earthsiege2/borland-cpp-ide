@@ -1,0 +1,32 @@
+// ---------------------------------------------------------------------------
+// ObjectWindows
+// Copyright (C) 1995, 1995 by Borland International, All Rights Reserved
+// ---------------------------------------------------------------------------
+#include <owl/inputdia.rc>
+#include "dynmnu.rh"
+
+TrackMenu MENU
+{
+ POPUP "&Menu Items"
+ {
+  MENUITEM "&Add...", CM_ADDMENU
+  MENUITEM "&Delete...", CM_DELETEMENU
+  MENUITEM "&Enable...", CM_ENABLEMENU
+  MENUITEM "Di&sable...", CM_DISABLEMENU
+ }
+
+ POPUP "&Dynamic Menu"
+ {
+  MENUITEM SEPARATOR
+ }
+
+}
+
+STRINGTABLE
+{
+ CM_ADDMENU, "Add a new dynamic menu"
+ CM_DELETEMENU, "Delete a dynamic menu"
+ CM_ENABLEMENU, "Enable a dynamic menu"
+ CM_DISABLEMENU, "Disable a dynamic menu"
+}
+

@@ -3,9 +3,9 @@
 ;[]-----------------------------------------------------------------[]
 
 ;
-;       C/C++ Run Time Library - Version 6.5
+;       C/C++ Run Time Library - Version 7.0
 ; 
-;       Copyright (c) 1987, 1994 by Borland International
+;       Copyright (c) 1987, 1996 by Borland International
 ;       All Rights Reserved.
 ; 
 
@@ -14,10 +14,13 @@
 
 		include RULES.ASI
 
+LOCALS
+
 IFNDEF __DPMI16__
 
 		extrn __FPMATH:far
 		extrn LOADLIBRARY:far
+		extrn FREELIBRARY:far
 		extrn __fperr:far
 		extrn __turboFloat
 		extrn __turboCvt
@@ -54,6 +57,7 @@ __windowsFloat  equ     0
 
 _DATA           segment
 LibName         db  'WIN87EM', 0
+LibInst		dw   ?
 		ends
 
 _TEXT           segment
@@ -67,15 +71,22 @@ __fpreset       proc    DIST
 
 __exitfp:       mov     bx,2                    ; close WIN87EM
 		call    __FPMATH
+		cmp     __LockWIN87EM, 0        ; unlock WIN87EM if locked
+		je      @@NoLock                ; workaround for DLL unload
+		mov	ax, LibInst
+		push    ax
+		call    FREELIBRARY
+@@NoLock:
 		ret
 
 __initfp:       cmp     __LockWIN87EM, 0        ; lock WIN87EM by forcing load
-		je      NoLock                  ; workaround for DLL unload
+		je      @@NoLock                ; workaround for DLL unload
 		push    ds                      ;   ordering problem in Windows
 		lea     ax, LibName
 		push    ax
 		call    LOADLIBRARY
-NoLock:
+		mov	LibInst, ax
+@@NoLock:
 		mov     word ptr __FPVector,offset __FPMATH
 		mov     word ptr __FPVector+2,seg __FPMATH
 

@@ -1,0 +1,13 @@
+#----------------------------------------------------------------------------
+# ObjectWindows - (c) Copyright 1996 by Borland International
+#----------------------------------------------------------------------------
+
+TARGETS = blazer.exe blazer.hlp
+SYSTEMS = WIN32             # Sample targets only Win32
+EXERES  = blazer
+OBJEXE  = blazer.obj client.obj about.obj propdlgs.obj
+HLP     = blazer
+HLP_    = blazer.hpj blazer.rtf helpids.hh
+
+!include $(BCEXAMPLEDIR)\owlmake.gen
+

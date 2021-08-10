@@ -1,11 +1,17 @@
 //----------------------------------------------------------------------------
 // ObjectWindows
-// (C) Copyright 1994 by Borland International, All Rights Reserved
+// Copyright (c) 1994, 1996 by Borland International, All Rights Reserved
+//
+//$Revision:   10.2  $
 //
 //----------------------------------------------------------------------------
-#include <owl/owlpch.h>
-#include <owl/uihandle.h>
-#include <owl/gdiobjec.h>
+#include <owl/pch.h>
+#if !defined(OWL_UIHELPER_H)
+# include <owl/uihelper.h>
+#endif
+#if !defined(OWL_GDIOBJEC_H)
+# include <owl/gdiobjec.h>
+#endif
 
 //
 // Construct a UIHandle object given a frame, a style and a handle size
@@ -18,23 +24,32 @@ TUIHandle::TUIHandle(const TRect& frame, uint style, int thickness)
 {
 }
 
+//
+//
+//
 void
 TUIHandle::Move(int dx, int dy)
 {
   Frame.Offset(dx, dy);
 }
 
+//
+//
+//
 void
 TUIHandle::MoveTo(int x, int y)
 {
   Frame.Offset(x-Frame.left, y-Frame.top);
 }
 
+//
+//
+//
 void
 TUIHandle::Size(int w, int h)
 {
   Frame.right = Frame.left + w;
-  Frame.top = Frame.top + h;
+  Frame.bottom = Frame.top + h;
 }
 
 //

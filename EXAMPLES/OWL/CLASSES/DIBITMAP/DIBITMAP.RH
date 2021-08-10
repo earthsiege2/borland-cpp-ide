@@ -1,0 +1,15 @@
+//----------------------------------------------------------------------------
+// ObjectWindows
+// Copyright (c) 1995, 1995 by Borland International, All Rights Reserved
+//----------------------------------------------------------------------------
+
+#define IDM_MENU    100
+#define CM_BLOCKS   101
+#define CM_SPRITES  102
+#define CM_SPRITESEP 103
+#define CM_SPRITESEM 104
+
+#define IDI_ICON    201
+
+#define IDB_BALL    301
+#define IDB_BKGND   302

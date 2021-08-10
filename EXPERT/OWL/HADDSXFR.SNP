@@ -12,5 +12,4 @@ struct [[ClassName]]Xfer {
 //{{[[ClassName]]XFER_DATA_END}}
 };
 
-
 ##--END-- QUERY_CLASS_NAME [[ClassName]]

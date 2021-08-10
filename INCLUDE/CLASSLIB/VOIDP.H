@@ -1,21 +1,19 @@
-/*------------------------------------------------------------------------*/
-/*                                                                        */
-/*  VOIDP.H                                                               */
-/*                                                                        */
-/*  Copyright (c) 1993, 1994 Borland International                        */
-/*  All Rights Reserved                                                   */
-/*                                                                        */
-/*------------------------------------------------------------------------*/
-
-#if !defined( CLASSLIB_VOIDP_H )
-#define CLASSLIB_VOIDP_H
+//----------------------------------------------------------------------------
+// Borland Class Library
+// Copyright (c) 1993, 1996 by Borland International, All Rights Reserved
+//
+//$Revision:   5.3  $
+//
+//----------------------------------------------------------------------------
+#if !defined(CLASSLIB_VOIDP_H)
+# define CLASSLIB_VOIDP_H
 
 #if !defined( CLASSLIB_DEFS_H )
-#include <classlib/defs.h>
+# include <classlib/defs.h>
 #endif
 
 #if defined( BI_CLASSLIB_NO_po )
-#pragma option -po-
+# pragma option -po-
 #endif
 
 class TVoidPointer
@@ -39,8 +37,7 @@ private:
 };
 
 #if defined( BI_CLASSLIB_NO_po )
-#pragma option -po.
+# pragma option -po.
 #endif
 
 #endif  // CLASSLIB_VOIDP_H
-

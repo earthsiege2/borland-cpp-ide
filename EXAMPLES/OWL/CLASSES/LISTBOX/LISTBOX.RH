@@ -1,0 +1,20 @@
+//----------------------------------------------------------------------------
+// ObjectWindows
+// Copyright (c) 1991, 1995 by Borland International, All Rights Reserved
+//----------------------------------------------------------------------------
+
+//
+// Menu item ids.
+//
+#define CM_STANDARD           101
+#define CM_MULTI_SEL          102
+#define CM_MULTI_COLUMN       103
+#define CM_ADD_STRING         104
+#define CM_ADD_STRING_AT      105
+#define CM_FIND_STRING        107
+#define CM_FIND_STRING_AT     108
+#define CM_DELETE_STRING      109
+#define CM_DELETE_STRING_AT   110
+#define CM_CLEAR              111
+#define CM_DIR_LIST           112
+#define IDM_LISTBOX_MENU      200

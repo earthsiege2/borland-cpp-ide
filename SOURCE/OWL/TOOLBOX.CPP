@@ -1,15 +1,27 @@
 //----------------------------------------------------------------------------
 // ObjectWindows
-// (C) Copyright 1992, 1994 by Borland International, All Rights Reserved
+// Copyright (c) 1992, 1996 by Borland International, All Rights Reserved
 //
-//   Implementation of class TToolBox, a 2-d arrangement of TButtonGadgets.
+//$Revision:   10.6  $
+//
+// Implementation of class TToolBox, a 2-d arrangement of TButtonGadgets.
 //----------------------------------------------------------------------------
-#include <owl/owlpch.h>
-#include <owl/toolbox.h>
-#include <owl/buttonga.h>
+#include <owl/pch.h>
+#if !defined(OWL_TOOLBOX_H)
+# include <owl/toolbox.h>
+#endif
+#if !defined(OWL_BUTTONGA_H)
+# include <owl/buttonga.h>
+#endif
+#if !defined(WINSYS_UIMETRIC_H)
+# include <winsys/uimetric.h>
+#endif
 
 IMPLEMENT_CASTABLE(TToolBox);
 
+//
+// Construct a 2-d toolbox with a given number of rows, columns, and direction.
+//
 TToolBox::TToolBox(TWindow*        parent,
                    int             numColumns,
                    int             numRows,
@@ -21,20 +33,28 @@ TToolBox::TToolBox(TWindow*        parent,
   NumRows = numRows;
   NumColumns = numColumns;
 
-  //
-  // make the gadget borders overlap the tool box's borders
+  // Make the gadget borders (if any) overlap the tool box's borders
   //
   Margins.Units = TMargins::BorderUnits;
-  Margins.Left = Margins.Right = Margins.Top = Margins.Bottom = -1;
-  
+  Margins.Left = Margins.Right = TSystem::Has3dUI() ? 0 : -TUIMetric::CxBorder;
+  Margins.Top = Margins.Bottom = TSystem::Has3dUI() ? 0 : -TUIMetric::CyBorder;
+
   ShrinkWrapWidth = true;
 }
 
+//
+// Always turn off notched corners when gadgets are in this toolbox.
+// Only TButtonGadgets or derived gadgets are supported.
+//
 void
 TToolBox::Insert(TGadget& g, TPlacement placement, TGadget* sibling)
 {
+  TButtonGadget* bg = TYPESAFE_DOWNCAST(&g,TButtonGadget);
+  PRECONDITION(bg != 0);
+
   TGadgetWindow::Insert(g, placement, sibling);
-  ((TButtonGadget&)g).SetNotchCorners(false);
+  if (bg)
+    bg->SetNotchCorners(false);
 }
 
 //
@@ -44,7 +64,7 @@ void
 TToolBox::SetDirection(TTileDirection direction)
 {
   if (Direction != direction) {
-    int t = NumRows; 
+    int t = NumRows;
     NumRows = NumColumns;
     NumColumns = t;
   }
@@ -53,7 +73,7 @@ TToolBox::SetDirection(TTileDirection direction)
 }
 
 //
-// compute the numer of rows & columns, filling in rows OR columns if left
+// Compute the numer of rows & columns, filling in rows OR columns if left
 // unspecified using AS_MANY_AS_NEEDED (but not both).
 //
 void
@@ -69,7 +89,7 @@ TToolBox::ComputeNumRowsColumns(int& numRows, int& numColumns)
 }
 
 //
-// compute the cell size which is determined by the widest and the highest
+// Compute the cell size which is determined by the widest and the highest
 // gadget
 //
 void
@@ -78,7 +98,7 @@ TToolBox::ComputeCellSize(TSize& cellSize)
   cellSize.cx = cellSize.cy = 0;
 
   for (TGadget* g = Gadgets; g; g = g->NextGadget()) {
-    TSize  desiredSize;
+    TSize  desiredSize(0, 0);
 
     g->GetDesiredSize(desiredSize);
 
@@ -90,59 +110,71 @@ TToolBox::ComputeCellSize(TSize& cellSize)
   }
 }
 
+//
+// Calculate how big this toolbox should be.
+//
 void
 TToolBox::GetDesiredSize(TSize& size)
 {
-  TSize  cellSize;
-  int    left, right, top, bottom;
-  int    numRows, numColumns;
-  int    cxBorder = GetSystemMetrics(SM_CXBORDER);
-  int    cyBorder = GetSystemMetrics(SM_CYBORDER);
+  // Get border sizes
+  //
+  int    cxBorder = TSystem::Has3dUI() ? 0 : (int)TUIMetric::CxBorder;
+  int    cyBorder = TSystem::Has3dUI() ? 0 : (int)TUIMetric::CyBorder;
 
+  int    left, right, top, bottom;
   GetMargins(Margins, left, right, top, bottom);
   size.cx = left + right;
   size.cy = top + bottom;
 
+  // Add in this window's border size if used
+  //
   if (Attr.Style & WS_BORDER) {
-    size.cx += 2 * cxBorder;
-    size.cy += 2 * cyBorder;
+    size.cx += 2 * TUIMetric::CxBorder;
+    size.cy += 2 * TUIMetric::CyBorder;
   }
 
+  TSize  cellSize;
   ComputeCellSize(cellSize);
+
+  int    numRows, numColumns;
   ComputeNumRowsColumns(numRows, numColumns);
 
   size.cx += numColumns * cellSize.cx;
   size.cy += numRows * cellSize.cy;
 
-  //
-  // compensate for the gadgets overlapping
+  // Compensate for the gadgets overlapping if UI style does that
   //
   size.cx -= (numColumns - 1) * cxBorder;
   size.cy -= (numRows - 1) * cyBorder;
 }
 
+//
+// Tile the gadgets in a tight 2-dimensional grid. Horizontal direction results
+// in a row-major layout, and vertical direction results in column-major layout
+//
 TRect
 TToolBox::TileGadgets()
 {
   TSize     cellSize;
-  int       numRows, numColumns;
-  TRect     innerRect;
-  TRect     invalidRect;
-  TGadget*  g = Gadgets;
-  int       x, y;
-  int       cxBorder = GetSystemMetrics(SM_CXBORDER);
-  int       cyBorder = GetSystemMetrics(SM_CYBORDER);
-
   ComputeCellSize(cellSize);
+
+  int       numRows, numColumns;
   ComputeNumRowsColumns(numRows, numColumns);
+
+  TRect     innerRect;
   GetInnerRect(innerRect);
+
+  TRect     invalidRect;
   invalidRect.SetEmpty();
 
-  if (Direction == Horizontal) {    // Row Major--
-    y = innerRect.top;
+  if (Direction == Horizontal) {
+    // Row Major
+    //
+    int y = innerRect.top;
+    TGadget* g = Gadgets;
 
     for (int r = 0; r < numRows; r++) {
-      x = innerRect.left;
+      int x = innerRect.left;
 
       for (int c = 0; c < numColumns && g; c++) {
         TRect bounds(TPoint(x, y), cellSize);
@@ -160,18 +192,21 @@ TToolBox::TileGadgets()
             invalidRect |= originalBounds;
         }
 
-        x += cellSize.cx - cxBorder;
+        x += cellSize.cx;
         g = g->NextGadget();
       }
 
-      y += cellSize.cy - cyBorder;
+      y += cellSize.cy;
     }
   }
   else {
-    x = innerRect.left;
+    // Column Major
+    //
+    int x = innerRect.left;
+    TGadget* g = Gadgets;
 
     for (int c = 0; c < numColumns; c++) {
-      y = innerRect.top;
+      int y = innerRect.top;
 
       for (int r = 0; r < numRows && g; r++) {
         TRect bounds(TPoint(x, y), cellSize);
@@ -189,22 +224,28 @@ TToolBox::TileGadgets()
             invalidRect |= originalBounds;
         }
 
-        y += cellSize.cy - cyBorder;
+        y += cellSize.cy;
         g = g->NextGadget();
       }
 
-      x += cellSize.cx - cxBorder;
+      x += cellSize.cx;
     }
   }
   return invalidRect;
 }
 
+//
+// Perform a layout session. After calling the base LayoutSession, adjust this
+// window's size & pos to match desired. Assumes it is used as a client in a
+// frame.
+//
 void
 TToolBox::LayoutSession()
 {
   TGadgetWindow::LayoutSession();
+
   TSize sz;
   GetDesiredSize(sz);
-  MoveWindow(0, 0, sz.cx, sz.cy, true);
-}
 
+  SetWindowPos(0, 0,0, sz.cx, sz.cy, SWP_NOACTIVATE|SWP_NOMOVE|SWP_NOZORDER);
+}

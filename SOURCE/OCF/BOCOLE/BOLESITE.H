@@ -1,25 +1,31 @@
-
-//**************************************************************************
-// 
-// BOleSite.h -- Interface of the Bolero half of the OLE2 server object.
-//               BOleSite objects impersonate the client application
-//               from the point of view of the Bolero customer who's
-//	              writing a server object (IPart)
+//----------------------------------------------------------------------------
+// ObjectComponents
+// Copyright (c) 1994, 1996 by Borland International, All Rights Reserved
 //
-//               Since the server object only has to implement IPart, it's
-//               convenient to have only one helper object (BOleSite) which
-//               inherits from all the required Bolero container interfaces
+// $Revision:   2.3  $
 //
-// Copyright (c) 1993,94 by Borland International, Inc. All rights reserved
+//  Interface of the Bolero half of the OLE2 server object. BOleSite objects 
+//  impersonate the client application from the point of view of the Bolero 
+//  customer who's writing a server object (IPart)
 //
-//**************************************************************************
-
+//  NOTE: Since the server object only has to implement IPart, it's
+//        convenient to have only one helper object (BOleSite) which
+//        inherits from all the required Bolero container interfaces
+//----------------------------------------------------------------------------
 #ifndef _BOLESITE_H
 #define _BOLESITE_H 
 
+#ifndef _BOLECOMP_H
 #include "BOleComp.h"
+#endif
+
+#ifndef _BOLEFACT_H
 #include "BOleFact.h"
+#endif
+
+#ifndef _BHATCH_H
 #include "BHatch.h"
+#endif
 
 class _ICLASS BOleService;
 
@@ -29,7 +35,8 @@ class _ICLASS BOleSite : 	public BOleComponent, public IBSite,
                            public IPersistStorage, public IDataObject,
 									public IOleObject,      public IOleInPlaceObject,     
                            public IDropSource,     public IEnumFORMATETC,
-                           public IOleInPlaceActiveObject
+                           public IOleInPlaceActiveObject,
+                           public IBDataState
 {
 	// to have separate IBWindow implementation
 	class _ICLASS IBApplicationImpl : public IBApplication {
@@ -230,19 +237,6 @@ public:
 	HRESULT _IFUNC QueryContinueDrag(BOOL fEscapePressed, DWORD grfKeyState);
 	HRESULT _IFUNC GiveFeedback(DWORD dwEffect);
 
-
-
-
-
-
-
-
-
-
-
-
-
-
 	// IBWindow methods
 	//
 	virtual HWND      _IFUNC GetWindow ();
@@ -284,6 +278,10 @@ public:
 	//
 	virtual HRESULT _IFUNC GetMoniker(IMoniker FAR* FAR* ppMon);
 	virtual HRESULT _IFUNC OnRename(PIBLinkable pILContainer, LPCOLESTR szName);
+  
+  // IBDataState
+  // IsDirty is implemented as part of IPersitStorage
+  virtual void _IFUNC SetDirty (BOOL fDirty);
 	
 protected:
 
@@ -315,5 +313,4 @@ protected:
 };
 
 #endif
-
 

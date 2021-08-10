@@ -1,0 +1,55 @@
+:Base Script.HLP>main
+1 About ObjectScripting=cSCr_About_Object_Scripting
+1 Quick Start
+2 ObjectScripting Quick start=cSCr_Quick_start
+2 Running script statements interactively=cSCr_Running_script_statements_interactively
+2 Using the print command=cSCr_Using_the_print_command
+2 Using the IDE Message dialog: a simple command entry example=cSCr_Using_the_IDE_Message_dialog
+2 Writing and loading a script file=cSCr_Writing_and_loading_a_script_file
+2 Developing and testing scripts=cSCr_Developing_and_testing_scripts
+1 ObjectScripting User's Guide
+2 Writing scripts=cSCr_Writing_scripts
+2 Loading scripts=cSCr_Loading_scripts
+2 Unloading scripts=cSCr_Unloading_scripts
+2 Setting ObjectScripting options=cSCr_Setting_Object_Scripting_options
+1 ObjectScripting Programmer's Guide
+2 Programming with cScript
+3 About cScript=cScr_About_cScript
+3 The advantages of a late-bound language=cScr_TheAdvantagesOfALateBoundLanguage
+3 cScript versus C++=cScript_versus_Cplusplus
+3 cScript comments=cScript_comments
+3 cScript identifiers=cScript_identifiers
+3 cScript and types=cScript_and_types
+3 cScript modules and scope=cScript_modules_and_scope
+3 cScript statements=cScript_statements
+3 cScript operators=cScript_operators
+3 cScript strings=cScriptStrings
+3 cScript arrays
+4 About cScript arrays=cScript_arrays
+4 Bounded arrays=cSCr_Bounded_arrays
+4 Associative arrays=cSCr_Associative_arrays
+3 cScript prototyping=cScript_prototyping
+3 cScript flow control statements=cScript_flow_control_statements
+3 cScript classes
+4 About cScript classes=cScript_classes
+4 Declaring a class=cSCr_Declaring_a_class
+4 Creating instances of cScript classes=cSCr_Creating_instances_of_cScript_classes
+4 Discovering cScript class and array members=cSCr_Discovering_cScript_class_and_array_members
+4 Understanding closures=cSCr_About_closures
+4 cScript event handling=cScript_event_handling
+4 Using on handlers=cSCr_Using_on_handlers
+4 Using attach and detach=cSCr_Using_attach_and_detach
+4 Controlling access to cScript properties=cSCr_Controlling_access_to_cScript_properties
+4 Using getters=cSCr_Using_getters
+4 Using setters=cSCr_Using_setters
+3 cScript pass by reference=cScript_pass_by_reference
+3 cScript built-in functions and variables=cScript_built_in_functions_and_variables
+3 cScript reserved identifiers=cScript_reserved_identifiers
+3 cScript access to exported DLL functions=cScript_access_to_exported_DLL_functions
+3 cScript to OLE2 interaction=cScript_and_OLE2
+3 Manifest constants=cSCr_manifest_constants
+2 Programming the IDE
+3 About the IDE Class Library=cSCr_About_the_IDE_Class_Library
+3 Manipulating the keyboard=cSCr_Manipulating_the_keyboard
+3 Manipulating the Editor=cSCr_Manipulating_the_Editor
+3 Adding menu items and buttons=cScr_Adding_a_menu_item

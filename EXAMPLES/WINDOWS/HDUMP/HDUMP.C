@@ -23,6 +23,10 @@
 
 #include "hdump.h"
 
+#ifndef __FLAT__          // 16-bit applications are limited to the old
+#define MAX_PATH MAXPATH  // path length limit of 80
+#endif
+
 typedef struct scrollkeys
   {
     WORD wVirtkey;
@@ -74,15 +78,15 @@ int       nVscrollInc, nHscrollInc;           // scroll increments
 int       nPageMaxLines;                      // max lines on screen
 
 // file open dialog stuff
-char      szFileSpec[80];                     // file spec for initial search
+char      szFileSpec[MAX_PATH];               // file spec for initial search
 char      szDefExt[5];                        // default extension
-char      szFileName[80];                     // file name
-char      szFilePath[80];                     // file path
+char      szFileName[MAX_PATH];               // file name
+char      szFilePath[MAX_PATH];               // file path
 WORD      wFileAttr;                          // attribute for search
 WORD      wStatus;                            // status of search
 
 // dump file stuff
-char      szFName[64];                        // file to display
+char      szFName[MAX_PATH];                  // file to display
 FILE     *fh;                                 // handle of open file
 LONG      fsize;                              // size of file
 
@@ -360,14 +364,13 @@ BOOL CALLBACK _export About(HWND hDlg, UINT message, WPARAM wParam, LPARAM lPara
 //             depends on message.
 //
 //*******************************************************************
-#pragma warn -eff
 LRESULT CALLBACK _export HdumpWndProc(HWND hWnd, UINT message,
            WPARAM wParam, LPARAM lParam)
 {
-    static char     sztFilePath[64];  // we remember last directory searched
+    static char     sztFilePath[MAX_PATH];  // remember last directory searched
     static char     sztFileExt[5];
-    static char     sztFileSpec[64];
-    static char     sztFileName[64];
+    static char     sztFileSpec[MAX_PATH];
+    static char     sztFileName[MAX_PATH];
 
     DLGPROC  lpproc;                  // pointer to thunk for dialog box
     char     buf[128];                // temp buffer
@@ -406,13 +409,18 @@ LRESULT CALLBACK _export HdumpWndProc(HWND hWnd, UINT message,
                               MAKEINTRESOURCE(ABOUT),
                               hWnd,
                               lpproc);
+
+                    #ifndef __FLAT__
+                    // required for 16-bit applications only
                     FreeProcInstance((FARPROC)lpproc);
+                    #endif
+
                     break;
 
                 case IDM_OPEN:
                     // Setup initial search path for open dialog box.
                     strcpy(sztFileSpec, sztFilePath);
-        strcat(sztFileSpec, "*");
+                    strcat(sztFileSpec, "*");
                     strcat(sztFileSpec, sztFileExt);
 
                     // Go ask user to select file to display.
@@ -625,7 +633,6 @@ LRESULT CALLBACK _export HdumpWndProc(HWND hWnd, UINT message,
 
     return(0L);
 }
-#pragma warn .eff
 
 //*******************************************************************
 // SetupScroll - setup scroll ranges
@@ -840,7 +847,6 @@ char *SnapLine(char *szBuf, LPSTR mem, int len, int dwid, char *olbl)
 //             0 - if file not selected
 //
 //*******************************************************************
-#pragma warn -eff
 DoFileOpenDlg(HINSTANCE hInst, HWND hWnd,
               char *szFileSpecIn, char *szDefExtIn,
               WORD wFileAttrIn,
@@ -862,7 +868,10 @@ DoFileOpenDlg(HINSTANCE hInst, HWND hWnd,
                         hWnd,
                         lpfnFileOpenDlgProc);
 
+    #ifndef __FLAT__
+    // required for 16-bit applications only
     FreeProcInstance((FARPROC)lpfnFileOpenDlgProc);
+    #endif
 
     // Return selected file spec.
     strcpy(szFilePathOut, szFilePath);
@@ -870,7 +879,6 @@ DoFileOpenDlg(HINSTANCE hInst, HWND hWnd,
 
     return(iReturn);
 }
-#pragma warn .eff
 
 //*******************************************************************
 // FileOpenDlgProc - get the name of a file to open
@@ -888,12 +896,15 @@ DoFileOpenDlg(HINSTANCE hInst, HWND hWnd,
 BOOL CALLBACK _export FileOpenDlgProc(HWND hDlg, UINT iMessage,
         WPARAM wParam, LPARAM lParam)
 {
-    static char   curpath[64];
-    char          tempDir[80], *tempStr = NULL;
+    static char   curpath[MAX_PATH];
+    char          tempDir[MAX_PATH], *tempStr = NULL;
     unsigned      attrib;
     char          cLastChar;
     int           nLen;
-    struct ffblk  fileinfo;
+	 struct ffblk  fileinfo;
+	 #ifndef __FLAT__
+	 int           tempDirNum;
+	 #endif
 
     switch (iMessage)
     {
@@ -952,17 +963,77 @@ BOOL CALLBACK _export FileOpenDlgProc(HWND hDlg, UINT iMessage,
         break;
 
                 case IDOK:
-        GetDlgItemText(hDlg, IDD_FNAME, szFileName, 80);
+        GetDlgItemText(hDlg, IDD_FNAME, szFileName, sizeof(szFileName));
 
         nLen  = strlen(szFileName);
 
         // Save new spec. & directory
         strcpy(tempDir, szFileName);
+
+        if (!strchr(tempDir, '*')) // GetFileAttributes does not like wildcards
+        {
 #ifdef __FLAT__
-        attrib = GetFileAttributes( (LPCTSTR) tempDir );
+             // GetFileAttributes does not like bogus drive letters
+             if (tempDir[1] != ':')
+             {
+                  attrib = GetFileAttributes( (LPCTSTR) tempDir );
+             }
+             else  // need to check drive letter
+             {
+                 tempDir[1] = 0;
+                 strcat(tempDir +1, ":\\");
+                 if (GetDriveType(tempDir) != 1)  // drive letter valid
+                 {
+                      strcpy(tempDir, szFileName);
+                      attrib = GetFileAttributes( (LPCTSTR) tempDir );
+                 }
+                 else  // drive letter invalid
+                 {
+                       MessageBox(NULL, "Invalid drive lettter specified.",
+                          "HDUMP", MB_OK | MB_TASKMODAL);
+                       strcpy(szFileName, szFilePath);
+                       strcat(szFileName, "*.*");
+                       SetDlgItemText(hDlg, IDD_FNAME, "*.*");
+                       strcpy(tempDir, szFileName);
+                       nLen = strlen(szFileName);
+                       attrib = -1;
+                 }
+             }
 #else
-        _dos_getfileattr(tempDir, &attrib);
+             // _dos_getfileattr does not like bogus drive letters either
+             if (tempDir[1] != ':')
+             {
+                  _dos_getfileattr(tempDir, &attrib);
+             }
+             else  // need to check drive letter
+             {
+                 strupr(tempDir);
+                 tempDirNum = tempDir[0] - 'A';
+                 if (GetDriveType(tempDirNum) != 0)  // drive letter valid
+                 {
+                      strcpy(tempDir, szFileName);
+                      // _dos_getfileattr doesn't like paths ending in ':'
+                      if (strchr(tempDir, ':')[1] == 0)
+                           strcat(tempDir, ".");
+                      _dos_getfileattr(tempDir, &attrib);
+                 }
+                 else  // drive letter invalid
+                 {
+                       MessageBox(NULL, "Invalid drive lettter specified.",
+                          "HDUMP", MB_OK | MB_TASKMODAL);
+                       strcpy(szFileName, szFilePath);
+                       strcat(szFileName, "*.*");
+                       SetDlgItemText(hDlg, IDD_FNAME, "*.*");
+                       strcpy(tempDir, szFileName);
+                       nLen = strlen(szFileName);
+                       attrib = -1;
+                 }
+             }
 #endif
+        }
+        else
+             attrib = -1;
+
         if(!(attrib == _A_SUBDIR) )
         {
          tempStr = strrchr(tempDir, '\\');
@@ -971,7 +1042,10 @@ BOOL CALLBACK _export FileOpenDlgProc(HWND hDlg, UINT iMessage,
         }
         if(tempStr || (attrib == _A_SUBDIR))
         {
-           strcat(szFilePath, tempDir);
+           if (tempDir[1] == ':')
+                strcpy(szFilePath, tempDir);
+           else
+                strcat(szFilePath, tempDir);
         }
 
         cLastChar = *AnsiPrev(szFileName, szFileName + nLen);

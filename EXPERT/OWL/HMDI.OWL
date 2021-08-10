@@ -1,12 +1,20 @@
 ##{hheader.snp}
-#include <owl\owlpch.h>
-#pragma hdrstop
+##@OPT_APPL_TOOLBAR 2
+#include <owl/controlb.h>
+#include <owl/docking.h>
+##@OPT_APPL_MAIL
+#include <owl/mailer.h>
+#include <owl/opensave.h>
+##@OPT_APPL_PRINTING
+#include <owl/printer.h>
+##@OPT_APPL_MRU
+#include <owl/rcntfile.h>
 
 ##@QUERY_APPL_OLE_AUTO 2
-#include <ocf\automacr.h>
+#include <ocf/automacr.h>
 
 ##@OPT_APPL_DRAGDROP 2
-#include <classlib\bags.h>
+#include <classlib/bags.h>
 
 ##<<TMDIClient QUERY_FILE_H [[FileName]]
 #include "[[FileName]]"
@@ -15,65 +23,77 @@
 #include "[[FileName]].rh"            // Definition of all resources.
 
 
-##{dragdrop.owl}
 //{{TApplication = [[TApplication]]}}
+##!@OPT_APPL_MRU
 class [[TApplication]] : public TApplication {
-private:
+##@OPT_APPL_MRU
+class [[TApplication]] : public TApplication, public TRecentFiles {
+  private:
 ##@OPT_APPL_HELP 3
     bool            HelpState;                          // Has the help engine been used.
-    bool            ContextHelp;                        // SHIFT-F1 state (context sensitive HELP)
-    HCURSOR         HelpCursor;                         // Context sensitive help cursor
+    bool            ContextHelp;                        // SHIFT-F1 state(context sensitive HELP)
+    TCursor*        HelpCursor;                         // Context sensitive help cursor.
 
-##--BEGIN-- @OPT_APPL_TOOLBAR || @OPT_APPL_DRAGDROP
+##--BEGIN-- @OPT_APPL_TOOLBAR || @OPT_APPL_DRAGDROP || @OPT_APPL_REGISTRY
 ##@OPT_APPL_TOOLBAR
-    void SetupSpeedBar (TDecoratedMDIFrame *frame);
+    void SetupSpeedBar(TDecoratedMDIFrame* frame);
 ##@OPT_APPL_DRAGDROP
-    void AddFiles (TFileList* files);
+    void AddFiles(TFileDropletList& files);
+##--BEGIN-- @OPT_APPL_REGISTRY
+    void ProcessCmdLine(char * CmdLine);
+    void RegisterInfo();
+    void UnRegisterInfo();
+##--END-- @OPT_APPL_REGISTRY
 
-##--END-- @OPT_APPL_TOOLBAR || @OPT_APPL_DRAGDROP
-public:
-    [[TApplication]] ();
-    virtual ~[[TApplication]] ();
+##--END-- @OPT_APPL_TOOLBAR || @OPT_APPL_DRAGDROP || @OPT_APPL_REGISTRY
+  public:
+    [[TApplication]]();
+    virtual ~[[TApplication]]();
 
 ##!@OPT_APPL_DOCVIEW 2
     TOpenSaveDialog::TData  FileData;                   // Data to control open/saveas standard dialog.
 
 ##@QUERY_APPL_OLE_AUTO 2
-    TAppDescriptor  *Factory;                           // Automation descriptor.
+    TAppDescriptor*  Factory;                           // Automation descriptor.
 
 ##<<TMDIClient QUERY_CLASS_NAME [[TMDIClient]]
-    [[TMDIClient]]  *mdiClient;
+    [[TMDIClient]]*  MdiClient;
 
-##@OPT_APPL_PRINTING 4
+##@OPT_APPL_TOOLBAR 2
+    THarbor*        ApxHarbor;
+
+##@OPT_APPL_PRINTING 5
     // Public data members used by the print menu commands and Paint routine in MDIChild.
-    TPrinter        *Printer;                           // Printer support.
+    //
+    TPrinter*       Printer;                            // Printer support.
     int             Printing;                           // Printing in progress.
 
 //{{[[TApplication]]VIRTUAL_BEGIN}}
-public:
+  public:
     virtual void InitMainWindow();
 ##:DBVirtual(\\"[[TApplication]]", "InitMainWindow")
-##--BEGIN-- @OPT_APPL_DRAGDROP
-    virtual void InitInstance();
+##@OPT_APPL_REGISTRY
 ##:DBVirtual(\\"[[TApplication]]", "InitInstance")
-##--END-- @OPT_APPL_DRAGDROP
+    virtual void InitInstance();
 ##@OPT_APPL_HELP 2
 ##:DBVirtual(\\"[[TApplication]]", "CanClose")
-    virtual bool CanClose ();
+    virtual bool CanClose();
 ##:DBVirtual(\\"[[TApplication]]", "ProcessAppMsg")
-    virtual bool ProcessAppMsg (MSG& msg);
+    virtual bool ProcessAppMsg(MSG& msg);
 //{{[[TApplication]]VIRTUAL_END}}
 
 //{{[[TApplication]]RSP_TBL_BEGIN}}
-protected:
+  protected:
 ##@OPT_APPL_HELP 2
-    void CmHelpContents ();
-    void CmHelpUsing ();
-    void CmHelpAbout ();
+    void CmHelpContents();
+    void CmHelpUsing();
+    void CmHelpAbout();
 ##@OPT_APPL_DRAGDROP
-    void EvDropFiles (TDropInfo drop);
+    void EvDropFiles(TDropInfo drop);
 ##@OPT_APPL_PRINTING
-    void EvWinIniChange (char far* section);
+    void EvWinIniChange(char far* section);
+##@OPT_APPL_MRU
+    int32 CmFileSelected(uint wp, int32 lp);
 //{{[[TApplication]]RSP_TBL_END}}
 ##--BEGIN-- @QUERY_APPL_OLE_AUTO
 

@@ -1,19 +1,36 @@
 //----------------------------------------------------------------------------
 // ObjectWindows
-// (C) Copyright 1994 by Borland International, All Rights Reserved
+// Copyright (c) 1994, 1996 by Borland International, All Rights Reserved
 //
-//----------------------------------------------------------------------------
-#if !defined(OWL_OLEFACTO_H)
-#define OWL_OLEFACTO_H
-
+//$Revision:   10.2  $
+//
 // Templatized class implementation of OLE component creation code for
 // TComponentFactory callback for ObjectWindows applications
 // All templates assume an AppDictionary global and a Registrar global
 // User can provide alternate implementation for any or all of the functions
 // The user's derived TApplication class is passed as the template parameter
-//____________________________________________________________________________
 //
+//----------------------------------------------------------------------------
+#if !defined(OWL_OLEFACTO_H)
+#define OWL_OLEFACTO_H
+
+#if !defined(OWL_DEFS_H)
+# include <owl/defs.h>
+#endif
+#if !defined(OCF_OLEUTIL_H)
+# include <ocf/oleutil.h>
+#endif
+#if !defined(OCF_OCREG_H)
+# include <ocf/ocreg.h>
+#endif
+
+// Generic definitions/compiler options (eg. alignment) preceeding the 
+// definition of classes
+#include <services/preclass.h>
+
+//----------------------------------------------------------------------------
 // Non-automated application automation callout stub implementation
+//
 
 template <class T> struct TOleFactoryNoAuto {
   static void      AutomateApp(T* app, uint32 options);
@@ -21,18 +38,27 @@ template <class T> struct TOleFactoryNoAuto {
   static void      UnregisterAutomation(T* app);
 };
 
-template<class T> void
-TOleFactoryNoAuto<T>::AutomateApp(T* /*app*/, uint32){}
-
-template<class T> TUnknown*
-TOleFactoryNoAuto<T>::AutomateObject(T*, const void*,const typeinfo&){return 0;}
-
-template<class T> void
-TOleFactoryNoAuto<T>::UnregisterAutomation(T* /*app*/){}
-
-//____________________________________________________________________________
 //
+template<class T> void
+TOleFactoryNoAuto<T>::AutomateApp(T* /*app*/, uint32) {
+
+}
+
+//
+template<class T> TUnknown*
+TOleFactoryNoAuto<T>::AutomateObject(T*, const void*,const typeinfo&) {
+  return 0;
+}
+
+//
+template<class T> void
+TOleFactoryNoAuto<T>::UnregisterAutomation(T* /*app*/) {
+
+}
+
+//----------------------------------------------------------------------------
 // Automated application default automation callout implementation
+//
 
 template <class T> struct TOleFactoryAuto {
   static void      AutomateApp(T* app, uint32 options);
@@ -67,15 +93,16 @@ TOleFactoryAuto<T>::AutomateApp(T* app, uint32 options)
   ::Registrar->CreateAutoApp(TAutoObjectDelete<T>(app), options);
 }
 
-//____________________________________________________________________________
-//
+//----------------------------------------------------------------------------
 // Application creation/destruction callouts shared for doc/view and non-d/v
 //
+
 template<class T, class Auto> struct TOleFactoryAppBase {
   static T*        CreateApp(uint32 options);
   static void      DestroyApp(T* app);
 };
 
+//
 template<class T, class Auto> T*
 TOleFactoryAppBase<T, Auto>::CreateApp(uint32 options)
 {
@@ -88,6 +115,7 @@ TOleFactoryAppBase<T, Auto>::CreateApp(uint32 options)
   return app;
 }
 
+//
 template<class T, class Auto>
 void TOleFactoryAppBase<T, Auto>::DestroyApp(T* app)
 {
@@ -95,17 +123,18 @@ void TOleFactoryAppBase<T, Auto>::DestroyApp(T* app)
   delete app;
 }
 
-//____________________________________________________________________________
-//
+//----------------------------------------------------------------------------
 // Non-docview application callout implementation, no CreateObject implemented
 // User must either provide an implementation of CreateOleObject for app class
 // or else reimplement this template function for the particular class
+//
 
-template<class T, class Auto> struct TOleFactoryNoDocView 
+template<class T, class Auto> struct TOleFactoryNoDocView
                                    : TOleFactoryAppBase<T, Auto> {
   static TUnknown* CreateObject(T* app, uint32 options, TRegLink* link);
 };
 
+//
 template <class T, class Auto> TUnknown*
 TOleFactoryNoDocView<T, Auto>::CreateObject(T* app, uint32 options,
                                             TRegLink* link)
@@ -113,15 +142,16 @@ TOleFactoryNoDocView<T, Auto>::CreateObject(T* app, uint32 options,
   return app->CreateOleObject(options, link);
 }
 
-//____________________________________________________________________________
-//
+//----------------------------------------------------------------------------
 // Docview application callout implementation - supplies CreateObject function
+//
 
 template <class T, class Auto> struct TOleFactoryDocView
                                     : TOleFactoryAppBase<T, Auto> {
   static TUnknown* CreateObject(T* app, uint32 options, TRegLink* link);
 };
 
+//
 template <class T, class Auto> TUnknown*
 TOleFactoryDocView<T, Auto>::CreateObject(T* app, uint32 options, TRegLink* link)
 {
@@ -152,16 +182,23 @@ TOleFactoryDocView<T, Auto>::CreateObject(T* app, uint32 options, TRegLink* link
   return (options & amEmbedding) ? obj : 0;
 }
 
-//____________________________________________________________________________
-//
-//  Standard factory for OWL components, callouts supplied via template args
+//----------------------------------------------------------------------------
+// Standard factory for OWL components, callouts supplied via template args
 //
 template <class T, class Obj> class TOleFactoryBase {
   public:
     operator TComponentFactory() {return Create;}
-
     static IUnknown* Create(IUnknown* outer, uint32 options, uint32 id);
 };
+
+/*
+//
+template <class T, class Obj>
+TOleFactoryBase<T, Obj>::operator TComponentFactory()
+{
+  return Create;
+}
+*/
 
 //
 // Main Create callback function called to create app and/or object
@@ -213,33 +250,42 @@ TOleFactoryBase<T, Obj>::Create(IUnknown* outer, uint32 options, uint32 id)
   return ifc;
 }
 
-//____________________________________________________________________________
-//
+//----------------------------------------------------------------------------
 //  Factory for OWL non-Doc/View, non-automated OLE components
 //
 template <class T> class TOleFactory
-: public TOleFactoryBase<T, TOleFactoryNoDocView<T, TOleFactoryNoAuto<T> > >{};
+: public TOleFactoryBase<T, TOleFactoryNoDocView<T, TOleFactoryNoAuto<T> > >
+{
+};
 
+//
 //  Factory for OWL Doc/View, non-automated OLE components
 //
 template <class T> class TOleDocViewFactory
-: public TOleFactoryBase<T, TOleFactoryDocView<T, TOleFactoryNoAuto<T> > > {};
+: public TOleFactoryBase<T, TOleFactoryDocView<T, TOleFactoryNoAuto<T> > >
+{
+};
 
+//
 //  Factory for OWL non-Doc/View, automated OLE components
 //
 template <class T> class TOleAutoFactory
-: public TOleFactoryBase<T, TOleFactoryNoDocView<T, TOleFactoryAuto<T> > > {};
+: public TOleFactoryBase<T, TOleFactoryNoDocView<T, TOleFactoryAuto<T> > >
+{
+};
 
+//
 //  Factory for OWL Doc/View, automated OLE components
 //
 template <class T> class TOleDocViewAutoFactory
-: public TOleFactoryBase<T, TOleFactoryDocView<T, TOleFactoryAuto<T> > > {};
+: public TOleFactoryBase<T, TOleFactoryDocView<T, TOleFactoryAuto<T> > >
+{
+};
 
-//____________________________________________________________________________
-//
+//----------------------------------------------------------------------------
 //  Factory for OWL automated OLE components, no linking/embedding support
 //
-//
+
 template <class T> class TAutoFactory {
   public:
     operator TComponentFactory() {return Create;}
@@ -253,6 +299,15 @@ template <class T> class TAutoFactory {
     //
     static IUnknown* Create(IUnknown* outer, uint32 options, uint32 id);
 };
+
+/*
+//
+template <class T>
+TAutoFactory<T>::operator TComponentFactory()
+{
+  return Create;
+}
+*/
 
 //
 // Called when the app is not found and needs to be created
@@ -310,6 +365,8 @@ TAutoFactory<T>::Create(IUnknown* outer, uint32 options, uint32 /*id*/)
   return ifc;
 }
 
+// Generic definitions/compiler options (eg. alignment) following the 
+// definition of classes
+#include <services/posclass.h>
 
 #endif  // OWL_OLEFACTO_H
-

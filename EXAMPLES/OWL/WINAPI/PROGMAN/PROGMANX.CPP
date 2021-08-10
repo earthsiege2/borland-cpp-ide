@@ -1,19 +1,21 @@
 //----------------------------------------------------------------------------
-// ObjectWindows - (C) Copyright 1991, 1993 by Borland International
+// ObjectWindows
+// Copyright (c) 1991, 1995 by Borland International, All Rights Reserved
 //----------------------------------------------------------------------------
-#include <owl\owlpch.h>
-#include <owl\dialog.h>
-#include <owl\framewin.h>
-#include <owl\applicat.h>
-#include <owl\listbox.h>
-#include <owl\inputdia.h>
+#include <owl/pch.h>
+#include <owl/dialog.h>
+#include <owl/framewin.h>
+#include <owl/applicat.h>
+#include <owl/listbox.h>
+#include <owl/inputdia.h>
 #include <string.h>
+#include <stdio.h>
 #include <ddeml.h>
 #include "progmanx.h"     // Dialog item IDs
 
 
 //
-// TDDEProgTalk is the main window of the application. 
+// TDDEProgTalk is the main window of the application.
 // It engages in a DDE conversation with the Program Manager
 // to create program groups with a
 // user specified list of program items.
@@ -51,7 +53,7 @@ class TDDEProgTalk : public TDialog{
     HSZ     Service;
     HSZ     Topic;
     TProcInstance CallBackProc;
-    
+
   DECLARE_RESPONSE_TABLE(TDDEProgTalk);
 };
 
@@ -173,24 +175,26 @@ TDDEProgTalk::CmCreateGroup()
       //
       int len = strlen(name) + strlen(createGroup) - 2 + 1;
       int count = ListBox->GetCount();
-      for (int i = 0; i < count; i++)
+
+      int i;
+      for (i = 0; i < count; i++)
         // Subtract 2 for the '%s' in 'addItem'.
         len += ListBox->GetStringLen(i) + strlen(addItem) - 2;
 
-      LPSTR commands = new char[len];
-      LPSTR ptr=commands;      
-      wsprintf(ptr, createGroup, (LPSTR)name);
+      char* commands = new char[len];
+      char* ptr=commands;
+      sprintf(ptr, createGroup, name);
       for (i = 0; i < count; i++) {
         ListBox->GetString(name, i);
         ptr += strlen(ptr);
-        wsprintf(ptr, addItem, (LPSTR)name);
+        sprintf(ptr, addItem, name);
       }
 
       //Send command to progman
       if (DdeClientTransaction((LPBYTE)commands, len, HConv, 0L, CF_TEXT, XTYP_EXECUTE, 1000, 0))
         ListBox->ClearList();
 
-      delete commands;
+      delete[] commands;
   }
 }
 

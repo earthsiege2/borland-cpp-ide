@@ -1,0 +1,10 @@
+#define IDM_MAINMENU    1
+#define IDD_DIALOG      2
+
+#define CM_POPUPAITEM1  101
+#define CM_POPUPBITEM2  102
+#define CM_DIALOG       200
+
+#define IDC_NAME	    401
+#define IDC_PHONE	    402
+#define IDC_NUMBER	  403

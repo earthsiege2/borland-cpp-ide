@@ -1,30 +1,26 @@
-/*------------------------------------------------------------------------*/
-/*                                                                        */
-/*  BINIMP.H                                                              */
-/*                                                                        */
-/*  Copyright (c) 1993, 1994 Borland International                        */
-/*  All Rights Reserved                                                   */
-/*                                                                        */
-/*------------------------------------------------------------------------*/
-
+//----------------------------------------------------------------------------
+// Borland BIDS Container Library
+// Copyright (c) 1993, 1996 by Borland International, All Rights Reserved
+//
+//$Revision:   5.5  $
+//
+//----------------------------------------------------------------------------
 #if !defined( CLASSLIB_BINIMP_H )
 #define CLASSLIB_BINIMP_H
 
 #if !defined( CLASSLIB_DEFS_H )
-#include <classlib/defs.h>
+# include <classlib/defs.h>
 #endif
-
 #if !defined( CLASSLIB_VOIDP_H )
-#include <classlib/voidp.h>
+# include <classlib/voidp.h>
 #endif
-
 #if !defined( CLASSLIB_STACKS_H )
-#include <classlib/stacks.h>
+# include <classlib/stacks.h>
 #endif
 
 #pragma option -Vo-
 #if defined( BI_CLASSLIB_NO_po )
-#pragma option -po-
+# pragma option -po-
 #endif
 
 /*------------------------------------------------------------------------*/
@@ -35,7 +31,7 @@
 /*                                                                        */
 /*------------------------------------------------------------------------*/
 
-class _BIDSCLASS TBinarySearchTreeBase
+class _BIDSTEMPL TBinarySearchTreeBase
 {
 
     friend class _BIDSCLASS TBinaryTreeInternalIteratorBase;
@@ -196,7 +192,7 @@ inline int TBinaryTreeExternalIteratorBase::IsInOrder() const
 /*                                                                        */
 /*------------------------------------------------------------------------*/
 
-template <class T> class _BIDSCLASS TBinaryNodeImp :
+template <class T> class _BIDSTEMPL TBinaryNodeImp :
     public TBinarySearchTreeBase::BinNode
 {
 
@@ -204,7 +200,7 @@ public:
 
     TBinaryNodeImp( const T& t ) : Data(t) {}
     T Data;
-}
+};
 
 /*------------------------------------------------------------------------*/
 /*                                                                        */
@@ -216,7 +212,7 @@ public:
 /*                                                                        */
 /*------------------------------------------------------------------------*/
 
-template <class T> class _BIDSCLASS TBinarySearchTreeImp :
+template <class T> class _BIDSTEMPL TBinarySearchTreeImp :
     public TBinarySearchTreeBase
 {
 
@@ -291,7 +287,7 @@ private:
 
 };
 
-template <class T> class _BIDSCLASS TBinaryTreeInternalIterator :
+template <class T> class _BIDSTEMPL TBinaryTreeInternalIterator :
     public TBinaryTreeInternalIteratorBase
 {
 
@@ -343,7 +339,7 @@ void TBinarySearchTreeImp<T>::ForEach( IterFunc iter,
         TBinaryTreeInternalIterator<T>( *this, iter, args, order ).Iterate();
 }
 
-template <class T> class _BIDSCLASS TBinarySearchTreeIteratorImp :
+template <class T> class _BIDSTEMPL TBinarySearchTreeIteratorImp :
     private TBinaryTreeExternalIteratorBase
 {
 
@@ -403,9 +399,9 @@ private:
 /*                                                                        */
 /*------------------------------------------------------------------------*/
 
-template <class T> class _BIDSCLASS TIBinarySearchTreeIteratorImp;
+template <class T> class _BIDSTEMPL TIBinarySearchTreeIteratorImp;
 
-template <class T> class _BIDSCLASS TIBinarySearchTreeImp :
+template <class T> class _BIDSTEMPL TIBinarySearchTreeImp :
     private TBinarySearchTreeImp<TVoidPointer>
 {
 
@@ -414,7 +410,7 @@ public:
     typedef void (_BIDSFAR *IterFunc)(T _BIDSFAR&, void _BIDSFAR*);
 
     typedef TBinarySearchTreeImp<TVoidPointer> Parent;
-    friend class _BIDSCLASS TIBinarySearchTreeIteratorImp<T>;
+    friend class _BIDSTEMPL TIBinarySearchTreeIteratorImp<T>;
 
     int Add( T _BIDSFAR * t )
         {
@@ -487,7 +483,7 @@ private:
 
 };
 
-template <class T> class _BIDSCLASS TIBinaryTreeInternalIterator :
+template <class T> class _BIDSTEMPL TIBinaryTreeInternalIterator :
     public TBinaryTreeInternalIteratorBase
 {
 
@@ -522,7 +518,7 @@ void TIBinaryTreeInternalIterator<T>::Apply( TBinarySearchTreeBase::BinNode _BID
     Iter( *(T _BIDSFAR *)(void _BIDSFAR *)(STATIC_CAST(TBinaryNodeImp<TVoidPointer>*,Node)->Data), Args );
 }
 
-template <class T> class _BIDSCLASS TIBinarySearchTreeIteratorImp :
+template <class T> class _BIDSTEMPL TIBinarySearchTreeIteratorImp :
     private TBinarySearchTreeIteratorImp<TVoidPointer>
 {
 
@@ -558,11 +554,9 @@ public:
 };
 
 #if defined( BI_CLASSLIB_NO_po )
-#pragma option -po.
+# pragma option -po.
 #endif
 
 #pragma option -Vo.
 
 #endif  // CLASSLIB_BINIMP_H
-
-

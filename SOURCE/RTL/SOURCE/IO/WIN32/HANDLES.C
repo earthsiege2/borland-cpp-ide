@@ -11,12 +11,13 @@
  *        _free_handle        - free a file handle table slot
  *        cfinfo_get          - construct file information table
  *        _init_handles       - initialize file handle table and lock
+ *        _cleanup_handle_locks - free the global file handle lock
  *----------------------------------------------------------------------*/
 
 /*
- *      C/C++ Run Time Library - Version 1.5
+ *      C/C++ Run Time Library - Version 2.0
  *
- *      Copyright (c) 1991, 1994 by Borland International
+ *      Copyright (c) 1991, 1996 by Borland International
  *      All Rights Reserved.
  *
  */
@@ -51,7 +52,8 @@
  */
 static lock_t handle_lock;  /* global handle lock */
 static lock_t *hlocks;      /* table of per-handle locks */
-
+static int _selffree = 0;   /* used to determine whether _unlock_handle()
+                               should free the lock or leave it allocated */
 /*---------------------------------------------------------------------*
 
 Name            _lock_all_handles - lock the global file handle lock
@@ -74,6 +76,36 @@ Return value    None.
 void _lock_all_handles(void)
 {
     _lock(handle_lock,"locking global handle lock");
+}
+
+/*---------------------------------------------------------------------*
+
+Name            _cleanup_handle_locks - free the global file handle lock
+
+Usage           void _cleanup_handle_locks(void);
+
+Description     This function frees the global lock that governs
+                access to the file handle table.
+
+Notes           This function also sets the _selffree flag to 1.  This
+                is in case a dll (like CG32) forces some cleanup calls
+                back into the EXE's RTL, and the handle locks are
+                needed again.  _lock_handle() will automatically re-
+                allocate the lock blocks again, and with this flag set
+                _unlock_handle() will also free it.
+
+Return value    None.
+
+*---------------------------------------------------------------------*/
+
+void _cleanup_handle_locks(void)
+{
+    if (hlocks)
+    {
+        free (hlocks);
+        hlocks = 0;
+    }
+    _selffree = 1;
 }
 
 /*---------------------------------------------------------------------*
@@ -180,7 +212,11 @@ Return value    None.
 void _unlock_handle(int handle)
 {
     _unlock(hlocks[handle],"unlocking handle");
+    if (_selffree)
+        _cleanup_handle_locks();
 }
+
+
 
 #endif  /* _MT */
 

@@ -41,6 +41,8 @@
         IMPOBJS =       \
                 xxa.obj \
                 xxv.obj
+
+        MISC = noxx.obj
 !   else
 !       if !$d(DLL) && $(MODEL) != t
             MISC = noxx.obj
@@ -63,6 +65,11 @@
 !   endif
 !endif
 
+!   if $(OS) == WIN32
+        OBJS =  $(OBJS)      \
+                lockdbg.obj
+!   endif
+
 #############################################################################
 # Configure the environment appropriately.                                  #
 #############################################################################
@@ -74,38 +81,21 @@ TASMCFG = 1        # Force tasm.cfg creation
 #############################################################################
 !if $(OS) == WIN16
 
-!if $(MODEL) == c || $(MODEL) == l
+!if $(MODEL) == c
 xalloc.obj: xalloc.cpp
         $(CC) -m$(MODEL) -WDE -n$(OBJDIR) $?
 
 xmsg.obj: xmsg.cpp
         $(CC) -m$(MODEL) -WDE -n$(OBJDIR) $?
-!endif
+!elif $(MODEL) == l
+xalloc.obj: xalloc.cpp
+        $(CC) -m$(MODEL) -WDE -n$(OBJDIR) -zC_TEXTB $?
+
+xmsg.obj: xmsg.cpp
+        $(CC) -m$(MODEL) -WDE -n$(OBJDIR) -zC_TEXTB $?
 
 !endif
-
-!if $(OS) == WIN16
-!if $(MODEL) == l
-noxx.obj: noxx.cpp
-        $(CC) -m$(MODEL) -WE -n$(OBJDIR) -zC_TEXTB $?
-
-!elif $(MODEL) == c
-noxx.obj: noxx.cpp
-        $(CC) -m$(MODEL) -WE -n$(OBJDIR) $?
-
-!elif $(MODEL) == m
-noxx.obj: noxx.cpp
-        $(CC) -m$(MODEL)! -WE -n$(OBJDIR) -zC_TEXTB $?
-
-!else
-noxx.obj: noxx.cpp
-        $(CC) -m$(MODEL)! -WE -n$(OBJDIR) $?
-
 !endif
-!else
-!if $(MODEL) == s  || $(MODEL) == m
-noxx.obj: noxx.cpp
-        $(CC) -m$(MODEL)! -n$(OBJDIR) $?
-!endif
-!endif
+
+
 

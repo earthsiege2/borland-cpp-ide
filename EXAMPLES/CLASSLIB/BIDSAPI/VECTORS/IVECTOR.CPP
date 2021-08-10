@@ -45,12 +45,14 @@ int main()
 {
     ContainerType container(MaxItems);
     AddItems(container, MaxItems);
-  
+
     cout << "--- Starting ForEach" << endl;
     container.ForEach(ForEachCallBack, (void*)"FE ");
-  
+
     cout << "--- Starting Iterator (forward)" << endl;
     UseForwardIterator(container);
-  
+
+    container.Flush(1);
+
     return 0;
 }

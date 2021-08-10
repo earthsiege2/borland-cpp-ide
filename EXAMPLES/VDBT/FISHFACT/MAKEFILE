@@ -1,0 +1,21 @@
+#-----------------------------------------------------------------------------
+# Borland C++ - (C) Copyright 1996 by Borland International
+#   examples\vdbt\fishfact\makefile
+#----------------------------------------------------------------------------
+
+SYSTEMS = WIN16 WIN32
+
+!if $(SYSTEM)==WIN16
+MODEL=l
+USERLIBS = $(BCLIBDIR)\bivbx.lib
+!else
+USERLIBS = $(BCLIBDIR)\bivbx32.lib
+!endif
+
+DEBUG = 1
+
+DEFEXE = ffactwin.def
+EXERES = fishfact
+OBJEXE = ffactwin.obj fshtdlgc.obj
+RESEXE = ffactwin.res
+!include $(BCEXAMPLEDIR)\owlmake.gen

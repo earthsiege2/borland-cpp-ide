@@ -78,8 +78,7 @@ LFLAGS = -Vt -Tw -c -C -s -A=16 -L$(LIBPATH)
 
 
 #------------------------------------------------------------------------------------------------
-# Rules to build target.EXE    
-#------------------------------------------------------------------------------------------------
+# Rules to build target.EXE  #------------------------------------------------------------------------------------------------
 
 # Compiler rules:
 #------------------------------------------------------------------------------------------------
@@ -164,10 +163,10 @@ DLLFlag=
 -vi                     # Inline function expansion
 -c
 -M
--ml                     # Compile large memory model (DS != SS)
+-ml                     # Compile large memory model(DS != SS)
 -3                      # Generate 80286 code
 -H=$&.csm               # Pre-compiled header file name
--H"owl\owlpch.h"
+-H"owl/pch.h"
 -D_OWLPCH
 -wpro                   # Next three are the Enable warning message types:
 -weas
@@ -187,10 +186,10 @@ DLLFlag=
 -vi                     # Inline function expansion
 -c
 -M
--ml                     # Compile large memory model (DS != SS)
+-ml                     # Compile large memory model(DS != SS)
 -3                      # Generate 80286 code
 -H=$&.csm               # Pre-compiled header file name
--H"owl\owlpch.h"
+-H"owl/pch.h"
 -D_OWLPCH
 -wpro                   # Next three are the Enable warning message types:
 -weas

@@ -11,7 +11,7 @@
 // When the command is received, we just check to see if the flag
 // has been set which indicates that the user wants help on the command.
 //----------------------------------------------------------------------------
-#include <owl\owlpch.h>
+#include <owl/pch.h>
 #include <owl\applicat.h>
 #include <owl\framewin.h>
 #include <owl\dc.h>
@@ -35,7 +35,7 @@ class TOwlHelpWnd : public TFrameWindow {
 
   private:
     BOOL F1Pressed;
-    
+
   DECLARE_RESPONSE_TABLE(TOwlHelpWnd);
 };
 
@@ -121,10 +121,9 @@ TOwlHelpWnd::CmExit()
   if (F1Pressed) {
     WinHelp(HelpFile, HELP_CONTEXT, HELP_EXIT);
     F1Pressed = FALSE;
-
-  } else {
-    TWindow::CmExit();
   }
+  else
+    CloseWindow();
 }
 
 void
@@ -151,7 +150,7 @@ TOwlHelpWnd::CmHelpAbout()
 class TOwlHelpApp : public TApplication {
   public:
     TOwlHelpApp() : TApplication() {}
-    void InitInstance() {   
+    void InitInstance() {
       TApplication::InitInstance();
       HAccTable = LoadAccelerators(OWLHELPAPACCEL);
     }

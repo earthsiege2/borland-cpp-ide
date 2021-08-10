@@ -1,0 +1,51 @@
+//--------------------------------------------------------------------------
+// Object Scripting
+// Copyright (c) 1996 by Borland International, All Rights Reserved
+//
+// DIRTOOL.SPP: Directory Tool. Creates a new tool called "Directory
+//   Listing," which takes a filespec and generates a directory listing
+//   in the message window.
+//
+// USE: Run script to create the tool. Use the tool by choosing
+//   Tool | Directory Listing and entering a file mask.
+//--------------------------------------------------------------------------
+print "dirtool.spp";
+
+//
+// IDE imports.
+//
+import IDE;
+
+dirtool()
+{
+  //
+  // Create a tool via Options | Tools. Note that keys are pumped into
+  // the keyboard buffer prior to invoking the dialog. The second
+  // parameter to SendKeys is TRUE to cause processing to wait for
+  // the dialog proc.
+  //
+  IDE.KeyboardManager.SendKeys("%n", TRUE);  // Access New button.
+  IDE.KeyboardManager.SendKeys("Directory Listing", TRUE);
+  Tab();
+  IDE.KeyboardManager.SendKeys("command.com", TRUE);
+  Tab();
+  declare keys = "$NOSWAP $CAP MSG(FILENAME) /c dir /b $PROMPT $SELNODES";
+  IDE.KeyboardManager.SendKeys(keys, TRUE);
+  Tab();
+  IDE.KeyboardManager.SendKeys("Directory Listing", TRUE);
+  Tab();
+  keys = "Creates a directory listing in the message window.";
+  IDE.KeyboardManager.SendKeys(keys, TRUE);
+  IDE.KeyboardManager.SendKeys("{VK_RETURN}", TRUE);  // Close Tool Options.
+  IDE.KeyboardManager.SendKeys("%c", TRUE);  // Close Tools using Alt-c.
+
+  IDE.OptionsTools();
+}
+
+//
+// Sends a Tab key.
+//
+Tab()
+{
+  IDE.KeyboardManager.SendKeys("{VK_TAB}", TRUE);
+}

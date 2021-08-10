@@ -1,0 +1,23 @@
+;-----------------------------------------------------------------------------
+;   Project OcxDlg
+;   Borland International, Inc.
+;   Copyright © 1996. All Rights Reserved.
+;
+;   SUBSYSTEM:    OcxDlg Application
+;   FILE:         OcxDlgAp.def
+;   AUTHOR:       Chris McConn
+;
+;-----------------------------------------------------------------------------
+
+NAME 'ocxdlg'
+
+DESCRIPTION 'OcxDlg Application - Copyright © 1996. All Rights Reserved.'
+EXETYPE     WINDOWS
+CODE        PRELOAD MOVEABLE DISCARDABLE
+DATA        PRELOAD MOVEABLE
+
+; Note: The following are recommended settings for the default
+;       AppExpert application when compiled as a 16-bit target.
+;
+; HEAPSIZE    4096
+; STACKSIZE   8192

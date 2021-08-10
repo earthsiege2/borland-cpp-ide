@@ -1,6 +1,6 @@
-LIBRARY     DLCAPI.DLL
-
+LIBRARY DLCAPI
 EXPORTS
-    AcsLan                         @1   
-    DlcCallDriver                  @2   
-    NtAcsLan                       @3   
+
+    AcsLan
+    DlcCallDriver
+    NtAcsLan

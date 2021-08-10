@@ -1,6 +1,14 @@
 // ---------------------------------------------------------------------------
 // Copyright (C) 1994 Borland International
 // ---------------------------------------------------------------------------
+#include <ocf/pch.h>
+#include <ocf/ocapp.h>
+#include <ocf/ocdoc.h>
+#include <ocf/ocview.h>
+#include <ocf/ocremvie.h>
+#include <ocf/ocpart.h>
+#include <windowsx.h>
+
 #include "ocfhlpr.h"
 #include "ocfhlpr.rh"
 
@@ -157,8 +165,10 @@ TOleWin::OnDestroy()
 
   // Release the OCF View helper object
   //
-  if (OcView)
+  if (OcView) {
+    OcView->EvClose();
     OcView->ReleaseObject();
+  }
 
   // Close the OCF document helper object
   //
@@ -248,10 +258,9 @@ TOleWin::OnInitMenu(HMENU hMenu)
   EnableMenuItem(hMenu, CM_EDITCONVERT,
               MF_BYCOMMAND|((DragPart != 0) ? MF_ON : MF_OFF));
 
-  uint mask = GetOcApp()->EnableEditMenu(meEnablePaste |
-                                         meEnablePasteLink |
-                                         meEnableBrowseClipboard |
-                                         meEnableBrowseLinks,
+  uint mask = GetOcApp()->EnableEditMenu(
+                  TOcMenuEnable(meEnablePaste|meEnablePasteLink|
+                                meEnableBrowseClipboard|meEnableBrowseLinks),
                                          GetOcView());
 
   EnableMenuItem(hMenu, CM_EDITPASTE,
@@ -840,7 +849,7 @@ MergeMenu(MenuDescr& dst, const MenuDescr& src, bool srcOwnsEven)
 
           // If it's a popup, we'll share the handle
           //
-          uint idOrPopup = 0;
+          uint idOrPopup;
           if (state & MF_POPUP) {
             state &= (MF_STRING|MF_POPUP);
             HMENU sub = GetSubMenu(src, srcOff+j);

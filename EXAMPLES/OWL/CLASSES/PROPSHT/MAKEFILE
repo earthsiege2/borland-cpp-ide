@@ -1,0 +1,11 @@
+#----------------------------------------------------------------------------
+# ObjectWindows
+# Copyright (c) 1995, 1996 by Borland International, All Rights Reserved
+#----------------------------------------------------------------------------
+
+MODELS = ldft
+
+EXERES = propsht
+OBJEXE = propshtx.obj 
+
+!include $(BCEXAMPLEDIR)\owlmake.gen

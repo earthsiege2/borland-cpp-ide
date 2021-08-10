@@ -1,0 +1,27 @@
+#----------------------------------------------------------------------------
+# Borland C++ - (C) Copyright 1996 by Borland International
+#   examples\vdbt\table\makefile
+#----------------------------------------------------------------------------
+
+SYSTEMS = WIN16 WIN32
+
+!if $(SYSTEM)==WIN16
+SUFFIX   = 16
+USERLIBS = bdto.lib bdtci.lib ole2w16.lib mathwl cwl
+!else
+SUFFIX   = 32
+USERLIBS = bdtof.lib bdtcfi.lib ole2w32.lib
+!endif
+
+APPNAME = table
+DEFEXE  = $(APPNAME)$(SUFFIX).def
+EXERES  = $(APPNAME)
+OBJEXE  = $(APPNAME).obj
+RESEXE  = $(APPNAME).res
+RESEXE_ = $(APPNAME).ico
+
+USERLIBPATH = $(BCEXAMPLEDIR)\..\lib
+
+!include $(BCEXAMPLEDIR)\makefile.gen
+
+CFLAGS = $(CFLAGS) -DSTRICT

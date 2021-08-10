@@ -14,9 +14,9 @@
 /*------------------------------------------------------------------------*/
 
 /*
- *      C/C++ Run Time Library - Version 6.5
+ *      C/C++ Run Time Library - Version 7.0
  *
- *      Copyright (c) 1992, 1994 by Borland International
+ *      Copyright (c) 1992, 1996 by Borland International
  *      All Rights Reserved.
  *
  */
@@ -36,13 +36,13 @@ static void __debug(void){}
 void string::to_lower()
 {
     cow();
-    strlwr((char _FAR *)c_str());
+    _lstrlwr((char _FAR *)c_str());
 }
 
 void string::to_upper()
 {
     cow();
-    strupr((char _FAR *)c_str());
+    _lstrupr((char _FAR *)c_str());
 }
 
 string _Cdecl _FARFUNC to_lower( const string _FAR &s ) throw()
@@ -68,7 +68,7 @@ void TSubString::to_lower() throw()
         unsigned n = extent;
         while( n-- )
             {
-            *p = char(tolower(*p));
+            *p = char(_ltolower(*p));
             p++;
             }
         }
@@ -83,7 +83,7 @@ void TSubString::to_upper() throw()
         unsigned n = extent;
         while( n-- )
             {
-            *p = char(toupper(*p));
+            *p = char(_ltoupper(*p));
             p++;
             }
         }

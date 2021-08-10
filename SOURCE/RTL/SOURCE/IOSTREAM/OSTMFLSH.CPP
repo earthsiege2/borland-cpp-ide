@@ -8,9 +8,9 @@
 /*[]------------------------------------------------------------[]*/
 
 /*
- *      C/C++ Run Time Library - Version 6.5
+ *      C/C++ Run Time Library - Version 7.0
  *
- *      Copyright (c) 1990, 1994 by Borland International
+ *      Copyright (c) 1990, 1996 by Borland International
  *      All Rights Reserved.
  *
  */
@@ -19,8 +19,9 @@
 #include <iostream.h>
 
 // flush the ostream
-ostream _FAR & _RTLENTRY _EXPFUNC flush(ostream _FAR & os)
+ostream _FAR & _RTLENTRY flush(ostream _FAR & os)
 {
-    os.flush();
+    if (os.delbuf())
+        os.flush();
     return os;
 }

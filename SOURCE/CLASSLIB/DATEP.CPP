@@ -1,23 +1,15 @@
-/*------------------------------------------------------------------------*/
-/*                                                                        */
-/*  DATEP.CPP                                                             */
-/*                                                                        */
-/*  Copyright (c) 1993, 1994 Borland International                        */
-/*  All Rights Reserved                                                   */
-/*                                                                        */
-/*------------------------------------------------------------------------*/
-
-#if !defined( __STRSTREA_H )
-#include <strstrea.h>
-#endif
-
-#if !defined( CLASSLIB_DATE_H )
+//----------------------------------------------------------------------------
+// Borland Class Library
+// Copyright (c) 1993, 1996 by Borland International, All Rights Reserved
+//
+//$Revision:   5.4  $
+//
+// TDate class persistant streaming implementation
+//----------------------------------------------------------------------------
+#include <classlib/pch.h>
 #include <classlib/date.h>
-#endif
-
-#if !defined( CLASSLIB_OBJSTRM_H )
 #include <classlib/objstrm.h>
-#endif
+#include <strstrea.h>
 
 opstream _BIDSFAR & _BIDSFUNC operator << ( opstream _BIDSFAR & os, const TDate _BIDSFAR & d )
 {
@@ -28,5 +20,3 @@ ipstream _BIDSFAR & _BIDSFUNC operator >> ( ipstream _BIDSFAR & is, TDate _BIDSF
 {
     return is >> d.Julnum;
 }
-
-

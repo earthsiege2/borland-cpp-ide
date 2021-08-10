@@ -1,0 +1,11 @@
+:BASE bcdos.hlp
+1 DOS functions and global variables
+2 DOS-only functions = DOSOnlyFunctions
+2 DOS global variables = DOSGlobalVariables
+1 DOS run-time libraries
+2 DOS run-time libraries = DOSRunTimeLibraries
+2 DOS interface routines = DOSInterfaceRoutines
+2 DOS memory routines = DOSMemoryRoutines
+2 Miscellaneous DOS routines = MiscellaneousDOSRoutines
+1 Borland Graphics Interface (BGI)
+2 About the Borland Graphics Interface = DOSGraphicsRoutines

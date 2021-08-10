@@ -1,15 +1,25 @@
-//
 //----------------------------------------------------------------------------
 // ObjectComponents
-// (C) Copyright 1994 by Borland International, All Rights Reserved
+// Copyright (c) 1994, 1996 by Borland International, All Rights Reserved
 //
-//   Implementation of TOcLinkView Class
+// $Revision:   2.6  $
+//
+// Implementation of TOcLinkView Class
 //----------------------------------------------------------------------------
-#include <ocf/ocfpch.h>
-#include <ocf/oclink.h>
-#include <ocf/ocapp.h>
-#include <ocf/ocremvie.h>
+#include <ocf/pch.h>
+#if !defined(OCF_OCLINK_H)
+# include <ocf/oclink.h>
+#endif
+#if !defined(OCF_OCAPP_H)
+# include <ocf/ocapp.h>
+#endif
+#if !defined(OCF_OCREMVIEW_H)
+# include <ocf/ocremvie.h>
+#endif
 
+//
+//
+//
 TOcLinkView::TOcLinkView(TOcView* ocView, TRegList* regList, IUnknown* outer)
 :
   BSiteI(0), OcView(ocView),
@@ -47,11 +57,14 @@ TOcLinkView::TOcLinkView(TOcView* ocView, TRegList* regList, IUnknown* outer)
   }
 }
 
+//
+//
+//
 TOcLinkView::~TOcLinkView()
 {
   // Detach the link view
   //
-  Detach();
+  //Detach();
   if (BSite) {
     BSite->Release();
   }
@@ -125,14 +138,20 @@ TOcLinkView::SetMoniker(const char far* name)
 
 
 //----------------------------------------------------------------------------
-// IDataNegotiator implementation
+// IDataNegotiator implementation -- delegate to our owning OcView
 
+//
+//
+//
 uint _IFUNC
 TOcLinkView::CountFormats()
 {
   return OcView->CountFormats();
 }
 
+//
+//
+//
 HRESULT _IFUNC
 TOcLinkView::GetFormat(uint index, TOcFormatInfo far* fmt)
 {
@@ -140,7 +159,6 @@ TOcLinkView::GetFormat(uint index, TOcFormatInfo far* fmt)
 
   return OcView->GetFormat(index, fmt);
 }
-
 
 //----------------------------------------------------------------------------
 // IBDataNegotiator implementation
@@ -155,18 +173,17 @@ TOcLinkView::GetFormatData(TOcFormatInfo far* fmt)
   PRECONDITION(fmt);
 
   TOcFormat* format = OcView->FormatList.Find(fmt->Id);
-  if (!format)
-    return 0;
+  if (format) {
+    TOcFormatData formatData(*format);
+    if (OcView->ServerHost->EvOcViewClipData(formatData))
+      return formatData.Handle;
+  }
 
-  TOcFormatData formatData(*format);
-  if (OcView->ForwardEvent(OC_VIEWCLIPDATA, &formatData))
-    return formatData.Handle;
-  else
-    return 0;
+  return 0;
 }
 
 //
-//  Get the initial size and position from the app
+// Get the initial size and position from the host app into our members
 //
 void
 TOcLinkView::GetLinkRect()
@@ -175,7 +192,7 @@ TOcLinkView::GetLinkRect()
 
   // Ask the app for initial server extent
   //
-  if (!OcView->ForwardEvent(OC_VIEWPARTSIZE, &ps)) {
+  if (!OcView->ServerHost->EvOcViewPartSize(ps)) {
     // An empty rect as default means that the container
     // decides the size for this server
     //
@@ -192,7 +209,7 @@ TOcLinkView::GetLinkRect()
 //
 HRESULT _IFUNC
 TOcLinkView::Draw(HDC dc, const RECTL far*  pos, const RECTL far* clip,
-                 TOcAspect aspect, TOcDraw bd)
+                  TOcAspect aspect, TOcDraw bd)
 {
   PRECONDITION(dc);
 
@@ -219,9 +236,8 @@ TOcLinkView::Draw(HDC dc, const RECTL far*  pos, const RECTL far* clip,
   *(TPoint*)&p = Origin;
 
   TOcViewPaint vp = { dc, &p, &c, (TOcAspect)aspect, false, &Moniker, 0 };
-  bool result = (bool)OcView->ForwardEvent(OC_VIEWPAINT, &vp);
 
-  return HRFailIfZero(result);
+  return HRFailIfZero(OcView->ServerHost->EvOcViewPaint(vp));
 }
 
 //
@@ -242,10 +258,22 @@ TOcLinkView::Save(IStorage* storage, BOOL sameAsLoad, BOOL remember)
 {
   PRECONDITION(storage);
 
-  TOcSaveLoad ocSave(storage, static_cast<bool>(sameAsLoad), static_cast<bool>(remember));
-  return HRFailIfZero((bool)OcView->ForwardEvent(OC_VIEWSAVEPART, &ocSave));
+  TOcSaveLoad ocSave(storage, ToBool(sameAsLoad), ToBool(remember));
+
+  return HRFailIfZero(OcView->ServerHost->EvOcViewSavePart(ocSave));
 }
 
+#if 0
+//
+//
+//
+HRESULT _IFUNC
+TOcLinkView::SetFormatData(TOcFormatInfo far* /*fmt*/, HANDLE /*data*/, BOOL /*release*/)
+{
+  return HR_NOTIMPL;
+}
+#endif
+                           
 //----------------------------------------------------------------------------
 // IBPart implementation
 
@@ -265,18 +293,17 @@ TOcLinkView::Init(IBSite far*, TOcInitInfo far* /*initInfo*/)
 HRESULT _IFUNC
 TOcLinkView::Close()
 {
-  OcView->ForwardEvent(OC_VIEWBREAKLINK, this);
-
+  OcView->ServerHost->EvOcViewBreakLink(*this);  
   return HR_NOERROR;
 }
 
 //
-// Query to determin if this view can open in place
+// Query to determine if this view can open in place
 //
 HRESULT _IFUNC
 TOcLinkView::CanOpenInPlace()
 {
-  return HR_FAIL;
+  return HR_FAIL;  // Links never open in place
 }
 
 //
@@ -286,10 +313,12 @@ HRESULT _IFUNC
 TOcLinkView::SetPartPos(TRect far* r)
 {
   Origin = *(POINT*)&r->left;
-
   return HR_NOERROR;
 }
 
+//
+//
+//
 HRESULT _IFUNC
 TOcLinkView::SetPartSize(TSize far* size)
 {
@@ -301,7 +330,7 @@ TOcLinkView::SetPartSize(TSize far* size)
 // Activate this view
 //
 HRESULT _IFUNC
-TOcLinkView::Activate(bool /*activate*/)
+TOcLinkView::Activate(BOOL /*activate*/)
 {
   return HR_NOERROR;
 }
@@ -310,7 +339,7 @@ TOcLinkView::Activate(bool /*activate*/)
 // Show/Hide the server view window
 //
 HRESULT _IFUNC
-TOcLinkView::Show(bool /*show*/)
+TOcLinkView::Show(BOOL /*show*/)
 {
   return HR_NOERROR;
 }
@@ -320,14 +349,14 @@ TOcLinkView::Show(bool /*show*/)
 // Work with the window Z-order and parenting
 //
 HRESULT _IFUNC
-TOcLinkView::Open(bool open)
+TOcLinkView::Open(BOOL open)
 {
   if (open) {
     TOcRemView* ocRemView = TYPESAFE_DOWNCAST(OcView, TOcRemView);
     if (ocRemView)
       ocRemView->SetOpenEditing();
 
-    OcView->ForwardEvent(OC_VIEWATTACHWINDOW, true);
+    OcView->ServerHost->EvOcViewAttachWindow(true);
     OcView->BringToFront();
   }
 
@@ -349,7 +378,7 @@ TOcLinkView::EnumVerbs(TOcVerb far*)
 HRESULT _IFUNC
 TOcLinkView::DoVerb(uint)
 {
-  return HR_FAIL;  // Not called on BOle parts
+  return HR_FAIL;  // Assume that links don't need to do verbs
 }
 
 //
@@ -375,7 +404,7 @@ TOcLinkView::InsertMenus(HMENU /*hMenu*/, TOcMenuWidths far* /*omw*/)
 // Show or hide the tool windows used by our view
 //
 HRESULT _IFUNC
-TOcLinkView::ShowTools(bool /*show*/)
+TOcLinkView::ShowTools(BOOL /*show*/)
 {
   return HR_NOERROR;
 }
@@ -385,7 +414,7 @@ TOcLinkView::ShowTools(bool /*show*/)
 // tools.
 //
 void _IFUNC
-TOcLinkView::FrameResized(const TRect far* /*contFrameR*/, bool /*isMainFrame*/)
+TOcLinkView::FrameResized(const TRect far* /*contFrameR*/, BOOL /*isMainFrame*/)
 {
 }
 
@@ -393,11 +422,11 @@ TOcLinkView::FrameResized(const TRect far* /*contFrameR*/, bool /*isMainFrame*/)
 // Let the server provide drag feedback
 //
 HRESULT _IFUNC
-TOcLinkView::DragFeedback(TPoint far* where, bool /*nearScroll*/)
+TOcLinkView::DragFeedback(TPoint far* where, BOOL /*nearScroll*/)
 {
   TPoint awhere(*where);
   TOcDragDrop dd = { 0, &awhere, 0 };
-  return HRFailIfZero((bool)OcView->ForwardEvent(OC_VIEWDRAG, &dd));
+  return HRFailIfZero(OcView->ServerHost->EvOcViewDrag(dd));
 }
 
 //
@@ -408,15 +437,21 @@ TOcLinkView::GetPalette(LOGPALETTE far* far* palette)
 {
   PRECONDITION(palette);
 
-  return HRFailIfZero((bool)OcView->ForwardEvent(OC_VIEWGETPALETTE, palette));
+  return HRFailIfZero(OcView->ServerHost->EvOcViewGetPalette(palette));
 }
 
+//
+//
+//
 HRESULT _IFUNC
 TOcLinkView::SetHost(IBContainer far* /*objContainer*/)
 {
   return HR_FAIL;  // Not called on BOle parts.
 }
 
+//
+//
+//
 HRESULT _IFUNC
 TOcLinkView::DoQueryInterface(const IID far& iid, void far* far* iface)
 {
@@ -425,6 +460,9 @@ TOcLinkView::DoQueryInterface(const IID far& iid, void far* far* iface)
   return OcView->QueryInterface(iid, iface);  // Unused on server side
 }
 
+//
+//
+//
 LPOLESTR _IFUNC
 TOcLinkView::GetName(TOcPartName /*name*/)
 {
@@ -436,12 +474,18 @@ TOcLinkView::GetName(TOcPartName /*name*/)
 // TOcViewCollection
 //
 
+//
+//
+//
 TOcViewCollection::TOcViewCollection()
 :
   TCVectorImp<TOcLinkView*>(0, 10)
 {
 }
 
+//
+//
+//
 TOcViewCollection::~TOcViewCollection()
 {
   Clear();
@@ -454,11 +498,15 @@ void
 TOcViewCollection::Clear()
 {
   for (int i = Count() - 1; i >= 0; i--) {
-    TOcLinkView* View = (TOcLinkView*)(*this)[i];
-    View->Release();
+    TOcLinkView* view = (TOcLinkView*)(*this)[i];
+    view->Release();
+    Base::Detach(i); 
   }
 }
 
+//
+//
+//
 int
 TOcViewCollection::Detach(TOcLinkView* const& view, int del)
 {
@@ -468,6 +516,9 @@ TOcViewCollection::Detach(TOcLinkView* const& view, int del)
   return ret;
 }
 
+//
+//
+//
 TOcLinkView*
 TOcViewCollection::Find(TString const moniker) const
 {
@@ -480,5 +531,3 @@ TOcViewCollection::Find(TString const moniker) const
 
   return 0;
 }
-
-

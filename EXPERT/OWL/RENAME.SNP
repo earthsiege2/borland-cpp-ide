@@ -4,13 +4,13 @@
 ##0 [[count]]
 ##--BEGIN-- QUERY_CLASS_NAME [[ClassName]]
 ##^BOF
-##Replace(\\"[[ClassName]] ([[BaseClass]])", \\"[[NewClassName]] ([[BaseClass]])") count
+##Replace(\\"[[ClassName]]([[BaseClass]])", \\"[[NewClassName]]([[BaseClass]])") count
 ##^BOF
 ##Replace(\\"//{{[[ClassName]]", \\"//{{[[NewClassName]]") count
 ##^BOF
 ##Replace(\\"class [[ClassName]] ", \\"class [[NewClassName]] ") count
 ##^BOF
-##Replace(\\"[[ClassName]] (", \\"[[NewClassName]] (") count
+##Replace(\\"[[ClassName]](", \\"[[NewClassName]](") count
 ##^BOF
 ##Replace(\\"([[ClassName]])", \\"([[NewClassName]])") count
 ##^BOF
@@ -26,7 +26,7 @@
 ##^BOF
 ##Replace(\\"[[ClassName]], [[BaseClass]]", \\"[[NewClassName]], [[BaseClass]]") count
 ##^BOF
-##Replace(\\"[[ClassName]] ([[BaseClass]])", \\"[[NewClassName]] ([[BaseClass]])") count
+##Replace(\\"[[ClassName]]([[BaseClass]])", \\"[[NewClassName]]([[BaseClass]])") count
 ##^BOF
 ##Replace(\\"//{{[[ClassName]]", \\"//{{[[NewClassName]]") count
 ##^BOF

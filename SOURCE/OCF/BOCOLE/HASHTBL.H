@@ -1,8 +1,11 @@
+//----------------------------------------------------------------------------
+// ObjectComponents
+// Copyright (c) 1991, 1996 by Borland International, All Rights Reserved
 //
-
+// $Revision:   2.1  $
+//----------------------------------------------------------------------------
 #ifndef _HASHTBL_H
-#define		_HASHTBL_H
-
+#define _HASHTBL_H
 
 #include <bole.h>
 
@@ -84,4 +87,3 @@ void	HashTable<T, SIZE>::Remove(IHashable<T> *pKey)
 }
 
 #endif
-

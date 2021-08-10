@@ -1,12 +1,10 @@
-/*------------------------------------------------------------------------*/
-/*                                                                        */
-/*  DICT.H                                                                */
-/*                                                                        */
-/*  Copyright (c) 1993, 1994 Borland International                        */
-/*  All Rights Reserved                                                   */
-/*                                                                        */
-/*------------------------------------------------------------------------*/
-
+//----------------------------------------------------------------------------
+// Borland BIDS Container Library
+// Copyright (c) 1993, 1996 by Borland International, All Rights Reserved
+//
+//$Revision:   5.4  $
+//
+//----------------------------------------------------------------------------
 #if !defined( CLASSLIB_DICT_H )
 #define CLASSLIB_DICT_H
 
@@ -107,7 +105,7 @@ int TMDictionaryAsHashTable<T,A>::Detach( const T& t,
 }
         
 template <class T, class A>
-void TMDictionaryAsHashTable<T,A>::Flush( DeleteType dt = DefDelete )
+void TMDictionaryAsHashTable<T,A>::Flush(DeleteType dt)
 {
     if( DelObj(dt) )
         {
@@ -358,4 +356,3 @@ public:
 
 #endif  // CLASSLIB_DICT_H
 
-

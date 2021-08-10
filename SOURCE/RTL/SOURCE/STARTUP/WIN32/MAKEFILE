@@ -20,14 +20,17 @@
 # Build the object module lists.                                            #
 #############################################################################
 OBJS =              \
-        libmain.obj
+        libmain.obj \
+	rawdll.obj
 
 !if $d(DLL)
     IMPOBJS =           \
-            libmain.obj
+            libmain.obj	\
+	    rawdll.obj
 
     MISC =                      \
-            $(LIBDIR)\c0d32.obj
+            $(LIBDIR)\c0d32.obj \
+            $(LIBDIR)\c0d32x.obj
 
 !elif !$d(MT)
     MISC =                      \
@@ -54,7 +57,12 @@ $(LIBDIR)\c0w32.obj : c0ntw.obj
 $(LIBDIR)\c0d32.obj : c0ntd.obj
     copy $** $<
 
+$(LIBDIR)\c0d32x.obj: c0ntdx.obj
+    copy $** $<
+
 c0ntw.obj : c0nt.asm
 
 c0ntd.obj : c0nt.asm
+
+c0ntdx.obj: c0nt.asm
 

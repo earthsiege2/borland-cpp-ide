@@ -1,0 +1,18 @@
+#----------------------------------------------------------------------------
+# Borland C++ - (C) Copyright 1996 by Borland International
+#   examples\vdbt\calcfld\makefile
+#----------------------------------------------------------------------------
+
+SYSTEMS = WIN16 WIN32
+
+!if $(SYSTEM)==WIN16
+MODEL=l
+USERLIBS = bdto.lib bdtci.lib ole2w16.lib
+!else
+MODEL=f
+USERLIBS = bdtof.lib bdtcfi.lib ole2w32.lib
+!endif
+
+EXE = calcfld
+USERLIBPATH = $(BCEXAMPLEDIR)\..\lib
+!include $(BCEXAMPLEDIR)\makefile.gen

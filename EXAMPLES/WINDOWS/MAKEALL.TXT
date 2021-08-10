@@ -1,21 +1,18 @@
-Instructions for the ide example MAKEALL.IDE.
+Instructions for the IDE example MAKEALL.IDE.
 //
-// Instructions for MakeAll.ide
-// Copyright Borland International, 1993
+// Copyright Borland International, 1993, 1995
 //
 
-Some tools (such as the Microsoft Help Compilers) seem
-to need assitance in directing the final output of their
-translaion to a given directory. In order to accomodate
-this and put the resulting [.hlp] files into their proper
-directories, please make sure that you have made the
-the examples\ide\deliver\deliver.ide project and delivered
-it into the bin directory. That will allow that this project
-to complete successfully.
+Some tools (such as the Microsoft Help Compilers) require
+assistance with directing final output to a given directory. 
+To accommodate this and put the resulting [.HLP] files into their 
+proper directories, please make sure that you have made the
+the EXAMPLES\IDE\DELIVER\DELIVER.IDE project and delivered
+it to the BIN directory. Then the project will complete successfully.
 
-Optionally you may chose to skip the [.hpj] compiliation
-by selecting 'Edit Local Options' from the [.hpj]'s SpeedMenu,
-going to 'Build Attributes' section and selecting
+Optionally, you can skip the [.hpj] compilation by
+selecting 'Edit Local Options' from the [.hpj] SpeedMenu,
+then by going to the 'Build Attributes' section and choosing
 'Never Build'.
 
 

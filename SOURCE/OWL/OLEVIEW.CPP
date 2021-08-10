@@ -1,21 +1,41 @@
 //----------------------------------------------------------------------------
 // ObjectWindows
-// (C) Copyright 1994 by Borland International, All Rights Reserved
+// Copyright (c) 1994, 1996 by Borland International, All Rights Reserved
 //
-//   Implementation of TOleView. Doc/View view derived from TOleWindow that
-//   supports Ole2 using OCF TOcView & TOcRemView
+//$Revision:   10.4  $
+//
+// Implementation of TOleView. Doc/View view derived from TOleWindow that
+// supports OLE 2 using OCF TOcView & TOcRemView
 //----------------------------------------------------------------------------
 #define INC_OLE2
-#include <owl/owlpch.h>
-#include <owl/window.h>
-#include <owl/gdiobjec.h>
-#include <owl/scroller.h>
-#include <owl/docmanag.h>
-#include <owl/docview.rh>
-#include <owl/oleview.rh>
-#include <owl/oleframe.h>
-#include <owl/oleview.h>
-#include <owl/oledoc.h>
+#include <owl/pch.h>
+#if !defined(OWL_WINDOW_H)
+# include <owl/window.h>
+#endif
+#if !defined(OWL_GDIOBJEC_H)
+# include <owl/gdiobjec.h>
+#endif
+#if !defined(OWL_SCROLLER_H)
+# include <owl/scroller.h>
+#endif
+#if !defined(OWL_DOCMANAG_H)
+# include <owl/docmanag.h>
+#endif
+#if !defined(OWL_DOCVIEW_RH)
+# include <owl/docview.rh>
+#endif
+#if !defined(OWL_OLEVIEW_RH)
+# include <owl/oleview.rh>
+#endif
+#if !defined(OWL_OLEFRAME_H)
+# include <owl/oleframe.h>
+#endif
+#if !defined(OWL_OLEVIEW_H)
+# include <owl/oleview.h>
+#endif
+#if !defined(OWL_OLEDOC_H)
+# include <owl/oledoc.h>
+#endif
 
 //----------------------------------------------------------------------------
 // TOleView
@@ -44,6 +64,9 @@ DEFINE_RESPONSE_TABLE1(TOleView, TOleWindow)
   EV_OC_VIEWGETITEMNAME,
 END_RESPONSE_TABLE;
 
+//
+//
+//
 TOleView::TOleView(TDocument& doc, TWindow* parent)
 :
   TView(doc),
@@ -55,12 +78,15 @@ TOleView::TOleView(TDocument& doc, TWindow* parent)
   OcDoc = oleDoc->GetOcDoc(); // Let OleWindow member point to it for accessor
 }
 
+//
+//
+//
 TOleView::~TOleView()
 {
   Destroying = true;
   if (IsRemote())
-    Destroy();  // make sure that derived TWindow shutdown virtuals get called
-  OcDoc = 0;  // we don't own it, don't let TOleWindow delete it
+    Destroy();  // Make sure that derived TWindow shutdown virtuals get called
+  OcDoc = 0;    // We don't own it, don't let TOleWindow delete it
 }
 
 //
@@ -90,7 +116,6 @@ TOleView::GetViewMenu()
   if (TView::GetViewMenu())
     return TView::GetViewMenu();
 
-//!CQ && not a link!
   if (IsRemote() && GetModule()->FindResource(IDM_OLEVIEWEMBED, RT_MENU))
     SetViewMenu(new TMenuDescr(IDM_OLEVIEWEMBED, GetModule()));
   else
@@ -100,12 +125,12 @@ TOleView::GetViewMenu()
 }
 
 //
-// Does a given HWND belong to this view? Yes if it is us, or a child of us
+// Does a given THandle belong to this view? Yes if it is us, or a child of us
 //
 bool
-TOleView::VnIsWindow(HWND hWnd)
+TOleView::VnIsWindow(THandle hWnd)
 {
-  return hWnd == HWindow || IsChild(hWnd);
+  return hWnd == GetHandle() || IsChild(hWnd);
 }
 
 //
@@ -125,20 +150,17 @@ TOleView::CanClose()
     return false;
   }
 
-  // say yes if there are more than one TOleView's attached to the document
+  // Say yes if there are more than one TOleView's attached to the document
   //
   if (OtherViewExists() || GetOcRemView())
     return true;
 
-  if (Doc->CanClose())
-  {
+  if (Doc->CanClose()) {
     if (OcDoc)
       OcDoc->Close();
     return true;
   }
-
   return false;
-
 }
 
 //
@@ -185,9 +207,14 @@ TOleView::CleanupWindow()
 bool
 TOleView::OleShutDown()
 {
-  TOleWindow::OleShutDown();
-  if (OcDoc && !OtherViewExists())
-    OcDoc->Close();
+  // if dll server open edit return
+  if (OcApp->IsOptionSet(amExeMode) || !IsOpenEditing())
+	  TOleWindow::OleShutDown();
+  else {
+	  TOleWindow::OleShutDown();
+	  if (OcDoc && !OtherViewExists())
+  	  OcDoc->Close();
+  }
   return true;
 }
 
@@ -477,13 +504,20 @@ DEFINE_RESPONSE_TABLE(TOleLinkView)
   EV_VN_LINKMONIKER,
 END_RESPONSE_TABLE;
 
+//
+//
+//
 TOleLinkView::TOleLinkView(TDocument& doc, TOcLinkView& view)
 :
   TView(doc),
   OcLinkView(view)
 {
+	view.AddRef();
 }
 
+//
+//
+//
 TOleLinkView::~TOleLinkView()
 {
   OcLinkView.Release();

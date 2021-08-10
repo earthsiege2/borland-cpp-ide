@@ -1,23 +1,15 @@
-/*------------------------------------------------------------------------*/
-/*                                                                        */
-/*  TIMEP.CPP                                                             */
-/*                                                                        */
-/*  Copyright (c) 1993, 1994 Borland International                        */
-/*  All Rights Reserved                                                   */
-/*                                                                        */
-/*------------------------------------------------------------------------*/
-
-#if !defined( __STRSTREA_H )
-#include <strstrea.h>
-#endif
-
-#if !defined( CLASSLIB_TIME_H )
+//----------------------------------------------------------------------------
+// Borland Class Library
+// Copyright (c) 1993, 1996 by Borland International, All Rights Reserved
+//
+//$Revision:   5.4  $
+//
+// TTime class persistent streaming implementation
+//----------------------------------------------------------------------------
+#include <classlib/pch.h>
 #include <classlib/time.h>
-#endif
-
-#if !defined( CLASSLIB_OBJSTRM_H )
 #include <classlib/objstrm.h>
-#endif
+#include <strstrea.h>
 
 opstream _BIDSFAR & _BIDSFUNC operator << ( opstream _BIDSFAR & os,
                                             const TTime _BIDSFAR & d )

@@ -3,9 +3,9 @@
 ;[]------------------------------------------------------------[]
 
 ;
-;       C/C++ Run Time Library - Version 6.5
+;       C/C++ Run Time Library - Version 7.0
 ; 
-;       Copyright (c) 1991, 1994 by Borland International
+;       Copyright (c) 1991, 1996 by Borland International
 ;       All Rights Reserved.
 ; 
 
@@ -29,8 +29,13 @@ __acrtused      equ     0
                 extrn __cexit:DIST
 ifdef	__LARGE__
 ifndef	_BUILDRTLDLL
-                extrn FREELIBRARY:far
+                extrn GETMODULEHANDLE:far
+                extrn GETPROCADDRESS:far
                 extrn __LockDLL:DIST
+else
+		extrn ___cg_init:DIST
+		extrn ___cg_exit:DIST
+		extrn __CG_QUIET:DIST
 endif
 endif
                 extrn __setupio:near    ;required!
@@ -95,6 +100,9 @@ ifdef	__LARGE__
 ifndef	_BUILDRTLDLL
                 public __LockRTLHandle
 __LockRTLHandle dw      0               ;Handle of RTLDLL (locked)
+FREELIBRARYPROC	dd	0		;True address of FreeLibrary
+KERNELSTRING	db	"KERNEL", 0	;Name of KERNEL.EXE
+FREELIBRARYSTRING db	"FREELIBRARY", 0;Name of FreeLibrary procedure
 endif
 endif
 
@@ -106,7 +114,7 @@ _abend          dw      1               ;If LibEntry is called gets set to
                                         ;Gets set to 1 if DLL is terminated
                                         ;by a call to abort() or _exit().
 
-CopyRight       db      'Borland C++ - Copyright 1994 Borland Intl.',0
+CopyRight       db      'Borland C++ - Copyright 1995 Borland Intl.',0
                 ends
 
 _TEXT           segment
@@ -125,7 +133,7 @@ LibEntry        proc far
                 jcxz    @@Init          ;jump if no heap specified
 
                 ;call the Windows function LocalInit() to set up the heap
-                ;LocalInit((LPSTR)start, WORD cbHeap);
+                ;LocalInit(uint segment, uint startOffset, uint endOffset)
 
                 push    ds              ;Heap segment
                 xor     ax,ax
@@ -179,16 +187,23 @@ ENDIF
                 jz      @@no8087
                 mov     __8087, 1
 @@no8087:
-                and     ax,08h+04h+02h  ; WF_CPU486|WF_CPU386|WF_CPU286 
+                and     ax,08h+04h+02h  ; WF_CPU486|WF_CPU386|WF_CPU286
                 shr     ax,1            ; Convert to 4 or 2 or 1 or 0
                 test    ax,0004h        ; Have 4, 486 done
                 jnz     @@NoAdjust
                 or      ax,ax           ; Have 0, 8086 done
-                jz      @@NoAdjust      
+                jz      @@NoAdjust
                 inc     ax              ; Have 2 or 1, need 3 or 2
 @@NoAdjust:
                 mov     __8086,ax       ; Set CPU Type
 
+ifdef	_BUILDRTLDLL
+;Init CG
+		call	___cg_init
+		test	ax,ax
+		jnz	@@Exit
+endif
+		
 ;Call our initialization functions, including C++ static constructors.
 
                 mov     ax,ds
@@ -209,7 +224,18 @@ ifndef	_BUILDRTLDLL
 
                 push    ax
                 call    __LockDLL
-                mov __LockRTLHandle, ax
+                mov 	__LockRTLHandle, ax
+                push	ds
+		mov	ax, OFFSET KERNELSTRING
+		push	ax
+                call	GETMODULEHANDLE
+                push	ax
+                push	ds
+		mov 	ax, OFFSET FREELIBRARYSTRING
+                push	ax
+                call	GETPROCADDRESS
+                mov	word ptr [FREELIBRARYPROC + 0], ax
+                mov	word ptr [FREELIBRARYPROC + 2], dx
                 pop ax
 @@LibMainRet:
 endif
@@ -289,6 +315,12 @@ WEP             proc    windows pascal far nParam:WORD
 
                 cmp     _abend, 0
                 jne     @@error
+
+ifdef	_BUILDRTLDLL
+;Tell CG not to display message box
+		call	__CG_QUIET
+endif
+
                 push    nParam
                 call    __WEP
                 push    ax
@@ -302,9 +334,14 @@ ifndef	_BUILDRTLDLL
 		or	ax, ax
 		jz	@@RTLNotLocked
 		push	ax
-		call	FreeLibrary
+		call	dword ptr [FREELIBRARYPROC]
 @@RTLNotLocked:
 endif
+endif
+
+ifdef	_BUILDRTLDLL
+;Init CG
+		call	___cg_exit
 endif
 
 IF LDATA EQ false

@@ -40,6 +40,11 @@
 #endif
 #endif // DUMMYUNIONNAME
 
+#if !defined(UNICODE) && !defined(__WIN32__)
+typedef LPSTR LPWSTR;
+typedef LPCSTR LPCWSTR;
+#endif
+
 #ifdef _WIN32
 #include <pshpack1.h>
 #endif
@@ -74,7 +79,7 @@ extern "C" {
 #include <prsht.h>
 
 
-WINCOMMCTRLAPI void WINAPI InitCommonControls();
+WINCOMMCTRLAPI void WINAPI InitCommonControls(void);
 
 #define ODT_HEADER              100
 #define ODT_TAB                 101
@@ -151,7 +156,10 @@ WINCOMMCTRLAPI void WINAPI InitCommonControls();
 #define CLR_NONE                0xFFFFFFFFL
 #define CLR_DEFAULT             0xFF000000L
 
-struct _IMAGELIST;
+struct _IMAGELIST
+{
+    int dummy;      /* used to prevent undefined structure warnings */
+};
 typedef struct _IMAGELIST NEAR* HIMAGELIST;
 
 #define ILC_MASK                0x0001
@@ -209,7 +217,7 @@ WINCOMMCTRLAPI HIMAGELIST  WINAPI ImageList_LoadImageW(HINSTANCE hi, LPCWSTR lpb
 #endif
 
 WINCOMMCTRLAPI BOOL        WINAPI ImageList_BeginDrag(HIMAGELIST himlTrack, int iTrack, int dxHotspot, int dyHotspot);
-WINCOMMCTRLAPI void        WINAPI ImageList_EndDrag();
+WINCOMMCTRLAPI void        WINAPI ImageList_EndDrag(void);
 WINCOMMCTRLAPI BOOL        WINAPI ImageList_DragEnter(HWND hwndLock, int x, int y);
 WINCOMMCTRLAPI BOOL        WINAPI ImageList_DragLeave(HWND hwndLock);
 WINCOMMCTRLAPI BOOL        WINAPI ImageList_DragMove(int x, int y);
@@ -1896,7 +1904,10 @@ typedef struct _LV_KEYDOWN
 #define TVS_DISABLEDRAGDROP     0x0010
 #define TVS_SHOWSELALWAYS       0x0020
 
-typedef struct _TREEITEM FAR* HTREEITEM;
+typedef struct _TREEITEM
+{
+    int dummy;      /* used to prevent undefined structure warnings */
+}   FAR* HTREEITEM;
 
 #define TVIF_TEXT               0x0001
 #define TVIF_IMAGE              0x0002

@@ -1,8 +1,8 @@
-	  WELCOME TO BORLAND C++ RUNTIME LIBRARY SOURCE 6.5
+	  WELCOME TO BORLAND C++ RUNTIME LIBRARY SOURCE 7.0
 	  -------------------------------------------------
 
   This README contains information on support for the Borland C++
-  Runtime Library source code.  
+  Runtime Library source code.
 
   BUILDING THE RTL
   ________________
@@ -12,27 +12,24 @@
   in the tools subdirectory of the directory where the source
   was installed.  For example:
 
-  If your Borland C++ root installation directory is C:\BC45, the RTL
-  source was installed into C:\BC45\SOURCE\RTL and C:\BC45\SOURCE\RTL\TOOLS
+  If your Borland C++ root installation directory is C:\BC5, the RTL
+  source was installed into C:\BC5\SOURCE\RTL and C:\BC5\SOURCE\RTL\TOOLS
   must be added to your path.
 
   You must have TASM.EXE installed from Borland Turbo Assembler before you
   can build the Run Time Library.
 
-  To build the rtl, move to the directory where the source was installed 
+  To build the rtl, move to the directory where the source was installed
   and type build.bat. An help screen is displayed allowing you to choose
   which part of the RTL you want to build. For example :
 
-      C:\BC45\SOURCE\RTL\BUILD ALL
+      C:\BC5\SOURCE\RTL\BUILD ALL
 
   will build everything.
 
-  NB : if the RTL was not installed in the C:\BC45\SOURCE\RTL directory 
+  Note: if the RTL was not installed in the C:\BC5\SOURCE\RTL directory
   you will need to modify the file RULES.MAK to set the RTLROOT variable
   accordingly.
-  Due to limitations in spawning a 16 bit application by a 32 bit 
-  application under Windows NT, you cannot build the 16 bit libraries
-  under Windows NT.
 
 
   RUNTIME LIBRARY SUPPORT

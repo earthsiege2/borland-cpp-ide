@@ -1,43 +1,16 @@
-/*------------------------------------------------------------------------*/
-/*                                                                        */
-/*  OBJSTRM.CPP                                                           */
-/*                                                                        */
-/*  Copyright (c) 1992, 1994 Borland International                        */
-/*  All Rights Reserved                                                   */
-/*                                                                        */
-/*------------------------------------------------------------------------*/
-
-#if !defined( _Windows )
-#define _Windows
-#endif
-
-#if !defined( __ALLOC_H )
-#include <alloc.h>
-#endif
-
-#if !defined( __CHECKS_H )
-#include <checks.h>
-#endif
-
-#if !defined( __CSTRING_H )
-#include <cstring.h>
-#endif
-
-#if !defined( CLASSLIB_STREAMBL_H )
+//----------------------------------------------------------------------------
+// Borland Class Library
+// Copyright (c) 1992, 1996 by Borland International, All Rights Reserved
+//
+//$Revision:   5.6  $
+//
+//----------------------------------------------------------------------------
+#include <classlib/pch.h>
 #include <classlib/streambl.h>
-#endif
-
-#if !defined( CLASSLIB_OBJSTRM_H )
 #include <classlib/objstrm.h>
-#endif
-
-#if defined( __FLAT__ )
-#define _fstrncpy strncpy
-#define _fstrcpy  strcpy
-#define _fstrlen  strlen
-#define _fmemcpy  memcpy
-#define farmalloc malloc
-#endif
+#include <services/checks.h>
+#include <services/cstring.h>
+#include <services/memory.h>
 
 DIAG_DEFINE_GROUP(Objstrm,1,0);
 
@@ -251,7 +224,7 @@ void ipstream::freadBytes( void _BIDSFARDATA *data, size_t sz )
         if( bp->sgetn( buf, sz ) != sz )
             clear( ios::failbit );
         else
-            _fmemcpy( data, buf, sz);
+            memcpy( data, buf, sz);
 
         delete [] buf;
         }
@@ -317,11 +290,11 @@ char *ipstream::readString()
         if( len == nullStringLen )
             return 0;
 
-        char *buf = new char[len+1];
+        char *buf = new char[size_t(len+1)];
         if( buf == 0 )
             return 0;
-        readBytes( buf, len );
-        buf[len] = EOS;
+        readBytes( buf, size_t(len) );
+        buf[size_t(len)] = EOS;
         return buf;
         }
 }
@@ -337,8 +310,8 @@ char *ipstream::readString( char *buf, unsigned maxLen )
         uint32 len = readStringLength();
         if( len == nullStringLen || len > maxLen-1 )
             return 0;
-        readBytes( buf, len );
-        buf[len] = EOS;
+        readBytes( buf, size_t(len) );
+        buf[size_t(len)] = EOS;
         return buf;
         }
 }
@@ -353,9 +326,9 @@ char _BIDSFARDATA *ipstream::freadString()
         if( len == nullStringLen )
             return 0;
 
-        char _BIDSFARDATA *buf = new _BIDSFARDATA char[len+1];
-        freadBytes(buf, len);
-        buf[len] = EOS;
+        char _BIDSFARDATA *buf = new _BIDSFARDATA char[size_t(len)+1];
+        freadBytes(buf, size_t(len));
+        buf[size_t(len)] = EOS;
         return buf;
         }
 }
@@ -372,8 +345,8 @@ char _BIDSFARDATA *ipstream::freadString( char _BIDSFARDATA *buf, unsigned maxLe
         if( len == nullStringLen || len > maxLen-1 )
             return 0;
 
-        freadBytes( buf, len);
-        buf[len] = EOS;
+        freadBytes( buf, size_t(len));
+        buf[size_t(len)] = EOS;
         return buf;
         }
 }
@@ -618,11 +591,11 @@ void opstream::fwriteBytes( const void _BIDSFARDATA *data, size_t sz )
         {
         char *buf = new char[sz];
 
-        _fmemcpy( buf, data, sz );
+        memcpy( buf, data, sz );
         if( bp->sputn( (char *)buf, sz ) != sz )
             clear( ios::failbit );
 
-        delete buf;
+        delete[] buf;
         }
 }
 
@@ -651,7 +624,7 @@ void opstream::fwriteString( const char _BIDSFARDATA * str )
         writeWord32( nullStringLen );
         return;
         }
-    size_t len = _fstrlen( str );
+    size_t len = strlen( str );
     writeWord32( len );
     fwriteBytes(str, len);
 }
@@ -773,14 +746,12 @@ ipstream _BIDSFAR& _BIDSENTRY _BIDSFUNC operator >> ( ipstream _BIDSFAR& is,
             str = "";
         else
             {
-            char *temp = new char[len+1];
-            is.readBytes( temp, len );
-            temp[len] = EOS;
+            char *temp = new char[size_t(len)+1];
+            is.readBytes( temp, size_t(len) );
+            temp[size_t(len)] = EOS;
             str = temp;
             delete [] temp;
             }
         }
     return is;
 }
-
-

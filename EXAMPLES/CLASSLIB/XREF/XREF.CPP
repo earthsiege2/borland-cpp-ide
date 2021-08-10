@@ -2,7 +2,7 @@
 /*                                                                        */
 /*  XREF.CPP                                                              */
 /*                                                                        */
-/*  Copyright (c) 1993 Borland International                              */
+/*  Copyright (c) 1993, 1995 Borland International                        */
 /*  All Rights Reserved.                                                  */
 /*                                                                        */
 /*  Text cross referencing example                                        */
@@ -18,10 +18,10 @@
 /*  Data files provided: trivial.dat and text.dat.                        */
 /*------------------------------------------------------------------------*/
 
-#include <classlib\binimp.h>
-#include <classlib\vectimp.h>
-#include <cstring.h>
-#include <regexp.h>
+#include <classlib/binimp.h>
+#include <classlib/vectimp.h>
+#include <services/cstring.h>
+#include <services/regexp.h>
 #include <fstream.h>
 #include <strstrea.h>
 #include <iomanip.h>
@@ -144,7 +144,8 @@ ostream& operator << ( ostream& os, const TRecord& rec )
 
     temp << setw(20) << rec.Word;
 
-    for( unsigned i = 0; i < rec.LineRef.Count()-1; i++ )
+    unsigned i;
+    for(i = 0; i < rec.LineRef.Count()-1; i++ )
         {
         temp << rec.LineRef[i] << ',';  // write all but last line number
         }                               // followed by a comma

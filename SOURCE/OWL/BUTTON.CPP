@@ -1,15 +1,25 @@
 //----------------------------------------------------------------------------
 // ObjectWindows
-// (C) Copyright 1991, 1994 by Borland International, All Rights Reserved
+// Copyright (c) 1991, 1996 by Borland International, All Rights Reserved
 //
-//   Implementation of class TButton.  This defines the basic behavior
-//   of all buttons.
+//$Revision:   10.6  $
+//
+// Implementation of class TButton.  This defines the basic behavior of all
+// buttons.
 //----------------------------------------------------------------------------
 #pragma hdrignore SECTION
-#include <owl/owlpch.h>
-#include <owl/button.h>
-#include <owl/applicat.h>
-#include <bwcc.h>
+#include <owl/pch.h>
+#if !defined(OWL_BUTTON_H)
+# include <owl/button.h>
+#endif
+#if !defined(OWL_APPLICAT_H)
+# include <owl/applicat.h>
+#endif
+#if defined(BI_COMP_BORLANDC)
+# include <bwcc.h>
+#endif
+
+DIAG_DECLARE_GROUP(OwlControl);
 
 #if !defined(SECTION) || SECTION == 1
 
@@ -38,6 +48,7 @@ TButton::TButton(TWindow*        parent,
 
   else
     Attr.Style |= BS_PUSHBUTTON;
+  TRACEX(OwlControl, OWL_CDLEVEL, "TButton constructed @" << (void*)this);
 }
 
 //
@@ -55,6 +66,15 @@ TButton::TButton(TWindow*   parent,
   DisableTransfer();
   IsDefPB = false;         // needed for drawable buttons
   IsCurrentDefPB = false;  // needed for drawable buttons
+  TRACEX(OwlControl, OWL_CDLEVEL, "TButton constructed from resource @" << (void*)this);
+}
+
+//
+// Output a debug message if using the diagnostic libraries.
+//
+TButton::~TButton()
+{
+  TRACEX(OwlControl, OWL_CDLEVEL, "TButton destructed @" << (void*)this);
 }
 
 //
@@ -63,10 +83,14 @@ TButton::TButton(TWindow*   parent,
 char far*
 TButton::GetClassName()
 {
-  if (GetApplication()->BWCCEnabled())
+#if defined(BI_COMP_BORLANDC)
+  if (GetApplication()->BWCCEnabled()) {
+    TRACEX(OwlControl, 1, "BWCC button used for classname @" << (void*)this);
     return BUTTON_CLASS;
-  else
-    return "BUTTON";
+  }
+#endif
+  TRACEX(OwlControl, 1, "Regular button used for classname @" << (void*)this);
+  return "BUTTON";
 }
 
 //
@@ -78,6 +102,7 @@ TButton::GetClassName()
 void
 TButton::SetupWindow()
 {
+  TRACEX(OwlControl, 1, "TButton::SetupWindow() @" << (void*)this);
   if (IsDefPB && ((Attr.Style & BS_OWNERDRAW) == BS_OWNERDRAW))
     Parent->HandleMessage(DM_SETDEFID, Attr.Id);
 }
@@ -104,17 +129,16 @@ TButton::EvGetDlgCode(MSG far* msg)
 // when Windows tries to make us a DEF- or non-DEFPUSHBUTTON we keep track
 // of the desired style in IsCurrentDefPB
 //
-LRESULT
-TButton::BMSetStyle(WPARAM wParam, LPARAM)
+TResult
+TButton::BMSetStyle(TParam1 param1, TParam2)
 {
   if ((Attr.Style & BS_OWNERDRAW) != BS_OWNERDRAW)
     DefaultProcessing();
-
-  else if (wParam == BS_DEFPUSHBUTTON) {
+  else if (param1 == BS_DEFPUSHBUTTON) {
     IsCurrentDefPB = true;
     Invalidate();
   }
-  else if (wParam == BS_PUSHBUTTON) {
+  else if (param1 == BS_PUSHBUTTON) {
     IsCurrentDefPB = false;
     Invalidate();
   }
@@ -130,6 +154,11 @@ TButton::BMSetStyle(WPARAM wParam, LPARAM)
 
 IMPLEMENT_STREAMABLE1(TButton, TControl);
 
+#if !defined(BI_NO_OBJ_STREAMING)
+
+//
+//
+//
 void*
 TButton::Streamer::Read(ipstream& is, uint32 /*version*/) const
 {
@@ -138,10 +167,15 @@ TButton::Streamer::Read(ipstream& is, uint32 /*version*/) const
   return GetObject();
 }
 
+//
+//
+//
 void
 TButton::Streamer::Write(opstream& os) const
 {
   WriteBaseObject((TControl*)GetObject(), os);
   os << GetObject()->IsDefPB;
 }
+#endif  // if !defined(BI_NO_OBJ_STREAMING)
+
 #endif

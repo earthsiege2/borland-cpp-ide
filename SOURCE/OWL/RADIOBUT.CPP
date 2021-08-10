@@ -1,16 +1,27 @@
 //----------------------------------------------------------------------------
 // ObjectWindows
-// (C) Copyright 1991, 1994 by Borland International, All Rights Reserved
+// Copyright (c) 1991, 1996 by Borland International, All Rights Reserved
 //
-//   Implementation of class TRadioButton.  This defines the basic behavior
-//   for all radio buttons.
+//$Revision:   10.3  $
+//
+// Implementation of class TRadioButton.  This defines the basic behavior for
+// all radio buttons.
 //----------------------------------------------------------------------------
 #pragma hdrignore SECTION
-#include <owl/owlpch.h>
-#include <owl/radiobut.h>
-#include <owl/groupbox.h>
-#include <owl/applicat.h>
-#include <bwcc.h>
+#include <owl/pch.h>
+#if !defined(OWL_RADIOBUT_H)
+# include <owl/radiobut.h>
+#endif
+#if !defined(OWL_GROUPBOX_H)
+# include <owl/groupbox.h>
+#endif
+#if !defined(OWL_APPLICAT_H)
+# include <owl/applicat.h>
+#endif
+
+#if defined(BI_COMP_BORLANDC)
+# include <bwcc.h>
+#endif
 
 #if !defined(SECTION) || SECTION == 1
 
@@ -33,6 +44,9 @@ TRadioButton::TRadioButton(TWindow*        parent,
   Attr.Style = WS_CHILD | WS_VISIBLE | BS_AUTORADIOBUTTON;
 }
 
+//
+//
+//
 TRadioButton::TRadioButton(TWindow*   parent,
                            int        resourceId,
                            TGroupBox* group,
@@ -48,9 +62,11 @@ TRadioButton::TRadioButton(TWindow*   parent,
 char far*
 TRadioButton::GetClassName()
 {
+#if defined(BI_COMP_BORLANDC)
   if (GetApplication()->BWCCEnabled())
     return RADIO_CLASS;
   else
+#endif
     return "BUTTON";
 }
 
@@ -76,6 +92,8 @@ TRadioButton::BNClicked()
 
 IMPLEMENT_STREAMABLE1(TRadioButton, TCheckBox);
 
+#if !defined(BI_NO_OBJ_STREAMING)
+
 //
 // reads an instance of TRadioButton from the passed ipstream
 //
@@ -94,4 +112,6 @@ TRadioButton::Streamer::Write(opstream& os) const
 {
   WriteBaseObject((TCheckBox*)GetObject(), os);
 }
+#endif  // if !defined(BI_NO_OBJ_STREAMING)
+
 #endif

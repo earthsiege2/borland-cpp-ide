@@ -1,17 +1,13 @@
+//----------------------------------------------------------------------------
+// ObjectComponents
+// Copyright (c) 1994, 1996 by Borland International, All Rights Reserved
 //
-//**************************************************************************
+// $Revision:   2.3  $
 //
-// BOleIPS.cpp --	Implements the Bolero half of the OLE2 in-process
-//                server object.
-//
-//                BOleIps objects impersonate the client application
-//                from the point of view of the Bolero customer who's
-//                writing a server object (IPart)
-//
-// Copyright (c) 1993,94 by Borland International, Inc. All rights reserved
-//
-//**************************************************************************
-
+// 	Implements the Bolero half of the OLE2 in-process server object.
+//    BOleIps objects impersonate the client application from the point of 
+//    view of the Bolero customer who's writing a server object (IPart)
+//----------------------------------------------------------------------------
 #include "BOleIPS.h"
 #include "BOleCMan.h"
 
@@ -38,6 +34,9 @@ BOleInProcHandler::~BOleInProcHandler ()
 {
 	if (pDefHandler)
 		pDefHandler->Release();
+
+	if (pAdviseView)
+		pAdviseView->Release();
 }
 
 HRESULT _IFUNC BOleInProcHandler::QueryInterfaceMain(REFIID iid, LPVOID FAR *ppv)
@@ -152,14 +151,10 @@ HRESULT _IFUNC BOleInProcHandler::SetAdvise (DWORD aspects, DWORD advf, LPADVISE
 	if (pAdviseView)
 		pAdviseView->Release();
 	pAdviseView = pAdvSink;
+  
+	if (pAdviseView)
+  	pAdviseView->AddRef ();
 
-//
-//
-//
-//
-//
-//
-//
 
 	if (advf | ADVF_PRIMEFIRST)
 		// Cause advises now
@@ -172,12 +167,17 @@ HRESULT _IFUNC BOleInProcHandler::SetAdvise (DWORD aspects, DWORD advf, LPADVISE
 HRESULT _IFUNC BOleInProcHandler::GetAdvise (DWORD FAR* pAspects,
 	DWORD FAR* pAdvf, LPADVISESINK FAR* ppAdvSink)
 {
-	pAdviseView->AddRef();
-	
-	*ppAdvSink = pAdviseView;
-	*pAspects = dwAdviseAspects;
-	*pAdvf = dwAdviseFlags;
-	return NOERROR;
+	if (ppAdvSink)  {
+		pAdviseView->AddRef();
+
+		*ppAdvSink = pAdviseView;
+		*pAspects = dwAdviseAspects;
+		*pAdvf = dwAdviseFlags;
+		return NOERROR;
+	}
+  else {
+  	return ResultFromScode (E_INVALIDARG);
+  }
 }
 	
 HRESULT _IFUNC BOleInProcHandler::GetExtent(DWORD dwDrawAspect,
@@ -228,7 +228,6 @@ HRESULT _IFUNC BOleInProcHandler::Init(PIBDataProvider pDP,
 		hr = pDefHandler->QueryInterface(IID_IBSite, &(LPVOID)pDefSite);
 		if (SUCCEEDED(hr)) {
 			pDefSite->Release();     // prevent aggregation deadlock
-			//
 			hr = pDefSite->Init(pDP, pP, szProgId, fHatchWnd);
 		}
 	}
@@ -286,7 +285,6 @@ void _IFUNC BOleInProcHandler::Invalidate( BOleInvalidate b)
 			pAdviseView = NULL;
 			dwAdviseAspects = 0L;
 			dwAdviseFlags = 0L;
-//
 		}
 	}
 	if (b)  // VIEW or DATA or PERSIST remains invalid
@@ -330,7 +328,6 @@ HRESULT _IFUNC BOleInProcHandler::ContextSensitiveHelp(BOOL fEnterMode)
 HRESULT _IFUNC BOleInProcHandler::TranslateAccelerator (LPMSG lpmsg)
 {
 	return pService->GetApplication()->Accelerator(lpmsg);
-//
 }
 
 HRESULT _IFUNC BOleInProcHandler::OnFrameWindowActivate (BOOL fActivate)
@@ -378,6 +375,9 @@ BOleInProcServer::~BOleInProcServer ()
 {
 	if (pDefHandler)
 		pDefHandler->Release();
+
+	if (pAdviseView)
+		pAdviseView->Release();
 }
 
 HRESULT _IFUNC BOleInProcServer::QueryInterfaceMain(REFIID iid, LPVOID FAR *ppv)
@@ -494,13 +494,9 @@ HRESULT _IFUNC BOleInProcServer::SetAdvise (DWORD aspects, DWORD advf, LPADVISES
 		pAdviseView->Release();
 	pAdviseView = pAdvSink;
 
-//
-//
-//
-//
-//
-//
-//
+	if (pAdviseView)
+		pAdviseView->AddRef ();
+
 
 	if (advf & ADVF_PRIMEFIRST)
 		// Cause advises now
@@ -513,12 +509,17 @@ HRESULT _IFUNC BOleInProcServer::SetAdvise (DWORD aspects, DWORD advf, LPADVISES
 HRESULT _IFUNC BOleInProcServer::GetAdvise (DWORD FAR* pAspects,
 	DWORD FAR* pAdvf, LPADVISESINK FAR* ppAdvSink)
 {
-	pAdviseView->AddRef();
-	
-	*ppAdvSink = pAdviseView;
-	*pAspects = dwAdviseAspects;
-	*pAdvf = dwAdviseFlags;
-	return NOERROR;
+	if (ppAdvSink)  {
+		pAdviseView->AddRef();
+		
+		*ppAdvSink = pAdviseView;
+		*pAspects = dwAdviseAspects;
+		*pAdvf = dwAdviseFlags;
+		return NOERROR;
+	}
+  else {
+  	return ResultFromScode (E_INVALIDARG);
+  }
 }
 	
 HRESULT _IFUNC BOleInProcServer::GetExtent(DWORD dwDrawAspect,
@@ -640,9 +641,6 @@ HRESULT _IFUNC BOleInProcServer::Init(PIBDataProvider pDP,
 		//
 		CreateDataCache(AsPIUnknown(pObjOuter),cid, IID_IUnknown,
 			&(LPVOID)pDefHandler);
-//
-//
-//
 	}
 
 	// initialize default IPS
@@ -659,7 +657,6 @@ void _IFUNC BOleInProcServer::Invalidate( BOleInvalidate b)
 			pAdviseView = NULL;
 			dwAdviseAspects = 0L;
 			dwAdviseFlags = 0L;
-//
 		}
 	}
 	if (b)  // VIEW or DATA or PERSIST remains invalid
@@ -718,13 +715,6 @@ HRESULT _IFUNC BOleInProcServer::Run(LPBINDCTX pbc)
 	//
 	if (!fRunningMode) {
 		fRunningMode = TRUE;
-//
-//
-//
-//
-//
-//
-//
 		// Should register the moniker here.
 		// Don't register if this is a clone (pPart is NULL)
 		// otherwise we would link to what's on the clipboard...
@@ -775,4 +765,3 @@ HRESULT _IFUNC BOleInProcServer::Close (DWORD dwSaveOption)
 	fRunningMode = FALSE;
 	return BOleSite::Close(dwSaveOption);
 }
-

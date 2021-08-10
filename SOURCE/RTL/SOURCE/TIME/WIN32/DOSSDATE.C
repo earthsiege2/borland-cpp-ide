@@ -7,9 +7,9 @@
  *-----------------------------------------------------------------------*/
 
 /*
- *      C/C++ Run Time Library - Version 1.5
+ *      C/C++ Run Time Library - Version 2.0
  *
- *      Copyright (c) 1991, 1994 by Borland International
+ *      Copyright (c) 1991, 1996 by Borland International
  *      All Rights Reserved.
  *
  */
@@ -18,6 +18,7 @@
 #include <_io.h>
 #include <dos.h>
 #include <errno.h>
+
 
 /*---------------------------------------------------------------------*
 
@@ -53,6 +54,14 @@ unsigned _RTLENTRY _EXPFUNC _dos_setdate(struct dosdate_t *datep)
 {
     SYSTEMTIME d;
 
+    /* Check for boundaries that Win32 doesn't do for us
+     */
+    if (datep->dayofweek > 6 || datep->dayofweek < 0)
+        return (__IOerror(-EINVAL));
+
+    if (datep->year > 2099)
+        return (__IOerror(-EINVAL));
+
     /* Get current time so that the time will be preserved.
      */
     GetLocalTime(&d);
@@ -66,8 +75,8 @@ unsigned _RTLENTRY _EXPFUNC _dos_setdate(struct dosdate_t *datep)
 
     if (SetLocalTime(&d) != TRUE)
         return (__NTerror());
-    else
-        return 0;
+
+    return 0;
 }
 
 /*---------------------------------------------------------------------*

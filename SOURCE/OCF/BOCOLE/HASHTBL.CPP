@@ -1,6 +1,9 @@
+//----------------------------------------------------------------------------
+// ObjectComponents
+// Copyright (c) 1991, 1996 by Borland International, All Rights Reserved
 //
-
-
+// $Revision:   2.1  $
+//----------------------------------------------------------------------------
 #include <hashtbl.h>
 #include <oledebug.h>
 
@@ -29,6 +32,5 @@ IHashable<T> *&HashTable<T, SIZE>::Find(IHashable<T> *pKey)
 	}
 	return *ppElem;
 }
-
 
 

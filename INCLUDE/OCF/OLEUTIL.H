@@ -1,52 +1,39 @@
-//
 //----------------------------------------------------------------------------
 // ObjectComponents
-// (C) Copyright 1994 by Borland International, All Rights Reserved
+// Copyright (c) 1994, 1996 by Borland International, All Rights Reserved
 //
-//   Low level OLE Utility class definitions
+// $Revision:   2.6  $
+//
+// Low level OLE Utility class definitions
 //----------------------------------------------------------------------------
 #if !defined(OCF_OLEUTIL_H)
 #define OCF_OLEUTIL_H
 
-#if !defined(OSL_DEFS_H)
-# include <osl/defs.h>
+#if !defined(OCF_DEFS_H)
+# include <ocf/defs.h>
 #endif
-#if !defined(__CSTRING_H)
-# include <cstring.h>
+#if !defined(SERVICES_CSTRING_H)
+# include <services/cstring.h>
 #endif
-#if !defined(OSL_EXCEPT_H)
-# include <osl/except.h>
+#if !defined(SERVICES_EXCEPT_H)
+# include <services/except.h>
+#endif
+#if !defined(SERVICES_OLE2INC_H)
+# include <services/ole2inc.h>
 #endif
 
-// For 16bit Ole2, can grab the headers now if the're not included already,
-// For 32bit Ole2, it is too late
 //
-#if defined(BI_PLAT_WIN16)
-# if !defined(__OLE2_H)
-#   include <ole2.h>
-# endif
-# if !defined(__DISPATCH_H)
-#   include <dispatch.h>
-# endif
-# if !defined(__OLENLS_H)
-#   include <olenls.h>
-# endif
-#endif
-#if defined(BI_PLAT_WIN32) && !defined(__OLE2_H) && !defined(_OLE2_H_)
-# error INC_OLE2 must be defined before osl/defs.h is included. Include ocdefs.h first
-#endif
-
 // Force this pointers and vtable pointers far on interfaces
 //
 #if !defined(_ICLASS)
-# if defined(__BORLANDC__)
+# if defined(BI_COMP_BORLANDC)
 #   if defined(BI_PLAT_WIN16)
 #     define _ICLASS  __huge
 #   else
 #     define _ICLASS
 #   endif
 # else
-#   define _ICLASS  FAR
+#   define _ICLASS  FAR   
 # endif
 #endif
 
@@ -54,11 +41,12 @@
 
 class TRegList;
 
-//____________________________________________________________________________
-//
-// TXOle - OLE API related exception object
-//____________________________________________________________________________
 
+//
+// class TXOle
+// ~~~~~ ~~~~~
+// OLE API related exception object
+//
 class TXOle : public TXBase {
   public:
     TXOle(const string& msg, HRESULT stat);
@@ -86,22 +74,59 @@ inline TXOle::TXOle(const TXOle& src)
 # define OLECALL(func, msg) TXOle::Check(func)
 #endif
 
-//____________________________________________________________________________
 //
-// TComRef - encapsulation of OLE interface pointers
-//____________________________________________________________________________
+// class TXObjComp
+// ~~~~~ ~~~~~~~~~
+// Base OC exception class
+//
+class TXObjComp : public TXOle {
+  public:
+    enum TError {
+      xNoError,             // App errors
+      xBOleLoadFail,
+      xBOleVersFail,
+      xBOleBindFail,
+      xDocFactoryFail,
+      xMissingRootIStorage, // doc and part errors
+      xInternalPartError,
+      xPartInitError,
+      xRootStorageOpenError,// storage errors
+      xStorageOpenError,
+      xStorageILockError,
+      xStreamOpenError,
+    };
+    TXObjComp(TError err, const string& msg, HRESULT stat = HR_FAIL)
+      : TXOle(msg, stat), ErrorCode(err) {}
+    TXObjComp(const TXObjComp& src)
+      : TXOle(src), ErrorCode(src.ErrorCode) {}
+   ~TXObjComp();
 
+    TXObjComp* Clone();
+    void       Throw();
+
+    static void Check(HRESULT stat, TError err, const char far* msg = 0);
+    static void Throw(TError err, HRESULT stat = HR_FAIL, const char far* msg = 0);
+
+    const TError ErrorCode;
+};
+
+//
+// class TComRef
+// ~~~~~ ~~~~~~~
+// Encapsulation of OLE interface pointers
+//
 template<class T> class TComRefBase {
   public:
          operator T far*() {return I;}
-         operator T far* far*() {TComRefBase::~TComRefBase(); return &I;}
-    int  operator !() {return I==0;}
+         virtual operator T far* far*() {Clear(); return &I;}
+    int  operator !() const {return I==0;}
     void operator delete(void* p) {((TComRefBase<T> far*)p)->I=0;}
   protected:
-    TComRefBase(const TComRefBase<T>& i) : I(i.I) {I->AddRef();}
+    TComRefBase(const TComRefBase<T>& i) : I(i.I) {if (I) I->AddRef();}
+    void Clear() {if (I) {I->Release(); I = 0;}}
     TComRefBase(T far* i) : I(i) {}
     TComRefBase() : I(0) {}
-   ~TComRefBase() {if (I) I->Release(); I = 0;}
+    virtual ~TComRefBase() {Clear();}
     T* I;
   private:
     void* operator new(size_t) {return 0;}  // prohibit use of new
@@ -112,16 +137,18 @@ template<class T> class TComRef : public TComRefBase<T> {
     TComRef() : TComRefBase<T>() {}
     TComRef(T far* iface) : TComRefBase<T>(iface) {}
     TComRef(const TComRef<T>& i) : TComRefBase<T>(i) {}
-    T far* operator =(T far* iface) {if(I)I->Release(); return I = iface;}
-    T far* operator =(const TComRef<T>& i) {if(I)I->Release(); return I=i.I;}
-    T far* operator->() {return I;} // should throw exception if I==0
+    TComRef<T>& operator =(T far* iface) {Clear(); I = iface; return *this;}
+    TComRef<T>& operator =(const TComRef<T>& i)
+                 {Clear(); if (i.I) {I = i.I; I->AddRef();} return *this;}
+    T far* operator->() {return I;}            // could throw exception if I==0
+    T far* operator->() const {return I;}      // could throw exception if I==0
 };
 
-//____________________________________________________________________________
 //
-// TBSTR - BASIC global string encapsulation
-//____________________________________________________________________________
-
+// class TBSTR
+// ~~~~~ ~~~~~
+// BASIC global string encapsulation
+//
 class TBSTR {
   public:
     TBSTR() : P(0) {}
@@ -131,24 +158,26 @@ class TBSTR {
     TBSTR& operator =(const TBSTR& p){if(P)::SysFreeString(P);P=p.P;return *this;}
            operator BSTR() {return P;}
            operator BSTR far*() {if(P)::SysFreeString(P); return &P;}
-    int    operator !() {return P==0;}
+    int    operator !() const {return P==0;}
     void   operator ~() {if (P)::SysFreeString(P); P = 0;}
+
   protected:
     BSTR P;
+
   private:
     void* operator new(size_t) {return 0;} // prohibit use of new, delete, etc
     void  operator delete(void*) {}
 };
 
-//____________________________________________________________________________
 //
-// TOleAllocator - object to initialize OLE and access memory manager
-//____________________________________________________________________________
-
+// class TOleAllocator
+// ~~~~~ ~~~~~~~~~~~~~
+// Object to initialize OLE and access memory manager
+//
 class TOleAllocator {
   public:
-    TOleAllocator();            // gets allocator, does not initialize OLE
-    TOleAllocator(IMalloc* mem);// use 0 to initialize with OLE task allocator
+    TOleAllocator();             // Gets allocator, does not initialize OLE
+    TOleAllocator(IMalloc* mem); // Use 0 to initialize with OLE task allocator
    ~TOleAllocator();
     void far* Alloc(unsigned long size);
     void Free(void far* pv);
@@ -157,21 +186,18 @@ class TOleAllocator {
     bool Initialized;
 };
 
-inline
-TOleAllocator::TOleAllocator(IMalloc* mem) : Initialized(true)
+inline TOleAllocator::TOleAllocator(IMalloc* mem) : Initialized(true)
 {
   OLECALL(OleInitialize(mem), "OleInitialize");
   OLECALL(CoGetMalloc(MEMCTX_TASK, &Mem), "CoGetMalloc");
 }
 
-inline
-TOleAllocator::TOleAllocator() : Initialized(false)
+inline TOleAllocator::TOleAllocator() : Initialized(false)
 {
   OLECALL(CoGetMalloc(MEMCTX_TASK, &Mem), "CoGetMalloc");
 }
 
-inline
-TOleAllocator::~TOleAllocator()
+inline TOleAllocator::~TOleAllocator()
 {
   if (Mem)
     Mem->Release();
@@ -179,17 +205,26 @@ TOleAllocator::~TOleAllocator()
     ::OleUninitialize();
 }
 
-inline void
-TOleAllocator::Free(void far* pv)
+inline void TOleAllocator::Free(void far* pv)
 {
   Mem->Free(pv);
 }
 
-//____________________________________________________________________________
 //
-// TClassId - GUID/IID/CLSID management
-//____________________________________________________________________________
+// class TOleStart
+// ~~~~~ ~~~~~~~~~
+// Simple wrapper of TOleAllocator used exclusively for initializing OLE
+//  
+class TOleStart : public TOleAllocator {
+  public:
+    TOleStart() : TOleAllocator(0){};
+};
 
+//
+// class TClassId
+// ~~~~~ ~~~~~~~~
+// GUID/IID/CLSID management
+//
 class far TClassId {
   public:
     enum TGenerate {Generate};
@@ -197,7 +232,7 @@ class far TClassId {
     TClassId(const char far* idtxt);
     TClassId(const TClassId& copy);
     TClassId(TGenerate);
-    TClassId & operator =(const TClassId& copy);
+    TClassId& operator =(const TClassId& copy);
     TClassId(const GUID far& guid, int offset);
    ~TClassId();
     operator GUID&();
@@ -216,6 +251,11 @@ inline TClassId::operator GUID&() { return Guid; }
 inline TClassId& TClassId::operator =(const TClassId& copy)
                                      {Guid = copy.Guid; Text=0; return *this;}
 
+//
+// class TBaseClassId
+// ~~~~~ ~~~~~~~~~~~~
+// Base GUID for a components sequence of GUIDs
+//
 class TBaseClassId : public TClassId {
   public:
     TBaseClassId(TRegList& regInfo, int maxAlloc = 256);
@@ -225,31 +265,31 @@ class TBaseClassId : public TClassId {
     TClassId operator [](int offset);
     int AllocId();
     int GetOffset(const GUID far& guid); // returns -1 if not within range
+
   private:
     int Offset;    // last offset given out by AllocId(), creator reserves 0
     int MaxAlloc;
 };
 
-//____________________________________________________________________________
 //
 // Fast GUID compare functions, assume that low word has already matched OK
-//____________________________________________________________________________
-
+//
 void CmpGuid12(IUnknown* This, REFIID req, REFIID ref, void far*far* pif);
 
 void CmpGuidOle(IUnknown* This, REFIID req, void far*far* pif);
 
-//____________________________________________________________________________
-//
-// TUnknown - Standard implementation of a controlling IUnknown for an object,
-//            to be inherited with other COM interfaces into an implementation
-//            class whose IUnknown implementation delegates to TUnknown::Outer.
-//____________________________________________________________________________
 
+//
+// class TUnknown
+// ~~~~~ ~~~~~~~~
+// Standard implementation of a controlling IUnknown for an object, to be
+// inherited with other COM interfaces into an implementation class whose
+// IUnknown implementation delegates to TUnknown::Outer.
+//
 class _ICLASS TUnknown {
   public:
-    operator IUnknown&() {return *Outer;}
-    operator IUnknown*() {Outer->AddRef(); return Outer;}
+    operator IUnknown&() {return *Outer;} 
+    operator IUnknown*() {Outer->AddRef(); return Outer;} 
     IUnknown* SetOuter(IUnknown* outer = 0);
     IUnknown* GetOuter() {return Outer;}
     unsigned long GetRefCount();
@@ -271,8 +311,8 @@ class _ICLASS TUnknown {
         unsigned long _IFUNC Release();
         TUnknownI() : RefCnt(0), Inner(0) {}
        ~TUnknownI();
-        unsigned  RefCnt;  // object's reference count, remains 1 if aggregated
-        TUnknown* Inner;   // chain of TUnknown-aggregated objects
+        unsigned  RefCnt;  // Object's reference count, remains 1 if aggregated
+        TUnknown* Inner;   // Chain of TUnknown-aggregated objects
       private:
         TUnknown& Host();
     } I;
@@ -299,7 +339,7 @@ inline unsigned long TUnknown::AdjustRefCount(int i)
   return (unsigned long)(I.RefCnt += i);
 }
 
-//____________________________________________________________________________
+//------------------------------------------------------------------------
 //
 // Macros to generate COM mixin classes for use with TUnknown
 //      Each base class must have an inline QueryInterface wrapper defined.
@@ -340,7 +380,8 @@ inline unsigned long TUnknown::AdjustRefCount(int i)
 //   public:
 //    TSample(IUnknown* outer, IUnknown*far* pif) { *pif = SetOuter(outer); }
 //  };
-//____________________________________________________________________________
+//
+//------------------------------------------------------------------------
 
 #define COMBASES_D(cls, bases)     \
   class cls : public TUnknown, bases { \
@@ -443,5 +484,3 @@ inline unsigned long TUnknown::AdjustRefCount(int i)
   };
 
 #endif  //  OCF_OLEUTIL_H
-
-

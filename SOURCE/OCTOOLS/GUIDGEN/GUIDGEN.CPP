@@ -1,8 +1,9 @@
 //----------------------------------------------------------------------------
-// ObjectConnections - (C) Copyright 1994 by Borland International
+// ObjectComponents
+// Copyright (c) 1994, 1996 by Borland International, All Rights Reserved
+//
 // Tool to generate a GUID from the network card ID, using the OLE 2 API func.
 //----------------------------------------------------------------------------
-
 #define STRICT
 #include <windows.h>
 #include <string.h>
@@ -43,8 +44,9 @@ GuidProc(HWND hDlg, UINT msg, WPARAM wParam, LPARAM /*lParam*/)
   return 1;
 }
 
-int PASCAL
+int far PASCAL
 WinMain(HINSTANCE hInst, HINSTANCE/*hPrev*/, char far*/*cmdLine*/, int/*show*/)
 {
   return ::DialogBox(hInst, "GuidDlg", 0,(DLGPROC)GuidProc);
 }
+

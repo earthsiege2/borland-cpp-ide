@@ -1,0 +1,21 @@
+//----------------------------------------------------------------------------
+// ObjectWindows
+// Copyright (C) 1995, 1995 by Borland International, All Rights Reserved
+//----------------------------------------------------------------------------
+#include <owl/owlapp.rc>         // default owl app icon
+#include "calldll.h"
+
+IDM_COMMANDS MENU
+BEGIN
+  MENUITEM "&Create", CM_CREATE
+  POPUP "&Resource"
+   BEGIN
+      MENUITEM "&String", CM_RSTRING
+      MENUITEM "&Cursor", CM_RCURSOR
+      MENUITEM "&Icon",   CM_RICON
+      MENUITEM "&Bitmap", CM_RBITMAP
+   END
+
+END
+
+

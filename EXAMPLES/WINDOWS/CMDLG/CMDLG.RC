@@ -2,7 +2,9 @@
 
 // FILE : cmdlg.rc
 
+#if !defined (WORKSHOP_INVOKED)
 #include <windows.h>
+#endif
 #include "cmdlgr.h"
 
 CMDLGAPMENU MENU

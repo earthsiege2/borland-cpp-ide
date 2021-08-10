@@ -1,85 +1,123 @@
 LIBRARY     SHELL32.DLL
 
 EXPORTS
-    CheckEscapesA                  @1
-    CheckEscapesW                  @2
-    CommandLineToArgvW             @3
-    DoEnvironmentSubstA            @4
-    DoEnvironmentSubstW            @5
-    DragAcceptFiles                @6
-    DragFinish                     @7
-    DragQueryFileA                 @8
-    DragQueryFileAorW              @9
-    DragQueryFileW                 @10
-    DragQueryPoint                 @11
-    DuplicateIcon                  @12
-    ExtractAssociatedIconA         @13
-    ExtractAssociatedIconExA       @14
-    ExtractAssociatedIconExW       @15
-    ExtractAssociatedIconW         @16
-    ExtractIconA                   @17
-    ExtractIconResInfoA            @18
-    ExtractIconResInfoW            @19
-    ExtractIconW                   @20
-    ExtractVersionResource16W      @21
-    FindExecutableA                @23
-    FindExecutableW                @24
-    FreeIconList                   @25
-    InternalExtractIconListA       @26
-    InternalExtractIconListW       @27
-    RealShellExecuteA              @28
-    RealShellExecuteExA            @29
-    RealShellExecuteExW            @30
-    RealShellExecuteW              @31
-    RegenerateUserEnvironment      @32
-    RegisterShellHook              @33
-    SheChangeDirA                  @34
-    SheChangeDirExA                @35
-    SheChangeDirExW                @36
-    SheChangeDirW                  @37
-    SheConvertPathW                @38
-    SheFullPathA                   @39
-    SheFullPathW                   @40
-    SheGetCurDrive                 @41
-    SheGetDirA                     @42
-    SheGetDirExW                   @43
-    SheGetDirW                     @44
-    SheGetPathOffsetW              @45
-    SheRemoveQuotesA               @46
-    SheRemoveQuotesW               @47
-    SheSetCurDrive                 @48
-    SheShortenPathA                @49
-    SheShortenPathW                @50
-    ShellAboutA                    @51
-    ShellAboutW                    @52
-    ShellExecuteA                  @53
-    ShellExecuteW                  @54
-    StrChrA                        @56
-    StrChrIA                       @57
-    StrChrIW                       @58
-    StrChrW                        @59
-    StrCmpNA                       @60
-    StrCmpNIA                      @61
-    StrCmpNIW                      @62
-    StrCmpNW                       @63
-    StrCpyNA                       @64
-    StrCpyNW                       @65
-    StrNCmpA                       @66
-    StrNCmpIA                      @67
-    StrNCmpIW                      @68
-    StrNCmpW                       @69
-    StrNCpyA                       @70
-    StrNCpyW                       @71
-    StrRChrA                       @72
-    StrRChrIA                      @73
-    StrRChrIW                      @74
-    StrRChrW                       @75
-    StrRStrA                       @76
-    StrRStrIA                      @77
-    StrRStrIW                      @78
-    StrRStrW                       @79
-    StrStrA                        @80
-    StrStrIA                       @81
-    StrStrIW                       @82
-    StrStrW                        @83
-    WOWShellExecute                @84
+    CheckEscapesA
+    CheckEscapesW
+    CommandLineToArgvW
+    Control_FillCache_RunDLL
+    Control_RunDLL
+    DoEnvironmentSubstA
+    DoEnvironmentSubstW
+    DragAcceptFiles
+    DragFinish
+    DragQueryFile
+    DragQueryFileA
+    DragQueryFileAorW
+    DragQueryFileW
+    DragQueryPoint
+    DuplicateIcon
+    ExtractAssociatedIconA
+    ExtractAssociatedIconExA
+    ExtractAssociatedIconExW
+    ExtractAssociatedIconW
+    ExtractIconA
+    ExtractIconEx
+    ExtractIconExA
+    ExtractIconResInfoA
+    ExtractIconResInfoW
+    ExtractIconW
+    ExtractVersionResource16W
+    FindExeDlgProc
+    FindExecutableA
+    FindExecutableW
+    FreeIconList
+    InternalExtractIconListA
+    InternalExtractIconListW
+    OpenAs_RunDLL
+    PrintersGetCommand_RunDLL
+    RealShellExecuteA
+    RealShellExecuteExA
+    RealShellExecuteExW
+    RealShellExecuteW
+    RegenerateUserEnvironment
+    RegisterShellHook
+    SHAddToRecentDocs
+    SHAppBarMessage
+    SHBrowseForFolder
+    SHBrowseForFolderA
+    SHChangeNotify
+    SHFileOperation
+    SHFileOperationA
+    SHFormatDrive
+    SHFreeNameMappings
+    SHGetDataFromIDListA
+    SHGetDesktopFolder
+    SHGetFileInfo
+    SHGetFileInfoA
+    SHGetInstanceExplorer
+    SHGetMalloc
+    SHGetPathFromIDList
+    SHGetPathFromIDListA
+    SHGetSpecialFolderLocation
+    SHHelpShortcuts_RunDLL
+    SHLoadInProc
+    SheChangeDirA
+    SheChangeDirExA
+    SheChangeDirExW
+    SheChangeDirW
+    SheConvertPathW
+    SheFullPathA
+    SheFullPathW
+    SheGetCurDrive
+    SheGetDirA
+    SheGetDirExW
+    SheGetDirW
+    SheGetPathOffsetW
+    SheRemoveQuotesA
+    SheRemoveQuotesW
+    SheSetCurDrive
+    SheShortenPathA
+    SheShortenPathW
+    ShellAboutA
+    ShellAboutW
+    ShellExecuteA
+    ShellExecuteEx
+    ShellExecuteExA
+    ShellExecuteW
+    ShellHookProc
+    Shell_NotifyIcon
+    Shell_NotifyIconA
+    Shl1632_ThunkData32
+    Shl3216_ThunkData32
+    StrChrA
+    StrChrIA
+    StrChrIW
+    StrChrW
+    StrCmpNA
+    StrCmpNIA
+    StrCmpNIW
+    StrCmpNW
+    StrCpyNA
+    StrCpyNW
+    StrNCmpA
+    StrNCmpIA
+    StrNCmpIW
+    StrNCmpW
+    StrNCpyA
+    StrNCpyW
+    StrRChrA
+    StrRChrIA
+    StrRChrIW
+    StrRChrW
+    StrRStrA
+    StrRStrIA
+    StrRStrIW
+    StrRStrW
+    StrStrA
+    StrStrIA
+    StrStrIW
+    StrStrW
+    WOWShellExecute
+
+
+

@@ -1,0 +1,10 @@
+#----------------------------------------------------------------------------
+# ObjectWindows
+# Copyright (c) 1995, 1996 by Borland International, All Rights Reserved
+#----------------------------------------------------------------------------
+MODELS = fdt
+SYSTEM = WIN32
+EXERES = toolbres
+OBJEXE = toolbres.obj 
+
+!include $(BCEXAMPLEDIR)\owlmake.gen

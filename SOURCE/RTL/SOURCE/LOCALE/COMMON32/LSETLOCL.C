@@ -8,9 +8,9 @@
 */
 
 /*
- *      C/C++ Run Time Library - Version 1.5
+ *      C/C++ Run Time Library - Version 2.0
  *
- *      Copyright (c) 1987, 1994 by Borland International
+ *      Copyright (c) 1987, 1996 by Borland International
  *      All Rights Reserved.
  *
  */
@@ -585,10 +585,10 @@ int __open_localelib( struct LocaleLibraryStatus *LibStatus )
 
     /* open locale library */
     if (
-	/*  Note: Assumes BINARY open!  */
+	/*  Note: Needs BINARY open!  */
         _OSFILEOPEN(
             _LocaleLibName,
-            (unsigned int) O_RDONLY,
+            (unsigned int) O_RDONLY | O_BINARY,
             LibStatus->Lhandle ) == OSFILE_ERROR )
 
     {
@@ -1123,7 +1123,7 @@ int __find_localelib( char *localelib )
     */
 
     /* split program name to get its directory */
-    fnsplit( _argv[ 0 ],
+    fnsplit( _argv0,
         pathspec1._drive_,
         pathspec1._dir_,
         pathspec1._name_,
@@ -1255,6 +1255,8 @@ int __dup_locale( struct LOCALEOBJECT **pdstlocale, struct LOCALEOBJECT **psrclo
                 &( (*pdstlocale)->pSubstitutionTbl ) +
                 ( (*psrclocale)->pSubstitutionTbl - (*psrclocale)->pClass );
     }
+    else
+	(*pdstlocale)->pClass = NULL;
 
     /* allocate ctype and case conversion tables space */
     (*pdstlocale)->pCtype =

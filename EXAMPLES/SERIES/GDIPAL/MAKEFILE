@@ -1,0 +1,16 @@
+#----------------------------------------------------------------------------
+# Borland C++
+# Copyright (c) 1987, 1996 Borland International Inc.  All Rights Reserved.
+#   examples\series\gdipal\makefile
+#----------------------------------------------------------------------------
+
+SYSTEMS = WIN32
+OSMAJOR = 4
+OSMINOR = 0
+EXERES  = gdipal
+CPCH    = -Hc -H"windows.h" -H=gdipal.csm
+OBJEXE  = about.obj brushdlg.obj client.obj colordlg.obj dispatch.obj\
+          gdipal.obj infodlg.obj init.obj misc.obj palctrl.obj palette.obj\
+          pendlg.obj statbar.obj toolbar.obj winmain.obj
+
+!include $(BCEXAMPLEDIR)\makefile.gen

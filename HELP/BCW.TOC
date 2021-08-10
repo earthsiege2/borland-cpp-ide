@@ -1,0 +1,366 @@
+:Base BCW.HLP
+:Title Borland C++ User's Guide
+0 Borland C++ User's Guide
+1 Integrated Development Environment (IDE)
+2 Menu commands
+3 About menu commands = MenuCommands
+
+3 File menu
+4 About the File menu = IDH_MFile
+4 New command = IDH_FNew
+4 Open command = IDH_FOpen
+4 Close command = IDH_FClose
+4 Save command = IDH_FSave
+4 Save as command = IDH_FSaveAs
+4 Save all command = IDH_FSaveAll
+4 Print command command = IDH_FPrint
+4 Printer Setup command = IDH_FPrintSetup
+4 Send command = IDH_FSend
+4 Exit command = IDH_FExit
+4 List of closed files = IDH_FClosedFileList
+
+3 Edit menu
+4 About the Edit menu = IDH_MEdit
+4 Undo command = IDH_EUndo 
+4 Redo command = IDH_ERedo 
+4 Cut command = IDH_ECut 
+4 Copy command = IDH_ECopy 
+4 Paste command = IDH_EPaste 
+4 Clear command = IDH_EClear 
+4 Select All command = IDH_ESelect
+4 Buffer List command = IDH_EBuffer
+
+3 Search menu
+4 About the Search menu = IDH_MSearch
+4 Find = IDH_SFind 
+4 Replace = IDH_SReplace
+4 Search Again = IDH_SSearchAgain 
+4 Browse Symbol = IDH_SBrowse
+4 Locate Symbol = IDH_SLocateSymbol
+4 Previous message = IDH_SPrevious
+4 Next message = IDH_SNext 
+
+3 View menu
+4 About the View menu = IDH_MView 
+4 ClassExpert = IDH_VClassExpert
+4 Project = IDH_VProject
+4 Message = IDH_VMessage
+4 Classes = IDH_VClasses
+4 Globals = IDH_VGlobals
+4 CPU = IDH_VCPU
+4 Process = IDH_VProcess
+4 Watch = IDH_VWatch
+4 Breakpoint = IDH_VBreakpoint
+4 Call Stack = IDH_VCallStack 
+
+3 Project menu
+4 About the Project menu = IDH_MProject
+4 Open Project = IDH_POpenProj
+4 Close Project = IDH_PCloseProj
+4 New Target = IDH_PNewTarget
+4 Compile = IDH_PCompile
+4 Make All = IDH_PMakeAll
+4 Build All = IDH_PBuildAll
+4 Generate Makefile = IDH_PGenerate
+
+3 Script menu
+4 About the cScript menu = IDH_Mscript
+4 Run = IDH_SRun
+4 Commands = IDH_SCommands
+4 Modules = IDH_SModules
+4 Compile File = IDH_SCompileFile
+4 Run File = IDH_SRunFile
+
+3 Tool menu
+4 About the Tool menu = IDH_Mtools
+4 Tool ListTList
+4 Transfer Macros
+5 About Transfer Macros = TransferMacros_Oview
+5 Translators, viewers, and tools = TranslatorsViewersAndTools
+5 $ARG = ARG_transfer
+5 $CAP EDIT = CAP_EDIT 
+5 $CAP MSG() = CAP_MSG
+5 $COL = COL
+5 $CONFIG = CONFIG
+5 $DEF = DEF
+5 $DEPLIST() = DEPLIST
+5 $DIR() = DIR
+5 $DRIVE() = DRIVE
+5 $EDNAME = EDNAME
+5 $ENV = ENV
+5 $ERRCOL = ERRCOL
+5 $ERRLINE = ERRLINE
+5 $ERRNAME = ERRNAME
+5 $EXT()= EXT
+5 $IMPLIB = IMPLIB_Transfer
+5 $INC = INC
+5 $LIB = LIB
+5 $LINE = LINE_Transfer
+5 $NAME() = NAME
+5 $NOSWAP = NOSWAP
+5 $OUTNAME = OUTNAME
+5 $PRJNAME = PRJNAME
+5 $PROMPT = PROMPT
+5 $RSP() = RSP
+5 $SAVE ALL = SAVE_ALL 
+5 $SAVE CUR = SAVE_CUR 
+5 $SAVE PROMPT = SAVE_PROMPT
+5 $SELNODES = SELNODES
+5 $TARGET = TARGET
+5 $TASM = TASM
+5 $TD = TD
+5 $TLINKRSP = TLINKRSP
+5 $UPTODATE = UPTODATE
+5 $WRITEMSG()= WRITEMSG
+
+3 Debug menu
+4 About the Debug menu = IDH_MDebug
+4 Run = IDH_DRun
+4 Load = IDH_DLoad
+4 Attach = IDH_DAttach
+4 Run to = IDH_DRunto
+4 Pause process = IDH_DPause
+4 Reset this process = IDH_DReset
+4 Terminate this process = IDH_DTerminate
+4 Source at Execution Point = IDH_DSource
+4 Add breakpoint = IDH_DAddBreakpoint
+4 Breakpoint Options = IDH_DBreakpointOptions
+4 Add watch  = IDH_DAddWatch
+4 Evaluate = IDH_DEvaluate
+4 Inspect = IDH_DInspect
+
+3 Resource Workshop Menus
+4 Resource = IDH_MResource@WORKSHOP.HLP
+4 Bitmap, Cursor and Icon menus = IDH_MGraphic@WORKSHOP.HLP
+4 Dialog = IDH_MDialog@WORKSHOP.HLP
+4 Menu = IDH_MMenu@WORKSHOP.HLP
+
+3 Options menu
+4 About the Options menu = IDH_Moptions
+4 Project = IDH_OProject
+4 Environment = IDH_OEnvironment
+4 Tools = IDH_OTools
+4 Style Sheets = IDH_OStyle
+4 Save = IDH_OSave
+
+3 Window Menu
+4 About the Window Menu = IDH_MWindow
+4 Cascade = IDH_WCascade 
+4 Tile Horizontal = IDH_WTileh 
+4 Tile Vertical = IDH_WTilev
+4 Arrange Icons = IDH_WArrange
+4 Close All = IDH_WCloseAll 
+4 Minimize All = IDH_WMinimize
+4 Restore All = IDH_WRestore
+4 List of open windows = IDH_WList
+4 More Windows = IDH_WMore
+
+3 Help menu
+4 About the Help menu = IDH_MHelp
+4 Contents = IDH_HContents 
+4 Keyword Search = IDH_HKeyword
+4 Using Help = IDH_HUsingHelp
+4 Windows API = IDH_HAPI
+4 OWL API = IDH_HOWL
+4 About = IDH_HAbout
+
+2 Editor
+3 About the Editor = UsingtheBorlandCPPEditor
+3 Editor Options= IDH_OEditor
+3 Edit Window = IDH_Edit_Window
+3 Selecting Text = SelectText
+3 Editor symbols = Gutter
+3 Syntax Highlighting = IDH_OESCustomize
+3 Regular Expression Search
+4 Grep = GrepLikeWCards
+4 BRIEF= BRIEFLikeWCards
+
+2 Keyboard
+3 About the Keyboard = IDH_Keyboard
+3 KBD files = IDH_KBDfile
+3 SpeedSettings = IDH_OEEEditorSpeedSettings
+
+2 Message Window
+3 About the Message Window = IDH_Message_Window
+
+2 SpeedMenus 
+3 Breakpoints Window SpeedMenu = BreakpointsSpeedMenu
+3 Browser SpeedMenu = BrowserSpeedMenu
+3 Call Stack SpeedMenu = IDH_CallStackSpeedMenu
+3 Classes pane SpeedMenu = AECM_LMClasses
+3 Data Inspector SpeedMenu = IDH_DataInspectorSpeedMenu
+3 Edit pane SpeedMenu = AECM_LIDH_MEdit
+3 Edit Window SpeedMenu = EditWindowSpeedMenu
+3 Events pane SpeedMenu = AECM_LMEventsAndFunctions
+3 Message Window SpeedMenu = MessageWindowSpeedMenu
+3 Options Window SpeedMenu = IDH_SettingsWindowSpeedMenu
+3 Project Window SpeedMenu = IDH_ProjectWindowSpeedMenu
+3 Watch Window SpeedMenu = WatchSpeedMenu
+
+2 SpeedBar
+3 About the SpeedBar = SpeedBar
+3 Orientation = IDH_OETOrientation
+3 Options = IDH_OETSpeedBarOptions
+
+1 Environment Options
+2 Browser = IDH_OBrowser
+2 Editor = IDH_OEditor
+2 Syntax Highlighting = IDH_OESyntaxHighlighting
+2 SpeedBar = IDH_OSpeedBar
+2 Scripting = IDH_OEScripting
+2 Process Control = IDH_OEProcessControl
+2 Preferences = IDH_SEnvironPreferences
+2 Fonts = IDH_OEFonts
+2 Project View = IDH_OEProjectView
+2 Debugger = IDH_SDebug
+2 Resource Editors = IDH_ResourceEditorSettings@WORKSHOP.HLP
+
+1 Project Options
+2 Directories= IDH_SDirectories
+2 Compiler = IDH_CompilerSettings
+2 16-Bit Compiler = IDH_16BitCompilerOptions
+2 32-Bit Compiler = IDH_32BitCompilerOptions
+2 C++ Options = IDH_CPPCompilerOptions
+2 Optimizations = IDH_SCompilerOptimizations
+2 Messages = IDH_SCompilerMessages
+2 Linker = IDH_SLinker
+2 Librarian = IDH_SLibSettings
+2 Resources = IDH_ResourcesSettings
+2 Build Attributes = IDH_BuildAttributes
+2 Make = IDH_OPMake
+
+1 Project Manager
+2 Creating a new project = IDH_FNewProject 
+2 Style Sheets = StyleSheets
+2 Target types = IDH_TargetExpert
+2 Source pools = SourcePools
+
+2 Managing Projects
+3 About Managing Projects = ManagingProjects
+3 Adding a new target = IDH_PNewTarget
+3 Compiling a project = IDH_PCompile
+3 Creating a multiple target project = CreatingAMultipleTargetProject
+3 Converting old projects = ConvertingOldProjects
+3 Building part of a project = BuildingPartOfAProject
+3 Generating a MAKE file for a project = IDH_PGenerate
+3 MAKE all targets = IDH_PMakeAll
+3 Rebuilding files in a project = IDH_PBuildAll
+3 Setting local options = IDH_LocalOptions
+3 Set node attributes = IDH_NodeAttributes
+3 Sharing Style Sheets = SharingStyleSheets
+3 Sharing Tools = SharingTools
+3 Viewing option settings = IDH_ViewOptionsHierarchy
+
+2 Project Hierarchy
+3 About the Project Hierarchy = IDH_PROJECT_HIERARCHY
+3 Displaying node information = IDH_OEProjectView
+3 Editing the project hierarchy = ProjectHierarchyReference
+3 Reference copy nodes = ReferenceCopyNodes
+3 Setting build attributes for a node = IDH_BuildAttributes
+
+1 AppExpert
+2 Generating Windows applications = UsingAppExpert
+2 Creating an Application with AppExpert = CreatingAnApplicationWithAppExpert
+2 Rebuilding the .APX Database File = RebuildingThe.APXDatabaseFile
+2 Renaming an AppExpert Element = RenamingAnAppExpertElement
+2 The AppExpert Dialog = IDH_AppExpert 
+
+1 ClassExpert
+2 Managing classes in Windows applications = ClassExpert
+2 Using Rescan to Rebuild Your Project Database = UsingRescan
+2 Deleting a Class with ClassExpert = DeletingAClass
+2 Importing a Class with ClassExpert = ImportingAClass
+2 Moving a Class with ClassExpert = MovingAClass
+
+1 TargetExpert
+2 About TargetExpert = IDH_TargetExpert
+2 New Target dialog = IDH_NewTargetDialogBox
+2 Advanced Options dialog = IDH_AdvancedOptions
+2 Redistributable files = RedistributableFiles
+
+1 Debugger
+2 About the Integrated Debugger = DebuggingInTheIDE
+2 Running your program = RunningYourProgram
+2 Examining program data values = ExaminingProgramDataValues
+2 Modifying program data values = ModifyingProgramDataVAlues
+
+2 Breakpoints
+3 Using Breakpoints = UsingBreakpoints
+3 Adding breakpoints = IDH_AddingBreakpoints
+3 Creating conditional breakpoints = CreatingConditionalBreakpoints
+3 Changing breakpoint options = IDH_ChangingBreakpointOptions
+3 Changing the color of breakpoint lines = ChangingTheColorOfBreakpointLines 
+3 Disabling and enabling breakpoints = IDH_DisablingBreakpoints
+3 Inspecting and editing code at a breakpoint = InspectingandEditingCodeAtaBreakpoint
+3 Removing breakpoints = IDH_RemovingBreakpoints
+3 Resetting invalid breakpoints = ResettingInvalidBreakpoints
+3 Using breakpoint option sets = Usingbreakpointoptionsets
+3 Using breakpoint groups = UsingBreakpointgroups
+
+2 Stepping
+3 About Stepping = Stepping
+3 Stepping over code = SteppingOverCode
+3 Stepping into code = SteppingIntoCode
+
+2 Watch Expressions
+3 About Watch Expressions = WatchExpressions
+3 Adding a Watch = IDH_AddingaWatch
+3 Changing Watch Properties = IDH_ChangingWatchProperties
+3 Disabling and Enabling Watches = IDH_DisablingWatches
+3 Deleting a Watch = IDH_DeletingAWatch
+3 The Watches window = IDH_WatchesWindow
+
+2 Inspecting 
+3 Inspecting data elements = InspectingDataElements
+3 Modifying variables = ModifyingVariables
+
+2 The CPU window
+3 The CPU window = IDH_CPUWindow
+4 The Disassembly pane = IDH_DisassemblyPane
+4 The Dump pane = IDH_DumpPane
+4 The Stack pane = IDH_StackPane
+4 The Registers pane = IDH_RegistersPane
+4 The Flags Pane = IDH_FlagsPane
+
+2 More about the Debugger
+3 Debugger options = IDH_SDebug
+3 Just-in-time debugging = JustInTimeDebugging
+3 Multi-process debugging = DebuggingMulitThreadedApplications 
+3 Changing the Color of the Execution point = ChangingTheColorOfTheExecutionPoint
+3 Choosing which Warnings Display in the Message Window = ChoosingwhichWarningsDisplay
+3 Debugging Dynamic-link Libraries = DebuggingDynamicLinkLibraries
+3 General Protection Exceptions = GeneralProtectionException
+3 Generating debugging information = GeneratingDebuggingInformation 
+
+1 Browser
+2 About the Browser = IDH_Browser
+2 Starting the Browser= StartingTheBrowser
+2 Browsing Symbols in Your Code = BrowsingSymbolsInYourCode
+2 Browsing Global Symbols = IDH_BrowsingGlobalSymbols
+2 Browsing Objects= IDH_BrowsingObjects
+2 Browser Filters and Letter Symbols = IDH_BrowserFiltersAndLetterSymbols
+2 Customizing the Browser = CustomizingTheBrowser
+
+2 Browser Views
+3 Global Symbols = IDH_BrowsingGlobalSymbols
+3 Objects = IDH_BrowsingObjects
+3 Symbol Declaration = SymbolDeclarationWindow
+3 Class Inspection = IDH_ClassInspectionWindow
+3 References = IDH_BrowsingReferences
+
+1 How to...
+2 Add a transfer program = Transfer_AddingItems
+2 Browse through your code = IDH_Browser
+2 Debug in the IDE = DebuggingInTheIDE
+2 Delete a Class with ClassExpert = DeletingAClass
+2 Generate Windows applications = UsingAppExpert
+2 Import a Class with ClassExpert = ImportingAClass
+2 Manage classes in Windows applications = ClassExpert
+2 Move a Class with ClassExpert = MovingAClass
+2 Rebuild your project database = UsingRescan
+2 Rebuild the .APX Database File = RebuildingThe.APXDatabaseFile
+2 Rename an AppExpert Element = RenamingAnAppExpertElement
+2 Use Style Sheets = StyleSheets
+2 Use Rescan to Rebuild Your Project Database = UsingRescan
+
+

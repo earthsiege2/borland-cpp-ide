@@ -1,7 +1,7 @@
 #############################################################################
 # This makefile is used as the driver to build the chosen RTL.  For         #
 # appropriate command line switches and environment variables, see          #
-# rules.mak                                                                 #       
+# rules.mak                                                                 #
 #############################################################################
 !include rules.mak
 
@@ -10,7 +10,12 @@
 # rules.mak is enhanced or modified, make the results must be reflected     #
 # here as well!!!                                                           #
 #############################################################################
-CMDLINE = OS=$(OS)
+#
+# The -l in the following line is an undocumented switch for MAKE.EXE
+# which allows the commandline of a command to exceed 128 chars.  The
+# default behavior is to report an error for any line exceeding 128.
+#
+CMDLINE = -l OS=$(OS)
 
 !if $d(DEBUG)
     CMDLINE = $(CMDLINE) -DDEBUG
@@ -65,7 +70,7 @@ $(BUILDDIR) :
 !if $d(DLL)
 !    if $(OS) == WIN16
          $(MAKE) -I$(RTLROOT) $(CMDLINE) win16dll
-!    else    
+!    else
          $(MAKE) -I$(RTLROOT) $(CMDLINE) dll
 !    endif
 !else
@@ -79,7 +84,6 @@ $(BUILDDIR) :
 # Do whatever is necessary at the start and end of the build.               #
 #############################################################################
 start :
-    time < $(RTLROOT)\tools\return.txt
     @echo.
     @echo [***************** Borland C++ Run Time Libary *****************]
     @echo.
@@ -99,6 +103,4 @@ end :
 !else
     if exist $(LIBDIR)\tlib.rsp del $(LIBDIR)\tlib.rsp
 !endif
-    time < $(RTLROOT)\tools\return.txt
-
 

@@ -1,5 +1,7 @@
 //----------------------------------------------------------------------------
-// ObjectWindows - (C) Copyright 1991, 1993 by Borland International
+// ObjectWindows
+// Copyright (c) 1991, 1995 by Borland International, All Rights Reserved
+//
 //   Resource & command IDs
 //----------------------------------------------------------------------------
 

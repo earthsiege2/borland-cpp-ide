@@ -3,7 +3,7 @@
 //   Tutorial application -- step14.cpp
 //   OLE 2 container example
 //----------------------------------------------------------------------------
-#include <owl/owlpch.h>
+#include <owl/pch.h>
 #include <owl/applicat.h>
 #include <owl/dialog.h>
 #include <owl/controlb.h>
@@ -142,7 +142,10 @@ OwlMain(int /*argc*/, char* /*argv*/ [])
 {
   try {
     Registrar = new TOcRegistrar(AppReg, TOleDocViewFactory<TDrawApp>(),
-                                 TApplication::GetCmdLine());
+                                 TApplication::GetCmdLine(), ::DocTemplateStaticHead);
+    if (Registrar->IsOptionSet(amAnyRegOption))
+      return 0;
+
     return Registrar->Run();
   }
   catch (xmsg& x) {

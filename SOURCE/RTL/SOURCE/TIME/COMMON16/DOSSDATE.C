@@ -7,9 +7,9 @@
  *-----------------------------------------------------------------------*/
 
 /*
- *      C/C++ Run Time Library - Version 6.5
+ *      C/C++ Run Time Library - Version 7.0
  *
- *      Copyright (c) 1991, 1994 by Borland International
+ *      Copyright (c) 1991, 1996 by Borland International
  *      All Rights Reserved.
  *
  */
@@ -50,6 +50,21 @@ Note            Compatible with Microsoft C.  Not the same as setdate().
 *---------------------------------------------------------------------*/
 unsigned _dos_setdate(struct dosdate_t *datep)
 {
+
+    /* Check for boundaries that DOS doesn't do for us
+     */
+    if (datep->dayofweek > 6)
+    {
+        errno = EINVAL;
+        return -1U;
+    }
+
+    if (datep->year > 2099)
+    {
+        errno = EINVAL;
+        return -1U;
+    }
+
     _DH = datep->month;
     _DL = datep->day;
     _CX = datep->year;

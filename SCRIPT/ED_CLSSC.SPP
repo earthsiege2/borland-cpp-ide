@@ -1,0 +1,581 @@
+//----------------------------------------------------------------------------
+// cScript
+// (C) Copyright 1995 by Borland International, All Rights Reserved
+//
+// ED_CLSSC.SPP
+//    Script component of IDE's Editor Classic emulation.
+//    Provides support services for editing environment.
+//
+// $Revision:   1.3  $
+//
+//----------------------------------------------------------------------------
+// Classic Editor.
+//----------------------------------------------------------------------------
+
+//----------------------------------------------------------------------------
+// Symbol Imports
+//----------------------------------------------------------------------------
+
+import IDE;
+import editor;
+import scriptEngine;
+import bFileLoading;
+
+//
+// Mark this module as being a library module.
+//
+library;
+
+//----------------------------------------------------------------------------
+// Symbol Defines
+//----------------------------------------------------------------------------
+
+#define BOOKMARK_ID_SYSTEM_ONE   19
+#define BOOKMARK_ID_SYSTEM_TWO   18
+#define BOOKMARK_ID_SYSTEM_THREE 17
+
+//----------------------------------------------------------------------------
+// Methods.
+//----------------------------------------------------------------------------
+
+//
+// Used to autoload the Default emulation specific methods.
+//
+ClassicEmulation() {
+   if (bFileLoading) {
+      print "Classic emulation enabled.";
+   } else {
+      print "Classic emulation removed.";
+      scriptEngine.Unload("ed_clssc.spp");
+   }
+}
+
+//----------------------------------------------------------------------------
+// Classic Editor.
+//----------------------------------------------------------------------------
+
+//
+// Delete the current block.
+//
+on editor:>ClassicBlockDelete() {
+   declare eb = .BlockExists();
+   if (eb != NULL) {
+      .ClassicDelete();
+      IDE.StatusBar = "Block deleted";
+   }
+}
+
+//
+// Using Classic behavior perform block copy operation.
+//
+on editor:>ClassicCopyBlock() {
+      declare eb = .BlockExists();
+   if (eb != NULL) {
+      eb.Copy();
+      .TopView.Position.InsertScrap();
+      IDE.StatusBar = "Block copied";
+   } else
+      IDE.ReportError("No marked block");
+}
+
+//
+// Delete the current block.
+//
+on editor:>ClassicCut() {
+   declare eb = .BlockExists();
+   if (eb != NULL) {
+      declare ev = .TopView;
+      ev.BookmarkRecord(BOOKMARK_ID_SYSTEM_ONE);
+      eb.Cut();
+      ev.BookmarkGoto(BOOKMARK_ID_SYSTEM_ONE);
+   }
+}
+
+//
+// Delete the current block.
+//
+on editor:>ClassicDelete() {
+   declare eb = .BlockExists();
+   if (eb != NULL) {
+      declare ev = .TopView;
+      ev.BookmarkRecord(BOOKMARK_ID_SYSTEM_ONE);
+      eb.Delete();
+      ev.BookmarkGoto(BOOKMARK_ID_SYSTEM_ONE);
+   }
+}
+
+//
+// Uses Classic specific behavior to delete a line.
+//
+on editor:>ClassicDeleteLine() {
+
+   declare bBlock = FALSE;
+   declare eb = .BlockExists();
+   declare ev = .TopView;
+   declare ep = ev.Position;
+
+   if (eb != NULL) {
+      eb.Save();
+      ep.Save();
+      ep.Move(eb.StartingRow,eb.StartingColumn);
+      ev.BookmarkRecord(BOOKMARK_ID_SYSTEM_ONE);
+      ep.Move(eb.EndingRow,eb.EndingColumn);
+      ev.BookmarkRecord(BOOKMARK_ID_SYSTEM_TWO);
+      ep.Restore();
+      eb.Restore();
+      bBlock = TRUE;
+   } else
+      eb = .TopView.Block;
+
+   ep.MoveBOL();
+   ep.Save();
+   BeginBlock(EXCLUSIVE_BLOCK);
+   declare nRow = ep.Row;
+   ep.MoveRelative(1,0);
+   if (ep.Row == nRow)
+      ep.MoveEOL();
+   EndBlock(EXCLUSIVE_BLOCK);
+   eb.Delete();
+   ep.Restore();
+
+   if (bBlock) {
+      SetBlockStyle(EXCLUSIVE_BLOCK);
+      ep.Save();
+      ev.BookmarkGoto(BOOKMARK_ID_SYSTEM_ONE);
+      eb.Begin();
+      ev.BookmarkGoto(BOOKMARK_ID_SYSTEM_TWO);
+      eb.End();
+      ep.Restore();
+   }
+}
+
+//
+// Uses Classic specific behavior for deletion of the current word.
+//
+on editor:>ClassicDeleteWordLeft() {
+
+   declare nBlocked = FALSE;
+   declare eb = .BlockExists();
+   declare ev = .TopView;
+   declare ep = ev.Position;
+
+   if (eb != NULL) {
+      eb.Save();
+      ep.Save();
+      ep.Move(eb.StartingRow,eb.StartingColumn);
+      ev.BookmarkRecord(BOOKMARK_ID_SYSTEM_ONE);
+      ep.Move(eb.EndingRow,eb.EndingColumn);
+      ev.BookmarkRecord(BOOKMARK_ID_SYSTEM_TWO);
+      ep.Restore();
+      eb.Restore();
+      nBlocked = TRUE;
+   }
+
+   eb = ResetBlock(EXCLUSIVE_BLOCK);
+   eb.End();
+
+   ep.MoveCursor(SKIP_LEFT | SKIP_NONWORD);
+   ep.MoveCursor(SKIP_LEFT | SKIP_WORD);
+
+   eb.Begin();
+
+   eb.Cut();
+
+   if (nBlocked) {
+      SetBlockStyle(EXCLUSIVE_BLOCK);
+      ep.Save();
+      ev.BookmarkGoto(BOOKMARK_ID_SYSTEM_ONE);
+      eb.Begin();
+      ev.BookmarkGoto(BOOKMARK_ID_SYSTEM_TWO);
+      eb.End();
+      ep.Restore();
+   }
+}
+
+on editor:>ClassicDeleteWordRight() {
+
+   declare nBlocked = FALSE;
+   declare eb = .BlockExists();
+   declare ev = .TopView;
+   declare ep = ev.Position;
+
+   if (eb != NULL) {
+      eb.Save();
+      ep.Save();
+      ep.Move(eb.StartingRow,eb.StartingColumn);
+      ev.BookmarkRecord(BOOKMARK_ID_SYSTEM_ONE);
+      ep.Move(eb.EndingRow,eb.EndingColumn);
+      ev.BookmarkRecord(BOOKMARK_ID_SYSTEM_TWO);
+      ep.Restore();
+      eb.Restore();
+      nBlocked = TRUE;
+   }
+
+   eb = ResetBlock(EXCLUSIVE_BLOCK);
+   eb.Begin();
+
+   declare nSpaceAdjust = 0;
+   ev.BookmarkRecord(BOOKMARK_ID_SYSTEM_THREE);
+
+   if (ep.IsWhiteSpace) {
+
+      if (ep.Character == '\t') {
+          declare c = ep.Column;
+          ep.Delete(1);
+          if (ep.Column != c)
+             nSpaceAdjust = c - ep.Column;
+      }
+      ep.MoveCursor(SKIP_RIGHT | SKIP_WHITE);
+   } else if (ep.IsWordCharacter) {
+      ep.MoveCursor(SKIP_RIGHT | SKIP_WORD);
+      ep.MoveCursor(SKIP_RIGHT | SKIP_WHITE);
+   } else if (ep.IsSpecialCharacter) {
+      ep.Delete(1);
+      ep.MoveCursor(SKIP_RIGHT | SKIP_WHITE);
+   } else
+      ep.Delete(1);
+
+   eb.End();
+   eb.Delete();
+
+   ev.BookmarkGoto(BOOKMARK_ID_SYSTEM_THREE);
+
+   while (nSpaceAdjust--) {
+      ep.InsertText(' ');
+   }
+
+   if (nBlocked) {
+      SetBlockStyle(EXCLUSIVE_BLOCK);
+      ep.Save();
+      ev.BookmarkGoto(BOOKMARK_ID_SYSTEM_ONE);
+      eb.Begin();
+      ev.BookmarkGoto(BOOKMARK_ID_SYSTEM_TWO);
+      eb.End();
+      ep.Restore();
+   }
+}
+
+//
+// Uses Classic specific behavior to mark a line.
+//
+on editor:>ClassicMarkLine() {
+
+   declare ep = .TopView.Position;
+
+   ep.Save();
+   ep.Move(0,1);
+   BeginBlock(EXCLUSIVE_BLOCK);
+   ep.MoveRelative(1,0);
+   EndBlock(EXCLUSIVE_BLOCK);
+   ep.Restore();
+}
+
+//
+// Using Classic behaviour marks and returns the current word.
+//
+on editor:>ClassicMarkWord() {
+   declare ep = .TopView.Position;
+
+   if (!.TopView.Position.IsWordCharacter) {
+      .MoveCursorToWordLeft();
+   }
+
+   return .MarkWord();
+}
+//
+// Uses Classic specific behavior to lowercase current word.
+//
+on editor:>ClassicLowerWord(declare bUseCurrentBlock) {
+
+   declare bBlock = FALSE;
+   declare eb = .BlockExists();
+
+   if (eb != NULL) {
+      bBlock = TRUE;
+      eb.Save();
+   }
+
+   .TopView.BookmarkRecord(BOOKMARK_ID_SYSTEM_ONE);
+   .MarkWord().LowerCase();
+   .TopView.BookmarkGoto(BOOKMARK_ID_SYSTEM_ONE);
+   .TopView.Block.Reset();
+
+   if (bBlock) {
+      eb.Restore();
+   }
+}
+
+
+//
+// Uses Classic specific behavior to mark to the top of the view.
+//
+on editor:>ClassicMarkToViewTop() {
+   declare ev = .TopView;
+   declare eb = ev.Block;
+   declare ep = ev.Position;
+
+   if ((eb.StartingRow == ep.Row) && (eb.StartingColumn == ep.Column)) {
+      SetBlockStyle(EXCLUSIVE_BLOCK);
+      ep.Move(eb.EndingRow,eb.EndingColumn);
+      eb.End();
+      eb.Extend(ev.TopRow, ev.Position.Column);
+      eb.Begin();
+   } else {
+      ResetBlock(EXCLUSIVE_BLOCK);
+      eb.End();
+      eb.Extend(ev.TopRow, ev.Position.Column);
+      eb.Begin();
+   }
+}
+
+//
+// Uses Classic specific behavior to mark to the end of the view.
+//
+on editor:>ClassicMarkToViewBottom() {
+   declare ev = .TopView;
+   declare eb = ev.Block;
+   declare ep = ev.Position;
+   if ((eb.EndingRow == ep.Row) && (eb.EndingColumn == ep.Column)) {
+      SetBlockStyle(EXCLUSIVE_BLOCK);
+      ep.Move(eb.StartingRow,eb.StartingColumn);
+      eb.Begin();
+      eb.Extend(ev.BottomRow-1, ev.Position.Column);
+      eb.End();
+   } else {
+      eb.Reset();
+      SetBlockStyle(EXCLUSIVE_BLOCK);
+      eb.Begin();
+      eb.Extend(ev.BottomRow-1, ev.Position.Column);
+      eb.End();
+   }
+}
+
+//
+// Uses Classic specific behavior to mark to the end of the line.
+//
+on editor:>ClassicMarkToEOL() {
+   declare eb = .BlockExists();
+    
+   if (eb == NULL)
+      ResetBlock();
+
+  .MarkToEOL();
+}
+
+//
+// Uses Classic specific behavior to mark to the begining of the line.
+//
+on editor:>ClassicMarkToBOL() {
+   declare eb = .BlockExists();
+    
+   if (eb == NULL)
+      ResetBlock();
+
+  .MarkToBOL();
+}
+
+//
+// Uses Classic specific behavior to mark to the begining of the file.
+//
+on editor:>ClassicMarkToBOF() {
+   declare eb = .TopView.Block;
+   declare ep = .TopView.Position;
+   if ((eb.StartingRow == ep.Row) && (eb.StartingColumn == ep.Column)) {
+      SetBlockStyle(EXCLUSIVE_BLOCK);
+      ep.Move(eb.EndingRow,eb.EndingColumn);
+      eb.End();
+      ep.Move(1,1);
+      eb.Begin();
+   } else {
+      eb.Reset();
+      SetBlockStyle(EXCLUSIVE_BLOCK);
+      eb.End();
+      ep.Move(1,1);
+      eb.Begin();
+   }
+}
+
+//
+// Uses Classic specific behavior to mark to the end of the file.
+//
+on editor:>ClassicMarkToEOF() {
+   declare eb = .TopView.Block;
+   declare ep = .TopView.Position;
+   if ((eb.EndingRow == ep.Row) && (eb.EndingColumn == ep.Column)) {
+      SetBlockStyle(EXCLUSIVE_BLOCK);
+      ep.Move(eb.StartingRow,eb.StartingColumn);
+      eb.Begin();
+      ep.MoveEOF();
+      eb.End();
+   } else {
+      eb.Reset();
+      SetBlockStyle(EXCLUSIVE_BLOCK);
+      eb.Begin();
+      ep.MoveEOF();
+      eb.End();
+   }
+}
+
+//
+// Uses Classic specific behavior to toggle current character.
+//
+on editor:>ClassicToggleCase() {
+
+   declare bBlock = FALSE;
+   declare eb = .BlockExists();
+   declare ep = .TopView.Position;
+
+   if (eb != NULL) {
+       bBlock = TRUE;
+       eb.Save();
+   } else
+       eb = .TopView.Block;
+
+   if ((ep.Column <= eb.EndingColumn && ep.Row <= eb.EndingRow) &&
+       (ep.Column >= eb.StartingColumn && ep.Row >= eb.StartingRow))
+       eb.ToggleCase();
+   else {           
+     eb.Begin();
+     ep.MoveRelative(0,1);
+     eb.End();
+     eb.ToggleCase();
+     eb.Reset();
+   }   
+
+   if (bBlock) {
+      eb.Restore();
+   }
+
+}
+
+//
+// Uses Classic specific behavior to move current block to cursor
+// position.
+//
+on editor:>ClassicMoveBlock() {
+   declare eb = .BlockExists();
+   if (eb != NULL) {
+      declare ev = .TopView;
+      declare ep = ev.Position;
+      ev.BookmarkRecord(BOOKMARK_ID_SYSTEM_ONE);
+      eb.Cut();
+      ev.BookmarkGoto(BOOKMARK_ID_SYSTEM_ONE);
+      ep.InsertScrap();
+      ep.Move(eb.StartingRow, eb.StartingColumn);
+      IDE.StatusBar = "Block moved";
+   } else {
+      IDE.ReportError("No marked block");
+   }
+}
+
+
+//
+// Read file into current buffer.
+//
+on editor:>ClassicReadFileIntoBuffer() {
+
+   declare sFileName = new String(IDE.FileDialog("File to read:","*.*"));
+
+   if (sFileName.Text != "" && IDE.IsLegalFileName(sFileName.Text)) {
+      .TopView.Position.Save();
+      .TopView.Position.InsertFile(sFileName.Text);
+      .TopView.Position.Restore();
+      IDE.StatusBar = "File Read.";
+   }
+}
+
+//
+// Start block at current position.
+//
+on editor:>ClassicStartBlock(declare type) {
+     declare eb = .BlockExists();
+     declare ep = .TopView.Position;
+
+     if (eb != NULL) {
+         declare ev = .TopView;
+         declare tr = ev.TopRow;
+         declare lc = ev.LeftColumn;
+         declare er = eb.EndingRow;
+         declare ec = eb.EndingColumn;
+         declare epr = ep.Row;
+         declare epc = ep.Column;
+
+
+         if (epr == er) {
+             if (epc >= ec) {
+                 ec = epc;
+             }
+         }
+
+         if (epr > er) {
+             er = epr;
+         }
+
+         ep.Save();
+         BeginBlock(type);
+         ep.Move(er,ec);
+         EndBlock(type);
+         ep.Restore();
+         ev.SetTopLeft(tr,lc);
+     } else {
+         BeginBlock(type);
+     }
+}
+
+//
+// End block at current position.
+//
+on editor:>ClassicStopBlock(declare type) {
+     declare eb = .BlockExists();
+     declare ep = .TopView.Position;
+
+     if (eb != NULL) {
+         declare sr = eb.StartingRow;
+         declare sc = eb.StartingColumn;
+         declare epr = ep.Row;
+         declare epc = ep.Column;
+
+
+         if (epr == sr) {
+             if (epc <= sc) {
+                 sc = epc;
+             }
+         }
+
+         if (epr < sr) {
+             sr = epr;
+         }
+
+         ep.Save();
+         ep.Move(sr,sc);
+         BeginBlock(type);
+         ep.Restore();
+     }
+
+     EndBlock(type);
+}
+
+//
+// Uses Classic specific behavior to uppercase current word.
+//
+on editor:>ClassicUpperWord() {
+
+   declare bBlock = FALSE;
+   declare eb = .BlockExists();
+
+   if (eb != NULL) {
+      bBlock = TRUE;
+      eb.Save();
+   }
+
+   .TopView.BookmarkRecord(BOOKMARK_ID_SYSTEM_ONE);
+   .MarkWord().UpperCase();
+   .TopView.BookmarkGoto(BOOKMARK_ID_SYSTEM_ONE);
+   .TopView.Block.Reset();
+
+   if (bBlock) {
+      eb.Restore();
+   }
+}
+
+

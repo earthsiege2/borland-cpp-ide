@@ -1,18 +1,29 @@
 //----------------------------------------------------------------------------
 // ObjectWindows
-// (C) Copyright 1992, 1994 by Borland International, All Rights Reserved
+// Copyright (c) 1992, 1996 by Borland International, All Rights Reserved
 //
-//   Implementation of TInputDialog.  User string input dialog box
+//$Revision:   10.3  $
+//
+// Implementation of TInputDialog.  User string input dialog box
 //----------------------------------------------------------------------------
 #pragma hdrignore SECTION
-#include <owl/owlpch.h>
-#include <owl/inputdia.h>
+#include <owl/pch.h>
+#if !defined(OWL_INPUTDIA_H)
+# include <owl/inputdia.h>
+#endif
+#if !defined(OWL_EDIT_H)
+# include <owl/edit.h>
+#endif
+#if !defined(OWL_VALIDATE_H)
+# include <owl/validate.h>
+#endif
 #include <string.h>
-#include <owl/edit.h>
-#include <owl/validate.h>
 
 #if !defined(SECTION) || SECTION == 1
 
+//
+//
+//
 TInputDialog::TInputDialog(TWindow*        parent,
                            const char far* title,
                            const char far* prompt,
@@ -30,12 +41,15 @@ TInputDialog::TInputDialog(TWindow*        parent,
   Buffer = buffer;
   BufferSize = bufferSize;
   if (validator)
-    new TEdit(this,ID_INPUT)->SetValidator(validator);
+    (new TEdit(this,ID_INPUT))->SetValidator(validator);
 }
 
+//
+//
+//
 TInputDialog::~TInputDialog()
 {
-  delete [] Prompt;
+  delete[] Prompt;
 }
 
 //
@@ -68,6 +82,8 @@ TInputDialog::SetupWindow()
 
 IMPLEMENT_STREAMABLE2(TInputDialog, TDialog, TWindow);
 
+#if !defined(BI_NO_OBJ_STREAMING)
+
 //
 // reads an instance of TInputDialog from the passed ipstream
 //
@@ -89,5 +105,7 @@ TInputDialog::Streamer::Write(opstream& os) const
   os.fwriteString(GetObject()->Prompt);
 }
 
+
+#endif  // if !defined(BI_NO_OBJ_STREAMING)
 
 #endif

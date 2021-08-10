@@ -173,6 +173,9 @@ mathw$(MODEL).lib : $(MATHOBJS)
 	    $?
 |   >> $(LIBDIR)\math.rsp
     $(TLIB) $(LIBDIR)\$& @$(LIBDIR)\math.rsp, $(LIBDIR)\temp.lst
+!if ($(OS) == WIN16 && $(MODEL) == l)
+    $(PUBTOOL) $(EXTDIR)\$(PUBNAME) $(LIBDIR)\$&
+!endif
     if exist $(LIBDIR)\$&.bak del $(LIBDIR)\$&.bak
     del $(LIBDIR)\temp.lst
     del $(LIBDIR)\math.rsp

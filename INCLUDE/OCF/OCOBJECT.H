@@ -1,15 +1,17 @@
-//
 //----------------------------------------------------------------------------
 // ObjectComponents
-// (C) Copyright 1994 by Borland International, All Rights Reserved
+// Copyright (c) 1994, 1996 by Borland International, All Rights Reserved
 //
-//   Various general OC enums and structs
+// Various general OC enums and structs
 //----------------------------------------------------------------------------
 #if !defined(OCF_OCOBJECT_H)
 #define OCF_OCOBJECT_H
 
-#if !defined(OCF_OCDEFS_H)
-# include <ocf/ocdefs.h>
+#if !defined(OCF_DEFS_H)
+# include <ocf/defs.h>
+#endif
+#if !defined(OCF_OLEUTIL_H)
+# include <ocf/oleutil.h>
 #endif
 #if !defined(OCF_OCREG_H)
 # include <ocf/ocreg.h>
@@ -25,7 +27,8 @@ enum TOcDialogHelp {
   dhChangeIcon,
   dhFileOpen,
   dhSourceSet,
-  dhIconFileOpen
+  dhIconFileOpen,
+  dhBrowseControl
 };
 
 enum TOcDropAction {
@@ -59,7 +62,8 @@ enum TOcAspect {
   asIcon      = 4,
   asDocPrint  = 8,
   asDefault   = 16,
-  asMaintain  = 32
+  asMaintain  = 32,
+  asClip      = 64
 };
 
 struct far TOcScaleInfo {
@@ -93,7 +97,8 @@ enum TOcInitWhere {
   iwStorage,
   iwDataObject,
   iwNew,
-  iwHandle
+  iwHandle,
+  iwNewOcx
 };
 
 class TOcInitInfo {
@@ -115,7 +120,7 @@ class TOcInitInfo {
     union {
       LPCOLESTR    Path;      // where == iwFile
       IDataObject* Data;      // where == iwDataObject
-      uint32       CId;       // where == iwNew
+      uint32       CId;       // where == iwNew, iwNewOcx
       struct {                // where == iwHandle
         HANDLE       Data;
         uint         DataFormat;
@@ -183,4 +188,3 @@ struct TOcFormatInfo {
 };
 
 #endif  // OCF_OCOBJECT_H
-

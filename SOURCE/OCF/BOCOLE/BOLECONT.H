@@ -1,14 +1,13 @@
+//----------------------------------------------------------------------------
+// ObjectComponents
+// Copyright (c) 1994, 1996 by Borland International, All Rights Reserved
 //
-//**************************************************************************
+// $Revision:   2.1  $
 //
-// BOleCont.h --   Implements the server helper for documents by masquerading
-//                 as the container object. Provides plumbing for server
-//                 linking to documents and items
-//
-// Copyright (c) 1993,94 by Borland International, Inc. All rights reserved
-//
-//**************************************************************************
-
+//  Implements the server helper for documents by masquerading as the 
+//  container object. Provides plumbing for server linking to documents 
+//  and items
+//----------------------------------------------------------------------------
 #ifndef _BOLECONT_H
 #define _BOLECONT_H 1
 
@@ -84,5 +83,4 @@ public:
 };
 
 #endif _BOLECONT_H
-
 

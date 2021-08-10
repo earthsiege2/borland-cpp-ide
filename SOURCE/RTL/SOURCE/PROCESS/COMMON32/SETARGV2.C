@@ -6,9 +6,9 @@
  *-----------------------------------------------------------------------*/
 
 /*
- *      C/C++ Run Time Library - Version 1.5
+ *      C/C++ Run Time Library - Version 2.0
  *
- *      Copyright (c) 1991, 1994 by Borland International
+ *      Copyright (c) 1991, 1996 by Borland International
  *      All Rights Reserved.
  *
  */
@@ -30,7 +30,7 @@ extern char ** __import _argv;        /* argument vector */
 extern int              _argc;        /* number of arguments */
 extern char **          _argv;        /* argument vector */
 #endif
-    
+
 int     _RTLENTRY __dll_argc;         /* Used to force setup of _argc */
 char ** _RTLENTRY __dll_argv;         /* Used to force setup of _argv */
 
@@ -44,5 +44,14 @@ static void _setargv2( void )
 }
 
 #pragma startup _setargv2 3      /* force _setargv2 to be called at startup */
+
+void _exitargv(void);
+
+static void _exitargv2 ( void )
+{
+    _exitargv();
+}
+#pragma exit _exitargv2 3        /* force _exitargv2 to be called at exit */
+
 
 #endif

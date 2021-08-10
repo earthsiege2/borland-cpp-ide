@@ -1,0 +1,130 @@
+//----------------------------------------------------------------------------
+// cScript
+// (C) Copyright 1995 by Borland International, All Rights Reserved
+//
+// STARTUP.SPP
+//    Script component of cScript startup process.
+//
+// $Revision:   1.63  $
+// $Revision:   1.63  $
+//
+//----------------------------------------------------------------------------
+
+//
+// Create an instance of the IDEApplication object called IDE.  This instance
+// will be used across all IDE supplied scripts to represent the IDE.
+// IDE is the only script variable whose existence is known internally within
+// the IDE.  Its prescence is required for the IDE to function properly.
+//
+export __const IDE = new IDEApplication();
+
+// mark this module as being a library module
+library;
+
+//
+// Show the user that we will perform some work.
+//
+IDE.StartWaitCursor();
+
+export scriptEngine = new ScriptEngine();
+scriptEngine.DiagnosticMessageMask &= ~OBJECT_DIAGNOSTICS;
+
+//
+// The call to initialize the ProjectManager will cause the IDE to load its initial
+// project file.  Most likely this will be the BCWDEF.IDE project, although a project
+// can be specified on the command line.  Regardless, the act of opening a project
+// causes any files "currently" open to be shut down and saved off to the project's
+// desktop file.  If you want to create your own edit buffers, do so after this has
+// been called.
+//
+
+IDE.ProjectManagerInitialize();
+
+//
+// Performs assignments based upon the request keyboard.
+//
+LoadKeyboard(){
+ // Process the keyboard data files and commands.
+ // IDEBASE.KBB Common and core keyboard assignments file name.
+ // For future expansion...
+ // declare sFileName = new String(scriptEngine.StartupDirectory + "IDEBASE.KBB");
+ // declare General = new KeyboardDataFile(sFileName.Text,FALSE);
+
+ // editor.KBD Assignments based upon Options|Environment+Editor.
+ declare String sFileName(scriptEngine.StartupDirectory + IDE.KeyboardAssignmentFile);
+ LoadKeyboardDataFile(sFileName.Text,FALSE);
+
+ // For future expansion...
+ // declare Custom  = new KeyboardDataFile("CUSTOM.KBC");
+}
+
+//
+// Dynamically load scripts as necessary in order to optimize script engine
+// performance.
+//
+scriptEngine.SymbolLoad("filters", "ParseBorlandMessages, ParseGenericMessages, \
+                                    ParseGrepMessages, ParseHelpCompilerMessages, \
+                                                                        ParseResourceCompilerMessages, \
+                                                                        ParseFilenameMessages, ParseAssemblerMessages");
+
+scriptEngine.SymbolLoad("mate", "LoadMateFunctionality");
+
+scriptEngine.SymbolLoad("openfile", "LoadFileAtCursor, FindFileOnPath, \
+                                     SmartFileLoad");
+
+scriptEngine.SymbolLoad("BRIEFEx", "assign_to_key, block_search, center, \
+                                    delete_macro, load_macro, next_char, \
+                                    unload_macro, prev_char, tolower, toupper, \
+                                    i_search, swap_anchor");
+
+//
+// Script engine must have these modules loaded for a comprehensive IDE.
+//
+scriptEngine.Load("miscscr");
+scriptEngine.Load("edit");
+scriptEngine.Load("debug");
+scriptEngine.Load("ide");
+scriptEngine.Load("keymaps");
+scriptEngine.Load("filtstub");
+
+//
+// Process the keyboard file.
+//
+LoadKeyboard();
+
+//
+// Set script diagnostic level.
+//
+scriptEngine.DiagnosticMessageMask |= OBJECT_DIAGNOSTICS;
+
+//
+// Setup default regions.
+//
+IDE.SetRegion("Editor", 1, 1, 10000, 6666);
+IDE.SetRegion("Message", 1, 6666, 10000, 10000);
+IDE.SetRegion("Project", 1, 6666, 10000, 10000);
+
+IDE.SetRegion("Watches", 1, 1, 10000, 6666);
+IDE.SetRegion("Breakpoints", 1, 1, 10000, 6666);
+IDE.SetRegion("Call Stack", 1, 1, 10000, 6666);
+IDE.SetRegion("Processes", 1, 1, 10000, 6666);
+IDE.SetRegion("Inspector", 1, 1, 10000, 6666);
+IDE.SetRegion("Evaluator", 1, 1, 10000, 6666);
+IDE.SetRegion("CPU", 1, 1, 10000, 6666);
+
+//
+// Provide access to the example scripts.
+//
+scriptEngine.Load("exscr");
+
+//
+// Notify IDE user of progress, set diagnostic state and regions.
+//
+print("IDE loaded in " + IDE.LoadTime + " milliseconds.");
+print("Startup completed.");
+
+//
+// Show the user that we have completed the work.
+//
+IDE.EndWaitCursor();
+

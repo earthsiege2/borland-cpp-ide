@@ -1,0 +1,44 @@
+//--------------------------------------------------------------------------
+// Object Scripting
+// Copyright (c) 1996 by Borland International, All Rights Reserved
+//
+// MISC.SPP: Miscellaneous. Miscellaneous script.
+//--------------------------------------------------------------------------
+print "misc.spp";
+
+import "kernel32.dll" {
+  void  Sleep  (long);
+}
+
+//
+// Pauses execution for the given number of seconds.
+//
+Pause(seconds)
+{
+  Sleep(seconds * 1000);
+}
+
+//
+// Returns the directory that the calling module resides in.
+// Returns the fully-qualified file name of the caller
+// if fileName is NULL or is not correct. NOTE: This routine
+// _MUST_ be called from another module, AND outside the scope of
+// any class or function.
+//
+GetModuleDir(fileName)
+{
+  // Lowercase the filename.
+  //
+  declare sTmp = new String(fileName);
+  sTmp = sTmp.Lower();
+  fileName = sTmp.Text;
+
+  // Create a stackframe object to get caller, and isolate the directory.
+  //
+  declare stackFrm = new StackFrame(1);
+  sTmp.Text = stackFrm.Caller;
+  sTmp = sTmp.Lower();
+  sTmp = sTmp.SubString(0, sTmp.Index(fileName) - 2);
+
+  return sTmp.Text;
+}

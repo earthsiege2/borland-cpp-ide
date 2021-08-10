@@ -1,41 +1,38 @@
-/*------------------------------------------------------------------------*/
-/*                                                                        */
-/*  STREAMBL.H                                                            */
-/*                                                                        */
-/*  Copyright (c) 1992, 1994 Borland International                        */
-/*  All Rights Reserved                                                   */
-/*                                                                        */
-/*  Class definitions for object streaming                                */
-/*                                                                        */
-/*                                                                        */
-/*                 +----------------+  +-------------+                    */
-/*                 |TStreamableTypes|  |ObjectBuilder|                    */
-/*                 +--+----------+--+  +-------------+                    */
-/*                    |class name|     |  BUILDER    |                    */
-/*                    +----------+     |  delta      |                    */
-/*                          |          +-------------+                    */
-/*                          |                 |                           */
-/*                          |                /\                           */
-/*                          |         +--------                           */
-/*                          |         |                                   */
-/*                          |         |                                   */
-/*                        +----------------+                              */
-/*                        |TStreamableClass|                              */
-/*                        +----------------+                              */
-/*                        |  Module ID     |                              */
-/*                        +----------------+                              */
-/*                                                                        */
-/*------------------------------------------------------------------------*/
-
-#if !defined( CLASSLIB_STREAMBL_H )
+//----------------------------------------------------------------------------
+// Borland Class Library
+// Copyright (c) 1992, 1996 by Borland International, All Rights Reserved
+//
+//$Revision:   5.4  $
+//
+// Class definitions for object streaming
+//
+//
+//                 +----------------+  +-------------+
+//                 |TStreamableTypes|  |ObjectBuilder|
+//                 +--+----------+--+  +-------------+
+//                    |class name|     |  BUILDER    |
+//                    +----------+     |  delta      |
+//                          |          +-------------+
+//                          |                 |
+//                          |                 /\ .
+//                          |         +--------
+//                          |         |
+//                          |         |
+//                        +----------------+
+//                        |TStreamableClass|
+//                        +----------------+
+//                        |  Module ID     |
+//                        +----------------+
+//
+//----------------------------------------------------------------------------
+#if !defined(CLASSLIB_STREAMBL_H)
 #define CLASSLIB_STREAMBL_H
 
-#if !defined( __STRING_H )
-#include <string.h>
+#if !defined(CLASSLIB_DEFS_H)
+# include <classlib/defs.h>
 #endif
-
-#if !defined( CLASSLIB_DEFS_H )
-#include <classlib/defs.h>
+#if !defined(__STRING_H) && !defined(_INC_STRING)
+# include <string.h>
 #endif
 
 #if defined(_FASTTHIS)
@@ -45,43 +42,39 @@
 #endif
 
 #if !defined( CLASSLIB_VECTIMP_H )
-#include "classlib\vectimp.h"
+# include <classlib/vectimp.h>
+#endif
+#if defined(BI_PLAT_MSW) && !defined(SERVICES_WSYSINC_H)
+# include <services/wsysinc.h>
 #endif
 
 #if defined( BI_CLASSLIB_NO_po )
-#pragma option -po-
-#endif
-
-#if defined( BI_PLAT_MSW ) && !defined( __WINDOWS_H )
-#include <windows.h>
+# pragma option -po-
 #endif
 
 #if defined( BI_NO_PER_INSTANCE_DATA ) && defined(_BIDSDLL)
 
-extern HINSTANCE _hInstance;
-typedef unsigned ModuleId;
-inline ModuleId GetModuleId() { return (unsigned)_hInstance; }
+  typedef unsigned ModuleId;
+  inline ModuleId GetModuleId() { return (unsigned)_hInstance; }
 
 #else
 
-typedef unsigned ModuleId;
-inline ModuleId GetModuleId() { return 1; }
+  typedef unsigned ModuleId;
+  inline ModuleId GetModuleId() { return 1; }
 
 #endif
 
 class _BIDSCLASS _BIDSFASTTHIS _RTTI TStreamer;
 class _BIDSCLASS _BIDSFASTTHIS _RTTI TStreamableBase;
 
-typedef TStreamer *(* BUILDER)( TStreamableBase * );
+typedef TStreamer* _CALLCNVN (*BUILDER)( TStreamableBase * );
 
 struct _BIDSCLASS ObjectBuilder
 {
 
     enum { NoDelta = -1 };
 
-    _BIDSENTRY ObjectBuilder( BUILDER b, int d ) : Builder( b ), Delta( d )
-    {
-    }
+    _BIDSCTOR ObjectBuilder( BUILDER b, int d ) : Builder( b ), Delta( d ) {}
 
     BUILDER Builder;
     int Delta;
@@ -95,12 +88,12 @@ class _BIDSCLASS TStreamableClass : public ObjectBuilder
 
 public:
 
-    _BIDSENTRY TStreamableClass( const char *n, 
+    _BIDSCTOR TStreamableClass( const char *n, 
                              BUILDER b, 
                              int d = NoDelta,
                              ModuleId mid = GetModuleId() );
 
-    _BIDSENTRY ~TStreamableClass();
+    _BIDSCTOR ~TStreamableClass();
 
     int _BIDSENTRY operator == ( const TStreamableClass& n ) const
         {
@@ -135,7 +128,7 @@ class _BIDSCLASS TStreamableTypes
 
 public:
 
-    _BIDSENTRY TStreamableTypes() : Types( 5, 5 ) {}
+    _BIDSCTOR TStreamableTypes() : Types( 5, 5 ) {}
 
     void _BIDSENTRY RegisterType( ModuleId id, TStreamableClass& );
     void _BIDSENTRY UnRegisterType( ModuleId id, TStreamableClass& );
@@ -149,8 +142,7 @@ private:
 };
 
 #if defined( BI_CLASSLIB_NO_po )
-#pragma option -po.
+# pragma option -po.
 #endif
 
 #endif  // CLASSLIB_STREAMBLE_H
-

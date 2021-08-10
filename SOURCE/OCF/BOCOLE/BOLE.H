@@ -1,37 +1,55 @@
+//----------------------------------------------------------------------------
+// ObjectComponents
+// Copyright (c) 1994, 1996 by Borland International, All Rights Reserved
 //
-//**************************************************************************
+// $Revision:   2.13  $
 //
-// BOle.h -- Common private header file for BOle modules.
-//
-// Copyright (c) 1993,94 by Borland International, Inc. All rights reserved
-//
-//**************************************************************************
-
+// Common private header file for BOle modules.
+//----------------------------------------------------------------------------
 #ifndef _BOLE_H
-#define _BOLE_H 1
+#define _BOLE_H 
 
-#pragma warn -par	// Turn off warning "Parameter is never used"
-
+#ifndef _BOLE32_H
 #include <BOle32.h>
-
-
-#if !defined(__DEFS_H)
+#endif
+#ifndef __DEFS_H
   #include <_defs.h>
 #endif
 
-#if !defined(__WINDOWS_H)
-//  #undef NULL
+#ifndef __WINDOWS_H
+  #undef NULL
   #define STRICT
   #include <windows.h>
 #endif
 
-
+#ifndef __OLE2_H
 #include <Ole2.h>
-#include <BOleintf.h>		// ole2 must come before boleintf.h
-#if defined(WIN32)
-  #include <oleauto.h>
+#endif
+
+#ifdef WIN32
+
+#ifndef _OLEAUTO_H_
+#include <oleauto.h>
+#endif
 #else
-  #include <Dispatch.h>
+#ifndef __DISPATCH_H
+#include <Dispatch.h>
+#endif
+
+#endif
+
+#ifdef WIN16
+#  ifdef OLECHAR
+#    undef OLECHAR
+#  endif
+#endif
+
+#ifndef __OLECTL_H
+#include <olectl.h>
+#endif
+
+#ifndef _BOLEINTF_H
+#include <BOleintf.h>           // ole2 must come before boleintf.h
 #endif
 
 #define OLE    /* use OLE::func to disambiguate OLEAPI global functions */
@@ -41,6 +59,7 @@
 //#define NOERROR ((void FAR*)0L)
 
 #if defined(INITGUID)
+  #include <olectlid.h>
   #if defined(WIN32)
   #include <cguid.h>
   #else
@@ -49,6 +68,7 @@
 #endif
 
 PREDECLARE_INTERFACE(IClassFactory)
+PREDECLARE_INTERFACE(IClassFactory2)
 PREDECLARE_INTERFACE(IDropSource)
 PREDECLARE_INTERFACE(IDropTarget)
 PREDECLARE_INTERFACE(IPersist)
@@ -74,6 +94,8 @@ PREDECLARE_INTERFACE(IOleInPlaceObject)
 PREDECLARE_INTERFACE(IOleInPlaceSite)
 PREDECLARE_INTERFACE(IOleInPlaceUIWindow)
 PREDECLARE_INTERFACE(IOleInPlaceFrame)
+PREDECLARE_INTERFACE(IOleControlSite)
+PREDECLARE_INTERFACE(IOlePropertyNotifySink)
 
 // Automation interfaces
 
@@ -103,7 +125,8 @@ PREDECLARE_INTERFACE(IOleCache)
 PREDECLARE_INTERFACE(IExternalConnection)
 PREDECLARE_INTERFACE(IRunnableObject)
 
-//DEFINE_INLINE_QI(IClassFactory,IUnknown)		// moved to boledefs.h
+//DEFINE_INLINE_QI(IClassFactory,IUnknown)              // moved to boledefs.h
+DEFINE_INLINE_QI( IClassFactory2, IClassFactory)
 DEFINE_INLINE_QI(IDropSource,IUnknown)
 DEFINE_INLINE_QI(IDropTarget,IUnknown)
 DEFINE_INLINE_QI(IPersist,IUnknown)
@@ -158,17 +181,35 @@ DEFINE_INLINE_QI(IOleCache,  IUnknown)
 DEFINE_INLINE_QI(IExternalConnection,  IUnknown)
 DEFINE_INLINE_QI(IRunnableObject,  IUnknown)
 
+// OCX's
+DEFINE_INLINE_QI(IOleControlSite, IUnknown)
+DEFINE_INLINE_QI(IPropertyNotifySink, IUnknown)
+DEFINE_INLINE_QI(IFont, IUnknown)
+DEFINE_INLINE_QI(IFontDisp, IDispatch)
+DEFINE_INLINE_QI(IPicture, IUnknown)
+DEFINE_INLINE_QI(IPictureDisp, IDispatch)
+
+DEFINE_INLINE_QI(IOleControl, IUnknown)
+DEFINE_INLINE_QI(IPersistStreamInit, IPersist)
+DEFINE_INLINE_QI(IProvideClassInfo, IUnknown)
+DEFINE_INLINE_QI(IConnectionPointContainer, IUnknown)
+DEFINE_INLINE_QI(IEnumConnectionPoints, IUnknown)
+DEFINE_INLINE_QI(IConnectionPoint, IUnknown)
+DEFINE_INLINE_QI(IEnumConnections, IUnknown)
+
+#ifndef _OLEDEBUG_H
 #include "oledebug.h"
+#endif
 
 extern HINSTANCE boleInst;
 
 
-#ifdef ANSI
+#ifndef _UTILS_H
   #include "Utils.h"
 #endif
 
+#define OLESTDDELIMW OLESTR("\\")
+
 #endif
-
-
 
 

@@ -1,6 +1,9 @@
 //----------------------------------------------------------------------------
 // ObjectWindows
-// (C) Copyright 1994 by Borland International, All Rights Reserved
+// Copyright (c) 1994, 1996 by Borland International, All Rights Reserved
+//
+//$Revision:   10.7  $
+//
 //
 //----------------------------------------------------------------------------
 #if !defined(OWL_OLEWINDO_H)
@@ -8,6 +11,9 @@
 
 #if !defined(OWL_WINDOW_H)
 # include <owl/window.h>
+#endif
+#if !defined(OWL_DC_H)
+# include <owl/dc.h>
 #endif
 #if !defined(OWL_OCFEVENT_H)
 # include <owl/ocfevent.h>
@@ -18,35 +24,42 @@
 #if !defined(OCF_OCPART_H)
 # include <ocf/ocpart.h>
 #endif
-#if !defined(OWL_UIHANDLE_H)
-# include <owl/uihandle.h>
+#if !defined(OWL_UIHELPER_H)
+# include <owl/uihelper.h>
 #endif
 #if !defined(OCF_OCLINK_H)
 # include <ocf/oclink.h>
 #endif
 
+// Generic definitions/compiler options (eg. alignment) preceeding the 
+// definition of classes
+#include <services/preclass.h>
+
+
+class _OWLCLASS TPopupMenu;
+class _ICLASS   TOcControl;
+
 //
 // class TOleWindow
-// ----- ----------
-//
+// ~~~~~ ~~~~~~~~~~
 // The generic ole 2 window. Use as a client of a frame window.
 //
-class _USERCLASS TOleWindow : public TWindow {
+class _USERCLASS TOleWindow : virtual public TWindow {
   public:
     TOleWindow(TWindow* parent = 0, TModule* module = 0);
    ~TOleWindow();
 
     // Accessors
     //
-    TOcDocument* GetOcDoc() {return OcDoc;}
-    TOcView*     GetOcView() {return OcView;}
-    TOcRemView*  GetOcRemView() {return TYPESAFE_DOWNCAST(OcView, TOcRemView);}
-    TOcApp*      GetOcApp() {return OcApp;}
+    TOcDocument* GetOcDoc();
+    TOcView*     GetOcView();
+    TOcRemView*  GetOcRemView();
+    TOcApp*      GetOcApp();
     bool         HasActivePart();
-    bool         SelectEmbedded() {return DragPart != 0;}
+    bool         SelectEmbedded();
 
     bool IsOpenEditing() const;
-    bool IsRemote() const {return Remote;}
+    bool IsRemote() const;
 
     virtual bool OleShutDown();
     virtual void SetupDC(TDC& dc, bool scale = true);
@@ -60,21 +73,27 @@ class _USERCLASS TOleWindow : public TWindow {
     virtual bool Deactivate();
     virtual bool Select(uint modKeys, TPoint& point);
     virtual bool PaintSelection(TDC& dc, bool erase, TRect& rect,
-                                void* userData = 0){return false;}
+                                void* userData = 0);
     virtual bool PaintParts(TDC& dc, bool erase, TRect& rect, bool metafile);
     virtual bool PaintLink(TDC& dc, bool erase, TRect& rect,
-                           TString& moniker) {return false;}
+                           TString& moniker);
     virtual void GetLogPerUnit(TSize& logPerUnit);
     virtual void SetScale(uint16 percent);
     virtual void SetSelection(TOcPart* part);
     virtual bool ShowCursor(HWND wnd, uint hitTest, uint mouseMsg);
+    virtual bool StartDrag(uint modKeys, TPoint& point);
+    virtual const char far* GetFileName();
 
   protected:
     void SetupWindow();
     void CleanupWindow();
-    bool IdleAction(long idleCount);
 
-    LRESULT EvCommand(uint id, HWND hWndCtl, uint notifyCode);
+    // Override virtual functions defined by TWindow
+    //
+    bool    PreProcessMsg(MSG& msg);
+    bool    IdleAction(long idleCount);
+
+    TResult EvCommand(uint id, HWND hWndCtl, uint notifyCode);
     void    EvCommandEnable(TCommandEnabler& commandEnabler);
     bool    CanClose();
     bool InClient(TDC& dc, TPoint& point);
@@ -98,6 +117,7 @@ class _USERCLASS TOleWindow : public TWindow {
     void CmEditLinks();
     void CmEditConvert();
     void CmEditInsertObject();
+    void CmEditInsertControl();
     void CmEditShowObjects();
 
     void CeEditDelete(TCommandEnabler& ce);
@@ -111,6 +131,7 @@ class _USERCLASS TOleWindow : public TWindow {
     void CeEditConvert(TCommandEnabler& ce);
     void CeEditVerbs(TCommandEnabler& ce);
     void CeEditInsertObject(TCommandEnabler& ce);
+    void CeEditInsertControl(TCommandEnabler& ce);
     void CeEditShowObjects(TCommandEnabler& ce);
 
     void EvMouseMove(uint modKeys, TPoint& point);
@@ -124,7 +145,7 @@ class _USERCLASS TOleWindow : public TWindow {
     void EvVScroll(uint scrollCode, uint thumbPos, HWND hWndCtl);
     void EvMenuSelect(uint menuItemId, uint flags, HMENU hMenu);
 
-    LRESULT EvOcEvent(WPARAM wParam, LPARAM lParam);
+    TResult EvOcEvent(TParam1 param1, TParam2 param2);
 //    uint32 EvOcViewDiscardUndo(void far* undo);
 
     // Container specific messages
@@ -145,7 +166,7 @@ class _USERCLASS TOleWindow : public TWindow {
 
     // Server specific messages
     //
-    bool   EvOcPartInvalid(TOcPart far& /*part*/) {return false;}
+    bool   EvOcPartInvalid(TOcPart far& /*part*/);
     bool   EvOcViewSavePart(TOcSaveLoad far& ocSave);
     bool   EvOcViewLoadPart(TOcSaveLoad far& ocLoad);
     bool   EvOcViewPaint(TOcViewPaint far& vp);
@@ -163,6 +184,55 @@ class _USERCLASS TOleWindow : public TWindow {
     bool   EvOcViewSetLink(TOcLinkView& view);
     bool   EvOcViewBreakLink(TOcLinkView& view);
     bool   EvOcViewDoVerb(uint verb);
+
+    virtual bool   EvOcViewTransformCoords(uint verb);
+
+    // Ambient property specific messages
+    //
+    virtual bool   EvOcAmbientGetBackColor(long* rgb);
+    virtual bool   EvOcAmbientGetForeColor(long* rgb);
+    virtual bool   EvOcAmbientGetLocaleID(long* locale);
+    virtual bool   EvOcAmbientGetTextAlign(short* align);
+    virtual bool   EvOcAmbientGetMessageReflect(bool* msgReflect);
+    virtual bool   EvOcAmbientGetUserMode(bool* mode);
+    virtual bool   EvOcAmbientGetUIDead(bool* dead);
+    virtual bool   EvOcAmbientGetShowGrabHandles(bool* show);
+    virtual bool   EvOcAmbientGetShowHatching(bool* show);
+    virtual bool   EvOcAmbientGetDisplayAsDefault(bool* disp);
+    virtual bool   EvOcAmbientGetSupportsMnemonics(bool* support);
+    virtual bool   EvOcAmbientGetDisplayName(TString** name);
+    virtual bool   EvOcAmbientGetScaleUnits(TString** units);
+    virtual bool   EvOcAmbientGetFont(IDispatch** font);
+
+    virtual bool   EvOcAmbientSetBackColor(long rgb);
+    virtual bool   EvOcAmbientSetForeColor(long rgb);
+    virtual bool   EvOcAmbientSetLocaleID(long locale);
+    virtual bool   EvOcAmbientSetTextAlign(short align);
+    virtual bool   EvOcAmbientSetMessageReflect(bool msgReflect);
+    virtual bool   EvOcAmbientSetUserMode(bool mode);
+    virtual bool   EvOcAmbientSetUIDead(bool dead);
+    virtual bool   EvOcAmbientSetShowGrabHandles(bool show);
+    virtual bool   EvOcAmbientSetShowHatching(bool show);
+    virtual bool   EvOcAmbientSetDisplayAsDefault(bool disp);
+    virtual bool   EvOcAmbientSetSupportsMnemonics(bool support);
+    virtual bool   EvOcAmbientSetDisplayName(TString* name);
+    virtual bool   EvOcAmbientSetScaleUnits(TString* units);
+    virtual bool   EvOcAmbientSetFont(IDispatch* font);
+
+    // Ctrl event specific messages
+    //
+    virtual bool   EvOcCtrlClick(TCtrlEvent* pev);
+    virtual bool   EvOcCtrlDblClick(TCtrlEvent* pev);
+    virtual bool   EvOcCtrlMouseDown(TCtrlMouseEvent* pev);
+    virtual bool   EvOcCtrlMouseMove(TCtrlMouseEvent* pev);
+    virtual bool   EvOcCtrlMouseUp(TCtrlMouseEvent* pev);
+    virtual bool   EvOcCtrlKeyDown(TCtrlKeyEvent* pev);
+    virtual bool   EvOcCtrlKeyUp(TCtrlKeyEvent* pev);
+    virtual bool   EvOcCtrlErrorEvent(TCtrlErrorEvent* pev);
+    virtual bool   EvOcCtrlFocus(TCtrlFocusEvent* pev);
+    virtual bool   EvOcCtrlPropertyChange(TCtrlPropertyEvent* pev);
+    virtual bool   EvOcCtrlPropertyRequestEdit(TCtrlPropertyEvent* pev);
+    virtual bool   EvOcCtrlCustomEvent(TCtrlCustomEvent* pev);
 
     TPopupMenu* CreateVerbPopup(const TOcVerb& ocVerb);
     void EvDoVerb(uint whichVerb);
@@ -195,15 +265,82 @@ class _USERCLASS TOleWindow : public TWindow {
 
 //
 // class TOleClientDC
-// ----- ------------
-//
+// ~~~~~ ~~~~~~~~~~~~
 // The TOleClientDC is a client dc with window origin, ext, and viewport
-// origin, ext set up to reflect the current scrolling and scaling information.
+// origin, ext, setup to reflect the current scrolling and scaling information.
 //
-class TOleClientDC : public TClientDC {
+class _USERCLASS TOleClientDC : public TClientDC {
   public:
     TOleClientDC(TOleWindow& win, bool scale = true);
 };
 
+// Generic definitions/compiler options (eg. alignment) following the 
+// definition of classes
+#include <services/posclass.h>
+
+// --------------------------------------------------------------------------
+// Inline implementation
+//
+
+//
+// Return pointer to TOcDocument helper object associated with this window
+//
+inline TOcDocument* TOleWindow::GetOcDoc() {
+  return OcDoc;
+}
+
+//
+// Return pointer to the 'TOcView' helper object associated with this window
+//
+inline TOcView* TOleWindow::GetOcView() {
+  return OcView;
+}
+
+//
+// Return pointer to 'TOcRemView' object associated with this window.
+// NOTE: Returns 0 in case of failure. For example, a TOleWindow of a 
+//       container application does not have an associated 'TOcRemView'
+//       and will return 0.
+//
+inline TOcRemView* TOleWindow::GetOcRemView() {
+  return TYPESAFE_DOWNCAST(OcView, TOcRemView);
+}
+
+//
+inline TOcApp* TOleWindow::GetOcApp() {
+  return OcApp;
+}
+
+//
+inline bool TOleWindow::SelectEmbedded() {
+  return DragPart != 0;
+}
+
+//
+inline bool TOleWindow::IsRemote() const {
+  return Remote;
+}
+
+//
+inline bool TOleWindow::PaintSelection(TDC& dc, bool erase,
+                                       TRect& rect, void* userData) {
+  return false;
+}
+
+//
+inline bool TOleWindow::PaintLink(TDC& dc, bool erase,
+                                  TRect& rect, TString& moniker) {
+  return false;
+}
+
+//
+inline bool TOleWindow::EvOcPartInvalid(TOcPart far& /*part*/) {
+  return false;
+}
+
+// on linking must be implemented and return the file name
+inline const char far* TOleWindow::GetFileName() {
+  return NULL;
+}
 
 #endif

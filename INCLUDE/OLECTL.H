@@ -1,15 +1,17 @@
 /////////////////////////////////////////////////////////////////////////////
 //
-// olectl.h     OLE Custom Control interfaces
+// olectl.h 	OLE Control interfaces
 //
 //              OLE Version 2.0
+//
+//              Copyright (c) 1992-1994, Microsoft Corp. All rights reserved.
 //
 /////////////////////////////////////////////////////////////////////////////
 
 /*
- *      C/C++ Run Time Library - Version 6.5
+ *      C/C++ Run Time Library - Version 7.0
  *
- *      Copyright (c) 1994 by Borland International
+ *      Copyright (c) 1994, 1996 by Borland International
  *      All Rights Reserved.
  *
  */
@@ -32,7 +34,7 @@
 #endif
 
 
-#if !defined(_WIN32) && !defined(WIN32)
+#ifndef _WIN32
 
 /////////////////////////////////////////////////////////////////////////////
 // Typedefs for characters and strings in interfaces
@@ -41,7 +43,7 @@ typedef char OLECHAR;
 typedef OLECHAR FAR* LPOLESTR;
 typedef const OLECHAR FAR* LPCOLESTR;
 
-#endif // not _WIN32 && not WIN32
+#endif // not _WIN32
 
 
 /////////////////////////////////////////////////////////////////////////////
@@ -63,9 +65,14 @@ typedef TEXTMETRICOLE FAR* LPTEXTMETRICOLE;
 interface IOleControl;
 interface IOleControlSite;
 interface ISimpleFrameSite;
+interface IErrorLog;
+interface IPropertyBag;
+interface IPersistPropertyBag;
 interface IPersistStreamInit;
+interface IPersistMemory;
 interface IPropertyNotifySink;
 interface IProvideClassInfo;
+interface IProvideClassInfo2;
 interface IConnectionPointContainer;
 interface IEnumConnectionPoints;
 interface IConnectionPoint;
@@ -84,9 +91,14 @@ interface IPictureDisp;
 typedef interface IOleControl IOleControl;
 typedef interface IOleControlSite IOleControlSite;
 typedef interface ISimpleFrameSite ISimpleFrameSite;
+typedef interface IErrorLog IErrorLog;
+typedef interface IPropertyBag IPropertyBag;
+typedef interface IPersistPropertyBag IPersistPropertyBag;
 typedef interface IPersistStreamInit IPersistStreamInit;
+typedef interface IPersistMemory IPersistMemory;
 typedef interface IPropertyNotifySink IPropertyNotifySink;
 typedef interface IProvideClassInfo IProvideClassInfo;
+typedef interface IProvideClassInfo2 IProvideClassInfo2;
 typedef interface IConnectionPointContainer IConnectionPointContainer;
 typedef interface IEnumConnectionPoints IEnumConnectionPoints;
 typedef interface IConnectionPoint IConnectionPoint;
@@ -106,9 +118,14 @@ typedef interface IPictureDisp IPictureDisp;
 typedef IOleControl FAR* LPOLECONTROL;
 typedef IOleControlSite FAR* LPOLECONTROLSITE;
 typedef ISimpleFrameSite FAR* LPSIMPLEFRAMESITE;
+typedef IErrorLog FAR* LPERRORLOG;
+typedef IPropertyBag FAR* LPPROPERTYBAG;
+typedef IPersistPropertyBag FAR* LPPERSISTPROPERTYBAG;
 typedef IPersistStreamInit FAR* LPPERSISTSTREAMINIT;
+typedef IPersistMemory FAR* LPPERSISTMEMORY;
 typedef interface IPropertyNotifySink FAR* LPPROPERTYNOTIFYSINK;
 typedef IProvideClassInfo FAR* LPPROVIDECLASSINFO;
+typedef IProvideClassInfo2 FAR* LPPROVIDECLASSINFO2;
 typedef IConnectionPointContainer FAR* LPCONNECTIONPOINTCONTAINER;
 typedef IEnumConnectionPoints FAR* LPENUMCONNECTIONPOINTS;
 typedef IConnectionPoint FAR* LPCONNECTIONPOINT;
@@ -158,9 +175,9 @@ typedef float OLE_YPOS_CONTAINER;
 typedef float OLE_XSIZE_CONTAINER;
 typedef float OLE_YSIZE_CONTAINER;
 typedef enum { triUnchecked = 0, triChecked = 1, triGray = 2 } OLE_TRISTATE;
-typedef BOOL OLE_OPTEXCLUSIVE;
-typedef BOOL OLE_CANCELBOOL;
-typedef BOOL OLE_ENABLEDEFAULTBOOL;
+typedef VARIANT_BOOL OLE_OPTEXCLUSIVE;
+typedef VARIANT_BOOL OLE_CANCELBOOL;
+typedef VARIANT_BOOL OLE_ENABLEDEFAULTBOOL;
 typedef UINT OLE_HANDLE;
 
 
@@ -275,15 +292,15 @@ typedef UINT OLE_HANDLE;
 /////////////////////////////////////////////////////////////////////////////
 // OLEMISC_ constants
 
-#define OLEMISC_INVISIBLEATRUNTIME  0x00000400
-#define OLEMISC_ALWAYSRUN           0x00000800
-#define OLEMISC_ACTSLIKEBUTTON      0x00001000
-#define OLEMISC_ACTSLIKELABEL       0x00002000
-#define OLEMISC_NOUIACTIVATE        0x00004000
-#define OLEMISC_ALIGNABLE           0x00008000
-#define OLEMISC_SIMPLEFRAME         0x00010000
-#define OLEMISC_SETCLIENTSITEFIRST  0x00020000
-#define OLEMISC_IMEMODE                         0x00040000
+#define OLEMISC_INVISIBLEATRUNTIME  0x00000400L
+#define OLEMISC_ALWAYSRUN           0x00000800L
+#define OLEMISC_ACTSLIKEBUTTON      0x00001000L
+#define OLEMISC_ACTSLIKELABEL       0x00002000L
+#define OLEMISC_NOUIACTIVATE        0x00004000L
+#define OLEMISC_ALIGNABLE           0x00008000L
+#define OLEMISC_SIMPLEFRAME         0x00010000L
+#define OLEMISC_SETCLIENTSITEFIRST  0x00020000L
+#define OLEMISC_IMEMODE				0x00040000L
 
 
 /////////////////////////////////////////////////////////////////////////////
@@ -300,6 +317,7 @@ typedef UINT OLE_HANDLE;
 #define VT_STREAMED_PROPSET 73  //       [P]  Stream contains a property set
 #define VT_STORED_PROPSET   74  //       [P]  Storage contains a property set
 #define VT_BLOB_PROPSET     75  //       [P]  Blob contains a property set
+#define VT_VERBOSE_ENUM		76	//       [P]  Enum value with text string
 
 
 /////////////////////////////////////////////////////////////////////////////
@@ -353,6 +371,10 @@ typedef UINT OLE_HANDLE;
 #define OCM_HSCROLL         (OCM__BASE + WM_HSCROLL)
 #define OCM_VSCROLL         (OCM__BASE + WM_VSCROLL)
 #define OCM_PARENTNOTIFY    (OCM__BASE + WM_PARENTNOTIFY)
+
+#if (WINVER >= 0x0400)
+#define OCM_NOTIFY			(OCM__BASE + WM_NOTIFY)
+#endif
 
 
 /////////////////////////////////////////////////////////////////////////////
@@ -482,10 +504,72 @@ DECLARE_INTERFACE_(ISimpleFrameSite, IUnknown)
 	STDMETHOD_(ULONG,Release)(THIS) PURE;
 
 	// ISimpleFrameSite methods
-	STDMETHOD(PreMessageFilter)(HWND hwnd, UINT msg, WPARAM wp, LPARAM lp,
-		LRESULT FAR* lplResult, DWORD FAR * lpdwCookie) PURE;
-	STDMETHOD(PostMessageFilter)(HWND hwnd, UINT msg, WPARAM wp, LPARAM lp,
-		LRESULT FAR* lplResult, DWORD dwCookie) PURE;
+	STDMETHOD(PreMessageFilter)(THIS_ HWND hwnd, UINT msg, WPARAM wp,
+		LPARAM lp, LRESULT FAR* lplResult, DWORD FAR * lpdwCookie) PURE;
+	STDMETHOD(PostMessageFilter)(THIS_ HWND hwnd, UINT msg, WPARAM wp,
+		LPARAM lp, LRESULT FAR* lplResult, DWORD dwCookie) PURE;
+};
+
+
+/////////////////////////////////////////////////////////////////////////////
+// IErrorLog interface
+
+#undef  INTERFACE
+#define INTERFACE IErrorLog
+
+DECLARE_INTERFACE_(IErrorLog, IUnknown)
+{
+	// IUnknown methods
+	STDMETHOD(QueryInterface)(THIS_ REFIID riid, LPVOID FAR* ppvObj) PURE;
+	STDMETHOD_(ULONG,AddRef)(THIS) PURE;
+	STDMETHOD_(ULONG,Release)(THIS) PURE;
+
+	// IErrorLog methods
+	STDMETHOD(AddError)(THIS_ LPCOLESTR pszPropName, LPEXCEPINFO pExcepInfo) PURE;
+};
+
+
+/////////////////////////////////////////////////////////////////////////////
+// IPropertyBag interface
+
+#undef  INTERFACE
+#define INTERFACE IPropertyBag
+
+DECLARE_INTERFACE_(IPropertyBag, IUnknown)
+{
+	// IUnknown methods
+	STDMETHOD(QueryInterface)(THIS_ REFIID riid, LPVOID FAR* ppvObj) PURE;
+	STDMETHOD_(ULONG,AddRef)(THIS) PURE;
+	STDMETHOD_(ULONG,Release)(THIS) PURE;
+
+	// IPropertyBag methods
+	STDMETHOD(Read)(THIS_ LPCOLESTR pszPropName, LPVARIANT pVar,
+		LPERRORLOG pErrorLog) PURE;
+	STDMETHOD(Write)(THIS_ LPCOLESTR pszPropName, LPVARIANT pVar) PURE;
+};
+
+
+/////////////////////////////////////////////////////////////////////////////
+// IPersistPropertyBag interface
+
+#undef  INTERFACE
+#define INTERFACE IPersistPropertyBag
+
+DECLARE_INTERFACE_(IPersistPropertyBag, IPersist)
+{
+	// IUnknown methods
+	STDMETHOD(QueryInterface)(THIS_ REFIID riid, LPVOID FAR* ppvObj) PURE;
+	STDMETHOD_(ULONG,AddRef)(THIS) PURE;
+	STDMETHOD_(ULONG,Release)(THIS) PURE;
+
+	// IPersist methods
+	STDMETHOD(GetClassID)(THIS_ LPCLSID lpClassID) PURE;
+
+	// IPersistPropertyBag methods
+	STDMETHOD(InitNew)(THIS) PURE;
+	STDMETHOD(Load)(THIS_ LPPROPERTYBAG pPropBag, LPERRORLOG pErrorLog) PURE;
+	STDMETHOD(Save)(THIS_ LPPROPERTYBAG pPropBag, BOOL fClearDirty,
+		BOOL fSaveAllProperties) PURE;
 };
 
 
@@ -510,6 +594,31 @@ DECLARE_INTERFACE_(IPersistStreamInit, IPersist)
 	STDMETHOD(Load)(THIS_ LPSTREAM pStm) PURE;
 	STDMETHOD(Save)(THIS_ LPSTREAM pStm, BOOL fClearDirty) PURE;
 	STDMETHOD(GetSizeMax)(THIS_ ULARGE_INTEGER FAR* pcbSize) PURE;
+	STDMETHOD(InitNew)(THIS) PURE;
+};
+
+
+/////////////////////////////////////////////////////////////////////////////
+// IPersistMemory interface
+
+#undef  INTERFACE
+#define INTERFACE IPersistMemory
+
+DECLARE_INTERFACE_(IPersistMemory, IPersist)
+{
+	// IUnknown methods
+	STDMETHOD(QueryInterface)(THIS_ REFIID riid, LPVOID FAR* ppvObj) PURE;
+	STDMETHOD_(ULONG,AddRef)(THIS) PURE;
+	STDMETHOD_(ULONG,Release)(THIS) PURE;
+
+	// IPersist methods
+	STDMETHOD(GetClassID)(THIS_ LPCLSID lpClassID) PURE;
+
+	// IPersistMemory methods
+	STDMETHOD(IsDirty)(THIS) PURE;
+	STDMETHOD(Load)(THIS_ LPVOID lpStream, ULONG cbSize) PURE;
+	STDMETHOD(Save)(THIS_ LPVOID lpStream, BOOL fClearDirty, ULONG cbSize) PURE;
+	STDMETHOD(GetSizeMax)(THIS_ ULONG* pcbSize) PURE;
 	STDMETHOD(InitNew)(THIS) PURE;
 };
 
@@ -550,6 +659,28 @@ DECLARE_INTERFACE_(IProvideClassInfo, IUnknown)
 	STDMETHOD(GetClassInfo)(THIS_ LPTYPEINFO FAR* ppTI) PURE;
 };
 
+
+/////////////////////////////////////////////////////////////////////////////
+// IProvideClassInfo2 interface
+
+#undef  INTERFACE
+#define INTERFACE IProvideClassInfo2
+
+DECLARE_INTERFACE_(IProvideClassInfo2, IProvideClassInfo)
+{
+	// IUnknown methods
+	STDMETHOD(QueryInterface)(THIS_ REFIID riid, LPVOID FAR* ppvObj) PURE;
+	STDMETHOD_(ULONG,AddRef)(THIS) PURE;
+	STDMETHOD_(ULONG,Release)(THIS) PURE;
+
+	// IProvideClassInfo methods
+	STDMETHOD(GetClassInfo)(THIS_ LPTYPEINFO FAR* ppTI) PURE;
+
+	// IProvideClassInfo2 methods
+	STDMETHOD(GetGUID)(THIS_ DWORD dwGuidKind, GUID FAR* pGUID) PURE;
+};
+
+#define GUIDKIND_DEFAULT_SOURCE_DISP_IID	1
 
 /////////////////////////////////////////////////////////////////////////////
 // IConnectionPointContainer interface
@@ -860,7 +991,7 @@ DECLARE_INTERFACE_(IPropertyPage, IUnknown)
 	STDMETHOD(GetPageInfo)(THIS_ LPPROPPAGEINFO pPageInfo) PURE;
 	STDMETHOD(SetObjects)(THIS_ ULONG cObjects, LPUNKNOWN FAR* ppunk) PURE;
 	STDMETHOD(Show)(THIS_ UINT nCmdShow) PURE;
-	STDMETHOD(Move)(LPCRECT prect) PURE;
+	STDMETHOD(Move)(THIS_ LPCRECT prect) PURE;
 	STDMETHOD(IsPageDirty)(THIS) PURE;
 	STDMETHOD(Apply)(THIS) PURE;
 	STDMETHOD(Help)(THIS_ LPCOLESTR lpszHelpDir) PURE;
@@ -888,7 +1019,7 @@ DECLARE_INTERFACE_(IPropertyPage2, IPropertyPage)
 	STDMETHOD(GetPageInfo)(THIS_ LPPROPPAGEINFO pPageInfo) PURE;
 	STDMETHOD(SetObjects)(THIS_ ULONG cObjects, LPUNKNOWN FAR* ppunk) PURE;
 	STDMETHOD(Show)(THIS_ UINT nCmdShow) PURE;
-	STDMETHOD(Move)(LPCRECT prect) PURE;
+	STDMETHOD(Move)(THIS_ LPCRECT prect) PURE;
 	STDMETHOD(IsPageDirty)(THIS) PURE;
 	STDMETHOD(Apply)(THIS) PURE;
 	STDMETHOD(Help)(THIS_ LPCOLESTR lpszHelpDir) PURE;
@@ -936,6 +1067,7 @@ DECLARE_INTERFACE_(IFont, IUnknown)
 	STDMETHOD(QueryTextMetrics)(THIS_ LPTEXTMETRICOLE lptm) PURE;
 	STDMETHOD(AddRefHfont)(THIS_ HFONT hfont) PURE;
 	STDMETHOD(ReleaseHfont)(THIS_ HFONT hfont) PURE;
+	STDMETHOD(SetHdc)(THIS_ HDC hdc) PURE;
 };
 
 
@@ -1052,11 +1184,14 @@ DECLARE_INTERFACE_(IPictureDisp, IDispatch)
 /////////////////////////////////////////////////////////////////////////////
 // PICTDESC structure
 
-#define PICTYPE_UNINITIALIZED   ((UINT)-1)
-#define PICTYPE_NONE        0
-#define PICTYPE_BITMAP      1
-#define PICTYPE_METAFILE    2
-#define PICTYPE_ICON        3
+#define PICTYPE_UNINITIALIZED (-1)
+#define PICTYPE_NONE		0
+#define PICTYPE_BITMAP		1
+#define PICTYPE_METAFILE	2
+#define PICTYPE_ICON		3
+#ifdef _WIN32
+#define PICTYPE_ENHMETAFILE	4
+#endif
 
 typedef struct tagPICTDESC
 {
@@ -1081,6 +1216,13 @@ typedef struct tagPICTDESC
 		{
 			HICON hicon;              // Icon
 		} icon;
+
+#ifdef _WIN32
+		struct
+		{
+			HENHMETAFILE hemf;        // Enhanced Metafile
+		} emf;
+#endif
 	}
 #if defined(NONAMELESSUNION)
 	u
@@ -1121,6 +1263,7 @@ typedef struct tagPICTDESC
 #define DISPID_TEXT                     (-517)
 #define DISPID_CAPTION                  (-518)
 #define DISPID_BORDERVISIBLE            (-519)
+#define DISPID_APPEARANCE				(-520)
 
 #define DISPID_REFRESH                  (-550)
 #define DISPID_DOCLICK                  (-551)
@@ -1151,6 +1294,7 @@ typedef struct tagPICTDESC
 #define DISPID_AMBIENT_DISPLAYASDEFAULT (-713)
 #define DISPID_AMBIENT_SUPPORTSMNEMONICS (-714)
 #define DISPID_AMBIENT_AUTOCLIP         (-715)
+#define DISPID_AMBIENT_APPEARANCE		(-716)
 
 
 /////////////////////////////////////////////////////////////////////////////
@@ -1180,6 +1324,7 @@ typedef struct tagPICTDESC
 
 #ifdef _WIN32
 #define STDOLE_TLB "stdole32.tlb"
+#define STDTYPE_TLB "olepro32.dll"
 #else
 #define STDOLE_TLB "stdole.tlb"
 #endif

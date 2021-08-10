@@ -1,4 +1,6 @@
+#if !defined (WORKSHOP_INVOKED)
 #include <windows.h>
+#endif
 #include "helpex.h"
 #include "helpex.dlg"
 

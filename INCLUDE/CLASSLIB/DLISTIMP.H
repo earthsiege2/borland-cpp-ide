@@ -1,12 +1,10 @@
-/*------------------------------------------------------------------------*/
-/*                                                                        */
-/*  DLISTIMP.H                                                            */
-/*                                                                        */
-/*  Copyright (c) 1991, 1994 Borland International                        */
-/*  All Rights Reserved                                                   */
-/*                                                                        */
-/*------------------------------------------------------------------------*/
-
+//----------------------------------------------------------------------------
+// Borland BIDS Container Library
+// Copyright (c) 1991, 1996 by Borland International, All Rights Reserved
+//
+//$Revision:   5.5  $
+//
+//----------------------------------------------------------------------------
 #if !defined( CLASSLIB_DLISTIMP_H )
 #define CLASSLIB_DLISTIMP_H
 
@@ -14,8 +12,8 @@
 #include <limits.h>
 #endif
 
-#if !defined( __CHECKS_H )
-#include <checks.h>
+#if !defined( SERVICES_CHECKS_H )
+#include <services/checks.h>
 #endif
 
 #if !defined( CLASSLIB_DEFS_H )
@@ -245,7 +243,9 @@ public:
     T *LastThat( CondFunc cond, void *args ) const;
 
     Parent::operator delete;
+#if !defined(BI_NO_ARRAYNEW)
     Parent::operator delete [];
+#endif
 
 #if defined( BI_OLDNAMES )
     const T& peekHead() const { return PeekHead(); }
@@ -432,6 +432,8 @@ T *TMDoubleListImp<T,Alloc>::LastThat( CondFunc cond, void *args ) const
 /*                                                                        */
 /*------------------------------------------------------------------------*/
 
+template <class T,class Alloc> class TMSDoubleListImp;
+
 template <class T,class Alloc> class TMDoubleListIteratorImp
 {
 
@@ -524,6 +526,8 @@ private:
 /*                                                                        */
 /*------------------------------------------------------------------------*/
 
+template <class T> class TSDoubleListImp;
+
 template <class T> class TDoubleListImp :
     public TMDoubleListImp<T,TStandardAllocator>
 {
@@ -583,7 +587,9 @@ public:
     Parent::FirstThat;
     Parent::LastThat;
     Parent::operator delete;
+#if !defined(BI_NO_ARRAYNEW)
     Parent::operator delete [];
+#endif
 
 #if defined( BI_OLDNAMES )
     void add( const T& t ) { Add(t); }
@@ -931,7 +937,9 @@ public:
     Parent::FirstThat;
     Parent::LastThat;
     Parent::operator delete;
+#if !defined(BI_NO_ARRAYNEW)
     Parent::operator delete [];
+#endif
 
 #if defined( BI_OLDNAMES )
     Parent::peekHead;
@@ -1059,7 +1067,9 @@ public:
     Parent::FirstThat;
     Parent::LastThat;
     Parent::operator delete;
+#if !defined(BI_NO_ARRAYNEW)
     Parent::operator delete [];
+#endif
 
 protected:
 

@@ -1,7 +1,7 @@
 /*---------------------------------------------------------------------------
  * filename - is.c
  *
- * function(s)     - replacements for macros in ctype.h, stdio.h
+ * function(s)     - replacements for macros in ctype.h
  *    isalnum
  *    isascii
  *    isalpha
@@ -14,18 +14,12 @@
  *    isspace
  *    isupper
  *    isxdigit
- *    getc
- *    getchar
- *    putc
- *    putchar
- *    feof
- *    ferror
  *--------------------------------------------------------------------------*/
 
 /*
- *      C/C++ Run Time Library - Version 1.5
+ *      C/C++ Run Time Library - Version 2.0
  *
- *      Copyright (c) 1987, 1994 by Borland International
+ *      Copyright (c) 1987, 1996 by Borland International
  *      All Rights Reserved.
  *
  */
@@ -104,32 +98,3 @@ int (_RTLENTRY _EXPFUNC isxdigit)( int c )
     return( __isctype( c, _IS_HEX ) );
 }
 
-int (_RTLENTRY _EXPFUNC getc)( FILE *fp )
-  {
-  return( fgetc( fp ) );
-  }
-
-int (_RTLENTRY _EXPFUNC getchar)( void )
-  {
-  return( getchar() );
-  }
-
-int (_RTLENTRY _EXPFUNC putc)( const int c, FILE *fp )
-  {
-  return( fputc( c, fp ) );
-  }
-
-int (_RTLENTRY _EXPFUNC putchar)( const int c )
-  {
-  return( putchar( c ) );
-  }
-
-int (_RTLENTRY _EXPFUNC feof)( FILE *fp )
-  {
-  return( feof( fp ) );
-  }
-
-int (_RTLENTRY _EXPFUNC ferror)( FILE *fp )
-  {
-  return( ferror( fp ) );
-  }

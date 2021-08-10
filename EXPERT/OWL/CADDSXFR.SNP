@@ -10,34 +10,34 @@
 ##^1
 
 
-static [[ClassName]]Xfer FAR *[[ClassName]]Data = NULL;
+static [[ClassName]]Xfer far *[[ClassName]]Data = 0;
 
-[[ClassName]]Xfer FAR * [[ClassName]]::CreateXfer ()
+[[ClassName]]Xfer far * [[ClassName]]::CreateXfer()
 {
-    if (![[ClassName]]Data) {
-        [[ClassName]]Data = new [[ClassName]]Xfer;
+  if (![[ClassName]]Data) {
+    [[ClassName]]Data = new [[ClassName]]Xfer;
 
-        // Initialize all data values to zero.
-        _fmemset([[ClassName]]Data, 0, sizeof([[ClassName]]Xfer));
+    // Initialize all data values to zero.
+    //
+    memset([[ClassName]]Data, 0, sizeof([[ClassName]]Xfer));
 
 //{{[[ClassName]]XFER_CREATE}}
 //{{[[ClassName]]XFER_CREATE_END}}
+  }
 
-    }
-
-    return [[ClassName]]Data;
+  return [[ClassName]]Data;
 }
 
 
-void [[ClassName]]::ReleaseXfer ()
+void [[ClassName]]::ReleaseXfer()
 {
-    if ([[ClassName]]Data) {
+  if ([[ClassName]]Data) {
 //{{[[ClassName]]XFER_RELEASE}}
 //{{[[ClassName]]XFER_RELEASE_END}}
 
-        delete [[ClassName]]Data;
-        [[ClassName]]Data = NULL;
-    }
+    delete [[ClassName]]Data;
+    [[ClassName]]Data = 0;
+  }
 }
 ##TRUE [[Search2]]
 ##^BOF
@@ -48,7 +48,7 @@ void [[ClassName]]::ReleaseXfer ()
 ##Search2 == FALSE
 ##:         %\\"[[ClassName]] missing #include <mem.h> for instance data.  "
 ##*
-##(Search1 == FALSE) && (Search2 == TRUE) 
+## (Search1 == FALSE) && (Search2 == TRUE) 
 ##:     ^BOL
 [[IncludeFile]]
 ##--END-- ? IncludeFile [[Search1]]

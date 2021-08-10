@@ -1,8 +1,10 @@
 //----------------------------------------------------------------------------
 // ObjectWindows
-// (C) Copyright 1992, 1994 by Borland International, All Rights Reserved
+// Copyright (c) 1992, 1996 by Borland International, All Rights Reserved
 //
-//   Definition of TDecoratedMDIFrame class
+//$Revision:   10.2  $
+//
+// Definition of TDecoratedMDIFrame class
 //----------------------------------------------------------------------------
 #if !defined(OWL_DECMDIFR_H)
 #define OWL_DECMDIFR_H
@@ -14,13 +16,17 @@
 # include <owl/decframe.h>
 #endif
 
+// Generic definitions/compiler options (eg. alignment) preceeding the 
+// definition of classes
+#include <services/preclass.h>
+
 //
-//  class TDecoratedMDIFrame
-//  ----- ------------------
+// class TDecoratedMDIFrame
+// ~~~~~ ~~~~~~~~~~~~~~~~~~
+// MDI frame that supports decoration child windows
 //
-//  MDI frame that supports decoration child windows
-//
-class _OWLCLASS TDecoratedMDIFrame : public TMDIFrame, public TDecoratedFrame {
+class _OWLCLASS TDecoratedMDIFrame : public TMDIFrame,
+                                     public TDecoratedFrame {
   public:
     TDecoratedMDIFrame(const char far* title,
                        TResId          menuResId,
@@ -28,11 +34,10 @@ class _OWLCLASS TDecoratedMDIFrame : public TMDIFrame, public TDecoratedFrame {
                        bool            trackMenuSelection = false,
                        TModule*        module = 0);
 
-    LRESULT  DefWindowProc(uint message, WPARAM wParam, LPARAM lParam);
+    TResult  DefWindowProc(uint message, TParam1 wParam, TParam2 lParam);
 
   private:
-    //
-    // hidden to prevent accidental copying or assignment
+    // Hidden to prevent accidental copying or assignment
     //
     TDecoratedMDIFrame(const TDecoratedMDIFrame&);
     TDecoratedMDIFrame& operator =(const TDecoratedMDIFrame&);
@@ -40,5 +45,11 @@ class _OWLCLASS TDecoratedMDIFrame : public TMDIFrame, public TDecoratedFrame {
   DECLARE_RESPONSE_TABLE(TDecoratedMDIFrame);
   DECLARE_STREAMABLE(_OWLCLASS, TDecoratedMDIFrame, 1);
 };
+
+// Generic definitions/compiler options (eg. alignment) following the 
+// definition of classes
+#include <services/posclass.h>
+
+typedef TDecoratedMDIFrame TDecoratedMdiFrame;
 
 #endif  // OWL_DECMDIFR_H

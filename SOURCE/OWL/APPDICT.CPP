@@ -1,25 +1,33 @@
 //----------------------------------------------------------------------------
 // ObjectWindows
-// (C) Copyright 1991, 1994 by Borland International, All Rights Reserved
+// Copyright (c) 1991, 1996 by Borland International, All Rights Reserved
 //
-//   Implementation of class TAppDictionary, a dictionary of
-//   associations between pids (Process IDs) and TApplication pointers.
-//   Used to support GetApplicationObject().
+//$Revision:   10.3  $
+//
+// Implementation of class TAppDictionary, a dictionary of associations
+// between pids (Process IDs) and TApplication pointers.
+// Used to support GetApplicationObject().
 //----------------------------------------------------------------------------
-#include <owl/owlpch.h>
-#include <owl/appdict.h>
-#include <owl/applicat.h>
+#include <owl/pch.h>
+#if !defined(OWL_APPDICT_H)
+# include <owl/appdict.h>
+#endif
+#if !defined(OWL_APPLICAT_H)
+# include <owl/applicat.h>
+#endif
 #if defined(BI_APP_DLL)
 # include <dos.h>
 # include <string.h>
 #endif
 
-//#define LOCALALLOC_TABLE  // define to use local alloc for table
+//#define LOCALALLOC_TABLE  // Define to use local alloc for table
 
 //
 // Global dictionary used by OWL for EXE Application lookup
 //
 TAppDictionary _OWLDATA OwlAppDictionary;
+
+//----------------------------------------------------------------------------
 
 //
 // Dictionary implementation used to associate Pids (hTasks) with running Owl
@@ -42,7 +50,7 @@ class TAppDictImp {
     virtual TAppDictionary::TEntry*    Lookup(TApplication* app) = 0;
     virtual void                       Iterate(TAppDictionary::TEntryIterator) = 0;
     virtual int                        GetCount() const = 0;
-};  
+};
 
 //
 // Pid based Dictionary implementation for Win16, or Win32 w/o perinstance data
@@ -69,23 +77,16 @@ class TAppDictPidImp : public TAppDictImp {
 
     int      NumEntries;
     TAppDictionary::TEntry*         Table;
-};  
+};
 
 #if defined(BI_PLAT_WIN32)
-//
-// Local flag used for Win32 to skip dictionary when per-instance data is 
-// available. Assume per-instance data is only unsupported in Win32s
-//
-static int   PerInstanceData =
-    !( (::GetVersion()&0x80000000) && (::GetVersion()&0xFF) < 4);
-
 //
 // Fast, small, per-instance data based Dictionary implementation (32bit only)
 //
 class TAppDictInstImp : public TAppDictImp {
   public:
     TAppDictInstImp() {Entry.App = 0;}
-                    
+
     void                       Add(unsigned pid, TApplication* app) {Entry.App = app;}
     void                       Remove(unsigned) {Entry.App = 0;}
     TAppDictionary::TEntry*    Lookup(unsigned) {return &Entry;}
@@ -110,8 +111,8 @@ class TAppDictInstImp : public TAppDictImp {
 TAppDictionary::TAppDictionary()
 {
 #if defined(BI_PLAT_WIN32)
-  if (PerInstanceData)         // could also use this case if linked to exe
-    Imp = new TAppDictInstImp();
+  if (TSystem::SupportsInstanceData())
+    Imp = new TAppDictInstImp();   // Could also use this case if linked to exe
   else
     Imp = new TAppDictPidImp();
 #else
@@ -192,7 +193,7 @@ TAppDictionary::Condemn(TApplication* app)
 //
 //
 //
-static void sDeleteCondemnedIter(TAppDictionary::TEntry& entry)
+static void _DeleteCondemnedIter(TAppDictionary::TEntry& entry)
 {
   if (!entry.Pid) {
     delete entry.App;
@@ -201,7 +202,7 @@ static void sDeleteCondemnedIter(TAppDictionary::TEntry& entry)
 }
 
 //
-//
+// Iterate over the entries, invoking the supplied callback function.
 //
 void
 TAppDictionary::Iterate(TAppDictionary::TEntryIterator iter)
@@ -210,12 +211,12 @@ TAppDictionary::Iterate(TAppDictionary::TEntryIterator iter)
 }
 
 //
-//
+// Delete all of the condemned app objects in this dictionary
 //
 bool
 TAppDictionary::DeleteCondemned()
 {
-  Imp->Iterate(sDeleteCondemnedIter);
+  Imp->Iterate(_DeleteCondemnedIter);
   return Imp->GetCount() == 0;
 }
 
@@ -232,6 +233,10 @@ GetTaskApplicationObject(unsigned pid)
 // TAppDictPidImp for DLL when there are real guts for pid lookup
 //
 
+//
+// Construct an app dictionary implementation that looks up apps based on
+// process id
+//
 TAppDictPidImp::TAppDictPidImp()
 {
   Table = AllocTable(DefDictionarySize);
@@ -239,7 +244,7 @@ TAppDictPidImp::TAppDictPidImp()
 }
 
 //
-//
+// Destruct the app dictionary implementation object
 //
 TAppDictPidImp::~TAppDictPidImp()
 {
@@ -247,16 +252,17 @@ TAppDictPidImp::~TAppDictPidImp()
 }
 
 //
-//
+// Add an app to the dictionary given a process id
 //
 void
 TAppDictPidImp::Add(unsigned pid, TApplication* app)
 {
   TAppDictionary::TEntry* freeEntry = 0;  // no free entry yet
+  TAppDictionary::TEntry* entry = Table;
 
   // First see if there is already a table; if so, replace the entry
   //
-  for (TAppDictionary::TEntry* entry = Table; entry < &Table[NumEntries]; entry++) {
+  for (; entry < &Table[NumEntries]; entry++) {
     if (entry->Pid == pid) {
       // Old app gets stomped, user must manage its lifetime
       entry->App = app;        // already in table, update pointers
@@ -276,7 +282,7 @@ TAppDictPidImp::Add(unsigned pid, TApplication* app)
 }
 
 //
-//
+// Remove an entry from the dictionary by looking up the process id
 //
 void
 TAppDictPidImp::Remove(unsigned pid)
@@ -287,6 +293,7 @@ TAppDictPidImp::Remove(unsigned pid)
     entry->Pid = 0;
   }
 }
+
 //
 // Lookup and return the entry associated with a given pid. May return 0.
 //
@@ -314,7 +321,7 @@ TAppDictPidImp::Lookup(TApplication* app)
 }
 
 //
-//
+// Iterate over the entries, invoking the supplied callback function.
 //
 void
 TAppDictPidImp::Iterate(TAppDictionary::TEntryIterator iter)
@@ -324,7 +331,7 @@ TAppDictPidImp::Iterate(TAppDictionary::TEntryIterator iter)
 }
 
 //
-//
+// Return the count of entries in this dictionary.
 //
 int
 TAppDictPidImp::GetCount() const
@@ -337,7 +344,9 @@ TAppDictPidImp::GetCount() const
 }
 
 //
-// Allocate the table from the local heap so that this DLL always owns it.
+// Allocate the actual table for the dictionary.
+// Optionally allocate the table from the local heap so that this DLL always
+// owns it, needed only if the RTL 
 //
 TAppDictionary::TEntry*
 TAppDictPidImp::AllocTable(int count)
@@ -356,7 +365,7 @@ TAppDictPidImp::AllocTable(int count)
 }
 
 //
-//
+// Free all memory used by the table itself.
 //
 void
 TAppDictPidImp::FreeTable(TAppDictionary::TEntry* table)
@@ -377,7 +386,7 @@ TAppDictPidImp::FreeTable(TAppDictionary::TEntry* table)
 }
 
 //
-//
+// Grow the size of the table by DefDictionaryIncrement delta
 //
 TAppDictionary::TEntry*
 TAppDictPidImp::GrowTable()
@@ -390,7 +399,7 @@ TAppDictPidImp::GrowTable()
   NumEntries += DefDictionaryIncrement;
   Table = AllocTable(NumEntries);
 
-  // copy old table to new one
+  // Copy old table to new one
   //
   memcpy(Table, oldTable, oldNumEntries * sizeof(TAppDictionary::TEntry));
 
@@ -398,16 +407,31 @@ TAppDictPidImp::GrowTable()
   //
   FreeTable(oldTable);
 
-  // return pointer to first entry in new block
+  // Return pointer to first entry in new block
   //
   return Table + oldNumEntries;
 }
 
-#endif  // defined(BI_APP_DLL)
+#else  // 16bit static link exe models 
 
 //
-// Global function that calls GetApplication() on owl's app-dictionary.
-// Used by EXEs, or DLLs statically linking Owl. Never returns 0, will make
+// Delete all of the condemned app objects in this dictionary
+//
+bool TAppDictionary::DeleteCondemned() {
+  if (!E.Pid) {
+    delete E.App;
+    E.App = 0;
+  }
+  return false;
+}
+
+#endif  // if/else defined(BI_APP_DLL) || defined(BI_PLAT_WIN32)
+
+//----------------------------------------------------------------------------
+
+//
+// Global function that calls GetApplication() on OWL's app-dictionary.
+// Used by EXEs, or DLLs statically linking OWL. Never returns 0, will make
 // an alias app if needed. Primarily for compatibility
 //
 TApplication* _OWLFUNC GetApplicationObject(unsigned pid)
@@ -416,8 +440,8 @@ TApplication* _OWLFUNC GetApplicationObject(unsigned pid)
   if (app)
     return app;
 
-  // Make alias app (will add itself to dictionary) because Owl always needs an
-  // app around. If the app is non-Owl, no TApplication will have been
+  // Make alias app (will add itself to dictionary) because OWL always needs an
+  // app around. If the app is non-OWL, no TApplication will have been
   // constructed.
   // Override default constructor argument to prevent overwrite of ::Module,
   // and pass the default dictionary.

@@ -10,9 +10,9 @@
  *-----------------------------------------------------------------------*/
 
 /*
- *      C/C++ Run Time Library - Version 6.5
+ *      C/C++ Run Time Library - Version 7.0
  *
- *      Copyright (c) 1991, 1994 by Borland International
+ *      Copyright (c) 1991, 1996 by Borland International
  *      All Rights Reserved.
  *
  */
@@ -37,28 +37,28 @@ extern "C"
 #endif // __DPMI16__
 }
 
-void far *farmalloc(unsigned long size)
+void far * _EXPFUNC farmalloc(unsigned long size)
 {
     return _farmallocf(size, _WinAllocFlag);
 }
 
-void far *farcalloc(unsigned long nitems, unsigned long size)
+void far * _EXPFUNC farcalloc(unsigned long nitems, unsigned long size)
 {
     return _farcallocf(nitems, size, _WinAllocFlag);
 }
 
-void farfree(void far *block)
+void _EXPFUNC farfree(void far *block)
 {
     _farfreef(block, _WinAllocFlag);
 }
 
-void far *farrealloc(void far *block, unsigned long size)
+void far * _EXPFUNC farrealloc(void far *block, unsigned long size)
 {
     return _farreallocf(block, size, _WinAllocFlag);
 }
 
 #if defined(__DPMI16__)
-unsigned long farcoreleft (void)
+unsigned long _EXPFUNC farcoreleft (void)
 {
     return GetFreeSpace (GMEM_NOT_BANKED);
 }

@@ -1,17 +1,29 @@
 //----------------------------------------------------------------------------
 // ObjectWindows
-// (C) Copyright 1992, 1994 by Borland International, All Rights Reserved
+// Copyright (c) 1992, 1996 by Borland International, All Rights Reserved
 //
-//   Implementation of TMetaFilePict class
+//$Revision:   10.5  $
+//
+// Implementation of TMetaFilePict class
 //----------------------------------------------------------------------------
 #pragma hdrignore SECTION
-#include <owl/owlpch.h>
-#include <owl/metafile.h>
-#include <owl/gdiobjec.h>
-#include <owl/clipboar.h>
-#include <owl/except.h>
+#include <owl/pch.h>
+#if !defined(OWL_METAFILE_H)
+# include <owl/metafile.h>
+#endif
+#if !defined(OWL_GDIOBJEC_H)
+# include <owl/gdiobjec.h>
+#endif
+#if !defined(OWL_CLIPBOAR_H)
+# include <owl/clipboar.h>
+#endif
+#if !defined(OWL_EXCEPT_H)
+# include <owl/except.h>
+#endif
 
-
+//
+// Alias an existing meta file handle.
+//
 TMetaFilePict::TMetaFilePict(HMETAFILE handle, TAutoDelete autoDelete)
 :
   TGdiBase(handle, autoDelete),
@@ -20,6 +32,9 @@ TMetaFilePict::TMetaFilePict(HMETAFILE handle, TAutoDelete autoDelete)
   Mm = MM_ANISOTROPIC;
 }
 
+//
+// Create a metafile object from an external file.
+//
 TMetaFilePict::TMetaFilePict(const char* filename)
 :
   TGdiBase(::GetMetaFile(filename), AutoDelete),
@@ -54,6 +69,9 @@ TMetaFilePict::TMetaFilePict(const TClipboard&)
 
 #if defined(BI_PLAT_WIN32)
 
+//
+// Create an enhanced metafile from a memory buffer.
+//
 TMetaFilePict::TMetaFilePict(uint size, void* data)
 :
   TGdiBase(::SetMetaFileBitsEx(size, (LPBYTE)data), NoAutoDelete),
@@ -65,6 +83,9 @@ TMetaFilePict::TMetaFilePict(uint size, void* data)
 
 #else
 
+//
+// Create a meta file from a memory buffer.
+//
 TMetaFilePict::TMetaFilePict(HGLOBAL data)
 :
   TGdiBase(::SetMetaFileBitsBetter(data), NoAutoDelete),
@@ -76,6 +97,9 @@ TMetaFilePict::TMetaFilePict(HGLOBAL data)
 
 #endif
 
+//
+// Copy the metafile.
+//
 TMetaFilePict::TMetaFilePict(const TMetaFilePict& src, const char far* fileName)
 :
   TGdiBase(::CopyMetaFile(src, fileName), AutoDelete),
@@ -85,6 +109,9 @@ TMetaFilePict::TMetaFilePict(const TMetaFilePict& src, const char far* fileName)
   Mm = src.Mm;
 }
 
+//
+// Delete the metafile.
+//
 TMetaFilePict::~TMetaFilePict()
 {
   if (ShouldDelete && Handle)
@@ -93,6 +120,9 @@ TMetaFilePict::~TMetaFilePict()
 
 #if defined(BI_PLAT_WIN32)
 
+//
+// Retrieve the bits of the metafile.
+//
 uint32
 TMetaFilePict::GetMetaFileBitsEx(uint size, void* data)
 {
@@ -142,7 +172,7 @@ TMetaFilePict::CalcPlaySize(TDC& dc, const TSize& defSize) const
 }
 
 //
-// Play this metafile onto a dc, possibly using a default size if this 
+// Play this metafile onto a dc, possibly using a default size if this
 // metafile doesn't have one. Does not save dc state.
 //
 bool
@@ -150,7 +180,7 @@ TMetaFilePict::PlayOnto(TDC& dc, const TSize& defSize) const
 {
   // Set target dc's mapping mode to this metafile's if there is one
   //
-  if (Mm)        
+  if (Mm)
     dc.SetMapMode(Mm);
 
   // Set the viewport extent to the size that the metafile wil play to
@@ -173,14 +203,74 @@ TMetaFilePict::ToClipboard(TClipboard& clipboard, unsigned mapMode,
 
   HGLOBAL hmfp = ::GlobalAlloc(GMEM_MOVEABLE, sizeof(METAFILEPICT));
   if (!hmfp)
-    THROW( TXOutOfMemory() );
+    TXOutOfMemory::Raise();
   METAFILEPICT far* mfp = (METAFILEPICT far*)::GlobalLock(hmfp);
   mfp->mm = mapMode;
   mfp->xExt = extent.cx;
   mfp->yExt = extent.cy;
   mfp->hMF = (HMETAFILE)Handle;
   ::GlobalUnlock(hmfp);
-  
+
   clipboard.SetClipboardData(CF_METAFILEPICT, hmfp);
   ShouldDelete = false;
 }
+
+#if defined(BI_PLAT_WIN32)
+
+//
+// Alias an existing enhanced metafile handle.
+//
+TEnhMetaFilePict::TEnhMetaFilePict(HENHMETAFILE handle, TAutoDelete autoDelete)
+:
+  TGdiBase(handle, autoDelete)
+{
+}
+
+//
+// Create an enhanced metafile from an external file.
+//
+TEnhMetaFilePict::TEnhMetaFilePict(const char* filename)
+:
+  TGdiBase(::GetEnhMetaFile(filename), AutoDelete)
+{
+}
+
+//
+// Copy a metafile
+//
+TEnhMetaFilePict::TEnhMetaFilePict(const TEnhMetaFilePict& metafilepict,
+                                   const char far* filename)
+:
+  TGdiBase(::CopyEnhMetaFile(metafilepict, filename), AutoDelete)
+{
+}
+
+//
+// Create metafile from buffer
+//
+TEnhMetaFilePict::TEnhMetaFilePict(uint bytes, const void* buffer)
+:
+  TGdiBase(::SetEnhMetaFileBits(bytes, (const BYTE*)buffer), AutoDelete)
+{
+}
+
+//
+// Destroy the enhanced metafile picture.
+//
+TEnhMetaFilePict::~TEnhMetaFilePict()
+{
+  if (ShouldDelete && Handle)
+    ::DeleteEnhMetaFile(HENHMETAFILE(Handle));
+}
+
+//
+// Plays the metafile onto a device context.
+//
+bool
+TEnhMetaFilePict::PlayOnto(TDC& dc, const TRect* rect) const
+{
+  return ::PlayEnhMetaFile(dc, *this, rect);
+}
+
+
+#endif  // BI_PLAT_WIN32

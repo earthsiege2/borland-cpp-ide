@@ -1,27 +1,27 @@
 LIBRARY     WOW32.DLL
 
 EXPORTS
-    GetCommHandle                  @1   
-    GetCommShadowMSR               @2   
-    W32Dispatch                    @3   
-    W32HungAppNotifyThread         @4   
-    W32Init                        @5   
-    WOW32ResolveHandle             @7   
-    WOW32ResolveMemory             @8   
-    WOWCallback16                  @9   
-    WOWCallback16Ex                @10  
-    WOWDirectedYield16             @11  
-    WOWFreeMetafile                @12  
-    WOWGetVDMPointer               @13  
-    WOWGetVDMPointerFix            @14  
-    WOWGetVDMPointerUnfix          @15  
-    WOWGlobalAlloc16               @16  
-    WOWGlobalAllocLock16           @17  
-    WOWGlobalFree16                @18  
-    WOWGlobalLock16                @19  
-    WOWGlobalLockSize16            @20  
-    WOWGlobalUnlock16              @21  
-    WOWGlobalUnlockFree16          @22  
-    WOWHandle16                    @23  
-    WOWHandle32                    @24  
-    WOWYield16                     @25  
+    GetCommHandle
+    GetCommShadowMSR
+    W32Dispatch
+    W32HungAppNotifyThread
+    W32Init
+    WOW32ResolveHandle
+    WOW32ResolveMemory
+    WOWCallback16
+    WOWCallback16Ex
+    WOWDirectedYield16
+    WOWFreeMetafile
+    WOWGetVDMPointer
+    WOWGetVDMPointerFix
+    WOWGetVDMPointerUnfix
+    WOWGlobalAlloc16
+    WOWGlobalAllocLock16
+    WOWGlobalFree16
+    WOWGlobalLock16
+    WOWGlobalLockSize16
+    WOWGlobalUnlock16
+    WOWGlobalUnlockFree16
+    WOWHandle16
+    WOWHandle32
+    WOWYield16

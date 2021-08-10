@@ -1,5 +1,5 @@
 //----------------------------------------------------------------------------
-// ObjectConnections - (C) Copyright 1994 by Borland International
+// ObjectConnections - (C) Copyright 1994, 1996 by Borland International
 //----------------------------------------------------------------------------
 
 #define IDC_GUID 71 //=='G'
@@ -15,7 +15,7 @@ FONT 8, "MS Sans Serif"
  LTEXT "Enter this into the app registration:  REGDATA(clsid, \"{...}\")", -1, 6, 33, 198, 12, SS_LEFT
  PUSHBUTTON "OK", IDOK, 95, 48, 30, 16
  ICON IDI_MAIN, -1, 45, 45, 18, 20, SS_ICON | WS_CHILD | WS_VISIBLE
- CTEXT "Copyright 1994 Borland International Inc. All Rights Reserved", -1, 0, 69, 210, 9, SS_CENTER
+ CTEXT "Copyright 1994, 1996 Borland International Inc. All Rights Reserved", -1, 0, 69, 210, 9, SS_CENTER
 }
 
 IDI_MAIN ICON 

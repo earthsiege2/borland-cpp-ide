@@ -1,34 +1,40 @@
-//
 //----------------------------------------------------------------------------
 // ObjectComponents
-// (C) Copyright 1994 by Borland International, All Rights Reserved
+// Copyright (c) 1994, 1996 by Borland International, All Rights Reserved
 //
-//   OLE Automation Class Definitions
+// $Revision:   2.19  $
+//
+// OLE Automation Class Definitions
 //----------------------------------------------------------------------------
 #if !defined(OCF_AUTODEFS_H)
 #define OCF_AUTODEFS_H
 
-#if !defined(OCF_OCDEFS_H)
-#  include <ocf/ocdefs.h>
+#if !defined(OCF_DEFS_H)
+# include <ocf/defs.h>
 #endif
-#if !defined(OSL_LOCALE_H)
-# include <osl/locale.h>   // TLocaleString and TRegItem/TRegList
+#if !defined(OCF_OLEUTIL_H)
+# include <ocf/oleutil.h>
 #endif
-#if !defined(OSL_USTRING_H)
-# include <osl/ustring.h>  // TString and TUString
+#if !defined(WINSYS_LCLSTRNG_H)
+# include <winsys/lclstrng.h>   // TLocaleString and TRegItem/TRegList
+#endif
+#if !defined(WINSYS_USTRING_H)
+# include <winsys/string.h>     // TString and TUString
 #endif
 #if !defined(__TYPEINFO_H)
-# include <typeinfo.h>
+# include <typeinfo.h>          // C++ type info
 #endif
 
-// class modifier for inherited classes or members within user C++ classes
+//
+// Class modifier for inherited classes or members within user C++ classes
 // if ambient class model is not used, this macro must be defined to match
 //
 #if !defined(_AUTOCLASS)
 # define  _AUTOCLASS
 #endif
 
-// forward class references
+//
+// Forward class references
 //
 class _AUTOCLASS TAutoDetach;
 class _AUTOCLASS TAutoBase;
@@ -48,14 +54,14 @@ const void far* DynamicCast(const void far* obj, const typeinfo& src,
                                                  const typeinfo& dst);
 const void far* MostDerived(const void far* obj, const typeinfo& src);
 
-// global function to invalidate external references, class model-independent
+//
+// Global function to invalidate external references, class model-independent
 //
 void SendObituary(const void far* obj, const typeinfo& typeInfo);
 
-//____________________________________________________________________________
-//
+//----------------------------------------------------------------------------
 // Automation typedefs
-//____________________________________________________________________________
+//
 
 typedef unsigned long TLocaleId;   // locale ID - same as NT LCID
 
@@ -71,8 +77,10 @@ class _AUTOCLASS TAutoDetach { // default base for detach notification objects
 
 typedef void* ObjectPtr;  // generic opaque object pointer
 
+//
 // Generic conversion function for changing between inherited classes
 
+//
 template <class T, class B> struct TTypeConvert {
   static ObjectPtr Cast(ObjectPtr from) { return
    reinterpret_cast<ObjectPtr>( dynamic_cast<T*>(reinterpret_cast<B*>(from)));
@@ -89,11 +97,11 @@ typedef IUnknown&      (*TAggregator)(ObjectPtr obj, TUnknown& inner);
 
 extern "C" const GUID __cdecl IID_TServedObject;
 
-//____________________________________________________________________________
 //
-// TXAuto - automation exception object
-//____________________________________________________________________________
-
+// class TXAuto
+// ~~~~~ ~~~~~~
+// Automation exception object
+//
 class TXAuto : public TXBase {
   public:
     enum TError {
@@ -114,10 +122,9 @@ class TXAuto : public TXBase {
     TError ErrorCode;
 };
 
-//____________________________________________________________________________
-//
+//----------------------------------------------------------------------------
 // TAutoType, TAutoClass - automation type/class descriptor
-//____________________________________________________________________________
+//
 
 struct TAutoType {
     uint16 GetType() const {return Type;}
@@ -134,9 +141,9 @@ class TAutoClass : public TAutoType {
     TAutoSymbol*  Lookup(char far* name, TLangId lang, short symFlags, long far& id);
     TAutoSymbol*  LookupArg(char far* name, TLangId lang, TAutoSymbol* cmd,
                             long far& retid);
-    TAutoSymbol*  FindId(short id, ObjectPtr& objptr);
-    TAutoSymbol*  FindFunction(unsigned index, int& retId);
-    TAutoSymbol*  FindVariable(unsigned index, int& retId);
+    TAutoSymbol*  FindId(long id, ObjectPtr& objptr);
+    TAutoSymbol*  FindFunction(unsigned index, MEMBERID& retId);
+    TAutoSymbol*  FindVariable(unsigned index, MEMBERID& retId);
     TXAuto::TError Dispatch(ObjectPtr obj, TAutoCreator& creator,
                             TUnknown& owner, int attr, TAutoStack& args,
                             TAutoVal far* retval);
@@ -159,6 +166,7 @@ class TAutoClass : public TAutoType {
     short CommandCount;      // command count including bases, 0 if uncounted
     short FunctionCount;     // number of symbols exposed as typelib functions
     short VariableCount;     // number of symbols exposed as typelib variables
+    bool  AutoIds;           // generate ID's automatically if true (default)
     TAutoSymbol* Table;      // pointer to array of symbol entries
     TAutoSymbol* ClassSymbol;// pointer to class symbol (terminator)
     const typeinfo& TypeInfo;// for validating type of data pointers
@@ -188,21 +196,27 @@ class TAutoClass : public TAutoType {
     TAutoClass*   NextClass;          // link to next class
     friend class TExtLink;            // access to ClassList
     friend class TClassList;          // access to TAutoClassRef
+    friend class TAppDescriptor;      // access to linkage information
     friend class _ICLASS TTypeLibrary;// access to TAutoClassRef
     friend class _ICLASS TCoClassInfo;// access to TAutoClassRef
-    friend class TAppDescriptor;      // access to linkage information
+    friend class _ICLASS TOcControlEvent;     // access to AutoIds bool
 };
 
-//____________________________________________________________________________
-//
+//----------------------------------------------------------------------------
 // TAuto(type) automation datatype encapsulations
-//____________________________________________________________________________
+//
 
-struct TAutoVoid {  // purpose to implement assignent of void to TAutoVal
+//
+// Class to implement assignent of void to TAutoVal
+//
+struct TAutoVoid {
   static TAutoType ClassInfo;
 };
 
-struct TAutoDate {  // purpose to disambiguate type from double
+//
+// Wrapper class to disambiguate automation date type from double
+//
+struct TAutoDate {
   TAutoDate() : Date(0) {}
   TAutoDate(double d) : Date(d) {}
   operator double() { return Date; }
@@ -210,35 +224,50 @@ struct TAutoDate {  // purpose to disambiguate type from double
   static TAutoType ClassInfo;
 };
 
-struct TAutoCurrency : public CY {
+//struct TAutoCurrency : public CY {
+struct far TAutoCurrency {
+  uint32 Lo;
+  int32  Hi;
+
+  operator CY& () {return *this;}
+
   static TAutoType ClassInfo;
 };
 
-struct TAutoBool {  // for suppressing compiler warnings until bool is a type
-  TAutoBool() : B(0) {}
-  TAutoBool(bool b) : B(b) {}
-  TAutoBool(TBool b) : B(static_cast<bool>(b)) {}
-  operator bool() {return B;}
-  operator TBool() {return static_cast<TBool>(B);}
-  void operator =(bool b) {B = b;}
-  void operator =(TBool b) {B = static_cast<bool>(b);}
-  bool B;
-  static TAutoType ClassInfo;
-};
+#if defined(BI_NO_BOOL)
+  // For suppressing compiler warnings when bool is not a type
+  //
+  struct TAutoBool {
+    TAutoBool() : B(0) {}
+    TAutoBool(bool b) : B(b) {}
+    TAutoBool(TBool b) : B(static_cast<bool>(b)) {}
+    operator bool() {return B;}
+    operator TBool() {return static_cast<TBool>(B);}
+    void operator =(bool b) {B = b;}
+    void operator =(TBool b) {B = static_cast<bool>(b);}
+    bool B;
+    static TAutoType ClassInfo;
+  };
+  // Needed for automating bool far* when bool is not a type
+  //
+  struct TAutoBoolRef {  //
+    TAutoBoolRef() : P(0) {}
+    TAutoBoolRef(bool far* p) : P(p) {}
+    TAutoBoolRef(TBool far* p) : P((bool far*)p) {}
+    operator bool far*() {return P;}
+    void operator =(bool far* p) {P = p;}
+    void operator =(TBool far* p){P = (bool far*)p;}
+    bool far* P;
+    static TAutoType ClassInfo;
+  };
+#else
+struct TAutoBool      { static TAutoType ClassInfo; };
+struct TAutoBoolRef   { static TAutoType ClassInfo; };
+#endif
 
-struct TAutoBoolRef {  // needed for automating bool far* until bool is a type
-  TAutoBoolRef() : P(0) {}
-  TAutoBoolRef(bool far* p) : P(p) {}
-  TAutoBoolRef(TBool far* p) : P((bool far*)p) {}
-  operator bool far*() {return P;}
-  void operator =(bool far* p) {P = p;}
-  void operator =(TBool far* p){P = (bool far*)p;}
-  bool far* P;
-  static TAutoType ClassInfo;
-};
-
-// the following types do no hold data, but only provide static type codes
-
+//
+// The following types do not hold data, but only provide static type codes
+//
 struct TAutoShort      { static TAutoType ClassInfo; };
 struct TAutoDouble     { static TAutoType ClassInfo; };
 struct TAutoFloat      { static TAutoType ClassInfo; };
@@ -256,17 +285,16 @@ struct TAutoStringRef  { static TAutoType ClassInfo; };
 struct TAutoVariantRef { static TAutoType ClassInfo; };
 struct TAutoByteRef    { static TAutoType ClassInfo; };
 #if (MAXINT==MAXSHORT)
-typedef TAutoShort    TAutoInt;
-typedef TAutoShortRef TAutoIntRef;
+  typedef TAutoShort    TAutoInt;
+  typedef TAutoShortRef TAutoIntRef;
 #else
-typedef TAutoLong    TAutoInt;
-typedef TAutoLongRef TAutoIntRef;
+  typedef TAutoLong    TAutoInt;
+  typedef TAutoLongRef TAutoIntRef;
 #endif
 
-//____________________________________________________________________________
-//
+//----------------------------------------------------------------------------
 // Attribute flags for automation symbols and command objects
-//____________________________________________________________________________
+//
 
 enum AutoSymFlag {
   asAnyCommand     = 0x0017,  // any command: method, property get/set, build
@@ -290,8 +318,10 @@ enum AutoSymFlag {
   asPersistent     = 0x8000,  // property is persistent
 };
 
+//
 // Automation datatypes and flags - same as OLE 2 definitions
 
+//
 enum AutoDataType {
   atVoid              = 0x0000,   //  void
   atNull              = 0x0001,   //  SQL style Null
@@ -318,16 +348,17 @@ const uint16 atByRef     = 0x4000;
 const uint16 atEnum      = 0x1000;   // non-OLE, enumeration for data of a type
 const uint16 atAutoClass = 0x0800;   // non-OLE, class object is a TAutoClass
 
-//____________________________________________________________________________
-//
+//----------------------------------------------------------------------------
 // Automated class typeinfo flags - corresponding to OLE 2.02 definitions
 //    flags set in END_AUTOCLASS, END_AUTOAGGREGATE, END_AUTOEVENTCLASS macros
-//____________________________________________________________________________
+//
 
+//
 // Flags set on any autoclass, but apply only to enclosing coclass typeinfo.
 // Autoclasses with any of these bits set will be members of generated coclass.
 // These flags from all autoclasses are combined to form the coclass type flags
 
+//
 const uint16 tfAppObject     =   1; // TYPEFLAG_FAPPOBJECT, set on COCLASS
 const uint16 tfCanCreate     =   2; // TYPEFLAG_FCANCREATE, set on COCLASS
 const uint16 tfLicensed      =   4; // TYPEFLAG_FLICENSED,  set on COCLASS
@@ -335,41 +366,49 @@ const uint16 tfPredeclared   =   8; // TYPEFLAG_FPREDECLID, set on COCLASS
 const uint16 tfControl       =  32; // TYPEFLAG_FCONTROL,   set on COCLASS
 const uint16 tfCoClassXfer   =  tfAppObject|tfCanCreate|tfLicensed|tfControl|tfPredeclared;
 
+//
 // Flags set on any autoclass, but used when class is a member of a coclass.
 // Autoclasses with any of these bits set will be members of generated coclass.
 // Flags from each class are set on the corresponding interfaces in the coclass
 
+//
 const uint16 tfDefault      = (1<<12); // IMPLTYPEFLAG_FDEFAULT << 12
 const uint16 tfEventSource  = (2<<12); // IMPLTYPEFLAG_FSOURCE << 12
 const uint16 tfRestricted   = (4<<12); // IMPLTYPEFLAG_FRESTRICTED << 12
 const uint16 tfImplFlagXfer = (tfDefault | tfEventSource | tfRestricted);
 
+//
 // Flags set on individual autoclasses, transferred to corresponding typeinfos
 
+//
 const uint16 tfHidden        =  16;  // TYPEFLAG_FHIDDEN
 const uint16 tfNonextensible = 128;  // TYPEFLAG_FNONEXTENSIBLE
 const uint16 tfAutoClassMask =  tfHidden|tfNonextensible;
 
+//
 // Flags defined by OLE, but not applicable to dispatch interfaces
 
+//
 const uint16 tfDual          =  64;  // TYPEFLAG_FDUAL
 const uint16 tfAutomation    = 256;  // TYPEFLAG_FOLEAUTOMATION
 
+//
 // Default typeflags value for autoclass not exposed as part of the coclass
 
+//
 const uint16 tfNormal        =   0;  // automated classes not at app level
 
-//____________________________________________________________________________
 //
-//  TAutoSymbol - symbol table element
-//____________________________________________________________________________
-
+// class TAutoSymbol
+// ~~~~~ ~~~~~~~~~~~
+// Symbol table element
+//
 struct TAutoSymbol {
   TLocaleString Name;         // name of symbol, initially untranslated
   TLocaleString Doc;          // documentation string, initially untranslated
-  uint16 Attr;                // attributes: enum AutoSymFlag, as????
+  uint32 Attr;                // attributes: enum AutoSymFlag, as???? (could be uint16)
   union {
-    short DispId;             // reserved dispatch ID, if not 0
+    long  DispId;             // reserved dispatch ID, if not 0
     short SymCount;           // asClass only: symbol count, 0 = uncounted yet
     unsigned short TypeFlags; // class symbol only (terminator)
   };
@@ -383,7 +422,8 @@ struct TAutoSymbol {
   };
   ulong HelpId;              // help context ID, not for asArgument
 
-  // inline data member accessor functions
+  // Inline data member accessor functions
+  //
   void SetFlag(uint16 mask);
   void ClearFlag(uint16 mask);
   bool TestFlag(uint16 mask);
@@ -397,24 +437,29 @@ struct TAutoSymbol {
   TAutoClass*  GetClass();
   TAutoEnum*   GetEnum();
 
-  // inline static functions solely to provide type-safety initializing symbols
+  // Inline static functions solely to provide type-safety initializing symbols
+  //
   static TAutoCommandBuild InitTypeConvert(TAutoSymTypeConvert f);
   static TAutoCommandBuild InitAutoIterator(TAutoIteratorBuild f);
   static TAutoCommandBuild InitAutoDestructor(TAutoCommandBuildDtr f);
 };
 
-//____________________________________________________________________________
 //
-// TObjectDescriptor - precursor to TServedObject containing object info
-//____________________________________________________________________________
-
+// struct TObjectDescriptor
+// ~~~~~~ ~~~~~~~~~~~~~~~~~
+// Precursor to TServedObject containing object info
+// Note: Cannot have a constructor and must limit to 8 bytes for TAutoVal union
+//
 struct TObjectDescBase {   // ONLY for use when storing in TAutoVal union
   const void* Object;      // pointer to C++ object
   TAutoClass* Class;       // class descriptor, contains typeinfo
   const void far* MostDerived()
                          {return ::MostDerived(Object, Class->GetTypeInfo());}
-};  // cannot have a constructor and must limit to 8 bytes for TAutoVal union
+};
 
+//
+// struct TObjectDescriptor
+// ~~~~~~ ~~~~~~~~~~~~~~~~~
 struct TObjectDescriptor : public TObjectDescBase {
   enum TDestruct     { // behavior when an automation helper is freed
     Quiet = 0,         // automation object quietly goes away without notice
@@ -431,15 +476,16 @@ struct TObjectDescriptor : public TObjectDescBase {
   friend class TAutoIterator;
 };
 
-//____________________________________________________________________________
 //
-// TAutoVal - automation data element (same data as OLE/BASIC VARIANT)
-//____________________________________________________________________________
-
+// class TAutoVal
+// ~~~~~ ~~~~~~~~
+// Automation data element (same data as OLE/BASIC VARIANT)
+//
 // This class simply duplicates and adds access methods to the system VARIANT
 // Data members or virtual functions cannot be added.
 // We rely on the fact that we can cast a VARIANT safely to/from a TAutoVal.
 
+//
 class far TAutoVal {
   public:
     operator unsigned char();
@@ -465,14 +511,17 @@ class far TAutoVal {
     operator double far*();
     operator TBool();
     operator TBool far*();
+#if !defined(BI_UNIQUE_BOOL)
     operator TAutoBool();
     operator TAutoBoolRef();
+#endif
     operator TAutoCurrency();
     operator TAutoCurrency far*();
     operator TAutoDate();
     operator TAutoDate far*();
     operator string();
     operator TUString*();
+    operator TString();
     operator IDispatch*();
     operator IUnknown*();
     operator IDispatch&();
@@ -502,8 +551,10 @@ class far TAutoVal {
     void operator =(double far*        p);
     void operator =(TBool              i);
     void operator =(TBool far*         p);
+#if !defined(BI_UNIQUE_BOOL)
     void operator =(TAutoBool          i);
     void operator =(TAutoBoolRef       p);
+#endif
     void operator =(const string&      s);
     void operator =(TAutoString        s);
     void operator =(TAutoCurrency      i);
@@ -580,10 +631,10 @@ class far TAutoVal {
     void ConvRef(int type);
 };
 
-//____________________________________________________________________________
 //
-// TAutoString class - based on reference counted TString with added automation
-//   functionality
+// class TAutoString
+// ~~~~~ ~~~~~~~~~~~
+// Based on reference counted TString with added automation functionality
 //
 class TAutoString : public TString {
   public:
@@ -594,7 +645,7 @@ class TAutoString : public TString {
     TAutoString(BSTR s, bool loan)     : TString(s) {}
     TAutoString(const string& s)       : TString(s) {}
     TAutoString(TUString* s)           : TString(s) {}
-    TAutoString(TAutoVal& val)         : TString(val) {}
+    TAutoString(TAutoVal& val)         : TString((TString)val) {}
     TAutoString(const TAutoString& src) : TString(src.S) {++*S;}
 
     TAutoString& operator =(const char far* s) {S = S->Assign(s); return *this;}
@@ -609,43 +660,48 @@ class TAutoString : public TString {
     static TAutoType ClassInfo;              // automation type code
 };
 
-//____________________________________________________________________________
 //
-// TAutoStack - automation argument stack abstraction
-//____________________________________________________________________________
-
+// class TAutoStack
+// ~~~~~ ~~~~~~~~~~
+// Automation argument stack abstraction
+//
 class TAutoStack {
   public:
-    enum {SetValue = -3}; // special arg index for property set value
-    TAutoStack(VARIANT far* stack, TLocaleId locale, int argcount,
+    enum {SetValue = -3};     // Special arg index for property set value
+    TAutoStack(DISPID dispid, VARIANT far* stack, TLocaleId locale,
+               int argcount,
                int namedcount, long far* map, TServedObject* owner);
    ~TAutoStack();
     TAutoVal& operator[](int index);
-    TAutoSymbol* Symbol;      // symbol of method/prop, args follow
-    int ArgSymbolCount;
-    TLangId LangId;
-    int CurrentArg;           // index of last arg requested by operator[]
-    const int ArgCount;
+
+    TAutoSymbol*   Symbol;      // Symbol of method/prop, args follow
+    int            CurrentArg;  // Index of last arg requested by operator[]
+    int            ArgCount;
+    int            ArgSymbolCount;
+    DISPID         DispId;
+    TLangId        LangId;
     TServedObject* Owner;
-    long ErrorCode;           // set if TXAuto::xErrorStatus returned
-    const char* ErrorMsg;     // set if TXAuto::xErrorStatus returned
+    long           ErrorCode;   // Set if TXAuto::xErrorStatus returned
+    const char*    ErrorMsg;    // Set if TXAuto::xErrorStatus returned
+
   protected:
-    TAutoVal far* Stack;
-    int NamedCount;
-    long far* NamedIds;
-    TAutoVal Default;
+    int            NamedCount;
+    long far*      NamedIds;
+    TAutoVal       Default;
+    TAutoVal far*  Stack;
 };
 
-//____________________________________________________________________________
+struct TAutoTransfer;              // Persistence transfer parameter structure
+
 //
+// class TAutoCommand
+// ~~~~~ ~~~~~~~~~~~~
 // Automation abstract base class for command objects
-//____________________________________________________________________________
-
-struct TAutoTransfer;              // persistence transfer parameter structure
-
+//
 class TAutoCommand {
   public:
-    TAutoCommand(int attr);          // construtor called from derived classes
+    TAutoCommand(int attr);          // Construtor called from derived classes
+
     virtual ~TAutoCommand() {}
     virtual TAutoCommand* Undo();             // generate command for undo stack
     virtual int           Record(TAutoStack& q); // record command and arguments
@@ -658,6 +714,7 @@ class TAutoCommand {
             void          Fail(TXAuto::TError);// throw designated exception
 
     // Non-virtual hook functions
+    //
     typedef const char* (*TErrorMsgHook)(long errCode);
     static TErrorMsgHook SetErrorMsgHook(TErrorMsgHook callback);
 
@@ -665,6 +722,7 @@ class TAutoCommand {
     static TCommandHook SetCommandHook(TCommandHook callback);
 
     // inline data member accessor functions
+    //
     static const char* LookupError(long errCode);
     void SetFlag(int mask);
     void ClearFlag(int mask);
@@ -674,24 +732,24 @@ class TAutoCommand {
     void SetSymbol(TAutoSymbol* sym);
 
   protected:
-    TAutoSymbol* Symbol;      // symbol entry generating this command
-    int Attr;                 // attribute and state flags, asXXXXXX
+    TAutoSymbol* Symbol;      // Symbol entry generating this command
+    int          Attr;        // Attribute and state flags, asXXXXXX
 };
     extern TAutoCommand::TErrorMsgHook TAutoCommand_ErrorLookup;
     extern TAutoCommand::TCommandHook  TAutoCommand_InvokeHook;
 
+//
 // Build function for application Quit command implementation
+//
 TAutoCommand* AutoQuitBuild(ObjectPtr obj, int attr, TAutoStack& args);
 
-//____________________________________________________________________________
-//
+//----------------------------------------------------------------------------
 // TAutoEnum - automation enumeration descriptor
-//____________________________________________________________________________
+//
 
-template <class T>
-struct TAutoEnumVal {
-  TLocaleString Name;         // name of symbol, enumeration text
-  T Val;                      // enumeration internal value
+template <class T> struct TAutoEnumVal {
+  TLocaleString Name;         // Name of symbol, enumeration text
+  T             Val;          // Enumeration internal value
 };
 
 class TAutoEnum : public TAutoType {
@@ -704,8 +762,7 @@ class TAutoEnum : public TAutoType {
     int Count;              // length of this symbol table
 };
 
-template <class T>
-class TAutoEnumT : public TAutoEnum {
+template <class T> class TAutoEnumT : public TAutoEnum {
   public:
     TAutoEnumT(TAutoEnumVal<T>* table, int symcount, int type);
     bool Convert(TAutoVal& txtVal, TAutoVal& numVal);
@@ -738,11 +795,13 @@ class TServedObjectCreator : public TAutoCreator {
     IDispatch* CreateDispatch(TObjectDescriptor objDesc, IUnknown* outer = 0);
     void       Attach(TServedObject& obj);
     void       Detach(TServedObject& obj);
-//protected:
+
     TAppDescriptor& AppDesc;
     TServedObject* AppObject;
+
   private:
     int ObjCount;
+
   friend class TServedObject;
 };
 
@@ -753,18 +812,15 @@ class TDispatchCreator : public TAutoCreator {
     TDispatchCreator() {}
     TUnknown*  CreateObject(TObjectDescriptor objDesc, IUnknown* outer = 0);
     IDispatch* CreateDispatch(TObjectDescriptor objDesc, IUnknown* outer = 0);
-  protected:
 };
 
-//____________________________________________________________________________
-//
+//----------------------------------------------------------------------------
 // TServedObject - OLE object exposed for automated access of internal object
-//____________________________________________________________________________
+//
 
 DECLARE_COMBASES2(TServedCOM, IDispatch, ITypeInfo)
 
 class _ICLASS TServedObject : public TServedCOM {
-    HRESULT QueryObject(const GUID far& iid, void far* far* pif);
   public:
     TServedObject(TObjectDescriptor& obj, TServedObjectCreator& creator,
                                           IUnknown* outer=0);
@@ -778,7 +834,22 @@ class _ICLASS TServedObject : public TServedCOM {
     operator IDispatch*();
     TLangId ReqLang;             // language requested by caller
     TObjectDescriptor::TDestruct Destruct;  // what to do with C++ object
+
+    // Object reference & lifetime managment
+    // For internal OCF use only
+    //
+    ulong   _IFUNC AddRef() {return GetOuter()->AddRef();}
+    ulong   _IFUNC Release() {return GetOuter()->Release();}
+    HRESULT _IFUNC QueryInterface(const GUID far& iid, void far*far* iface)
+                     {return GetOuter()->QueryInterface(iid, iface);}
+
+  protected:
+    // TUnknown overrides
+    //
+    HRESULT      QueryObject(const IID far& iid, void far* far* iface);
+
   private:
+    IID                   iidEvent;
     TServedObject*        Next;
     TServedObject* far*   Prev;
     // need to access local LANGID for typeinfo, either as member or as global
@@ -798,6 +869,7 @@ class _ICLASS TServedObject : public TServedCOM {
                                  unsigned int far* puArgErr);
 
     // ITypeInfo implementation
+    //
     HRESULT _IFUNC GetTypeAttr(TYPEATTR far* far* pptypeattr);
     HRESULT _IFUNC GetTypeComp(ITypeComp* far* pptcomp);
     HRESULT _IFUNC GetFuncDesc(unsigned int index, FUNCDESC far* far* ppfuncdesc);
@@ -837,13 +909,28 @@ class _ICLASS TServedObject : public TServedCOM {
     void _IFUNC ReleaseTypeAttr(TYPEATTR far* ptypeattr);
     void _IFUNC ReleaseFuncDesc(FUNCDESC far* pfuncdesc);
     void _IFUNC ReleaseVarDesc(VARDESC far* pvardesc);
-  friend class TAppDescriptor;   // access to Next,Prev
+    HRESULT _IFUNC GetFuncDocFromIndex(unsigned index,
+                                       BSTR far* retName, BSTR far* retDoc,
+                                       ulong far* retHelpContext,
+                                       BSTR far* retHelpFile);
+    // GetVarDocFromIndex and GetDocFromSym are used to by WriteTypeLib to make
+    // type libraries
+    HRESULT _IFUNC GetVarDocFromIndex(unsigned index,
+                                      BSTR far* retName, BSTR far* retDoc,
+                                      ulong far* retHelpContext,
+                                      BSTR far* retHelpFile);
+    HRESULT _IFUNC GetDocFromSym(TAutoSymbol* sym,
+                                 BSTR far* retName, BSTR far* retDoc,
+                                 ulong far* retHelpContext,
+                                 BSTR far* retHelpFile);
+    friend class _ICLASS TAppDescriptor;   // access to Next,Prev
+    friend class _ICLASS TOcxView;         // access to QueryObject
+    friend class _ICLASS TOcControl;       // access to QueryObject
 };
 
-//____________________________________________________________________________
-//
+//----------------------------------------------------------------------------
 // TDispatch - lightweight IDispatch implementation for automation controllers
-//____________________________________________________________________________
+//
 
 DECLARE_COMBASES1(TDispatchCOM, IDispatch)
 
@@ -870,10 +957,9 @@ class _ICLASS TDispatch : public TDispatchCOM {
                                  unsigned int far* puArgErr);
 };
 
-//____________________________________________________________________________
-//
+//----------------------------------------------------------------------------
 // TAutoObject - holders for C++ object pointers for automation conversions
-//____________________________________________________________________________
+//
 
 template<class T>
 class TAutoObject {
@@ -936,10 +1022,9 @@ class TAutoObjectByVal : public TAutoObjectDelete<T> {
     TAutoObjectByVal(T o) : TAutoObjectDelete<T>(new T(o)) {}
 };
 
-//____________________________________________________________________________
-//
+//----------------------------------------------------------------------------
 // TAutoIterator - automation collection iterator
-//____________________________________________________________________________
+//
 
 
 class TAutoIterator : public IEnumVARIANT {
@@ -1183,8 +1268,10 @@ inline TAutoVal::operator unsigned int() {return (unsigned long)(long)*this;}
 inline TAutoVal::operator int far*()     {return (int far*)operator long far*();}
 #endif
 
+#if !defined(BI_UNIQUE_BOOL)
 inline TAutoVal::operator TAutoBool()  {return TAutoBool(operator TBool());}
 inline TAutoVal::operator TAutoBoolRef(){return TAutoBoolRef(operator TBool far*());}
+#endif
 inline TAutoVal::operator signed char(){return operator unsigned char();}
 inline TAutoVal::operator char()       {return operator unsigned char();}
 inline TAutoVal::operator char far*()  {return (char far*)operator unsigned char far*();}
@@ -1200,7 +1287,9 @@ inline void TAutoVal::operator =(long   v)       {vt=atLong;   lVal  = v;}
 inline void TAutoVal::operator =(float  v)       {vt=atFloat;  fltVal= v;}
 inline void TAutoVal::operator =(double v)       {vt=atDouble; dblVal= v;}
 inline void TAutoVal::operator =(TBool  v)   {vt=atBool; boolVal = short(v ? -1 : 0);}
+#if !defined(BI_UNIQUE_BOOL)
 inline void TAutoVal::operator =(TAutoBool v){vt=atBool; boolVal = short((bool)v ? -1 : 0);}
+#endif
 inline void TAutoVal::operator =(TAutoDate v)    {vt=atDatetime; date = v;}
 inline void TAutoVal::operator =(TAutoCurrency v){vt=atCurrency; cyVal = v;}
 inline void TAutoVal::operator =(TAutoVoid)      {vt=atVoid;}
@@ -1210,7 +1299,9 @@ inline void TAutoVal::operator =(char far* p)       {vt=atByte+atByRef; pbVal=(u
 inline void TAutoVal::operator =(short far* p) {vt=atShort+atByRef; piVal=p;}
 inline void TAutoVal::operator =(long far* p)  {vt=atLong+atByRef;  plVal=p;}
 inline void TAutoVal::operator =(TBool far* p) {vt=atBool+atByRef;  pbool=(VARIANT_BOOL far*)p;}
+#if !defined(BI_UNIQUE_BOOL)
 inline void TAutoVal::operator =(TAutoBoolRef p){vt=atBool+atByRef; pbool=(VARIANT_BOOL far*)(bool far*)p;}
+#endif
 inline void TAutoVal::operator =(float far* p) {vt=atFloat+atByRef; pfltVal=p;}
 inline void TAutoVal::operator =(double far* p){vt=atDouble+atByRef;pdblVal=p;}
 inline void TAutoVal::operator =(TAutoDate far* p){vt=atDatetime+atByRef;pdate=(double far*)p;}
@@ -1351,7 +1442,8 @@ TAutoEnumT<T>::TAutoEnumT(TAutoEnumVal<T>* table, int symcount, int type)
 template <class T> bool
 TAutoEnumT<T>::Convert(TAutoVal& txtVal, TAutoVal& numVal)
 {
-  const char far* str = txtVal.StrVal();  // 0 if not string type
+  TString& stringRef = txtVal.StrVal();  // 0 if not string type
+  const char far* str = stringRef;
   if (str) {
     TLangId langId = txtVal.GetLanguage();
     for (int i = 0; i < Count; i++) {

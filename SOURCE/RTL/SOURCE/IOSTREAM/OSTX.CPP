@@ -9,9 +9,9 @@
 /*[]------------------------------------------------------------[]*/
 
 /*
- *      C/C++ Run Time Library - Version 6.5
+ *      C/C++ Run Time Library - Version 7.0
  *
- *      Copyright (c) 1990, 1994 by Borland International
+ *      Copyright (c) 1990, 1996 by Borland International
  *      All Rights Reserved.
  *
  */
@@ -24,6 +24,12 @@
 ostream::ostream(int fd)
 {
     ios::init(new filebuf(fd));
+    delbuf(2);  // 2 is special value to indicate that the streambuf passed
+                // to ios::init() needs to be deleted upon exit.  We don't
+                // do this in the new (not obsolete) constructors since there
+                // is a static instance of streambuf who's address is passed
+                // into ios::init()
+
 }
 
 
@@ -31,4 +37,9 @@ ostream::ostream(int fd)
 ostream::ostream(int sz, char* b)
 {
     ios::init(new strstreambuf(b, sz, b));
+    delbuf(2);  // 2 is special value to indicate that the streambuf passed
+                // to ios::init() needs to be deleted upon exit.  We don't
+                // do this in the new (not obsolete) constructors since there
+                // is a static instance of streambuf who's address is passed
+                // into ios::init()
 }

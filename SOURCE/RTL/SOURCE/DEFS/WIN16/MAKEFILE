@@ -62,7 +62,7 @@ OLE2LIBS =           \
         storage.def  \
         typelib.def
 
-$(LIBDIR)\import.lib : $(IMPLIBS:.def=.fst) profc.obj
+$(LIBDIR)\import.lib : $(IMPLIBS:.def=.fst) profc.obj guid.obj
     makersp "-+!s &\n" &&|
         $?
 |   > $&.rsp

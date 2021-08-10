@@ -1,14 +1,13 @@
+//----------------------------------------------------------------------------
+// ObjectComponents
+// Copyright (c) 1994, 1996 by Borland International, All Rights Reserved
 //
-//**************************************************************************
+// $Revision:   2.5  $
 //
-// BOleCont.cpp -- Implements the server helper for documents by masquerading
-//                 as the container object. Provides plumbing for server
-//                 linking to documents and items
-//
-// Copyright (c) 1993,94 by Borland International, Inc. All rights reserved
-//
-//**************************************************************************
-
+//  Implements the server helper for documents by masquerading as the 
+//  container object. Provides plumbing for server linking to documents 
+//  and items
+//----------------------------------------------------------------------------
 #include "BOleCont.h"
 #include "BOleFact.h"
 #include "BOleCMan.h"
@@ -24,7 +23,6 @@ HRESULT _IFUNC BOleContainer::QueryInterfaceMain(REFIID iid, LPVOID FAR *ppv)
 	   SUCCEEDED(hr = IBRootLinkable_QueryInterface(this, iid, ppv))
 	|| SUCCEEDED(hr = IPersistFile_QueryInterface(this, iid, ppv))
 	|| SUCCEEDED(hr = IOleItemContainer_QueryInterface(this, iid, ppv))
-//
 	// base classes
 
 	|| SUCCEEDED(hr = BOleComponent::QueryInterfaceMain(iid, ppv))
@@ -73,7 +71,6 @@ HRESULT _IFUNC BOleContainer::IsDirty ()
 {
 	HRESULT hrErr = ResultFromScode (S_OK);
 
-	//
 	
 	return hrErr;
 }
@@ -85,19 +82,48 @@ HRESULT _IFUNC BOleContainer::ParseDisplayName (IBindCtx *pbc, LPOLESTR pszDispl
 {
 	*ppmk = NULL;
 
-	OLECHAR szItemName[OLE_MAXNAMESIZE];
-	OLECHAR *pszDest = szItemName;
-	LPCTSTR pszSrc = pszDisplayName;
+	OLECHAR   szItemName[OLE_MAXNAMESIZE];
+	OLECHAR  *pszDest = szItemName;
+	LPCOLESTR pszSrc = pszDisplayName;
 
 	// skip leading delimiters
 	int cEaten = 0;
+#if defined(DBCS)
+	while (*pszSrc != '\0' && (*pszSrc == '\\' || *pszSrc == '/' ||
+		*pszSrc == '!' || *pszSrc == '['))
+	{
+		if(IsDBCSLeadByte(*pszSrc))
+		{
+			++pszSrc;
+			++cEaten;
+		}
+		
+		++pszSrc;
+		++cEaten;
+	}
+#else
 	while (*pszSrc != '\0' && (*pszSrc == '\\' || *pszSrc == '/' ||
 		*pszSrc == '!' || *pszSrc == '['))
 	{
 		++pszSrc;
 		++cEaten;
 	}
+#endif
 
+#if defined(DBCS)
+	// parse next token into szItemName
+	while (*pszSrc != '\0' && *pszSrc != '\\' && *pszSrc != '/' &&
+		*pszSrc != '!' && *pszSrc != '[' &&	cEaten < OLE_MAXNAMESIZE-1)
+	{
+		if(IsDBCSLeadByte(*pszSrc))
+		{
+			*pszDest++ = *pszSrc++;
+			++cEaten;
+		}
+		*pszDest++ = *pszSrc++;
+		++cEaten;
+	}
+#else
 	// parse next token into szItemName
 	while (*pszSrc != '\0' && *pszSrc != '\\' && *pszSrc != '/' &&
 		*pszSrc != '!' && *pszSrc != '[' &&	cEaten < OLE_MAXNAMESIZE-1)
@@ -105,6 +131,7 @@ HRESULT _IFUNC BOleContainer::ParseDisplayName (IBindCtx *pbc, LPOLESTR pszDispl
 		*pszDest++ = *pszSrc++;
 		++cEaten;
 	}
+#endif
 	*pchEaten = cEaten;
 	*pszDest = 0;
 
@@ -115,7 +142,7 @@ HRESULT _IFUNC BOleContainer::ParseDisplayName (IBindCtx *pbc, LPOLESTR pszDispl
 	if (SUCCEEDED(hr))	{
 		pUnknown->Release();
 		// item name found -- create item moniker for it
-		return ::CreateItemMoniker(OLESTDDELIM, szItemName, ppmk);
+		return ::CreateItemMoniker (OLESTDDELIMW, szItemName, ppmk);
 	}
 	else {
 		return hr;
@@ -139,10 +166,6 @@ HRESULT _IFUNC BOleContainer::LockContainer (BOOL fLock)
 	//  work (otherwise, Close gets called).
 	//
 
-	//
-	//
-	//
-	//
 	if (fLock)
 		AddRef();
 	else
@@ -150,7 +173,6 @@ HRESULT _IFUNC BOleContainer::LockContainer (BOOL fLock)
 	
 	return NOERROR;
 
-//
 }
 
 HRESULT _IFUNC BOleContainer::GetObject (LPOLESTR lpszItem,
@@ -284,7 +306,7 @@ HRESULT	_IFUNC BOleContainer::OnRename(PIBLinkable pContainer, LPCOLESTR pszName
 			// intermediate moniker
 			LPMONIKER pmkObj = NULL;
 		
-			if (SUCCEEDED(CreateItemMoniker(TEXT("!"), (LPOLESTR)pszName, &pmkObj))) {
+			if (SUCCEEDED(CreateItemMoniker (OLESTR("!"), (LPOLESTR)pszName, &pmkObj))) {
 				hr = CreateGenericComposite(pmkDoc, pmkObj, &pMon);
 				pmkObj->Release();
 			}
@@ -377,29 +399,6 @@ HRESULT _IFUNC BOleContainer::GetMoniker(LPMONIKER *ppMon)
 	return hrErr;
 }
 
-
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 
 
 

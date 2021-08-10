@@ -1,16 +1,18 @@
-//
 //----------------------------------------------------------------------------
 // ObjectComponents
-// (C) Copyright 1994 by Borland International, All Rights Reserved
+// Copyright (c) 1994, 1996 by Borland International, All Rights Reserved
+//
+// $Revision:   2.13  $
 //
 //   Implementation of TOcApp Class
 //----------------------------------------------------------------------------
-#include <ocf/ocfpch.h>
+#include <ocf/pch.h>
 #include <ocf/autodefs.h>
 #include <ocf/appdesc.h>
 #include <ocf/ocreg.h>
 #include <ocf/ocapp.h>
 #include <ocf/ocpart.h>
+#include <services/memory.h>
 #if defined(BI_PLAT_WIN32)
 # include <winver.h>
 #elif defined(BI_PLAT_WIN16)
@@ -22,13 +24,14 @@ DIAG_DECLARE_GROUP(OcDll);
 DIAG_DECLARE_GROUP(OcRefCount);
 
 //
-// Constructor for TOcApp
+// Compatibility constructor & SetupWindow for TOcApp
 //
 TOcApp::TOcApp(TOcRegistrar& registrar, uint32 options, TOcApp*& retOcApp)
 :
-  OcAppPtr(retOcApp),
+  Host(0),
+  FrameHost(new TOcAppFrameHostMsg(this)), // Use default, msg based host
+  OcAppPtr(&retOcApp),
   Options(options),
-  FrameWnd(0),
   DisableDlgs(false),
 #if defined(BI_DATA_NEAR)
   Name(*new TString),
@@ -40,8 +43,56 @@ TOcApp::TOcApp(TOcRegistrar& registrar, uint32 options, TOcApp*& retOcApp)
   Registrar.AppCount++;
   Init();
   RegisterClasses();
-  retOcApp = this;    // setup the client's pointer last if all else is OK
+
+  *OcAppPtr = this;    // Setup the client's pointer last if all else is OK
   TRACEX(OcRefCount, 1, "TOcApp() @" << (void*)this);
+
+  // Host = (char*)OcAppPtr - int(&(TOcModule*)0->OcAppPtr);
+}
+
+//
+void TOcApp::SetupWindow(HWND frameWnd)
+{
+  FrameHost->SetWindow(frameWnd);  // Pass frame's hWnd over to frame host
+
+  Registrar.SetApp(this);
+}
+
+//
+// New constructor for TOcApp using host interfaces
+//
+TOcApp::TOcApp(TOcRegistrar& registrar, uint32 options, TOcAppHost* host,
+               TOcAppFrameHost* frameHost)
+:
+  Host(host),
+  FrameHost(frameHost),
+  OcAppPtr(0),
+  Options(options),
+  DisableDlgs(false),
+#if defined(BI_DATA_NEAR)
+  Name(*new TString),
+  NameList(*new TOcNameList),
+#endif
+  Registrar(registrar),
+  Registered(false)
+{
+  PRECONDITION(&host);
+  PRECONDITION(&frameHost);
+
+  Registrar.AppCount++;
+  Init();
+  RegisterClasses();
+
+  if (Host)
+    Host->AttachHost(this);
+
+  TRACEX(OcRefCount, 1, "TOcApp() @" << (void*)this);
+}
+
+//
+void TOcApp::SetupWindow(TOcAppFrameHost* frameHost)
+{
+  FrameHost = frameHost;
 }
 
 //
@@ -64,13 +115,13 @@ TOcApp::Init()
   // Create BOle service object & get its interface
   //
   BOleComponentCreate(&BService, GetOuter(), cidBOleService);
-  if (BService && HRSucceeded(BService->QueryInterface(IID_IBService,
+  if (BService && HRSucceeded(BService->QueryInterface(IID_IBService2,
                                                        &(LPVOID)BServiceI))) {
     Release();
     BServiceI->Init(this);
   }
   else
-    TXObjComp::Throw(TXObjComp::xBOleBindFail); // give up if no IBService
+    TXObjComp::Throw(TXObjComp::xBOleBindFail); // give up if no IBService2
 
 #if defined(BI_PLAT_WIN16)
   // Make this task's message queue larger for Ole.
@@ -104,14 +155,26 @@ TOcApp::Init()
 //
 TOcApp::~TOcApp()
 {
-  OcAppPtr = 0;  // we're gone, make sure nobody calls us through unref'd ptr
+  // We're gone, make sure nobody calls us through unref'd ptr
+  //
+  if (OcAppPtr)     
+    *OcAppPtr = 0;
+  if (Host) {
+    Host->ReleaseOcObject();
+    Host = 0;
+  }
+
   UnregisterClasses();
 
-  // refcnt was held by controller
+  // RefCnt was held by controller
   //
-  if (ForwardEvent(OC_APPSHUTDOWN) && IsOptionSet(amServedApp) &&
-      !IsOptionSet(amExeModule)) {
-    Registrar.Shutdown(0, Options);
+  if (FrameHost) {
+    if (FrameHost->EvOcAppShutdown() && IsOptionSet(amServedApp) &&
+        !IsOptionSet(amExeModule)) {
+      Registrar.Shutdown(0, Options);
+    }
+    FrameHost->ReleaseOcObject();
+    FrameHost = 0;
   }
 
   if (BService)
@@ -131,7 +194,14 @@ TOcApp::~TOcApp()
 void
 TOcApp::ReleaseObject()
 {
-  FrameWnd = 0;
+  if (Host) {
+    Host->ReleaseOcObject();
+    Host = 0;
+  }
+  if (FrameHost) {
+    FrameHost->ReleaseOcObject();
+    FrameHost = 0;
+  }
   if (!IsOptionSet(amServedApp))
     Release();   // if our container app holds the refcnt, then release it
 }
@@ -301,6 +371,12 @@ TOcApp::Browse(TOcInitInfo& init)
 }
 
 bool
+TOcApp::BrowseControls(TOcInitInfo& init)
+{
+  return BServiceI ? HRIsOK(BServiceI->BrowseControls(&init)) : false;
+}
+
+bool
 TOcApp::BrowseClipboard(TOcInitInfo& init)
 {
   return BServiceI ? HRIsOK(BServiceI->BrowseClipboard(&init)): false;
@@ -447,13 +523,15 @@ TOcApp::InsertContainerMenus(HMENU hMenu, TOcMenuWidths far* omw)
 
   TOcMenuDescr md;
   md.HMenu = hMenu;
-  for (int i = 0; i < 6; i++) {
+
+  int i;
+  for (i = 0; i < 6; i++) {
     md.Width[i] = (int)omw->Width[i] = 0;  // make sure the server's are zeroed
     i++;
     md.Width[i] = (int)omw->Width[i];
   }
 
-  if (!(bool)ForwardEvent(OC_APPINSMENUS, &md))
+  if (!FrameHost || !FrameHost->EvOcAppInsMenus(md))
     return HR_FAIL;
 
   for (i = 0; i < 6; i++)
@@ -470,7 +548,7 @@ TOcApp::SetFrameMenu(HMENU hMenu)
 {
   TOcMenuDescr md;
   md.HMenu = hMenu;
-  return HRFailIfZero((bool)ForwardEvent(OC_APPMENUS, &md));
+  return HRFailIfZero(FrameHost && FrameHost->EvOcAppMenus(md));
 }
 
 //
@@ -481,15 +559,23 @@ TOcApp::Accelerator(MSG far* msg)
 {
   PRECONDITION(msg);
 
-  return HRFailIfZero((bool)ForwardEvent(OC_APPPROCESSMSG, msg));
+  return HRFailIfZero(FrameHost && FrameHost->EvOcAppProcessMsg(msg));
 }
 
 //
 // Let BOle know if we (container app) have an accelerator table
 //
 HRESULT _IFUNC
-TOcApp::GetAccelerators(HACCEL far*, int far*)
+TOcApp::GetAccelerators(HACCEL far* phAccel, int far* pcAccel)
 {
+  TOcGetAccel acc;
+  if (FrameHost) {
+    if (FrameHost->EvOcAppGetAccel(&acc)) {
+      *phAccel = acc.Accel;
+      *pcAccel = acc.Count;
+      return HR_NOERROR;
+    }
+  }
   return HR_FAIL;  // would retrieve or generate an accelerator table here
 }
 
@@ -517,7 +603,7 @@ TOcApp::CanEmbed()
 HWND _IFUNC
 TOcApp::GetWindow()
 {
-  return FrameWnd;
+  return FrameHost ? FrameHost->EvOcGetWindow() : 0;
 }
 
 //
@@ -528,7 +614,7 @@ TOcApp::GetWindowRect(TRect far* r)
 {
   PRECONDITION(r);
 
-  return HRFailIfZero((bool)ForwardEvent(OC_APPFRAMERECT, r));
+  return HRFailIfZero(FrameHost && FrameHost->EvOcAppFrameRect(r));
 }
 
 //
@@ -548,7 +634,8 @@ TOcApp::GetWindowTitle()
 HRESULT _IFUNC
 TOcApp::RequestBorderSpace(const TRect far* space)
 {
-  return HRFailIfZero((bool)ForwardEvent(OC_APPBORDERSPACEREQ, space));
+  TRect far* nc_space = CONST_CAST(TRect far*, space);  
+  return HRFailIfZero(FrameHost && FrameHost->EvOcAppBorderSpaceReq(nc_space));
 }
 
 //
@@ -558,7 +645,8 @@ TOcApp::RequestBorderSpace(const TRect far* space)
 HRESULT _IFUNC
 TOcApp::SetBorderSpace(const TRect far* space)
 {
-  return HRFailIfZero((bool)ForwardEvent(OC_APPBORDERSPACESET, space));
+  TRect far* nc_space = CONST_CAST(TRect far*, space);  
+  return HRFailIfZero(FrameHost && FrameHost->EvOcAppBorderSpaceSet(nc_space));
 }
 
 //
@@ -575,10 +663,14 @@ TOcApp::AppendWindowTitle(LPCOLESTR /*title*/)
 HRESULT _IFUNC
 TOcApp::SetStatusText(LPCOLESTR text)
 {
-  // Convert ole str into ascii
+  // Convert OLE str into ANSI
   //
-
-  return HRFailIfZero((bool)ForwardEvent(OC_APPSTATUSTEXT, (const char far*)OleStr(text)));
+//  return HRFailIfZero(FrameHost && FrameHost->EvOcAppStatusText(OleStr(text)));
+  if (FrameHost) {
+    FrameHost->EvOcAppStatusText(OleStr(text));
+    return HR_OK;
+  }
+  return HR_FAIL;
 }
 
 //
@@ -612,7 +704,8 @@ void _IFUNC
 TOcApp::RestoreUI()
 {
   SetStatusText(0);
-  ForwardEvent(OC_APPRESTOREUI);
+  if (FrameHost)
+    FrameHost->EvOcAppRestoreUI();
 }
 
 //
@@ -621,36 +714,41 @@ TOcApp::RestoreUI()
 void _IFUNC
 TOcApp::DialogHelpNotify(TOcDialogHelp help)
 {
-  ForwardEvent(OC_APPDIALOGHELP, help);
+  if (FrameHost)
+    FrameHost->EvOcAppDialogHelp(help);
 }
 
 //
-// called by BOle when last embedding is closed
-// if that's the only reason the app is up we need to shut ourselves down
+// Called by BOle when last embedding is closed
+// If that's the only reason the app is up we need to shut ourselves down
 //
 void _IFUNC
 TOcApp::ShutdownMaybe()
 {
   TRACEX(OcApp, 1,
          "ShutdownMaybe() on " << (void*)this <<
-         " Embedding:" << ToBool(IsOptionSet(amEmbedding)) <<
+         " Embedding:" << (int)ToBool(IsOptionSet(amEmbedding)) <<
          " Win:" << hex << (uint)GetWindow());
 
   // Check first to see if TOcApp should initiate a shutdown
   //
-  if (ForwardEvent(OC_APPSHUTDOWN) || !GetWindow()) {
+  if (!FrameHost || FrameHost->EvOcAppShutdown() || !GetWindow()) {
     // The server initiated the shutdown
     //
     if (!IsOptionSet(amExeMode)) {  // DLL server
-      AddRef();    // prevent destroying ourselves yet
+      AddRef();    // Prevent destroying ourselves yet
       Registrar.Shutdown(&(IUnknown&)*this, Options);
-      Release();   // this should do us in now
+      Release();   // This should do us in now
     }
   }
 }
 
 //----------------------------------------------------------------------------
+// Obsolete hard-wired message sending functions.
+// Use individual FrameHost methods instead
+//
 
+/*
 uint32
 TOcApp::ForwardEvent(int eventId, const void far* param)
 {
@@ -668,6 +766,7 @@ TOcApp::ForwardEvent(int eventId, uint32 param)
 
   return 0;
 }
+*/
 
 //-----------------------------------------------------------------------------
 // TOcClassMgr, IBClassMgr implementation for TOcRegistrar
@@ -679,6 +778,9 @@ class _ICLASS TOcClassMgr : private TUnknown, public IBClassMgr {
     ~TOcClassMgr();
     ulong _IFUNC   AddRef() ;
     ulong _IFUNC   Release();
+    
+    void 					 SetApp(TOcApp* app) 
+    																		{OcApp = app;}
 
   private:
     HRESULT _IFUNC QueryInterface(const GUID far& iid, void far*far* iface)
@@ -693,12 +795,15 @@ class _ICLASS TOcClassMgr : private TUnknown, public IBClassMgr {
 
     TComponentFactory OcCallback;  // callback for creating component
     uint32    Options;  // options flags from TOcRegistrar
-  friend class TOcApp;  // could delegate the interface instead...
+    TOcApp*		OcApp;
+    friend class TOcApp;  // could delegate the interface instead...
 };
 
 TOcClassMgr::TOcClassMgr(TComponentFactory cc, uint32 options)
 :
-  OcCallback(cc), Options(options)
+  OcCallback(cc),
+  Options(options),
+	OcApp (0)
 {
 }
 
@@ -742,6 +847,10 @@ TOcClassMgr::ComponentCreate(IUnknown far* far* retIface, IUnknown far* outer, B
     return *retIface ? HR_OK : HR_FAIL;
   }
   catch (...) {  // we can't throw any exception through OLE
+		// if an exception occur shutdown the application if it needs to be so
+		if (OcApp)
+    	OcApp->ShutdownMaybe ();
+
     return HR_OUTOFMEMORY;  // probably a resource problem, better error code?
   }
 }
@@ -889,6 +998,12 @@ TOcRegistrar::CanUnload()
   return TRegistrar::CanUnload() && AppCount == 0;
 }
 
+void						
+TOcRegistrar::SetApp(TOcApp* app) 
+{
+	OcClassMgr->SetApp(app);
+}
+
 static bool
 sGetFileVersionInfo(const char far* fileName, VS_FIXEDFILEINFO& vInfo)
 {
@@ -899,8 +1014,10 @@ sGetFileVersionInfo(const char far* fileName, VS_FIXEDFILEINFO& vInfo)
   // create a buffer of that size
   //
   uint32 infoHandle;
-  if ((infoSize = ::GetFileVersionInfoSize(OleStr(fileName), &infoHandle)) == 0)
+  infoSize = ::GetFileVersionInfoSize(OleStr(fileName), &infoHandle);
+  if (infoSize == 0)
     return false;
+
   viBuff = new OLECHAR[(int)infoSize];
 
   // Copy the file version info buffer from the file into viBuff
@@ -914,11 +1031,11 @@ sGetFileVersionInfo(const char far* fileName, VS_FIXEDFILEINFO& vInfo)
     VS_FIXEDFILEINFO far* vInfoPtr;
     if (::VerQueryValue(viBuff, "\\", &(void far*)vInfoPtr, &vInfoLen)) {
       vInfo = *vInfoPtr;
-      delete [] viBuff;
+      delete[] viBuff;
       return true;
     }
   }
-  delete [] viBuff;
+  delete[] viBuff;
   return false;
 }
 
@@ -936,6 +1053,7 @@ TOcRegistrar::LoadBOle()
   OFSTRUCT ofs;
   ofs.cBytes = sizeof ofs;
 
+#ifdef NT_PREFERS_UNICODE_INSTEAD_OF_ANSI
 #if defined(BI_PLAT_WIN32)
   bool winNT = !ToBool(::GetVersion()&0x80000000);
   if (winNT) // NT platform
@@ -947,6 +1065,7 @@ TOcRegistrar::LoadBOle()
       lstrcpy(name, BOLEDLL);
   }
   else
+#endif
 #endif
     lstrcpy(name, BOLEDLL);
 
@@ -1039,3 +1158,94 @@ TOcInitInfo::TOcInitInfo(TOcInitHow how, TOcInitWhere where, IBContainer far* co
 {
 }
 
+//----------------------------------------------------------------------------
+// Default FrameHost class implementation for compatibility. Forwards events
+// to FrameWindow using windows messages
+//
+
+//
+bool
+TOcAppFrameHostMsg::EvOcAppInsMenus(TOcMenuDescr far& sharedMenu)
+{
+  return (bool)ForwardEvent(OC_APPINSMENUS, &sharedMenu);
+}
+
+bool
+TOcAppFrameHostMsg::EvOcAppMenus(TOcMenuDescr far& md)
+{
+  return (bool)ForwardEvent(OC_APPMENUS, &md);
+}
+
+bool
+TOcAppFrameHostMsg::EvOcAppProcessMsg(MSG far* msg)
+{
+  return (bool)ForwardEvent(OC_APPPROCESSMSG, msg);
+}
+
+bool
+TOcAppFrameHostMsg::EvOcAppFrameRect(TRect far* rect)
+{
+  return (bool)ForwardEvent(OC_APPFRAMERECT, rect);
+}
+
+bool
+TOcAppFrameHostMsg::EvOcAppBorderSpaceReq(TRect far* space)
+{
+  return (bool)ForwardEvent(OC_APPBORDERSPACEREQ, space);
+}
+
+bool
+TOcAppFrameHostMsg::EvOcAppBorderSpaceSet(TRect far* space)
+{
+  return (bool)ForwardEvent(OC_APPBORDERSPACESET, space);
+}
+
+void
+TOcAppFrameHostMsg::EvOcAppStatusText(const char far* text)
+{
+  ForwardEvent(OC_APPSTATUSTEXT, text);
+}
+
+void
+TOcAppFrameHostMsg::EvOcAppRestoreUI()
+{
+  ForwardEvent(OC_APPRESTOREUI);
+}
+
+void
+TOcAppFrameHostMsg::EvOcAppDialogHelp(TOcDialogHelp far& help)
+{
+  ForwardEvent(OC_APPDIALOGHELP, help);
+}
+
+bool
+TOcAppFrameHostMsg::EvOcAppShutdown()
+{
+  return (bool)ForwardEvent(OC_APPSHUTDOWN);
+}
+
+bool
+TOcAppFrameHostMsg::EvOcAppGetAccel(TOcGetAccel far* acc)
+{
+  return ForwardEvent(OC_APPGETACCEL, acc);
+}
+
+uint32
+TOcAppFrameHostMsg::ForwardEvent(int eventId, const void far* param)
+{
+  HWND hWnd = EvOcGetWindow();
+  if (::IsWindow(hWnd))
+    return ::SendMessage(hWnd, WM_OCEVENT, eventId, (LPARAM)param);
+
+  return 0;
+}
+
+uint32
+TOcAppFrameHostMsg::ForwardEvent(int eventId, uint32 param)
+{
+  HWND hWnd = EvOcGetWindow();
+  if (::IsWindow(hWnd))
+    return ::SendMessage(hWnd, WM_OCEVENT, eventId, param);
+
+  return 0;
+}

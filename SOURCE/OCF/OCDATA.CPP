@@ -1,14 +1,18 @@
-//
 //----------------------------------------------------------------------------
 // ObjectComponents
-// (C) Copyright 1994 by Borland International, All Rights Reserved
+// Copyright (c) 1994, 1996 by Borland International, All Rights Reserved
 //
-//   Implementation of TOcDataProvider Class
+// $Revision:   2.4  $
+//
+// Implementation of TOcDataProvider Class
 //----------------------------------------------------------------------------
-#include <ocf/ocfpch.h>
+#include <ocf/pch.h>
 #include <ocf/ocapp.h>
 #include <ocf/ocdata.h>
 
+//
+//
+//
 TOcDataProvider::TOcDataProvider(TOcView& ocView, TRegList* regList, IUnknown* outer,
                                  void* userData, TDeleteUserData callBack)
 :
@@ -54,6 +58,9 @@ TOcDataProvider::TOcDataProvider(TOcView& ocView, TRegList* regList, IUnknown* o
   }
 }
 
+//
+//
+//
 TOcDataProvider::~TOcDataProvider()
 {
   // If the TOcDataProvider object is released by the clipboard
@@ -61,7 +68,7 @@ TOcDataProvider::~TOcDataProvider()
   if (OcView.GetOcData() == this)
     OcView.SetOcData(0);
 
-  // user data clean up
+  // User data clean up
   //
   if (CBDelete)
     CBDelete(UserData);
@@ -114,16 +121,22 @@ TOcDataProvider::Rename()
   // Update the item's moniker
   //
   TOcItemName item(true);
-  if (OcView.ForwardEvent(OC_VIEWGETITEMNAME, &item))
+  if (OcView.ServerHost->EvOcViewGetItemName(item))
     BLSiteI->OnRename(OcView.BLDocumentI, OleStr(item.Name));
 }
 
+//
+//
+//
 UINT _IFUNC
 TOcDataProvider::CountFormats()
 {
   return OcView.CountFormats();
 }
 
+//
+//
+//
 HRESULT _IFUNC
 TOcDataProvider::GetFormat(uint index, TOcFormatInfo far* fmt)
 {
@@ -131,7 +144,6 @@ TOcDataProvider::GetFormat(uint index, TOcFormatInfo far* fmt)
 
   return OcView.GetFormat(index, fmt);
 }
-
 
 //
 // Request native data for pasting into client application.
@@ -143,14 +155,13 @@ TOcDataProvider::GetFormatData(TOcFormatInfo far* fmt)
   PRECONDITION(fmt);
 
   TOcFormat* format = OcView.FormatList.Find(fmt->Id);
-  if (!format || (*format->GetRegName() == 0))
-    return 0;
+  if (format && *format->GetRegName()) {
+    TOcFormatData formatData(*format, UserData);
+    if (OcView.ServerHost->EvOcViewClipData(formatData))
+      return formatData.Handle;
+  }
 
-  TOcFormatData formatData(*format, UserData);
-  if (OcView.ForwardEvent(OC_VIEWCLIPDATA, &formatData))
-    return formatData.Handle;
-  else
-    return 0;
+  return 0;
 }
 
 //
@@ -183,9 +194,8 @@ TOcDataProvider::Draw(HDC dc, const RECTL far* pos, const RECTL far* clip,
   p.Normalize();
   c.Normalize();
   TOcViewPaint vp = { dc, &p, &c, (TOcAspect)aspect, true, 0, UserData };
-  bool result = (bool)OcView.ForwardEvent(OC_VIEWPAINT, &vp);
 
-  return HRFailIfZero(result);
+  return HRFailIfZero(OcView.ServerHost->EvOcViewPaint(vp));
 }
 
 //
@@ -198,7 +208,7 @@ TOcDataProvider::GetPartSize(TSize far* size)
 
   // Ask the app for initial server extent
   //
-  if (!OcView.ForwardEvent(OC_VIEWPARTSIZE, &ps)) {
+  if (!OcView.ServerHost->EvOcViewPartSize(ps)) {
     // An empty rect as default means that the container
     // decides the size for this server
     //
@@ -220,12 +230,8 @@ TOcDataProvider::Save(IStorage* storage, BOOL sameAsLoad, BOOL remember)
 {
   PRECONDITION(storage);
 
-  TOcSaveLoad ocSave(storage, static_cast<bool>(sameAsLoad),
-                     static_cast<bool>(remember), true, UserData);
+  TOcSaveLoad ocSave(storage, ToBool(sameAsLoad), ToBool(remember), true,
+                     UserData);
 
-  return HRFailIfZero((bool)OcView.ForwardEvent(OC_VIEWSAVEPART, &ocSave));
+  return HRFailIfZero(OcView.ServerHost->EvOcViewSavePart(ocSave));
 }
-
-
-
-

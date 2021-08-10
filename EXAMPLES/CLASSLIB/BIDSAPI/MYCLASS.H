@@ -19,9 +19,9 @@
 #ifndef MYCLASS_H          // prevent header from
 #define MYCLASS_H 1        // being included twice
 
-#include <cstring.h>
+#include <services/cstring.h>
+#include <services/checks.h>
 #include <iostream.h>
-#include <checks.h>
 
 class MyClass
 {

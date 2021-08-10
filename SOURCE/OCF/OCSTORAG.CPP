@@ -1,14 +1,15 @@
-//
 //----------------------------------------------------------------------------
 // ObjectComponents
-// (C) Copyright 1994 by Borland International, All Rights Reserved
+// Copyright (c) 1994, 1996 by Borland International, All Rights Reserved
+//
+// $Revision:   2.3  $
 //
 //   Implementation of TOcStorage & TOcStream IStorage/IStream encapsulation
 //----------------------------------------------------------------------------
-#include <ocf/ocfpch.h>
+#include <ocf/pch.h>
 #include <ocf/ocobject.h>
 #include <ocf/ocstorag.h>
-#include <osl/geometry.h>
+#include <winsys/geometry.h>
 #include <iostream.h>
 
 DIAG_DEFINE_GROUP(OcExcept, true, 1);
@@ -577,4 +578,3 @@ TOcStorage::SetTimes(char const far* name, FILETIME const far* ctime, FILETIME c
 
   return ::StgSetTimes(OleStr(name), ctime, atime, mtime);
 }
-

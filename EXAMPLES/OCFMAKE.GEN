@@ -1,6 +1,10 @@
 #----------------------------------------------------------------------------
-# ObjectWindows - (C) Copyright 1993 by Borland International
-#     Extension to makefile.gen, adding OCF definitions and libraries
+# ObjectComponents & ObjectWindows
+# Copyright (c) 1994, 1996 by Borland International, All Rights Reserved
+#
+# $Revision:   10.3  $
+#
+# Extension to makefile.gen, adding OCF definitions and libraries
 #----------------------------------------------------------------------------
 
 !ifndef MODELS
@@ -10,14 +14,48 @@ MODELS = smldf
 SYSTEMS = WIN16 WIN32
 !endif
 
+#----------------------------------------------------------------------------
+# Dir & search paths
+#----------------------------------------------------------------------------
 
-#
-# if no MODEL is specified & we're in 16-bit,  default to LARGE
-#
-!if !$d(MODEL) && !$d(WIN32) && "$(SYSTEM)" != "WIN32"
-MODEL=l
+!ifndef BIDSLIBDIR
+BIDSLIBDIR = $(BCLIBDIR)
 !endif
 
+!ifndef OCFLIBDIR
+OCFLIBDIR = $(BCLIBDIR)
+!endif
+
+!ifndef BIDSINCDIR
+BIDSINCDIR = $(BCINCDIR)
+!endif
+
+!ifndef OCFINCDIR
+OCFINCDIR = $(BCINCDIR)
+!endif
+
+!if "$(OCFINCDIR)" != "$(BCINCDIR)"
+! if "$(BIDSINCDIR)" != "$(OCFINCDIR)" && "$(BIDSINCDIR)" != "$(BCINCDIR)"
+SYSINCPATH = $(OCFINCDIR);$(BIDSINCDIR)
+! else
+SYSINCPATH = $(OCFINCDIR)
+! endif
+!elif "$(BIDSINCDIR)" != "$(BCINCDIR)"
+SYSINCPATH = $(BIDSINCDIR)
+!endif
+
+#!if !$d(OCFINCDIR)
+#OCFINCDIR = $(BCINCDIR)
+#!elif "$(OCFINCDIR)" != "$(BCINCDIR)"
+#SYSINCPATH = $(OCFINCDIR);$(SYSINCPATH)
+#!endif
+
+#
+# If no MODEL is specified & we're in 16-bit,  default to LARGE
+#
+!if !$d(MODEL) && ($d(WIN16) || "$(SYSTEM)" == "WIN16")
+MODEL=l
+!endif
 
 SYSLIBS  = 1   # force defined, actually set after include of makefile.gen
 SYSLIBSD = 1   # force defined, actually set after include of makefile.gen
@@ -29,30 +67,24 @@ CFLAGSD = $(CFLAGSD) -D_OCFDLL -D_BIDSDLL
 !endif
 
 #----------------------------------------------------------------------------
-# dir & search paths
+# Additional libraries for OCF and BIDS
 #----------------------------------------------------------------------------
 
-!ifndef OCFLIBDIR
-OCFLIBDIR = $(BCLIBDIR)
-!endif
-
-!if !$d(OCFINCDIR)
-OCFINCDIR = $(BCINCDIR)
-!elif "$(OCFINCDIR)" != "$(BCINCDIR)"
-INCLUDEPATH = $(OCFINCDIR);$(BCINCDIR)
-!endif
-
-#----------------------------------------------------------------------------
-# additional libraries for OCF and BIDS
-#----------------------------------------------------------------------------
-
-# determine library name suffix based upon model
+# Determine library name suffix based upon model
 #
 !if $(_32BIT_)
 ! if $d(USEDLL)
+!  if $d(MT)
+_SFX_ = ti
+!  else
 _SFX_ = fi
+!  endif
 ! else
+!  if $d(MT)
+_SFX_ = t
+!  else
 _SFX_ = f
+!  endif
 ! endif
 !else #WIN16
 ! if $d(USEDLL)
@@ -69,7 +101,7 @@ _OCFCODE_ = $(_SYSCODE_)
 !endif
 
 #
-# select suffix for alternate library if diagnostics enabled
+# Select suffix for alternate library if diagnostics enabled
 #
 !if $(DIAGS)
 OCFSFX = d$(_OCFCODE_)$(_SFX_)
@@ -84,28 +116,28 @@ BIDSSFX = $(_SFX_)
 !endif
 
 #
-# add OCF to system libraries
+# Add OCF to system libraries
 #
 !if $(_32BIT_)
 OLELIB =   $(BCLIBDIR)\ole2w32
-SYSLIBS =  $(OCFLIBDIR)\ocf$(OCFSFX) $(BCLIBDIR)\bids$(BIDSSFX) $(OLELIB)
+SYSLIBS =  $(OCFLIBDIR)\ocf$(OCFSFX) $(BIDSLIBDIR)\bids$(BIDSSFX) $(OLELIB)
 SYSLIBSD = $(SYSLIBS)
 !else
 OLELIB =   $(BCLIBDIR)\ole2w16
-SYSLIBS =  $(OCFLIBDIR)\ocf$(OCFSFX) $(BCLIBDIR)\bids$(BIDSSFX) $(OLELIB)
-SYSLIBSD = $(OCFLIBDIR)\ocf$(OCFSFX)u $(BCLIBDIR)\bids$(BIDSSFX) $(OLELIB)
+SYSLIBS =  $(OCFLIBDIR)\ocf$(OCFSFX) $(BIDSLIBDIR)\bids$(BIDSSFX) $(OLELIB)
+SYSLIBSD = $(OCFLIBDIR)\ocf$(OCFSFX)u $(BIDSLIBDIR)\bids$(BIDSSFX) $(OLELIB)
 !endif
 
 #
-# build the cpp command line option for precompiled headers if requested
+# Build the cpp command line option for precompiled headers if requested
 #
 !if !$d(NOOCFPCH)
-CPCH = -H=$(OCFLIBDIR)\ocf$(OCFSFX).csm -H"ocf\ocfpch.h" -D_OCFPCH
+CPCH = -H=$(OCFLIBDIR)\ocf$(OCFSFX).csm -Hc -H"ocfpch.h" -H"pch.h" -D_OCFPCH
 !if $(_32BIT_)
-CPCHD = -H=$(OCFLIBDIR)\ocf$(OCFSFX).csm -H"ocf\ocfpch.h" -D_OCFPCH
+CPCHD = -H=$(OCFLIBDIR)\ocf$(OCFSFX).csm -Hc -H"ocfpch.h" -H"pch.h" -D_OCFPCH
 !else
-CPCHD = -H=$(OCFLIBDIR)\ocf$(OCFSFX)u.csm -H"ocf\ocfpch.h" -D_OCFPCH
+CPCHD = -H=$(OCFLIBDIR)\ocf$(OCFSFX)u.csm -Hc -H"ocfpch.h" -H"pch.h" -D_OCFPCH
 !endif
 !endif
 
-$(MAKEFILE) :: $(OCFLIBDIR)\ocf$(OCFSFX).lib $(BCLIBDIR)\bids$(BIDSSFX).lib
+$(MAKEFILE) :: $(OCFLIBDIR)\ocf$(OCFSFX).lib $(BIDSLIBDIR)\bids$(BIDSSFX).lib

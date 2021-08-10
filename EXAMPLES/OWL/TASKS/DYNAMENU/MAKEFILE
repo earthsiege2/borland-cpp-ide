@@ -1,0 +1,12 @@
+#----------------------------------------------------------------------------
+# ObjectWindows
+# Copyright (c) 1995, 1995 by Borland International, All Rights Reserved
+#----------------------------------------------------------------------------
+
+DEFMODEL=l
+MYROOT  =dynmnu
+
+EXERES  =$(MYROOT)
+OBJEXE  =app.obj $(MYROOT).obj dmdecfr.obj
+
+!include $(BCEXAMPLEDIR)\owlmake.gen

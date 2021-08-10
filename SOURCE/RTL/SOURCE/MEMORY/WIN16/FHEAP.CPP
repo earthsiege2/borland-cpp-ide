@@ -9,9 +9,9 @@
  *-----------------------------------------------------------------------*/
 
 /*
- *      C/C++ Run Time Library - Version 6.5
+ *      C/C++ Run Time Library - Version 7.0
  *
- *      Copyright (c) 1991, 1994 by Borland International
+ *      Copyright (c) 1991, 1996 by Borland International
  *      All Rights Reserved.
  *
  */
@@ -66,6 +66,9 @@ void far * _FARFUNC _farcallocf(unsigned long nitems, unsigned long size,
                                unsigned flags)
 {
     unsigned long RealSize = size * nitems;
+
+    if (RealSize == 0)
+        return NULL;
 
     unsigned OldWinAllocFlags = _WinAllocFlag;
     _WinAllocFlag = flags | GMEM_ZEROINIT;

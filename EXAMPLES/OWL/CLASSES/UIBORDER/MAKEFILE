@@ -1,0 +1,11 @@
+#----------------------------------------------------------------------------
+# ObjectWindows
+# Copyright (c) 1995, 1995 by Borland International, All Rights Reserved
+#----------------------------------------------------------------------------
+
+MODELS = lfdt
+
+EXE    = uiborder
+OBJEXE = uibordex.obj
+
+!include $(BCEXAMPLEDIR)\owlmake.gen

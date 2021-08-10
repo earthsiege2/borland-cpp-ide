@@ -1,4 +1,4 @@
-LIBRARY CW3215 INITINSTANCE
+LIBRARY CW3220 INITINSTANCE
 
 DESCRIPTION 'Borland C++ DLL Single-thread Runtime library'
 
@@ -167,6 +167,7 @@ EXPORTS
     @istream@$brsh$qp9streambuf    @713 ; istream::operator >>(streambuf*)
     @istream@$brsh$qpc             @714 ; istream::operator >>(char*)
     @istream@$brsh$qpqr3ios$r3ios  @732 ; istream::operator >>(ios&(*)(ios&))
+    @istream@$brsh$qr4bool         @871 ; istream::operator >>(bool&)
     @istream@$brsh$qrc             @717 ; istream::operator >>(char&)
     @istream@$brsh$qrd             @862 ; istream::operator >>(double&)
     @istream@$brsh$qrf             @864 ; istream::operator >>(float&)
@@ -178,14 +179,14 @@ EXPORTS
     @istream@$brsh$qrui            @721 ; istream::operator >>(unsigned int&)
     @istream@$brsh$qrul            @722 ; istream::operator >>(unsigned long&)
     @istream@$brsh$qrus            @723 ; istream::operator >>(unsigned short&)
-    @istream@$brsh$qrzc            @718 ; istream::operator >>(char&)
+    @istream@$brsh$qrzc            @718 ; istream::operator >>(signed char&)
     @istream@do_get$qv             @708 ; istream::do_get()
     @istream@eatwhite$qv           @712 ; istream::eatwhite()
     @istream@get$qpcic             @729 ; istream::get(char*,int,char)
     @istream@get$qr9streambufc     @724 ; istream::get(streambuf&,char)
     @istream@get$qrc               @727 ; istream::get(char&)
     @istream@get$qruc              @730 ; istream::get(unsigned char&)
-    @istream@get$qrzc              @728 ; istream::get(char&)
+    @istream@get$qrzc              @728 ; istream::get(signed char&)
     @istream@get$qv                @725 ; istream::get()
     @istream@getline$qpcic         @726 ; istream::getline(char*,int,char)
     @istream@ignore$qii            @731 ; istream::ignore(int,int)
@@ -203,8 +204,8 @@ EXPORTS
     @istrstream@$bctr$qpci         @698 ; istrstream::istrstream(char*,int)
     @istrstream@$bctr$qpuc         @697 ; istrstream::istrstream(unsigned char*)
     @istrstream@$bctr$qpuci        @700 ; istrstream::istrstream(unsigned char*,int)
-    @istrstream@$bctr$qpzc         @696 ; istrstream::istrstream(char*)
-    @istrstream@$bctr$qpzci        @699 ; istrstream::istrstream(char*,int)
+    @istrstream@$bctr$qpzc         @696 ; istrstream::istrstream(signed char*)
+    @istrstream@$bctr$qpzci        @699 ; istrstream::istrstream(signed char*,int)
     @istrstream@$bdtr$qv           @701 ; istrstream::~istrstream()
     @lock$qr3ios                   @849 ; lock(ios&)
     @log$qr7complex                @393 ; log(complex&)
@@ -221,6 +222,7 @@ EXPORTS
     @ostream@$bctr$qp9streambuf    @760 ; ostream::ostream(streambuf*)
     @ostream@$bctr$qv              @759 ; ostream::ostream()
     @ostream@$bdtr$qv              @762 ; ostream::~ostream()
+    @ostream@$blsh$q4bool          @872 ; ostream::operator <<(bool)
     @ostream@$blsh$qc              @771 ; ostream::operator <<(char)
     @ostream@$blsh$qg              @766 ; ostream::operator <<(long double)
     @ostream@$blsh$ql              @769 ; ostream::operator <<(long)
@@ -242,7 +244,7 @@ EXPORTS
     @ostream_withassign@$bdtr$qv   @763 ; ostream_withassign::~ostream_withassign()
     @ostrstream@$bctr$qpcii        @752 ; ostrstream::ostrstream(char*,int,int)
     @ostrstream@$bctr$qpucii       @754 ; ostrstream::ostrstream(unsigned char*,int,int)
-    @ostrstream@$bctr$qpzcii       @753 ; ostrstream::ostrstream(char*,int,int)
+    @ostrstream@$bctr$qpzcii       @753 ; ostrstream::ostrstream(signed char*,int,int)
     @ostrstream@$bctr$qv           @755 ; ostrstream::ostrstream()
     @ostrstream@$bdtr$qv           @756 ; ostrstream::~ostrstream()
     @pow$qdr7complex               @396 ; pow(double,complex&)
@@ -291,13 +293,19 @@ EXPORTS
     @string@$bcall$qrx7TRegexpui   @495 ; string::operator ()(const TRegexp&,unsigned int)
     @string@$bcall$qui             @493 ; string::operator ()(unsigned int)
     @string@$bcall$xqrx7TRegexpui  @496 ; string::operator ()(const TRegexp&,unsigned int) const
+    @string@$bctr$qc               @878 ; string::string(char)
+    @string@$bctr$qcui             @879 ; string::string(char,unsigned int)
     @string@$bctr$qp11HINSTANCE__uii @647 ; string::string(HINSTANCE__*,unsigned int,int)
     @string@$bctr$qpxc             @468 ; string::string(const char*)
     @string@$bctr$qpxcuiui         @469 ; string::string(const char*,unsigned int,unsigned int)
     @string@$bctr$qrx10TSubString  @471 ; string::string(const TSubString&)
     @string@$bctr$qrx6string       @467 ; string::string(const string&)
     @string@$bctr$qrx6stringuiui   @470 ; string::string(const string&,unsigned int,unsigned int)
+    @string@$bctr$quc              @882 ; string::string(unsigned char)
+    @string@$bctr$qucui            @883 ; string::string(unsigned char,unsigned int)
     @string@$bctr$qv               @466 ; string::string()
+    @string@$bctr$qzc              @880 ; string::string(signed char)
+    @string@$bctr$qzcui            @881 ; string::string(signed char,unsigned int)
     @string@$bdtr$qv               @525 ; string::~string()
     @string@append$qpxc            @447 ; string::append(const char*)
     @string@append$qpxcuiui        @448 ; string::append(const char*,unsigned int,unsigned int)
@@ -367,7 +375,7 @@ EXPORTS
     @strstreambuf@$bctr$qpcit1     @798 ; strstreambuf::strstreambuf(char*,int,char*)
     @strstreambuf@$bctr$qpql$pvpqpv$v @794 ; strstreambuf::strstreambuf(void*(*)(long),void(*)(void*))
     @strstreambuf@$bctr$qpucit1    @797 ; strstreambuf::strstreambuf(unsigned char*,int,unsigned char*)
-    @strstreambuf@$bctr$qpzcit1    @796 ; strstreambuf::strstreambuf(char*,int,char*)
+    @strstreambuf@$bctr$qpzcit1    @796 ; strstreambuf::strstreambuf(signed char*,int,signed char*)
     @strstreambuf@$bctr$qv         @793 ; strstreambuf::strstreambuf()
     @strstreambuf@$bdtr$qv         @800 ; strstreambuf::~strstreambuf()
     @strstreambuf@doallocate$qv    @799 ; strstreambuf::doallocate()
@@ -400,477 +408,483 @@ EXPORTS
     @xmsg@$bctr$qrx6string         @421 ; xmsg::xmsg(const string&)
     @xmsg@$bdtr$qv                 @423 ; xmsg::~xmsg()
     @xmsg@raise$qv                 @424 ; xmsg::raise()
-    __8087                         @274
-    __CurrExcContext               @435
-    __ErrorExit                    @601
-    __ErrorMessage                 @599
-    __ExceptionHandler             @433
-    __Global_unwind                @434
-    __Local_unwind                 @431
-    __LocaleLibName                @295
+    __8087                         @274 
+    __CurrExcContext               @435 
+    __ErrorExit                    @601 
+    __ErrorMessage                 @599 
+    __ExceptionHandler             @433 
+    __Global_unwind                @434 
+    __Local_unwind                 @431 
+    __LocaleLibName                @295 
     __Return_unwind                @432
-    __SetUserHandler               @47
-    ___ErrorMessage                @600
-    ___JumpToCatch__               @867
-    ___assertfail                  @6
-    ___bcd_log10                   @12
-    ___bcd_pow10                   @13
-    ___bcd_tobinary                @10
-    ___bcd_todecimal               @11
+    __SetUserHandler               @47  
+    ___ErrorMessage                @600 
+    ___JumpToCatch__               @867 
+    ___assertfail                  @6   
+    ___bcd_log10                   @12  
+    ___bcd_pow10                   @13  
+    ___bcd_tobinary                @10  
+    ___bcd_todecimal               @11  
+    ___errno                       @874 
     ___ftruncate                   @557
-    ___isctype                     @129
-    ___matherr                     @276
-    ___matherrl                    @275
-    ___uninitialize_locale         @330
-    __argc                         @178
-    __argv                         @179
-    __assert                       @5
-    __atold                        @290
-    __c_exit                       @60
+    ___getStream                   @877 
+    ___isctype                     @129 
+    ___matherr                     @276 
+    ___matherrl                    @275 
+    ___uninitialize_locale         @330 
+    __alloca                       @873 
+    __argc                         @178 
+    __argv                         @179 
+    __assert                       @5   
+    __atold                        @290 
+    __c_exit                       @60  
     __cexit                        @59
-    __chdrive                      @569
-    __chmod                        @559
-    __clear87                      @293
-    __close                        @561
-    __control87                    @304
-    __creat                        @268
-    __crotl                        @33
-    __crotr                        @34
-    __ctype                        @38
+    __chdrive                      @569 
+    __chmod                        @559 
+    __clear87                      @293 
+    __close                        @561 
+    __control87                    @304 
+    __creat                        @268 
+    __crotl                        @33  
+    __crotr                        @34  
+    __ctype                        @38  
     __daylight                     @248
-    __default87                    @40
-    __directvideo                  @574
-    __dos_close                    @580
-    __dos_creat                    @581
-    __dos_creatnew                 @582
-    __dos_findfirst                @586
-    __dos_findnext                 @587
-    __dos_getdate                  @588
-    __dos_getdiskfree              @583
-    __dos_getdrive                 @590
-    __dos_getfileattr              @584
+    __default87                    @40  
+    __directvideo                  @574 
+    __dos_close                    @580 
+    __dos_creat                    @581 
+    __dos_creatnew                 @582 
+    __dos_findfirst                @586 
+    __dos_findnext                 @587 
+    __dos_getdate                  @588 
+    __dos_getdiskfree              @583 
+    __dos_getdrive                 @590 
+    __dos_getfileattr              @584 
     __dos_getftime                 @592
-    __dos_gettime                  @589
-    __dos_open                     @593
-    __dos_read                     @594
-    __dos_setdate                  @595
-    __dos_setdrive                 @591
-    __dos_setfileattr              @585
-    __dos_setftime                 @597
-    __dos_settime                  @596
-    __dos_write                    @598
+    __dos_gettime                  @589 
+    __dos_open                     @593 
+    __dos_read                     @594 
+    __dos_setdate                  @595 
+    __dos_setdrive                 @591 
+    __dos_setfileattr              @585 
+    __dos_setftime                 @597 
+    __dos_settime                  @596 
+    __dos_write                    @598 
     __doserrno                     @616
-    __environ                      @629
-    __exit                         @58
-    __expand                       @170
-    __expand_wild                  @263
-    __expandptr                    @180
-    __fgetc                        @133
-    __fileinfo                     @16
-    __flushout                     @869
-    __fpreset                      @316
-    __fputc                        @269
-    __fsopen                       @270
+    __environ                      @629 
+    __exit                         @58  
+    __expand                       @170 
+    __expand_wild                  @263 
+    __expandptr                    @180 
+    __fgetc                        @133 
+    __fileinfo                     @16  
+    __flushout                     @869 
+    __fpreset                      @316 
+    __fputc                        @269 
+    __fsopen                       @270 
     __ftol                         @319
-    __ftruncate                    @84
-    __fullpath                     @605
-    __get_osfhandle                @623
-    __getdcwd                      @612
-    __heapadd                      @100
-    __heapchk                      @101
-    __heapmin                      @105
-    __heapset                      @106
-    __heapwalk                     @107
-    __huge_dble                    @322
+    __ftruncate                    @84  
+    __fullpath                     @605 
+    __get_osfhandle                @623 
+    __getdcwd                      @612 
+    __heapchk                      @101 
+    __heapmin                      @105 
+    __heapset                      @106 
+    __heapwalk                     @107 
+    __huge_dble                    @322 
     __huge_flt                     @321
-    __huge_ldble                   @323
-    __indefinite                   @324
-    __llocaleconv                  @336
-    __localeconvention             @297
-    __lower                        @298
-    __lrand                        @167
-    __lrotl                        @135
-    __lrotr                        @136
-    __lsetlocale                   @335
-    __lstrcoll                     @338
-    __lstrftime                    @337
+    __huge_ldble                   @323 
+    __indefinite                   @324 
+    __llocaleconv                  @336 
+    __localeconvention             @297 
+    __lower                        @298 
+    __lrand                        @167 
+    __lrotl                        @135 
+    __lrotr                        @136 
+    __lsetlocale                   @335 
+    __lstrcoll                     @338 
+    __lstrftime                    @337 
     __lstrlwr                      @339
-    __lstrupr                      @340
-    __lstrxfrm                     @341
-    __ltolower                     @342
-    __ltoupper                     @343
-    __makepath                     @143
-    __msize                        @171
-    __nfile                        @68
-    __open                         @563
+    __lstrupr                      @340 
+    __lstrxfrm                     @341 
+    __ltolower                     @342 
+    __ltoupper                     @343 
+    __makepath                     @143 
+    __messagefile                  @875 
+    __msize                        @171 
+    __nfile                        @68  
+    __open                         @563 
     __open_osfhandle               @624
-    __oscmd                        @204
-    __osenv                        @203
-    __osmajor                      @642
-    __osminor                      @643
-    __osmode                       @644
-    __osversion                    @645
-    __pLocale                      @294
-    __pclose                       @271
-    __pipe                         @564
-    __popen                        @272
+    __oscmd                        @204 
+    __osenv                        @203 
+    __osmajor                      @642 
+    __osminor                      @643 
+    __osmode                       @644 
+    __ostype                       @876 
+    __osversion                    @645 
+    __pLocale                      @294 
+    __pclose                       @271 
+    __pipe                         @564 
+    __popen                        @272 
     __read                         @566
-    __rotl                         @175
-    __rotr                         @176
-    __rtl_chmod                    @558
-    __rtl_close                    @560
-    __rtl_creat                    @267
-    __rtl_heapwalk                 @108
-    __rtl_open                     @562
-    __rtl_read                     @565
-    __rtl_write                    @868
+    __rotl                         @175 
+    __rotr                         @176 
+    __rtl_chmod                    @558 
+    __rtl_close                    @560 
+    __rtl_creat                    @267 
+    __rtl_heapwalk                 @108 
+    __rtl_open                     @562 
+    __rtl_read                     @565 
+    __rtl_write                    @868 
     __searchenv                    @198
-    __searchstr                    @200
-    __setargv                      @181
-    __setcursortype                @575
-    __setlocalebuff                @279
-    __setlocalelib                 @277
-    __setstrcoll                   @278
-    __setstrxfrm                   @280
-    __sleep                        @634
-    __splitpath                    @195
-    __startup                      @205
-    __startupd                     @206
+    __searchstr                    @200 
+    __setargv                      @181 
+    __setcursortype                @575 
+    __setlocalebuff                @279 
+    __setlocalelib                 @277 
+    __setstrcoll                   @278 
+    __setstrxfrm                   @280 
+    __sleep                        @634 
+    __splitpath                    @195 
+    __startup                      @205 
+    __startupd                     @206 
     __status87                     @364
-    __stkbase                      @418
-    __stkchk                       @417
-    __stpcpy                       @273
-    __strdate                      @637
-    __streams                      @67
-    __strerror                     @217
-    __strtime                      @638
-    __strtold                      @366
-    __sys_errlist                  @157
+    __stkbase                      @418 
+    __stkchk                       @417 
+    __stpcpy                       @273 
+    __strdate                      @637 
+    __streams                      @67  
+    __strerror                     @217 
+    __strtime                      @638 
+    __strtold                      @366 
+    __sys_errlist                  @157 
     __sys_nerr                     @158
-    __timezone                     @249
-    __tiny_ldble                   @325
-    __tzname                       @250
-    __unsetuserhandler             @48
-    __upper                        @299
-    __version                      @646
-    __write                        @567
-    __wscroll                      @266
-    _abort                         @1
-    _abs                           @2
-    _access                        @3
+    __timezone                     @249 
+    __tiny_ldble                   @325 
+    __tzname                       @250 
+    __unsetuserhandler             @48  
+    __upper                        @299 
+    __version                      @646 
+    __write                        @567 
+    __wscroll                      @266 
+    _abort                         @1   
+    _abs                           @2   
+    _access                        @3   
     _acos                          @282
-    _acosl                         @284
-    _alloca                        @4
-    _asctime                       @36
-    _asin                          @281
-    _asinl                         @283
-    _atan                          @285
-    _atan2                         @286
-    _atan2l                        @287
-    _atanl                         @288
+    _acosl                         @284 
+    _alloca                        @4   
+    _asctime                       @36  
+    _asin                          @281 
+    _asinl                         @283 
+    _atan                          @285 
+    _atan2                         @286 
+    _atan2l                        @287 
+    _atanl                         @288 
     _atexit                        @7
-    _atof                          @289
-    _atoi                          @8
-    _atol                          @9
-    _bsearch                       @14
-    _calloc                        @15
-    _ceil                          @291
-    _ceill                         @292
-    _cerr                          @693
-    _cgets                         @17
-    _chdir                         @568
-    _chmod                         @570
+    _atof                          @289 
+    _atoi                          @8   
+    _atol                          @9   
+    _bsearch                       @14  
+    _calloc                        @15  
+    _ceil                          @291 
+    _ceill                         @292 
+    _cerr                          @693 
+    _cgets                         @17  
+    _chdir                         @568 
+    _chmod                         @570 
     _chsize                        @18
-    _cin                           @691
-    _clearerr                      @19
-    _clock                         @571
-    _clog                          @694
-    _close                         @20
-    _closedir                      @578
-    _clreol                        @572
-    _clrscr                        @573
-    _cos                           @300
+    _cin                           @691 
+    _clearerr                      @19  
+    _clock                         @571 
+    _clog                          @694 
+    _close                         @20  
+    _closedir                      @578 
+    _clreol                        @572 
+    _clrscr                        @573 
+    _cos                           @300 
     _cosh                          @301
-    _coshl                         @302
-    _cosl                          @303
-    _cout                          @692
-    _cprintf                       @28
-    _cputs                         @29
-    _creat                         @30
-    _creatnew                      @32
-    _creattemp                     @31
-    _cscanf                        @35
-    _ctime                         @37
-    _cwait                         @39
+    _coshl                         @302 
+    _cosl                          @303 
+    _cout                          @692 
+    _cprintf                       @28  
+    _cputs                         @29  
+    _creat                         @30  
+    _creatnew                      @32  
+    _creattemp                     @31  
+    _cscanf                        @35  
+    _ctime                         @37  
+    _cwait                         @39  
     _delline                       @109
-    _difftime                      @305
-    _div                           @42
-    _dostounix                     @242
-    _dup                           @43
-    _dup2                          @44
-    _ecvt                          @306
-    _eof                           @45
-    _errno                         @46
-    _execl                         @49
+    _difftime                      @305 
+    _div                           @42  
+    _dostounix                     @242 
+    _dup                           @43  
+    _dup2                          @44  
+    _ecvt                          @306 
+    _eof                           @45  
+    _errno                         @46  
+    _execl                         @49  
     _execle                        @50
-    _execlp                        @51
-    _execlpe                       @52
-    _execv                         @53
-    _execve                        @54
-    _execvp                        @55
-    _execvpe                       @56
-    _exit                          @57
-    _exp                           @308
-    _expl                          @309
-    _fabs                          @310
-    _fabsl                         @311
+    _execlp                        @51  
+    _execlpe                       @52  
+    _execv                         @53  
+    _execve                        @54  
+    _execvp                        @55  
+    _execvpe                       @56  
+    _exit                          @57  
+    _exp                           @308 
+    _expl                          @309 
+    _fabs                          @310 
+    _fabsl                         @311 
     _fclose                        @61
-    _fcloseall                     @21
-    _fcvt                          @307
-    _fdopen                        @62
-    _feof                          @127
-    _ferror                        @128
-    _fflush                        @63
-    _fgetc                         @132
-    _fgetchar                      @64
-    _fgetpos                       @65
+    _fcloseall                     @21  
+    _fcvt                          @307 
+    _fdopen                        @62  
+    _feof                          @127 
+    _ferror                        @128 
+    _fflush                        @63  
+    _fgetc                         @132 
+    _fgetchar                      @64  
+    _fgetpos                       @65  
     _fgets                         @66
-    _filelength                    @602
-    _findfirst                     @69
-    _findnext                      @70
-    _floor                         @312
-    _floorl                        @313
-    _flushall                      @71
-    _fmod                          @314
-    _fmodl                         @315
-    _fnmerge                       @72
-    _fnsplit                       @73
+    _filelength                    @602 
+    _fileno                        @870 
+    _findfirst                     @69  
+    _findnext                      @70  
+    _floor                         @312 
+    _floorl                        @313 
+    _flushall                      @71  
+    _fmod                          @314 
+    _fmodl                         @315 
+    _fnmerge                       @72  
+    _fnsplit                       @73  
     _fopen                         @74
-    _fprintf                       @75
-    _fputc                         @134
-    _fputchar                      @76
-    _fputs                         @77
-    _fread                         @78
-    _free                          @98
-    _freopen                       @79
-    _frexp                         @317
-    _frexpl                        @318
+    _fprintf                       @75  
+    _fputc                         @134 
+    _fputchar                      @76  
+    _fputs                         @77  
+    _fread                         @78  
+    _free                          @98  
+    _freopen                       @79  
+    _frexp                         @317 
+    _frexpl                        @318 
     _fscanf                        @80
-    _fseek                         @81
-    _fsetpos                       @83
-    _fstat                         @603
-    _ftell                         @82
-    _ftime                         @604
-    _fwrite                        @85
-    _gcvt                          @320
-    _getc                          @123
-    _getch                         @606
-    _getchar                       @124
-    _getche                        @608
+    _fseek                         @81  
+    _fsetpos                       @83  
+    _fstat                         @603 
+    _ftell                         @82  
+    _ftime                         @604 
+    _fwrite                        @85  
+    _gcvt                          @320 
+    _getc                          @123 
+    _getch                         @606 
+    _getchar                       @124 
+    _getche                        @608 
     _getcurdir                     @609
-    _getcwd                        @86
-    _getdate                       @610
-    _getdfree                      @613
-    _getdisk                       @614
-    _getenv                        @87
-    _getftime                      @88
-    _getpass                       @89
-    _getpid                        @90
-    _gets                          @91
+    _getcwd                        @86  
+    _getdate                       @610 
+    _getdfree                      @613 
+    _getdisk                       @614 
+    _getenv                        @87  
+    _getftime                      @88  
+    _getpass                       @89  
+    _getpid                        @90  
+    _gets                          @91  
     _gettext                       @96
-    _gettextinfo                   @257
-    _gettime                       @611
-    _getw                          @92
-    _gmtime                        @93
-    _gotoxy                        @95
-    _heapcheck                     @153
-    _heapcheckfree                 @102
-    _heapchecknode                 @103
-    _heapfillfree                  @104
-    _heapwalk                      @154
-    _highvideo                     @22
+    _gettextinfo                   @257 
+    _gettime                       @611 
+    _getw                          @92  
+    _gmtime                        @93  
+    _gotoxy                        @95  
+    _heapcheck                     @153 
+    _heapcheckfree                 @102 
+    _heapchecknode                 @103 
+    _heapfillfree                  @104 
+    _heapwalk                      @154 
+    _highvideo                     @22  
     _hypot                         @326
-    _hypotl                        @327
-    _insline                       @110
-    _isalnum                       @111
-    _isalpha                       @112
-    _isascii                       @122
-    _isatty                        @130
-    _iscntrl                       @113
-    _isdigit                       @114
-    _isgraph                       @115
+    _hypotl                        @327 
+    _insline                       @110 
+    _isalnum                       @111 
+    _isalpha                       @112 
+    _isascii                       @122 
+    _isatty                        @130 
+    _iscntrl                       @113 
+    _isdigit                       @114 
+    _isgraph                       @115 
     _islower                       @116
-    _isprint                       @117
-    _ispunct                       @118
-    _isspace                       @119
-    _isupper                       @120
-    _isxdigit                      @121
-    _itoa                          @140
-    _kbhit                         @617
-    _labs                          @131
-    _ldexp                         @328
-    _ldexpl                        @329
-    _ldiv                          @41
+    _isprint                       @117 
+    _ispunct                       @118 
+    _isspace                       @119 
+    _isupper                       @120 
+    _isxdigit                      @121 
+    _itoa                          @140 
+    _kbhit                         @617 
+    _labs                          @131 
+    _ldexp                         @328 
+    _ldexpl                        @329 
+    _ldiv                          @41  
     _lfind                         @137
-    _localeconv                    @296
-    _localtime                     @94
-    _lock                          @618
-    _locking                       @620
-    _log                           @331
-    _log10                         @332
-    _log10l                        @333
-    _logl                          @334
-    _longjmp                       @631
+    _localeconv                    @296 
+    _localtime                     @94  
+    _lock                          @618 
+    _locking                       @620 
+    _log                           @331 
+    _log10                         @332 
+    _log10l                        @333 
+    _logl                          @334 
+    _longjmp                       @631 
     _lowvideo                      @23
-    _lsearch                       @138
-    _lseek                         @139
-    _ltoa                          @141
-    _malloc                        @99
-    _mblen                         @344
-    _mbstowcs                      @345
-    _mbtowc                        @346
-    _memccpy                       @144
-    _memchr                        @145
-    _memcmp                        @146
-    _memcpy                        @147
+    _lsearch                       @138 
+    _lseek                         @139 
+    _ltoa                          @141 
+    _malloc                        @99  
+    _mblen                         @344 
+    _mbstowcs                      @345 
+    _mbtowc                        @346 
+    _memccpy                       @144 
+    _memchr                        @145 
+    _memcmp                        @146 
+    _memcpy                        @147 
     _memicmp                       @148
-    _memmove                       @149
-    _memset                        @150
-    _mkdir                         @621
-    _mktemp                        @151
-    _mktime                        @152
-    _modf                          @349
-    _modfl                         @350
-    _movetext                      @622
-    _normvideo                     @24
+    _memmove                       @149 
+    _memset                        @150 
+    _mkdir                         @621 
+    _mktemp                        @151 
+    _mktime                        @152 
+    _modf                          @349 
+    _modfl                         @350 
+    _movetext                      @622 
+    _normvideo                     @24  
     _open                          @155
-    _opendir                       @576
-    _perror                        @156
-    _poly                          @351
-    _polyl                         @352
-    _pow                           @353
-    _pow10                         @354
-    _pow10l                        @355
-    _powl                          @356
-    _printf                        @159
-    _putc                          @126
-    _putch                         @160
+    _opendir                       @576 
+    _perror                        @156 
+    _poly                          @351 
+    _polyl                         @352 
+    _pow                           @353 
+    _pow10                         @354 
+    _pow10l                        @355 
+    _powl                          @356 
+    _printf                        @159 
+    _putc                          @126 
+    _putch                         @160 
     _putchar                       @125
-    _putenv                        @161
-    _puts                          @162
-    _puttext                       @97
-    _putw                          @163
-    _qsort                         @164
-    _raise                         @632
-    _rand                          @165
-    _read                          @168
-    _readdir                       @577
+    _putenv                        @161 
+    _puts                          @162 
+    _puttext                       @97  
+    _putw                          @163 
+    _qsort                         @164 
+    _raise                         @632 
+    _rand                          @165 
+    _read                          @168 
+    _readdir                       @577 
     _realloc                       @169
-    _remove                        @172
-    _rename                        @625
-    _rewind                        @173
-    _rewinddir                     @579
-    _rmdir                         @626
-    _rmtmp                         @174
-    _scanf                         @177
-    _searchpath                    @199
-    _setbuf                        @182
-    _setdate                       @627
-    _setdisk                       @615
+    _remove                        @172 
+    _rename                        @625 
+    _rewind                        @173 
+    _rewinddir                     @579 
+    _rmdir                         @626 
+    _rmtmp                         @174 
+    _scanf                         @177 
+    _searchpath                    @199 
+    _setbuf                        @182 
+    _setdate                       @627 
+    _setdisk                       @615 
     _setftime                      @183
-    _setjmp                        @630
-    _setlocale                     @357
-    _setmode                       @184
-    _settime                       @628
-    _setvbuf                       @185
-    _signal                        @633
-    _sin                           @358
-    _sinh                          @359
-    _sinhl                         @360
+    _setjmp                        @630 
+    _setlocale                     @357 
+    _setmode                       @184 
+    _settime                       @628 
+    _setvbuf                       @185 
+    _signal                        @633 
+    _sin                           @358 
+    _sinh                          @359 
+    _sinhl                         @360 
     _sinl                          @361
-    _sopen                         @186
-    _spawnl                        @187
-    _spawnle                       @188
-    _spawnlp                       @189
-    _spawnlpe                      @190
-    _spawnv                        @191
-    _spawnve                       @192
-    _spawnvp                       @193
-    _spawnvpe                      @194
-    _sprintf                       @196
-    _sqrt                          @362
+    _sopen                         @186 
+    _spawnl                        @187 
+    _spawnle                       @188 
+    _spawnlp                       @189 
+    _spawnlpe                      @190 
+    _spawnv                        @191 
+    _spawnve                       @192 
+    _spawnvp                       @193 
+    _spawnvpe                      @194 
+    _sprintf                       @196 
+    _sqrt                          @362 
     _sqrtl                         @363
-    _srand                         @166
-    _sscanf                        @201
-    _stackavail                    @207
-    _stat                          @635
-    _stime                         @636
-    _stpcpy                        @208
-    _strcat                        @209
-    _strchr                        @210
-    _strcmp                        @211
+    _srand                         @166 
+    _sscanf                        @201 
+    _stackavail                    @207 
+    _stat                          @635 
+    _stime                         @636 
+    _stpcpy                        @208 
+    _strcat                        @209 
+    _strchr                        @210 
+    _strcmp                        @211 
     _strcoll                       @212
-    _strcpy                        @213
-    _strcspn                       @214
-    _strdup                        @215
-    _strerror                      @216
-    _strftime                      @218
-    _stricmp                       @219
-    _strlen                        @220
-    _strlwr                        @221
-    _strncat                       @222
-    _strncmp                       @223
-    _strncpy                       @224
+    _strcpy                        @213 
+    _strcspn                       @214 
+    _strdup                        @215 
+    _strerror                      @216 
+    _strftime                      @218 
+    _stricmp                       @219 
+    _strlen                        @220 
+    _strlwr                        @221 
+    _strncat                       @222 
+    _strncmp                       @223 
+    _strncpy                       @224 
     _strnicmp                      @225
-    _strnset                       @226
-    _strpbrk                       @227
-    _strrchr                       @228
-    _strrev                        @229
-    _strset                        @230
-    _strspn                        @231
-    _strstr                        @232
-    _strtod                        @365
-    _strtok                        @233
+    _strnset                       @226 
+    _strpbrk                       @227 
+    _strrchr                       @228 
+    _strrev                        @229 
+    _strset                        @230 
+    _strspn                        @231 
+    _strstr                        @232 
+    _strtod                        @365 
+    _strtok                        @233 
     _strtol                        @234
-    _strtoul                       @235
-    _strupr                        @236
-    _strxfrm                       @237
-    _swab                          @238
-    _system                        @639
-    _tan                           @367
-    _tanh                          @368
-    _tanhl                         @369
-    _tanl                          @370
-    _tell                          @239
-    _tempnam                       @240
+    _strtoul                       @235 
+    _strupr                        @236 
+    _strxfrm                       @237 
+    _swab                          @238 
+    _system                        @639 
+    _tan                           @367 
+    _tanh                          @368 
+    _tanhl                         @369 
+    _tanl                          @370 
+    _tell                          @239 
+    _tempnam                       @240 
     _textattr                      @25
-    _textbackground                @26
-    _textcolor                     @27
-    _textmode                      @241
-    _time                          @640
-    _tmpfile                       @244
-    _tmpnam                        @245
-    _tolower                       @246
-    _toupper                       @247
-    _tzset                         @251
+    _textbackground                @26  
+    _textcolor                     @27  
+    _textmode                      @241 
+    _time                          @640 
+    _tmpfile                       @244 
+    _tmpnam                        @245 
+    _tolower                       @246 
+    _toupper                       @247 
+    _tzset                         @251 
     _ultoa                         @142
-    _umask                         @252
-    _ungetc                        @253
-    _ungetch                       @607
-    _unixtodos                     @243
-    _unlink                        @254
-    _unlock                        @619
-    _utime                         @641
-    _vfprintf                      @255
-    _vfscanf                       @256
-    _vprintf                       @258
-    _vscanf                        @259
+    _umask                         @252 
+    _ungetc                        @253 
+    _ungetch                       @607 
+    _unixtodos                     @243 
+    _unlink                        @254 
+    _unlock                        @619 
+    _utime                         @641 
+    _vfprintf                      @255 
+    _vfscanf                       @256 
+    _vprintf                       @258 
+    _vscanf                        @259 
     _vsprintf                      @197
-    _vsscanf                       @202
-    _wait                          @260
-    _wcstombs                      @347
-    _wctomb                        @348
-    _wherex                        @261
-    _wherey                        @262
-    _window                        @264
-    _write                         @265
+    _vsscanf                       @202 
+    _wait                          @260 
+    _wcslen                        @100 
+    _wcstombs                      @347 
+    _wctomb                        @348 
+    _wherex                        @261 
+    _wherey                        @262 
+    _window                        @264 
+    _write                         @265 

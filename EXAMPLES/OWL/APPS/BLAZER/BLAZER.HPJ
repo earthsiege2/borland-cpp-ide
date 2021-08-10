@@ -1,0 +1,11 @@
+[Config]
+BrowseButtons()
+
+[Options]
+Title=Blazer Help File
+
+[Files]
+blazer.rtf
+
+[Map]
+#include <helpids.hh>

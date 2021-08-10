@@ -1,16 +1,29 @@
 //----------------------------------------------------------------------------
 // ObjectWindows
-// (C) Copyright 1991, 1994 by Borland International, All Rights Reserved
+// Copyright (c) 1991, 1996 by Borland International, All Rights Reserved
 //
-//   Implemenation ofclass TCheckBox.  This defines the basic behavior
-//   for all check boxes.
+//$Revision:   10.8  $
+//
+// Implemenation of class TCheckBox.  This defines the basic behavior for all
+// check boxes.
 //----------------------------------------------------------------------------
 #pragma hdrignore SECTION
-#include <owl/owlpch.h>
-#include <owl/checkbox.h>
-#include <owl/groupbox.h>
-#include <owl/applicat.h>
-#include <bwcc.h>
+#include <owl/pch.h>
+#if !defined(OWL_CHECKBOX_H)
+# include <owl/checkbox.h>
+#endif
+#if !defined(OWL_GROUPBOX_H)
+# include <owl/groupbox.h>
+#endif
+#if !defined(OWL_APPLICAT_H)
+# include <owl/applicat.h>
+#endif
+
+#if defined(BI_COMP_BORLANDC)
+# include <bwcc.h>
+#endif
+
+DIAG_DECLARE_GROUP(OwlControl);
 
 #if !defined(SECTION) || SECTION == 1
 
@@ -36,6 +49,8 @@ TCheckBox::TCheckBox(TWindow*        parent,
   // Don't use TButton's inherited style - it conflicts with BS_AUTOCHECKBOX
   //
   Attr.Style = WS_CHILD | WS_VISIBLE | WS_TABSTOP | BS_AUTOCHECKBOX;
+
+  TRACEX(OwlControl, OWL_CDLEVEL, "TCheckBox constructed @" << (void*)this);
 }
 
 //
@@ -48,10 +63,21 @@ TCheckBox::TCheckBox(TWindow*   parent,
                      int        resourceId,
                      TGroupBox* group,
                      TModule*   module)
-  : TButton(parent, resourceId, module)
+:
+  TButton(parent, resourceId, module)
 {
   Group = group;
   EnableTransfer();
+
+  TRACEX(OwlControl, OWL_CDLEVEL, "TCheckBox constructed from resource @" << (void*)this);
+}
+
+//
+// Output a trace message if using the diagnostic libraries.
+//
+TCheckBox::~TCheckBox()
+{
+  TRACEX(OwlControl, OWL_CDLEVEL, "TCheckBox destructed @" << (void*)this);
 }
 
 //
@@ -60,10 +86,14 @@ TCheckBox::TCheckBox(TWindow*   parent,
 char far*
 TCheckBox::GetClassName()
 {
-  if (GetApplication()->BWCCEnabled())
+#if defined(BI_COMP_BORLANDC)
+  if (GetApplication()->BWCCEnabled()) {
+    TRACEX(OwlControl, 1, "BWCC checkbox used for classname @" << (void*)this);
     return CHECK_CLASS;
-  else
-    return "BUTTON";
+  }
+#endif
+  TRACEX(OwlControl, 1, "Regular checkbox used for classname @" << (void*)this);
+  return "BUTTON";
 }
 
 //
@@ -99,6 +129,7 @@ TCheckBox::Transfer(void* buffer, TTransferDirection direction)
 void
 TCheckBox::SetCheck(uint check)
 {
+  PRECONDITION(GetHandle());
   SendMessage(BM_SETCHECK, check);
 
   if (Group)
@@ -138,6 +169,8 @@ TCheckBox::BNClicked()
 
 IMPLEMENT_STREAMABLE1(TCheckBox, TButton);
 
+#if !defined(BI_NO_OBJ_STREAMING)
+
 //
 // reads an instance of TCheckBox from the passed ipstream
 //
@@ -149,6 +182,8 @@ TCheckBox::Streamer::Read(ipstream& is, uint32 /*version*/) const
   return GetObject();
 }
 
+#if !defined(BI_NO_OBJ_STREAMING)
+
 //
 // writes the TCheckBox to the passed opstream
 //
@@ -158,4 +193,8 @@ TCheckBox::Streamer::Write(opstream& os) const
   WriteBaseObject((TButton*)GetObject(), os);
   os << GetObject()->Group;
 }
+#endif  // if !defined(BI_NO_OBJ_STREAMING)
+
+#endif  // if !defined(BI_NO_OBJ_STREAMING)
+
 #endif

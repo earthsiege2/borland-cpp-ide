@@ -1,8 +1,10 @@
 //----------------------------------------------------------------------------
 // ObjectWindows
-// (C) Copyright 1992, 1994 by Borland International, All Rights Reserved
+// Copyright (c) 1992, 1996 by Borland International, All Rights Reserved
 //
-//   TEventHandler and related classes & macros
+//$Revision:   10.3  $
+//
+// Definition of TEventHandler and related classes & macros
 //----------------------------------------------------------------------------
 #if !defined(OWL_EVENTHAN_H)
 #define OWL_EVENTHAN_H
@@ -14,10 +16,15 @@
 # include <owl/dispatch.h>
 #endif
 
+// Generic definitions/compiler options (eg. alignment) preceeding the 
+// definition of classes
+#include <services/preclass.h>
+
+//
+// Class/operator which converts a Windows message to its string equivalent for
+// use with the diagnostic library
+//
 #if defined(__TRACE) || defined(__WARN)
-  //
-  // class/operator which converts a Windows message to its string equivalent
-  //
   class _EXPCLASS ostream;
   class _OWLCLASS MsgName {
     public:
@@ -28,6 +35,10 @@
   };
 #endif
 
+//
+// Modifier macro used with response tables to put them in far segments if
+// needed.
+//
 #if defined(OWLRTFAR)
 # define __RTFAR  __far
 #else
@@ -35,7 +46,7 @@
 #endif
 
 //
-// messages defined for OWL use - the top of the user range of ids is reserved
+// Messages defined for OWL use - the top of the user range of ids is reserved
 //
 #define WM_OWLLAST        0x7FFF
 #define WM_OWLFIRST       (WM_OWLLAST - 0x03FF)
@@ -52,13 +63,45 @@
 #define WM_VBXBASE        (WM_OWLLAST - 8 - 256)
 #define WM_OWLWAKEUP      (WM_VBXBASE - 1)
 
-template <class T> class TResponseTableEntry;  // forward declaration
+//
+// Portable types for message & event components
+//
+typedef LRESULT TResult;  // Returned result of a message
+typedef uint    TMsgId;   // Message ID type 
+typedef WPARAM  TParam1;  // Type of first message parameter (uint)
+typedef LPARAM  TParam2;  // Type of second message parameter (uint32)
+
+template <class T1, class T2>
+inline TParam2 MkParam2(const T1& lo, const T2& hi) {
+  return (uint32(hi) << 16) | uint16(lo);
+}
+#if !defined(BI_PLAT_WIN16)
+inline TParam1 MkParam1(uint lo, uint hi) {
+  return (uint32(hi) << 16) | uint16(lo);
+}
+#endif
+
+struct TMsg {  //  : public tagMSG
+  HWND    HWnd;
+  uint    Message;
+  TParam1 Param1;
+  TParam2 Param2;
+  uint32  Time;
+  TPoint  Pt;
+
+  operator MSG&() {return *this;}
+};
+
+//
+// Forward declarations
+//
+template <class T> class TResponseTableEntry;
 typedef TResponseTableEntry<GENERIC>  TGenericTableEntry;
 
 //
-//  class TEventHandler
-//  ----- -------------
-//  base class from which to derive classes that can handle events
+// class TEventHandler
+// ~~~~~ ~~~~~~~~~~~~~
+// Base class from which to derive classes that can handle events
 //
 class _OWLCLASS _RTTI TEventHandler {
   public:
@@ -69,19 +112,16 @@ class _OWLCLASS _RTTI TEventHandler {
         GENERIC*                    Object;
         TGenericTableEntry __RTFAR* Entry;
 
-        TEventInfo(uint msg, uint id = 0) : Msg(msg), Id(id) {Entry = 0;}
+        TEventInfo(uint msg, uint id=0) : Msg(msg), Id(id) {Entry = 0;}
     };
     typedef bool(*TEqualOperator)(TGenericTableEntry __RTFAR&, TEventInfo&);
 
-    //
-    // searches the list of response table entries looking for a match
-    //
-    // since class TEventHandler doesn't have any entries, this routine just
-    // returns false
+    // Searches the list of response table entries looking for a match
     //
     virtual bool     Find(TEventInfo& info, TEqualOperator op = 0);
 
-    virtual LRESULT  Dispatch(TEventInfo& info, WPARAM wp, LPARAM lp = 0);
+    TResult          Dispatch(TEventInfo& info, TParam1 p1, TParam2 p2 = 0);
+    TResult          DispatchMsg(uint msg, uint id, TParam1 p1, TParam2 p2);
 
   protected:
     bool             SearchEntries(TGenericTableEntry __RTFAR* entries,
@@ -90,9 +130,9 @@ class _OWLCLASS _RTTI TEventHandler {
 };
 
 //
-//  template class TResponseTableEntry
-//  -------- ----- -------------------
-//  entries into a response table
+// class TResponseTableEntry<>
+// ~~~~~ ~~~~~~~~~~~~~~~~~~~~~
+// Entry in a response table
 //
 template <class T> class TResponseTableEntry {
   public:
@@ -107,8 +147,12 @@ template <class T> class TResponseTableEntry {
     PMF             Pmf;
 };
 
+// Generic definitions/compiler options (eg. alignment) following the 
+// definition of classes
+#include <services/posclass.h>
+
 //
-// macros to declare a response table
+// Macros to declare a response table
 //
 #define DECLARE_RESPONSE_TABLE(cls)\
   private:\
@@ -125,9 +169,9 @@ template <class T> class TResponseTableEntry {
   TResponseTableEntry< cls > __RTFAR  cls::__entries[] = {
 
 //
-// macro to define a response table for a class with no base response tables
+// Macro to define a response table for a class with no base response tables
 //
-// you use it like this:
+// Use it like this:
 //    DEFINE_RESPONSE_TABLE(cls)
 //      EV_WM_PAINT,
 //      EV_WM_LBUTTONDOWN,
@@ -140,7 +184,7 @@ template <class T> class TResponseTableEntry {
   DEFINE_RESPONSE_TABLE_ENTRIES(cls)
 
 //
-// macro to define a response table for a class with one base. use this macro
+// Macro to define a response table for a class with one base. Use this macro
 // exactly like macro DEFINE_RESPONSE_TABLE
 //
 #define DEFINE_RESPONSE_TABLE1(cls, base)\
@@ -151,7 +195,7 @@ template <class T> class TResponseTableEntry {
   DEFINE_RESPONSE_TABLE_ENTRIES(cls)
 
 //
-// macro to define a response table for a class with two bases. use this macro
+// Macro to define a response table for a class with two bases. Use this macro
 // exactly like macro DEFINE_RESPONSE_TABLE
 //
 #define DEFINE_RESPONSE_TABLE2(cls, base1, base2)\
@@ -163,7 +207,7 @@ template <class T> class TResponseTableEntry {
   DEFINE_RESPONSE_TABLE_ENTRIES(cls)
 
 //
-// macro to define a response table for a class with three bases. use this macro
+// Macro to define a response table for a class with three bases. Use this macro
 // exactly like macro DEFINE_RESPONSE_TABLE
 //
 #define DEFINE_RESPONSE_TABLE3(cls, base1, base2, base3)\

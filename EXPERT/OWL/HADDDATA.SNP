@@ -25,21 +25,19 @@
 ##*
 ##--END-- ? ClassMarker [[Search]]
 ##^BOL
-##OLEType == "TAutoBool"
-##      :"TAutoBool" CPPType
 ##*
-##(OLEType == CPPType) && (OLEType != "TAutoCurrency") && (OLEType != "TAutoDate") && (OLEType != "TAutoBool")
+## (OLEType == CPPType) && (OLEType != "TAutoCurrency") && (OLEType != "TAutoDate")
 ##--BEGIN-- StripPtrRef(CPPType, [[StripCPPType]]) [[AnyStripping]]
 ##      !AnyStripping
 AUTODATA([[InternalName]], [[InternalName]], TAutoObject<[[StripCPPType]]>, )
 ##      AnyStripping
 AUTODATA([[InternalName]], [[InternalName]], TAutoObject<[[StripCPPType]]>, )
 ##--END-- StripPtrRef(CPPType) [[StripCPPType]]
-##(OLEType != CPPType) && (OLEType != "TAutoString") && (OLEType != "TAutoBool")
+## (OLEType != CPPType) && (OLEType != "TAutoString")
 AUTODATA([[InternalName]], [[InternalName]], [[CPPType]], )
-##(OLEType == CPPType) && ((OLEType == "TAutoCurrency") || (OLEType == "TAutoDate") || (OLEType == "TAutoBool"))
+## (OLEType == CPPType) && ((OLEType == "TAutoCurrency") || (OLEType == "TAutoDate"))
 AUTODATA([[InternalName]], [[InternalName]], [[CPPType]], )
-##(OLEType == "TAutoString") && (CPPType != "string")
+## (OLEType == "TAutoString") && (CPPType != "string")
 AUTODATA([[InternalName]], [[InternalName]], TAutoString, )
-##(OLEType == "TAutoString") && (CPPType == "string")
+## (OLEType == "TAutoString") && (CPPType == "string")
 AUTODATA([[InternalName]], [[InternalName]], string, )

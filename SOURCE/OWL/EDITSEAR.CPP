@@ -1,17 +1,27 @@
 //----------------------------------------------------------------------------
 // ObjectWindows
-// (C) Copyright 1992, 1994 by Borland International, All Rights Reserved
+// Copyright (c) 1992, 1996 by Borland International, All Rights Reserved
 //
-//   Implementation of class TEditWindow, an edit control that responds to
-//   Find, Replace and FindNext commands.
+//$Revision:   10.5  $
+//
+// Implementation of class TEditWindow, an edit control that responds to Find,
+// Replace and FindNext commands.
 //----------------------------------------------------------------------------
 #pragma hdrignore SECTION
-#include <owl/owlpch.h>
-#include <owl/editsear.h>
-#include <owl/applicat.h>
-#include <owl/edit.h>
-#include <owl/findrepl.h>
-#include <cstring.h>
+#include <owl/pch.h>
+#if !defined(OWL_EDITSEAR_H)
+# include <owl/editsear.h>
+#endif
+#if !defined(OWL_APPLICAT_H)
+# include <owl/applicat.h>
+#endif
+#if !defined(OWL_EDIT_H)
+# include <owl/edit.h>
+#endif
+#if !defined(OWL_FINDREPL_H)
+# include <owl/findrepl.h>
+#endif
+#include <stdio.h>
 
 #if !defined(SECTION) || SECTION == 1
 
@@ -42,6 +52,9 @@ TEditSearch::TEditSearch(TWindow*        parent,
   SearchCmd = 0;
 }
 
+//
+//
+//
 TEditSearch::~TEditSearch()
 {
   delete SearchDialog;
@@ -66,9 +79,8 @@ void
 TEditSearch::DoSearch()
 {
   do {
-#if defined(BI_PLAT_WIN32)
-    unsigned long version = ::GetVersion();
-    if (version & 0x80000000L) {
+#if defined(BI_PLAT_WIN32)  // && defined(WIN32S_SUPPORT) ??
+    if (TSystem::IsWin95() || TSystem::IsWin32s()) {  
       if (GetApplication())
         GetApplication()->PumpWaitingMessages();
     }
@@ -83,9 +95,8 @@ TEditSearch::DoSearch()
       if (SearchData.Flags & (FR_FINDNEXT|FR_REPLACE)) {
         string errTemplate(GetModule()->LoadString(IDS_CANNOTFIND));
         char  errMsg[81];
-        wsprintf(errMsg, errTemplate.c_str(), (const char far*)SearchData.FindWhat);
-        TWindow* w = SearchDialog ? (TWindow*)SearchDialog : (TWindow*)this;
-        w->MessageBox(errMsg, GetApplication()->GetName(),
+        sprintf(errMsg, errTemplate.c_str(), (const char far*)SearchData.FindWhat);
+        GetApplication()->MessageBox(0, errMsg, GetApplication()->GetName(),
                       MB_OK | MB_ICONEXCLAMATION | MB_TASKMODAL);
       }
       else if (SearchData.Flags & FR_REPLACEALL)
@@ -149,19 +160,19 @@ TEditSearch::CmEditFindNext()
 void
 TEditSearch::CeEditFindNext(TCommandEnabler& ce)
 {
-  ce.Enable((SearchData.FindWhat && *(SearchData.FindWhat)) ? true : false);
+  ce.Enable(SearchData.FindWhat && *SearchData.FindWhat);
 }
 
 //
 // Respond to the message sent by the modeless find/replace dialog by
 // performing a search. Or, if the dialog has terminated, zero search command
 //
-LRESULT
-TEditSearch::EvFindMsg(WPARAM, LPARAM lParam)
+TResult
+TEditSearch::EvFindMsg(TParam1, TParam2 param2)
 {
   PRECONDITION(SearchDialog);
 
-  SearchDialog->UpdateData(lParam);
+  SearchDialog->UpdateData(param2);
   if (SearchData.Flags & FR_DIALOGTERM)
     SearchCmd = 0;
 
@@ -176,6 +187,8 @@ TEditSearch::EvFindMsg(WPARAM, LPARAM lParam)
 #if !defined(SECTION) || SECTION == 2
 
 IMPLEMENT_STREAMABLE1(TEditSearch, TEdit);
+
+#if !defined(BI_NO_OBJ_STREAMING)
 
 //
 // reads an instance of TEditSearch from the passed ipstream.
@@ -203,5 +216,7 @@ TEditSearch::Streamer::Write(opstream& os) const
   GetObject()->SearchData.Write(os);
   os << GetObject()->SearchCmd;
 }
+
+#endif  // if !defined(BI_NO_OBJ_STREAMING)
 
 #endif

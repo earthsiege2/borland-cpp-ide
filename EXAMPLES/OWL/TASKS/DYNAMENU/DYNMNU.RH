@@ -1,0 +1,14 @@
+// ---------------------------------------------------------------------------
+// ObjectWindows
+// Copyright (C) 1995, 1995 by Borland International, All Rights Reserved
+// ---------------------------------------------------------------------------
+
+#define CM_ADDMENU      101
+#define CM_DELETEMENU   102
+#define CM_ENABLEMENU   103
+#define CM_DISABLEMENU  104
+
+#define CM_DYNFIRST     10000
+#define CM_DYNLAST      20000
+
+#define NUMDYNMENUITEMS (CM_DYNLAST-CM_DYNFIRST)

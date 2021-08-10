@@ -2,7 +2,7 @@
 // ObjectWindows - (C) Copyright 1991, 1994 by Borland International
 //   Tutorial application -- step11.cpp
 //----------------------------------------------------------------------------
-#include <owl/owlpch.h>
+#include <owl/pch.h>
 #include <owl/applicat.h>
 #include <owl/decmdifr.h>
 #include <owl/mdi.h>

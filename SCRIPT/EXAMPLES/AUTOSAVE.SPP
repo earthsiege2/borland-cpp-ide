@@ -1,0 +1,136 @@
+//--------------------------------------------------------------------------
+// Object Scripting
+// Copyright (c) 1996 by Borland International, All Rights Reserved
+//
+// AUTOSAVE.SPP: Autosave. Saves files, environment, desktop, project,
+//   and/or messages at the specified interval.
+//
+// USE: Set values in autosave.cfg and run script.
+//
+// FILES: AUTOSAVE.CFG, MSG.SPP, FILE.SPP, MISC.SPP   
+//
+// NOTES: All autosave.* files must reside in the same directory. 
+//--------------------------------------------------------------------------
+print "autosave.spp";
+
+//
+// IDE imports.
+//
+import IDE;
+import scriptEngine;
+
+//
+// Load support module(s).
+//
+if (!scriptEngine.IsLoaded("msg.spp")) scriptEngine.Load("msg.spp");
+if (!scriptEngine.IsLoaded("file.spp")) scriptEngine.Load("file.spp");
+if (!scriptEngine.IsLoaded("misc.spp")) scriptEngine.Load("misc.spp");
+
+//
+// Configuration values.
+//
+SaveIntervalSec;
+bSaveFiles;
+bSaveEnvironment;
+bSaveDesktop;
+bSaveProject;
+bSaveMessages;
+
+Msg = new TMsg();          // Message object.
+Seconds = 0;               // Seconds counter.
+bAutosaveComplete = TRUE;  // Reentry flag.
+
+//
+// Fully-qualified configuration file.
+//
+CFGFile = GetModuleDir("autosave.spp") + "\\autosave.cfg";
+
+autosave()
+{
+  //
+  // Load configuration values.
+  //
+  declare file = new TConfigFile(CFGFile);
+
+  SaveIntervalSec  = file.GetValue("SaveIntervalSec", "600");
+  bSaveFiles       = file.GetValue("SaveFiles", "1");
+  bSaveEnvironment = file.GetValue("SaveEnvironment", "0");
+  bSaveDesktop     = file.GetValue("SaveDesktop", "0");
+  bSaveProject     = file.GetValue("SaveProject", "0");
+  bSaveMessages    = file.GetValue("SaveMessages", "0");
+
+  file.Close();
+}
+
+//
+// Saves the specified items.
+//
+SaveItems()
+{
+  bAutosaveComplete = FALSE;  // Set flag to prevent reentry.
+
+  //
+  // If any of the items saved through the Save Options dialog are to be
+  // saved, raise a confirmation dialog first. This is necessary since that
+  // dialog is controlled with the use of SendKeys(), and the keys can go to
+  // another task if BCW is not active.
+  //
+  if (bSaveEnvironment || bSaveDesktop || bSaveProject || bSaveMessages) {
+    declare choice = IDE.YesNoDialog("Autosave?");
+    if (choice == "No" || choice == "") {
+      bAutosaveComplete = TRUE;
+      return;
+    }
+  }
+
+  // Save open buffers.
+  //
+  if (bSaveFiles) {
+    if (!IDE.FileSaveAll()) Msg.Error("Save All failed.");
+  }
+
+  //  
+  // Save the items available via the Options Save dialog. This must be done
+  // with keystrokes, so we tell the IDE Application object to raise events
+  // when dialogs are created and we later trap those events.
+  //
+  if (bSaveEnvironment || bSaveDesktop || bSaveProject || bSaveMessages) {
+    IDE.RaiseDialogCreatedEvent = TRUE;
+    if (!IDE.OptionsSave()) Msg.Error("Could not open Save Options dialog.");
+    IDE.RaiseDialogCreatedEvent = FALSE;
+  }
+
+  bAutosaveComplete = TRUE;
+}
+
+//
+// Handle the second timer events, and save if we hit the save interval.
+//
+on IDE:>SecondElapsed()
+{
+  pass();
+
+  Seconds++;
+  if (Seconds == SaveIntervalSec) {
+    Seconds = 0;
+    if (bAutosaveComplete) SaveItems();  // Save if not still saving.
+  }
+}
+
+//
+// Handle the dialog created events, and throw keys if it's the Save Options
+// dialog.
+//
+on IDE:>DialogCreated(dlgName, hDlg)
+{
+  if (dlgName == "Save Options") {
+     declare keys = "e" + (bSaveEnvironment ? "{VK_ADD}" : "-") +
+                    "d" + (bSaveDesktop ? "{VK_ADD}" : "-") +
+                    "p" + (bSaveProject ? "{VK_ADD}" : "-") +
+                    "m" + (bSaveMessages ? "{VK_ADD}" : "-") +
+                    "{VK_RETURN}";
+     .KeyboardManager.SendKeys(keys, TRUE);
+  }
+
+  pass(dlgName, hDlg);
+}

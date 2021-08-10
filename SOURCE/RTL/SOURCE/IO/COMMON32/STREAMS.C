@@ -7,12 +7,13 @@
  *      _unlock_all_streams - unlock the global file stream lock
  *      _lock_stream        - lock a file stream
  *      _unlock_stream      - unlock a file stream
+ *      _cleanup_stream_locks - free the global file stream lock
  *-----------------------------------------------------------------------*/
 
 /*
- *      C/C++ Run Time Library - Version 1.5
+ *      C/C++ Run Time Library - Version 2.0
  *
- *      Copyright (c) 1987, 1994 by Borland International
+ *      Copyright (c) 1987, 1996 by Borland International
  *      All Rights Reserved.
  *
  */
@@ -32,6 +33,9 @@
 #ifdef _MT
 static lock_t _stream_lock;         /* global stream lock */
 static lock_t *strm_locks;          /* table of per-stream locks */
+static int _selffree = 0;           /* used to determine whether
+                                       _unlock_stream() should free the
+                                       lock or leave it allocated */
 #endif
 
 /*---------------------------------------------------------------------*
@@ -76,6 +80,46 @@ void _RTLENTRY _init_streams(void)
     if ((_openfd[stdout->fd] & O_DEVICE) == 0)
         stdout->flags &= ~_F_TERM;
     _allocbuf(stdout, NULL, (stdout->flags & _F_TERM) ? _IONBF : _IOFBF, BUFSIZ);
+}
+
+
+/*---------------------------------------------------------------------*
+
+Name            _exit_streams - cleanup file stream table and lock
+
+Usage           void _exit_streams(void);
+
+Description     This function cleans up the file stream table and
+                the global lock that governs access to the file stream
+                table and the stream lock table.
+
+Return value    None.
+
+*---------------------------------------------------------------------*/
+
+void _RTLENTRY _exit_streams(void)
+{
+#pragma exit _exit_streams 0
+
+    _lock_all_streams();
+
+
+    if (stdin->flags & _F_BUF)
+    {
+        fflush (stdin);
+        free(stdin->buffer);
+        stdin->bsize = 0;       /* Mark this buffer as freed */
+        stdin->level = 0;
+    }
+    if (stdout->flags & _F_BUF)
+    {
+        fflush (stdout);
+        free(stdout->buffer);
+        stdout->bsize = 0;      /* Mark this buffer as freed */
+        stdout->level = 0;
+    }
+
+    _unlock_all_streams();
 }
 
 #ifdef _MT
@@ -183,6 +227,37 @@ void _lock_stream(FILE *stream)
     _lock(strm_locks[index],"locking stream");
 }
 
+
+/*---------------------------------------------------------------------*
+
+Name            _cleanup_stream_locks - free the global file stream lock
+
+Usage           void _cleanup_stream_locks(void);
+
+Description     This function frees the global lock that governs
+                access to the file stream table.
+
+Notes           This function also sets the _selffree flag to 1.  This
+                is in case a dll (like CG32) forces some cleanup calls
+                back into the EXE's RTL, and the stream locks are
+                needed again.  _lock_stream() will automatically re-
+                allocate the lock blocks again, and with this flag set
+                _unlock_stream() will also free it.
+
+Return value    None.
+
+*---------------------------------------------------------------------*/
+
+void _cleanup_stream_locks(void)
+{
+    if (strm_locks)
+    {
+        free (strm_locks);
+        strm_locks = 0;
+    }
+    _selffree = 1;
+}
+
 /*---------------------------------------------------------------------*
 
 Name            _unlock_stream - lock a file stream
@@ -209,6 +284,8 @@ Return value    None.
 void _unlock_stream(FILE *stream)
 {
     _unlock(strm_locks[stream - _streams],"unlocking stream");
+    if (_selffree)
+        _cleanup_stream_locks();
 }
 
 #endif  /* _MT */

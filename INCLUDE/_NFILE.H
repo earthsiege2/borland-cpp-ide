@@ -5,9 +5,9 @@
 */
 
 /*
- *      C/C++ Run Time Library - Version 6.5
+ *      C/C++ Run Time Library - Version 7.0
  *
- *      Copyright (c) 1991, 1994 by Borland International
+ *      Copyright (c) 1991, 1996 by Borland International
  *      All Rights Reserved.
  *
  */
@@ -17,11 +17,11 @@
 
 #if !defined(__FLAT__)
 
-#define _NFILE_ 20
+#define _NFILE_ 50
 
 #else
 
-#define _NFILE_ 40
+#define _NFILE_ 50
 
 #endif
 

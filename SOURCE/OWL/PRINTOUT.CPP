@@ -1,33 +1,52 @@
 //----------------------------------------------------------------------------
 // ObjectWindows
-// (C) Copyright 1992, 1994 by Borland International, All Rights Reserved
+// Copyright (c) 1992, 1996 by Borland International, All Rights Reserved
+//
+//$Revision:   10.2  $
 //
 //----------------------------------------------------------------------------
 #pragma hdrignore SECTION
-#include <owl/owlpch.h>
-#include <owl/printer.h>
+#include <owl/pch.h>
+#if !defined(OWL_PRINTER_H)
+# include <owl/printer.h>
+#endif
 
 #if !defined(SECTION) || SECTION == 1
 
+//
+//
+//
 TPrintout::TPrintout(const char far* title)
+:
+  Title(strnewdup(title)),
+  Banding(false),
+  ForceAllBands(true),
+  DC(0),
+  PageSize(0)
 {
-  Title = strnewdup(title);
-  Banding = false;
-  ForceAllBands = true;
 }
 
+//
+//
+//
 TPrintout::~TPrintout()
 {
-  delete Title;
+  delete[] Title;
 }
 
+//
+//
+//
 void
 TPrintout::SetPrintParams(TPrintDC* dc, TSize pageSize)
 {
-  DC = dc;
-  PageSize = pageSize;
+  SetPrintDC(dc);
+  SetPageSize(pageSize);
 }
 
+//
+//
+//
 void
 TPrintout::GetDialogInfo(int& minPage, int& maxPage,
                          int& selFromPage, int& selToPage)
@@ -37,35 +56,63 @@ TPrintout::GetDialogInfo(int& minPage, int& maxPage,
   selFromPage = selToPage = 0;
 }
 
+//
+//
+//
 void
 TPrintout::BeginPrinting()
 {
 }
 
+//
+//
+//
 void
 TPrintout::BeginDocument(int, int, unsigned)
 {
 }
 
+//
+//
+//
 bool
 TPrintout::HasPage(int page)
 {
   return page == 1;
 }
 
+//
+//
+//
 void
 TPrintout::PrintPage(int, TRect&, unsigned)
 {
 }
 
+//
+//
+//
 void
 TPrintout::EndDocument()
 {
 }
 
+//
+//
+//
 void
 TPrintout::EndPrinting()
 {
+}
+
+//
+// Set a new title for this printout. The passed title string is copied.
+//
+void
+TPrintout::SetTitle(const char far* title)
+{
+  delete[] Title;
+  Title = strnewdup(title);
 }
 
 #endif
@@ -73,6 +120,11 @@ TPrintout::EndPrinting()
 
 IMPLEMENT_STREAMABLE(TPrintout);
 
+#if !defined(BI_NO_OBJ_STREAMING)
+
+//
+//
+//
 void*
 TPrintout::Streamer::Read(ipstream& is, uint32) const
 {
@@ -82,6 +134,9 @@ TPrintout::Streamer::Read(ipstream& is, uint32) const
   return GetObject();
 }
 
+//
+//
+//
 void
 TPrintout::Streamer::Write(opstream& os) const
 {
@@ -90,5 +145,6 @@ TPrintout::Streamer::Write(opstream& os) const
   os << GetObject()->ForceAllBands;
 }
 
-#endif
+#endif  // if !defined(BI_NO_OBJ_STREAMING)
 
+#endif

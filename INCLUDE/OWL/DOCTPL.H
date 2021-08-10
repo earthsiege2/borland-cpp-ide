@@ -1,23 +1,25 @@
 //----------------------------------------------------------------------------
 // ObjectWindows
-// (C) Copyright 1993, 1994 by Borland International, All Rights Reserved
+// Copyright (c) 1993, 1996 by Borland International, All Rights Reserved
 //
-//   Defines classes TDocTemplate, TDocTemplateT<D,V>
+//$Revision:   10.4  $
+//
+// Definition of class TDocTemplate, and class template TDocTemplateT<D,V>
 //----------------------------------------------------------------------------
 #if !defined(OWL_DOCTPL_H)
 #define OWL_DOCTPL_H
 
-#if !defined(OWL_OWLDEFS_H)
-# include <owl/owldefs.h>
+#if !defined(OWL_DEFS_H)
+# include <owl/defs.h>
 #endif
-#if !defined(OSL_LOCALE_H)
-# include <osl/locale.h>
+#if !defined(WINSYS_REGISTRY_H)
+# include <winsys/registry.h>
 #endif
 #if !defined(CLASSLIB_OBJSTRM_H)
 # include <classlib/objstrm.h>
 #endif
 
-#if defined(_OWLDLL) && defined(__DLL__) && !defined(BI_PLAT_WIN32)
+#if defined(_OWLDLL) && defined(BI_APP_DLL) && !defined(BI_PLAT_WIN32)
 # define _DOCVIEWENTRY __export   // templates in a DLL using DLLs
 #else
 # define _DOCVIEWENTRY
@@ -29,49 +31,58 @@ class _OWLCLASS TModule;
 class _OWLCLASS TDocument;
 class _OWLCLASS TView;
 
-extern TDocTemplate* DocTemplateStaticHead;// templates constructed before app
+//
+// Templates constructed before app get linked onto this head pointer
+//
+extern TDocTemplate* DocTemplateStaticHead;
+
+// Generic definitions/compiler options (eg. alignment) preceeding the 
+// definition of classes
+#include <services/preclass.h>
 
 //
-//  class TDocTemplate
-//  ----- ------------
-//
+// class TDocTemplate
+// ~~~~~ ~~~~~~~~~~~~
 class _OWLCLASS TDocTemplate : public TRegLink, public TStreamableBase {
   public:
-    virtual TDocument* ConstructDoc(TDocument* parent = 0) = 0;
-    virtual TView*     ConstructView(TDocument& doc) = 0;
-    virtual TDocument* IsMyKindOfDoc(TDocument& doc) = 0;
-    virtual TView*     IsMyKindOfView(TView& view) = 0;
+    virtual TDocument*      ConstructDoc(TDocument* parent = 0) = 0;
+    virtual TView*          ConstructView(TDocument& doc) = 0;
+    virtual TDocument*      IsMyKindOfDoc(TDocument& doc) = 0;
+    virtual TView*          IsMyKindOfView(TView& view) = 0;
     virtual const char far* GetViewName() = 0;
-    bool               IsVisible();     // displayable in file select dialogs
-    virtual TDocTemplate* Clone(TModule* module,
-                                TDocTemplate*& phead=DocTemplateStaticHead)=0;
-    TDocManager*    GetDocManager() const {return DocManager;}
-    void            SetDocManager(TDocManager* dm) {DocManager = dm;}
-    const char far* GetDirectory() const;
-    void            SetDirectory(const char far*);
-    void            SetDirectory(const char far*, int len);
-    TDocTemplate*   GetNextTemplate() const {return (TDocTemplate*)Next;}
-    bool            IsFlagSet(long flag) const {return ToBool(GetFlags()&flag);}
-    long            GetFlags() const {return Flags;}
-    void            SetFlag(long flag);
-    void            ClearFlag(long flag);
-    bool            IsStatic() {return ToBool(RefCnt & 0x8000);}
-    TModule*&       GetModule() {return *ModulePtr;}
-    void            SetModule(TModule* module) {ModuleDeref = module;
-                                                ModulePtr = &ModuleDeref;}
 
-  protected:                // called only from parameterized subclass
+    bool                    IsVisible(); // displayable in file select dialogs
+    virtual TDocTemplate*   Clone(TModule* module,
+                                  TDocTemplate*& phead=DocTemplateStaticHead)=0;
+
+    TDocManager*            GetDocManager() const;
+    void                    SetDocManager(TDocManager* dm);
+    const char far*         GetDirectory() const;
+    void                    SetDirectory(const char far*);
+    void                    SetDirectory(const char far*, int len);
+    TDocTemplate*           GetNextTemplate() const;
+    bool                    IsFlagSet(long flag) const;
+    long                    GetFlags() const;
+    void                    SetFlag(long flag);
+    void                    ClearFlag(long flag);
+    bool                    IsStatic() const;
+    TModule*&               GetModule();
+    void                    SetModule(TModule* module);
+    int                     GetRefCount() const;
+
+  protected:                // Called only from parameterized derived class
     TDocTemplate(TRegList& regList, TModule*& module, TDocTemplate*& phead);
    ~TDocTemplate();
 
   private:
-    char far* Directory;        // current directory path, 0 until changed
-    long      Flags;            // dt??? bits for dialogs and creation modes
-    TDocManager*  DocManager;   // pointer back to document manager
-    int       RefCnt;           // documents attached + 1 if attached to docmgr
-    TModule** ModulePtr;        // would be TModule*&, except for streaming
-    TModule*  ModuleDeref;      // used only when setting a new module
+    char far* Directory;        // Current directory path, 0 until changed
+    long      Flags;            // dtXxx bits for dialogs and creation modes
+    TDocManager* DocManager;    // Pointer back to document manager
+    int       RefCnt;           // Documents attached + 1 if attached to docmgr
+    TModule** ModulePtr;        // Would be TModule*&, except for streaming
+    TModule*  ModuleDeref;      // Used only when setting a new module
 
+#if defined(OWL2_COMPAT)
   // The following functions are maintained for backward compatability
   // with code generated for versions prior to enhanced document templates
   //
@@ -88,15 +99,16 @@ class _OWLCLASS TDocTemplate : public TRegLink, public TStreamableBase {
     void               SetDescription(const char far*);
     void               SetDefaultExt(const char far*);
 
-  protected:                // called only from parameterized subclass
+  protected:                // Called only from parameterized derived class
     TDocTemplate(const char* desc, const char* filt,
                  const char* dir,  const char* ext, long flags,
                  TModule*& module, TDocTemplate*& phead);
   private:
-    static bool       (*SelectSave_)(TDocTemplate* tpl, TDocument& doc);
-    static TView*     (*InitView_)(TView* view);
-    static TDocument* (*InitDoc_)(TDocTemplate& tpl, TDocument* doc,
+    static bool       _CALLCNVN (*SelectSave_)(TDocTemplate* tpl, TDocument& doc);
+    static TView*     _CALLCNVN (*InitView_)(TView* view);
+    static TDocument* _CALLCNVN (*InitDoc_)(TDocTemplate& tpl, TDocument* doc,
                                   const char far* path, long flags);
+#endif
 
   DECLARE_ABSTRACT_STREAMABLE(_OWLCLASS, TDocTemplate, 1);
   friend class TDocument;   // access to RefCnt
@@ -104,32 +116,35 @@ class _OWLCLASS TDocTemplate : public TRegLink, public TStreamableBase {
 };
 
 //
-//  class TDocTemplateT<D,V>
-//  ----- ------------------
-//
+// class TDocTemplateT<D,V>
+// ~~~~~ ~~~~~~~~~~~~~~~~~~
 template<class D, class V>
 class _DOCVIEWENTRY TDocTemplateT : public TDocTemplate {
   public:
     TDocTemplateT(TRegList& regList, TModule*& module = ::Module,
                   TDocTemplate*& phead = DocTemplateStaticHead);
-    TDocTemplateT(const char* filt, const char* desc,
+    TDocTemplateT(const char* desc, const char* filt,
                   const char* dir, const char* ext, long flags = 0,
                   TModule*& module = ::Module,
                   TDocTemplate*& phead = DocTemplateStaticHead);
     TDocTemplateT* Clone(TModule* module,
                          TDocTemplate*& phead = DocTemplateStaticHead);
+
     D* ConstructDoc(TDocument* parent = 0);
     V* ConstructView(TDocument& doc);
-    D* IsMyKindOfDoc(TDocument& doc);  // returns 0 if template can't support
-    V* IsMyKindOfView(TView& view);    // returns 0 if template incompatible
-    virtual const char far* GetViewName() {return V::StaticName();}
+    D* IsMyKindOfDoc(TDocument& doc);  // Returns 0 if template can't support
+    V* IsMyKindOfView(TView& view);    // Returns 0 if template incompatible
 
+    virtual const char far* GetViewName();
+
+#if defined(OWL2_COMPAT)
     // The following functions are maintained for backward compatability
     //
-    D* CreateDoc(const char far* path, long flags = 0);
+    D*     CreateDoc(const char far* path, long flags = 0);
     TView* CreateView(TDocument& doc, long flags = 0);
+#endif
 
-  // explicit expansion of DECLARE_STREAMABLE for use with parameterized class
+  // Explicit expansion of DECLARE_STREAMABLE for use with parameterized class
   // DECLARE_STREAMABLE_FROM_BASE(TDocTemplateT<D,V>);
   //
   #define TEMPLATECLASS TDocTemplateT<D,V>
@@ -140,12 +155,16 @@ class _DOCVIEWENTRY TDocTemplateT : public TDocTemplate {
   #undef TEMPLATECLASS
 };
 
+// Generic definitions/compiler options (eg. alignment) following the 
+// definition of classes
+#include <services/posclass.h>
+
 //----------------------------------------------------------------------------
 // Template flags used in reg parameter "docflags"
 //
 
 //
-// definitions of dt??? document/view flags for templates and CreateDoc()
+// Definitions of dtXxx document/view flags for templates and CreateDoc()
 //
 const long dtNewDoc     = 0x80000000L; // create new document, no path used
 const long dtAutoDelete = 0x40000000L; // delete doc when last view is deleted
@@ -160,82 +179,145 @@ const long dtSingleUse  = 0x00400000L; // to be registered as single use
 const long dtRegisterExt= 0x00200000L; // register extension with this app
 
 //
-// flags defined by Windows in <commdlg.h> - use the low order 17 bits
+// Flags defined by Windows in <commdlg.h> - use the low order 17 bits
 //
-const long dtReadOnly       = OFN_READONLY;      // initial check readonly box
-const long dtOverwritePrompt= OFN_OVERWRITEPROMPT;  // prompt before overwrite
-const long dtHideReadOnly   = OFN_HIDEREADONLY;     // no show readonly box
-const long dtPathMustExist  = OFN_PATHMUSTEXIST;    // path must be valid
-const long dtFileMustExist  = OFN_FILEMUSTEXIST;    // file must exist
-const long dtCreatePrompt   = OFN_CREATEPROMPT;     // prompt before create
-const long dtNoReadOnly     = OFN_NOREADONLYRETURN; // return writable file
-const long dtNoTestCreate   = OFN_NOTESTFILECREATE; // skip create tests
+const long dtReadOnly       = 0x0001; //OFN_READONLY;         // initial check readonly box
+const long dtOverwritePrompt= 0x0002; //OFN_OVERWRITEPROMPT;  // prompt before overwrite
+const long dtHideReadOnly   = 0x0004; //OFN_HIDEREADONLY;     // no show readonly box
+const long dtPathMustExist  = 0x0800; //OFN_PATHMUSTEXIST;    // path must be valid
+const long dtFileMustExist  = 0x1000; //OFN_FILEMUSTEXIST;    // file must exist
+const long dtCreatePrompt   = 0x2000; //OFN_CREATEPROMPT;     // prompt before create
+const long dtNoReadOnly     = 0x8000; //OFN_NOREADONLYRETURN; // return writable file
+const long dtNoTestCreate   = 0x10000L;//OFN_NOTESTFILECREATE; // skip create tests;
 
 //----------------------------------------------------------------------------
-// inline implementations
+// Inline implementations
 //
 
+//
+inline TDocManager* TDocTemplate::GetDocManager() const
+{
+  return DocManager;
+}
+
+//
+inline void TDocTemplate::SetDocManager(TDocManager* dm)
+{
+  DocManager = dm;
+}
+
+//
+inline TDocTemplate* TDocTemplate::GetNextTemplate() const
+{
+  return (TDocTemplate*)Next;
+}
+
+//
+inline bool TDocTemplate::IsFlagSet(long flag) const
+{
+  return (GetFlags() & flag) != 0;
+}
+
+//
+inline long TDocTemplate::GetFlags() const
+{
+  return Flags;
+}
+
+//
+inline bool TDocTemplate::IsStatic() const
+{
+  return (RefCnt & 0x8000) != 0;
+}
+
+//
+inline TModule*& TDocTemplate::GetModule()
+{
+  return *ModulePtr;
+}
+
+//
+// Return the number of reference count of the template.
+// NOTE: The reference count of static templates has the high bit set.
+//
+inline int TDocTemplate::GetRefCount() const
+{
+  return RefCnt;
+}
+
+//
+inline void TDocTemplate::SetModule(TModule* module)
+{
+  ModuleDeref = module;
+  ModulePtr = &ModuleDeref;
+}
+
+//
 inline bool
-TDocTemplate::IsVisible() {
-  return ToBool(!(GetFlags() & dtHidden));
-}
-
-inline TDocument*
-TDocTemplate::InitDoc(TDocument* doc,const char far* path,long flags)
+TDocTemplate::IsVisible()
 {
-  return InitDoc_(*this, doc, path, flags);
+  return (GetFlags() & dtHidden) == 0;
 }
 
-inline TView*
-TDocTemplate::InitView(TView* view)
-{
-  return InitView_(view);
-}
-
-inline bool
-TDocTemplate::SelectSave(TDocument& doc)
-{
-  return SelectSave_(this, doc);
-}
-
+//
 template<class D, class V> inline
-TDocTemplateT<D,V>::TDocTemplateT(TRegList& regList,
-                        TModule*& module, TDocTemplate*& phead)
-                  : TDocTemplate(regList, module, phead){}
+TDocTemplateT<D,V>::TDocTemplateT(TRegList& regList, TModule*& module,
+                                  TDocTemplate*& phead)
+:
+  TDocTemplate(regList, module, phead)
+{
+}
 
+//
 template<class D, class V> inline
 TDocTemplateT<D,V>::TDocTemplateT(const char* desc, const char* filt,
                         const char* dir,  const char* ext, long flags,
                         TModule*& module, TDocTemplate*& phead)
-                  : TDocTemplate(desc, filt, dir, ext, flags, module, phead){}
+:
+  TDocTemplate(desc, filt, dir, ext, flags, module, phead)
+{
+}
 
+//
 template<class D, class V> inline TDocTemplateT<D,V>*
-TDocTemplateT<D,V>::Clone(TModule* module, TDocTemplate*& phead) {
+TDocTemplateT<D,V>::Clone(TModule* module, TDocTemplate*& phead)
+{
   TDocTemplateT<D,V>* tpl = new TDocTemplateT<D,V>(GetRegList(),
                                                    GetModule(), phead);
   tpl->SetModule(module);
   return tpl;
 }
 
+#if !defined(BI_COMP_MSC)  
+//
+// 'Factory' method to create a new document of type 'D' using the specified
+// parameter as the parent document.
+//
 template<class D, class V> inline D*
-TDocTemplateT<D,V>::ConstructDoc(TDocument* parent = 0) {
+TDocTemplateT<D,V>::ConstructDoc(TDocument* parent = 0)
+{
   return new D(parent);
 }
+#endif
 
+//
+// 'Factory' method to create a new view of type 'V' from the specified
+// document parameter.
+//
 template<class D, class V> inline V*
-TDocTemplateT<D,V>::ConstructView(TDocument& doc) {
+TDocTemplateT<D,V>::ConstructView(TDocument& doc)
+{
   return new V((D&)doc);
 }
 
-template<class D, class V> inline D*
-TDocTemplateT<D,V>::CreateDoc(const char far* path, long flags) {
-  return (D*)InitDoc(new D(0), path, flags);
+//
+template<class D, class V> inline const char far*
+TDocTemplateT<D,V>::GetViewName()
+{
+  return V::StaticName();
 }
 
-template<class D, class V> inline TView*
-TDocTemplateT<D,V>::CreateView(TDocument& doc, long flags) {
-  return (V*)InitView(new V((D&)doc));
-}
+//----------------------------------------------------------------------------
 
 #if defined(BI_NO_NEW_CASTS)  // cannot use templates with TYPESEAFE_DOWNCAST
 
@@ -270,5 +352,44 @@ TDocTemplateT<D,V>::IsMyKindOfView(TView& view)
   IMPLEMENT_STREAMABLE_FROM_BASE(tplClass, TDocTemplate);
 
 #endif
+
+//----------------------------------------------------------------------------
+#if defined(OWL2_COMPAT)
+
+//
+inline TDocument*
+TDocTemplate::InitDoc(TDocument* doc, const char far* path, long flags)
+{
+  return InitDoc_(*this, doc, path, flags);
+}
+
+//
+inline TView*
+TDocTemplate::InitView(TView* view)
+{
+  return InitView_(view);
+}
+
+//
+inline bool
+TDocTemplate::SelectSave(TDocument& doc)
+{
+  return SelectSave_(this, doc);
+}
+
+//
+template<class D, class V> inline D*
+TDocTemplateT<D,V>::CreateDoc(const char far* path, long flags)
+{
+  return (D*)InitDoc(new D((TDocument*)0), path, flags);
+}
+
+//
+template<class D, class V> inline TView*
+TDocTemplateT<D,V>::CreateView(TDocument& doc, long /*flags*/)
+{
+  return (V*)InitView(new V((D&)doc));
+}
+#endif  // defined(OWL2_COMPAT)
 
 #endif  // OWL_DOCTPL_H

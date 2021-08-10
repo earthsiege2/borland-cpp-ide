@@ -6,9 +6,9 @@
  *-----------------------------------------------------------------------*/
 
 /*
- *      C/C++ Run Time Library - Version 1.5
+ *      C/C++ Run Time Library - Version 2.0
  *
- *      Copyright (c) 1987, 1994 by Borland International
+ *      Copyright (c) 1987, 1996 by Borland International
  *      All Rights Reserved.
  *
  */
@@ -33,7 +33,11 @@ void _xfclose( void )
 
     _lock_all_streams();
     for( i = 0, fp = _streams; i < _nfile; fp++, i++ )
-        if (fp->flags & _F_RDWR)
+        /* Only close temp files.  Leave the others open so CG has a crack
+           at them.  This is so that CG can detect when the user has failed
+           to close a file he opened.
+        */
+        if( (fp->flags & _F_RDWR) && (fp->istemp))
             fclose( fp );
     _unlock_all_streams();
 }

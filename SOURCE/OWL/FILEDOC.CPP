@@ -1,19 +1,24 @@
 //----------------------------------------------------------------------------
 // ObjectWindows
-// (C) Copyright 1993, 1994 by Borland International, All Rights Reserved
+// Copyright (c) 1993, 1996 by Borland International, All Rights Reserved
 //
-//   Implements classes TFileDocument, TFileInStream, TFileOutStream, TFileBuf
+//$Revision:   10.5  $
+//
+// Implementation of classes TFileDocument, TFileInStream, TFileOutStream,
+// TFileBuf
 //----------------------------------------------------------------------------
 #pragma hdrignore SECTION
-#include <owl/owlpch.h>
-#include <owl/filedoc.h>
+#include <owl/pch.h>
+#if !defined(OWL_FILEDOC_H)
+# include <owl/filedoc.h>
+#endif
+#include <stdio.h>
 
 #if !defined(SECTION) || SECTION == 1
 
 //
-//  class TFileBuf
-//  ----- --------
-//
+// class TFileBuf
+// ~~~~~ ~~~~~~~~
 class _OWLCLASS_RTL TFileBuf : public streambuf {
   public:
     enum { shDefault = shReadWrite };  // default file sharing
@@ -33,8 +38,8 @@ class _OWLCLASS_RTL TFileBuf : public streambuf {
 };
 
 //
-//  class TFileStreamBase
-//  ----- ---------------
+// class TFileStreamBase
+// ~~~~~ ~~~~~~~~~~~~~~~
 //
 class _OWLCLASS_RTL TFileStreamBase : virtual public ios {
   public:
@@ -44,9 +49,8 @@ class _OWLCLASS_RTL TFileStreamBase : virtual public ios {
 };
 
 //
-//  class TFileInStream
-//  ----- -------------
-//
+// class TFileInStream
+// ~~~~~ ~~~~~~~~~~~~~
 class _OWLCLASS_RTL TFileInStream : public TFileStreamBase, public TInStream {
   public:
     TFileInStream(TFileDocument& doc, HFILE fhdl, int omode, streampos seekpos)
@@ -55,9 +59,8 @@ class _OWLCLASS_RTL TFileInStream : public TFileStreamBase, public TInStream {
 };
 
 //
-//  class TFileOutStream
-//  ----- --------------
-//
+// class TFileOutStream
+// ~~~~~ ~~~~~~~~~~~~~~
 class _OWLCLASS_RTL TFileOutStream : public TFileStreamBase, public TOutStream {
   public:
     TFileOutStream(TFileDocument& doc, HFILE fhdl, int omode, streampos seekpos)
@@ -65,11 +68,11 @@ class _OWLCLASS_RTL TFileOutStream : public TFileStreamBase, public TOutStream {
    ~TFileOutStream();
 };
 
-//
-//  class TFileDocument
-//  ----- -------------
-//
+//----------------------------------------------------------------------------
 
+//
+//
+//
 HFILE
 TFileDocument::OpenThisFile(int omode, const char far* name, streampos* pseekpos){
   int how;
@@ -114,7 +117,7 @@ TFileDocument::OpenThisFile(int omode, const char far* name, streampos* pseekpos
     return HFILE_ERROR;   // must specfify in, out, or in/out
 
   if ((fhdl = ::_lopen(name, how)) != HFILE_ERROR) {
-    if ((*pseekpos = ::_llseek(fhdl, 0L, (omode & (ofAtEnd|ofAppend))
+    if ((*pseekpos = ::_llseek(fhdl, 0, (omode & (ofAtEnd|ofAppend))
                              ? SEEK_END : SEEK_SET)) == long(HFILE_ERROR)) {
       ::_lclose(fhdl);
       return HFILE_ERROR;
@@ -133,6 +136,9 @@ TFileDocument::OpenThisFile(int omode, const char far* name, streampos* pseekpos
   return fhdl;
 }
 
+//
+//
+//
 void
 TFileDocument::CloseThisFile(HFILE fhdl, int omode)
 {
@@ -142,30 +148,41 @@ TFileDocument::CloseThisFile(HFILE fhdl, int omode)
   }
 }
 
+//
+//
+//
 bool
 TFileDocument::Open(int omode, const char far* path)
 {
-  long seekpos;
   if (FHdl != HFILE_ERROR)
     return false;    // if already open at document level
+
   if (path)
     SetDocPath(path);
   if (omode != 0)
     SetOpenMode(omode);
+
+  long seekpos;
   if ((FHdl = OpenThisFile(GetOpenMode(),GetDocPath(),&seekpos)) == HFILE_ERROR)
     return false;
   return true;
 }
 
+//
+//
+//
 bool
 TFileDocument::Open(HFILE fhdl)
 {
-  SetOpenMode(PREV_OPEN | ofReadWrite);  // can we determine open mode?
-  SetDocPath(0); // can we get path name?
+  SetOpenMode(PREV_OPEN | ofReadWrite);  
+  SetDocPath(0); 
   FHdl = fhdl;
   return true;
 }
 
+//
+//
+//
 bool
 TFileDocument::Close()
 {
@@ -180,6 +197,9 @@ TFileDocument::Close()
   return true;
 }
 
+//
+//
+//
 bool
 TFileDocument::Commit(bool force)
 {
@@ -189,6 +209,9 @@ TFileDocument::Commit(bool force)
   return true;
 }
 
+//
+//
+//
 bool
 TFileDocument::Revert(bool clear)
 {
@@ -199,7 +222,7 @@ TFileDocument::Revert(bool clear)
 }
 
 static char* PropNames[] = {
-  "Create Time",   // CreateTime 
+  "Create Time",   // CreateTime
   "Modify Time",   // ModifyTime
   "Access Time",   // AccessTime
   "Storage Size",  // StorageSize
@@ -207,13 +230,16 @@ static char* PropNames[] = {
 };
 
 static int PropFlags[] = {
-  pfGetBinary|pfGetText,   // CreateTime 
+  pfGetBinary|pfGetText,   // CreateTime
   pfGetBinary|pfGetText,   // ModifyTime
   pfGetBinary|pfGetText,   // AccessTime
   pfGetBinary|pfGetText,   // StorageSize
   pfGetBinary,             // FileHandle
 };
 
+//
+//
+//
 const char*
 TFileDocument::PropertyName(int index)
 {
@@ -225,6 +251,9 @@ TFileDocument::PropertyName(int index)
     return 0;
 }
 
+//
+//
+//
 int
 TFileDocument::PropertyFlags(int index)
 {
@@ -236,6 +265,9 @@ TFileDocument::PropertyFlags(int index)
     return 0;
 }
 
+//
+//
+//
 int
 TFileDocument::FindProperty(const char far* name)
 {
@@ -246,6 +278,9 @@ TFileDocument::FindProperty(const char far* name)
   return TDocument::FindProperty(name);
 }
 
+//
+//
+//
 int
 TFileDocument::GetProperty(int prop, void far* dest, int textlen)
 {
@@ -265,7 +300,7 @@ TFileDocument::GetProperty(int prop, void far* dest, int textlen)
             }
             else {
               char buf[10];
-              int len = wsprintf(buf, "%ld", FileLength);
+              int len = sprintf(buf, "%ld", FileLength);
               if (textlen > len)
                 textlen = len;
               memcpy(dest, buf, textlen);
@@ -302,6 +337,9 @@ TFileDocument::GetProperty(int prop, void far* dest, int textlen)
   }
 }
 
+//
+//
+//
 bool
 TFileDocument::SetProperty(int prop, const void far* src)
 {
@@ -310,8 +348,11 @@ TFileDocument::SetProperty(int prop, const void far* src)
   return TDocument::SetProperty(prop, src);
 }
 
+//
+//
+//
 TInStream*
-TFileDocument::InStream(int omode, const char far* /*strmId*/) 
+TFileDocument::InStream(int omode, const char far* /*strmId*/)
 {
   HFILE fhdl;
   streampos seekpos;
@@ -331,6 +372,9 @@ TFileDocument::InStream(int omode, const char far* /*strmId*/)
   return new TFileInStream(*this, fhdl, omode, seekpos);
 }
 
+//
+//
+//
 TOutStream*
 TFileDocument::OutStream(int omode, const char far* /*strmId*/)
 {
@@ -352,11 +396,19 @@ TFileDocument::OutStream(int omode, const char far* /*strmId*/)
   return new TFileOutStream(*this, fhdl, omode, seekpos);
 }
 
+//----------------------------------------------------------------------------
+
+//
+//
+//
 TFileInStream::~TFileInStream()
 {
   ((TFileDocument&)Doc).CloseThisFile(buf.xfd, GetOpenMode());
 }
 
+//
+//
+//
 TFileOutStream::~TFileOutStream()
 {
   if (buf.out_waiting())
@@ -364,14 +416,15 @@ TFileOutStream::~TFileOutStream()
   ((TFileDocument&)Doc).CloseThisFile(buf.xfd, GetOpenMode());
 }
 
+//----------------------------------------------------------------------------
+// class TFileBuf
 //
-//  class TFileBuf
-//  ----- --------
+
+const int B_size = 516; // natural size for a file buffer, plus 4 for putback;
+
 //
-const int B_size = 516; // natural size for a file buffer, plus 4 for putback
-
-// make a TFileBuf attached to an open fd
-
+// Make a TFileBuf attached to an open fd
+//
 TFileBuf::TFileBuf(int fhdl, int omode, long seekpos)
 {
   xfd = fhdl;     // assumed to be valid
@@ -385,10 +438,11 @@ TFileBuf::TFileBuf(int fhdl, int omode, long seekpos)
   }
 }
 
+//
 // Seek file to position.
 // We take a simple approach, and don't check for small position changes
 // within the current buffer.
-
+//
 streampos TFileBuf::seekoff(streamoff off, ios::seek_dir dir, int /*mode*/)
 {
   long loff = off;
@@ -422,9 +476,12 @@ streampos TFileBuf::seekoff(streamoff off, ios::seek_dir dir, int /*mode*/)
   return (last_seek == long(HFILE_ERROR)) ? EOF : last_seek;
 }
 
+//
+//
+//
 int TFileBuf::sync()
 {
-  int count = out_waiting();
+  uint count = out_waiting();
   if (count) {
     char* curp;
     char* srcp = pbase();
@@ -442,7 +499,7 @@ int TFileBuf::sync()
           *(srcp = curp) = '\n';
         }
       }
-      count = (int)(curp - srcp);  // write what remains in the buffer below
+      count = curp - srcp;  // write what remains in the buffer below
     }
     if (::_lwrite(xfd, srcp, count) != count)
       return EOF;
@@ -463,13 +520,16 @@ int TFileBuf::sync()
   return 0;
 }
 
+//
+//
+//
 int TFileBuf::underflow()
 {
   if ((mode & (ofRead | ofWrite)) == ofWrite)
     return EOF;
 
   if (in_avail())    // no action needed
-    return (unsigned char) *gptr();
+    return (uchar) *gptr();
 
   int c = 0;  // the return value
   int count;  // input character count
@@ -517,7 +577,7 @@ int TFileBuf::underflow()
     setp(begp, begp);
 
     if (count)
-      c = (unsigned char) *gptr();
+      c = (uchar) *gptr();
   }
   else {     // this is not buffered
     for (;;) {
@@ -527,7 +587,7 @@ int TFileBuf::underflow()
         setg(0, 0, 0);
       }
       else {
-        c = (unsigned char)lahead[0];
+        c = (uchar)lahead[0];
         if ((mode & ofBinary) == 0  && c == '\r')
           continue;
         setg(lahead, lahead, lahead+1);
@@ -540,8 +600,9 @@ int TFileBuf::underflow()
   return c;
 }
 
-// always flush
-
+//
+// Always flush
+//
 int TFileBuf::overflow(int c)
 {
   if ((mode & (ofRead | ofWrite)) == ofRead)
@@ -549,7 +610,7 @@ int TFileBuf::overflow(int c)
 
   if (unbuffered() || !base()) {
     if (c != EOF) {
-      int count;
+      uint count;
       char b[2];
       if (c == '\n' && (mode & ofBinary) == 0) {
         b[0] = '\r';
@@ -584,23 +645,31 @@ int TFileBuf::overflow(int c)
   return 1;
 }
 
-//
-//  class TFileStreamBase
-//  ----- ---------------
+//----------------------------------------------------------------------------
+// class TFileStreamBase
 //
 
+//
+//
+//
 TFileStreamBase::TFileStreamBase(int fhdl, int omode, streampos seekpos)
-                : buf(fhdl, omode, seekpos)
+:
+  buf(fhdl, omode, seekpos)
 {
   ios::init(&buf);
 }
 
 #endif
-
+//----------------------------------------------------------------------------
 #if !defined(SECTION) || SECTION == 2
 
 IMPLEMENT_STREAMABLE1(TFileDocument, TDocument);
 
+#if !defined(BI_NO_OBJ_STREAMING)
+
+//
+//
+//
 void*
 TFileDocument::Streamer::Read(ipstream& is, uint32 /*version*/) const
 {
@@ -611,11 +680,16 @@ TFileDocument::Streamer::Read(ipstream& is, uint32 /*version*/) const
   return o;
 }
 
+//
+//
+//
 void
 TFileDocument::Streamer::Write(opstream& os) const
 {
   //  assumed that document is committed at this point
   WriteBaseObject((TDocument*)GetObject(), os);
 }
+
+#endif  // if !defined(BI_NO_OBJ_STREAMING)
 
 #endif

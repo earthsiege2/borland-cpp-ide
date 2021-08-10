@@ -1,0 +1,55 @@
+//--------------------------------------------------------------------------
+// Object Scripting
+// Copyright (c) 1996 by Borland International, All Rights Reserved
+//
+// REVISIT.SPP: Code Revisit Tool. Quickly lists occurrences of a 
+//   configurable "revisit this code" marker in all files in the specified
+//   directory.
+//
+// USE: Set revisit marker in revisit.cfg. Run script.
+//
+// FILES: REVISIT.CFG, MISC.SPP, FILE.SPP
+//
+// NOTES: All revisit.* files must reside in the same directory.
+//--------------------------------------------------------------------------
+print "revisit.spp";
+
+//
+// IDE imports.
+//
+import IDE;
+import scriptEngine;
+
+//
+// Load support module(s).
+//
+if (!scriptEngine.IsLoaded("misc.spp")) scriptEngine.Load("misc.spp");
+if (!scriptEngine.IsLoaded("file.spp")) scriptEngine.Load("file.spp");
+
+ModuleDir = GetModuleDir("revisit.spp");  // Directory of this script.
+
+revisit()
+{
+  // Get the search directory.
+  //
+  declare dir;
+  dir = IDE.DirectoryDialog("Enter the search directory.", NULL,
+                            IDE.CurrentDirectory);
+  if (dir == "") return;
+
+  // Load configuration values.
+  //
+  declare CFGFile = new TConfigFile(ModuleDir + "\\revisit.cfg");
+  declare revisitMarker = CFGFile.GetValue("RevisitMarker", "\\#");
+  CFGFile.Close();
+
+  // GREP for marker, indicating search directory, and show results.
+  //
+  IDE.StatusBar = "Searching " + IDE.CurrentDirectory;
+  declare cmd = "-n+ $NOSWAP$CAP MSG(GREP2MSG)" + revisitMarker + " " +
+                dir + "\\*.*";
+  IDE.Tool("GrepFiles", cmd);
+  IDE.ViewMessage("Grep");
+}
+
+

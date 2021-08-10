@@ -109,7 +109,7 @@ public:
             LineMessage = new far char [MessageLength+1];
             lstrcpy( LineMessage, Message );
         };
-        ~LINEFUNCDATA( void ) { delete LineMessage; }
+        ~LINEFUNCDATA( void ) { delete[] LineMessage; }
     };
 };
 

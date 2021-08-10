@@ -1,0 +1,25 @@
+#define IDS_APPNAME                     1
+#define IDS_DESCRIPTION                 2
+#define IDD_VERFIRST                    100
+#define IDI_APPICON                     101
+#define IDD_EDITSTOCKINFO               102
+#define IDD_VERLAST                     104
+#define IDM_EXIT                        1000
+#define IDC_EDIT1                       1000
+#define IDC_COMPANYNAME                 1000
+#define IDC_EDIT2                       1001
+#define IDC_SYMBOL                      1001
+#define IDC_HIGH                        1002
+#define IDC_LOW                         1003
+#define IDC_CLOSE                       1004
+#define IDC_NEWS                        1005
+#define IDC_EXCHANGE                    1006
+#define IDM_LARGEICONS                  1100
+#define IDM_SMALLICONS                  1101
+#define IDM_LIST                        1102
+#define IDM_DETAILS                     1103
+#define IDM_DRAGLIST                    1200
+#define IDM_ABOUT                       1300
+#define IDM_EDITSTOCKINFO               40001
+#define IDC_STATIC                      -1
+

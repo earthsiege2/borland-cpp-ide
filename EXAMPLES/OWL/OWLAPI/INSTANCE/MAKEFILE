@@ -1,8 +1,0 @@
-#----------------------------------------------------------------------------
-# ObjectWindows - (C) Copyright 1991, 1993 by Borland International
-#   examples\owl\owlapi\instance\makefile
-#----------------------------------------------------------------------------
-
-EXE = instance
-!include $(BCEXAMPLEDIR)\owlmake.gen
-

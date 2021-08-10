@@ -1,18 +1,18 @@
 #############################################################################
 # Configure the tools appropriately.                                        #
 #############################################################################
-AFLAGS   = -D__$(MODEL)__ -m -mx -q -t -I$(BC45INCL) -I$(INCLBASE)\rtlinc\common16
-ASM      = tasm
+AFLAGS   = -D__$(MODEL)__ -m -mx -q -t -I$(BCINCL) -I$(INCLBASE)\rtlinc\common16
+ASM      = tasmx
 CC       = bcc $(CCPFX) +$(OBJDIR)\$(CFG) $(CCSFX)
 CFLAGS   = -c -k- -2- -Vs -w -w-asm -xc -X -zC_TEXT -zR_DATA -zTDATA -n$(OBJDIR) -I$(INCLUDES) -m$(MODEL)
-INCLUDES = $(BC45INCL);$(INCLBASE)\rtlinc\common16
+INCLUDES = $(BCINCL);$(INCLBASE)\rtlinc\common16
 LIBNAME  = c$(MODEL)
 OBJDIR   = $(OBJBASE)\$(MODEL)
 
 !if $d(DEBUG)
-    TLIB = tlib /C /P128 /E
+    TLIB = tlib /C /P128
 !else
-    TLIB = tlib /C /0 /E
+    TLIB = tlib /C /0
 !endif
 
 !if $(MODEL) == t
@@ -57,11 +57,13 @@ SRCDIRS =                              \
 	  $(SRCBASE)\time\common16
 
 !if $(MODEL) != t
-    SRCDIRS = $(SRCDIRS)                 \
+    SRCDIRS = $(SRCDIRS)             \
 	      $(SRCBASE)\except          \
 	      $(SRCBASE)\except\common16 \
 	      $(SRCBASE)\mathlib         \
 	      $(SRCBASE)\string
+
+
 !endif
 
 

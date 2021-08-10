@@ -1,0 +1,25 @@
+#----------------------------------------------------------------------------
+# Borland C++
+# Copyright (c) 1987, 1996 Borland International Inc.  All Rights Reserved.
+#   examples\series\dllskel\makefile
+#----------------------------------------------------------------------------
+
+SYSTEMS = WIN32
+
+!if !$d(WIN16)
+     SYSTEM    = WIN32
+!endif
+
+OSMAJOR = 4
+OSMINOR = 0
+MODEL   = d  #force use of DLLs
+EXERES  = appskel
+CPCH    = -Hc -H"windows.h" -H=mixtree.csm
+OBJEXE  = appskel.obj winmain.obj init.obj about.obj dispatch.obj misc.obj
+LIBEXE  = dllskel.lib
+DLLRES  = dllskel
+CPCHD   = -Hc -H"windows.h" -H=dllskel.csm
+OBJDLL  = dllmain.obj exports.obj
+
+!include $(BCEXAMPLEDIR)\makefile.gen
+

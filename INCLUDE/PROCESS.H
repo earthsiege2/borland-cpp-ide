@@ -5,9 +5,9 @@
 */
 
 /*
- *      C/C++ Run Time Library - Version 6.5
+ *      C/C++ Run Time Library - Version 7.0
  *
- *      Copyright (c) 1987, 1994 by Borland International
+ *      Copyright (c) 1987, 1996 by Borland International
  *      All Rights Reserved.
  *
  */
@@ -122,9 +122,33 @@ unsigned long _RTLENTRY _EXPFUNC _beginthreadNT(void (_USERENTRY *__start)(void 
                                                 void *__security_attr,
                                                 unsigned long __create_flags,
                                                 unsigned long *__thread_id);
+
 #endif  /* __WIN32__ */
 
 void _RTLENTRY _EXPFUNC _endthread     (void);
+
+#if defined(__MFC_COMPAT__)
+inline unsigned long _RTLENTRY _beginthreadex
+(
+    void *security,
+    unsigned stksize,
+    unsigned (__stdcall *start_address)(void *),
+    void *arglist,
+    unsigned initflag,
+    unsigned *threadaddr
+)
+{
+    return _beginthreadNT((void(_USERENTRY *)(void *))start_address, stksize,
+                          arglist, security, (unsigned long)initflag,
+                          (unsigned long *)threadaddr);
+}
+#pragma argsused
+inline void _RTLENTRY _endthreadex(unsigned retval)
+{
+    _endthread();
+}
+#endif  /* __MFC_COMPAT__ */
+
 
 #endif  /* __MT__ */
 

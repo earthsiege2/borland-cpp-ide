@@ -1,0 +1,7 @@
+#----------------------------------------------------------------------------
+# ObjectWindows
+# Copyright (c) 1991, 1996 by Borland International, All Rights Reserved
+#----------------------------------------------------------------------------
+EXERES=mdifile
+
+!include $(BCEXAMPLEDIR)\owlmake.gen

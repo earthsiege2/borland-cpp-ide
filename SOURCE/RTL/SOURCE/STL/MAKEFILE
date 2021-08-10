@@ -1,0 +1,31 @@
+!if $(OS)==WIN32
+ENVIRON=WIN32
+!elif $(OS)==WIN16
+ENVIRON=WIN16
+!endif
+
+!if $d(DLL)
+BINDING=DLL
+!else
+BINDING=STATIC
+!endif
+
+!if $d(MT)
+THREAD=MULTI
+!else
+THREAD=SINGLE
+!endif
+
+BMODE=RELEASE
+
+objs: clean
+!if $d(DLL) && $(OS)==WIN16
+        echo ** Skipping WIN16 DLL build **
+!else
+        make -DENVIRON=$(ENVIRON) -DBINDING=$(BINDING) -DTHREAD=$(THREAD) -DBMODE=$(BMODE) -f makefile.bcc
+        copy lib \rtl\lib
+!endif
+
+clean:
+        make -f makefile.bcc clean
+

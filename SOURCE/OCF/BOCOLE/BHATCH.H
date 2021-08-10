@@ -1,22 +1,24 @@
+//----------------------------------------------------------------------------
+// ObjectComponents
+// Copyright (c) 1994, 1996 by Borland International, All Rights Reserved
 //
-//**************************************************************************
-// 
-// BHatch.cpp -- An implementation of the hatched border around inplace
-//               active windows.
+// $Revision:   2.5  $
 //
-// Copyright (c) 1993,94 by Borland International, Inc. All rights reserved
-//
-//**************************************************************************
-
-#ifndef HATCH_H
-#define HATCH_H
+// An implementation of the hatched border around inplace active windows.
+//----------------------------------------------------------------------------
+#ifndef _BHATCH_H
+#define _BHATCH_H
 
 #include "BOleSite.h"
 
-#define CLIPPED				0x0001
-#define CLIPPED_LEFT 		0x0002
-#define CLIPPED_TOP        0x0004
-#define CLIPPED_TOPLEFT    CLIPPED_LEFT|CLIPPED_TOP
+#ifndef MOVEWIN_H
+#include "movewin.h"
+#endif
+
+#define CLIPPED							0x0001
+#define CLIPPED_LEFT 				0x0002
+#define CLIPPED_TOP        	0x0004
+#define CLIPPED_TOPLEFT    	CLIPPED_LEFT|CLIPPED_TOP
 
 void SetRectExt (RECT FAR *,UINT,UINT,UINT);
 
@@ -28,21 +30,19 @@ public:
 	~BOleHatchWindow();
 
 	static 					Register (HINSTANCE hInst); // register window
-	static void 			InitWidth ();
+	static void 		InitWidth ();
 
 	// window messages related member functions
-#ifdef ANSI
-	LRESULT 					wmCreate (LPCREATESTRUCTA);
-#else
-	LRESULT 					wmCreate (LPCREATESTRUCT);
-#endif
-	LRESULT 					wmPaint ();
+	LRESULT 				wmCreate (LPCREATESTRUCT);
+	LRESULT 				wmPaint ();
 	UINT 						wmNCHitTest (LPPOINT);
-	LRESULT 					wmSetCursor (HWND, UINT, UINT);
+	LRESULT 				wmSetCursor (HWND, UINT, UINT);
 	UINT 						wmMouseActivate (HWND, UINT, UINT);
-	LRESULT 					wmNCLButtonDown (UINT, LPPOINT);
-	LRESULT 					wmGetMinMaxInfo (MINMAXINFO*);
-	LRESULT 					wmWindowPosChanging (LPWINDOWPOS);
+	LRESULT 				wmNCLButtonDown (UINT, LPPOINT);
+	LRESULT 				wmMouseMove (UINT, LPPOINT);
+	LRESULT 				wmLButtonUp (UINT, LPPOINT);
+	LRESULT 				wmGetMinMaxInfo (MINMAXINFO*);
+	LRESULT 				wmWindowPosChanging (LPWINDOWPOS);
 
 	void 						Show (BOOL, LPOLEINPLACESITE = NULL);
 	void 						SetSize (LPRECT,LPRECT,LPPOINT);
@@ -62,10 +62,11 @@ protected:
 	RECT 						MoveRect; // temp rect used only inside WM_WINDOWPOSCHANGING (orrible!)
 	BOOL 						fInMouseDown; // used to signal when mouse left button is kept down
 
-	LPOLEINPLACESITE 		pSite;
-	BOleSite *				pBack;
+	GrayGhostRect*	GrayFrame; // gray frame showing window movement
+
+	LPOLEINPLACESITE	pSite;
+	BOleSite *			pBack;
 
 };
 
 #endif
-

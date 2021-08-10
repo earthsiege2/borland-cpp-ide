@@ -1,0 +1,22 @@
+CODEOWL.DAT: OWL code library file.
+
+MAIN FILE: CODELIB.SPP
+
+NOTES: Enter library entries. The first line of each entry must be the
+  entry marker, immediately followed by a description. The code begins
+  on the line following the description, and extends until the next
+  marker or EOF.
+
+<*>Example entry: Application class def
+class T? : public TApplication {
+  public:
+    T?(const char far* name) : TApplication(name) {}
+
+    void   InitMainWindow();
+};
+
+<*>Example entry 2
+SomeOWLCode(){
+
+
+}

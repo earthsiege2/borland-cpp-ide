@@ -1,21 +1,19 @@
-/*------------------------------------------------------------------------*/
-/*                                                                        */
-/*  TIMER.CPP                                                             */
-/*                                                                        */
-/*  Copyright (c) 1991, 1994 Borland International                        */
-/*  All Rights Reserved                                                   */
-/*                                                                        */
-/*------------------------------------------------------------------------*/
+//----------------------------------------------------------------------------
+// Borland Class Library
+// Copyright (c) 1991, 1996 by Borland International, All Rights Reserved
+//
+//$Revision:   5.5  $
+//
+// TTimer class implementation for DOS and Win16
+//----------------------------------------------------------------------------
+#include <classlib/pch.h>
+#include <classlib/defs.h>
 
-#if !defined( __DOS_H )
-#include <dos.h>
-#endif
+#if defined(BI_PLAT_DOS) || defined(BI_PLAT_WIN16)
 
 #define BUILDBIDSTIMER
-
-#if !defined( CLASSLIB_TIMER_H )
 #include <classlib/timer.h>
-#endif
+#include <dos.h>
 
 const unsigned long far * const dosTime =
     (const unsigned long far * const)MK_FP( 0x40, 0x6C );
@@ -31,11 +29,13 @@ void TTimer::Start()
     if( !Running )
         {
         outportb( 0x43, 0x34 );
-        asm jmp __1;
-    __1:
+        __emit__( 0xEB, 0x00 );
+//        asm jmp __1;
+//    __1:
         outportb( 0x40, 0 );
-        asm jmp __2;
-    __2:
+        __emit__( 0xEB, 0x00 );
+//        asm jmp __2;
+//    __2:
         outportb( 0x40, 0 );
         StartTime.DosCount = *dosTime;
         StartTime.TimerCount = 0;
@@ -107,4 +107,4 @@ int main( void )
 }
 #endif
 
-
+#endif  //#if !defined(BI_PLAT_DOS) && !defined(BI_PLAT_WIN16)

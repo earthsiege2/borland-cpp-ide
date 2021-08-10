@@ -6,9 +6,9 @@
  *-----------------------------------------------------------------------*/
 
 /*
- *      C/C++ Run Time Library - Version 6.5
+ *      C/C++ Run Time Library - Version 7.0
  *
- *      Copyright (c) 1987, 1994 by Borland International
+ *      Copyright (c) 1987, 1996 by Borland International
  *      All Rights Reserved.
  *
  */
@@ -123,11 +123,7 @@ void _FARFUNC _ftime(struct timeb _FAR *TimeStructPtr)
        Set milliseconds structure field. DOS is only accurate to 100ths of a
           second so (100ths * 10) makes 1000ths.
     */
-#if defined(_RTLDLL)
-        TimeStructPtr->__timezone = (short)( _timezone / 60L);
-#else
-        TimeStructPtr->_timezone = (short)( _timezone / 60L);
-#endif
+    TimeStructPtr->timezone = (short)( _timezone / 60L);
     if (_daylight && __isDST( DosTime.ti_hour, DosDate.da_day,
                                  DosDate.da_mon,  DosDate.da_year-1970) )
         TimeStructPtr->dstflag  = 1;

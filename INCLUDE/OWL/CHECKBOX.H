@@ -1,9 +1,11 @@
 //----------------------------------------------------------------------------
 // ObjectWindows
-// (C) Copyright 1991, 1994 by Borland International, All Rights Reserved
+// Copyright (c) 1991, 1996 by Borland International, All Rights Reserved
 //
-//   Defines class TCheckBox.  This defines the basic behavior
-//   for all check boxes.
+//$Revision:   10.4  $
+//
+// Definition of class TCheckBox. This defines the basic behavior for all check
+// boxes.
 //----------------------------------------------------------------------------
 #if !defined(OWL_CHECKBOX_H)
 #define OWL_CHECKBOX_H
@@ -20,17 +22,18 @@ class _OWLCLASS TGroupBox;
 enum {
   BF_CHECKED   = 0x01,
   BF_GRAYED    = 0x02,
-  BF_UNCHECKED = 0x0
+  BF_UNCHECKED = 0x00,
 };
 
+// Generic definitions/compiler options (eg. alignment) preceeding the
+// definition of classes
+#include <services/preclass.h>
+
 //
-//  class TCheckBox
-//  ----- ---------
-//
+// class TCheckBox
+// ~~~~~ ~~~~~~~~~
 class _OWLCLASS TCheckBox : public TButton {
   public:
-    TGroupBox*  Group;
-
     TCheckBox(TWindow*        parent,
               int             id,
               const char far* title,
@@ -42,41 +45,39 @@ class _OWLCLASS TCheckBox : public TButton {
               int        resourceId,
               TGroupBox* group = 0,
               TModule*   module = 0);
+   ~TCheckBox();
 
-    void       Check() {SetCheck(BF_CHECKED);}
-    void       Uncheck() {SetCheck(BF_UNCHECKED);}
+    void       Check();
+    void       Uncheck();
     void       Toggle();
 
     uint       GetCheck() const;
     void       SetCheck(uint check);
 
-    uint       GetState() const;
-    void       SetState(uint state) {SendMessage(BM_SETSTATE, state);}
+    TGroupBox* GetGroup() const;
+    void       SetGroup(TGroupBox* group);
 
-    void       SetStyle(uint style, bool redraw);
-
-    //
     // Override TWindow virtual member functions
     //
     uint       Transfer(void* buffer, TTransferDirection direction);
 
   protected:
-    //
-    //  override TButton's processing so drawable check boxes and radio
+    //  Override TButton's processing so drawable check boxes and radio
     //  buttons work properly
     //
-    uint       EvGetDlgCode(MSG far*) {return (uint)DefaultProcessing();}
+    uint       EvGetDlgCode(MSG far*);
 
-    //
-    // child id notification
+    // Child id notification
     //
     void       BNClicked();  // BN_CLICKED
 
     char far*  GetClassName();
 
+  public_data:
+    TGroupBox* Group;
+
   private:
-    //
-    // hidden to prevent accidental copying or assignment
+    // Hidden to prevent accidental copying or assignment
     //
     TCheckBox(const TCheckBox&);
     TCheckBox& operator =(const TCheckBox&);
@@ -85,16 +86,39 @@ class _OWLCLASS TCheckBox : public TButton {
   DECLARE_STREAMABLE(_OWLCLASS, TCheckBox, 1);
 };
 
+// Generic definitions/compiler options (eg. alignment) following the
+// definition of classes
+#include <services/posclass.h>
+
+//
+inline void TCheckBox::Check() {
+  SetCheck(BF_CHECKED);
+}
+
+//
+inline void TCheckBox::Uncheck() {
+  SetCheck(BF_UNCHECKED);
+}
+
+//
+inline TGroupBox* TCheckBox::GetGroup() const {
+  return Group;
+}
+
+//
+inline void TCheckBox::SetGroup(TGroupBox* group) {
+  Group = group;
+}
+
+//
+inline uint TCheckBox::EvGetDlgCode(MSG far*) {
+  return (uint)DefaultProcessing();
+}
+
+//
 inline uint TCheckBox::GetCheck() const {
+  PRECONDITION(GetHandle());
   return (uint)CONST_CAST(TCheckBox*, this)->SendMessage(BM_GETCHECK);
-}
-
-inline uint TCheckBox::GetState() const {
-  return (uint)CONST_CAST(TCheckBox*, this)->SendMessage(BM_GETSTATE);
-}
-
-inline void TCheckBox::SetStyle(uint style, bool redraw) {
-  SendMessage(BM_SETSTYLE, style, MAKELPARAM(redraw,0));
 }
 
 #endif  // OWL_CHECKBOX_H

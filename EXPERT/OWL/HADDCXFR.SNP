@@ -9,7 +9,7 @@
 ##^BOL
 
 //{{[[ClassName]]XFER_DEF}}
-protected:
+  protected:
 
 //{{[[ClassName]]XFER_DEF_END}}
 ##--END-- QUERY_CLASS_NAME [[ClassName]]

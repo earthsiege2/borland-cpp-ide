@@ -1,0 +1,11 @@
+#----------------------------------------------------------------------------
+# ObjectWindows
+# Copyright (c) 1996, 1996 by Borland International, All Rights Reserved
+#----------------------------------------------------------------------------
+
+MODELS = ldft
+
+EXERES = tooltip
+OBJEXE = tooltipx.obj
+
+!include $(BCEXAMPLEDIR)\owlmake.gen

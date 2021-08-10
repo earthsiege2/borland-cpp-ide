@@ -3,9 +3,9 @@
 */
 
 /*
- *      C/C++ Run Time Library - Version 6.5
+ *      C/C++ Run Time Library - Version 7.0
  *
- *      Copyright (c) 1990, 1994 by Borland International
+ *      Copyright (c) 1990, 1996 by Borland International
  *      All Rights Reserved.
  *
  */
@@ -43,82 +43,82 @@
 #endif  /* !RC_INVOKED */
 
 
-template<class typ> class _EXPCLASS smanip {
-        ios _FAR & (_RTLENTRY *_fn)(ios _FAR &, typ);
-        typ _ag;
+template<class _typ> class _EXPCLASS smanip {
+        ios _FAR & (_RTLENTRY *_fn)(ios _FAR &, _typ);
+        _typ _ag;
 public:
-        _RTLENTRY smanip(ios _FAR & (_RTLENTRY *_f)(ios _FAR &, typ), typ _a) :
+        _RTLENTRY smanip(ios _FAR & (_RTLENTRY *_f)(ios _FAR &, _typ), _typ _a) :
                 _fn(_f), _ag(_a) { }
-        friend istream _FAR & _RTLENTRY operator>>(istream _FAR & _s, smanip<typ> _FAR & _f) {
+        friend istream _FAR & _RTLENTRY operator>>(istream _FAR & _s, smanip<_typ> _FAR & _f) {
                         (*_f._fn)(_s, _f._ag); return _s; }
-        friend ostream _FAR & _RTLENTRY operator<<(ostream _FAR & _s, smanip<typ> _FAR & _f) {
+        friend ostream _FAR & _RTLENTRY operator<<(ostream _FAR & _s, smanip<_typ> _FAR & _f) {
                         (*_f._fn)(_s, _f._ag); return _s; }
         };
 
-template<class typ> class _EXPCLASS sapp {
-        ios _FAR & (_RTLENTRY *_fn)(ios _FAR &, typ);
+template<class _typ> class _EXPCLASS sapp {
+        ios _FAR & (_RTLENTRY *_fn)(ios _FAR &, _typ);
 public:
-        sapp(ios _FAR & (_RTLENTRY *_f)(ios _FAR &, typ)) : _fn(_f) { }
-        smanip<typ> _RTLENTRY operator()(typ _z)
-                { return smanip<typ>(_fn, _z); }
+        sapp(ios _FAR & (_RTLENTRY *_f)(ios _FAR &, _typ)) : _fn(_f) { }
+        smanip<_typ> _RTLENTRY operator()(_typ _z)
+                { return smanip<_typ>(_fn, _z); }
         };
 
-template<class typ> class _EXPCLASS imanip {
-        istream _FAR & (_RTLENTRY *_fn)(istream _FAR &, typ);
-        typ _ag;
+template<class _typ> class _EXPCLASS imanip {
+        istream _FAR & (_RTLENTRY *_fn)(istream _FAR &, _typ);
+        _typ _ag;
 public:
-        _RTLENTRY imanip(istream _FAR & (_RTLENTRY *_f)(istream _FAR &, typ), typ _z ) :
+        _RTLENTRY imanip(istream _FAR & (_RTLENTRY *_f)(istream _FAR &, _typ), _typ _z ) :
                 _fn(_f), _ag(_z) { }
-        friend istream _FAR & _RTLENTRY operator>>(istream _FAR & _s, imanip<typ> _FAR & _f) {
+        friend istream _FAR & _RTLENTRY operator>>(istream _FAR & _s, imanip<_typ> _FAR & _f) {
                 return(*_f._fn)(_s, _f._ag); }
         };
 
-template<class typ> class _EXPCLASS iapply {
-        istream _FAR & (_RTLENTRY *_fn)(istream _FAR &, typ);
+template<class _typ> class _EXPCLASS iapply {
+        istream _FAR & (_RTLENTRY *_fn)(istream _FAR &, _typ);
 public:
-        _RTLENTRY iapply(istream _FAR & (_RTLENTRY *_f)(istream _FAR &, typ)) :
+        _RTLENTRY iapply(istream _FAR & (_RTLENTRY *_f)(istream _FAR &, _typ)) :
                 _fn(_f) { }
-        imanip<typ> _RTLENTRY operator()(typ _z) {
-                return IMANIP(typ)(_fn, _z); }
+        imanip<_typ> _RTLENTRY operator()(_typ _z) {
+                return IMANIP(_typ)(_fn, _z); }
         };
 
-template<class typ> class _EXPCLASS omanip {
-        ostream _FAR & (_RTLENTRY *_fn)(ostream _FAR &, typ);
-        typ _ag;
+template<class _typ> class _EXPCLASS omanip {
+        ostream _FAR & (_RTLENTRY *_fn)(ostream _FAR &, _typ);
+        _typ _ag;
 public:
-        _RTLENTRY omanip(ostream _FAR & (_RTLENTRY *_f)(ostream _FAR &, typ), typ _z ) :
+        _RTLENTRY omanip(ostream _FAR & (_RTLENTRY *_f)(ostream _FAR &, _typ), _typ _z ) :
                 _fn(_f), _ag(_z) { }
-        friend ostream _FAR & _RTLENTRY operator<<(ostream _FAR & _s, omanip<typ> _FAR & _f) {
+        friend ostream _FAR & _RTLENTRY operator<<(ostream _FAR & _s, omanip<_typ> _FAR & _f) {
                 return(*_f._fn)(_s, _f._ag); }
         };
 
-template<class typ> class _EXPCLASS oapp {
-        ostream _FAR & (_RTLENTRY *_fn)(ostream _FAR &, typ);
+template<class _typ> class _EXPCLASS oapp {
+        ostream _FAR & (_RTLENTRY *_fn)(ostream _FAR &, _typ);
 public:
-        _RTLENTRY oapp(ostream _FAR & (_RTLENTRY *_f)(ostream _FAR &, typ)) :
+        _RTLENTRY oapp(ostream _FAR & (_RTLENTRY *_f)(ostream _FAR &, _typ)) :
                 _fn(_f) { }
-        omanip<typ> _RTLENTRY operator()(typ _z) {
-                return omanip<typ>(_fn, _z); }
+        omanip<_typ> _RTLENTRY operator()(_typ _z) {
+                return omanip<_typ>(_fn, _z); }
         };
 
-template<class typ> class _EXPCLASS iomanip {
-        iostream _FAR & (_RTLENTRY *_fn)(iostream _FAR &, typ);
-        typ _ag;
+template<class _typ> class _EXPCLASS iomanip {
+        iostream _FAR & (_RTLENTRY *_fn)(iostream _FAR &, _typ);
+        _typ _ag;
 public:
-        _RTLENTRY iomanip(iostream _FAR & (_RTLENTRY *_f)(iostream _FAR &, typ), typ _z ) :
+        _RTLENTRY iomanip(iostream _FAR & (_RTLENTRY *_f)(iostream _FAR &, _typ), _typ _z ) :
                 _fn(_f), _ag(_z) { }
-        friend istream _FAR & _RTLENTRY operator>>(iostream _FAR & _s, iomanip<typ> _FAR & _f) {
+        friend istream _FAR & _RTLENTRY operator>>(iostream _FAR & _s, iomanip<_typ> _FAR & _f) {
                 return(*_f._fn)(_s, _f._ag); }
-        friend ostream _FAR & _RTLENTRY operator<<(iostream _FAR & _s, iomanip<typ> _FAR & _f) {
+        friend ostream _FAR & _RTLENTRY operator<<(iostream _FAR & _s, iomanip<_typ> _FAR & _f) {
                 return(*_f._fn)(_s, _f._ag); }
         };
 
-template<class typ> class _EXPCLASS ioapp {
-        iostream _FAR & (_RTLENTRY *_fn)(iostream _FAR &, typ);
+template<class _typ> class _EXPCLASS ioapp {
+        iostream _FAR & (_RTLENTRY *_fn)(iostream _FAR &, _typ);
 public:
-        _RTLENTRY ioapp(iostream _FAR & (_RTLENTRY *_f)(iostream _FAR &, typ)) : _fn(_f) { }
-        iomanip<typ> _RTLENTRY operator()(typ _z) {
-                return iomanip<typ>(_fn, _z); }
+        _RTLENTRY ioapp(iostream _FAR & (_RTLENTRY *_f)(iostream _FAR &, _typ)) : _fn(_f) { }
+        iomanip<_typ> _RTLENTRY operator()(_typ _z) {
+                return iomanip<_typ>(_fn, _z); }
         };
 
 // set the conversion base to 0, 8, 10, or 16

@@ -20,76 +20,113 @@
 # Build the object module lists.                                            #
 #############################################################################
 MISC =                            \
-	$(LIBDIR)\c0$(MODEL).obj  \
-	$(LIBDIR)\c0f$(MODEL).obj
+        $(LIBDIR)\c0$(MODEL).obj  \
+        $(LIBDIR)\c0f$(MODEL).obj
 
 #############################################################################
 # Configure the environment appropriately.                                  #
 #############################################################################
 !include rules.mak
 
-ASM = $(ASM) -m -mx -q -t -I$(INCLBASE)\rtlinc\common16
+ASM = $(ASM)
+AFLAGS = -m -mx -q -t -I$(INCLBASE)\rtlinc\common16
 
 #############################################################################
 # MISC explicit rules.                                                      #
 #############################################################################
 $(LIBDIR)\c0t.obj : c0.asm
-	if exist tasm.cfg del tasm.cfg
-	$(ASM) -d__TINY__    $**, $(OBJDIR)\$.
-	copy $(OBJDIR)\$. $(LIBDIR)
+        copy &&|
+        $(AFLAGS)
+|       tasm.cfg
+        $(ASM) -d__TINY__    $**, $(OBJDIR)\$.
+        del tasm.cfg
+        copy $(OBJDIR)\$. $(LIBDIR)
 
 $(LIBDIR)\c0s.obj : c0.asm
-	if exist tasm.cfg del tasm.cfg
-	$(ASM) -d__SMALL__   $**, $(OBJDIR)\$.
-	copy $(OBJDIR)\$. $(LIBDIR)
+        copy &&|
+        $(AFLAGS)
+|       tasm.cfg
+        $(ASM) -d__SMALL__   $**, $(OBJDIR)\$.
+        del tasm.cfg
+        copy $(OBJDIR)\$. $(LIBDIR)
 
 $(LIBDIR)\c0c.obj : c0.asm
-	if exist tasm.cfg del tasm.cfg
-	$(ASM) -d__COMPACT__ $**, $(OBJDIR)\$.
-	copy $(OBJDIR)\$. $(LIBDIR)
+        copy &&|
+        $(AFLAGS)
+|       tasm.cfg
+        $(ASM) -d__COMPACT__ $**, $(OBJDIR)\$.
+        del tasm.cfg
+        copy $(OBJDIR)\$. $(LIBDIR)
 
 $(LIBDIR)\c0m.obj : c0.asm
-	if exist tasm.cfg del tasm.cfg
-	$(ASM) -d__MEDIUM__  $**, $(OBJDIR)\$.
-	copy $(OBJDIR)\$. $(LIBDIR)
+        copy &&|
+        $(AFLAGS)
+|       tasm.cfg
+        $(ASM) -d__MEDIUM__  $**, $(OBJDIR)\$.
+        del tasm.cfg
+        copy $(OBJDIR)\$. $(LIBDIR)
 
 $(LIBDIR)\c0l.obj : c0.asm
-	if exist tasm.cfg del tasm.cfg
-	$(ASM) -d__LARGE__   $**, $(OBJDIR)\$.
-	copy $(OBJDIR)\$. $(LIBDIR)
+        copy &&|
+        $(AFLAGS)
+|       tasm.cfg
+        $(ASM) -d__LARGE__   $**, $(OBJDIR)\$.
+        del tasm.cfg
+        copy $(OBJDIR)\$. $(LIBDIR)
 
 $(LIBDIR)\c0h.obj : c0.asm
-	if exist tasm.cfg del tasm.cfg
-	$(ASM) -d__HUGE__    $**, $(OBJDIR)\$.
-	copy $(OBJDIR)\$. $(LIBDIR)
+        copy &&|
+        $(AFLAGS)
+|       tasm.cfg
+        $(ASM) -d__HUGE__    $**, $(OBJDIR)\$.
+        del tasm.cfg
+        copy $(OBJDIR)\$. $(LIBDIR)
 
 $(LIBDIR)\c0ft.obj : c0.asm
-	if exist tasm.cfg del tasm.cfg
-	$(ASM) -d__TINY__    -d_DSSTACK_ $**, $(OBJDIR)\$.
-	copy $(OBJDIR)\$. $(LIBDIR)
+        copy &&|
+        $(AFLAGS)
+|       tasm.cfg
+        $(ASM) -d__TINY__    -d_DSSTACK_ $**, $(OBJDIR)\$.
+        del tasm.cfg
+        copy $(OBJDIR)\$. $(LIBDIR)
 
 $(LIBDIR)\c0fs.obj : c0.asm
-	if exist tasm.cfg del tasm.cfg
-	$(ASM) -d__SMALL__   -d_DSSTACK_ $**, $(OBJDIR)\$.
-	copy $(OBJDIR)\$. $(LIBDIR)
+        copy &&|
+        $(AFLAGS)
+|       tasm.cfg
+        $(ASM) -d__SMALL__   -d_DSSTACK_ $**, $(OBJDIR)\$.
+        del tasm.cfg
+        copy $(OBJDIR)\$. $(LIBDIR)
 
 $(LIBDIR)\c0fc.obj : c0.asm
-	if exist tasm.cfg del tasm.cfg
-	$(ASM) -d__COMPACT__ -d_DSSTACK_ $**, $(OBJDIR)\$.
-	copy $(OBJDIR)\$. $(LIBDIR)
+        copy &&|
+        $(AFLAGS)
+|       tasm.cfg
+        $(ASM) -d__COMPACT__ -d_DSSTACK_ $**, $(OBJDIR)\$.
+        del tasm.cfg
+        copy $(OBJDIR)\$. $(LIBDIR)
 
 $(LIBDIR)\c0fm.obj : c0.asm
-	if exist tasm.cfg del tasm.cfg
-	$(ASM) -d__MEDIUM__  -d_DSSTACK_ $**, $(OBJDIR)\$.
-	copy $(OBJDIR)\$. $(LIBDIR)
+        copy &&|
+        $(AFLAGS)
+|       tasm.cfg
+        $(ASM) -d__MEDIUM__  -d_DSSTACK_ $**, $(OBJDIR)\$.
+        del tasm.cfg
+        copy $(OBJDIR)\$. $(LIBDIR)
 
 $(LIBDIR)\c0fl.obj : c0.asm
-	if exist tasm.cfg del tasm.cfg
-	$(ASM) -d__LARGE__   -d_DSSTACK_ $**, $(OBJDIR)\$.
-	copy $(OBJDIR)\$. $(LIBDIR)
+        copy &&|
+        $(AFLAGS)
+|       tasm.cfg
+        $(ASM) -d__LARGE__   -d_DSSTACK_ $**, $(OBJDIR)\$.
+        del tasm.cfg
+        copy $(OBJDIR)\$. $(LIBDIR)
 
 $(LIBDIR)\c0fh.obj : c0.asm
-	if exist tasm.cfg del tasm.cfg
-	$(ASM) -d__HUGE__                $**, $(OBJDIR)\$.
-	copy $(OBJDIR)\$. $(LIBDIR)
+        copy &&|
+        $(AFLAGS)
+|       tasm.cfg
+        $(ASM) -d__HUGE__                $**, $(OBJDIR)\$.
+        del tasm.cfg
+        copy $(OBJDIR)\$. $(LIBDIR)
 

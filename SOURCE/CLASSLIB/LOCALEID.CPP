@@ -1,11 +1,12 @@
 //----------------------------------------------------------------------------
-// (C) Copyright 1994 by Borland International, All Rights Reserved
+// Borland WinSys Library
+// Copyright (c) 1994, 1996 by Borland International, All Rights Reserved
+//
+//$Revision:   5.4  $
 //
 // TLocaleString default native language for symbols, only if not user-defined
 //----------------------------------------------------------------------------
-#if !defined(_Windows)
-# define _Windows      // pretend we are in windows to get the headers we need
-#endif
-#include <osl/locale.h>
+#include <winsys/pch.h>
+#include <winsys/lclstrng.h>
 
 TLangId TLocaleString::NativeLangId = TLocaleString::GetSystemLangId();

@@ -1,13 +1,26 @@
 //----------------------------------------------------------------------------
 // ObjectWindows
-// (C) Copyright 1992, 1994 by Borland International, All Rights Reserved
+// Copyright (c) 1992, 1996 by Borland International, All Rights Reserved
 //
-//   Implementation of TTinyCaption
+//$Revision:   10.7  $
+//
+// Implementation of TTinyCaption
 //----------------------------------------------------------------------------
 #pragma hdrignore SECTION
-#include <owl/owlpch.h>
-#include <owl/tinycapt.h>
-#include <owl/gdiobjec.h>
+#include <owl/pch.h>
+#if !defined(OWL_TINYCAPT_H)
+# include <owl/tinycapt.h>
+#endif
+#if !defined(OWL_GDIOBJEC_H)
+# include <owl/gdiobjec.h>
+#endif
+#if !defined(WINSYS_UIMETRIC_H)
+# include <winsys/uimetric.h>
+#endif
+
+#if !defined(WS_EX_TOOLWINDOW)
+# define WS_EX_TOOLWINDOW         0x00000080L
+#endif
 
 #if !defined(SECTION) || SECTION == 1
 
@@ -36,52 +49,78 @@ TTinyCaption::TTinyCaption()
   CaptionFont = 0;
 }
 
+//
+//
+//
 TTinyCaption::~TTinyCaption()
 {
   delete CaptionFont;
 }
 
+//
+//
+//
 void
 TTinyCaption::EnableTinyCaption(int captionHeight, bool closeBox)
 {
-  Border.cx = GetSystemMetrics(SM_CXBORDER);
-  Border.cy = GetSystemMetrics(SM_CYBORDER);
+  Border.cx = TUIMetric::CxBorder;
+  Border.cy = TUIMetric::CyBorder;
 
-  //
   // Get width of window borders, these will vary with type of window
+  // Really 3 styles are supported:
+  //   Fixed frame - WS_DLGFRAME, no WS_BORDER, WS_THICKFRAME optional and
+  //                 only affects sizability, not look
+  //   Thick frame - WS_BORDER + WS_THICKFRAME, visible thick frame for sizing
+  //   Thin frame  - WS_BORDER only. No sizing.
   //
-  if (Attr.Style & WS_THICKFRAME) {
-    Frame.cx = GetSystemMetrics(SM_CXFRAME);
-    Frame.cy = GetSystemMetrics(SM_CYFRAME);
-  }
-  else if (Attr.Style & WS_DLGFRAME) {
-    Frame.cx = GetSystemMetrics(SM_CXDLGFRAME);
-    Frame.cy = GetSystemMetrics(SM_CYDLGFRAME);
+  if ((Attr.Style & WS_CAPTION) == WS_DLGFRAME) {
+    Frame.cx = TUIMetric::CxFixedFrame;
+    Frame.cy = TUIMetric::CyFixedFrame;
   }
   else {
-    Attr.Style |= WS_BORDER;  // must have at least a border
-    Frame = Border;
+    Attr.Style |= WS_BORDER;     // must have at least a border
+    Attr.Style &= ~WS_DLGFRAME;  // but never a caption (WS_BORDER+WS_DLGFRAME)
+    if (Attr.Style & WS_THICKFRAME) {
+      Frame.cx = TUIMetric::CxSizeFrame;
+      Frame.cy = TUIMetric::CySizeFrame;
+    }
+    else {
+      Frame = Border;
+    }
   }
 
+  CloseBox = closeBox;
+
+  // If running under Win95 or NT NewShell, then use its extended style to
+  // become a tiny caption
   //
+  if (TSystem::Has3dUI()) {
+    Attr.Style |= WS_CAPTION;
+    Attr.ExStyle |= WS_EX_TOOLWINDOW;
+    if (closeBox)
+      Attr.Style |= WS_SYSMENU;
+    CaptionHeight = TUIMetric::CySmCaption;
+    return;
+  }
+
   // Calculate the actual caption height including lower divider, but not top
   // border
   //
-  CaptionHeight = (GetSystemMetrics(SM_CYCAPTION) * captionHeight) / 100
-                  - Border.cy;
-  CloseBox = closeBox;
+  CaptionHeight = (TUIMetric::CyCaption * captionHeight) / 100 - Border.cy;
 
+  // Create the small font
+  //
   delete CaptionFont;
   CaptionFont = new TFont(
-    "Arial",                    // facename. "Small Fonts" is another option
-    -(CaptionHeight-2*Border.cy), // height in pixels,
-    0, 0, 0, FW_NORMAL,         // width,esc,orientation,weight
-    VARIABLE_PITCH | FF_SWISS,  // Pitch and Family
-    false, false, false,        // Italic, Underline, Strikeout
-    ANSI_CHARSET,               // Charset
-    OUT_CHARACTER_PRECIS,       // Output precision
-    CLIP_DEFAULT_PRECIS,        // Clip precision
-    PROOF_QUALITY               // Quality
+    "Small Fonts",                // facename
+    -(CaptionHeight-2*Border.cy), // height in pixels
+    0, 0, 0, FW_NORMAL,           // width,esc,orientation,weight
+    VARIABLE_PITCH | FF_SWISS,    // Pitch and Family
+    false, false, false,          // Italic, Underline, Strikeout
+    ANSI_CHARSET,                 // Charset
+    OUT_CHARACTER_PRECIS,         // Output precision
+    CLIP_DEFAULT_PRECIS,          // Clip precision
+    PROOF_QUALITY                 // Quality
   );
 
   TCEnabled = true;
@@ -94,35 +133,33 @@ TTinyCaption::EnableTinyCaption(int captionHeight, bool closeBox)
 uint
 TTinyCaption::EvNCHitTest(TPoint& screenPt)
 {
-  uint er;
+  uint er = 0;
   if (DoNCHitTest(screenPt, er) == esComplete)
     return er;
   return TWindow::EvNCHitTest(screenPt);
 }
 
+//
+//
+//
 TEventStatus
 TTinyCaption::DoNCHitTest(TPoint& screenPt, uint& evRes)
 {
   if (!TCEnabled)
     return esPartial;
 
-  //
   // Check style bits to see what to paint
   //
-  long style = GetWindowLong(GWL_STYLE);
-  bool hasCaption, hasSysMenu, hasMaximize, hasMinimize;
-  hasCaption = hasSysMenu = hasMaximize = hasMinimize = false;
-  if (style & WS_CAPTION) {
-    hasCaption = true;
-    if (style & WS_SYSMENU)
-      hasSysMenu = true;
-    if (style & WS_MAXIMIZEBOX)
-      hasMaximize = true;
-    if (style & WS_MINIMIZEBOX)
-      hasMinimize = true;
-  }
+  long style = GetStyle();
+  bool hasSysMenu, hasMaximize, hasMinimize;
+  hasSysMenu = hasMaximize = hasMinimize = false;
+  if (style & WS_SYSMENU)
+    hasSysMenu = true;
+  if (style & WS_MAXIMIZEBOX)
+    hasMaximize = true;
+  if (style & WS_MINIMIZEBOX)
+    hasMinimize = true;
 
-  //
   // Convert to window coordinates
   //
   TPoint winPt = screenPt - GetWindowRect().TopLeft();
@@ -139,17 +176,16 @@ TTinyCaption::DoNCHitTest(TPoint& screenPt, uint& evRes)
     evRes = HTMAXBUTTON;
     return esComplete;
   }
-  //
+
   // CaptionRect includes buttons so make sure it's last checked
-  // Should modify this one to allow clicking in left, top, right thin 
+  // Should modify this one to allow clicking in left, top, right thin
   // borders of caption
   //
-  else if (hasCaption && GetCaptionRect().Contains(winPt)) {
+  else if (GetCaptionRect().Contains(winPt)) {
     evRes = HTCAPTION;
     return esComplete;
   }
   else {
-    evRes = 0;
     return esPartial;
   }
 }
@@ -164,32 +200,33 @@ TTinyCaption::EvNCPaint()
   DoNCPaint();           // Then our special caption painting
 }
 
+//
+//
+//
 TEventStatus
 TTinyCaption::DoNCPaint()
 {
   if (!TCEnabled || IsIconic())
     return esPartial;  // We don't do anything special for an Icon
 
-  //
   // If we have focus or our children have focus, then we're active
-  // Note: We can't use GetFocus here because when we're being restored
-  // from an icon, we're active, but don't yet have focus!
+  // Note: We can't rely only on GetFocus here because when we're being
+  //       restored from an icon, we're active, but don't yet have focus!
   //
-  HWND focus = GetFocus();
-  PaintCaption(GetActiveWindow() == HWindow || focus == HWindow || IsChild(focus));
+  THandle focus = GetFocus();
+  PaintCaption(GetActiveWindow() == GetHandle() || focus == GetHandle() || IsChild(focus));
   return esPartial;       // Caller must call function to paint borders
 }
 
 //
-// Returns the size of our client area
+// Return the size of our client area
 //
 uint
 TTinyCaption::EvNCCalcSize(bool calcValidRects, NCCALCSIZE_PARAMS far& calcSize)
 {
-  uint er;
-  if (DoNCCalcSize(calcValidRects, calcSize, er) == esComplete)
-    return er;
-  return TWindow::EvNCCalcSize(calcValidRects, calcSize);
+  uint er = TWindow::EvNCCalcSize(calcValidRects, calcSize);
+  DoNCCalcSize(calcValidRects, calcSize, er);
+  return er;
 }
 
 //
@@ -197,32 +234,31 @@ TTinyCaption::EvNCCalcSize(bool calcValidRects, NCCALCSIZE_PARAMS far& calcSize)
 //
 TEventStatus
 TTinyCaption::DoNCCalcSize(bool /*calcValidRects*/,
-                           NCCALCSIZE_PARAMS far& calcSize, uint& evRes)
+                           NCCALCSIZE_PARAMS far& calcSize, uint& /*evRes*/)
 {
   if (!TCEnabled || IsIconic())
     return esPartial;
 
-  TRect captRect = GetCaptionRect();
+  calcSize.rgrc[0].top += GetCaptionRect().Height();
 
-  calcSize.rgrc[0].left +=   Frame.cx;
-  calcSize.rgrc[0].top +=    Frame.cy + captRect.Height();
-  calcSize.rgrc[0].right -=  Frame.cx;
-  calcSize.rgrc[0].bottom -= Frame.cy;
-
-  evRes = 0;
   return esComplete;
 }
 
+//
+//
+//
 void
 TTinyCaption::EvNCLButtonDown(uint hitTest, TPoint& screenPt)
 {
-  //
   // Display system menu, invert min/max icons (not), etc
   //
-  if (DoNCLButtonDown(hitTest,screenPt) == esPartial)
+  if (DoNCLButtonDown(hitTest, screenPt) == esPartial)
     TWindow::EvNCLButtonDown(hitTest, screenPt);
 }
 
+//
+//
+//
 TEventStatus
 TTinyCaption::DoNCLButtonDown(uint hitTest, TPoint& screenPt)
 {
@@ -242,20 +278,17 @@ TTinyCaption::DoNCLButtonDown(uint hitTest, TPoint& screenPt)
         sysBoxRect.right += 1;
 
         TWindowDC(*this).PatBlt(sysBoxRect, PATINVERT);
-        //
+
         // Display sys menu on button down
         // Need to lock sys menu until user clicks outside
-        //
 
-        //
         // Set flag to indicate we're expecting a sys command, & then send
         // message to popup sys menu
         //
         WaitingForSysCmd = true;
         SendMessage(WM_SYSCOMMAND, SC_MOUSEMENU|HTSYSMENU,
-                    MAKELPARAM(screenPt.x,screenPt.y));
+                    MkParam2(screenPt.x,screenPt.y));
 
-        //
         // If we didn't execute a command, user released btn outside of menu
         // If it was released in sys menu box, then redisplay menu as if it
         // were brought up with a keystroke
@@ -269,7 +302,7 @@ TTinyCaption::DoNCLButtonDown(uint hitTest, TPoint& screenPt)
             SendMessage(WM_SYSCOMMAND, SC_KEYMENU|HTSYSMENU);
           }
         }
-        if (HWindow)
+        if (GetHandle())
           TWindowDC(*this).PatBlt(sysBoxRect, PATINVERT);
       }
       return esComplete;
@@ -292,6 +325,9 @@ TTinyCaption::DoNCLButtonDown(uint hitTest, TPoint& screenPt)
   return esPartial;
 }
 
+//
+//
+//
 void
 TTinyCaption::EvMouseMove(uint modKeys, TPoint& pt)
 {
@@ -299,6 +335,9 @@ TTinyCaption::EvMouseMove(uint modKeys, TPoint& pt)
     TWindow::EvMouseMove(modKeys, pt);
 }
 
+//
+//
+//
 TEventStatus
 TTinyCaption::DoMouseMove(uint /*modKeys*/, TPoint& pt)
 {
@@ -328,16 +367,21 @@ TTinyCaption::DoMouseMove(uint /*modKeys*/, TPoint& pt)
   return esPartial;
 }
 
+//
+//
+//
 void
 TTinyCaption::EvLButtonUp(uint modKeys, TPoint& pt)
 {
-  //
   // If we're still in area where buton went down, then do it
   //
   if (DoLButtonUp(modKeys, pt) == esPartial)
     TWindow::EvLButtonUp(modKeys, pt);
 }
 
+//
+//
+//
 TEventStatus
 TTinyCaption::DoLButtonUp(uint modKeys, TPoint& pt)
 {
@@ -358,9 +402,9 @@ TTinyCaption::DoLButtonUp(uint modKeys, TPoint& pt)
             PostMessage(WM_CLOSE);
           return esComplete;
 
-        //
-        // We have to handle these buttons also to prevent defproc from painting
-        // the standard big min/max buttons when left mouse button is pressed
+        // We have to handle these buttons also to prevent defproc from
+        // painting the standard big min/max buttons when left mouse button is
+        // pressed
         //
         case HTMINBUTTON:
           HandleMessage(WM_SYSCOMMAND, SC_MINIMIZE);
@@ -376,15 +420,21 @@ TTinyCaption::DoLButtonUp(uint modKeys, TPoint& pt)
   return esPartial;
 }
 
+//
+//
+//
 bool
 TTinyCaption::EvNCActivate(bool active)
 {
   bool er;
-  if (DoNCActivate(active, er) == esComplete)
-    return er;
-  return TWindow::EvNCActivate(active);
+  if (DoNCActivate(active, er) == esPartial)
+    er = TWindow::EvNCActivate(active);
+  return er;
 }
 
+//
+//
+//
 TEventStatus
 TTinyCaption::DoNCActivate(bool active, bool& evRes)
 {
@@ -392,24 +442,28 @@ TTinyCaption::DoNCActivate(bool active, bool& evRes)
     return esPartial;  // Let default do it's thing
 
   PaintCaption(active);
-  evRes = ToBool(!active);
+  evRes = true;
   return esComplete;
 }
 
-
-LRESULT
-TTinyCaption::EvCommand(uint id, HWND hWndCtl, uint notifyCode)
+//
+//
+//
+TResult
+TTinyCaption::EvCommand(uint id, THandle hCtl, uint notifyCode)
 {
-  LRESULT er;
-  if (DoCommand(id, hWndCtl, notifyCode, er) == esComplete)
+  TResult er;
+  if (DoCommand(id, hCtl, notifyCode, er) == esComplete)
     return er;
-  return TWindow::EvCommand(id, hWndCtl, notifyCode);
+  return TWindow::EvCommand(id, hCtl, notifyCode);
 }
 
+//
+//
+//
 TEventStatus
-TTinyCaption::DoCommand(uint id, HWND /*hWndCtl*/, uint notifyCode, LRESULT& evRes)
+TTinyCaption::DoCommand(uint id, THandle /*hCtl*/, uint notifyCode, TResult& evRes)
 {
-  //
   // We're displaying system menu using TrackPopup...
   // This will send us WM_COMMAND messages instead of WM_SYSCOMMAND msgs
   // If we get a system menu command then transform it into a WM_SYSCOMMAND
@@ -428,6 +482,9 @@ TTinyCaption::DoCommand(uint id, HWND /*hWndCtl*/, uint notifyCode, LRESULT& evR
   }
 }
 
+//
+//
+//
 void
 TTinyCaption::EvSysCommand(uint cmdType, TPoint& p)
 {
@@ -435,7 +492,6 @@ TTinyCaption::EvSysCommand(uint cmdType, TPoint& p)
     TWindow::EvSysCommand(cmdType, p);
 }
 
-//
 //
 // Handle WM_SYSCOMMAND to make sure that SC_KEYMENU and SC_MOUSEMENU bring up
 // our sys menu at the right coord w/ respect to the tiny sys box.
@@ -456,32 +512,37 @@ TTinyCaption::DoSysCommand(uint cmdType, TPoint&)
   return esPartial;
 }
 
+//
+//
+//
 void
 TTinyCaption::PaintButton(TDC& dc, TRect& r, bool pressed)
 {
-//  dc.OWLFastWindowFrame(TBrush(GetSysColor(COLOR_WINDOWFRAME)), r, 1, 1);
-  dc.FrameRect(r, TBrush(GetSysColor(COLOR_WINDOWFRAME)));
+//  dc.OWLFastWindowFrame(TBrush(TColor::SysWindowFrame), r, 1, 1);
+  dc.FrameRect(r, TBrush(TColor::SysWindowFrame));
 
   r.Inflate(-1,-1);
-  dc.TextRect(r, TColor::LtGray);
+  dc.TextRect(r, TColor::Sys3dFace);
   if (r.Width() > 4 && r.Height() > 4) {
     if (pressed) {
-      dc.TextRect(r.left, r.top, r.right, r.top+1, TColor::Gray);
-      dc.TextRect(r.left, r.top+1, r.left+1, r.bottom, TColor::Gray);
+      dc.TextRect(r.left, r.top, r.right, r.top+1, TColor::Sys3dShadow);
+      dc.TextRect(r.left, r.top+1, r.left+1, r.bottom, TColor::Sys3dShadow);
     }
     else {
-      dc.TextRect(r.left, r.top, r.right-1, r.top+1, TColor::White);
-      dc.TextRect(r.left, r.top+1, r.left+1, r.bottom-1, TColor::White);
-      dc.TextRect(r.right-1, r.top+1, r.right, r.bottom, TColor::Gray);
-      dc.TextRect(r.left+1, r.bottom-1, r.right-1, r.bottom, TColor::Gray);
+      dc.TextRect(r.left, r.top, r.right-1, r.top+1, TColor::Sys3dHilight);
+      dc.TextRect(r.left, r.top+1, r.left+1, r.bottom-1, TColor::Sys3dHilight);
+      dc.TextRect(r.right-1, r.top+1, r.right, r.bottom, TColor::Sys3dShadow);
+      dc.TextRect(r.left+1, r.bottom-1, r.right-1, r.bottom, TColor::Sys3dShadow);
     }
   }
 }
 
+//
+//
+//
 void
 TTinyCaption::PaintCloseBox(TDC& dc, TRect& boxRect, bool pressed)
 {
-  //
   // Fill the box with light gray & draw bevel if possible
   //
   PaintButton(dc, boxRect, pressed);
@@ -489,7 +550,6 @@ TTinyCaption::PaintCloseBox(TDC& dc, TRect& boxRect, bool pressed)
   if (pressed)
     boxRect.Offset(1,1);
 
-  //
   // Do something different to differentiate from standard system menu--
   // draw a recessed black box glyph about half the button size, centered
   //
@@ -502,53 +562,58 @@ TTinyCaption::PaintCloseBox(TDC& dc, TRect& boxRect, bool pressed)
     glyphRect.Offset(boxRect.left + (boxRect.Width()-glyphWidth-1)/2,
                      boxRect.top + (boxRect.Height()-glyphHeight-1)/2);
 
-    dc.TextRect(glyphRect, TColor::Gray);
+    dc.TextRect(glyphRect, TColor::Sys3dShadow);
     glyphRect.Offset(1,1);
-    dc.TextRect(glyphRect, TColor::White);
+    dc.TextRect(glyphRect, TColor::Sys3dHilight);
     glyphRect.BottomRight().Offset(-1,-1);
-    dc.TextRect(glyphRect, TColor::Black);
+    dc.TextRect(glyphRect, TColor::SysBtnText);
   }
 }
 
+//
+//
+//
 void
 TTinyCaption::PaintSysBox(TDC& dc, TRect& boxRect, bool /*pressed*/)
 {
-  //
   // Dont paint over the left & top borders
   //
   boxRect.left++;
   boxRect.top++;
 
+  // Fill the box with 3d face
   //
-  // Fill the box with light gray
-  //
-  dc.TextRect(boxRect, TColor::LtGray);
+  dc.TextRect(boxRect, TColor::Sys3dFace);
 
-  //
   // Draw the ventilator (sysmenu) box, with shadow
-  // 
+  //
   TPoint begPt = boxRect.TopLeft().OffsetBy(2, (boxRect.Height()-3)/2);
   TRect ventRect(begPt, TSize(boxRect.Width()-5, 3));
 
   // Draw shadow down and right 1
+  //
   dc.TextRect(ventRect.left+1, ventRect.top+1,
-              ventRect.right+1, ventRect.bottom+1, TColor::Gray);
+              ventRect.right+1, ventRect.bottom+1, TColor::Sys3dShadow);
 
   // Draw ventilator rectangle
-  dc.FrameRect(ventRect, TBrush(TColor::Black));
+  //
+  dc.FrameRect(ventRect, TBrush(TColor::SysBtnText));
 
   // Draw white interior of ventilator
+  //
   dc.TextRect(ventRect.left+1, ventRect.top+1,
-              ventRect.right-1, ventRect.top+2, TColor::White);
+              ventRect.right-1, ventRect.top+2, TColor::Sys3dHilight);
 
   dc.TextRect(boxRect.right, boxRect.top,
-              boxRect.right+1, boxRect.bottom, TColor::Black);
+              boxRect.right+1, boxRect.bottom, TColor::SysBtnText);
 }
 
+//
+//
+//
 void
 TTinyCaption::PaintMinBox(TDC& dc, TRect& boxRect, bool pressed)
 {
-  //
   // Fill the box with light gray & draw bevel if possible
   //
   PaintButton(dc, boxRect, pressed);
@@ -569,10 +634,12 @@ TTinyCaption::PaintMinBox(TDC& dc, TRect& boxRect, bool pressed)
   }
 }
 
+//
+//
+//
 void
 TTinyCaption::PaintMaxBox(TDC& dc, TRect& boxRect, bool pressed)
 {
-  //
   // Fill the box with light gray & draw bevel if possible
   //
   PaintButton(dc, boxRect, pressed);
@@ -580,7 +647,6 @@ TTinyCaption::PaintMaxBox(TDC& dc, TRect& boxRect, bool pressed)
   if (pressed)
     boxRect.Offset(1,1);
 
-  //
   // Down triangle
   //
   int bh = boxRect.Height();
@@ -597,7 +663,6 @@ TTinyCaption::PaintMaxBox(TDC& dc, TRect& boxRect, bool pressed)
     }
   }
 
-  //
   // Up triangle
   //
   {
@@ -612,37 +677,36 @@ TTinyCaption::PaintMaxBox(TDC& dc, TRect& boxRect, bool pressed)
   }
 }
 
+//
+//
+//
 void
 TTinyCaption::PaintCaption(bool active)
 {
-  int xOrg;
-
-  long style = GetWindowLong(GWL_STYLE);
-  if (!(style & WS_CAPTION))
-    return;    // Leave now if there is no caption, it's all we care about
-
-  //
   // Paint caption background and caption text if any.
   //
   TWindowDC dc(*this);
   TRect captRect = GetCaptionRect();
 
-  HBRUSH captionBrush = CreateSolidBrush(GetSysColor(active ?
-                                                     COLOR_ACTIVECAPTION :
-                                                     COLOR_INACTIVECAPTION));
-  dc.SetTextColor(GetSysColor(active ? COLOR_CAPTIONTEXT :
-                                       COLOR_INACTIVECAPTIONTEXT));
-  dc.FillRect(captRect, captionBrush);
-  DeleteObject(captionBrush);
+  dc.SetTextColor(active ? TColor::SysCaptionText :
+                           TColor::SysInactiveCaptionText);
 
+  // Could use a TBrush and PatBlt instead, but text backgrounds are always
+  // solid so this works well.
+  //
+  dc.TextRect(captRect, active ? TColor::SysActiveCaption :
+                                 TColor::SysInactiveCaption);
+
+  CHECK(CaptionFont);
   dc.SelectObject(*CaptionFont);
   dc.SetBkMode(TRANSPARENT);
   TSize textSize = dc.GetTextExtent(Title, strlen(Title));
 
-  //
   // Calc x coord for text, so that text is centered between caption buttons
   //
-  xOrg = captRect.right - captRect.left;
+  int  xOrg = captRect.right - captRect.left;
+  long style = GetWindowLong(GWL_STYLE);
+
   if (style & WS_MINIMIZEBOX)
     xOrg -= GetMinBoxRect().Width();
 
@@ -657,7 +721,7 @@ TTinyCaption::PaintCaption(bool active)
     xOrg = 0;
   else
     xOrg = xOrg/2;
-  
+
   xOrg += captRect.left;
 
   if ((style & WS_SYSMENU) || CloseBox)
@@ -671,39 +735,32 @@ TTinyCaption::PaintCaption(bool active)
   );
   dc.RestoreFont();
 
-  //
   // Paint widgets: sysmenu or close button, minimize button, maximize button
   // They currently all use a black pen
   //
   dc.SelectStockObject(BLACK_PEN);
 
-  //
   // Paint system menu or close button
   //
-
   if (CloseBox)
     PaintCloseBox(dc, GetSysBoxRect(), false);
   else if (style & WS_SYSMENU)
     PaintSysBox(dc, GetSysBoxRect(), false);
 
-  //
   // Paint minimize button
   //
   if (style & WS_MINIMIZEBOX)
     PaintMinBox(dc, GetMinBoxRect(), false);
 
-  //
   // Paint maximize button
   //
   if (style & WS_MAXIMIZEBOX)
     PaintMaxBox(dc, GetMaxBoxRect(), false);
 
-  //
   // Draw window-frame color line under caption
   //
   dc.FrameRect(captRect.left, captRect.bottom-1, captRect.right, captRect.bottom,
-               TBrush(GetSysColor(COLOR_WINDOWFRAME)));
-
+               TBrush(TColor::SysWindowFrame));
 }
 
 //
@@ -712,7 +769,6 @@ TTinyCaption::PaintCaption(bool active)
 TRect
 TTinyCaption::GetCaptionRect()
 {
-  //
   // Get caption rect converted to window relative coordinates
   //
   TRect captRect = GetWindowRect();
@@ -739,10 +795,12 @@ TTinyCaption::GetSysBoxRect()
   return boxRect;
 }
 
+//
+//
+//
 TRect
 TTinyCaption::GetMinBoxRect()
 {
-  //
   // Far right on caption if no max box, else next to max box
   //
   TRect boxRect = GetMaxBoxRect();
@@ -751,11 +809,14 @@ TTinyCaption::GetMinBoxRect()
   return boxRect;
 }
 
+//
+//
+//
 TRect
 TTinyCaption::GetMaxBoxRect()
 {
   TRect boxRect = GetCaptionRect();
-  boxRect.left = boxRect.right - CaptionHeight; 
+  boxRect.left = boxRect.right - CaptionHeight;
   boxRect.top -= 1;
   boxRect.right += 1;
   return boxRect;
@@ -771,23 +832,28 @@ TTinyCaption::DoSysMenu()
   if (hSysMenu) {
     uint32 style = GetWindowLong(GWL_STYLE);
     EnableMenuItem(hSysMenu, SC_RESTORE, (IsIconic() || IsZoomed()) ? MF_ENABLED : MF_GRAYED);
-    EnableMenuItem(hSysMenu, SC_MOVE, (style & WS_CAPTION) ? MF_ENABLED : MF_GRAYED);
+    EnableMenuItem(hSysMenu, SC_MOVE, (1/*style & WS_CAPTION*/) ? MF_ENABLED : MF_GRAYED);
     EnableMenuItem(hSysMenu, SC_SIZE, (style & WS_THICKFRAME) ? MF_ENABLED : MF_GRAYED);
     EnableMenuItem(hSysMenu, SC_MINIMIZE, ((style&WS_MINIMIZEBOX) && !IsIconic()) ? MF_ENABLED : MF_GRAYED);
     EnableMenuItem(hSysMenu, SC_MAXIMIZE, ((style&WS_MAXIMIZEBOX) && !IsZoomed()) ? MF_ENABLED : MF_GRAYED);
     TRect r = GetSysBoxRect();
     ClientToScreen(r.TopLeft());     // Cvt pt to screen coord
-    ClientToScreen(r.BottomRight()); 
+    ClientToScreen(r.BottomRight());
     TrackPopupMenu(hSysMenu, TPM_LEFTALIGN | TPM_LEFTBUTTON,
-                   r.left-Frame.cx, r.top-Frame.cy, 0, HWindow, &r);
+                   r.left-Frame.cx, r.top-Frame.cy, 0, GetHandle(), &r);
   }
 }
 
 #endif
 #if !defined(SECTION) || SECTION == 2
 
+#if !defined(BI_NO_OBJ_STREAMING)
+
 IMPLEMENT_STREAMABLE(TTinyCaption);
 
+//
+// Reads an instance of TTinyCaption from the given ipstream
+//
 void*
 TTinyCaption::Streamer::Read(ipstream& is, uint32 /*version*/) const
 {
@@ -803,6 +869,9 @@ TTinyCaption::Streamer::Read(ipstream& is, uint32 /*version*/) const
   return o;
 }
 
+//
+// Writes the TTinyCaption to the given opstream
+//
 void
 TTinyCaption::Streamer::Write(opstream& os) const
 {
@@ -811,8 +880,11 @@ TTinyCaption::Streamer::Write(opstream& os) const
   os << o->TCEnabled;
   if (o->TCEnabled) {
     int captionHeight = (100*o->CaptionHeight) /
-                          (o->Border.cy+GetSystemMetrics(SM_CYCAPTION));
+                          (o->Border.cy+TUIMetric::CyCaption);
     os << captionHeight << o->CloseBox;
   }
 }
+
+#endif  // if !defined(BI_NO_OBJ_STREAMING)
+
 #endif

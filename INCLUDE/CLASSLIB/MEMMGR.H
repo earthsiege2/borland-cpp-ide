@@ -1,42 +1,36 @@
-/*------------------------------------------------------------------------*/
-/*                                                                        */
-/*  MEMMGR.H                                                              */
-/*                                                                        */
-/*  Copyright (c) 1991, 1994 Borland International                        */
-/*  All Rights Reserved                                                   */
-/*                                                                        */
-/*------------------------------------------------------------------------*/
-
-#if !defined( CLASSLIB_MEMMGR_H )
+//----------------------------------------------------------------------------
+// Borland BIDS Container Library
+// Copyright (c) 1992, 1996 by Borland International, All Rights Reserved
+//
+//$Revision:   5.8  $
+//
+//----------------------------------------------------------------------------
+#if !defined(CLASSLIB_MEMMGR_H)
 #define CLASSLIB_MEMMGR_H
 
-#if !defined( __STDLIB_H )
-#include <stdlib.h>
+#if !defined(CLASSLIB_DEFS_H)
+# include <classlib/defs.h>
+#endif
+#if !defined(CLASSLIB_STDTEMPL_H)
+# include <classlib/stdtempl.h>
+#endif
+#if !defined(CLASSLIB_ALLOCTR_H)
+# include <classlib/alloctr.h>
+#endif
+#if !defined(SERVICES_CHECKS_H)
+# include <services/checks.h>
 #endif
 
-#if !defined( __DOS_H )
-#include <dos.h>
+#if !defined(__STDLIB_H) && !defined(_INC_STDLIB)
+# include <stdlib.h>
+#endif
+#if !defined(__DOS_H) && !defined(_INC_DOS)
+# include <dos.h>
 #endif
 
-#if !defined( __CHECKS_H )
-#include <checks.h>
-#endif
-
-#if !defined( CLASSLIB_DEFS_H )
-#include <classlib/defs.h>
-#endif
-
-#if !defined( CLASSLIB_STDTEMPL_H )
-#include <classlib/stdtempl.h>
-#endif
-
-#if !defined( CLASSLIB_ALLOCTR_H )
-#include <classlib/alloctr.h>
-#endif
-
-#pragma option -Vo-
+//#pragma option -Vo-
 #if defined( BI_CLASSLIB_NO_po )
-#pragma option -po-
+# pragma option -po-
 #endif
 
 /*------------------------------------------------------------------------*/
@@ -59,9 +53,7 @@ public:
 private:
 
     void *operator new( size_t, size_t, const Alloc& );
-    void *operator new [] ( size_t, size_t, const Alloc& );
     void operator delete( void * );
-    void operator delete [] ( void * );
 
     TMBlockList *Next;
 
@@ -85,12 +77,6 @@ inline void *TMBlockList<Alloc>::operator new ( size_t sz,
 
 template <class Alloc>
 inline void TMBlockList<Alloc>::operator delete ( void *ptr )
-{
-    Alloc::operator delete(ptr);
-}
-
-template <class Alloc>
-inline void TMBlockList<Alloc>::operator delete [] ( void _BIDSFAR * ptr )
 {
     Alloc::operator delete [] (ptr);
 }
@@ -140,7 +126,7 @@ public:
 
     char *Block() const { return REINTERPRET_CAST(char *,CurBlock); }
     unsigned Count() const { return BlockCount; }
-    AllocBlock( size_t );
+    int AllocBlock( size_t );
     void FreeTo( unsigned );
     size_t GetBlockSize() const { return BlockSize; }
 
@@ -171,10 +157,8 @@ inline TMBaseMemBlocks<Alloc>::~TMBaseMemBlocks()
 
 template <class Alloc> int TMBaseMemBlocks<Alloc>::AllocBlock( size_t sz )
 {
-    TMBlockList<Alloc> *temp = 
-        new( max(sz,BlockSize), *this ) TMBlockList<Alloc>( CurBlock-1 );
-    if( temp == 0 )
-        return 0;
+    TMBlockList<Alloc> *temp =
+        new( max(sz,BlockSize), *this ) TMBlockList<Alloc>( CurBlock );
     CurBlock = temp+1;
     BlockCount++;
     return 1;
@@ -186,8 +170,8 @@ template <class Alloc> void TMBaseMemBlocks<Alloc>::FreeTo( unsigned term )
     while( BlockCount > term )
         {
         TMBlockList<Alloc> *temp = CurBlock-1;
-        CurBlock = (temp->Next)+1;
-        delete temp;
+        CurBlock = temp->Next;
+        delete[] temp;
         BlockCount--;
         }
 }
@@ -248,11 +232,10 @@ private:
 
     TMBaseMemBlocks<Alloc> Data;
     size_t CurLoc;
-
 };
 
-#if defined( BI_OLDNAMES )
-#define MMemStack TMMemStack
+#if defined(BI_OLDNAMES)
+# define MMemStack TMMemStack
 #endif
 
 template <class Alloc>
@@ -261,11 +244,13 @@ inline void *operator new( size_t sz, TMMemStack<Alloc>& m )
     return m.Allocate( sz );
 }
 
+#if !defined(BI_NO_ARRAYNEW)
 template <class Alloc>
 inline void *operator new [] ( size_t sz, TMMemStack<Alloc>& m )
 {
     return m.Allocate( sz );
 }
+#endif
 
 template <class Alloc> inline TMMemStack<Alloc>::TMMemStack( size_t sz ) :
     Data( sz ),
@@ -383,10 +368,31 @@ template <class Alloc> class TMMemBlocks
 
 public:
 
-    TMMemBlocks( size_t, unsigned = 100 );
+    TMMemBlocks( size_t sz, unsigned count = 100 ) :
+      Mem( sz*count ),
+      FreeList(0),
+      Size( max(sz,sizeof(void *)) )
+    { 
+      CHECK( sz != 0 && count != 0 );
+    }
 
-    void *Allocate( size_t );
-    void Free( void * );
+    void *Allocate( size_t sz) 
+    {
+      PRECONDITION( Size == max(sz,sizeof(void *)) );
+      if( FreeList == 0 )
+        return Mem.Allocate( Size );
+      else
+        {
+        void *temp = FreeList;
+        FreeList = *(void **)temp;
+        return temp;
+        }
+    }
+    void Free( void * block) 
+    {
+      *(void **)block = FreeList;
+      FreeList = block;
+    }
 
 #if defined( BI_OLDNAMES )
     void *allocate( size_t sz ) { return Allocate(sz); }
@@ -405,6 +411,7 @@ private:
 #define MMemBlocks TMemBlocks
 #endif
 
+#if defined(FOO)    
 template <class Alloc>
 inline TMMemBlocks<Alloc>::TMMemBlocks( size_t sz, unsigned count ) :
     Mem( sz*count ),
@@ -414,9 +421,11 @@ inline TMMemBlocks<Alloc>::TMMemBlocks( size_t sz, unsigned count ) :
     CHECK( sz != 0 && count != 0 );
 }
 
-#pragma argsused
-template <class Alloc>
-inline void *TMMemBlocks<Alloc>::Allocate( size_t sz )
+#if (__DEBUG > 0)
+template <class Alloc> inline void *TMMemBlocks<Alloc>::Allocate( size_t sz )
+#else
+template <class Alloc> inline void *TMMemBlocks<Alloc>::Allocate( size_t )
+#endif
 {
     PRECONDITION( Size == max(sz,sizeof(void *)) );
     if( FreeList == 0 )
@@ -435,6 +444,7 @@ inline void TMMemBlocks<Alloc>::Free( void *block )
     *(void **)block = FreeList;
     FreeList = block;
 }
+#endif
 
 /*------------------------------------------------------------------------*/
 /*                                                                        */
@@ -456,21 +466,19 @@ public:
 
 };
 
-#if defined( BI_OLDNAMES )
-#define MemBlocks TMemBlocks
+#if defined(BI_OLDNAMES)
+# define MemBlocks TMemBlocks
 #endif
 
 typedef TMMemBlocks<TStandardAllocator> TStandardBlocks;
 
-#if defined( BI_PLAT_WIN16 ) && defined( BI_DATA_FAR )
-typedef TMMemBlocks<TSharedAllocator> TSharedBlocks;
+#if defined(BI_PLAT_WIN16) && !defined(BI_DATA_NEAR)
+ typedef TMMemBlocks<TSharedAllocator> TSharedBlocks;
 #endif
 
 #if defined( BI_CLASSLIB_NO_po )
-#pragma option -po.
+# pragma option -po.
 #endif
-
-#pragma option -Vo.
+//#pragma option -Vo.
 
 #endif  // CLASSLIB_MEMMGR_H
-

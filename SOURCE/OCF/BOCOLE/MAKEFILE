@@ -1,154 +1,516 @@
-# $Header:   N:\admin\ocf\source\bocole\makefile.__v   2.0.1.0   10 Apr 1995 18:06:46   CQUINN  $
 #-----------------------------------------------------------------------------
-# ObjectComponents - (C) Copyright 1991, 1993 by Borland International
+# ObjectComponents
+# Copyright (c) Borland International 1991, 1996. All Rights Reserved
 #
-# MAKEFILE for ObjectComponents BOcOle Dlls
+#  $Revision:   2.21  $
 #
-# To get 16 bit non-debug Bocole.dll, do
-#   make
-# To get 16 bit debug BocoleD.dll, do
-#   make DEBUG=1
+# MAKEFILE for BOCOLE Helper DLL
 #
-# To get 32 bit non-debug BocoleF.dll, do
-#   make WIN32=1 ANSI=1
-# To get 32 bit debug BocoleDF.dll, do
-#   make WIN32=1 DEBUG=1 ANSI=1
+# Defines:
+#   MODEL=<l|f>       one of: large, flat
+#   WIN32             enables win32 DLL [flat]
+#   WIN16             enables win16 DLL [large]
+#   DEBUG             enables debug info for TDW & TD32
+#   BOCONAME=Xxx      lib & DLL name base, Defaults to BOCOLE or BOCOF
+#   BOCORES=Xxxx      name of .RES file [defaults to BOCONAME.res]
+#   CODEGUARD         builds with CodeGuard:  1=basic data, 2=full checking
+#   RTLDLL            builds BOCOLE DLL which uses DLL version of RTL
+#   ALIGN=<1|2|4|8>   Specifies the alignment
 #
-# The ANSI symbol is not needed for 16-bit Bocole, nor for UNICODE apps.
-# Build with ANSI flag if you want to use Bocole under both NT and Win95
-# since Win95 does not support Unicode.
 #
-# Rename the debug versions of BOCOLED, BOCODF and BOCODFW to
-# BOCOLE, BOCOF.dll and BOCOFW.dll respectively to use them for debugging.
-#
-#------------------------------------------------------------------------
-!if $d(DEBUG)
-KEY = D
+# Define these for alternate OCF build directories:
+#   BOCOLESRCDIR    defaults to: $(OCFSRCDIR)\bocole
+#   BOCOLEINCDIR    defaults to: $(OCFSRCDIR)\bocole
+#   BOCOLELIBDIR    defaults to: $(OCFSRCDIR)\bocole
+#   BOCOLEBINDIR    defaults to: $(OCFSRCDIR)\bocole\bin
+#-----------------------------------------------------------------------------
+
+.autodepend
+.cacheautodepend
+.swap
+
+
+#-----------------------------------------------------------------------------
+# Fill in defaults
+#-----------------------------------------------------------------------------
+!if !$d(WIN16) && !$d(WIN32)
+  WIN32 = 1
 !endif
-
-!if !$d(ANSI)
-WIDE = W
-!endif
-
-!if !$d(APP)
-! ifdef WIN32
-  FILENAME   = BOCO$(KEY)F$(WIDE)
-  APP = BOCOF$(WIDE)
-! else
-  FILENAME   = BOCOLE$(KEY)
-  APP = BOCOLE
-! endif
-!else
-  FILENAME = $(APP)
-!endif
-
-! ifdef WIN32
-  DEFNAME = BOCOF
-! else
-  DEFNAME = BOCOLE
-! endif
-
-! ifdef WIN32
-  MODEL = 32
-  UNICODE = UNICODE
-! else
-  MODEL = l
-! endif
 
 DLL = 1
-VERSION = 1
 
-OBJS = \
-   bolecomp.obj \
-   bolesvc.obj  \
-   bolecman.obj \
-   bolecont.obj \
-   bolesite.obj \
-   oledll.obj   \
-   boleips.obj  \
-   bolefact.obj \
-   boledoc.obj  \
-   bolepart.obj \
-   boleclip.obj \
-   bhatch.obj \
-   olenew.obj \
-   boledata.obj\
-   bolehelp.obj \
-   boleguid.obj \
-   bolever.obj
 
-!if $d(ANSI)
-OBJS = $(OBJS) \
-   utils.obj
+#--------------------------------------------------------------------
+# Dir & name components
+#--------------------------------------------------------------------
+!if !$d(BOCONAME)
+! if $d(WIN16)
+    BOCONAME = BOCOLE
+! else
+    BOCONAME = BOCOF
+! endif
+!endif
+!if !$d(BOCORES)
+  BOCORES = $(BOCONAME).res
 !endif
 
-!if $d(DIAGS)
-OBJS = $(OBJS) \
-  hashtbl.obj  \
-  oledebug.obj
+
+
+#--------------------------------------------------------------------
+# Debug & diagnostic flags
+#--------------------------------------------------------------------
+!if $d(DEBUG)
+  CDBG = -v -vi -D_DEBUG
+  LDBG = /v
+!endif
+!if $d(DIAGS)         # default diags use precondition, check, trace & warn
+  __DEBUG=2
+  __TRACE=1
+  __WARN=1
 !endif
 
-!ifndef WIN32
-DEBUG_TARGETS =   \
-   $(RELDIR)\$(APP).map
-#  $(RELDIR)\$(APP).sym
-!endif
 
-OTHER_TARGETS = \
-   $(RELDIR)\$(DEFNAME).res   \
-   $(RELDIR)\$(APP).dll   \
-#  $(RELDIR)\$(APP).lib   \
-#  $(RELDIR)\bolever.h   \
-   $(DEBUG_TARGETS)
+#--------------------------------------------------------------------
+# Dir & search paths, & precompiled headers
+#--------------------------------------------------------------------
 
-OBJDIR = BIN$(MODEL)$(KEY)$(WIDE)
-
-!ifdef WIN32
-   RESOURCES = $(SRCDIR)\boleui32\boleui32.res
-   LIBS = boleui32 ole2w32 # ctl3d32
+#
+# BC tools BCBINDIR can be based on MAKEDIR if no BCROOT is defined
+#
+!if $d(BCROOT)
+  BCBINDIR = $(BCROOT)\bin
 !else
-   RESOURCES = $(SRCDIR)\boleui\boleui.res
-   LIBS = boleui ole2w16 # ctl3dv2
+  BCBINDIR = $(MAKEDIR)
 !endif
 
-!include make.inc
+#
+# Where to find BC tools, libraries and include files
+#
+BCSRCDIR = $(BCROOT)\source
+BCINCDIR = $(BCROOT)\include
+BCLIBDIR = $(BCROOT)\lib
+BCBINDIR = $(BCROOT)\bin
 
-$(RELDIR)\$(APP).dll :  $(APP).dll
-   copy $(APP).dll $(RELDIR)\$(FILENAME).dll
-
-#!ifndef WIN32
-#   tdstrip -s $(RELDIR)\$(APP).dll
-#!else
-#   tdstrp32 -s $(RELDIR)\$(APP).dll
-#!endif
-
-$(RELDIR)\$(APP).map :  $(APP).map
-   copy $(APP).map $(RELDIR)\$(FILENAME).map
-
-$(RELDIR)\$(APP).sym :  $(APP).map
-   $(MAPSYM) $(APP).map
-   copy $(APP).sym $(RELDIR)\$(FILENAME).sym
-   del $(APP).sym
-
-$(RELDIR)\bolever.h : $(SRCDIR)\bolever.h
-   copy $(SRCDIR)\bolever.h $(RELDIR)\bolever.h
-
-!ifndef  WIN32
-boleguid.obj: $(SRCDIR)\boleguid.cpp
-  $(CPP) -zE_TEXT -zFCODE $(SRCDIR)\boleguid.cpp
-# put data into code segment in this module
+#
+# Default bcroot to whatever is in bcroot.inc
+#
+!if !$d(BCROOT)
+!  include $(MAKEDIR)\bcroot.inc
 !endif
 
-!ifdef WIN32
-# $(DEFNAME).res: $(SRCDIR)\bole16.rc $(SRCDIR)\bole32.rc
-#         $(BCROOT)\bin\brc32 -r @&&|
-#         -I$(BCROOT)\include;$(OLEROOT)\h;$(SRCDIR) \
-#         $(SRCDIR)\bole32.rc -fo $(DEFNAME).res
-# |
+#
+# Where to find OCF dirs-- can set these for special layouts
+# Build search paths differently if OCF include dir is not below BC's
+#
+!if !$d(OCFSRCDIR)
+  OCFSRCDIR = $(BCSRCDIR)\ocf
+!endif
+
+!if !$d(BOCOLESRCDIR)
+  BOCOLESRCDIR = $(OCFSRCDIR)\bocole
+!endif
+!if !$d(BOCOLEINCDIR)
+  BOCOLEINCDIR = $(BOCOLESRCDIR)
+!endif
+!if !$d(BOCOLELIBDIR)
+  BOCOLELIBDIR = $(BOCOLESRCDIR)
+!endif
+!if !$d(BOCOLEBINDIR)
+  BOCOLEBINDIR = $(BOCOLESRCDIR)\bin
+!endif
+
+!if $d(WIN16)
+  BOCOLEOBJDIR = $(BOCOLESRCDIR)\o\wi
 !else
-$(DEFNAME).res: $(SRCDIR)\bole16.rc
-        $(BCROOT)\bin\brc -r @&&|
-        -I.;$(BCROOT)\include $(SRCDIR)\bole16.rc -fo $(DEFNAME).res
+  BOCOLEOBJDIR = $(BOCOLESRCDIR)\o\wfi
+!endif
+
+INCLUDE = $(BOCOLEINCDIR);$(BCINCDIR)
+!if $d(WIN16)
+  INCLUDE = $(INCLUDE);$(BOCOLEINCDIR)\BOLEUI
+!else
+  INCLUDE = $(INCLUDE);$(BOCOLEINCDIR)\BOLEUI32
+!endif
+
+!if $d(WIN16)
+  RCINCLUDEPATH = -i$(BCINCDIR)\WIN16 -i$(BCINCDIR)
+!else
+  RCINCLUDEPATH = -i$(BCINCDIR)\WIN32 -i$(BCINCDIR)
+!endif
+
+.PATH.obj = $(BOCOLEOBJDIR)
+.PATH.res = $(BOCOLEOBJDIR)
+.PATH.def = $(BOCOLEOBJDIR)
+.PATH.lib = $(BOCOLELIBDIR)
+.PATH.cpp = $(BOCOLESRCDIR)
+
+
+#--------------------------------------------------------------------
+# Library names
+#--------------------------------------------------------------------
+
+
+#--------------------------------------------------------------------
+# Generic BOCOLE Options
+#--------------------------------------------------------------------
+CFLAGS = -DINC_OLE2 -DMS_OLEUI_DEF -c
+!if !$d(DIAGS)
+  CFLAGS = $(CFLAGS) -DNDEBUG
+!endif
+LFLAGS = -c -n -s
+
+
+#--------------------------------------------------------------------
+# Tools and options for Win32
+#--------------------------------------------------------------------
+!if $d(WIN32)
+  CC       = $(BCBINDIR)\bcc32       # Compiler
+  RCC      = $(BCBINDIR)\brcc32 -w32 # Resource compiler
+  CCASM    = $(BCBINDIR)\tasm32      # Assembler
+  LINK     = $(BCBINDIR)\tlink32     # Linker
+  LIB      = $(BCBINDIR)\tlib        # Librarian
+  IMPLIB   = $(BCBINDIR)\implib      # Import library generator
+  TDSTRIP  = $(BCBINDIR)\tdstrp32    # Debug info extractor
+
+  CFLAGS   = $(CFLAGS) -DWIN32 -a4 -i60 -d -O -Obels -Z -RT- -x-
+  STDLIBS  = ole2w32 import32 
+
+! if $d(RTLDLL)  
+    STDLIBS = $(STDLIBS) cw32$(MT)i
+! else
+    STDLIBS = $(STDLIBS) cw32$(MT)
+! endif
+
+  BOLEUILIB = $(BOCOLESRCDIR)\boleui32\boleui32.lib
+  BOLEUIRES = $(BOCOLESRCDIR)\boleui32\boleui32.res
+
+!  if $d(UNICODE)
+    CFLAGS = $(CFLAGS) -DUNICODE
+!  else
+    CFLAGS = $(CFLAGS) -DANSI
+!  endif
+
+!  if $d(CODEGUARD)                  # d=add data, t=check this
+    CFLAGS = $(CFLAGS) -vGd -vGt
+!  endif
+!  if $(CODEGUARD) == 2              # c=add calls,  
+    CFLAGS= $(CFLAGS) -vGc
+!  endif
+
+  CFGFILE  = bcc32.cfg               # Name of compiler's config file
+
+!  if $d(DEBUG)
+    TLIBOPTS = /P512 /C
+!  else
+    TLIBOPTS = /P32 /0 /C
+!  endif
+
+!  if $d(DLL)
+    CFLAGS = $(CFLAGS) -WDE 
+    LFLAGS = $(LFLAGS) $(LDBG) -Tpd -aa -s -c
+    STARTUP= c0d32.obj
+!  else
+    CFLAGS = $(CFLAGS) -WS
+    STARTUP= c0w32.obj
+!  endif
+
+!  if $d(CODEGUARD)
+    STDLIBS  = cg32 $(STDLIBS)
+!  endif
+
+!  if $d(MT)
+    CFLAGS = $(CFLAGS) -WM
+!  endif
+
+!  if $d(ALIGN)
+    CFLAGS = $(CFLAGS) -a$(ALIGN)
+!  endif
+#--------------------------------------------------------------------
+# Tools and options for Win16
+#--------------------------------------------------------------------
+!else
+  CC       = $(BCBINDIR)\bcc         # Compiler
+  RCC      = $(BCBINCIR)\brcc32 -31  # Resource compiler
+  CCASM    = $(BCBINDIR)\tasm        # Assembler
+  LINK     = $(BCBINDIR)\tlink       # Linker
+  LIB      = $(BCBINDIR)\tlib        # Librarian
+  TDSTRIP  = $(BCBINDIR)\tdstrip     # Debug info extractor
+
+  # implib needs -o switch in 16 bit for compatibility
+  IMPLIB   = $(BCBINDIR)\implib -o   # Import library generator
+  TDSTRIP  = $(BCBINDIR)\tdstrip     # Debug info extractor
+
+  CFLAGS   = $(CFLAGS) -OW -k -2 -ml -i42 -O -Obels -Z -RT- -x-
+! if $d(CODEGUARD)                   # d=add data, c=add calls, t=check this
+    CFLAGS = $(CFLAGS) -vGd -vGt     # vGc: Only 32-bit currently 
+! endif
+
+  CFGFILE= turboc.cfg
+  STDLIBS= ole2w16 import mathwl 
+
+! if $d(RTLDLL)  
+    STDLIBS = $(STDLIBS) crtldll
+! else
+    STDLIBS = $(STDLIBS) cwl
+! endif
+
+  BOLEUILIB = $(BOCOLESRCDIR)\boleui\boleui.lib
+  BOLEUIRES = $(BOCOLESRCDIR)\boleui\boleui.res
+
+!  if $d(DEBUG)
+    TLIBOPTS = /P512 /C
+!  else
+    TLIBOPTS = /P32 /0 /C
+!  endif
+
+!  if $d(DLL)                        # Build the 16bit OCF for use with RTL/BIDS DLL
+    CFLAGS = $(CFLAGS) -WD #!DR -WDE 
+    LFLAGS = $(LFLAGS) $(LDBG) -C -Twd -A=16
+    STARTUP= c0dl.obj
+!  else
+    CFLAGS = $(CFLAGS) -WSE          # Build static OCF lib for use in EXEs
+    STARTUP= c0wl.obj
+!  endif
+
+!  if $d(CODEGUARD)
+    STDLIBS  = cg16 $(STDLIBS)
+!  endif
+
+!  if $d(ALIGN)
+    CFLAGS = $(CFLAGS) -a$(ALIGN)
+!  endif
+!endif
+
+#--------------------------------------------------------------------
+# Rules
+#--------------------------------------------------------------------
+.rc.res:
+  $(RCC) $(RCINCLUDEPATH) -fo$@ $.
+
+.cpp.obj:
+  $(CC) {$& }
+
+#--------------------------------------------------------------------
+# Various file lists needed for dependency checking and LIBing.
+#
+#   OBJS_CMN are the objs common to static libs and the dll
+#   OBJS_LIB are the objs that go into libs and implibs only, not the dlls
+#   OBJS_DLL are the objs that go into the dll only
+#   LIBDEPOBJS is the list of object files for lib/implib dependency checking
+#   LIBOBJS is the list of object files for building/addingto the libraries
+#   LINKOBJS is the list of object files for building the DLL
+#--------------------------------------------------------------------
+
+# Common, unsectioned objs go into static libs and DLLs
+#
+OBJS_CMN = \
+ PFXbolecomp.obj \
+ PFXbolesvc.obj  \
+ PFXbolecman.obj \
+ PFXbolecont.obj \
+ PFXbolesite.obj \
+ PFXbolectrl.obj \
+ PFXbolefont.obj \
+ PFXboleips.obj  \
+ PFXbolefact.obj \
+ PFXboledoc.obj  \
+ PFXbolepart.obj \
+ PFXbolepict.obj \
+ PFXboleclip.obj \
+ PFXbhatch.obj   \
+ PFXolenew.obj   \
+ PFXboledata.obj \
+ PFXbolehelp.obj \
+ PFXboleguid.obj \
+ PFXbolever.obj  \
+ PFXbconnpnt.obj \
+ PFXbocxctrl.obj \
+ PFXmovewin.obj
+
+!if $d(WIN32)
+  OBJS_CMN = $(OBJS_CMN) \
+    PFXutils.obj
+!endif
+
+OBJS_DLL =  \
+ PFXoledll.obj 
+
+# Put together obj groups into lists for different targets
+#
+_OBJDIR_ = $(BOCOLEOBJDIR)\\
+!if $d(DLL)
+ LIBDEPOBJS= $(OBJS_CMN:PFX=) $(OBJS_DLL:PFX=)
+ LIBOBJS   = $(OBJS_CMN:PFX=+) 
+ LINKOBJS  = $(OBJS_CMN:PFX=$(_OBJDIR_)) $(OBJS_DLL:PFX=$(_OBJDIR_))
+!endif
+
+
+#--------------------------------------------------------------------
+# targets
+#--------------------------------------------------------------------
+all: cfgfile $(BOCOLEBINDIR)\$(BOCONAME).DLL
+
+cfgfile:
+  @-if not exist $(.PATH.obj)\..\NUL md $(.PATH.obj)\..
+  @-if not exist $(.PATH.obj)\NUL md $(.PATH.obj)
+  @copy &&|
+-I$(INCLUDE)
+-c -w $(CFLAGS) $(CDBG) $(CDIAG)
+-n$(.PATH.obj) 
+| $(CFGFILE) > NUL
+
+$(BOCOLEBINDIR)\$(BOCONAME).DLL : $(LIBDEPOBJS) \
+                                  $(.PATH.obj)\$(BOCONAME).DEF \
+                                  $(.PATH.obj)\$(BOCORES) \
+                                  $(BOLEUILIB) $(BOLEUIRES)
+  $(LINK) @&&|
+$(LFLAGS) -L$(BCLIBDIR) $(STARTUP) +
+$(LINKOBJS)
+$(BOCOLEBINDIR)\$(BOCONAME)
+$(.PATH.obj)\$(BOCONAME).map
+$(BOLEUILIB) $(STDLIBS)
+$(.PATH.obj)\$(BOCONAME).def
+$(.PATH.obj)\$(BOCORES) $(BOLEUIRES) 
 |
+  $(TDSTRIP) -s $(BOCOLEBINDIR)\$(BOCONAME).DLL
+  $(IMPLIB) $(BOCOLEBINDIR)\$(BOCONAME).LIB $(BOCOLEBINDIR)\$(BOCONAME).DLL
+
+!if $d(WIN16)
+#--------------------------------------------------------------------
+# DEF file [16-bit]
+#--------------------------------------------------------------------
+$(.PATH.obj)\$(BOCONAME).DEF:
+  @copy &&|
+LIBRARY      $(BOCONAME)
+DESCRIPTION  'Aggregable Generic OLE2 Container and Object Implementation'
+EXETYPE      WINDOWS
+
+CODE         LOADONCALL MOVEABLE DISCARDABLE
+DATA         PRELOAD MOVEABLE SINGLE
+
+SEGMENTS
+  _TEXT      PRELOAD MOVEABLE DISCARDABLE
+  WEP_TEXT   PRELOAD MOVEABLE DISCARDABLE
+
+HEAPSIZE     1024
+
+EXPORTS
+
+    ; Explicitly exported initialization routine
+    ;
+    DLLGETCLASSOBJECT             @2
+    CREATECLASSMGR                @3
+    DLLCANUNLOADNOW               @4
+;   DLLENTRYPOINT                 @5
+
+   _IID_IBPart                    @260 
+   _IID_IBSite                    @261
+   _IID_IBContainer               @262 
+   _IID_IBDocument                @263 
+   _IID_IBService                 @264 
+   _IID_IBApplication             @265 
+   _IID_IBClassMgr                @266 
+   _IID_IBLinkInfo                @267 
+   _IID_IBLinkable                @268 
+   _IID_IBRootLinkable            @269 
+   _IID_IBContains                @270 
+   _IID_BOleDocument              @271 
+   _IID_BOlePart                  @272 
+   _IID_IBDataConsumer            @273 
+   _IID_IBDataProvider            @274 
+   _IID_IBWindow                  @275 
+   _IID_IBDataNegotiator          @276 
+   _IID_IBDropDest                @277 
+   _IID_BOleShadowData            @278 
+   _IID_IBClass                   @279 
+   _IID_IBOverrideBrowseLinks     @280
+   _IID_IBOverrideHelpButton      @281
+   _IID_IBSite2                   @282
+   _IID_BOleFont                  @283 
+   _IID_BOlePicture               @284 
+   _IID_IBPicture                 @285 
+| $(.PATH.obj)\$(BOCONAME).def  > NUL
+
+#--------------------------------------------------------------------
+# DEF file [32-bit]
+#--------------------------------------------------------------------
+!else
+
+$(.PATH.obj)\$(BOCONAME).DEF:
+  @copy &&|
+LIBRARY      $(BOCONAME)
+DESCRIPTION  'Aggregable Generic OLE2 Container and Object Implementation'
+EXETYPE      WINDOWS
+
+;CODE        LOADONCALL MOVEABLE DISCARDABLE
+DATA         MULTIPLE NONSHARED
+
+SEGMENTS
+	_TEXT   PRELOAD MOVEABLE DISCARDABLE
+	;WEP_TEXT PRELOAD MOVEABLE DISCARDABLE  
+
+HEAPSIZE     1024
+
+EXPORTS
+	;WEP @1 RESIDENTNAME PRIVATE            
+	DllGetClassObject	@2
+	CreateClassMgr		@3
+	DllCanUnloadNow		@4
+	DllEntryPoint		  @5
+
+   _IID_IBPart                    @260 
+   _IID_IBSite                    @261
+   _IID_IBContainer               @262 
+   _IID_IBDocument                @263 
+   _IID_IBService                 @264 
+   _IID_IBApplication             @265 
+   _IID_IBClassMgr                @266 
+   _IID_IBLinkInfo                @267 
+   _IID_IBLinkable                @268 
+   _IID_IBRootLinkable            @269 
+   _IID_IBContains                @270 
+   _IID_BOleDocument              @271
+   _IID_BOlePart                  @272 
+   _IID_IBDataConsumer            @273 
+   _IID_IBDataProvider            @274 
+   _IID_IBWindow                  @275 
+   _IID_IBDataNegotiator          @276 
+   _IID_IBDropDest                @277 
+   _IID_BOleShadowData            @278 
+   _IID_IBClass                   @279 
+   _IID_IBOverrideBrowseLinks		  @280
+   _IID_IBOverrideHelpButton      @281
+   _IID_IBSite2                   @282
+   _IID_BOleFont                  @283 
+   _IID_BOlePicture               @284 
+   _IID_IBPicture                 @285 
+
+| $(.PATH.obj)\$(BOCONAME).def  > NUL
+
+!endif
+
+$(.PATH.obj)\$(BOCORES):
+  $(RCC) $&.rc @&&|
+$(RCINCLUDEPATH)
+| -fo$@
+
+$(BOLEUILIB):
+ @if not exist $(BOLEUILIB) echo $(BOLEUILIB) must exist
+
+$(BOLEUIRES):
+ @if not exist $(BOLEUIRES) echo $(BOLEUIRES) must exist
+
+clean:
+  @echo Removing .OBJs from $(.PATH.obj)
+  @if exist $(.PATH.obj)\*.obj del $(.PATH.obj)\*.obj
+  @if exist $(.PATH.obj)\*.csm del $(.PATH.obj)\*.csm
+
+!if !$d(WIN32)
+
+# Put data into code segment for this module
+# 
+boleguid.obj : $(BOCOLESRCDIR)\boleguid.cpp
+  $(CC) -H- -zE_TEXT -zFCODE $(BOCOLESRCDIR)\boleguid.cpp
+
 !endif
 

@@ -5,9 +5,9 @@
 */
 
 /*
- *      C/C++ Run Time Library - Version 6.5
+ *      C/C++ Run Time Library - Version 7.0
  *
- *      Copyright (c) 1987, 1994 by Borland International
+ *      Copyright (c) 1987, 1996 by Borland International
  *      All Rights Reserved.
  *
  */
@@ -30,9 +30,7 @@
 #pragma warn -nak
 #endif
 
-#if defined(__FLAT__)
-#pragma option -a-
-#endif
+#pragma pack(push, 1)
 
 #endif  /* !RC_INVOKED */
 
@@ -133,11 +131,12 @@ int  _RTLENTRYF _EXPFUNC   write (int __handle, const void _FAR *__buf, unsigned
 
 #if !defined(__FLAT__)
  /* Initialization call for Easy Windows */
-void _RTLENTRY		   _InitEasyWin(void); 
+void _RTLENTRY             _InitEasyWin(void);
 #endif
 
 #if defined(__MSC)
 #define _lseek(__handle, __offset, __fromwhere) lseek(__handle, __offset, __fromwhere)
+#define _dup(h) dup(h)
 #endif
 
 #ifdef __cplusplus
@@ -155,9 +154,8 @@ void _RTLENTRY		   _InitEasyWin(void);
 #pragma obsolete _read
 #pragma obsolete _write
 
-#if defined(__FLAT__)
-#pragma option -a. /*restore default packing */
-#endif
+/* restore default packing */
+#pragma pack(pop)
 
 #if defined(__STDC__)
 #pragma warn .nak

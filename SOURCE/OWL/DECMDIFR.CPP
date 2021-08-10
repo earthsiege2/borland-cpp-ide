@@ -1,12 +1,16 @@
 //----------------------------------------------------------------------------
 // ObjectWindows
-// (C) Copyright 1992, 1994 by Borland International, All Rights Reserved
+// Copyright (c) 1992, 1996 by Borland International, All Rights Reserved
 //
-//   Implementation of class TDecoratedMDIFrame
+//$Revision:   10.3  $
+//
+// Implementation of class TDecoratedMDIFrame
 //----------------------------------------------------------------------------
 #pragma hdrignore SECTION
-#include <owl/owlpch.h>
-#include <owl/decmdifr.h>
+#include <owl/pch.h>
+#if !defined(OWL_DECMDIFR_H)
+# include <owl/decmdifr.h>
+#endif
 
 #if !defined(SECTION) || SECTION == 1
 
@@ -30,8 +34,11 @@ TDecoratedMDIFrame::TDecoratedMDIFrame(const char far* title,
 {
 }
 
-LRESULT
-TDecoratedMDIFrame::DefWindowProc(uint message, WPARAM wParam, LPARAM lParam)
+//
+//
+//
+TResult
+TDecoratedMDIFrame::DefWindowProc(uint message, TParam1 param1, TParam2 param2)
 {
   //
   // ::DefFrameProc() will response to WM_SIZE by making the MDI client the
@@ -40,7 +47,7 @@ TDecoratedMDIFrame::DefWindowProc(uint message, WPARAM wParam, LPARAM lParam)
   //
   return message == WM_SIZE ?
                       0 :
-                      TMDIFrame::DefWindowProc(message, wParam, lParam);
+                      TMDIFrame::DefWindowProc(message, param1, param2);
 }
 
 #endif
@@ -49,6 +56,11 @@ TDecoratedMDIFrame::DefWindowProc(uint message, WPARAM wParam, LPARAM lParam)
 
 IMPLEMENT_STREAMABLE4(TDecoratedMDIFrame, TMDIFrame, TDecoratedFrame,
                       TFrameWindow, TWindow);
+#if !defined(BI_NO_OBJ_STREAMING)
+
+//
+//
+//
 void*
 TDecoratedMDIFrame::Streamer::Read(ipstream& is, uint32 /*version*/) const
 {
@@ -57,11 +69,16 @@ TDecoratedMDIFrame::Streamer::Read(ipstream& is, uint32 /*version*/) const
   return GetObject();
 }
 
+//
+//
+//
 void
 TDecoratedMDIFrame::Streamer::Write(opstream& os) const
 {
   WriteBaseObject((TMDIFrame*)GetObject(), os);
   WriteBaseObject((TDecoratedFrame*)GetObject(), os);
 }
+
+#endif  // if !defined(BI_NO_OBJ_STREAMING)
 
 #endif

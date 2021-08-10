@@ -1,13 +1,12 @@
 #--------------------------------------------------------------------------#
 #                                                                          #
-#   MAKEFILE for DATE example                                              #
+#   MAKEFILE for threads example                                           #
 #                                                                          #
-#   Copyright (c) 1994 Borland International                               #
+#   Copyright (c) 1994, 1996 Borland International                         #
 #   All Rights Reserved                                                    #
 #                                                                          #
 #   Usage:                                                                 #
-#                                                                          #
-#       make                            for 32-bit Windows Console         #
+#       make MODEL=f                 for 32-bit Windows                    #
 #                                                                          #
 #--------------------------------------------------------------------------#
 

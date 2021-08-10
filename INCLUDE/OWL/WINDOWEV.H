@@ -1,8 +1,10 @@
 //----------------------------------------------------------------------------
 // ObjectWindows
-// (C) Copyright 1992, 1994 by Borland International, All Rights Reserved
+// Copyright (c) 1992, 1996 by Borland International, All Rights Reserved
 //
-//   Event response table macros for windows messages
+//$Revision:   10.8  $
+//
+// Event response table macros for windows messages
 //----------------------------------------------------------------------------
 #if !defined(OWL_WINDOWEV_H)
 #define OWL_WINDOWEV_H
@@ -12,22 +14,22 @@
 #endif
 
 //
-// general purpose WM_* macro
+// General purpose WM_* macro
 //
-// wparam and lparam are passed, i.e: LPARAM method(WPARAM, LPARAM)
+// wparam and lparam are passed, i.e: TParam2 method(TParam1, TParam2)
 //
 #define EV_MESSAGE(message, method)\
   {message, 0, (TAnyDispatcher)::I32_WPARAM_LPARAM_Dispatch,\
    (TMyPMF)LRESULT_WPARAM_LPARAM_Sig(&TMyClass::method)}
 
 //
-// registered messages
+// Registered messages
 //
 #define EV_REGISTERED(str, method)\
   EV_MESSAGE(::RegisterWindowMessage(str), method)
 
 //
-// handler for child ID notifications that are handled at the child's parent
+// Handler for child ID notifications that are handled at the child's parent
 //
 // no arguments are passed, i.e: void method()
 //
@@ -36,9 +38,9 @@
    (TMyPMF)v_Sig(&TMyClass::method)}
 
 //
-// handler for child ID notifications that are handled at the child's parent
+// Handler for child ID notifications that are handled at the child's parent
 //
-// the notification code is passed in as an argument; this allows multiple
+// The notification code is passed in as an argument; this allows multiple
 // notifications to be handled by a single response function, i.e:
 //   void method(uint notifyCode)
 //
@@ -47,11 +49,11 @@
    (TMyPMF)v_U_Sig(&TMyClass::method)}
 
 //
-// generic handler for child ID notification: rather than specify the
+// Generic handler for child ID notification: rather than specify the
 // specific notification codes you are interested in ALL notifications
 // from the child are passed to the response function
 //
-// the notification code is passed in as an argument, i.e.:
+// The notification code is passed in as an argument, i.e.:
 //   void method(uint notifyCode)
 //
 #define EV_CHILD_NOTIFY_ALL_CODES(id, method)\
@@ -59,27 +61,27 @@
    (TMyPMF)v_U_Sig(&TMyClass::method)}
 
 //
-// handler for child ID notifications that are handled at the child
+// Handler for child ID notifications that are handled at the child
 //
-// no arguments are passed, i.e: void method()
+// No arguments are passed, i.e: void method()
 //
 #define EV_NOTIFY_AT_CHILD(notifyCode, method)\
   {notifyCode, UINT_MAX, (TAnyDispatcher)::v_Dispatch,\
    (TMyPMF)v_Sig(&TMyClass::method)}
 
 //
-// handler for menu/accelerator/push buttons
+// Handler for menu/accelerator/push buttons
 //
-// no arguments are passed, i.e: void method()
+// No arguments are passed, i.e: void method()
 //
 #define EV_COMMAND(id, method)\
   {0, id, (TAnyDispatcher)::v_Dispatch,\
    (TMyPMF)v_Sig(&TMyClass::method)}
 
 //
-// handler for menu/accelerator/push buttons
+// Handler for menu/accelerator/push buttons
 //
-// the menu id is passed in as an argument; this allows multiple
+// The menu id is passed in as an argument; this allows multiple
 // commands to be handled by a single response function.
 //  void method(uint commandId)
 //
@@ -88,7 +90,7 @@
    (TMyPMF)v_U_Sig(&TMyClass::method)}
 
 //
-// handler for command enabling
+// Handler for command enabling
 //  void method(uint commandId)
 //
 #define EV_COMMAND_ENABLE(id, method)\
@@ -96,7 +98,7 @@
    (TMyPMF)v_COMMANDENABLER_Sig(&TMyClass::method)}
 
 //
-// handlers for document and view notifications
+// Handlers for document and view notifications
 //
 #define EV_OWLDOCUMENT(id, method)\
   {WM_OWLDOCUMENT, id, (TAnyDispatcher)::v_POINTER_Dispatch,\
@@ -107,22 +109,22 @@
    (TMyPMF)v_OWLVIEW_Sig(&TMyClass::method)}
 
 #define EV_OWLNOTIFY(id, method)\
-  {WM_OWLNOTIFY, id, (TAnyDispatcher)::U_LPARAM_Dispatch,\
+  {WM_OWLNOTIFY, id, (TAnyDispatcher)::B_LPARAM_Dispatch,\
    (TMyPMF)B_LPARAM_Sig(&TMyClass::method)}
 
 #define EV_VIEWNOTIFY(id, method) \
-  {WM_OWLNOTIFY, id, (TAnyDispatcher)::U_LPARAM_Dispatch, \
+  {WM_OWLNOTIFY, id, (TAnyDispatcher)::B_LPARAM_Dispatch, \
   (TMyPMF)B_LPARAM_Sig(&TMyClass::method)}
 
 //
-// macros for specific WM_* messages
+// Macros for specific WM_* messages
 //
 #define EV_WM_ACTIVATE\
   {WM_ACTIVATE, 0, (TAnyDispatcher)::v_Activate_Dispatch,\
    (TMyPMF)v_U_B_W_Sig(&TMyClass::EvActivate)}
 
 #define EV_WM_ACTIVATEAPP\
-  {WM_ACTIVATEAPP, 0, (TAnyDispatcher)::v_U_U_Dispatch,\
+  {WM_ACTIVATEAPP, 0, (TAnyDispatcher)::v_B_U_Dispatch,\
    (TMyPMF)v_B_HTASK_Sig(&TMyClass::EvActivateApp)}
 
 #define EV_WM_ASKCBFORMATNAME\
@@ -169,6 +171,12 @@
   {WM_COMPAREITEM, 0, (TAnyDispatcher)::LRESULT_WPARAM_LPARAM_Dispatch,\
    (TMyPMF)LRESULT_U_COMPAREITEM_Sig(&TMyClass::EvCompareItem)}
 
+// Win32 only
+//
+#define EV_WM_COPYDATA\
+  {WM_COPYDATA, 0, (TAnyDispatcher)::v_HWND_PCOPYDATASTRUCT_Dispatch,\
+   (TMyPMF)v_HWND_PCOPYDATASTRUCT_Sig(&TMyClass::EvCopyData)}
+
 #define EV_WM_CREATE\
   {WM_CREATE, 0, (TAnyDispatcher)::i_LPARAM_Dispatch,\
    (TMyPMF)i_CREATE_Sig(&TMyClass::EvCreate)}
@@ -210,19 +218,19 @@
    (TMyPMF)v_DROP_Sig(&TMyClass::EvDropFiles)}
 
 #define EV_WM_ENABLE\
-  {WM_ENABLE, 0, (TAnyDispatcher)::v_WPARAM_Dispatch,\
+  {WM_ENABLE, 0, (TAnyDispatcher)::v_B_Dispatch,\
    (TMyPMF)v_B_Sig(&TMyClass::EvEnable)}
 
 #define EV_WM_ENDSESSION\
-  {WM_ENDSESSION, 0, (TAnyDispatcher)::v_WPARAM_Dispatch,\
-   (TMyPMF)v_B_Sig(&TMyClass::EvEndSession)}
+  {WM_ENDSESSION, 0, (TAnyDispatcher)::v_B_B_Dispatch,\
+   (TMyPMF)v_B_B_Sig(&TMyClass::EvEndSession)}
 
 #define EV_WM_ENTERIDLE\
   {WM_ENTERIDLE, 0, (TAnyDispatcher)::v_U_U_Dispatch,\
    (TMyPMF)v_U_W_Sig(&TMyClass::EvEnterIdle)}
 
 #define EV_WM_ERASEBKGND\
-  {WM_ERASEBKGND, 0, (TAnyDispatcher)::i_WPARAM_Dispatch,\
+  {WM_ERASEBKGND, 0, (TAnyDispatcher)::B_WPARAM_Dispatch,\
    (TMyPMF)B_HDC_Sig(&TMyClass::EvEraseBkgnd)}
 
 #define EV_WM_FONTCHANGE\
@@ -272,7 +280,7 @@
    (TMyPMF)v_HMENU_Sig(&TMyClass::EvInitMenu)}
 
 #define EV_WM_INITMENUPOPUP\
-  {WM_INITMENUPOPUP, 0, (TAnyDispatcher)::v_U_U_U_Dispatch,\
+  {WM_INITMENUPOPUP, 0, (TAnyDispatcher)::v_U_U_B_Dispatch,\
    (TMyPMF)v_HMENU_U_B_Sig(&TMyClass::EvInitMenuPopup)}
 
 #define EV_WM_KEYDOWN\
@@ -348,15 +356,15 @@
    (TMyPMF)v_POINT_Sig(&TMyClass::EvMove)}
 
 #define EV_WM_NCACTIVATE\
-  {WM_NCACTIVATE, 0, (TAnyDispatcher)::i_WPARAM_Dispatch,\
+  {WM_NCACTIVATE, 0, (TAnyDispatcher)::B_B_Dispatch,\
    (TMyPMF)B_B_Sig(&TMyClass::EvNCActivate)}
 
 #define EV_WM_NCCALCSIZE\
-  {WM_NCCALCSIZE, 0, (TAnyDispatcher)::U_WPARAM_LPARAM_Dispatch,\
+  {WM_NCCALCSIZE, 0, (TAnyDispatcher)::U_B_LPARAM_Dispatch,\
    (TMyPMF)U_B_CALCSIZE_Sig(&TMyClass::EvNCCalcSize)}
 
 #define EV_WM_NCCREATE\
-  {WM_NCCREATE, 0, (TAnyDispatcher)::i_LPARAM_Dispatch,\
+  {WM_NCCREATE, 0, (TAnyDispatcher)::B_LPARAM_Dispatch,\
    (TMyPMF)B_CREATE_Sig(&TMyClass::EvNCCreate)}
 
 #define EV_WM_NCDESTROY\
@@ -450,15 +458,15 @@
    (TMyPMF)H_Sig(&TMyClass::EvQueryDragIcon)}
 
 #define EV_WM_QUERYENDSESSION\
-  {WM_QUERYENDSESSION, 0, (TAnyDispatcher)::U_Dispatch,\
+  {WM_QUERYENDSESSION, 0, (TAnyDispatcher)::B_Dispatch,\
    (TMyPMF)B_Sig(&TMyClass::EvQueryEndSession)}
 
 #define EV_WM_QUERYNEWPALETTE\
-  {WM_QUERYNEWPALETTE, 0, (TAnyDispatcher)::U_Dispatch,\
+  {WM_QUERYNEWPALETTE, 0, (TAnyDispatcher)::B_Dispatch,\
    (TMyPMF)B_Sig(&TMyClass::EvQueryNewPalette)}
 
 #define EV_WM_QUERYOPEN\
-  {WM_QUERYOPEN, 0, (TAnyDispatcher)::U_Dispatch,\
+  {WM_QUERYOPEN, 0, (TAnyDispatcher)::B_Dispatch,\
    (TMyPMF)B_Sig(&TMyClass::EvQueryOpen)}
 
 #define EV_WM_QUEUESYNC\
@@ -486,7 +494,7 @@
    (TMyPMF)v_U_Sig(&TMyClass::EvRenderFormat)}
 
 #define EV_WM_SETCURSOR\
-  {WM_SETCURSOR, 0, (TAnyDispatcher)::U_U_U_U_Dispatch,\
+  {WM_SETCURSOR, 0, (TAnyDispatcher)::B_U_U_U_Dispatch,\
    (TMyPMF)B_W_U_U_Sig(&TMyClass::EvSetCursor)}
 
 #define EV_WM_SETFOCUS\
@@ -494,11 +502,11 @@
    (TMyPMF)v_W_Sig(&TMyClass::EvSetFocus)}
 
 #define EV_WM_SETFONT\
-  {WM_SETFONT, 0, (TAnyDispatcher)::v_U_U_Dispatch,\
+  {WM_SETFONT, 0, (TAnyDispatcher)::v_U_B_Dispatch,\
    (TMyPMF)v_HFONT_B_Sig(&TMyClass::EvSetFont)}
 
 #define EV_WM_SETREDRAW\
-  {WM_SETREDRAW, 0, (TAnyDispatcher)::v_WPARAM_Dispatch,\
+  {WM_SETREDRAW, 0, (TAnyDispatcher)::v_B_Dispatch,\
    (TMyPMF)v_B_Sig(&TMyClass::EvSetRedraw)}
 
 #define EV_WM_SETTEXT\
@@ -506,7 +514,7 @@
    (TMyPMF)v_CS_Sig(&TMyClass::EvSetText)}
 
 #define EV_WM_SHOWWINDOW\
-  {WM_SHOWWINDOW, 0, (TAnyDispatcher)::v_U_U_Dispatch,\
+  {WM_SHOWWINDOW, 0, (TAnyDispatcher)::v_B_U_Dispatch,\
    (TMyPMF)v_B_U_Sig(&TMyClass::EvShowWindow)}
 
 #define EV_WM_SIZE\
@@ -582,6 +590,198 @@
    (TMyPMF)v_S_Sig(&TMyClass::EvWinIniChange)}
 
 //
+//
+//
+#define EV_WM_SETTINGCHANGE\
+  {WM_SETTINGCHANGE, 0, (TAnyDispatcher)::v_WPARAM_LPARAM_Dispatch,\
+  (TMyPMF)v_U_CS_Sig(&TMyClass::EvSettingChange)}
+
+#define EV_WM_DISPLAYCHANGE\
+  {WM_DISPLAYCHANGE, 0, (TAnyDispatcher)::v_B_U_U_Dispatch,\
+   (TMyPMF)v_B_I_I_Sig(&TMyClass::EvDisplayChange)}
+
+//WM_NOTIFY  // Not dispatched, use virtual
+
+#define EV_WM_INPUTLANGCHANGEREQUEST\
+  {WM_INPUTLANGCHANGEREQUEST, 0, (TAnyDispatcher)::B_B_U_Dispatch,\
+   (TMyPMF)B_B_HKL_Sig(&TMyClass::EvInputLangChangeRequest)}
+
+#define EV_WM_INPUTLANGCHANGE\
+  {WM_INPUTLANGCHANGE, 0, (TAnyDispatcher)::B_U_U_Dispatch,\
+  (TMyPMF)B_I_HKL_Sig(&TMyClass::EvInputLangChange)}
+
+#define EV_WM_TCARD\
+  {WM_TCARD, 0, (TAnyDispatcher)::v_U_U32_Dispatch,\
+  (TMyPMF)v_I_I32_Sig(&TMyClass::EvTCard)}
+
+#define EV_WM_HELP\
+  {WM_HELP, 0, (TAnyDispatcher)::v_LPARAM_Dispatch,\
+  (TMyPMF)v_HELPINFO_Sig(&TMyClass::EvHelp)}
+
+#define EV_WM_USERCHANGED\
+  {WM_USERCHANGED, 0, (TAnyDispatcher)::B_Dispatch,\
+  (TMyPMF)B_Sig(&TMyClass::EvUserChanged)}
+
+#define EV_WM_CONTEXTMENU\
+  {WM_CONTEXTMENU, 0, (TAnyDispatcher)::v_U_U_U_Dispatch,\
+  (TMyPMF)v_W_I_I_Sig(&TMyClass::EvContextMenu)}
+
+#define EV_WM_STYLECHANGING\
+  {WM_STYLECHANGING, 0, (TAnyDispatcher)::v_WPARAM_LPARAM_Dispatch,\
+  (TMyPMF)v_U_STYLE_Sig(&TMyClass::EvStyleChanging)}
+
+#define EV_WM_STYLECHANGED\
+  {WM_STYLECHANGED, 0, (TAnyDispatcher)::v_WPARAM_LPARAM_Dispatch,\
+  (TMyPMF)v_U_STYLE_Sig(&TMyClass::EvStyleChanged)}
+
+#define EV_WM_GETICON\
+  {WM_GETICON, 0, (TAnyDispatcher)::U_B_Dispatch,\
+  (TMyPMF)HICON_B_Sig(&TMyClass::EvGetIcon)}
+
+#define EV_WM_SETICON\
+  {WM_SETICON, 0, (TAnyDispatcher)::U_B_U_Dispatch,\
+  (TMyPMF)HICON_B_HICON_Sig(&TMyClass::EvSetIcon)}
+
+#define EV_WM_SIZING\
+  {WM_SIZING, 0, (TAnyDispatcher)::B_U_RECT_Dispatch,\
+  (TMyPMF)B_U_RECT_Sig(&TMyClass::EvSizing)}
+
+#define EV_WM_CAPTURECHANGED\
+  {WM_CAPTURECHANGED, 0, (TAnyDispatcher)::v_U_Dispatch,\
+  (TMyPMF)v_W_Sig(&TMyClass::EvCaptureChanged)}
+
+#define EV_WM_MOVING\
+  {WM_MOVING, 0, (TAnyDispatcher)::B_U_RECT_Dispatch,\
+  (TMyPMF)B_U_RECT_Sig(&TMyClass::EvMoving)}
+
+#define EV_WM_EXITSIZEMOVE\
+  {WM_EXITSIZEMOVE, 0, (TAnyDispatcher)::v_Dispatch,\
+  (TMyPMF)v_Sig(&TMyClass::EvExitSizeMove)}
+
+#define EV_WM_POWERBROADCAST\
+  {WM_POWERBROADCAST, 0, (TAnyDispatcher)::B_WPARAM_LPARAM_Dispatch,\
+  (TMyPMF)B_U_U_Sig(&TMyClass::Ev)}
+
+//
+#if 0
+#define EV_WM_DEVICECHANGE\
+  {WM_DEVICECHANGE, 0, (TAnyDispatcher)::v_Dispatch,\
+  (TMyPMF)v_Sig(&TMyClass::Ev)}
+#endif
+
+#if 0
+//WM_IME_SETCONTEXT
+#define EV_\
+  {xxx, 0, (TAnyDispatcher)::v_Dispatch,\
+  (TMyPMF)v_Sig(&TMyClass::Ev)}
+
+//WM_IME_NOTIFY
+#define EV_\
+  {xxx, 0, (TAnyDispatcher)::v_Dispatch,\
+  (TMyPMF)v_Sig(&TMyClass::Ev)}
+
+//WM_IME_CONTROL
+#define EV_\
+  {xxx, 0, (TAnyDispatcher)::v_Dispatch,\
+  (TMyPMF)v_Sig(&TMyClass::Ev)}
+
+//WM_IME_COMPOSITIONFULL
+#define EV_\
+  {xxx, 0, (TAnyDispatcher)::v_Dispatch,\
+  (TMyPMF)v_Sig(&TMyClass::Ev)}
+
+//WM_IME_SELECT
+#define EV_\
+  {xxx, 0, (TAnyDispatcher)::v_Dispatch,\
+  (TMyPMF)v_Sig(&TMyClass::Ev)}
+
+//WM_IME_CHAR
+#define EV_\
+  {xxx, 0, (TAnyDispatcher)::v_Dispatch,\
+  (TMyPMF)v_Sig(&TMyClass::Ev)}
+
+//WM_IME_KEYDOWN
+#define EV_\
+  {xxx, 0, (TAnyDispatcher)::v_Dispatch,\
+  (TMyPMF)v_Sig(&TMyClass::Ev)}
+
+//WM_IME_KEYUP
+#define EV_\
+  {xxx, 0, (TAnyDispatcher)::v_Dispatch,\
+  (TMyPMF)v_Sig(&TMyClass::Ev)}
+
+//
+//WM_IME_STARTCOMPOSITION
+#define EV_\
+  {xxx, 0, (TAnyDispatcher)::v_Dispatch,\
+  (TMyPMF)v_Sig(&TMyClass::Ev)}
+
+//WM_IME_ENDCOMPOSITION
+#define EV_\
+  {xxx, 0, (TAnyDispatcher)::v_Dispatch,\
+  (TMyPMF)v_Sig(&TMyClass::Ev)}
+
+//WM_IME_COMPOSITION
+#define EV_\
+  {xxx, 0, (TAnyDispatcher)::v_Dispatch,\
+  (TMyPMF)v_Sig(&TMyClass::Ev)}
+
+//WM_IME_KEYLAST
+#define EV_\
+  {xxx, 0, (TAnyDispatcher)::v_Dispatch,\
+  (TMyPMF)v_Sig(&TMyClass::Ev)}
+#endif
+
+#define EV_WM_ENTERMENULOOP\
+  {WM_ENTERMENULOOP, 0, (TAnyDispatcher)::v_B_Dispatch,\
+  (TMyPMF)v_B_Sig(&TMyClass::EvEnterMenuLoop)}
+
+#define EV_WM_EXITMENULOOP\
+  {WM_EXITMENULOOP, 0, (TAnyDispatcher)::v_B_Dispatch,\
+  (TMyPMF)v_B_Sig(&TMyClass::EvExitMenuLoop)}
+
+//
+#if 0
+#define EV_WM_NEXTMENU\
+  {WM_NEXTMENU, 0, (TAnyDispatcher)::v_Dispatch,\
+  (TMyPMF)v_Sig(&TMyClass::EvNextMenu)}
+#endif
+
+#define EV_WM_PRINT\
+  {WM_PRINT, 0, (TAnyDispatcher)::v_WPARAM_LPARAM_Dispatch,\
+  (TMyPMF)v_HDC_U_Sig(&TMyClass::Ev)}
+
+#define EV_WM_PRINTCLIENT\
+  {WM_PRINTCLIENT, 0, (TAnyDispatcher)::v_WPARAM_LPARAM_Dispatch,\
+  (TMyPMF)v_HDC_U_Sig(&TMyClass::Ev)}
+
+//WM_HANDHELDFIRST    
+//WM_HANDHELDLAST     
+
+//WM_AFXFIRST  
+//WM_AFXLAST   
+
+//WM_APP  
+//WM_USER 
+
+//
+// Dialog messages
+//
+#define EV_DM_GETDEFID\
+  {DM_GETDEFID, 0, (TAnyDispatcher)::U32_Dispatch,\
+    (TMyPMF)U32_Sig(&TMyClass::EvGetDefId)}
+
+#define EV_DM_SETDEFID\
+  {DM_SETDEFID, 0, (TAnyDispatcher)::B_WPARAM_Dispatch,\
+    (TMyPMF)B_I_Sig(&TMyClass::EvSetDefId)}
+
+#if defined(BI_PLAT_WIN32)
+# define EV_DM_REPOSITION\
+   {DM_REPOSITION, 0, (TAnyDispatcher)::v_Dispatch,\
+    (TMyPMF)v_Sig(&TMyClass::EvReposition)}
+#endif
+
+//
 // Control notification macros
 //
 
@@ -591,6 +791,10 @@
 #define EV_BN_HILITE(id, method)    EV_CHILD_NOTIFY(id, BN_HILITE, method)
 #define EV_BN_PAINT(id, method)     EV_CHILD_NOTIFY(id, BN_PAINT, method)
 #define EV_BN_UNHILITE(id, method)  EV_CHILD_NOTIFY(id, BN_UNHILITE, method)
+#if defined(BI_PLAT_WIN32)
+#define EV_BN_KILLFOCUS(id, method) EV_CHILD_NOTIFY(id, BN_KILLFOCUS, method)
+#define EV_BN_SETFOCUS(id, method)  EV_CHILD_NOTIFY(id, BN_SETFOCUS, method)
+#endif
 
 #define EV_CBN_CLOSEUP(id, method)    EV_CHILD_NOTIFY(id, CBN_CLOSEUP, method)
 #define EV_CBN_DBLCLK(id, method)     EV_CHILD_NOTIFY(id, CBN_DBLCLK, method)

@@ -1,8 +1,10 @@
 //----------------------------------------------------------------------------
 // ObjectWindows
-// (C) Copyright 1993, 1994 by Borland International, All Rights Reserved
+// Copyright (c) 1993, 1996 by Borland International, All Rights Reserved
 //
-//   Menu and accelerators for use with TEditView
+//$Revision:   10.3  $
+//
+// Menu and accelerators for use with TEditView
 //----------------------------------------------------------------------------
 
 #include <owl/editsear.rh>
@@ -22,8 +24,8 @@ IDM_EDITVIEW MENU LOADONCALL MOVEABLE PURE DISCARDABLE
   {
     MenuItem  "&Undo\aCtrl+Z",        CM_EDITUNDO
     MenuItem  SEPARATOR
-    MenuItem  "&Cut\aCtrl+X",         CM_EDITCUT
-    MenuItem  "C&opy\aCtrl+C",        CM_EDITCOPY
+    MenuItem  "Cu&t\aCtrl+X",         CM_EDITCUT
+    MenuItem  "&Copy\aCtrl+C",        CM_EDITCOPY
     MenuItem  "&Paste\aCtrl+V",       CM_EDITPASTE
     MenuItem  "&Delete\aDel",         CM_EDITDELETE
     MenuItem  "C&lear All\aCtrl+Del", CM_EDITCLEAR
@@ -46,6 +48,11 @@ IDM_EDITVIEW MENU LOADONCALL MOVEABLE PURE DISCARDABLE
 #define __IDA_EDITVIEW
 IDA_EDITVIEW ACCELERATORS
 {
+  "^Z",      CM_EDITUNDO
+  "^X",      CM_EDITCUT
+  "^C",      CM_EDITCOPY
+  "^V",      CM_EDITPASTE
+  VK_DELETE, CM_EDITCLEAR, VIRTKEY, CONTROL
   VK_F3,     CM_EDITFINDNEXT, VIRTKEY
 }
 #endif

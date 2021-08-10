@@ -8,9 +8,9 @@
  *-----------------------------------------------------------------------*/
 
 /*
- *      C/C++ Run Time Library - Version 1.5
+ *      C/C++ Run Time Library - Version 2.0
  *
- *      Copyright (c) 1987, 1994 by Borland International
+ *      Copyright (c) 1987, 1996 by Borland International
  *      All Rights Reserved.
  *
  */
@@ -67,6 +67,40 @@ int _RTLENTRY _EXPFUNC sprintf(char *bufP, const char *fmt, ...)
     va_end(ap);
     return (ret);
 }
+
+/*---------------------------------------------------------------------*
+
+Name            swprintf - sends formatted output to a string of wchar_t
+
+Usage           int swprintf(wchar_t *string, const wchar_t *format[, argument, ...]);
+
+Prototype in    stdio.h
+
+Description     sends formatted output to a string of wchar_t
+
+Return value    number of characters output
+
+NOTE:           This function DOES NOT handle wide chars correctly yet.
+                This is just to satisfy some other internal routines.
+
+*---------------------------------------------------------------------*/
+
+int _RTLENTRY _EXPFUNC swprintf(wchar_t *wb, const wchar_t *wf, ...)
+{
+    char *bufP, *fmt;
+    va_list ap;
+    int ret;
+
+    bufP = (char *)wb;
+    fmt  = (char *)wf;
+
+    *bufP = 0;
+    va_start(ap,fmt);
+    ret = __vprinter ((putnF *)strputn, &bufP, fmt, ap);
+    va_end(ap);
+    return (ret);
+}
+
 
 /*---------------------------------------------------------------------*
 

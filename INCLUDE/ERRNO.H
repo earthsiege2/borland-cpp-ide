@@ -7,9 +7,9 @@
 */
 
 /*
- *      C/C++ Run Time Library - Version 6.5
+ *      C/C++ Run Time Library - Version 7.0
  *
- *      Copyright (c) 1987, 1994 by Borland International
+ *      Copyright (c) 1987, 1996 by Borland International
  *      All Rights Reserved.
  *
  */
@@ -85,7 +85,7 @@
 #define EISDIR  46      /* UNIX - not MSDOS         */
 #define EUCLEAN 47      /* UNIX - not MSDOS         */
 
-#if !__STDC__
+#if !defined(__STDC__)
 #define sys_nerr     _sys_nerr
 #define sys_errlist  _sys_errlist
 #endif
@@ -121,7 +121,7 @@ extern  int  far              _Cdecl __get_sys_nerr(void);
 #endif
 
 #else  /* defined __FLAT__ */
- 
+
 /*  Dos Error Codes */
 
 #define ENAMETOOLONG 48 /* Filename too long        */

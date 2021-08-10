@@ -1,34 +1,29 @@
-/*------------------------------------------------------------------------*/
-/*                                                                        */
-/*  ASSOC.H                                                               */
-/*                                                                        */
-/*  Copyright (c) 1993, 1994 Borland International                        */
-/*  All Rights Reserved                                                   */
-/*                                                                        */
-/*------------------------------------------------------------------------*/
-
+//----------------------------------------------------------------------------
+// Borland BIDS Container Library
+// Copyright (c) 1993, 1996 by Borland International, All Rights Reserved
+//
+//$Revision:   5.6  $
+//
+//----------------------------------------------------------------------------
 #if !defined( CLASSLIB_ASSOC_H )
 #define CLASSLIB_ASSOC_H
 
 #if !defined( CLASSLIB_DEFS_H )
-#include <classlib/defs.h>
+# include <classlib/defs.h>
 #endif
-
 #if !defined( CLASSLIB_ALLOCTR_H )
-#include <classlib/alloctr.h>
+# include <classlib/alloctr.h>
 #endif
-
 #if !defined( CLASSLIB_VOIDP_H )
-#include <classlib/voidp.h>
+# include <classlib/voidp.h>
 #endif
-
 #if !defined( CLASSLIB_HASHIMP_H )
-#include <classlib/hashimp.h>
+# include <classlib/hashimp.h>
 #endif
 
 #pragma option -Vo-
 #if defined( BI_CLASSLIB_NO_po )
-#pragma option -po-
+# pragma option -po-
 #endif
 
 /*------------------------------------------------------------------------*/

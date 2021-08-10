@@ -1,7 +1,7 @@
-<<[H]TDLGClient [[TDialog]]
+<<[H]TDlgClient [[TDialog]]
 ##{hheader.snp}
-#include <owl\owlpch.h>
-#pragma hdrstop
+##@OPT_APPL_DOCVIEW 2
+#include <owl/docview.h>
 
 ##<<TApplication QUERY_FILENAME_CPP [[Filename]]
 #include "[[Filename]].rh"                  // Definition of all resources.
@@ -10,58 +10,56 @@
 ##--BEGIN-- !@OPT_APPL_DOCVIEW
 //{{TDialog = [[TDialog]]}}
 class [[TDialog]] : public TDialog {
-public:
+  public:
 ##QUERY_DLOG [[DLogRsrc]]
-	 [[TDialog]] (TWindow *parent, TResId resId = [[DLogRsrc]], TModule *module = 0);
-    virtual ~[[TDialog]] ();
+    [[TDialog]](TWindow* parent, TResId resId = [[DLogRsrc]], TModule* module = 0);
+    virtual ~[[TDialog]]();
 
 };    //{{[[TDialog]]}}
 ##--END-- !@OPT_APPL_DOCVIEW
 ##--BEGIN-- @OPT_APPL_DOCVIEW
 //{{TDialog = [[TDialog]]}}
 class [[TDialog]] : public TDialog, public TView {
-public:
+  public:
 ##QUERY_DLOG [[DLogRsrc]]
-//	 [[TDialog]] (TWindow *parent, TResId resId = [[DLogRsrc]], TModule *module = 0);  //{{DIALOG_ASSOCIATION}}
+//  [[TDialog]](TWindow* parent, TResId resId = [[DLogRsrc]], TModule* module = 0);  //{{DIALOG_ASSOCIATION}}
 
-	 [[TDialog]] (TDocument& doc, TWindow* parent = 0);
-    virtual ~[[TDialog]] ();
+    [[TDialog]](TDocument& doc, TWindow* parent = 0);
+    virtual ~[[TDialog]]();
 
     static const char far* StaticName() {return "Dialog View";}  // put in resource
 
-    //
-    // inherited virtuals from TView
+    // Inherited virtuals from TView
     //
     const char far* GetViewName() {return StaticName();}
-    TWindow* GetWindow() {return (TWindow*)this;}
+    TWindow* GetWindow() {return(TWindow*)this;}
     bool     SetDocTitle(const char far* docname, int index)
              { return TWindow::SetDocTitle(docname, index); }
   private:
+    // Event handlers
     //
-    // event handlers
-    //
-    bool     VnIsWindow(HWND hWnd) {return HWindow == hWnd;}
+    bool     VnIsWindow(HWND hWnd)
+             { return ((HWindow == hWnd) || IsChild(hWnd)); }
 
 //{{[[TDialog]]VIRTUAL_BEGIN}}
-public:
-    virtual bool CanClose ();
+  public:
+    virtual bool CanClose();
 ##:DBVirtual(\\"[[TDialog]]", "CanClose")
 //{{[[TDialog]]VIRTUAL_END}}
 
 //{{[[TDialog]]RSP_TBL_BEGIN}}
-protected:
+  protected:
 //{{[[TDialog]]RSP_TBL_END}}
 DECLARE_RESPONSE_TABLE([[TDialog]]);
 };    //{{[[TDialog]]}}
 ##--END-- @OPT_APPL_DOCVIEW
 ##{hfooter.snp}
->>[H]TDLGClient [[TDialog]]
+>>[H]TDlgClient [[TDialog]]
 
 
-<<[CPP]TDLGClient [[TDialog]]
+<<[CPP]TDlgClient [[TDialog]]
 ##{cheader.snp}
-#include <owl\owlpch.h>
-#pragma hdrstop
+#include <owl/pch.h>
 
 ##<<TApplication QUERY_FILE_H [[FileName]]
 #include "[[FileName]]"
@@ -74,23 +72,25 @@ DECLARE_RESPONSE_TABLE([[TDialog]]);
 
 ##--BEGIN-- !@OPT_APPL_DOCVIEW
 ##      --BEGIN-- @QUERY_APPL_COMMENT == VALUE_VERBOSE
-//////////////////////////////////////////////////////////
+//--------------------------------------------------------
 // [[TDialog]]
-// ==========
+// ~~~~~~~~~~
 // Construction/Destruction handling.
+//
 ##      --END-- @QUERY_APPL_COMMENT == VALUE_VERBOSE
-[[TDialog]]::[[TDialog]] (TWindow *parent, TResId resId, TModule *module)
-    : TDialog(parent, resId, module)
+[[TDialog]]::[[TDialog]](TWindow* parent, TResId resId, TModule* module)
+:
+  TDialog(parent, resId, module)
 {
-    // INSERT>> Your constructor code here.
+  // INSERT>> Your constructor code here.
 }
 
 
-[[TDialog]]::~[[TDialog]] ()
+[[TDialog]]::~[[TDialog]]()
 {
-    Destroy();
+  Destroy();
 
-    // INSERT>> Your destructor code here.
+  // INSERT>> Your destructor code here.
 }
 ##--END-- !@OPT_APPL_DOCVIEW
 ##--BEGIN-- @OPT_APPL_DOCVIEW
@@ -105,31 +105,33 @@ END_RESPONSE_TABLE;
 
 
 ##      --BEGIN-- @QUERY_APPL_COMMENT == VALUE_VERBOSE
-//////////////////////////////////////////////////////////
+//--------------------------------------------------------
 // [[TDialog]]
-// ==========
+// ~~~~~~~~~~
 // Construction/Destruction handling.
+//
 ##      --END-- @QUERY_APPL_COMMENT == VALUE_VERBOSE
-[[TDialog]]::[[TDialog]] (TDocument& doc, TWindow* parent)
+[[TDialog]]::[[TDialog]](TDocument& doc, TWindow* parent)
 ##:     @QUERY_APPL_DLGCLIENT [[ClientClass]]
-##:     <<*ClientClass QUERY_DLOG [[DLogRsrc]]
-		: TView(doc), TDialog(parent, [[DLogRsrc]])
+##:     <<*ClientClass QUERY_DLOG [[DLogRsrc]] 2
+:
+  TView(doc), TDialog(parent, [[DLogRsrc]])
 {
-    // INSERT>> Your constructor code here.
+  // INSERT>> Your constructor code here.
 
 }
 
 
-[[TDialog]]::~[[TDialog]] ()
+[[TDialog]]::~[[TDialog]]()
 {
-    // INSERT>> Your destructor code here.
+  // INSERT>> Your destructor code here.
 
 }
 
 
-bool [[TDialog]]::CanClose ()
+bool [[TDialog]]::CanClose()
 {
-    return TWindow::CanClose() && Doc->CanClose();
+  return TWindow::CanClose() && Doc->CanClose();
 }
 ##--END-- @OPT_APPL_DOCVIEW
->>[CPP]TDLGClient [[TDialog]]
+>>[CPP]TDlgClient [[TDialog]]

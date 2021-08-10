@@ -3,9 +3,9 @@
 ;[]------------------------------------------------------------[]
 
 ;
-;       C/C++ Run Time Library - Version 1.5
+;       C/C++ Run Time Library - Version 2.0
 ; 
-;       Copyright (c) 1987, 1994 by Borland International
+;       Copyright (c) 1987, 1996 by Borland International
 ;       All Rights Reserved.
 ; 
 
@@ -45,6 +45,7 @@ Locals@ <int temp1>,<qword temp2>
         mov     temp1.by1, al
         fldcw   temp1.w0                ; restore the control word
         mov     eax, temp2.dd0          ; return LS 32 bits
+        mov     edx, temp2.dd1          ;        MS 32 bits
 
         Unlink@
         Return@

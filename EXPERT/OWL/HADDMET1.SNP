@@ -27,10 +27,6 @@
 ##              :", TAutoCurrency" GeneralArg
 ##*
 ##          --END-- AutoOLE(Idx) == "TAutoCurrency"
-##          --BEGIN-- AutoOLE(Idx) == "TAutoBool"
-##              :", TAutoBool" GeneralArg
-##*
-##          --END-- AutoOLE(Idx) == "TAutoBool"
 ##          :Index == 1
 ##              :GeneralArg Arg1
 ##*

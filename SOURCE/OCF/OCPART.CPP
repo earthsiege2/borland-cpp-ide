@@ -1,16 +1,27 @@
-//
 //----------------------------------------------------------------------------
 // ObjectComponents
-// (C) Copyright 1994 by Borland International, All Rights Reserved
+// Copyright (c) 1994, 1996 by Borland International, All Rights Reserved
 //
-//   Implementation of TOcPart Class
+// $Revision:   2.11  $
+//
+// Implementation of TOcPart Class
 //----------------------------------------------------------------------------
-#include <ocf/ocfpch.h>
-#include <ocf/ocstorag.h>
-#include <ocf/ocpart.h>
-#include <ocf/ocdoc.h>
-#include <ocf/ocapp.h>
-#include <ocf/ocview.h>
+#include <ocf/pch.h>
+#if !defined(OCF_OCSTORAG_H)
+# include <ocf/ocstorag.h>
+#endif
+#if !defined(OCF_OCPART_H)
+# include <ocf/ocpart.h>
+#endif
+#if !defined(OCF_OCDOC_H)
+# include <ocf/ocdoc.h>
+#endif
+#if !defined(OCF_OCAPP_H)
+# include <ocf/ocapp.h>
+#endif
+#if !defined(OCF_OCVIEW_H)
+# include <ocf/ocview.h>
+#endif
 #include <stdio.h>  // sprintf
 
 const char  PartFormat[]     = "OcPart.%d";
@@ -18,35 +29,21 @@ const char  PartStreamName[] = "\03OcPart";
 
 //
 // Construct a new part with a given temp id
+// Must call Init method to complete initialization
 //
-TOcPart::TOcPart(TOcDocument& document, TOcInitInfo far& initInfo,
-                 TRect objPos, int id)
+TOcPart::TOcPart(TOcDocument& document, int id)
 :
-  OcDocument(document)
+  OcDocument(document), BPart(0), BPartI(0), BLPartI(0), Flags(Visible),
+  Storage(0)
 #if defined(BI_DATA_NEAR)
  ,Name(*new string),
   Pos(*new TPoint),
   Size(*new TSize)
 #endif
 {
-  BPart   = 0;
-  BPartI  = 0;
-  BLPartI = 0;
-  Flags = Visible;
-
-  // Part position and size are in logical units
-  //
-  TRect siteRect = objPos;
-  TOcView* view = OcDocument.GetActiveView();
-  if (!view)
-    return;
-
-  view->ForwardEvent(OC_VIEWSETSITERECT, &siteRect);
-  Pos = siteRect.TopLeft();
-  Size = siteRect.Size();
-
+  AddRef();  // TUnknown defaults to 0, we need 1
   if (!id)
-    id = ++OcDocument.PartID;
+    id = OcDocument.AllocPartID();
   char name[32];
   sprintf(name, PartFormat, id);
   Name = name;
@@ -59,12 +56,41 @@ TOcPart::TOcPart(TOcDocument& document, TOcInitInfo far& initInfo,
   // Create a sub-storage from the parent storage in init
   //
   Storage = new TOcStorage(*OcDocument.GetStorage(), name, true, STGM_READWRITE);
+}
 
-  // Initialize our helpers & then add ourselves to our document's part
-  // collection if everything succeeds
+//
+// Old style constructor - does init in constructor -
+//  OCF messages will get passed before constructor is complete
+//
+TOcPart::TOcPart(TOcDocument& document, TOcInitInfo far& initInfo,
+                 TRect objPos, int id)
+:
+  OcDocument(document), BPart(0), BPartI(0), BLPartI(0), Flags(Visible),
+  Storage(0)
+#if defined(BI_DATA_NEAR)
+ ,Name(*new string),
+  Pos(*new TPoint),
+  Size(*new TSize)
+#endif
+{
+  // Part position and size are in logical units
   //
-  Init(initInfo);
-  OcDocument.GetParts().Add(this);
+  AddRef();  // TUnknown defaults to 0, we need 1
+  if (!id)
+    id = OcDocument.AllocPartID();
+  char name[32];
+  sprintf(name, PartFormat, id);
+  Name = name;
+
+  // There must be a Root IStorage associated with each document
+  //
+  if (!OcDocument.GetStorage())
+    TXObjComp::Throw(TXObjComp::xMissingRootIStorage);
+
+  // Create a sub-storage from the parent storage in init
+  //
+  Storage = new TOcStorage(*OcDocument.GetStorage(), name, true, STGM_READWRITE);
+  Init (&initInfo, objPos);
 }
 
 //
@@ -72,7 +98,8 @@ TOcPart::TOcPart(TOcDocument& document, TOcInitInfo far& initInfo,
 //
 TOcPart::TOcPart(TOcDocument& document, const char far* name)
 :
-  OcDocument(document),
+  OcDocument(document), BPart(0), BPartI(0), BLPartI(0), Flags(Visible),
+  Storage(0),
 #if defined(BI_DATA_NEAR)
   Name(*new string(name)),
   Pos(*new TPoint),
@@ -81,10 +108,7 @@ TOcPart::TOcPart(TOcDocument& document, const char far* name)
   Name(name)
 #endif
 {
-  BPart   = 0;
-  BPartI  = 0;
-  BLPartI = 0;
-  Flags = Visible;
+  AddRef();  // TUnknown defaults to 0, we need 1
 
   // There must be an IStorage associated with each document
   //
@@ -103,13 +127,20 @@ TOcPart::TOcPart(TOcDocument& document, const char far* name)
   OcDocument.GetParts().Add(this);
 }
 
+//
+//
+//
 TOcPart::~TOcPart()
 {
-  // detach this part from its document
+  // Detach this part from its document
   //
   Detach();
 
-  // delete any associated storage
+  // double check if active part is "this" and, in case, delete it
+  if (OcDocument.GetActiveView()->GetActivePart() == this)
+    OcDocument.GetActiveView()->SetActivePart(NULL);
+
+  // Delete any associated storage
   //
   delete Storage;
 #if defined(BI_DATA_NEAR)
@@ -122,49 +153,80 @@ TOcPart::~TOcPart()
 //
 // Perform common ctor initialization
 //
-void
-TOcPart::Init(TOcInitInfo far& initInfo)
+bool
+TOcPart::Init(TOcInitInfo far* initInfo, TRect objPos)
 {
-  AddRef();  // TUnknown defaults to 0, we need 1
+  if (BPart)
+    return false;   // already initialized
 
-  // There must be an IStorage associated with each part, make sure the ctor
-  // got it OK
+  // Part position and size are in logical units
   //
-  initInfo.Storage = Storage->GetIStorage();
-
-  // Create part helper
-  //
-  TXObjComp::Check(
-    OcDocument.OcApp.BOleComponentCreate(&BPart, GetOuter(), cidBOlePart),
-    TXObjComp::xInternalPartError);
-
-  // Get the interfaces we need & then release the object itself
-  //
-  if (HRSucceeded(BPart->QueryInterface(IID_IBPart, &(LPVOID)BPartI)))
-    BPartI->Release();
-  if (HRSucceeded(BPart->QueryInterface(IID_IBLinkable, &(LPVOID)BLPartI)))
-    BLPartI->Release();
-
-  HRESULT hr;
-  if (!BPartI || !HRSucceeded(hr = BPartI->Init(this, &initInfo))) {
-    BPart->Release();
-    BPart = 0;
-    TXObjComp::Throw(TXObjComp::xPartInitError, hr);
+  TOcSiteRect siteRect(this, objPos);
+  TOcView* view = OcDocument.GetActiveView();
+  if (view) {
+    view->ContainerHost->EvOcViewSetSiteRect(siteRect);
+    Pos = siteRect.Rect.TopLeft();
+    Size = siteRect.Rect.Size();
   }
-
-  Rename();
-  if (initInfo.How == ihLink)  // Remember that we are a link
-    Flags |= Link;
-
-  // New parts become active when they are init'd above. Make sure that our
-  // view knows that we are active too.
-  //
-  if (initInfo.Where == iwNew) {
-    Flags |= Active;
-    TOcView* activeView = OcDocument.GetActiveView();
-    CHECK(activeView);
-    activeView->ActivatePart(this);
+  
+  if (InitObj(initInfo)) {
+    OcDocument.GetParts().Add(this);
+    return true;
   }
+  return false;
+}
+
+//
+//
+//
+bool
+TOcPart::InitObj(TOcInitInfo far* initInfo)
+{
+  // Initialize our helpers & then add ourselves to our document's part
+  // collection if everything succeeds
+  //
+  if (initInfo) {
+
+    // There must be an IStorage associated with each part, make sure the ctor
+    // got it OK
+    //
+    initInfo->Storage = Storage->GetIStorage();
+
+    // Create part helper
+    //
+    TXObjComp::Check(
+      OcDocument.GetOcApp().BOleComponentCreate(&BPart, GetOuter(), cidBOlePart),
+      TXObjComp::xInternalPartError);
+  
+    // Get the interfaces we need & then release the object itself
+    //
+    if (HRSucceeded(BPart->QueryInterface(IID_IBPart, &(LPVOID)BPartI)))
+      BPartI->Release();
+    if (HRSucceeded(BPart->QueryInterface(IID_IBLinkable, &(LPVOID)BLPartI)))
+      BLPartI->Release();
+  
+    HRESULT hr;
+    if (!BPartI || !HRSucceeded(hr = BPartI->Init(this, initInfo))) {
+      BPart->Release();
+      BPart = 0;
+      TXObjComp::Throw(TXObjComp::xPartInitError, hr);
+    }
+  
+    Rename();
+    if (initInfo->How == ihLink)  // Remember that we are a link
+      Flags |= Link;
+  
+    // New parts become active when they are init'd above. Make sure that our
+    // view knows that we are active too.
+    //
+    if (initInfo->Where == iwNew) {
+      Flags |= Active;
+      TOcView* activeView = OcDocument.GetActiveView();
+      CHECK(activeView);
+      activeView->ActivatePart(this);
+    }
+  }
+  return true;
 }
 
 //
@@ -209,7 +271,6 @@ TOcPart::QueryServer(const IID far& iid, void far* far* iface)
   return BPartI->DoQueryInterface(iid, iface);
 }
 
-
 //
 // Disconnect servers by closing & releasing our BOle helper
 //
@@ -218,6 +279,9 @@ TOcPart::Close()
 {
   if (!BPartI)
     return true;
+
+  if (BLPartI)
+    BLPartI->OnRename(0, 0);
 
   if (HRSucceeded(BPartI->Close())) {
     // release our BOle helper object
@@ -261,7 +325,7 @@ TOcPart::Rename()
 // Show/hide a site.
 //
 HRESULT _IFUNC
-TOcPart::SiteShow(bool show)
+TOcPart::SiteShow(BOOL show)
 {
   Invalidate(invView);
 
@@ -275,7 +339,7 @@ TOcPart::SiteShow(bool show)
     TOcView* view = OcDocument.GetActiveView();
     if (view) {
       view->ActivatePart(this);
-      view->ForwardEvent(OC_VIEWPARTACTIVATE, this);
+      view->ContainerHost->EvOcViewPartActivate(*this);
     }
   }
   return HR_NOERROR;
@@ -304,18 +368,19 @@ TOcPart::GetSiteRect(TRect far* posRect, TRect far* clipRect)
   TOcView* view = OcDocument.GetActiveView();
   if (!view)
     return HR_FAIL;
-  if (posRect)
-    *posRect = TRect(Pos, Size);
+  if (posRect) {
+    TOcSiteRect siteRect(this, TRect(Pos, Size));
+    view->ContainerHost->EvOcViewGetSiteRect(siteRect);
+    *posRect = siteRect.Rect;
 
-  view->ForwardEvent(OC_VIEWGETSITERECT, posRect);
-
-  // If we don't know our site size yet, then fail this call. Let the server
-  // pick a size.
-  //
-  if (posRect->right-posRect->left <= 0 || posRect->bottom-posRect->top <= 0) {
-    posRect->right = posRect->left;
-    posRect->bottom = posRect->top;
-    return HR_FAIL;
+    // If we don't know our site size yet, then fail this call. Let the server
+    // pick a size.
+    //
+    if (posRect->right-posRect->left <= 0 || posRect->bottom-posRect->top <= 0) {
+      posRect->right = posRect->left;
+      posRect->bottom = posRect->top;
+      return HR_FAIL;
+    }
   }
 
   if (clipRect)
@@ -342,11 +407,10 @@ TOcPart::SetSiteRect(const TRect far* newRect)
   //
   Invalidate(invView);   // erase old image
 
-  TRect rect(*newRect);
-
-  view->ForwardEvent(OC_VIEWSETSITERECT, &rect);
-  Size = rect.Size();
-  Pos  = rect.TopLeft();
+  TOcSiteRect siteRect(this, *newRect);
+  view->ContainerHost->EvOcViewSetSiteRect(siteRect);
+  Size = siteRect.Rect.Size();
+  Pos  = siteRect.Rect.TopLeft();
 
   // Give other views a chance to update
   //
@@ -379,16 +443,30 @@ TOcPart::SetSiteExtent(const TSize far* newSize)
   Invalidate(invView); // display new image
 
   TSize ext(*newSize);
-  TRect siteRect(Pos, ext);
+  TOcSiteRect siteRect(this, TRect(Pos, ext));
 
-  view->ForwardEvent(OC_VIEWSETSITERECT, &siteRect);
-  Size = siteRect.Size();
+  if (view->ContainerHost->EvOcViewSetSiteRect(siteRect))
+    Size = siteRect.Rect.Size();
+  else
+    //\\// container doesn't accept server size (keep what we have)
+    return HR_FAIL;
 
   // Give other views a chance to update
   //
   Invalidate(invView);    // refresh new image position
 
   return HR_NOERROR;
+}
+
+//
+// Get parent window for part
+//
+HRESULT _IFUNC
+TOcPart::GetParentWindow(HWND FAR *hWnd)
+{
+  TOcView* activeView = OcDocument.GetActiveView();
+  *hWnd = activeView->GetWindow();
+  return 0;
 }
 
 //
@@ -405,12 +483,12 @@ TOcPart::GetZoom(TOcScaleInfo* zoom)
   if (!view)
     return HR_FAIL;
 
-  TOcScaleFactor scale(*zoom);
-  if (!view->ForwardEvent(OC_VIEWGETSCALE, &scale)) {
+  TOcScaleFactor scaleFactor(*zoom);
+  if (!view->ContainerHost->EvOcViewGetScale(scaleFactor)) {
     zoom->xD = zoom->xN = zoom->yD = zoom->yN = 1;
   }
   else
-    scale.GetScaleFactor(*zoom);
+    scaleFactor.GetScaleFactor(*zoom);
 
   return HR_NOERROR;
 }
@@ -428,7 +506,7 @@ TOcPart::Invalidate(TOcInvalidate type)
 }
 
 void _IFUNC
-TOcPart::OnSetFocus(bool set)
+TOcPart::OnSetFocus(BOOL set)
 {
   TOcView* view = OcDocument.GetActiveView();
   if (view && set)
@@ -436,7 +514,7 @@ TOcPart::OnSetFocus(bool set)
 }
 
 HRESULT _IFUNC
-TOcPart::Init(IBDataProvider far*, IBPart far*, LPCOLESTR, bool)
+TOcPart::Init(IBDataProvider far*, IBPart far*, LPCOLESTR, BOOL)
 {
   return HR_FAIL; // never called
 }
@@ -575,14 +653,13 @@ TOcPart::UpdateRect()
 {
   // Use device units for Bolero
   //
-  TRect rect(Pos, Size);
   TOcView* view = OcDocument.GetActiveView();
   if (!view)
     return;
 
-  view->ForwardEvent(OC_VIEWGETSITERECT, &rect);
-
-  BPartI->SetPartPos(&rect);
+  TOcSiteRect siteRect(this, TRect(Pos, Size));
+  view->ContainerHost->EvOcViewGetSiteRect(siteRect);
+  BPartI->SetPartPos(&siteRect.Rect);
 }
 
 //----------------------------------------------------------------------------
@@ -623,7 +700,7 @@ TOcPart::FinishLoading()
   //
   if (!BPartI) {
     TOcInitInfo initInfo(ihEmbed, iwStorage, OcDocument.GetActiveView());
-    Init(initInfo);
+    InitObj(&initInfo);
   }
 }
 
@@ -670,7 +747,7 @@ TOcPart::Draw(HDC dc, const TRect& pos, const TRect& clip, TOcAspect aspect)
   //
   if (!BPartI) {
     TOcInitInfo initInfo(ihEmbed, iwStorage, OcDocument.GetActiveView());
-    Init(initInfo);
+    InitObj(&initInfo);
     // Update the link
     //
     if (IsLink()) {
@@ -712,6 +789,40 @@ TOcPart::Detach()
 {
   return OcDocument.GetParts().Detach(this);
 }
+
+void
+TOcPart::SetVisible(bool visible)
+{
+  if (visible)
+    Flags |= Visible;
+  else
+    Flags &= ~Visible;
+
+  if (IsActive())
+    BPartI->Show(visible);
+  else
+    Invalidate(invView);    // refresh new image position
+}
+
+
+//
+// Set the storage for this part
+//
+void
+TOcPart::SetStorage(IStorage* storage, bool remember)
+{
+  if (Storage && (storage == Storage->GetIStorage()))
+    return;
+
+  if (remember) 
+    delete Storage;
+
+  if (storage)
+    Storage = new TOcStorage(storage);
+  else
+    Storage = 0;
+}
+
 
 //----------------------------------------------------------------------------
 // CdPartCollection
@@ -786,4 +897,3 @@ TOcVerb::TOcVerb()
   CanDirty(false)
 {
 }
-

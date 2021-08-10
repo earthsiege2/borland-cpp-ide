@@ -15,16 +15,16 @@
 ##--END-- ? \\"//{{[[BaseName]] = [[ClassName]]}}"
 ##*
 ##--BEGIN-- ? \\"//{{[[ClassName]]VIRTUAL_BEGIN}}"
-##:     (YPos() + 2) [[StartLine]]
+##:    (YPos() + 2) [[StartLine]]
 ##:     --BEGIN-- ? \\"//{{[[ClassName]]VIRTUAL_END}}"
 ##:         YPos() [[EndLine]]
 ##:         ^@StartLine
 ##:         ^BOL
-##:         --FOR-- VEntries = 1 TO (EndLine - StartLine)
+##:         --FOR-- VEntries = 1 TO(EndLine - StartLine)
 ##:             ScanIEntry([[FunctionName]])
 ##:             DBVirtual(ClassName, FunctionName)
-##*    
-##:         --NEXT-- VEntries = 1 TO (EndLine - StartLine)
+##*
+##:         --NEXT-- VEntries = 1 TO(EndLine - StartLine)
 ##:     --END-- ? \\"//{{[[ClassName]]VIRTUAL_END}}"
 ##--END-- ? \\"//{{[[ClassName]]VIRTUAL_BEGIN}}"
 ##--END-- QUERY_CLASS_NAME [[ClassName]]
@@ -52,7 +52,7 @@
 ##:         YPos() [[EndLine]]
 ##:         ^@StartLine + 1
 ##:         ^BOL
-##:         --FOR-- RespEntry = 1 TO ((EndLine - StartLine) + 1)
+##:         --FOR-- RespEntry = 1 TO((EndLine - StartLine) + 1)
 ##:             ScanRespEntry([[RspConstant]], [[RspFunctionName]], [[RspEventType]], [[RspMenuType]]) [[result]]
 ##:                 DBResponse(ClassName, RspConstant, RspFunctionname, RspEventType, RspMenuType)
 ##*

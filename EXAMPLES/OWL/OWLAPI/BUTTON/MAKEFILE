@@ -1,9 +1,0 @@
-#----------------------------------------------------------------------------
-# ObjectWindows - (C) Copyright 1991, 1993 by Borland International
-#   examples\owl\owlapi\button\makefile
-#----------------------------------------------------------------------------
-
-MODELS=mldf
-EXE    = buttonx
-!include $(BCEXAMPLEDIR)\owlmake.gen
-

@@ -21,10 +21,12 @@ MODELS=ldf                          # Allowable models
 EXERES = sampexe
 EXEALL = step01.exe step02.exe step03.exe step04.exe step05.exe step06.exe\
          step07.exe step08.exe step09.exe step10.exe step11.exe step12.exe\
-         step13.exe step14.exe step15.exe step16.exe step17.exe
+         step13.exe step14.exe step15.exe step16.exe step17.exe step18.exe
 EXEMAKE= $(STEP1) $(STEP2) $(STEP3) $(STEP4)  $(STEP5)  $(STEP6)\
          $(STEP7) $(STEP8) $(STEP9) $(STEP10) $(STEP11) $(STEP12)\
-         $(STEP13) $(STEP14) $(STEP15) $(STEP16) $(CNTRL16) $(STEP17) $(CNTRL17)
+         $(STEP13) $(STEP14) $(STEP15) $(STEP16) $(CNTRL16) \
+         $(STEP17) $(CNTRL17) $(STEP18) $(CNTRL18)
+
 
 NORES = $(EXERULE:sampexe.res=)
 STEP1 = $(NORES:sampexe=step01)
@@ -48,10 +50,13 @@ STEP16= $(STEPW:sampexe=step16)
 CNTRL16= $(STEP1:step01=cntrl16)
 STEP17= $(STEPW:sampexe=step17)
 CNTRL17= $(STEP1:step01=cntrl17)
+STEP18= $(STEPW:sampexe=step18)
+CNTRL18= $(STEP1:step01=cntrl18)
 
 RULES = ^
 step16.obj: cntrl16.exe^
-step17.obj: cntrl17.exe
+step17.obj: cntrl17.exe^
+step18.obj: cntrl18.exe
 
 
 #
@@ -69,6 +74,7 @@ step15du.obj : step15dv.cpp ^
 
 STEP16U = $(STEP15U:step15=step16)
 STEP17U = $(STEP15U:step15=step17)
+STEP18U = $(STEP15U:step15=step18)
 
 #
 # Typically DLLs are built before EXEs - However, this does not have
@@ -78,8 +84,8 @@ STEP17U = $(STEP15U:step15=step17)
 # build order [step01, step02, step03,...]
 #
 !if !$d(TARGET)
-TARGETS= cfgdllsrvr step15.dll step16.dll step17.dll makcln
-RULES  = $(RULES) $(STEP15U) $(STEP16U) $(STEP17U)^
+TARGETS= cfgdllsrvr step15.dll step16.dll step17.dll step18.dll makcln
+RULES  = $(RULES) $(STEP15U) $(STEP16U) $(STEP17U) $(STEP18U)^
  ^
 cfgdllsrvr: ^
   @copy &&| ^
@@ -92,10 +98,10 @@ makcln: ^
   @del $(MAKEFILE)
 
 #
-# Prevent MAKEFILE.GEN from building DLL Servers via DLLALL/DLLMAKE 
+# Prevent MAKEFILE.GEN from building DLL Servers via DLLALL/DLLMAKE
 #
-DLLALL = 
-DLLMAKE= 
+DLLALL =
+DLLMAKE=
 
 
 !else
@@ -103,8 +109,8 @@ DLLMAKE=
 #
 # A TARGET was specified
 #
-DLLALL = step15.dll step16.dll step17.dll
-DLLMAKE= $(STEP15U) $(STEP16U) $(STEP17U)
+DLLALL = step15.dll step16.dll step17.dll step18.dll
+DLLMAKE= $(STEP15U) $(STEP16U) $(STEP17U) $(STEP18U)
 
 TARGETS= makcln
 RULES  = $(RULES) ^

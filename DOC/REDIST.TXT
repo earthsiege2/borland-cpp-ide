@@ -1,0 +1,126 @@
+
+OPTIONS FOR 16-BIT PROGRAMS
+===========================
+
+Application         Associated Files              Destination
+Options
+----------------------------------------------------------------------------
+RTL                 \bc5\bin\bc500rtl.dll         \windows\system
+dynamically linked
+                    --------------------------------------------------------
+ClassLib            \bc5\bin\bids50.dll           \windows\system
+dynamically linked
+                    --------------------------------------------------------
+OCF                 \windows\system\bocole.dll    \windows\system
+linking and         + ClassLib*
+embedding
+                    --------------------------------------------------------
+OWL                 \bc5\bin\owl50.dll            \windows\system
+dynamically linked  + RTL
+                    + ClassLib 16
+                    --------------------------------------------------------
+VBX                 \windows\system\bivbx30.dll   \windows\system
+                    --------------------------------------------------------
+VDBT                \bc5\bin\bdt50c.dll           with exe file (or on path)
+programmatic                                      
+access
+                    --------------------------------------------------------
+VDBT with VBX       \windows\system\bdt50acc.vbx  \windows\system
+                    \windows\system\bdt50ctl.vbx  \windows\system
+                    \windows\system\bdt50ex.dll   \windows\system
+                    \bc5\bin\bdt50c.dll           with exe file (or on path)
+                    + VBX             
+                    --------------------------------------------------------
+VDBT with OLE       \bc5\bin\bdt50c.dll           with exe file (or on path)
+                    \bc5\bin\bdt50.reg            
+                    \bc5\bin\bdt50.tlb            with exe file (or on path)
+                                                  
+                                                  with exe file (or on path)
+                    --------------------------------------------------------                                                  
+Microsoft 3D        \windows\system\ctl3dv2.dll   windows\system
+controls
+CTL3D
+                    --------------------------------------------------------
+Borland custom      \windows\system\bwcc.dll      windows\system
+controls            \windows\system\bwcc000c.dll  windows\system
+BWCC                \windows\system\bwcc0007.dll  windows\system
+                    \windows\system\bwcc0009.dll  windows\system
+
+
+* the notation "+ ClassLib" indicates that this option also implies
+another one.  Specifically, an OCF linking and embedding application
+also needs the files listed in this table under the "ClassLib" option.
+
+
+OPTIONS FOR 32-BIT PROGRAMS
+===========================
+
+Application         Associated Files              Destination
+Options
+----------------------------------------------------------------------------
+RTL                 \bc5\bin\cw3220.dll           \windows\system[32]*
+dynamically linked
+                    --------------------------------------------------------
+RTL                 \bc5\bin\cw3220mt.dll         \windows\system[32]
+dynamically linked
+multithreaded
+                    --------------------------------------------------------
+ClassLib            \bc5\bin\bids50f.dll          \windows\system[32]
+dynamically linked
+                    --------------------------------------------------------
+ClassLib            \bc5\bin\bids50t.dll          \windows\system[32]
+dynamically linked
+multithreaded
+                    --------------------------------------------------------
+OCF                 \windows\system[32]\bocof.dll \windows\system[32]
+linking and         + ClassLib 
+embedding           
+                    --------------------------------------------------------
+OWL                 \bc5\bin\owl50f.dll           \windows\system[32]
+dynamically linked  + ClassLib
+                    --------------------------------------------------------
+OWL                 \bc5\bin\owl50t.dll           \windows\system[32]
+dynamically linked  + ClassLib (multithreaded)
+multithreded
+                    --------------------------------------------------------
+VBX                 \windows\system\bivbx30.dll        \windows\system
+                    \windows\system\bivbx30.32c        \windows\system (Win95 only)**
+                    \windows\system\bivbx30c.dll       \windows\system (Win95 only)
+                    \windows\system32\bivbx30.32n      \windows\system32 (WinNT only)
+                    \windows\system32\bivbx30n.exe     \windows\system32 (WinNT only)
+                    --------------------------------------------------------
+VDBT                \bc5\bin\bdt50cf.dll          with exe file (or on path)
+programmatic                                      
+access
+                    --------------------------------------------------------
+VDBT with VBX       \windows\system\bdt50acc.vbx  \windows\system
+                    \windows\system\bdt50ctl.vbx  \windows\system
+                    \windows\system\bdt50exf.dll  \windows\system
+                    \bc5\bin\bdt50cf.dll          with exe file (or on path)
+                    + VBX                         
+                    --------------------------------------------------------
+VDBT with OLE       \bc5\bin\bdt50cf.dll          with exe file (or on path)
+                    \bc5\bin\bdt50.reg            with exe file (or on path)
+                    \bc5\bin\bdt5032.tlb          with exe file (or on path)
+                                                  
+                    --------------------------------------------------------
+VDBT with VBX &     \windows\system\bdt50acc.vbx  \windows\system
+OLE                 \windows\system\bdt50ctl.vbx  \windows\system
+                    \windows\system\bdt50exf.dll  \windows\system
+                    \bc5\bin\bdt50cf.dll          with exe file (or on path)
+                    \bc5\bin\bdt50.reg            with exe file (or on path)
+                    \bc5\bin\bdt5032.tlb          with exe file (or on path)
+                    + VBX                         
+                    --------------------------------------------------------
+Microsoft 3D        \windows\system[32]\ctl3d32.dll**    \windows\system[32]
+controls           
+CTL3D
+                    --------------------------------------------------------
+Borland custom      \windows\system[32]\bw32000c.dll    \windows\system[32]
+controls            \windows\system[32]\bw320007        \windows\system[32]  BWCC                \windows\system[32]\bw320009        \windows\system[32]
+                    \windows\system[32]\bwcc32.dll      \windows\system[32]
+
+** The notation "\system[32]" is necessary because Windows 95 has only a \windows\system directory, while Windows NT has that and a \windows\system32 directory as well.  Where BC installs the files, and where they should be deployed, depends on the operating system and must be determined by the SETUP program at run time.
+
+** The deployment program InstallExpress builds must determine at runtime whether it is installing under NT or Win95 and install the appropriate files.
+

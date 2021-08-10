@@ -1,48 +1,73 @@
 //----------------------------------------------------------------------------
 // ObjectWindows
-// (C) Copyright 1992, 1994 by Borland International, All Rights Reserved
+// Copyright (c) 1992, 1996 by Borland International, All Rights Reserved
 //
-//   Defines class TMessageBar.
+//$Revision:   10.6  $
+//
+// Implementation of class TMessageBar.
 //----------------------------------------------------------------------------
-#include <owl/owlpch.h>
-#include <owl/messageb.h>
-#include <owl/textgadg.h>
+#include <owl/pch.h>
+#if !defined(OWL_MESSAGEB_H)
+# include <owl/messageb.h>
+#endif
+#if !defined(OWL_TEXTGADG_H)
+# include <owl/textgadg.h>
+#endif
+#if !defined(WINSYS_UIMETRIC_H)
+# include <winsys/uimetric.h>
+#endif
 
+IMPLEMENT_CASTABLE1(TMessageBar, TGadgetWindow);
+
+//
+// Construct a message bar with a given font.
+//
 TMessageBar::TMessageBar(TWindow*   parent,
                          TFont*     font,
                          TModule*   module)
 :
   TGadgetWindow(parent, Horizontal, font, module)
 {
-  TTextGadget*  textGadget = new TTextGadget(TGadget::None);
+  TTextGadget*  textGadget = new TTextGadget(IDG_MESSAGE, TTextGadget::Recessed,
+                             TTextGadget::Left, 10, 0, 0);
 
   Attr.Id = IDW_STATUSBAR;
-  HighlightLine = true;
+
+  // 3d UI will bevel the client's inner edge, so we dont need the hilight
+  //
+  HighlightLine = !(TSystem::Has3dUI());
+
   HintText = 0;
   textGadget->WideAsPossible = true;
   Insert(*textGadget);
 }
 
+//
+// Destruct this message bar and cleanup text allocated
+//
 TMessageBar::~TMessageBar()
 {
-  delete [] HintText;
+  delete[] HintText;
 }
 
+//
+// Paint the gadgets in this messagebar. Paints highlight line if enabled, and
+// handles painting hint text over the gadgets if text is currently set.
+//
 void
 TMessageBar::PaintGadgets(TDC& dc, bool erase, TRect& rect)
 {
   if (HighlightLine && rect.top == 0)
-    dc.TextRect(0, 0, rect.right, GetSystemMetrics(SM_CYBORDER),
-                GetSysColor(COLOR_BTNHIGHLIGHT));
+    dc.TextRect(0, 0, rect.right, TUIMetric::CyBorder, TColor::Sys3dHilight);
 
   if (HintText) {
     TRect  clientRect = GetClientRect();
     int    y = (clientRect.bottom - GetFontHeight()) / 2;
 
     if (HighlightLine)
-      clientRect.top += GetSystemMetrics(SM_CYBORDER);
+      clientRect.top += TUIMetric::CyBorder;
     dc.SelectObject(GetFont());
-    dc.SetBkColor(GetSysColor(COLOR_BTNFACE));
+    dc.SetBkColor(TColor::Sys3dFace);
     dc.ExtTextOut(5, y, ETO_OPAQUE, &clientRect, HintText, strlen(HintText));
   }
   else {
@@ -50,15 +75,23 @@ TMessageBar::PaintGadgets(TDC& dc, bool erase, TRect& rect)
   }
 }
 
+//
+// Get the inner rect for this message bar. Adjust for the top highlight line
+// if one is set.
+//
 void
 TMessageBar::GetInnerRect(TRect& innerRect)
 {
   TGadgetWindow::GetInnerRect(innerRect);
 
   if (HighlightLine)
-    innerRect.top += GetSystemMetrics(SM_CYBORDER);
+    innerRect.top += TUIMetric::CyBorder;
 }
 
+//
+// Get the desired size for this message bar. Adjust for the top highlight line
+// if one is set.
+//
 void
 TMessageBar::GetDesiredSize(TSize& size)
 {
@@ -68,23 +101,35 @@ TMessageBar::GetDesiredSize(TSize& size)
     size.cy++;
 }
 
+//
+// Set the text for the message bar by puting it in the message text gadget
+//
 void
 TMessageBar::SetText(const char* text)
 {
-  //
-  // forward the message to the text gadget
-  //
-  ((TTextGadget*)Gadgets)->SetText(text);
+  SetMessageText(IDG_MESSAGE, text);
 }
 
 //
-// sets or clears menu/command hint text over all the gadgets
+// Set the text for the text gadget with a given ID
+//
+void
+TMessageBar::SetMessageText(int id, const char* text)
+{
+  TTextGadget* tg = TYPESAFE_DOWNCAST(GadgetWithId(id), TTextGadget);
+  if (tg)
+    tg->SetText(text);
+}
+
+//
+// Sets or clears menu/command hint text that is displayed over all the gadgets
+// Pass 0 to clear the text. Causes a repaint.
 //
 void
 TMessageBar::SetHintText(const char* text)
 {
   if (text != HintText) {
-    delete [] HintText;
+    delete[] HintText;
     HintText = text ? strnewdup(text) : 0;
     Invalidate();
   }

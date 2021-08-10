@@ -1,42 +1,39 @@
-/*------------------------------------------------------------------------*/
-/*                                                                        */
-/*  LISTIMP.H                                                             */
-/*                                                                        */
-/*  Copyright (c) 1991, 1994 Borland International                        */
-/*  All Rights Reserved                                                   */
-/*                                                                        */
-/*------------------------------------------------------------------------*/
-
+//----------------------------------------------------------------------------
+// Borland BIDS Container Library
+// Copyright (c) 1991, 1996 by Borland International, All Rights Reserved
+//
+//$Revision:   5.7  $
+//
+//----------------------------------------------------------------------------
 #if !defined( CLASSLIB_LISTIMP_H )
 #define CLASSLIB_LISTIMP_H
 
-#if !defined( __LIMITS_H )
-#include <limits.h>
+#if !defined(CLASSLIB_DEFS_H)
+# include <classlib/defs.h>
+#endif
+#if !defined(CLASSLIB_MEMMGR_H)
+# include <classlib/memmgr.h>
+#endif
+#if !defined(CLASSLIB_ALLOCTR_H)
+# include <classlib/alloctr.h>
+#endif
+#if !defined(CLASSLIB_VOIDP_H)
+# include <classlib/voidp.h>
+#endif
+#if !defined(SERVICES_CHECKS_H)
+# include <services/checks.h>
+#endif
+#if !defined(CLASSLIB_RESOURCE_H)
+# include <classlib/resource.h>
 #endif
 
-#if !defined( __CHECKS_H )
-#include <checks.h>
-#endif
-
-#if !defined( CLASSLIB_DEFS_H )
-#include <classlib/defs.h>
-#endif
-
-#if !defined( CLASSLIB_MEMMGR_H )
-#include <classlib/memmgr.h>
-#endif
-
-#if !defined( CLASSLIB_ALLOCTR_H )
-#include <classlib/alloctr.h>
-#endif
-
-#if !defined( CLASSLIB_VOIDP_H )
-#include <classlib/voidp.h>
+#if !defined(__LIMITS_H) && !defined(_INC_LIMITS)
+# include <limits.h>
 #endif
 
 #pragma option -Vo-
 #if defined( BI_CLASSLIB_NO_po )
-#pragma option -po-
+# pragma option -po-
 #endif
 
 /*------------------------------------------------------------------------*/
@@ -48,7 +45,10 @@
 /*------------------------------------------------------------------------*/
 
 template <class T,class Alloc> class TMListImp;
+template <class T,class Alloc> class TMSListImp;
 template <class T,class Alloc> class TMListElement;
+template <class T,class Alloc> class TMIListIteratorImp;
+template <class T,class Alloc> class TMISListIteratorImp;
 
 template <class T,class Alloc> class TMListBlockInitializer :
     public Alloc
@@ -154,6 +154,7 @@ void TMListElement<T,Alloc>::operator delete( void *b )
 /*------------------------------------------------------------------------*/
 
 template <class T,class Alloc> class TMListIteratorImp;
+template <class T,class Alloc> class TMSListIteratorImp;
 
 template <class T,class Alloc> class TMListImp :
     private TMListBlockInitializer<T,Alloc>
@@ -195,7 +196,7 @@ public:
         return DoDetachAtHead(0);
         }
 
-    T *Find( const const T& t );
+    T *Find( const T& t );
 
     void Flush()
         {
@@ -217,7 +218,9 @@ public:
     T *LastThat( CondFunc cond, void *args ) const;
 
     Parent::operator delete;
+#if !defined(BI_NO_ARRAYNEW)
     Parent::operator delete [];
+#endif
 
 #if defined( BI_OLDNAMES )
     const T& peekHead() const { return PeekHead(); }
@@ -397,8 +400,6 @@ public:
         Cur = List->Head.Next;
         }
 
-    TMListIteratorImp( const TMSListImp<T,Alloc>& l );
-
     operator int()
         {
         return Cur != &(List->Tail);
@@ -471,9 +472,6 @@ public:
     TListIteratorImp( const TMListImp<T,TStandardAllocator>& l ) :
         TMListIteratorImp<T,TStandardAllocator>( l ) {}
 
-    TListIteratorImp( const TMSListImp<T,TStandardAllocator>& l ) :
-        TMListIteratorImp<T,TStandardAllocator>( l ) {}
-
 };
 
 #if defined( BI_OLDNAMES )
@@ -492,7 +490,7 @@ public:
 /*------------------------------------------------------------------------*/
 
 template <class T,class Alloc> class TMSListImp :
-    private TMListImp<T,Alloc>
+    public TMListImp<T,Alloc>
 {
 
     typedef TMListImp<T,Alloc> Parent;
@@ -503,8 +501,10 @@ public:
 
     int Add( const T& t );
 
+#if !defined(BI_COMP_MSC)
     Parent::IterFunc;
     Parent::CondFunc;
+#endif
     Parent::PeekHead;
     Parent::Detach;
     Parent::DetachAtHead;
@@ -516,7 +516,9 @@ public:
     Parent::FirstThat;
     Parent::LastThat;
     Parent::operator delete;
+#if !defined(BI_NO_ARRAYNEW)
     Parent::operator delete [];
+#endif
 
 #if defined( BI_OLDNAMES )
     void add( const T& t ) { Add(t); }
@@ -607,14 +609,6 @@ public:
         TMSListIteratorImp<T,TStandardAllocator>( l ) {}
 
 };
-
-// constructor for TMListIteratorImp
-template <class T, class Alloc>
-TMListIteratorImp<T,Alloc>::TMListIteratorImp( const TMSListImp<T,Alloc>& l )
-{
-    List = &l;
-    Cur = List->Head.Next;
-}
 
 #if defined( BI_OLDNAMES )
 #define BI_SListImp TSListImp
@@ -777,15 +771,15 @@ template <class T,class Alloc> class TMIListImp :
 
 public:
 
-    friend TMIListIteratorImp<T,Alloc>;
-
     void Flush( int del = 0 )
         {
         Parent::DoFlush(del);
         }
 
+#if !defined(BI_COMP_MSC)
     Parent::IterFunc;
     Parent::CondFunc;
+#endif
     Parent::PeekHead;
     Parent::Add;
     Parent::Detach;
@@ -797,7 +791,9 @@ public:
     Parent::FirstThat;
     Parent::LastThat;
     Parent::operator delete;
+#if !defined(BI_NO_ARRAYNEW)
     Parent::operator delete [];
+#endif
 
 protected:
 
@@ -810,15 +806,17 @@ protected:
 };
 
 template <class T,class Alloc> class TMIListIteratorImp :
-    private TMListIteratorImp<TVoidPointer,Alloc>
+    public TMListIteratorImp<TVoidPointer,Alloc>
 {
 
     typedef TMListIteratorImp<TVoidPointer,Alloc> Parent;
+    typedef TMInternalIListImp<T,TMListImp<TVoidPointer,Alloc>,Alloc> ListBase;
 
 public:
 
     TMIListIteratorImp( const TMIListImp<T,Alloc>& l ) :
-        TMListIteratorImp<TVoidPointer,Alloc>(l) {}
+        TMListIteratorImp<TVoidPointer,Alloc>(
+            STATIC_CAST(const ListBase&,l) ) {}
 
     T *Current()
         {
@@ -910,14 +908,12 @@ public:
 /*------------------------------------------------------------------------*/
 
 template <class T,class Alloc> class TMISListImp :
-    private TMInternalIListImp<T, TMSListImp<TVoidPointer,Alloc>, Alloc >
+    public TMInternalIListImp<T, TMSListImp<TVoidPointer,Alloc>, Alloc >
 {
 
     typedef TMInternalIListImp<T, TMSListImp<TVoidPointer,Alloc>, Alloc > Parent;
 
 public:
-
-    friend TMISListIteratorImp<T,Alloc>;
 
     Parent::IterFunc;
     Parent::CondFunc;
@@ -933,7 +929,9 @@ public:
     Parent::FirstThat;
     Parent::LastThat;
     Parent::operator delete;
+#if !defined(BI_NO_ARRAYNEW)
     Parent::operator delete [];
+#endif
 
 protected:
 
@@ -947,15 +945,18 @@ protected:
 };
 
 template <class T,class Alloc> class TMISListIteratorImp :
-    private TMListIteratorImp<TVoidPointer,Alloc>
+    public TMListIteratorImp<TVoidPointer,Alloc>
 {
 
     typedef TMListIteratorImp<TVoidPointer,Alloc> Parent;
+    typedef TMInternalIListImp<T,TMSListImp<TVoidPointer,Alloc>,Alloc> ListBase1;
+    typedef TMSListImp<TVoidPointer,Alloc> ListBase2;
 
 public:
 
     TMISListIteratorImp( const TMISListImp<T,Alloc>& l ) :
-        TMListIteratorImp<TVoidPointer,Alloc>(l) {}
+        TMListIteratorImp<TVoidPointer,Alloc>(
+            STATIC_CAST(const ListBase2&, STATIC_CAST(const ListBase1&,l)) ) {}
 
     T *Current()
         {
@@ -1044,14 +1045,13 @@ public:
 };
 
 #if defined( BI_OLDNAMES )
-#define BI_ISListImp TISListImp
+# define BI_ISListImp TISListImp
 #endif
 
 #if defined( BI_CLASSLIB_NO_po )
-#pragma option -po.
+# pragma option -po.
 #endif
 
 #pragma option -Vo.
 
 #endif  // CLASSLIB_LISTIMP_H
-

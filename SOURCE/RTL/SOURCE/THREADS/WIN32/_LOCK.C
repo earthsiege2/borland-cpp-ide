@@ -9,9 +9,9 @@
  *-----------------------------------------------------------------------*/
 
 /*
- *      C/C++ Run Time Library - Version 1.5
+ *      C/C++ Run Time Library - Version 2.0
  *
- *      Copyright (c) 1991, 1994 by Borland International
+ *      Copyright (c) 1991, 1996 by Borland International
  *      All Rights Reserved.
  *
  */
@@ -29,7 +29,7 @@
 #include <string.h>
 #include <_thread.h>
 
-#define MAX_LOCKS 100
+#define MAX_LOCKS 512  /* This should be big enough for everyone */
 
 /*----------------------------------------------------------------------
  * crit - array of critical sections

@@ -1,0 +1,287 @@
+//----------------------------------------------------------------------------
+// cScript
+// (C) Copyright 1995 by Borland International, All Rights Reserved
+//
+// KEYMAPS.SPP
+//    Parses KBD files for commands and script processing.
+//
+// $Revision:   1.91  $
+//
+//----------------------------------------------------------------------------
+
+import IDE;
+import scriptEngine;
+
+// mark this module as being a library module
+library;
+
+export declare nImplicitFlag = ASSIGN_IMPLICIT_MODIFIER | ASSIGN_IMPLICIT_SHIFT | ASSIGN_IMPLICIT_KEYPAD;
+export declare nImplicitFlagOverride = 0;
+
+LoadKeyboardDataFile(declare acFileName, declare unassign) {
+
+    declare bNeedToGenerate = FALSE; 
+    IDE.StartWaitCursor();
+           
+    // Check for a valid file.
+    if (IDE.IsLegalFileName(acFileName) && IDE.FileExists(acFileName)) {
+
+        // Obtain the keyboard data file.
+        declare ebDataFile = new EditBuffer(acFileName,TRUE,TRUE);
+
+        if (initialized(ebDataFile)) {
+            // Build keyboard script file name.
+            declare String sSourceFileName(acFileName);
+            declare nPoint = sSourceFileName.Index("."); 
+            sSourceFileName = sSourceFileName.SubString(0,nPoint-1);
+            declare acRootFileName = sSourceFileName.Text;
+            declare acRootBaseFileName = sSourceFileName.Text;
+
+            if (initialized(unassign)) {
+                if (unassign)
+                    acRootFileName = acRootFileName + "u";
+            }
+
+            sSourceFileName = acRootFileName + ".spp";
+
+            declare ebSourceFile = NULL;
+
+            if (IDE.FileExists(sSourceFileName)) {
+                ebSourceFile = new EditBuffer(sSourceFileName,TRUE,TRUE);
+
+                if (initialized(ebSourceFile)) {
+                    if (ebDataFile.InitialDate.Compare(ebSourceFile.InitialDate) > 0 || !ebDataFile.IsPrivate) {
+                        bNeedToGenerate = TRUE;
+                        ebSourceFile.Destroy();
+                        IDE.DeleteFile(sSourceFileName);
+                    }
+                } else 
+                     IDE.ReportError("Error: Unable to open keyboard source file: " + sSourceFileName);
+            } else {
+                 bNeedToGenerate = TRUE;
+            }
+
+            // if data file is newer than source file or doesn't exist, regenerate source file
+            if (bNeedToGenerate) {
+                ebSourceFile = new EditBuffer(sSourceFileName,TRUE);
+                declare GenerateKeyboardSourceFile kbsf(ebDataFile,ebSourceFile,unassign);
+            }
+            // No more commands... close the files.
+            if (ebDataFile)
+                ebDataFile.Destroy();
+        
+            if (ebSourceFile != NULL) {
+                ebSourceFile.Save();
+                ebSourceFile.Destroy();
+            }
+            // Load the generated source file.
+            if (initialized(unassign)) {
+               if (unassign == TRUE) {
+                  if (scriptEngine.IsLoaded(acRootBaseFileName + ".spp"))
+                      scriptEngine.Unload(acRootBaseFileName + ".spp");
+                  if (scriptEngine.IsLoaded(acRootBaseFileName + ".spx"))
+                      scriptEngine.Unload(acRootBaseFileName + ".spx");
+               }
+            }
+
+            scriptEngine.Load(acRootFileName);
+
+            if (initialized(unassign)) {
+               if (unassign == TRUE) {
+                  if (scriptEngine.IsLoaded(acRootFileName + ".spp"))
+                      scriptEngine.Unload(acRootFileName + ".spp");
+                  if (scriptEngine.IsLoaded(acRootFileName + ".spx"))
+                      scriptEngine.Unload(acRootFileName + ".spx");
+               }
+            }
+        } else
+             IDE.ReportError("Error: Unable to open keyboard data file: " + acFileName);
+    } else {
+         IDE.ReportError("Error: Unable to locate keyboard data file : " + acFileName);
+    }
+    IDE.EndWaitCursor();
+} 
+
+
+class GenerateKeyboardSourceFile(declare ebDataFile, declare ebSourceFile, declare unassign)
+{
+ // Variables.
+ declare chr;                  // Used for EditPosition Character multiple checks.
+ declare nLinesToProcess;      // Number of line to process in this data file.
+ declare ep = NULL;            // EditPosition object from EditBuffer.
+ declare epSF = NULL;          // EditPosition object from EditBuffer.
+ declare bUnassign = unassign; // Performing Assignments or Unassignments.
+
+ declare Assign;               // Closure for Assignments or Unassignments method.
+ declare OperationCommand = this :> ProcessScriptSection; // Current internal parsing operation.
+
+ // Ctor - Starts.
+ // Open file.
+ IDE.StartWaitCursor();
+
+ // Get the EditPosition object of the buffer, get the last row & make sure 
+ // we're at the top left.
+ ep = ebDataFile.Position;
+ nLinesToProcess = ep.LastRow;
+ ep.Move(1,1);
+
+ // Move to the begining of the Source file and generate variables.
+ epSF = ebSourceFile.Position;
+ epSF.Move(1,1);
+
+ epSF.InsertText("#define FUNCTION_CONTINUE 0\n");
+ epSF.InsertText("#define FUNCTION_END      1\n");
+
+ if (bUnassign)
+	 epSF.InsertText("export declare bFileLoading=false;\n");
+ else
+    epSF.InsertText("export declare bFileLoading=true;\n");
+
+ epSF.InsertText("declare clsrAssign = NULL;\n");
+ epSF.InsertText("declare kbdCurrent = NULL;\n");
+ epSF.InsertText("declare eDefaultAssignmentFlag = ASSIGN_IMPLICIT_MODIFIER|ASSIGN_IMPLICIT_SHIFT|ASSIGN_IMPLICIT_KEYPAD;\n");
+
+ // If we start on a non-command character que, goto the next useable line.
+ chr = ep.Character;
+ if (chr == ' ' || chr == '/' || chr == ';' || chr == '\t' || chr == '\n' )
+    GotoNextLine();
+
+ // Process each line of the data file.
+ do
+   {
+    if (ep.Character == '[')
+	     IdentifyProcessingMode();
+    else
+        call OperationCommand();
+    } while(GotoNextLine());
+
+ IDE.EndWaitCursor();
+ // Ctor - Ends.
+
+ IdentifyProcessingMode()
+ {
+  declare ExtendedCommand = NULL;
+
+  // The processing mode will be determined by the text within the [].
+  // We begin our processing from locating a '[' at the begining of the
+  // current line.
+  OperationCommand = this :> ProcessScriptCommand;
+  declare Command = new String(ep.RipText("]",INVERT_LEGAL_CHARS));
+
+  if (Command.Length) {
+		declare BaseCommand = Command;
+		declare nIndexOfColon = Command.Index(":");
+
+		if (nIndexOfColon) {
+			 // Assign new keyboad file as active file.
+			 BaseCommand = Command.SubString(0,nIndexOfColon-1);
+			 ExtendedCommand = Command.SubString(nIndexOfColon,Command.Length-nIndexOfColon);
+		}
+
+		if (BaseCommand.Text == "[Assignments") {
+			 // Assign ProcessAssignmentsSection as desired function.
+			 OperationCommand = this :> ProcessAssignmentCommand;
+
+			 if (ExtendedCommand != NULL) {
+				 epSF.InsertText("kbdCurrent = IDE.KeyboardManager.GetKeyboard(\""+ExtendedCommand.Text+"\");\n");
+				 
+				 if (bUnassign) {
+					 epSF.InsertText("clsrAssign = kbdCurrent :> Unassign;\n");
+				 } else {
+					 epSF.InsertText("clsrAssign = kbdCurrent :> Assign;\n");
+             }
+			 }
+		}
+  }
+ }
+
+ ProcessScriptCommand()
+ {
+  // Read the line.
+  declare sCommand = new String(ep.Read());
+
+  // Insert given command.
+  epSF.InsertText(sCommand.Text);
+ }
+
+ ProcessAssignmentCommand()
+ {
+  // Prepare for assignment command.
+  declare nIndex = 0;
+  declare sKeyFlag;
+  declare sKeyCommand;
+  declare sKeyDescription;
+  declare sLine = new String(ep.Read());
+  declare crlf = new String("\n");
+ 
+  // First locate the end of the key command.
+  nIndex = sLine.Index("|:|");
+
+  if (nIndex) {
+      // Copy out the key description.
+      sKeyDescription = sLine.SubString(0,nIndex-1);
+
+      // Throw out the whitspace at the end.
+      sKeyDescription = sKeyDescription.Trim();
+
+      // Create a new string and obtain the KeyCommand.  Go past the delimiter.
+      sLine = sLine.SubString(nIndex+2, sLine.Length - (nIndex - 2));
+      sLine = sLine.Trim(TRUE);
+
+      // Find the end of the command.  We may also be the end of the line...
+      if (nIndex = sLine.Index("|:|")) {
+          // Copy out the key command.
+          sKeyCommand = sLine.SubString(0,nIndex-1);
+          sKeyCommand = sKeyCommand.Trim();
+      } else if (nIndex = sLine.Index(crlf.Text)) { // This is the last part of the assignment.
+          // Copy out the key command.
+          sKeyCommand = sLine.SubString(0,nIndex-2);
+          sKeyCommand = sKeyCommand.Trim();
+          nIndex = 0;
+      }
+
+      // Do we have more line? 
+      if (nIndex) {
+			 // Create the new sting. Go past the delimiter.
+          sLine = sLine.SubString(nIndex+2, sLine.Length - (nIndex - 2));
+          sLine = sLine.Trim();
+
+          // Find the end of the flag.  There might be a comment afterwards.
+          if (nIndex = sLine.Index("|:|")){
+             sKeyFlag = sLine.SubString(0,nIndex-1);
+             sKeyFlag = sKeyFlag.Trim();
+          } else {
+             sKeyFlag = sLine.SubString(0,nIndex-2);
+             sKeyFlag = sKeyFlag.Trim();
+          }
+      }
+ }
+
+  // Assign with or without the flag?
+  if (initialized(sKeyFlag)) {
+      if (sKeyFlag.Length) { // Happens when there is a comment but no flag.
+		    // Make the assignment using the closure technique include the override flag.
+          epSF.InsertText("call clsrAssign(\""+sKeyDescription.Text+"\",\""+sKeyCommand.Text+"\","+sKeyFlag.Text+");\n");
+      } else {
+          // Make the assignment using the closure technique and the common flag.
+          epSF.InsertText("call clsrAssign(\""+sKeyDescription.Text+"\",\""+sKeyCommand.Text+"\","+"eDefaultAssignmentFlag);\n");
+      }
+  } else {
+		// Make the assignment using the closure technique.
+      epSF.InsertText("call clsrAssign(\""+sKeyDescription.Text+"\",\""+sKeyCommand.Text+"\","+"eDefaultAssignmentFlag);\n");
+  }
+ }
+
+ GotoNextLine()
+ {
+  do
+	  {
+		ep.MoveRelative(1,0);
+		chr = ep.Character;
+	  } while (--nLinesToProcess && (chr == 13 || chr == ';' || chr == ' ' || chr == '/' || chr == '\t'));
+
+  return nLinesToProcess;
+ }
+} // End of class.
+
+

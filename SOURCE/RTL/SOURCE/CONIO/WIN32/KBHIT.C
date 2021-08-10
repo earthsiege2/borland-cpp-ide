@@ -6,9 +6,9 @@
  *-----------------------------------------------------------------------*/
 
 /*
- *      C/C++ Run Time Library - Version 1.5
+ *      C/C++ Run Time Library - Version 2.0
  *
- *      Copyright (c) 1991, 1994 by Borland International
+ *      Copyright (c) 1991, 1996 by Borland International
  *      All Rights Reserved.
  *
  */
@@ -19,11 +19,14 @@
 
 #include <conio.h>
 
+#define MAX_INPUT_RECORDS 20
+
 /* The following variables are used in getch.c */
 
 unsigned char _cFlag = 0;       /* Flag presence of un-gotten char */
 unsigned char _cChar = 0;       /* The ungotten char               */
 
+extern int _cextend;            /* Used for the scan code of an extended key */
 /*-----------------------------------------------------------------------*
 
 Name            kbhit - checks for recent keystrokes
@@ -43,39 +46,47 @@ Return value    If a keystroke is available, kbhit returns a
 
 int _RTLENTRY _EXPFUNC kbhit(void)
 {
-    INPUT_RECORD inp;
-    DWORD nread, nevents;
+    static INPUT_RECORD pinp[MAX_INPUT_RECORDS];
+    DWORD nread, nevents, j;
     HANDLE hin;
 
     if (_cFlag)             /* has a character been ungetch'd? */
         return (1);
 
+    if (_cextend != -1)
+        return (1);         /* last char was a 0 signifing that next one will
+                               be the scan code of an extended key */
+
     hin = GetStdHandle(STD_INPUT_HANDLE);
 
-    /* Discard console events until we come to a keydown event,
-     * or the event queue is empty.
-     */
-    while (GetNumberOfConsoleInputEvents(hin, &nevents) == TRUE && nevents > 0)
-    {
-        /* Take a look at the first input event in the queue.
-         * If we can't peek at it, something bad happened.
-         */
-        if (PeekConsoleInput(hin, &inp, 1, &nread) != TRUE)
-            break;
+    /* Get the number of pending input records */
+    GetNumberOfConsoleInputEvents(hin, &nevents);
 
-        /* If the event is a key-down, a key has been hit.
-         */
-        if ((inp.EventType & KEY_EVENT) != 0 &&
-             inp.Event.KeyEvent.bKeyDown != 0)
-            return (1);
+    /* Check for limit violations (if > max, return 0 and let the user
+       call us again later for further checks)
+    */
+    if (nevents == 0 || nevents > MAX_INPUT_RECORDS)
+        return 0;
 
-        /* It's not a key-down event, discard it.
-         * NOTE: this discards all other console input events, including
-         * mouse events!  Thus, kbhit() should not be used in programs
-         * that track the mouse or window resizing.
-         */
-        if (ReadConsoleInput(hin, &inp, 1, &nread) != TRUE)
-            break;
-    }
-    return (0);
+    /* Read all the pending records */
+    PeekConsoleInput(hin, pinp, nevents, &nread);
+
+    /* Cycle through the records looking for valid key presses */
+    for (j = 0;j<nevents;j++)
+        if ((pinp[j].EventType & KEY_EVENT) != 0)
+            if (pinp[j].Event.KeyEvent.bKeyDown != 0)
+            {
+                /* We must ignore <Shift>, <Ctrl>, and <Alt> key events when
+                   announcing a pressed key, but leave them in the buffer so
+                   they will be recoginized later when we pull them out with
+                   getch()
+                */
+                if ((pinp[j].Event.KeyEvent.wVirtualKeyCode == VK_SHIFT)   ||
+                    (pinp[j].Event.KeyEvent.wVirtualKeyCode == VK_CONTROL) ||
+                    (pinp[j].Event.KeyEvent.wVirtualKeyCode == VK_MENU))
+                      continue;
+                else
+                      return 1;
+            }
+    return 0;
 }

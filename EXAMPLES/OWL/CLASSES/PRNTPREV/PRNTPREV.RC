@@ -1,0 +1,20 @@
+//----------------------------------------------------------------------------
+// ObjectWindows
+// Copyright (c) 1995, 1995 by Borland International, All Rights Reserved
+//  Example print preview program resources
+//----------------------------------------------------------------------------
+#include <owl/printer.rc>
+#include <owl/owlapp.rc>         // default owl app icon
+#include "prntprev.rh"
+
+IDM_TESTMENU MENU LOADONCALL MOVEABLE PURE DISCARDABLE
+BEGIN
+  POPUP "&Test"
+  BEGIN
+    MenuItem  "Printer Setup...", CM_PRINTERSETUP
+    MenuItem  "Print...", CM_PRINT
+    MenuItem  "Print Preview...", CM_PRINTPREVIEW
+    MenuItem  SEPARATOR
+    MenuItem  "E&xit", CM_EXIT
+  END
+END

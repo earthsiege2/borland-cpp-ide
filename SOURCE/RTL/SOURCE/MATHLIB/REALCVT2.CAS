@@ -7,9 +7,9 @@
  *-----------------------------------------------------------------------*/
 
 /*
- *      C/C++ Run Time Library - Version 6.5
+ *      C/C++ Run Time Library - Version 7.0
  *
- *      Copyright (c) 1987, 1994 by Borland International
+ *      Copyright (c) 1987, 1996 by Borland International
  *      All Rights Reserved.
  *
  */
@@ -41,13 +41,12 @@ Description     Following  rules derived  from combining  the altFormat and
                         (altFormat || ~(G or g)) == trailing zeroes are wanted
                         altFormat == trailing decimal point is wanted
 
-                Upon entry DL  must contain formCh, CX the  starting offset
+                Upon entry DL  must contain formCh, DH contains the current locale
+		decimal point character, CX the  starting offset
                 of strP, and ES_:[bx] points at the end of the string.
 
 Return value    Upon  exit  ES_:[bx-1]  points  to  the  last  byte  of the
                 (trimmed ?) string.
-
-EXPECTS:   ah to contain the current locale decimal point character
 
 *---------------------------------------------------------------------------*/
 static  void    near    TrimTrailing (void)
@@ -69,7 +68,7 @@ I       ja      tt_trimLoop
 I       jmp     short   tt_trimmed
 
 tt_trimPoint:
-I       cmp     BY0 (ES_ [bx-1]), ah
+I       cmp     BY0 (ES_ [bx-1]), dh
 I       jne     tt_trimmed
 I       dec     bx
 
@@ -377,7 +376,7 @@ I       jne     Fz              /* altFormat implies no trimming */
 I       mov     dl, formCh
 I       mov     cx, W0 (strP)
 I       xchg    bx, di
-I       mov     ah, decimal_point_char
+I       mov     dh, decimal_point_char
         TrimTrailing ();                /* backspaces BX to effect trimming */
 I       xchg    di, bx
 
@@ -433,7 +432,7 @@ I       mov     dl, formCh
 I       mov     cx, W0 (strP)
 I       xchg    bx, di
 
-I       mov     ah, decimal_point_char
+I       mov     dh, decimal_point_char
         TrimTrailing ();                /* backspaces BX to effect trimming */
 I       xchg    di, bx
 
@@ -538,4 +537,3 @@ I       cPtr    __realcvt
 I       _CVTSEG ENDS
 I       CodeSeg SEGMENT
 }
-

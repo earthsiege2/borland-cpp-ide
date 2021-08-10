@@ -1,24 +1,13 @@
-/*------------------------------------------------------------------------*/
-/*                                                                        */
-/*  RESOURCE.H                                                            */
-/*                                                                        */
-/*  Copyright (c) 1991, 1994 Borland International                        */
-/*  All Rights Reserved                                                   */
-/*                                                                        */
-/*------------------------------------------------------------------------*/
-
-#if !defined( CLASSLIB_RESOURCE_H )
+//----------------------------------------------------------------------------
+// Borland BIDS Container Library
+// Copyright (c) 1991, 1996 by Borland International, All Rights Reserved
+//
+//$Revision:   5.15  $
+//
+// Set up some default sizes for BIDS containers.
+//----------------------------------------------------------------------------
+#if !defined(CLASSLIB_RESOURCE_H)
 #define CLASSLIB_RESOURCE_H
-
-#if !defined( CLASSLIB_COMPILER_H )
-#include <classlib/compiler.h>
-#endif
-
-/*------------------------------------------------------------------------*/
-/*                                                                        */
-/*  Set up some default sizes for containers.                             */
-/*                                                                        */
-/*------------------------------------------------------------------------*/
 
 const DEFAULT_HASH_TABLE_SIZE   = 111;
 const DEFAULT_BAG_SIZE          =  29;
@@ -30,4 +19,3 @@ const DEFAULT_ARRAY_SIZE        =  20;
 const DEFAULT_DICT_SIZE         =  20;
 
 #endif  // CLASSLIB_RESOURCE_H
-

@@ -41,4 +41,3 @@ int FAR PASCAL WEP ( int bSystemExit )
 {
     return 1;
 }
-

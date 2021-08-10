@@ -1,9 +1,8 @@
-//
 //----------------------------------------------------------------------------
 // ObjectComponents
-// (C) Copyright 1994 by Borland International, All Rights Reserved
+// Copyright (c) 1994, 1996 by Borland International, All Rights Reserved
 //
-//   Definition of TOcDataProvider Class
+// Definition of TOcDataProvider Class
 //----------------------------------------------------------------------------
 #if !defined(OCF_OCDATA_H)
 #define OCF_OCDATA_H
@@ -12,16 +11,18 @@
 # include <ocf/ocview.h>
 #endif
 
+//
 // Callback function for user data clean up
 //
-typedef void
-(*TDeleteUserData)(void* userData);
+typedef void (*TDeleteUserData)(void* userData);
 
 //
-// Data Provider object for a server document
+// class TOcDataProvider
+// ~~~~~ ~~~~~~~~~~~~~~~
+// Data Provider object for a container document
 //
 class _OCFCLASS TOcDataProvider : public TUnknown,
-                                  public IBDataProvider {
+                                  public IBDataProvider {  
   public:
     TOcDataProvider(TOcView& ocView, TRegList* regList, IUnknown* outer = 0,
                     void* userData = 0, TDeleteUserData callBack = 0);
@@ -48,8 +49,9 @@ class _OCFCLASS TOcDataProvider : public TUnknown,
     HRESULT  _IFUNC GetFormat(uint index, TOcFormatInfo far* fmt);
 
     // IBDataProvider implementation
-    //
+  //
     HANDLE  _IFUNC  GetFormatData(TOcFormatInfo far* fmt);
+//    HRESULT _IFUNC  SetFormatData(TOcFormatInfo far* fmt, HANDLE data, bool release);
     HRESULT _IFUNC  Draw(HDC dc, const RECTL far*  pos, const RECTL far* clip,
                          TOcAspect aspect, TOcDraw bd);
     HRESULT _IFUNC  GetPartSize(TSize far* size);
@@ -79,5 +81,3 @@ class _OCFCLASS TOcDataProvider : public TUnknown,
 };
 
 #endif  // OCF_OCDATA_H
-
-

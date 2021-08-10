@@ -10,9 +10,9 @@
  *-----------------------------------------------------------------------*/
 
 /*
- *      C/C++ Run Time Library - Version 1.5
+ *      C/C++ Run Time Library - Version 2.0
  *
- *      Copyright (c) 1987, 1994 by Borland International
+ *      Copyright (c) 1987, 1996 by Borland International
  *      All Rights Reserved.
  *
  */
@@ -37,6 +37,11 @@ static  void    dummy(void) {}
 void    (*_exitbuf)(void)   = dummy;
 void    (*_exitfopen)(void) = dummy;
 void    (*_exitopen)(void)  = dummy;
+
+#if defined(__MT__)
+void _cleanup_handle_locks(void);
+void _cleanup_stream_locks(void);
+#endif
 
 /*---------------------------------------------------------------------------*
 
@@ -76,15 +81,16 @@ static void __exit(int quick, int dontexit, int errcode)
         while (_atexitcnt)
             (*_atexittbl[--_atexitcnt])();
 
-        /* Run #pragma exit routines
+        /* First run #pragma exit routines...
          */
         _cleanup();
 
-        /* Flush files.
+        /* ... Then Flush files.
          */
         (*_exitbuf)();
-    }
 
+
+    }
 
     if (!dontexit)
     {
@@ -96,6 +102,14 @@ static void __exit(int quick, int dontexit, int errcode)
         _unlock_exit();
         /* Optionally release virtual memory here
 	 */
+#if defined(__MT__)
+        /*
+          These functions free the memory for the locks so the CG doesn't
+          complain.
+        */
+        _cleanup_handle_locks();
+        _cleanup_stream_locks();
+#endif
         _terminate(errcode);    /* terminate program */
     }
     _unlock_exit();

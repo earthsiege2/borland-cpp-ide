@@ -1,8 +1,10 @@
 //----------------------------------------------------------------------------
 // ObjectWindows
-// (C) Copyright 1992, 1994 by Borland International, All Rights Reserved
+// Copyright (c) 1992, 1996 by Borland International, All Rights Reserved
 //
-//   Class TMessageBar.
+//$Revision:   10.4  $
+//
+// Definition of class TMessageBar.
 //----------------------------------------------------------------------------
 #if !defined(OWL_MESSAGEB_H)
 #define OWL_MESSAGEB_H
@@ -11,17 +13,20 @@
 # include <owl/gadgetwi.h>
 #endif
 
+// Generic definitions/compiler options (eg. alignment) preceeding the 
+// definition of classes
+#include <services/preclass.h>
+
 const int IDW_STATUSBAR     = 32040;  // Window ID used to locate status bars
 
 //
-//  class TMessageBar
-//  ----- -----------
+// class TMessageBar
+// ~~~~~ ~~~~~~~~~~~
+// Implements a message bar with one text gadget as wide as the window and no
+// border. positions itself at the bottom of the window and uses the default
+// decoration bar font
 //
-//  implements a message bar with one text gadget as wide as the window and no
-//  border. positions itself at the bottom of the window and uses the default
-//  decoration bar font
-//
-//  the message bar optionally draws a highlight line at the top
+// The message bar optionally draws a highlight line at the top
 //
 class _OWLCLASS TMessageBar : public TGadgetWindow {
   public:
@@ -30,39 +35,71 @@ class _OWLCLASS TMessageBar : public TGadgetWindow {
                 TModule*   module = 0);
    ~TMessageBar();
 
-    //
-    // set the text for the text message gadget (the first gadget)
+    // Set the text for the default text message gadget or a text gadget by id
     //
     void    SetText(const char* text);
+    void    SetMessageText(int id, const char* text);
 
-    //
-    // set (or clear if 0) menu/command item hint text displayed in/on bar
+    // Set (or clear if 0) menu/command item hint text displayed in/on bar
     //
     virtual void    SetHintText(const char* text);
 
   protected:
-    bool   HighlightLine;  // does this bar have a upper highlight line?
-    char*  HintText;       // current command hint being displayed, if any
-
-    //
-    // compensate for highlight line
+    // Compensate for highlight line
     //
     void   GetInnerRect(TRect& rect);
     void   GetDesiredSize(TSize& rect);
 
+    // Draw highlight line, then HintText if any, or gadgets
     //
-    // draw highlight line, then HintText if any, or gadgets
-    //
-    void  PaintGadgets(TDC& dc, bool erase, TRect& rect);
+    void   PaintGadgets(TDC& dc, bool erase, TRect& rect);
+
+    bool   GetHighlightLine() const;
+    void   SetHighlightLine(bool highlightline);
+
+    const char*  GetHintText() const;
+
+  protected_data:
+    bool   HighlightLine;  // does this bar have a upper highlight line?
+    char*  HintText;       // current command hint being displayed, if any
 
   private:
-    //
-    // hidden to prevent accidental copying or assignment
+    // Hidden to prevent accidental copying or assignment
     //
     TMessageBar(const TMessageBar&);
     TMessageBar& operator =(const TMessageBar&);
 
   DECLARE_CASTABLE;
 };
+
+// Generic definitions/compiler options (eg. alignment) following the 
+// definition of classes
+#include <services/posclass.h>
+
+//----------------------------------------------------------------------------
+// Inline implementations
+//
+
+//
+// Returns true if the message bar has an upper highlight line.
+//
+inline bool TMessageBar::GetHighlightLine() const {
+  return HighlightLine;
+}
+
+//
+// Sets the flag for the message bar to have an upper highlight line.
+//
+inline void TMessageBar::SetHighlightLine(bool highlightline) {
+  HighlightLine = highlightline;
+}
+
+//
+// Return the cached hint text for the current message.
+//
+inline const char* TMessageBar::GetHintText() const {
+  return HintText;
+}
+
 
 #endif  // OWL_MESSAGEB_H

@@ -1,16 +1,14 @@
 // ---------------------------------------------------------------------------
 // Copyright (C) 1994 Borland International
 // ---------------------------------------------------------------------------
-#if !defined(_OCFHLPR_H)
-#define _OCFHLPR_H
+#if !defined(OCFHLPR_H)
+#define OCFHLPR_H
 
-#include <ocf/ocfpch.h>
-#include <ocf/ocapp.h>
-#include <ocf/ocdoc.h>
-#include <ocf/ocview.h>
-#include <ocf/ocremvie.h>
-#include <ocf/ocpart.h>
-#include <windowsx.h>
+#if !defined(OCF_OCREMVIE_H)
+# include <ocf/ocremvie.h>
+#endif
+
+#include <commdlg.h>
 
 //
 // Forward ref.
@@ -513,4 +511,4 @@ SendOCFEvent(HWND hwnd, int ocfCode, const T far* t = 0)
 #define HANDLE_OC_VIEWPARTACTIVATE(hwnd, lParam, fn) \
   (LRESULT)(UINT)(fn)((hwnd), (TRect far*)(lParam))
 
-#endif  //  _OCFHLPR_H
+#endif  //  OCFHLPR_H

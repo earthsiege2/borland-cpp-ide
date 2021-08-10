@@ -6,9 +6,9 @@
  *-----------------------------------------------------------------------*/
 
 /*
- *      C/C++ Run Time Library - Version 6.5
+ *      C/C++ Run Time Library - Version 7.0
  *
- *      Copyright (c) 1987, 1994 by Borland International
+ *      Copyright (c) 1987, 1996 by Borland International
  *      All Rights Reserved.
  *
  */
@@ -36,7 +36,7 @@ Return value    If  val  was matched then the  return value is a  pointer to
 #undef memchr                  /* not an intrinsic */
 
 
-/* alias records for C++ emplimentation of memchr() */
+/* alias records for C++ implementation of memchr() */
 
 #if !defined(__FARFUNCS__)
 

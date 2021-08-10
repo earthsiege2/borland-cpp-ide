@@ -6,12 +6,13 @@
  *      _thread_data_new - allocate new per-thread data structure
  *      _thread_data_del - deallocate per-thread data structure
  *      _thread_init     - initialize data structures for threads
+ *      _thread_done     - clean up data structures for threads
  *-----------------------------------------------------------------------*/
 
 /*
- *      C/C++ Run Time Library - Version 1.5
+ *      C/C++ Run Time Library - Version 2.0
  *
- *      Copyright (c) 1991, 1994 by Borland International
+ *      Copyright (c) 1991, 1996 by Borland International
  *      All Rights Reserved.
  *
  */
@@ -111,9 +112,12 @@ THREAD_DATA * _thread_data_new(void)
         t->thread_seed.lo = 1;
         t->thread_seed.hi = 0;
 
-        /* Allocate space dor exception variables.
+        /* Allocate space for exception variables if needed.  NOTE:
+           we reuse this block of memory from previously terminated
+           threads.
          */
-        if ((t->thread_exceptvars = malloc(_ExceptVarsSize)) == NULL)
+        if ((t->thread_exceptvars == NULL) &&
+            ((t->thread_exceptvars = malloc(_ExceptVarsSize)) == NULL))
             {
             free(t);
             t = NULL;
@@ -145,6 +149,7 @@ void _thread_data_del(THREAD_DATA *t)
 {
     _lock(thread_lock,"locking thread data (del)");
 
+    /* Place the block on the free list for re-use later */
     t->thread_link = free_list;
     free_list = t;
 
@@ -175,4 +180,54 @@ static void _thread_init(void)
      * structures.
      */
     _create_lock(&thread_lock,"creating thread data lock");
+}
+
+/*---------------------------------------------------------------------*
+
+Name            _thread_done - clean up data structures for threads
+
+Usage           void _thread_done(void);
+
+Prototype in
+
+Description     This function is called by the exit code to clean up
+                all data structures used by thread handling internal
+                library functions.
+
+Return value    None.
+
+*---------------------------------------------------------------------*/
+static void _thread_done(void)
+{
+#pragma exit _thread_done 2  /* This must be higher than _exit_tls in TLS.C */
+    THREAD_DATA *p;
+
+    /* Free the main thread's data if needed */
+    if ((p = (THREAD_DATA *)TlsGetValue(_tlsindex)) != NULL)
+        _thread_data_del(p);
+
+    while (free_list)
+    {
+        p = free_list;
+        if (p->thread_strbuf)
+            free (p->thread_strbuf);
+        if (p->thread_template)
+            free (p->thread_template);
+        if (p->thread_cvt)
+            free (p->thread_cvt);
+        if (p->thread_pathbuf)
+            free (p->thread_pathbuf);
+        if (p->thread_time)
+            free (p->thread_time);
+        if (p->thread_passbuf)
+            free (p->thread_passbuf);
+        if (p->thread_exceptvars)
+            free (p->thread_exceptvars);
+        if (p->thread_sig)
+            free (p->thread_sig);
+
+        p = free_list->thread_link;
+        free (free_list);
+        free_list = p;
+    }
 }

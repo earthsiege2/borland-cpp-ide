@@ -1,6 +1,6 @@
-# $Header:   N:\admin\ocf\source\bocole\make.inv   2.0.1.0   10 Apr 1995 18:05:34   CQUINN  $
 #-----------------------------------------------------------------------------
-# ObjectComponents - (C) Copyright 1991, 1993 by Borland International
+# ObjectComponents - 
+# Copyright (c) 1991, 1996 by Borland International
 #
 # MAKEFILE for ObjectComponents BOcOle Dlls
 #
@@ -13,9 +13,9 @@
 #  DLL     = defined if making a DLL, not defined for EXE
 #------------------------------------------------------------------------
 
-MAKEINC = ..\make.inc
+#MAKEINC = ..\make.inc
 
-.SUFFIXES: .OBJ .RC .DEF .CPP .C .ASM
+.SUFFIXES: .RC .OBJ .DEF .CPP .C .ASM
 
 !if !$d(TARGET_EXT)
 !if $d(DLL)
@@ -37,24 +37,26 @@ WARN  = 1
   BCROOT = $(MAKEDIR)\..   # default bcroot to parent of dir where make lives
 !endif
 
-!ifdef WIN32
-#OLEINC    = $(SRCDIR)\..\boleui32
-#OLELIB    = $(OLEROOT)\LIB;$(SRCDIR)\..\boleui32;
+!ifndef WIN16
 OLEINC    = $(SRCDIR)\boleui32
 LIBPATH   = $(RELDIR);$(SRCDIR)\boleui32;$(BCROOT)\LIB
+INCLUDE   = $(BCROOT)\include\win32;$(BCROOT)\include
 CONFIG    = bcc32.cfg
 CPP       = @$(BCROOT)\BIN\BCC32
 LINK      = $(BCROOT)\BIN\TLINK32
-BRC       = $(BCROOT)\BIN\BRC32 -w32
+BRC       = $(BCROOT)\BIN\BRCC32
 !else
 #OLEINC    = $(SRCDIR)\..\boleui
 #OLELIB    = $(OLEROOT)\LIB;$(OLEROOT)\SAMP\LIB
 OLEINC    = $(SRCDIR)\boleui
+INCLUDE   = $(BCROOT)\include
 LIBPATH   = $(RELDIR);$(SRCDIR)\boleui;$(BCROOT)\LIB
 CONFIG    = turboc.cfg
 CPP       = @$(BCROOT)\BIN\BCC
 LINK      = $(BCROOT)\BIN\TLINK
-BRC       = $(BCROOT)\BIN\BRC
+# //!BB Investigate screwed-up version resources
+# //!BRC       = $(BCROOT)\BIN\BRCC32 -31
+BRC       = $(BCROOT)\BIN\BRCC.EXE
 !endif
 
 SRCDIR    = ..
@@ -64,9 +66,9 @@ RELDIR    = $(SRCDIR)\BIN
 LIB       = $(BCROOT)\BIN\TLIB
 IMPLIB    = $(BCROOT)\BIN\IMPLIB
 ASM       = $(BCROOT)\BIN\TASM
-RC        = $(BRC) -i$(BCROOT)\INCLUDE;$(OLEINC)
+RC        = $(BRC)
 
-!ifdef WIN32
+!ifndef WIN16
 RLINK     = $(BCROOT)\BIN\BRC32
 !else
 RLINK     = $(BCROOT)\BIN\RLINK -fi
@@ -77,7 +79,7 @@ CPPFLAGS  = -DINC_OLE2 # -DLOOSE_HRESULT
 !if $(DEBUG)
   CPPFLAGS  = $(CPPFLAGS) -v -vi -D_DEBUG
 !else
-!ifdef WIN32                               # NDEBUG turns assert() off.
+!ifndef WIN16                               # NDEBUG turns assert() off.
   CPPFLAGS  = $(CPPFLAGS) -DNDEBUG -k-     # -k- optimized stack frames.
 !else                                      # -OW no inc/dec bp in
   CPPFLAGS  = $(CPPFLAGS) -DNDEBUG -OW -k- #     prolog/epilog (16 bit only).
@@ -91,17 +93,18 @@ CPPFLAGS  = $(CPPFLAGS) -D__TRACE
 CPPFLAGS  = $(CPPFLAGS) -D__WARN
 !endif
 
-!ifdef WIN32
+!ifndef WIN16
   CPPFLAGS  = $(CPPFLAGS) -DWIN32 -a4
-!ifdef ANSI
+!ifndef UNICODE
   CPPFLAGS =  $(CPPFLAGS) -DANSI
+!else
+  CPPFLAGS =  $(CPPFLAGS) -DUNICODE
 !endif
 !endif
 
-!ifdef UNICODE
-  CPPFLAGS =  $(CPPFLAGS) -DUNICODE
-!endif
-!if $d(WIN32)
+  CPPFLAGS =  $(CPPFLAGS) -DMS_OLEUI_DEF
+
+!ifndef WIN16
 LINKFLAGS   = -c -C -Tw -n -s c0w$(MODEL)+
 LINKFLAGSD  =       -Tpd -n -v -s c0d32+
 !else
@@ -109,7 +112,7 @@ LINKFLAGS   = -c -C -Tw  -A=16 -n -s c0w$(MODEL)+
 LINKFLAGSD  = -c -C -Twd -A=16 -n -v -s c0dl+
 !endif
 
-!ifdef WIN32
+!ifndef WIN16
 LIBS      = $(LIBS) cw$(MODEL) import32
 !else
 LIBS      = $(LIBS) cw$(MODEL) mathw$(MODEL) import
@@ -131,7 +134,7 @@ turboc.cfg: $(MAKEINC)
   @echo  Building turboc.cfg
   @copy &&|
   $(CPPFLAGS)
-  -I$(SRCDIR);$(OLEINC);$(BCROOT)\INCLUDE
+  -I$(SRCDIR);$(OLEINC);$(BCROOT)\include
 #  -I..\..\public;..\..\boleauto;..\..\bole;
   -w-par -w-aus -w-ef
   -c -2 -m$(MODEL) -i42 -d -W$(WSWITCH) -O -Obels -Z -RT- -x-
@@ -145,7 +148,7 @@ bcc32.cfg: $(MAKEINC)
   @echo  Building bcc32.cfg
   @copy &&|
   $(CPPFLAGS)
-  -I$(SRCDIR);$(SRCDIR)\..\ole2ui;$(OLEINC);$(BCROOT)\INCLUDE;
+  -I$(SRCDIR);$(SRCDIR)\..\ole2ui;$(OLEINC);$(BCROOT)\include\win32;$(BCROOT)\include
 #  -I..\..\public;..\..\bole
   -w-par -w-aus -w-ef
   -c -3 -i60 -d -W$(WSWITCH) -O -Obels -Z -RT- -x-
@@ -159,11 +162,11 @@ $(APP).dll: $(OBJS) $(SRCDIR)\$(DEFNAME).def $(SRCDIR)\$(DEFNAME).res $(RESOURCE
   $(APP).map
   $(LIBS)
   $(SRCDIR)\$(DEFNAME).def
-!ifdef WIN32
+!ifndef WIN16
   $(SRCDIR)\$(DEFNAME).res $(RESOURCES)
 !endif
 |
-!ifndef WIN32
+!ifdef WIN16
   $(RLINK) $(SRCDIR)\$(DEFNAME).res $(RESOURCES) $@
 !endif
 #  copy $(APP).dll $(RELDIR)
@@ -209,5 +212,4 @@ $(DEFNAME).def : $(MAKEINC)
   $(IMPLIB) $@ $<
 
 {$(SRCDIR)}.rc{}.res:
-       $(RC) -r -i$(SRCDIR) -fo$@ $<
-
+  $(RC) $< -r -i$(SRCDIR);$(BCROOT)\include -fo$@

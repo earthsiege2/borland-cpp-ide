@@ -1,4 +1,3 @@
-//
 /*
  * OLE2UI.H
  *
@@ -45,6 +44,14 @@
 #include <dlgs.h>           //For fileopen dlg; standard include
 
 #include "olestd.h"
+
+#if !defined(HKEY_CLASSES_ROOT)
+#define HKEY_CLASSES_ROOT   1     
+#endif                            
+
+#if !defined(REG_SZ)
+#define REG_SZ              1
+#endif
 
 #ifdef __TURBOC__
 #define _getcwd getcwd
@@ -96,6 +103,7 @@ void BOleHelpNotify (DWORD, int);
 // Backward compatibility with older library
 #define OleUIUninitialize OleUIUnInitialize
 
+void Ctl3DSubDlg(HWND hwnd);
 STDAPI_(BOOL) OleUIInitialize(HINSTANCE hInstance, HINSTANCE hPrevInst);
 STDAPI_(BOOL) OleUIUninitialize(void);
 
@@ -119,6 +127,12 @@ STDAPI OleUILockLibrary(BOOL fLock);
 
 #endif // !RC_INVOKED
 
+// Win 4.0 styles
+//
+#if !defined(DS_3DLOOK)
+#define DS_3DLOOK   0x04L
+#endif
+
 //Dialog Identifiers as passed in Help messages to identify the source.
 #define IDD_INSERTOBJECT        32248
 #define IDD_CHANGEICON          32249
@@ -139,6 +153,7 @@ STDAPI OleUILockLibrary(BOOL fLock);
 #define IDD_LINKTYPECHANGED     32262
 #define IDD_SERVERNOTFOUND      32263
 #define IDD_OUTOFMEMORY         32264
+#define IDD_INSERTCONTROL       32265
 
 // Stringtable identifers
 #define IDS_OLE2UIUNKNOWN       32300
@@ -219,7 +234,7 @@ typedef UINT (CALLBACK *LPFNOLEUIHOOK)(HWND, UINT, WPARAM, LPARAM);
 #define ID_OLEUIHELP                    99
 
 // Help button for fileopen.dlg  (need this for resizing) 1038 is pshHelp
-#define IDHELP  1038
+#define BOLEUI_IDHELP  1038
 
 // Static text control (use this instead of -1 so things work correctly for
 // localization
@@ -320,6 +335,7 @@ typedef struct tagOLEUIINSERTOBJECT
 
 //API prototype
 STDAPI_(UINT) OleUIInsertObject(LPOLEUIINSERTOBJECT);
+STDAPI_(UINT) OleUIInsertControl(LPOLEUIINSERTOBJECT);
 
 #endif // !RC_INVOKED
 
@@ -987,4 +1003,3 @@ STDAPI_(void) SetHatchWindowSize(
 #define OLEUI_VERSION_MAGIC 0x4D42
 
 #endif  //_OLE2UI_H_
-

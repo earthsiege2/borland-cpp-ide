@@ -1,0 +1,37 @@
+//----------------------------------------------------------------------------
+// ObjectWindows
+// Copyright (c) 1995, 1995 by Borland International, All Rights Reserved
+//----------------------------------------------------------------------------
+
+// Main window menu commands
+//
+#define BITMAP_1                 1
+#define BITMAP_2                 2
+#define BITMAP_3                 3
+
+#define IDB_GROW                 103
+#define IDB_SHRINK               102
+#define IDB_NUDGE                103
+#define IDB_VERT                 101
+#define IDB_HORZ                 100
+
+#define CM_S_MOVE                201
+#define CM_S_WIDTH               202
+#define CM_P_SPLIT               203
+#define CM_P_REMOVE              204
+#define CM_P_REPLACE             205
+#define CM_P_SWAP                206
+#define CM_P_FOR_EACH_PANE       207
+#define CM_S_SET_SPLITTER_WIDTH  208
+#define CM_P_NUMBER_OF_PANES     209
+#define CM_P_REMOVE_ALL_PANES    210
+
+#define CM_SPLITVERT             301
+#define CM_SPLITHORZ             302
+#define CM_SHRINK                303
+#define CM_GROW                  304
+
+//#define CM_CANCLOSE   501
+//#define CM_CANTCLOSE  502
+//#define IDB_CANCLOSE   501
+//#define IDB_CANTCLOSE  502

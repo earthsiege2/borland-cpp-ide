@@ -1,0 +1,21 @@
+#include <owl/window.rh>
+#include <owl/docview.rh>
+
+IDM_TEST MENU
+{
+ POPUP "&File"
+ {
+  MENUITEM "&New", CM_FILENEW
+  MENUITEM "&Open...", CM_FILEOPEN
+  MENUITEM "&Save", CM_FILESAVE
+  MENUITEM "Save &as...", CM_FILESAVEAS
+  MENUITEM SEPARATOR
+  MENUITEM "&Print...", CM_FILEPRINT
+  MENUITEM "Page se&tup...", CM_FILEPAGESETUP
+  MENUITEM "P&rinter setup...", CM_FILEPRINTERSETUP
+  MENUITEM SEPARATOR
+  MENUITEM "E&xit", CM_EXIT
+ }
+}
+
+

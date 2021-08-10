@@ -6,9 +6,9 @@
  *-----------------------------------------------------------------------*/
 
 /*
- *      C/C++ Run Time Library - Version 6.5
+ *      C/C++ Run Time Library - Version 7.0
  *
- *      Copyright (c) 1987, 1994 by Borland International
+ *      Copyright (c) 1987, 1996 by Borland International
  *      All Rights Reserved.
  *
  */
@@ -28,10 +28,15 @@ Description     called at exit to flush open streams
 *---------------------------------------------------------------------*/
 void _FARFUNC _xfflush(void)
 {
-        register FILE   *fp;
-        register int    i = 4;
+    register FILE   *fp;
+    register int    i;
+    _QRTLDataBlock;
 
-        for (fp = _RTLInstanceData(_streams); i; i--, fp++)
-                if (fp->flags & _F_RDWR)
-                        fflush(fp);
+    for( i = 0, fp = _QRTLInstanceData(_streams);
+         i < _QRTLInstanceData(_nfile);
+         fp++, i++ )
+    {
+        if( (fp->flags & _F_RDWR) && (fp->level < 0) )
+	         fflush(fp);
+    }
 }

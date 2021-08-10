@@ -1,22 +1,38 @@
 //----------------------------------------------------------------------------
 // ObjectWindows
-// (C) Copyright 1994 by Borland International, All Rights Reserved
+// Copyright (c) 1994, 1996 by Borland International, All Rights Reserved
 //
-//   Implementation of class TOleFrame.
+//$Revision:   10.6  $
+//
+// Implementation of class TOleFrame.
 //----------------------------------------------------------------------------
 #define INC_OLE2
-#include <owl/owlpch.h>
-#include <owl/decmdifr.h>
-#include <owl/statusba.h>
-#include <owl/ocfevent.h>
-#include <owl/uihandle.h>
-#include <owl/oleframe.h>
-#include <owl/olewindo.h>
+#include <owl/pch.h>
+#if !defined(OWL_DECMDIFR_H)
+# include <owl/decmdifr.h>
+#endif
+#if !defined(OWL_STATUSBA_H)
+# include <owl/statusba.h>
+#endif
+#if !defined(OWL_OCFEVENT_H)
+# include <owl/ocfevent.h>
+#endif
+#if !defined(OWL_OLEFRAME_H)
+# include <owl/oleframe.h>
+#endif
+#if !defined(OWL_OLEWINDO_H)
+# include <owl/olewindo.h>
+#endif
+#if !defined(OWL_COMMCTRL_H)
+# include <owl/commctrl.h>
+#endif
 
 DIAG_DEFINE_GROUP_INIT(OWL_INI, OwlOleMenu, 1, 0);
+DIAG_DECLARE_GROUP(OwlCmd);
 
-//#define DEBUG_PADS          // define to make pads paint red for debugging
-const int DllIdleTime = 200;  // time in MS for idle action polling
+//#define DEBUG_PADS
+// define to make pads paint red for debugging time in MS for idle action polling
+const int DllIdleTime = 200;
 
 // Four edge locations for inplace-server space negotiation
 //
@@ -41,37 +57,170 @@ class TPadWindow : public TWindow {
       Attr.Style = WS_CHILD | WS_VISIBLE;
       Attr.W = Attr.H = 1;             // takeup no space until needed
                                        // need 1 since layout overlapps borders
-      #if defined(DEBUG_PADS)
-        SetBkgndColor(TColor(255,0,0));  // to help Debug toolbar negotiations
-        strstream s;
-        s << "Pad" << ('0' + edge);
-        Title = strnewdup(s.str());
-      #else
-        SetBkgndColor(NoErase);          // Don't erase--to avoid flicker
-      #endif
+#if defined(DEBUG_PADS)
+      SetBkgndColor(TColor(255,0,0));  // to help Debug toolbar negotiations
+      strstream s;
+      s << "Pad" << ('0' + edge);
+      Title = strnewdup(s.str());
+#else
+      SetBkgndColor(NoErase);          // Don't erase--to avoid flicker
+#endif
     }
 };
 
-//----------------------------------------------------------------------------
+//
+// class TRemViewBucket
+// ~~~~~ ~~~~~~~~~~~~~~
 // A small window class to act as a holder for the unattached remote server
 // view windows
 //
-
-class TRemViewBucket : public TFrameWindow {
+class _CALLCNVN TRemViewBucket : public TFrameWindow {
   public:
-    TRemViewBucket(TWindow* parent)
-      : TFrameWindow(parent, "RemViewBucket")
-      {
-        Attr.Style = WS_CHILD | WS_DISABLED;
-        Attr.Id = IDW_REMVIEWBUCKET;
-      }
+    TRemViewBucket(TWindow* parent);
+    
+    // Overriden virtuals of base class
+    //
+    bool      SetDocTitle(const char far*, int);
 
-    bool SetDocTitle(const char far*, int) {return true;}
-
-  protected:
-  private:
+    // Override handlers to act as pass-thru on behalf of remove server view
+    //
+    TResult   EvCommand(uint id, THandle hWndCtl, uint notifyCode);
+    TResult   EvNotify(uint id, TNotify far& notifyInfo);
+    void      EvCommandEnable(TCommandEnabler& ce);
+    TWindow*  FindRemoteWindow();
 };
 
+//
+//
+//
+TRemViewBucket::TRemViewBucket(TWindow* parent) 
+               :TFrameWindow(parent, "RemViewBucket")
+{
+  Attr.Style = WS_CHILD | WS_DISABLED;
+  Attr.Id = IDW_REMVIEWBUCKET;
+}
+
+//
+//
+//
+bool
+TRemViewBucket::SetDocTitle(const char far*, int)
+{
+  return true;
+}
+
+//
+//
+//
+TWindow*  
+TRemViewBucket::FindRemoteWindow()
+{
+  // Check if we can find the object representing the remote window object by
+  // traversing the focus window tree
+  //
+  TWindow* remote = 0;
+  HWND focusHwnd  = GetFocus();
+  HWND hwnd       = focusHwnd;
+  while (hwnd) {
+    remote = GetWindowPtr(hwnd);
+    if (remote) {
+      // The remote window has the remViewBucket as its parent
+      //
+      if (remote->GetParentO() == this)
+        break;
+      else
+        remote = 0;
+    }
+    hwnd = ::GetParent(hwnd);
+  }
+  return remote;
+}
+
+//
+//
+//
+TResult   
+TRemViewBucket::EvCommand(uint id, THandle hWndCtl, uint notifyCode)
+{
+#if !defined(_OWLDLL)
+  TRACEX(OwlCmd, 1, "TRemViewBucket::EvCommand - id(" << id << "), ctl(" <<\
+                     hex << uint(hWndCtl) << "), code(" << notifyCode  << ")");
+#endif
+
+  // Find remote view
+  //
+  TWindow* handler = FindRemoteWindow();
+  
+  // Default to parent if none was found
+  //
+  if (!handler)
+    handler = GetParentO();
+
+#if !defined(_OWLDLL)
+  TRACEX(OwlCmd, 1, "TRemViewBucket::EvCommand - forwarding to " << *handler);
+#endif
+
+  // Forward event
+  //
+  CHECK(handler);
+  return handler->EvCommand(id, hWndCtl, notifyCode);
+}
+
+//
+//
+//
+TResult   
+TRemViewBucket::EvNotify(uint id, TNotify far& notifyInfo)
+{
+#if !defined(_OWLDLL)
+  TRACEX(OwlCmd, 1, "TRemViewBucket::EvNotify - id(" << id << "), ctl("\
+                    << hex << uint(notifyInfo.hwndFrom) << "), code(" \
+                    << notifyInfo.code  << ")");
+#endif
+
+  // Find remote view
+  //
+  TWindow* handler = FindRemoteWindow();
+  
+  // Default to parent if none was found
+  //
+  if (!handler)
+    handler = GetParentO();
+
+#if !defined(_OWLDLL)
+  TRACEX(OwlCmd, 1, "TRemViewBucket::EvNotify - forwarding to " << *handler);
+#endif
+
+  // Forward event
+  //
+  CHECK(handler);
+  return handler->EvNotify(id, notifyInfo);
+}
+
+//
+//
+//
+void      
+TRemViewBucket::EvCommandEnable(TCommandEnabler& ce)
+{
+  // Find remote view
+  //
+  TWindow* handler = FindRemoteWindow();
+  
+  // Default to parent if none was found
+  //
+  if (!handler)
+    handler = GetParentO();
+
+#if !defined(_OWLDLL)
+  TRACEX(OwlCmd, 1, "TRemViewBucket::EvCommandEnable - forwarding to " << *handler);
+#endif
+
+  // Forward event
+  //
+  CHECK(handler);
+  handler->EvCommandEnable(ce);
+}
 
 DEFINE_RESPONSE_TABLE1(TOleFrame, TDecoratedFrame)
   EV_WM_SIZE,
@@ -90,6 +239,9 @@ DEFINE_RESPONSE_TABLE1(TOleFrame, TDecoratedFrame)
   EV_OC_APPSHUTDOWN,
 END_RESPONSE_TABLE;
 
+//
+//
+//
 TOleFrame::TOleFrame(const char far* title,
                      TWindow*        clientWnd,
                      bool            trackMenuSelection,
@@ -137,7 +289,7 @@ TOleFrame::SetOcApp(TOcApp* ocApp)
 }
 
 //
-// Let the OcApp know our HWND so that it can talk to us
+// Let the OcApp know our THandle so that it can talk to us
 //
 void
 TOleFrame::SetupWindow()
@@ -218,7 +370,7 @@ sDisconnectDocServer(TWindow* win, void* /*retVal*/)
 void
 TOleFrame::Destroy(int retVal)
 {
-  if (!HWindow || OcShutDown == UserInitiated)
+  if (!GetHandle() || OcShutDown == UserInitiated)
     return;
 
   // Disconnect document servers with their clients if user shuts down the app
@@ -287,26 +439,26 @@ TOleFrame::EvTimer(uint timerId)
 //
 // Handle & sub-dispatch the OC event message.
 //
-LRESULT
-TOleFrame::EvOcEvent(WPARAM wParam, LPARAM lParam)
+TResult
+TOleFrame::EvOcEvent(TParam1 param1, TParam2 param2)
 {
-  TEventHandler::TEventInfo eventInfo(WM_OCEVENT, wParam);
+  TEventHandler::TEventInfo eventInfo(WM_OCEVENT, param1);
 
   // Give the client window the first chance at it
   //
   TWindow* receiver = GetClientWindow();
   if (receiver->Find(eventInfo))
-    return receiver->Dispatch(eventInfo, wParam, lParam);
+    return receiver->Dispatch(eventInfo, param1, param2);
 
   // Then try this frame
   //
   if (Find(eventInfo))
-    return Dispatch(eventInfo, wParam, lParam);
+    return Dispatch(eventInfo, param1, param2);
 
   // Last, try the application in case it wants to override events
   //
   if (GetApplication()->Find(eventInfo))
-    return GetApplication()->Dispatch(eventInfo, wParam, lParam);
+    return GetApplication()->Dispatch(eventInfo, param1, param2);
   return 0;
 }
 
@@ -333,6 +485,8 @@ TOleFrame::EvOcAppInsMenus(TOcMenuDescr far& sharedMenu)
     //
     compMenuDesc.Merge(TMenuDescr(0,  0, -1, 0, -1, 0, -1));
   }
+  else
+    return false; // stop menu negotiation if we don't have menu
 
   // Merge into the OLE shared menubar
   //

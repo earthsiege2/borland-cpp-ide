@@ -14,10 +14,8 @@
 ##"" [[SearchStr]]
 ##--BEGIN-- QUERY_CLASS_NAME [[ClassName]]
 ##--BEGIN--Kind == VALUE_DATA
-##      :OLEType == "TAutoBool"
-##          :"TAutoBool" CPPType
 ##*
-##(OLEType == CPPType) && (OLEType != "TAutoCurrency") && (OLEType != "TAutoDate") && (OLEType != "TAutoBool")
+## (OLEType == CPPType) && (OLEType != "TAutoCurrency") && (OLEType != "TAutoDate")
 ##      --BEGIN-- StripPtrRef(CPPType, [[StripCPPType]]) [[AnyStripping]]
 ##          !AnyStripping
 ##              :\\"AUTODATA([[InternalName]], [[InternalName]], TAutoObject<[[StripCPPType]]>, )" SearchStr
@@ -27,16 +25,16 @@
 ##*
 ##      --END-- StripPtrRef(CPPType, [[StripCPPType]]) [[AnyStripping]]
 ##*
-##(OLEType != CPPType) && (OLEType != "TAutoString")
+## (OLEType != CPPType) && (OLEType != "TAutoString")
 ##      :\\"AUTODATA([[InternalName]], [[InternalName]], [[CPPType]], )" SearchStr
 ##*
-##(OLEType == CPPType) && ((OLEType == "TAutoCurrency") || (OLEType == "TAutoDate") || (OLEType == "TAutoBool"))
+## (OLEType == CPPType) && ((OLEType == "TAutoCurrency") || (OLEType == "TAutoDate"))
 ##      :\\"AUTODATA([[InternalName]], [[InternalName]], [[CPPType]], )" SearchStr
 ##*
-##(OLEType == "TAutoString") && (CPPType != "string")
+## (OLEType == "TAutoString") && (CPPType != "string")
 ##      :\\"AUTODATA([[InternalName]], [[InternalName]], TAutoString, )" SearchStr
 ##*
-##(OLEType == "TAutoString") && (CPPType == "string")
+## (OLEType == "TAutoString") && (CPPType == "string")
 ##      :\\"AUTODATA([[InternalName]], [[InternalName]], string, )" SearchStr
 ##*
 ##      :^BOF
@@ -47,13 +45,11 @@
 ##*
 ##--END--Kind == VALUE_DATA
 ##--BEGIN-- Kind == VALUE_PROPERTY
-##      :OLEType == "TAutoBool"
-##          :"TAutoBool" CPPType
 ##*
 ##      :"" [[XlateOLEProp]]
 ##      --BEGIN-- "" [[OLEAutoProp]]
 ##          :^BOL
-##          :(OLEType == CPPType) && (OLEType != "TAutoCurrency") && (OLEType != "TAutoDate") && (OLEType != "TAutoBool")
+##          :(OLEType == CPPType) && (OLEType != "TAutoCurrency") && (OLEType != "TAutoDate")
 ##              --BEGIN-- StripPtrRef(CPPType, [[StripCPPType]]) [[AnyStripping]]
 ##                  !AnyStripping
 ##                      :\\"TAutoObject<[[StripCPPType]]>" OLEAutoProp
@@ -66,7 +62,7 @@
 ##          :(OLEType != CPPType) && (OLEType != "TAutoString")
 ##              :"[[CPPType]]" OLEAutoProp
 ##*
-##          :(OLEType == CPPType) && ((OLEType == "TAutoCurrency") || (OLEType == "TAutoDate") || (OLEType == "TAutoBool"))
+##          :(OLEType == CPPType) && ((OLEType == "TAutoCurrency") || (OLEType == "TAutoDate"))
 ##              :"[[CPPType]]" OLEAutoProp
 ##*
 ##          :(OLEType == "TAutoString") && (CPPType != "string")
@@ -139,13 +135,13 @@
 ##          :StripPtrRef(OLEType, [[StripCPPType]]) [[AnyStripping]]
 ##          :StripCPPType OLEType
 ##*
-##(GetProperty == TRUE) && (SetProperty == TRUE)
+## (GetProperty == TRUE) && (SetProperty == TRUE)
 ##      :\\"EXPOSE_PROPRW([[InternalName]], [[OLEType]], \"[[InternalName]]\"" SearchStr
 ##*
-##(GetProperty == TRUE) && (SetProperty == FALSE)
+## (GetProperty == TRUE) && (SetProperty == FALSE)
 ##      :\\"EXPOSE_PROPRO([[InternalName]], [[OLEType]], \"[[InternalName]]\"" SearchStr
 ##*
-##(GetProperty == FALSE) && (SetProperty == TRUE)
+## (GetProperty == FALSE) && (SetProperty == TRUE)
 ##      :\\"EXPOSE_PROPWO([[InternalName]], [[OLEType]], \"[[InternalName]]\"" SearchStr
 ##*
 ##      :? SearchStr [[Search]]

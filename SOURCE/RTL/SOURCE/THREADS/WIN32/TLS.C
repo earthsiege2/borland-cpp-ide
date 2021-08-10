@@ -6,9 +6,9 @@
  *-----------------------------------------------------------------------*/
 
 /*
- *      C/C++ Run Time Library - Version 1.5
+ *      C/C++ Run Time Library - Version 2.0
  *
- *      Copyright (c) 1992, 1994 by Borland International
+ *      Copyright (c) 1992, 1996 by Borland International
  *      All Rights Reserved.
  *
  */
@@ -49,6 +49,19 @@ void _RTLENTRY _init_tls(void)
 #pragma startup _init_tls 1
 
     MEMORY_BASIC_INFORMATION info;
+    OSVERSIONINFO ov;
+    unsigned long extra = 0;
+
+    ov.dwOSVersionInfoSize = sizeof (ov);
+    GetVersionEx (&ov);
+
+    if (ov.dwPlatformId == 1)
+        extra = 0x10000;        /*  If we are running under Win95, the
+                                 *  true bottom of the stack is 64k higher
+                                 *  than what is reported by the OS.  So we
+                                 *  add 64k to this value that the rest of
+                                 *  the RTL uses.
+                                 */
 
     /* Allocate a thread local storage index, to be used for saving each
      * thread's stack base.  This is used by alloca() to check for
@@ -60,7 +73,7 @@ void _RTLENTRY _init_tls(void)
      * The _beginthread function will do the same for each new thread.
      */
     VirtualQuery((void *)&info, &info, sizeof(info));
-    TlsSetValue(_stkindex, (void *)info.AllocationBase);
+    TlsSetValue(_stkindex, (void *)((unsigned long)info.AllocationBase + extra));
 
     /* Allocate a thread local storage index, to be used for THRDDATA.
      */

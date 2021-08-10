@@ -37,7 +37,7 @@ class TDrawApp : public TApplication, public TOcModule {
   DECLARE_RESPONSE_TABLE(TDrawApp);
 
   DECLARE_AUTOAGGREGATE(TDrawApp)
-    AUTOPROP  (Visible, GetShow,SetShow,      TAutoBool, )
+    AUTOPROP  (Visible, GetShow,SetShow,      TBool, )
     AUTOFUNC0 (NewDoc,  OpenDoc, TAutoObject<TDrawDocument>, )
     AUTOFUNC1 (OpenDoc, OpenDoc, TAutoObject<TDrawDocument>,TAutoString,)
     AUTOPROPRO(AppName, GetName, TAutoString, )

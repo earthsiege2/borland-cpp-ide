@@ -1,4 +1,3 @@
-//
 /*
  * COMMON.H
  *
@@ -58,7 +57,7 @@
             SendMessage(hWnd, EM_SETSEL, 0, MAKELPARAM(nStart, nEnd))
 #endif  //SendSetSel
 
-#endif  //
+#endif  
 
 
 
@@ -152,27 +151,29 @@ int CALLBACK EXPORT EnumMetafileExtractIcon(HDC, HANDLETABLE FAR *, METARECORD F
 int CALLBACK EXPORT EnumMetafileExtractIconSource(HDC, HANDLETABLE FAR *, METARECORD FAR *, int, LPLABELEXTRACT);
 
 
+LPSTR FAR PASCAL PointerToNthField(LPSTR, int, char);
+
 //Shared globals:  our instance, registered messages used from all dialogs and clipboard
 // formats used by the PasteSpecial dialog
 extern HINSTANCE  ghInst;
 
-extern UINT       uMsgHelp;
-extern UINT       uMsgEndDialog;
-extern UINT       uMsgBrowse;
-extern UINT       uMsgChangeIcon;
-extern UINT       uMsgFileOKString;
-extern UINT       uMsgCloseBusyDlg;
+extern UINT       xMsgEndDialog;
 
-extern UINT       cfObjectDescriptor;
-extern UINT       cfLinkSrcDescriptor;
-extern UINT       cfEmbedSource;
-extern UINT       cfEmbeddedObject;
-extern UINT       cfLinkSource;
-extern UINT       cfOwnerLink;
-extern UINT       cfFileName;
+// extern UINT       uMsgHelp;
+// extern UINT       uMsgBrowse;
+// extern UINT       uMsgChangeIcon;
+// extern UINT       uMsgFileOKString;
+// extern UINT       uMsgCloseBusyDlg;
+
+// extern UINT       cfObjectDescriptor;
+// extern UINT       cfLinkSrcDescriptor;
+// extern UINT       cfEmbedSource;
+// extern UINT       cfEmbeddedObject;
+// extern UINT       cfLinkSource;
+// extern UINT       cfOwnerLink;
+// extern UINT       cfFileName;
 
 //Standard control identifiers
 #define ID_NULL                         98
 
 #endif //_COMMON_H_
-

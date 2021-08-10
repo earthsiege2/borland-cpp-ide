@@ -1,6 +1,6 @@
 //----------------------------------------------------------------------------
-// ObjectWindows - (C) Copyright 1991, 1993 by Borland International
-//
+// ObjectWindow
+// Copyright (c) 1995, 1995 by Borland International, All Rights Reserved
 //
 // This example demonstrates the use of MCI APIs in Windows 3.1 in an OWL
 // application:
@@ -19,17 +19,18 @@
 // WM_MCINOTIFY.
 //
 //----------------------------------------------------------------------------
-#include <owl\owlpch.h>
-#include <owl\applicat.h>
-#include <owl\opensave.h>
-#include <owl\framewin.h>
-#include <owl\dc.h>
-#include <owl\menu.h>
-#include <owl\button.h>
-#include <owl\slider.h>
-#include <owl\slider.rh>
+#include <owl/pch.h>
+#include <owl/applicat.h>
+#include <owl/opensave.h>
+#include <owl/framewin.h>
+#include <owl/dc.h>
+#include <owl/menu.h>
+#include <owl/button.h>
+#include <owl/slider.h>
+#include <owl/slider.rh>
 #include <math.h>
 #include <mmsystem.h>
+#include <stdio.h>
 #include "mcisound.h"
 
 #define ID_SCROLL    150         // Scroll bar
@@ -43,7 +44,7 @@ BOOL  FlushNotify = FALSE;
 
 class TSoundBar : public THSlider {
   public:
-    TSoundBar(TWindow* parent, int id, int x, int y, int w, int h, 
+    TSoundBar(TWindow* parent, int id, int x, int y, int w, int h,
               TModule* module = 0)
          : THSlider(parent, id, x, y, w, h, IDB_HSLIDERTHUMB, module) {}
 
@@ -267,7 +268,7 @@ TSoundWindow::TSoundWindow(TWindow* parent, const char far* title)
   ElementName[0] = 0;
 
   SoundBar = new TSoundBar(this, ID_SCROLL, 50, 67, 300, 40);
-  
+
   new TButton(this, SM_PLAY, "&Play", 50, 120, 50, 20, TRUE);
   new TButton(this, SM_STOP, "&Stop", 120, 120, 50, 20, TRUE);
 }
@@ -307,7 +308,7 @@ TSoundWindow::EvPaint()
   //
   char buffer[10];
   if (WaveLength)
-    wsprintf(buffer, "%ld", WaveLength);
+    sprintf(buffer, "%ld", WaveLength);
   else
     strcpy(buffer, "Unknown");
   paintDC.TextOut(315, 48, buffer, strlen(buffer));
@@ -339,7 +340,7 @@ TSoundWindow::CmPlayWave()
 
     MciOpenParm.lpstrElementName = ElementName;
 
-    if (mciSendCommand(0, MCI_OPEN, MCI_WAIT | MCI_OPEN_ELEMENT, 
+    if (mciSendCommand(0, MCI_OPEN, MCI_WAIT | MCI_OPEN_ELEMENT,
                        MCI_PARM2(MciOpenParm))) {
       MessageBox(
          "Open Error - a waveForm output device is necessary to use this demo.",

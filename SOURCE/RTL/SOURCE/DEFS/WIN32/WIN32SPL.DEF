@@ -1,5 +1,5 @@
-LIBRARY     WIN32SPL.DLL
-
+LIBRARY WIN32SPL
 EXPORTS
-    InitializePrintProvidor        @1   
-    LibMain                        @2   
+
+    InitializePrintProvidor
+    LibMain

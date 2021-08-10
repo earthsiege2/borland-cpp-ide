@@ -1,4 +1,3 @@
-//
 /*************************************************************************
 **
 **    OLE 2.0 Standard Utilities
@@ -855,5 +854,8 @@ STDAPI_(DWORD) OleStdGetDropEffect ( DWORD grfKeyState );
 
 #endif  /* RC_INVOKED */
 
-#endif // _OLESTD_H_
+#ifdef BJAPAN
+unsigned int NthCType( char *pC, int pos );
+#endif
 
+#endif // _OLESTD_H_

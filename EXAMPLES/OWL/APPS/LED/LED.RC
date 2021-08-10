@@ -1,0 +1,17 @@
+#ifndef WS_POPUP
+  #include <windows.h>
+#endif
+
+LEDICON ICON led.ico
+
+Led0Bmp BITMAP led0.bmp
+Led1Bmp BITMAP led1.bmp
+Led2Bmp BITMAP led2.bmp
+Led3Bmp BITMAP led3.bmp
+Led4Bmp BITMAP led4.bmp
+Led5Bmp BITMAP led5.bmp
+Led6Bmp BITMAP led6.bmp
+Led7Bmp BITMAP led7.bmp
+Led8Bmp BITMAP led8.bmp
+Led9Bmp BITMAP led9.bmp
+LedColBmp BITMAP ledcol.bmp

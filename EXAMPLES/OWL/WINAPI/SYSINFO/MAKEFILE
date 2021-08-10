@@ -2,6 +2,6 @@
 # ObjectWindows - (C) Copyright 1991, 1993 by Borland International
 #----------------------------------------------------------------------------
 
-MODELS = mldf
+MODELS = ldf
 EXERES = sysinfo
 !include $(BCEXAMPLEDIR)\owlmake.gen

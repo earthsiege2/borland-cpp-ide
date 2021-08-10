@@ -1,502 +1,589 @@
-#--------------------------------------------------------------------------#
-#                                                                          #
-#   MAKEFILE for Class Libraries                                           #
-#                                                                          #
-#   Copyright (c) Borland International 1991, 1994                         #
-#   All Rights Reserved                                                    #
-#                                                                          #
-#   Usage:                                                                 #
-#                                                                          #
-#       maker options                                                      #
-#                                                                          #
-#   Options:                                                               #
-#                                                                          #
-#       -DDOS, -DWIN32, -DOS2   Specifies target system                    #
-#                                                                          #
-#       -DMT                    Build multi-thread version                 #
-#                                                                          #
-#       -DMODEL=x               Specifies memory model for DOS library.    #
-#                               Required when building DOS library.        #
-#                               Must be s, c, m, l, or h.                  #
-#                                                                          #
-#       -DNAME=xxx              Base name of the target library or DLL     #
-#                               Always required.                           #
-#                                                                          #
-#       -DSUFFIX=xxx            Suffix to add to the base name when        #
-#                               building a DLL. For example, -DSUFFIX=d is #
-#                               used when building the DBG DLLs. This puts #
-#                               'd' into the name of the dll and the name  #
-#                               of the import library.                     #
-#                                                                          #
-#       -DDLL                   Build a DLL.                               #
-#                                                                          #
-#       -DDBG                   Build the debugging version of the target. #
-#                                                                          #
-#       -DOBJECTS               Also build the object-based containers     #
-#                                                                          #
-#       -DBIDSFARVTABLE         moves class vtables out of dgroup          #
-#                                                                          #
-#   16-bit non-diagnostic static libraries:                                #
-#   make -r -DDOS -DMODEL=s -DNAME=bidss                                   #
-#   make -r -DDOS -DMODEL=c -DNAME=bidsc                                   #
-#   make -r -DDOS -DMODEL=m -DNAME=bidsm                                   #
-#   make -r -DDOS -DMODEL=l -DNAME=bidsl                                   #
-#   make -r -DDOS -DMODEL=h -DNAME=bidsh                                   #
-#                                                                          #
-#   16-bit diagnostic static libraries:                                    #
-#   make -r -DDOS -DMODEL=s -DDBG -DNAME=bidsdbs                           #
-#   make -r -DDOS -DMODEL=c -DDBG -DNAME=bidsdbc                           #
-#   make -r -DDOS -DMODEL=m -DDBG -DNAME=bidsdbm                           #
-#   make -r -DDOS -DMODEL=l -DDBG -DNAME=bidsdbl                           #
-#   make -r -DDOS -DMODEL=h -DDBG -DNAME=bidsdbh                           #
-#                                                                          #
-#   16-bit DLLs:                                                           #
-#   make -r -DDOS -DDLL -DNAME=bids                                        #
-#   make -r -DDOS -DDLL -DDBG -DNAME=bids -DSUFFIX=d                       #
-#                                                                          #
-#   WIN32 libraries:                                                       #
-#   make -r -DWIN32 -DNAME=bidsf                                           #
-#   make -r -DWIN32 -DDBG -DNAME=bidsdf                                    #
-#                                                                          #
-#   WIN32 DLLs:                                                            #
-#   make -r -DWIN32 -DDLL -DNAME=bids -DSUFFIX=f                           #
-#   make -r -DWIN32 -DDLL -DDBG -DNAME=bids -DSUFFIX=df                    #
-#                                                                          #
-#   OS/2 libraries:                                                        #
-#   make -r -DOS2 -DNAME=bids2                                             #
-#   make -r -DOS2 -DDBG -DNAME=bidsdb2                                     #
-#                                                                          #
-#   OS/2 DLLs:                                                             #
-#   make -r -DOS2 -DDLL -DNAME=bids -DSUFFIX=2                             #
-#   make -r -DOS2 -DDLL -DDBG -DNAME=bids -DSUFFIX=d2                      #
-#                                                                          #
-#--------------------------------------------------------------------------#
+#-----------------------------------------------------------------------------
+# MAKEFILE for Class Libraries
+# Copyright (c) Borland International 1991, 1996, All Rights Reserved
+#
+# $Revision:   5.40  $
+# $Author:   BBABET  $
+# $Date:   25 Jan 1996 11:11:32  $
+#
+# Defines:
+#   -DDOS, -DWIN32, -DOS2   Specifies target system
+#                           (DOS implies WIN16 for Windows specific classes)
+#   -DMT                    Build multi-thread version
+#   MODEL=<s|c|m|l|h>       Specifies memory model for DOS library.
+#                           Required when building DOS library.
+#   BIDSNAME=xxx            Base name of the target library or DLL
+#                           Always required.
+#   BIDSVER=xxx             Base name of the target library or DLL
+#   -DDLL                   Build a DLL.
+#   -DDIAGS                 Build the diagnostic version of the target.
+#   -DOBJECTS               Also build the object-based containers
+#   -DBIDSFARVTABLE         Moves class vtables out of dgroup
+#   CODEGUARD               Builds classlib with CodeGuard:
+#                            1=basic data, 2=full checking
+#   ALIGN=<1|2|4|8>         Specifies the alignment
+#   BCC32I                  Uses bcc32i instead of bcc32 to compile
+#   -DBI_REDEFINE_BOOL      Builds library with BOOL mapped to bool
+#
+# 16-bit non-diagnostic static libraries:
+#   make -r -DDOS MODEL=s BIDSNAME=bids
+#   make -r -DDOS MODEL=c BIDSNAME=bids
+#   make -r -DDOS MODEL=m BIDSNAME=bids
+#   make -r -DDOS MODEL=l BIDSNAME=bids
+#   make -r -DDOS MODEL=h BIDSNAME=bids
+#
+# 16-bit diagnostic static libraries:
+#   make -r -DDOS MODEL=s -DDIAGS BIDSNAME=bids
+#   make -r -DDOS MODEL=c -DDIAGS BIDSNAME=bids
+#   make -r -DDOS MODEL=m -DDIAGS BIDSNAME=bids
+#   make -r -DDOS MODEL=l -DDIAGS BIDSNAME=bids
+#   make -r -DDOS MODEL=h -DDIAGS BIDSNAME=bids
+#
+# 16-bit DLLs:
+#   make -r -DDOS -DDLL BIDSNAME=bids
+#   make -r -DDOS -DDLL -DDIAGS BIDSNAME=bids
+#
+# WIN32 libraries:
+#   make -r -DWIN32 BIDSNAME=bidsf
+#   make -r -DWIN32 -DDIAGS BIDSNAME=bids
+#
+# WIN32 DLLs:
+#   make -r -DWIN32 -DDLL BIDSNAME=bids
+#   make -r -DWIN32 -DDLL -DDIAGS BIDSNAME=bids
+#
+# OS/2 libraries:
+#   make -r -DOS2 BIDSNAME=bids
+#   make -r -DOS2 -DDIAGS BIDSNAME=bids
+#
+# OS/2 DLLs:
+#   make -r -DOS2 -DDLL BIDSNAME=bids
+#   make -r -DOS2 -DDLL -DDIAGS BIDSNAME=bids
+#-----------------------------------------------------------------------------
 
 .autodepend
+.cacheautodepend
 .swap
 
-!if !$d(DOS) && !$d(WIN32) && !$d(OS2)
-!error Must specify target system DOS, WIN32, or OS2
+#--------------------------------------------------------------------
+# fill in defaults
+#--------------------------------------------------------------------
+!if !$d(MODEL) && !$d(DOS) && !$d(WIN16) && !$d(OS2)
+  MODEL = f    # default build model = flat static, Win32
+#  MODEL = d    # default build model = flat DLL, Win32
 !endif
 
-!if $d(DOS) && !($d(MODEL) || $d(DLL))
-!error When building DOS libraries, must specify MODEL or DLL
+!if $(MODEL) == d
+  DLL = 1      # model d means to build the DLL model
+  WIN32 = 1    # 32bit DLL
 !endif
 
-!if $d(MODEL) && ($d(OS2) || $d(WIN32))
-!error When building OS2 or WIN32 libraries, cannot specify MODEL
+!if ($(MODEL) == t || $(MODEL) == f) && !$d(OS2)
+  WIN32 = 1    # default to WIN32 switch on for flat or multi-threaded model
 !endif
 
-!if $d(DLL) && !$d(NAME)
-!error Must specify a NAME for a DLL.
+!if $(MODEL) == t || $d(MT)
+  MT = mt       # model t implies MT. Use MT as 'mt' to build library names
+!endif
+
+!if $d(WIN32)
+! if $d(MT)
+    MODEL = t
+! else
+    MODEL = f
+! endif
+!elif $d(OS2)
+  MODEL = 2
+!else
+! if $d(DLL)
+    MODEL = l
+! endif
+! if !$d(DOS)
+    DOS   = 1
+! endif
+! if !$d(WIN16)
+    WIN16 = 1
+! endif
+!endif
+
+#
+# Figure out default data alignment based on target
+#
+!if !$d(ALIGN)
+! if $d(WIN32)
+    ALIGN = 1
+! else
+    ALIGN = 1
+! endif
 !endif
 
 !if $d(DOS) && $d(MT)
-!error Cannot build multi-thread library for DOS.
+! error Cannot build multi-thread library for DOS.
 !endif
 
 !if $d(MODEL)
-!if $(MODEL)!=s && $(MODEL)!=c && $(MODEL)!=m && $(MODEL)!=l && $(MODEL)!=h
-!Error MODEL must be s, c, m, l, or h
-!endif
-!endif
-
-#--------------------------------------------------------------------#
-#                                                                    #
-# Set up the names of the tools to be used. If these macros have     #
-#   already been defined in the environment, use those definitions.  #
-#                                                                    #
-#   BCC is the compiler.                                             #
-#   MAKE is make.                                                    #
-#   TLIB is the librarian.                                           #
-#   TLINK is the linker.                                             #
-#                                                                    #
-#--------------------------------------------------------------------#
-
-
-!if !$d(BCC)
-!if $d(WIN32)
-BCC = bcc32 +turboc.cfg -v- -x
-!elif $d(OS2)
-BCC = bcc
-!else
-BCC = bcc -2- -x
-!endif
+! if $(MODEL)!=s && $(MODEL)!=c && $(MODEL)!=m && $(MODEL)!=l && $(MODEL)!=h && $(MODEL)!=f && $(MODEL)!=t
+!   error MODEL must be s, c, m, l, h, f or t
+! endif
 !endif
 
-!if !$d(MAKE)
-!if $d(WIN32)
-MAKE = maker
-!else
-MAKE = make
-!endif
-!endif
-
-!if !$d(TLIB)
-!if $d(WIN32)
-TLIB = tlib /C
-!else
-TLIB = tlib /C
-!endif
-!endif
-
-!if !$d(TLINK)
-!if $d(WIN32)
-TLINK = tlink32
-!else
-TLINK = tlink
-!endif
-!endif
-
-!if !$d(BRCC)
-!if $d(WIN32)
-BRCC = brcc32 -dWIN32
-!else
-BRCC = brcc
-!endif
-!endif
-
-#--------------------------------------------------------------------#
-#                                                                    #
-# Set up options for the various tools                               #
-#                                                                    #
-#   WFLAG does some magic to produce a library that works for both   #
-#   DOS and Windows.                                                 #
-#                                                                    #
-#   WLFLAG is a variation of WFLAG for the implib objs               #
-#                                                                    #
-#   DFLAG contains the debugging switches that will be passed to the #
-#   compiler through the .CFG file.                                  #
-#                                                                    #
-#   LFLAG contains the switches that will be passed to TLIB on the   #
-#   command line.                                                    #
-#                                                                    #
-#   XFLAG handles _RTLDLL, which is passed to the compiler in the    #
-#   .CFG file and determines whether classes are to be exported.     #
-#   It also handle far vtable options when they are enabled.         #
-#                                                                    #
-#   LINKOPTS is the list of options for the linker.                  #
-#                                                                    #
-#--------------------------------------------------------------------#
-
-!if $d(DOS) && $d(DLL)
-WFLAG = -WDE -xc
-WLFLAG = -Y
-!elif $d(DOS) && ($(MODEL) == s || $(MODEL) == c )
-WFLAG = -WE
-!elif $d(DOS) && ($(MODEL) == m || $(MODEL) == l)
-WFLAG = -Y
-!endif
-
-!if $d(MT)
-!if $d(OS2)
-MTFLAG = -sm
-!else
-MTFLAG = -WM
-!endif
-!endif
-
-!if $d(DBG)
-DFLAG = -v- -D__DEBUG=2 -D__WARN -D__TRACE
-LFLAG = /0
-!else
-DFLAG = -v- -D__DEBUG=0
-LFLAG = /0
-!endif
-
+#--------------------------------------------------------------------
+# dir & name components
+#--------------------------------------------------------------------
 !if $d(DLL)
-XFLAG = -D_RTLDLL -D_BUILDBIDSDLL
-!endif
 
-!if $d(BIDSFARVTABLE)
-XFLAG = $(XFLAG) -D_BIDSFARVTABLE  #;_RTLFARVTABLE if RTL is rebuilt too
-!endif
-
-!if $d(DOS)
-!if $d(DLL)
-MFLAG = -ml
-!else
-MFLAG = -m$(MODEL)
-!endif
-!endif
-
-!if $d(DOS)
-LINKOPTS = /C/c/s/Twd/Oc/Oi/Oa/Or
-!elif $d(OS2)
-LINKOPTS = /c/s/Tod
-!elif $d(WIN32)
-LINKOPTS = /c/s/Tpd
-!endif
-
-!if $d(DLL)
-DEFFILE=deffile
-!endif
-
-#--------------------------------------------------------------------#
-#                                                                    #
-# Build the macros to provide the startup code and library names     #
-# for building DLLs.                                                 #
-#                                                                    #
-#   STARTUP is the startup code.                                     #
-#                                                                    #
-#   LINKLIBS is the list of libraries.                               #
-#                                                                    #
-#--------------------------------------------------------------------#
-
-!if !$d(DLL)
-
-TARGETLIB = $(NAME)
+! if !$d(BIDSNAME) && !$d(DIAGS)
+!   error MUST DEFINE LIBRARY NAME, e.g. "MAKE MODEL=d BIDSNAME=YourName"
+! endif
+! if $d(WIN32)
+    KEY = $(MODEL)i             # Win32 flat or multithread DLL import library
+! elif $d(OS2)
+    KEY = i$(MODEL)             # OS2 DLL import library
+! else
+    KEY = i                     # Dos/Win16 DLL import library
+! endif
 
 !else
 
-VER = 45
+KEY = $(MODEL)                  # Static library just uses model
 
-!if $d(DLL) && $d(WIN32) && $d(DBG)
-TARGETFILE = bds$(VER)$(SUFFIX)     # name is too long if we use 'bids'
+!endif  # if/else $d(DLL)
+
+#! if $d(USERDLL)
+#  KEY = $(KEY)u                 # Static or import library for use by dlls
+#! endif
+
+!if !$d(BIDSNAME)
+  BIDSNAME  = bids
+! if !$d(BIDSVER)
+    BIDSVER = 50
+! endif
+!endif
+
+#--------------------------------------------------------------------
+# debug & diagnostic flags
+#--------------------------------------------------------------------
+!if $d(DEBUG)
+  CDBG = -v -k -Od    # debug-info on, normal stack, no optimizations
+!endif
+!if 1 || $d(DEBUG)    # Leave public debug info in dll & strip to a .tds after
+! if $d(WIN32)
+    LDBG = -v
+! else
+    LDBG = -v -Vt
+! endif
+!endif
+
+!if $d(DIAGS)         # default diags use precondition, check, trace & warn
+  __DEBUG=2
+  __TRACE=1
+  __WARN=1
+! if $d(DOS)
+    BD=db             # Bids Diag version mark (db for older dos libs)
+! else
+    BD=d              # Bids Diag version mark
+! endif
+  OD=d                # Owl  Diag version mark
+!endif
+
+#
+# Build up compiler diag switches based on settings
+#
+!if $d(__DEBUG)
+  CDIAG = -D__DEBUG=$(__DEBUG)
+!endif
+!if $d(__TRACE)
+  CDIAG = $(CDIAG) -D__TRACE
+!endif
+!if $d(__WARN)
+  CDIAG = $(CDIAG) -D__WARN
+!endif
+
+#--------------------------------------------------------------------
+# dir & search paths, & precompiled headers
+#--------------------------------------------------------------------
+
+#
+# BC tools BCBINDIR can be based on MAKEDIR if no BCROOT is defined
+#
+!if $d(BCROOT)
+  BCBINDIR = $(BCROOT)\bin
 !else
-TARGETFILE = $(NAME)$(VER)$(SUFFIX)
-!endif
-TARGETLIB  = $(NAME)$(SUFFIX)i.lib
-
-!if $d(DOS)
-
-STARTUP = $(LIB)\c0dl.obj
-LINKLIBS = $(LIB)\import.lib $(LIB)\crtldll.lib
-
-!elif $d(OS2)
-
-STARTUP = $(LIB)\c02d.obj
-
-!if $d(MT)
-LINKLIBS = $(LIB)\c2mti.lib $(LIB)\os2.lib
-!else
-LINKLIBS = $(LIB)\c2i.lib $(LIB)\os2.lib
+  BCBINDIR = $(MAKEDIR)
 !endif
 
-!else
-
-STARTUP = $(LIB)\c0d32.obj
-
-!if $d(MT)
-LINKLIBS = $(LIB)\cw32mti.lib $(LIB)\import32.lib
-!else
-LINKLIBS = $(LIB)\cw32i.lib $(LIB)\import32.lib
-!endif
-
-!endif
-
-!endif
-
-#--------------------------------------------------------------------#
-#                                                                    #
-# OBJDIRLIST is the list of subdirectories under the OBJ directory   #
-#                                                                    #
-#   This is used by dirs to be sure all the subdirectories are       #
-#   present and by clean to remove all OBJ files                     #
-#                                                                    #
-#--------------------------------------------------------------------#
-
-!if $d(DOS)
-OBJDIRLIST = s ds c dc m dm l dl h dh i di
-!endif
-
-!if $d(WIN32)
-OBJDIRLIST = 32 d32 i32 di32
-!endif
-
-!if $d(OS2)
-OBJDIRLIST = 2 d2 i2 di2
-!endif
-
-#--------------------------------------------------------------------#
-#                                                                    #
-# Set up the paths that will be needed later.                        #
-#                                                                    #
-#   INCLUDE is the full path to the compiler's include files and     #
-#   to the classlib's include files.  If it is not defined in the    #
-#   environment, it is assumed to be under the directory where the   #
-#   compiler was installed in the subdirectory INCLUDE.              #
-#                                                                    #
-#   LIB is the full path to the compiler's libraries.  If it is not  #
-#   defined in the environment, it is assumed to be under the        #
-#   directory where the compiler was installed in the subdirectory   #
-#   LIB.                                                             #
-#                                                                    #
-#   SOURCEDIR is the full path to the source code.  If it is not     #
-#   defined in the environment, it is assumed to be under the        #
-#   directory where the compiler was installed in the subdirectory   #
-#   SOURCE\CLASSLIB.                                                 #
-#                                                                    #
-#   ROOTDIR is the full path to the directory in which the makefile  #
-#   is located.  If it is not defined in the environment, it is      #
-#   assumed to be the same as SOURCEDIR.                             #
-#                                                                    #
-#   LIBDIR is the full path to the directory in which the libraries  #
-#   should be placed when they are built.  If it is not defined in   #
-#   the environment, it is assumed to be the same as the directory   #
-#   specified by LIB.                                                #
-#                                                                    #
-#--------------------------------------------------------------------#
-
+#
+# Default bcroot to whatever is in bcroot.inc
+#
 !if !$d(BCROOT)
-!if $d(OS2)
-BCROOT=$(MAKEDIR)\..
+! include $(MAKEDIR)\bcroot.inc
+!endif
+
+#
+# Where to find BC tools, libraries and include files
+#
+BCSRCDIR = $(BCROOT)\source
+!if $d(WIN32)
+  BCINCDIR = $(BCROOT)\include\win32;$(BCROOT)\include
 !else
-!include $(MAKEDIR)\bcroot.inc
+  BCINCDIR = $(BCROOT)\include\win16;$(BCROOT)\include
 !endif
-!endif
+BCLIBDIR = $(BCROOT)\lib
+BCBINDIR = $(BCROOT)\bin
 
-!if !$d(INCLUDE)
-INCLUDE = $(BCROOT)\include
-!endif
-
-!if !$d(RCINCLUDE)
-RCINCLUDE = $(BCROOT)\include
-!endif
-
-!if !$d(LIB)
-LIB = $(BCROOT)\lib
+#
+# Where to find Bids dirs-- can set these for special layouts
+# Build search paths differently if Bids include dir is not below BC's
+#
+!if !$d(BIDSSRCDIR)
+  BIDSSRCDIR = $(BCSRCDIR)\classlib
 !endif
 
-!if !$d(SOURCEDIR)
-SOURCEDIR = $(BCROOT)\source\classlib
-!endif
-
-!if !$d(LIBDIR)
-LIBDIR = $(LIB)
-!endif
-
-!if !$d(ROOTDIR)
-ROOTDIR = $(SOURCEDIR)
-!endif
-
-#--------------------------------------------------------------------#
-#                                                                    #
-# Set up the various paths that MAKE will use                        #
-#                                                                    #
-#   OBJDIR will only have been defined when we've decide on a target #
-#   platform and a set of options. Since .PATH.obj isn't used in any #
-#   context in which DBG and SUFFIX haven't been defined, it's ok    #
-#   to use DBG and SUFFIX to define it.                              #
-#                                                                    #
-#--------------------------------------------------------------------#
-
-.PATH.cpp = $(SOURCEDIR)
-.PATH.cpo = $(SOURCEDIR)\obsolete
-
-.PATH.lib = $(LIBDIR)
-
-.PATH.rc = $(SOURCEDIR)
-
-!if $d(DOS)
-OBJDIR=$(MODEL)
-!elif $d(OS2)
-OBJDIR=2
+!if !$d(BIDSINCDIR)
+  BIDSINCDIR     = $(BCINCDIR)
+  INCLUDE       = $(BCINCDIR)
+  RCINCLUDEPATH = -i$(BCINCDIR)
 !else
-OBJDIR=32
+  INCLUDE       = $(BIDSINCDIR);$(BCINCDIR)
+  RCINCLUDEPATH = -i$(BIDSINCDIR) -i$(BCINCDIR)
 !endif
 
+!if !$d(BIDSLIBDIR)
+  BIDSLIBDIR = $(BCLIBDIR)
+!endif
+
+!if !$d(BIDSBINDIR)
+  BIDSBINDIR = $(BCBINDIR)
+!endif
+
+BIDSOBJDIR = $(BIDSSRCDIR)\o\$(BD)$(KEY)   # Keep seperate diag/nondiag dirs
+
+.PATH.obj = $(BIDSOBJDIR)
+.PATH.res = $(BIDSOBJDIR)
+.PATH.def = $(BIDSOBJDIR)
+.PATH.lib = $(BIDSLIBDIR)
+.PATH.cpp = $(BIDSSRCDIR)
+.PATH.cpo = $(BIDSSRCDIR)\obsolete
+
+#
+# Define BIDSNOPCH to disable the use of Precompiled headers when building BIDS
+#
+!if !$d(BIDSNOPCH)
+  CPCH= -H=$(BIDSLIBDIR)\$(BIDSNAME)$(BD)$(KEY).csm -H"pch.h" -D_BIDSPCH -D_WSYSPCH
+! if $d(WIN32) || $(__MAKE__) > 0x0370 # -Hc is not valid in earlier 16-bit
+    CPCH = $(CPCH) -Hc
+! endif
+!endif
+
+#--------------------------------------------------------------------
+# library names
+#--------------------------------------------------------------------
 !if $d(DLL)
-OBJDIR=i$(OBJDIR)
+! if $d(WIN32)
+    BIDSDLL = $(BIDSBINDIR)\$(BIDSNAME)$(BIDSVER)$(BD)$(MODEL).dll
+! else
+    BIDSDLL = $(BIDSBINDIR)\$(BIDSNAME)$(BIDSVER)$(BD).dll
+! endif
+  BIDSDEF = bids.def
+  BIDSRES = version.res  #bids.res
+!endif
+BIDSLIB = $(BIDSLIBDIR)\$(BIDSNAME)$(BD)$(KEY).lib
+
+#--------------------------------------------------------------------
+# Options which are memory model independent
+#--------------------------------------------------------------------
+!if $d(BI_REDEFINE_BOOL)
+  CFLAGS = $(CFLAGS) -DBI_REDEFINE_BOOL
 !endif
 
-!if $d(DBG)
-.PATH.obj = $(SOURCEDIR)\d$(OBJDIR)
+#--------------------------------------------------------------------
+# Tools and options for Win32
+#--------------------------------------------------------------------
+!if $d(WIN32)
+! if $d(BCC32I)
+    CC     = $(BCBINDIR)\bcc32i      # Highly optimizing compiler
+! else
+    CC     = $(BCBINDIR)\bcc32       # Regular optimizing compiler
+! endif
+  RCC      = brcc32 -DWIN32          # Resource compiler
+  LINK     = $(BCBINDIR)\tlink32     # Linker
+  LIB      = $(BCBINDIR)\tlib        # Librarian
+  IMPLIB   = $(BCBINDIR)\implib      # Import library generator
+  TDSTRIP  = $(BCBINDIR)\tdstrp32    # Debug info extractor
+
+  CFLAGS  = $(CFLAGS) -d -k- -O1gmpv # Optimizations
+! if $d(CODEGUARD)                   # d=add data, c=add calls, t=check this
+    CFLAGS = $(CFLAGS) -vGd -vGt
+!   if $(CODEGUARD) == 2
+      CFLAGS= $(CFLAGS) -vGc
+!   endif
+!  endif
+  CFGFILE  = bcc32.cfg               # Name of compiler's config file
+! if $d(DEBUG)
+    LIBOPTS = /P512 /C
+! else
+    LIBOPTS = /P32 /0 /C
+! endif
+
+! if $d(DLL)
+    CFLAGS = $(CFLAGS) -WDE -D_BUILDBIDSDLL -D_BUILDSVCSDLL -D_BUILDWSYSDLL
+    LFLAGS = $(LDBG) -Tpd -s -c
+    STDLIBS  = import32 cw32$(MT)i   # Libs for linking the DLL
+!   if $d(CODEGUARD)
+      STDLIBS  = cg32 $(STDLIBS)
+!   endif
+    STARTUP  = c0d32
+! else
+    CFLAGS = $(CFLAGS) #!TH why always windows? -W
+! endif
+
+! if $d(MT)
+    CFLAGS = $(CFLAGS) -WM
+! endif
+! if $d(ALIGN)
+    CFLAGS = $(CFLAGS) -a$(ALIGN)
+! endif
+
+#--------------------------------------------------------------------
+# Tools and options for OS/2
+#--------------------------------------------------------------------
+!elif $d(OS2)
+  CC       = $(BCBINDIR)\bcc         # Compiler
+  RCC      = brcc                    # Resource compiler
+  LINK     = $(BCBINDIR)\tlink       # Linker
+  LIB      = $(BCBINDIR)\tlib        # Librarian
+  IMPLIB   = $(BCBINDIR)\implib      # Import library generator
+  TDSTRIP  = $(BCBINDIR)\tdstrip     # Debug info extractor
+
+  CFLAGS   = $(CFLAGS) -d -k- -O1gmpv# Optimizations
+  CFGFILE  = turboc.cfg              # Name of compiler's config file
+! if $d(DEBUG)
+    LIBOPTS = /P512 /C
+! else
+    LIBOPTS = /P32 /0 /C
+! endif
+
+! if $d(DLL)
+    CFLAGS = $(CFLAGS) -WDE -D_BUILDBIDSDLL -D_BUILDSVCSDLL -D_BUILDWSYSDLL
+    LFLAGS   = $(LDBG) -Tod -s -c
+    STDLIBS  = c2$(MT)i os2     # Libs for linking the DLL
+    STARTUP  = c02d
+! else
+    CFLAGS = $(CFLAGS) -W
+! endif
+! if $d(MT)
+    CFLAGS = $(CFLAGS) -sm
+! endif
+
+#--------------------------------------------------------------------
+# Tools and options for DOS / Win16
+#--------------------------------------------------------------------
+!elif $d(WIN16)
+  CC      = $(BCBINDIR)\bcc          # Compiler
+  RCC     = brcc                     # Resource compiler
+  LINK    = $(BCBINDIR)\tlink        # Linker
+  LIB     = $(BCBINDIR)\tlib         # Librarian
+
+  # implib needs -o switch in 16 bit for compatibility
+  IMPLIB   = $(BCBINDIR)\implib -o   # Import library generator
+  TDSTRIP  = $(BCBINDIR)\tdstrip     # Debug info extractor
+
+  CFLAGS   = $(CFLAGS) -2- -d -k- -O1gmpv   # Optimizations
+  CFLAGS   = $(CFLAGS) -m$(MODEL)           # Memory Model
+! if $d(DLL) && $d(CODEGUARD)               # Enable compiler's CodeGuard support
+    CFLAGS = $(CFLAGS) -vGd -vGt
+!  endif
+
+#! if $(MODEL) != s && $(MODEL) != m # Far data models can put strs in code seg
+#    CFLAGS=$(CFLAGS) -dc
+#! endif
+! if $d(BIDSFARVTABLE)
+    CFLAGS = $(CFLAGS) -D_BIDSFARVTABLE #;_RTLFARVTABLE
+! endif
+! if $d(DISABLE_EXCEPTIONS)
+    CFLAGS = $(CFLAGS) -DDISABLE_EXCEPTIONS -x-
+! endif
+  CFGFILE = turboc.cfg
+
+! if $d(DEBUG)
+    LIBOPTS = /P512 /C
+! else
+    LIBOPTS = /P32 /0 /C
+! endif
+
+! if $d(DLL)                         # Build the 16bit DLL
+    # Dll, explicit export, compat excptns
+    CFLAGS = $(CFLAGS) -WDE -D_BUILDBIDSDLL -D_BUILDSVCSDLL -D_BUILDWSYSDLL -xc
+    LFLAGS = $(LDBG) -Twd -n -s -c -C -Oc -Oi -Oa -Or
+    STDLIBS  = import crtldll        # Libs for linking the DLL
+!if $d(CODEGUARD)
+    STDLIBS  = cg16 $(STDLIBS)
+!endif
+    STARTUP  = c0dl
+! else
+!   if $(MODEL) == h
+      CFLAGS = $(CFLAGS) -D_Windows      # Fool headers to get windows incs
+!   else
+!     if $d(USERDLL)
+        CFLAGS = $(CFLAGS) -WDE -xc      # Build static lib for use in DLLs
+!     endif
+!   endif
+! endif
+! if $d(ALIGN)
+    CFLAGS = $(CFLAGS) -a$(ALIGN)
+! endif
+
 !else
-.PATH.obj = $(SOURCEDIR)\$(OBJDIR)
+! error No platform defined. Define one of: DOS, WIN16, WIN32, OS2
 !endif
 
-#--------------------------------------------------------------------#
-#                                                                    #
-# Build the various file lists needed for dependency checking,       #
-# and LIBing.                                                        #
-#                                                                    #
-#   OBJS is the main list, conditionalized for the various targets   #
-#       and options.                                                 #
-#                                                                    #
-#   OBJS_LIB are the objs that only go in libs & implib, not the dll #
-#                                                                    #
-#   OBJS_DLL are the objs that only go in the dll, not the libs      #
-#                                                                    #
-#   DEPOBJS is the list of object files for dependency checking      #
-#                                                                    #
-#   LIBOBJS is the list of object files for building the library     #
-#                                                                    #
-#--------------------------------------------------------------------#
+#--------------------------------------------------------------------
+# Rules
+#--------------------------------------------------------------------
+.rc.res:
+  $(RCC) $(RCINCLUDEPATH) -fo$@ $.
 
+.cpp.obj:
+  $(CC) {$& }
+
+.cpo.obj:
+  $(CC) -P {$& }
+
+#-----------------------------------------------------------------------------
+#
+# Build the various file lists needed for dependency checking,
+# and LIBing.
+#
+#   OBJS is the main list, conditionalized for the various targets
+#       and options.
+#
+#   OBJS_LIB are the objs that only go in libs & implib, not the dll
+#
+#   OBJS_DLL are the objs that only go in the dll, not the libs
+#
+#   DEPOBJS is the list of object files for dependency checking
+#
+#   LIBOBJS is the list of object files for building the library
+#
+#-----------------------------------------------------------------------------
+
+# Old Object Container files
+#
 !if $d(OBJECTS)
-OBJS =              \
-    PFXassoc.obj    \
-    PFXbtree.obj    \
-    PFXbtreeinn.obj \
-    PFXbtreelfn.obj \
-    PFXcollect.obj  \
-    PFXcontain.obj  \
-    PFXdbllist.obj  \
-    PFXhashtbl.obj  \
-    PFXldate.obj    \
-    PFXlist.obj     \
-    PFXltime.obj    \
-    PFXobject.obj
+OBJS =           \
+ PFXassoc.obj    \
+ PFXbtree.obj    \
+ PFXbtreeinn.obj \
+ PFXbtreelfn.obj \
+ PFXcollect.obj  \
+ PFXcontain.obj  \
+ PFXdbllist.obj  \
+ PFXhashtbl.obj  \
+ PFXldate.obj    \
+ PFXlist.obj     \
+ PFXltime.obj    \
+ PFXobject.obj
 !endif
 
-OBJS = $(OBJS)      \
-    PFXbinimp.obj   \
-    PFXcastable.obj \
-    PFXdate.obj     \
-    PFXdateio.obj   \
-    PFXdatep.obj    \
-    PFXfile.obj     \
-    PFXheapsel.obj  \
-    PFXobjstrm.obj  \
-    PFXtime.obj     \
-    PFXtimep.obj    \
-    PFXtimeio.obj   \
-    PFXversion.obj
+# BIDS Container files
+#
+OBJS = $(OBJS)   \
+ PFXbinimp.obj   \
+ PFXheapsel.obj
+
+!if $d(DOS) && !$d(DLL)
+  OBJS = $(OBJS) PFXtimer.obj
+!endif
+
+# Class Library files
+#
+OBJS = $(OBJS)   \
+ PFXcastable.obj \
+ PFXdate.obj     \
+ PFXdateio.obj   \
+ PFXdatep.obj    \
+ PFXobjstrm.obj  \
+ PFXtime.obj     \
+ PFXtimep.obj    \
+ PFXversion.obj  \
+ PFXcmdline.obj  \
+ PFXfile.obj     \
+ PFXtimeio.obj   \
+ PFXfilename.obj
+
+#!if $(MODEL)!=h                 # use these files for huge model
+#OBJS = $(OBJS)   \
+# PFXfilename.obj
+#!endif
+
+!if $d(WIN32) || $d(OS2)
+  OBJS = $(OBJS) PFXthread.obj
+!endif
+
+# Services Library files. Most are not needed for BorlandC++
+#
+OBJS = $(OBJS)   \
+  PFXmemory.obj
+
+# WinSys Library files (some MSW specific)
+#
+!if $(MODEL)!=h
+OBJS = $(OBJS)   \
+ PFXcolor.obj
+!else
+!endif
 
 !if !$d(OS2)
-OBJS = $(OBJS)      \
-    PFXexbase.obj   \
-    PFXgeometry.obj \
-    PFXgeomstrm.obj \
-    PFXreglink.obj
+
+OBJS = $(OBJS)   \
+ PFXexbase.obj   \
+ PFXgeometrp.obj \
+ PFXgeometrs.obj \
+ PFXgeometry.obj \
+ PFXsystem.obj   \
+ PFXreglink.obj
+
+! if $(MODEL)!=h                # do not compile thse when using huge model
+OBJS = $(OBJS)   \
+ PFXdiaginit.obj \
+ PFXmsgthred.obj \
+ PFXprofile.obj  \
+ PFXuimetric.obj \
+ PFXwsyscls.obj  \
+ PFXwsysclsp.obj \
+ PFXwsysclss.obj
+! endif
+
 !endif
 
-OBJS_LIB =          \
-    PFXlocale.obj   \
-    PFXlocaleco.obj \
-    PFXlocaleid.obj \
-    PFXregheap.obj  \
-    PFXustring.obj
+
+OBJS_LIB =       \
+ PFXlocale.obj   \
+ PFXlocaleco.obj \
+ PFXlocaleid.obj \
+ PFXustring.obj  \
+ PFXregheap.obj  \
+ PFXregistry.obj   # needs ole2 & prev 3 need TLocaleString currently
 
 OBJS_DLL =
 
-!if $d(DOS) && !$d(DLL)
-OBJS = $(OBJS) PFXtimer.obj
-!endif
-
-!if $d(WIN32) || $d(OS2)
-OBJS = $(OBJS) PFXthread.obj
-!endif
-
 !if $d(OBJECTS)
 !if $d(TEMPLATES)
-OBJS = $(OBJS)      \
-    PFXbabstary.obj \
-    PFXbdict.obj    \
-    PFXbsortary.obj
+OBJS = $(OBJS)   \
+ PFXbabstary.obj \
+ PFXbdict.obj    \
+ PFXbsortary.obj
 !else
-OBJS = $(OBJS)      \
-    PFXabstarry.obj \
-    PFXarray.obj    \
-    PFXdeque.obj    \
-    PFXdict.obj     \
-    PFXsortarry.obj \
-    PFXstack.obj
+OBJS = $(OBJS)   \
+ PFXabstarry.obj \
+ PFXarray.obj    \
+ PFXdeque.obj    \
+ PFXdict.obj     \
+ PFXsortarry.obj \
+ PFXstack.obj
 !endif
 !endif
 
-!if $d(DLL) && $(DOS)
+!if $d(DLL)
 OBJS = $(OBJS) PFXclasmain.obj
 !endif
 
@@ -514,125 +601,215 @@ OBJS = $(OBJS) PFXtmpl1.obj
 RESFILE = version.res
 !endif
 
-#PFXOBJS = $(OBJS:SFX=)
-#SFXOBJS = $(OBJS:PFX=)
-
 DEPOBJS = $(OBJS:PFX=) $(OBJS_LIB:PFX=) $(OBJS_DLL:PFX=)
 !if $d(DLL)
 LIBOBJS = $(OBJS_LIB:PFX=+)
 LINKOBJS = $(OBJS:PFX=) $(OBJS_DLL:PFX=)
 !else
-LIBOBJS = $(OBJS:PFX=-+) $(OBJS_LIB:PFX=-+)
+LIBOBJS = $(OBJS:PFX=+) $(OBJS_LIB:PFX=+)
 !endif
 
-#--------------------------------------------------------------------#
-#                                                                    #
-# These are the targets that we can make.                            #
-#                                                                    #
-#   target: builds the target file                                   #
-#                                                                    #
-#   dirs:   makes sure all the necessary subdirectories are present  #
-#                                                                    #
-#   clean:  deletes the .OBJ files                                   #
-#                                                                    #
-#   config: builds a .CFG file with the correct flags                #
-#                                                                    #
-#--------------------------------------------------------------------#
+#-----------------------------------------------------------------------------
+# These are the targets that we can make.
+#
+#   target: builds the target file
+#
+#   cfgfile: builds a .CFG file with the correct flags
+#-----------------------------------------------------------------------------
 
-target: config $(DEFFILE) $(DEPOBJS) $(RESFILE)
-!if !$d(DLL)
-    cd $(.PATH.obj)
-    $(TLIB) $(LFLAG) $(.PATH.lib)\$(TARGETLIB) @&&!
-$(LIBOBJS)
-!
-    cd $(ROOTDIR)
-!else
-    cd $(.PATH.obj)
-    $(TLINK) @&&!
-$(STARTUP)+
+!if $d(DLL)
+DEFFILE=deffile
+!endif
+
+target: cfgfile $(BIDSLIB)
+
+cfgfile:
+  @-if not exist $(.PATH.cpp)\o\NUL md $(.PATH.cpp)\o
+  @-if not exist $(.PATH.obj)\NUL md $(.PATH.obj)
+  @copy &&|
+-I$(INCLUDE)
+-c -w $(CFLAGS) $(CDBG) $(CDIAG)
+$(CPCH) -n$(.PATH.obj)
+| $(CFGFILE) > NUL
+
+!if $d(DLL)
+
+$(.PATH.obj)\$(BIDSRES):
+  $(RCC) $&.rc @&&|
+$(RCINCLUDEPATH)
+| -fo$@
+
+!if $d(WIN32)
+
+$(BIDSLIB): $(DEPOBJS) $(.PATH.obj)\$(BIDSDEF) $(.PATH.obj)\$(BIDSRES)
+  @cd $(.PATH.obj)
+  $(LINK) @&&|
+$(LFLAGS) -L$(BCLIBDIR) $(STARTUP) +
 $(LINKOBJS)
-$(TARGETFILE).dll
-$(LINKOPTS) $(.PATH.lib)\$(TARGETFILE).map
-$(LINKLIBS)
-temp.def
-$(RESFILE)
-!
-!if $(TARGET) == DOS
-    rc -30 $(TARGETFILE)
+$(BIDSDLL)
+
+$(STDLIBS)
+$(BIDSDEF)
+$(BIDSRES)
+|
+!if !$d(DIAGS)
+  $(TDSTRIP) -s $(BIDSDLL)
 !endif
-    implib $(TARGETLIB) $(TARGETFILE).dll
-    tlib $(LFLAG) $(TARGETLIB) @&&|
+  $(IMPLIB) $(BIDSLIB) $(BIDSDLL)
+  $(LIB) $(LIBOPTS) $(BIDSLIB) @&&|
 $(LIBOBJS)
 |
-    cd $(ROOTDIR)
-    copy $(.PATH.obj)\$(TARGETFILE).dll $(.PATH.lib)
-    del $(.PATH.obj)\$(TARGETFILE).dll
-    copy $(.PATH.obj)\$(TARGETLIB) $(.PATH.lib)
-    del $(.PATH.obj)\$(TARGETLIB)
+  @-del $*.bak
+  @cd $(.PATH.cpp)
+
+$(.PATH.obj)\$(BIDSDEF):
+  @copy &&|
+LIBRARY     $(BIDSNAME)$(BIDSVER)$(BD) INITINSTANCE  #
+DESCRIPTION 'Borland Class Library for C++'
+#EXETYPE     WINDOWS
+DATA        MULTIPLE NONSHARED
+| $(.PATH.obj)\$(BIDSDEF) > NUL
+
+!else  # ! WIN32
+
+$(BIDSLIB): $(DEPOBJS) $(.PATH.obj)\$(BIDSDEF) $(.PATH.obj)\$(BIDSRES)
+  @cd $(.PATH.obj)
+  $(LINK) @&&|
+$(LFLAGS) -L$(BCLIBDIR) $(STARTUP) +
+$(LINKOBJS)
+$(BIDSDLL)
+
+$(STDLIBS)
+$(BIDSDEF)
+
+|
+# $(IMPLIB) -i $(BIDSLIB) $(BIDSDEF) $(BIDSDLL) #
+  $(IMPLIB) -i $(BIDSLIB) $(BIDSDLL)
+  $(LIB) $(LIBOPTS) $(BIDSLIB) @&&|
+$(LIBOBJS)
+|
+!if !$d(DIAGS)
+  $(TDSTRIP) -s $(BIDSDLL)
+!endif
+  @-del $*.bak
+  @cd $(.PATH.cpp)
+
+$(.PATH.obj)\$(BIDSDEF):
+  @copy &&|
+LIBRARY     $(BIDSNAME)$(BIDSVER)$(BD)
+DESCRIPTION 'Borland Class Library for C++'
+EXETYPE     WINDOWS
+CODE        PRELOAD MOVEABLE DISCARDABLE
+DATA        PRELOAD MOVEABLE SINGLE
+HEAPSIZE    4096
+EXPORTS
+    WEP @1 RESIDENTNAME
+| $(.PATH.obj)\$(BIDSDEF) > NUL
+
+!endif # if/else WIN32
+
+!else  # ! DLL
+
+$(BIDSLIB): $(DEPOBJS)
+  @-del $(BIDSLIB)
+  @cd $(.PATH.obj)
+  $(LIB) $(LIBOPTS) $(BIDSLIB) @&&|
+$(LIBOBJS)
+|
+  @cd $(.PATH.cpp)
+
 !endif
 
+#-----------------------------------------------------------------------------
+# We need an implicit rule for building .OBJ files, and a few
+# explicit rules for special cases.
+#
+#   TIMER.OBJ is never built for windows, so doesn't need the
+#       windows flags.
+#-----------------------------------------------------------------------------
+CFLAGS_WIN=-W $(CFLAGS_WIN)   
 
-dirs:
-    -for %d in ($(OBJDIRLIST)) do md $(SOURCEDIR)\%d
-
-clean:
-    -for %d in ($(OBJDIRLIST)) do del $(SOURCEDIR)\%d\*.obj
-
-config:
-    @-if not exist $(.PATH.obj)\..\NUL md $(.PATH.obj)\..
-    @-if not exist $(.PATH.obj)\NUL md $(.PATH.obj)
-    @type &&!
--c -n$(.PATH.obj) -I$(INCLUDE) $(DFLAG) $(XFLAG) $(MFLAG) $(TFLAG)
-! >turboc.cfg
-
-deffile:
-!if $d(DOS)
-    @echo >$(.PATH.obj)\temp.def LIBRARY     $(TARGETFILE)
-!else
-    @echo >$(.PATH.obj)\temp.def LIBRARY     $(TARGETFILE) INITINSTANCE
+# For pre v5.0 tools, LPCWSTR is only defined via OLE headers
+#
+!if $(__MAKE__) <= 0x0370
+ CFLAGS_WIN=$(CFLAGS_WIN) -DINC_OLE2
 !endif
-    @echo >>$(.PATH.obj)\temp.def DESCRIPTION 'Parametrized Class Library for BC++'
-!if $d(DOS)
-    @echo >>$(.PATH.obj)\temp.def EXETYPE     WINDOWS
-    @echo >>$(.PATH.obj)\temp.def CODE        PRELOAD MOVEABLE DISCARDABLE
-    @echo >>$(.PATH.obj)\temp.def DATA        PRELOAD MOVEABLE SINGLE
-!else
-    @echo >>$(.PATH.obj)\temp.def DATA        MULTIPLE NONSHARED
+!if $(MODEL)==l && $d(CODEGUARD)
+ CFLAGS_WIN=-vGd -vGt $(CFLAGS_WIN)
 !endif
-    @echo >>$(.PATH.obj)\temp.def HEAPSIZE    4096
 
+!if $(MODEL)!=h
+file.obj: file.cpp
+  $(CC) $(CFLAGS_WIN) {$& }
 
-#--------------------------------------------------------------------#
-#                                                                    #
-# We need an implicit rule for building .OBJ files, and a few        #
-# explicit rules for special cases.                                  #
-#                                                                    #
-#   TIMER.OBJ is never built for windows, so doesn't need the        #
-#       windows flags.                                               #
-#                                                                    #
-#--------------------------------------------------------------------#
+filename.obj: filename.cpp
+  $(CC) $(CFLAGS_WIN) {$& }
 
-timer.obj: timer.cpp
-    $(BCC) $(SOURCEDIR)\timer
+memory.obj: memory.cpp
+  $(CC) $(CFLAGS_WIN) {$& }
 
-tmpl1.obj: tmplinst.cpp
-    $(BCC) -o$(.PATH.obj)\tmpl1.obj $(WFLAG) $(.PATH.cpp)\tmplinst
+timeio.obj: timeio.cpp
+  $(CC) $(CFLAGS_WIN) {$& }
 
-tmpl2.obj: tmplinst.cpp
-    $(BCC) -o$(.PATH.obj)\tmpl2.obj -DTEMPLATES $(WFLAG) $(.PATH.cpp)\tmplinst
+exbase.obj: exbase.cpp
+  $(CC) $(CFLAGS_WIN) {$& }
 
-.cpo.obj:
-    $(BCC) $(WFLAG) -P {$< }
+geometrp.obj: geometrp.cpp
+  $(CC) $(CFLAGS_WIN) {$& }
 
-.cpp.obj:
-    $(BCC) $(WFLAG) $(MTFLAG) {$* }
+geometrs.obj: geometrs.cpp
+  $(CC) $(CFLAGS_WIN) {$& }
 
-.rc.res:
-    $(BRCC) -i$(RCINCLUDE) $*.rc
-    copy $*.res $(.PATH.obj)
-    del $*.res
+geometry.obj: geometry.cpp
+  $(CC) $(CFLAGS_WIN) {$& }
 
-!if $d(DOS) && $d(DLL)
-$(OBJS_LIB:PFX=):
-    $(BCC) $(WLFLAG) $(MTFLAG) -D_BIDSDLL -U_BUILDBIDSDLL $(.PATH.cpp)\$&.cpp
+system.obj: system.cpp
+  $(CC) $(CFLAGS_WIN) {$& }
+
+reglink.obj: reglink.cpp
+  $(CC) $(CFLAGS_WIN) {$& }
+
+locale.obj: locale.cpp
+  $(CC) $(CFLAGS_WIN) {$& }
+
+localeco.obj: localeco.cpp
+  $(CC) $(CFLAGS_WIN) {$& }
+
+localeid.obj: localeid.cpp
+  $(CC) $(CFLAGS_WIN) {$& }
+
+ustring.obj: ustring.cpp
+  $(CC) $(CFLAGS_WIN) {$& }
+
+regheap.obj: regheap.cpp
+  $(CC) $(CFLAGS_WIN) {$& }
+
+registry.obj: registry.cpp
+  $(CC) $(CFLAGS_WIN) {$& }
+
 !endif
+
+color.obj: color.cpp
+  $(CC) $(CFLAGS_WIN) {$& }
+
+diaginit.obj: diaginit.cpp
+  $(CC) $(CFLAGS_WIN) {$& }
+
+msgthred.obj: msgthred.cpp
+  $(CC) $(CFLAGS_WIN) {$& }
+
+profile.obj: profile.cpp
+  $(CC) $(CFLAGS_WIN) {$& }
+
+uimetric.obj: uimetric.cpp
+  $(CC) $(CFLAGS_WIN) {$& }
+
+wsyscls.obj: wsyscls.cpp
+  $(CC) $(CFLAGS_WIN) {$& }
+
+wsysclss.obj: wsysclss.cpp
+  $(CC) $(CFLAGS_WIN) {$& }
+
+wsysclsp.obj: wsysclsp.cpp
+  $(CC) $(CFLAGS_WIN) {$& }
+

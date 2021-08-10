@@ -1,15 +1,13 @@
-/*------------------------------------------------------------------------*/
-/*                                                                        */
-/*  BINIMP.CPP                                                            */
-/*                                                                        */
-/*  Copyright (c) 1993, 1994 Borland International                        */
-/*  All Rights Reserved                                                   */
-/*                                                                        */
-/*------------------------------------------------------------------------*/
-
-#if !defined( CLASSLIB_BINIMP_H )
+//----------------------------------------------------------------------------
+// Borland BIDS Container Library
+// Copyright (c) 1993, 1996 by Borland International, All Rights Reserved
+//
+//$Revision:   5.6  $
+//
+//----------------------------------------------------------------------------
+#include <classlib/pch.h>
+#include <winsys/wsysinc.h>   // needed here only to reduce nesting for MSVC
 #include <classlib/binimp.h>
-#endif
 
 TBinarySearchTreeBase::TBinarySearchTreeBase() :
     Root(0),
@@ -142,7 +140,7 @@ void TBinaryTreeInternalIteratorBase::Iterate()
 {
     TBinarySearchTreeBase::BinNode _FAR *Current = Node;
     TBinarySearchTreeBase::BinNode _FAR *Prev = 0;
-    TBinarySearchTreeBase::BinNode _FAR *Next = 0;
+    TBinarySearchTreeBase::BinNode _FAR *Next;
 step2:
     if( Order == TBinarySearchTreeBase::PreOrder )
         Apply( Current, 0 );

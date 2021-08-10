@@ -1,0 +1,11 @@
+:Title Borland C++ Programmer's Guide and Library Reference
+:INDEX Borland C++ User's Guide = BCW.HLP
+:INDEX Using Borland C++ Online Documentation = OPENHELP.HLP
+:INDEX Borland C++ Programmer's Reference = BCPP.HLP
+:INDEX Borland C++ Class Libraries Guide = CLASSLIB.HLP
+:INDEX Borland C++ DOS Reference = BCDOS.HLP
+:INDEX Borland C++ Error Messages and Warnings = BCERRMSG.HLP
+:INDEX CodeGuard 5.0 User's Guide = CG5.HLP
+:INCLUDE OPENHELP.CFG
+:INCLUDE BCPPPG.TOC
+:INCLUDE BCPPRG.TOC

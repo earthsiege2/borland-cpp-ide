@@ -1,8 +1,10 @@
 //----------------------------------------------------------------------------
-// ObjectWindows
-// (C) Copyright 1991, 1994 by Borland International, All Rights Reserved
+// ObjectComponents
+// Copyright (c) 1991, 1996 by Borland International, All Rights Reserved
 //
-//   OWL global version structure for vprint
+// $Revision:   2.1  $
+//
+//   Global version structure for vprint
 //----------------------------------------------------------------------------
 #include "bolever.h"
 
@@ -19,4 +21,3 @@ TVersionHeader VersionHeader = {
   {BOLE_FILEVER_LS},
   WhoIsUs,
 };
-

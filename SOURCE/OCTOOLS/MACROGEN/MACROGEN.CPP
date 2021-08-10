@@ -1,16 +1,13 @@
-// ---------------------------------------------------------------------------
-// Copyright (C) 1994 Borland International
-// ---------------------------------------------------------------------------
+//----------------------------------------------------------------------------
+// ObjectComponents
+// Copyright (c) 1994, 1996 by Borland International, All Rights Reserved
+//
+//----------------------------------------------------------------------------
+#include <services/defs.h>
 #include <iostream.h>
 #include <strstrea.h>
 #include <cstring.h>
 #include <stdlib.h>
-
-enum bool
-{
-  false = 0,
-  true = 1
-};
 
 //
 // AutomationMacro
@@ -348,7 +345,7 @@ void
 PrintUsage()
 {
   cerr << "MacroGen Utility v1.0" << endl;
-  cerr << "Copyright (c) 1994, Borland International Inc" << endl;
+  cerr << "Copyright (c) 1994, 1996 Borland International Inc" << endl;
   cerr << "All Rights Reserved" << endl;
   cerr << endl;
   cerr << "  MacroGen AutomationMacro [void] numArgs" << endl;

@@ -1,0 +1,18 @@
+#----------------------------------------------------------------------------
+# ObjectWindows
+# Copyright (c) 1994, 1995 by Borland International, All Rights Reserved
+#----------------------------------------------------------------------------
+
+MODELS = ldf
+
+LIBEXE = $(BCLIBDIR)\bivbx.lib
+EXERES = blakjack
+OBJEXE = blakjack.obj owlmain.obj
+#MAPEXE = blakjack.map
+#DEFEXE = blakjack.def
+
+!include $(BCEXAMPLEDIR)\owlmake.gen
+
+!if $(_32BIT_)
+  LIBEXE=$(BCLIBDIR)\bivbx32.lib
+!endif

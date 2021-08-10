@@ -1,11 +1,17 @@
 //----------------------------------------------------------------------------
 // ObjectWindows
-// (C) Copyright 1992, 1994 by Borland International, All Rights Reserved
+// Copyright (c) 1992, 1996 by Borland International, All Rights Reserved
 //
-//   Implementation of Choose Color Common Dialog class
+//$Revision:   10.6  $
+//
+// Implementation of TChooseColorDialog, a Choose Color Common Dialog class
 //----------------------------------------------------------------------------
-#include <owl/owlpch.h>
-#include <owl/chooseco.h>
+#include <owl/pch.h>
+#if !defined(OWL_CHOOSECO_H)
+# include <owl/chooseco.h>
+#endif
+
+DIAG_DECLARE_GROUP(OwlCommDialog);  // diagnostic group for common dialogs
 
 uint TChooseColorDialog::SetRGBMsgId = 0;
 
@@ -14,50 +20,71 @@ END_RESPONSE_TABLE;
 
 IMPLEMENT_CASTABLE(TChooseColorDialog);
 
+//
+// Initialize the choose color common dialog data members.
+//
 TChooseColorDialog::TChooseColorDialog(TWindow*        parent,
                                        TData&          data,
                                        TResId          templateId,
                                        const char far* title,
                                        TModule*        module)
 :
-  TCommonDialog(parent, title, module), 
+  TCommonDialog(parent, title, module),
   Data(data)
 {
   if (!SetRGBMsgId)
     SetRGBMsgId = ::RegisterWindowMessage(SETRGBSTRING);
 
-  memset(&cc, 0, sizeof(CHOOSECOLOR));
-  cc.lStructSize = sizeof(CHOOSECOLOR);
-  cc.hwndOwner = Parent ? Parent->HWindow : 0;
-  (HINSTANCE)(cc.hInstance) = *GetModule();
-  cc.Flags = CC_ENABLEHOOK | Data.Flags;
+  memset(&Cc, 0, sizeof Cc);
+  Cc.lStructSize = sizeof Cc;
+  Cc.hwndOwner = Parent ? Parent->GetHandle() : 0;
+  Cc.hInstance = HWND(GetModule()->GetHandle());  // hInstance is badly typed
+  Cc.Flags = CC_ENABLEHOOK | Data.Flags;
   if (templateId) {
-    cc.lpTemplateName = templateId;
-    cc.Flags |= CC_ENABLETEMPLATE;
+    Cc.lpTemplateName = templateId;
+    Cc.Flags |= CC_ENABLETEMPLATE;
   }
   else
-    cc.Flags &= ~CC_ENABLETEMPLATE;
-  cc.lpfnHook = 0;
+    Cc.Flags &= ~CC_ENABLETEMPLATE;
+  Cc.lpfnHook = 0;
 
-  cc.rgbResult = Data.Color;
-  cc.lpCustColors = (COLORREF far*)Data.CustColors;
+  Cc.rgbResult = Data.Color;
+  Cc.lpCustColors = (COLORREF far*)Data.CustColors;
+
+  TRACEX(OwlCommDialog, OWL_CDLEVEL, "TChooseColorDialog constructed @" << (void*)this);
 }
 
-bool
-TChooseColorDialog::DialogFunction(uint msg, WPARAM wParam, LPARAM lParam)
+//
+// Destructor does nothing in non diagnostic versions of the library.
+// In the diagnostic version, it displays a trace message.
+//
+TChooseColorDialog::~TChooseColorDialog()
 {
-  return TCommonDialog::DialogFunction(msg, wParam, lParam);
+  TRACEX(OwlCommDialog, OWL_CDLEVEL, "TChooseColorDialog destructed @" << (void*)this);
 }
 
+//
+// Override the virtual DialogFunction.
+// Does no additional processing.
+//
+bool
+TChooseColorDialog::DialogFunction(uint msg, TParam1 param1, TParam2 param2)
+{
+  return TCommonDialog::DialogFunction(msg, param1, param2);
+}
+
+//
+// Execute the dialog to retrieve user's choice of color.
+//
 int
 TChooseColorDialog::DoExecute()
 {
-  (DLGPROC)cc.lpfnHook = (DLGPROC)(FARPROC)StdDlgProcInstance;
-  int ret = ::ChooseColor(&cc);
+  Cc.lpfnHook = LPCCHOOKPROC(StdDlgProc);
+  int ret = ::ChooseColor(&Cc);
   if (ret) {
-    Data.Flags = cc.Flags;
+    Data.Flags = Cc.Flags;
     Data.Error = 0;
-    Data.Color = cc.rgbResult;
+    Data.Color = Cc.rgbResult;
   }
   else {
     Data.Error = ::CommDlgExtendedError();

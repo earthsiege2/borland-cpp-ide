@@ -7,7 +7,7 @@
 #include <classlib/deques.h>
 #include <iostream.h>
 #include <strstrea.h>
-#include "../myclass.h" 
+#include "../myclass.h"
 
 typedef TIDequeAsDoubleList<MyClass> ContainerType;
 typedef TIDequeAsDoubleListIterator<MyClass> IteratorType;
@@ -47,12 +47,13 @@ int main()
 {
     ContainerType container;
     AddItems(container, MaxItems);
-  
+
     cout << "--- Starting ForEach" << endl;
     container.ForEach(ForEachCallBack, (void*)"FE ");
-  
+
     cout << "--- Starting Iterator" << endl;
     UseForwardIterator(container);
-  
+
+    container.Flush();
     return 0;
 }

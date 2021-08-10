@@ -7,9 +7,9 @@
  *-----------------------------------------------------------------------*/
 
 /*
- *      C/C++ Run Time Library - Version 6.5
+ *      C/C++ Run Time Library - Version 7.0
  *
- *      Copyright (c) 1987, 1994 by Borland International
+ *      Copyright (c) 1987, 1996 by Borland International
  *      All Rights Reserved.
  *
  */
@@ -34,7 +34,8 @@ extern char _FAR **_C0environ;
 int _setenvp__  = 0;  // This is the symbol which pulls in _setenvp
 #endif
 
-char **_environ = NULL;
+char **		_environ = NULL;
+static char *	evBlockSave;
 
 /*----------------------------------------------------------------------*
 
@@ -51,8 +52,8 @@ Notes   Must be executed after _setenv init proc so that _envLng, _envseg,
 *-----------------------------------------------------------------------*/
 static void _setenviron(void)
 {
-    int     i;
-    char    *evBlock;
+    int  i;
+    char *evBlock;
     unsigned Old_WinAllocFlag = _WinAllocFlag;
 
 /*
@@ -66,21 +67,32 @@ static void _setenviron(void)
 */
 
     _WinAllocFlag |= 0x2000;
-    if ((evBlock = malloc(_envLng)) == NULL)
+    if ((evBlockSave = evBlock = malloc(_envLng)) == NULL)
         abort();
     movedata(_envseg, 0, FP_SEG((char far *)evBlock),
              FP_OFF((char far *)evBlock), _envLng);
-    if ((_environ = (char **)calloc((_envSize/sizeof(char *))+EXTRA,
-                                    sizeof(char *))) == NULL)
+
+    i = ((_envSize/sizeof(char *))+EXTRA) * sizeof(char *);
+    if ((_environ = (char **)malloc(i)) == NULL)
         abort();
+    memset(_environ, 0, i);
+    
     for (i=0; i<(_envSize/sizeof(char*)); i++, evBlock+=(strlen(evBlock)+1))
         _environ[i] = evBlock;
     _envSize += EXTRA*sizeof(char*);
     _WinAllocFlag = Old_WinAllocFlag;
 
-#if defined(__DPMI16__)    
+#if defined(__DPMI16__)
     _C0environ = _environ;
 #endif
 }
 
-#pragma startup _setenviron 9  /* Must be executed after _setenv (8) */
+#pragma startup _setenviron 9  	/* Must be executed after _setenv (8) */
+
+static void _rlsenviron(void)
+{
+    free(evBlockSave);
+    free(_environ);
+}
+#pragma exit _rlsenviron 9  	
+

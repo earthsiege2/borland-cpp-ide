@@ -1,14 +1,14 @@
-'////////////////////////////////////////////////////////////////////////////////////   
+'------------------------------------------------------------------------------
 '   Expert PROJECT
-'   Expert - (C) Copyright 1993 by Borland International, Inc. All Rights Reserved.
+'   Expert - (C) Copyright 1993, 1995 by Borland International, Inc. All Rights Reserved.
 '
 '   SUBSYSTEM:    OWL code template at AppGen time
 '   FILE:         TApplica.OWL
 '
 '
 '   OVERVIEW
-'   ========
-'////////////////////////////////////////////////////////////////////////////////////   
+'   ~~~~~~~~
+'------------------------------------------------------------------------------
 
 
 '
@@ -20,7 +20,7 @@
 
 <<[H]TApplication [[TApplication]]
 ##--BEGIN-- @OPT_APPL_DOCVIEW
-##((@QUERY_APPL_MODEL == VALUE_SDI) || (@QUERY_APPL_MODEL == VALUE_DIALOG))
+## ((@QUERY_APPL_MODEL == VALUE_SDI) || (@QUERY_APPL_MODEL == VALUE_DIALOG))
 ##:     {hsdidocv.owl}
 ##*
 ##@QUERY_APPL_MODEL == VALUE_MDI
@@ -28,7 +28,7 @@
 ##*
 ##--END-- @OPT_APPL_DOCVIEW
 ##--BEGIN-- !@OPT_APPL_DOCVIEW
-##((@QUERY_APPL_MODEL == VALUE_SDI) || (@QUERY_APPL_MODEL == VALUE_DIALOG))
+## ((@QUERY_APPL_MODEL == VALUE_SDI) || (@QUERY_APPL_MODEL == VALUE_DIALOG))
 ##:     {hsdi.owl}
 ##*
 ##@QUERY_APPL_MODEL == VALUE_MDI
@@ -43,7 +43,7 @@
 '
 <<[CPP]TApplication [[TApplication]]
 ##--BEGIN-- @OPT_APPL_DOCVIEW
-##((@QUERY_APPL_MODEL == VALUE_SDI) || (@QUERY_APPL_MODEL == VALUE_DIALOG))
+## ((@QUERY_APPL_MODEL == VALUE_SDI) || (@QUERY_APPL_MODEL == VALUE_DIALOG))
 ##:     {csdidocv.owl}
 ##*
 ##@QUERY_APPL_MODEL == VALUE_MDI
@@ -51,7 +51,7 @@
 ##*
 ##--END-- @OPT_APPL_DOCVIEW
 ##--BEGIN-- !@OPT_APPL_DOCVIEW
-##((@QUERY_APPL_MODEL == VALUE_SDI) || (@QUERY_APPL_MODEL == VALUE_DIALOG))
+## ((@QUERY_APPL_MODEL == VALUE_SDI) || (@QUERY_APPL_MODEL == VALUE_DIALOG))
 ##:     {csdi.owl}
 ##*
 ##@QUERY_APPL_MODEL == VALUE_MDI
@@ -62,46 +62,48 @@
 
 
 '
-' Resource header file.  (.RH)
+' Resource header file. (.RH)
 '
 <<[RH]TApplication [[TApplication]]
-##QUERY_FILENAME_CPP [[Filename]]  2
-//#if !defined(__[[Filename]]_rh)                // Sentry use file only if it's not already included.
-//#define __[[Filename]]_rh
-
+//----------------------------------------------------------------------------
 ##@QUERY_PRJ_NAME [[Project]]
-/*  Project [[Project]]
+//  Project [[Project]]
 ##@QUERY_PRJ_COMPANY [[CompanyName]] 2
 ##@QUERY_PRJ_COPYRIGHT [[Copyright]] 2
 ##\\Copyright Copyright 2
-    [[CompanyName]]
-    [[Copyright]]
-
+//  [[CompanyName]]
+//  [[Copyright]]
+//
 ##@QUERY_TARGET_NAME [[Target]]
-    SUBSYSTEM:    [[Target]] Application
+//  SUBSYSTEM:    [[Target]] Application
 ##QUERY_FILE_H [[Filename]]
-    FILE:         [[Filename]]
+//  FILE:         [[Filename]]
 ##@QUERY_PRJ_USER [[Author]]
-    AUTHOR:       [[Author]]
-
-
-    OVERVIEW
-    ========
+//  AUTHOR:       [[Author]]
+//
+//  OVERVIEW
+//  ~~~~~~~~
 ##QUERY_FILENAME_CPP [[Filename]]
-    Constant definitions for all resources defined in [[Filename]].rc.      
-*/
+//  Constant definitions for all resources defined in [[Filename]].rc.
+//
+//----------------------------------------------------------------------------
+##QUERY_FILENAME_CPP [[CPPFileName]]
+##--BEGIN-- StripDiacritic(CPPFileName) [[Filename]]
+//#if !defined([[Filename]]_rh)   // Sentry use file only if it's not already included.
+//#define [[Filename]]_rh
+##--END-- StripDiacritic(CPPFileName) [[Filename]]
 
 
+##@QUERY_APPL_CONTROL == VALUE_BWCC 5
 //
 // IDHELP BorButton for BWCC dialogs.
 //
-#define IDHELP                  998             // Id of help button
-
+#define IDHELP                  9               // Id of help button
 
 //
 // Application specific definitions:
 //
-##((@QUERY_APPL_MODEL == VALUE_SDI) || (@QUERY_APPL_MODEL == VALUE_DIALOG))
+## ((@QUERY_APPL_MODEL == VALUE_SDI) || (@QUERY_APPL_MODEL == VALUE_DIALOG))
 #define IDI_SDIAPPLICATION      1001            // Application icon
 ##@QUERY_APPL_MODEL == VALUE_MDI
 #define IDI_MDIAPPLICATION      1001            // Application icon
@@ -109,19 +111,19 @@
 #define IDI_DOC                 1002            // MDI child window icon
 
 ##@QUERY_APPL_MODEL == VALUE_MDI
-#define MDI_MENU                100             // Menu resource ID and Accelerator IDs
-##((@QUERY_APPL_MODEL == VALUE_SDI) || (@QUERY_APPL_MODEL == VALUE_DIALOG))
-#define SDI_MENU                100             // Menu resource ID and Accelerator IDs
+#define IDM_MDI                 100             // Menu resource ID and Accelerator IDs
+## ((@QUERY_APPL_MODEL == VALUE_SDI) || (@QUERY_APPL_MODEL == VALUE_DIALOG))
+#define IDM_SDI                 100             // Menu resource ID and Accelerator IDs
 
 ##--BEGIN-- @OPT_APPL_DOCVIEW
 #define IDM_DOCMANAGERFILE      32401           // Menu for DocManager merging.
-#define IDM_EDITVIEW   		    32581           // Menu for TEditView merging.
+#define IDM_EDITVIEW            32581           // Menu for TEditView merging.
 #define IDM_LISTVIEW            32582           // Menu for TListView merging.
 
 ##--END-- @OPT_APPL_DOCVIEW
 ##--BEGIN-- @QUERY_APPL_OLE != VALUE_NOOLE
 //
-// OleView merged menus (include\owl\oleview.rh)
+// OleView merged menus (include/owl/oleview.rh)
 //
 #define IDM_OLEPOPUP            32405
 #define IDM_OLEVIEW             32406
@@ -130,9 +132,9 @@
 
 ##--END-- @QUERY_APPL_OLE != VALUE_NOOLE
 //
-// CM_FILEnnnn commands (include\owl\editfile.rh except for CM_FILEPRINTPREVIEW)
+// CM_FILEnnnn commands (include/owl/editfile.rh except for CM_FILEPRINTPREVIEW)
 //
-##((@QUERY_APPL_MODEL == VALUE_SDI) || (@QUERY_APPL_MODEL == VALUE_DIALOG)) 2
+## ((@QUERY_APPL_MODEL == VALUE_SDI) || (@QUERY_APPL_MODEL == VALUE_DIALOG)) 2
 #define CM_FILENEW              24331           // SDI New
 #define CM_FILEOPEN             24332           // SDI Open
 ##@QUERY_APPL_MODEL == VALUE_MDI 2
@@ -148,16 +150,18 @@
 #define CM_FILEPRINT            24337
 #define CM_FILEPRINTERSETUP     24338
 #define CM_FILEPRINTPREVIEW     24340
+##@OPT_APPL_MAIL && @OPT_APPL_DOCVIEW
+#define CM_FILESEND             24345
 
 
 //
-// Window commands (include\owl\window.rh)
+// Window commands (include/owl/window.rh)
 //
 #define CM_EXIT                 24310
 
 
 //
-// CM_EDITnnnn commands (include\owl\window.rh)
+// CM_EDITnnnn commands (include/owl/window.rh)
 //
 #define CM_EDITUNDO             24321
 #define CM_EDITCUT              24322
@@ -169,9 +173,10 @@
 #define CM_EDITEDIT             24328
 ##--BEGIN-- @QUERY_APPL_OLE != VALUE_NOOLE
 #define CM_EDITPASTESPECIAL     24311
-#define CM_EDITPASTELINK     	24312
+#define CM_EDITPASTELINK        24312
 #define CM_EDITINSERTOBJECT     24313
 #define CM_EDITLINKS            24314
+#define CM_EDITINSERTCONTROL    24315
 
 #define CM_EDITOBJECT           24370
 #define CM_EDITFIRSTVERB        24371       // 20 verbs at most
@@ -183,7 +188,7 @@
 
 
 //
-// Search menu commands (include\owl\editsear.rh)
+// Search menu commands (include/owl/editsear.rh)
 //
 #define CM_EDITFIND             24351
 #define CM_EDITREPLACE          24352
@@ -192,7 +197,7 @@
 
 
 //
-// Windows menu commands (include\owl\mdi.rh)
+// Windows menu commands (include/owl/mdi.rh)
 //
 #define CM_CASCADECHILDREN      24361
 #define CM_TILECHILDREN         24362
@@ -214,7 +219,9 @@
 
 
 ##--BEGIN-- @OPT_APPL_HELP
+//
 // Context sensitive help cursor.
+//
 #define IDC_HELPCURSOR          24000
 
 
@@ -245,25 +252,30 @@
 // OWL defined strings
 //
 
+//
 // Statusbar
+//
 #define IDS_MODES               32530
 #define IDS_MODESOFF            32531
 
-
+//
 // EditFile
+//
 ##!@OPT_APPL_DOCVIEW
 #define IDS_UNTITLED            32550
 #define IDS_UNABLEREAD          32551
 #define IDS_UNABLEWRITE         32552
 #define IDS_FILECHANGED         32553
 #define IDS_FILEFILTER          32554
-                                
-// EditSearch                   
+
+//
+// EditSearch
+//
 #define IDS_CANNOTFIND          32540
 
 
 //
-// General & application exception messages (include\owl\except.rh)
+// General & application exception messages (include/owl/except.rh)
 //
 #define IDS_UNKNOWNEXCEPTION    32767
 #define IDS_OWLEXCEPTION        32766
@@ -279,9 +291,9 @@
 //
 // Owl 1 compatibility messages
 //
-#define IDS_INVALIDWINDOW       32756
-#define IDS_INVALIDCHILDWINDOW  32755
-#define IDS_INVALIDCLIENTWINDOW 32754
+#define IDS_INVALIDWINDOW       32709
+#define IDS_INVALIDCHILDWINDOW  32708
+#define IDS_INVALIDCLIENTWINDOW 32707
 
 //
 // TXWindow messages
@@ -313,11 +325,14 @@
 ##--BEGIN-- @OPT_APPL_DOCVIEW
 
 
-// ListView (include\owl\listview.rh)
+//
+// ListView (include/owl/listview.rh)
+//
 #define IDS_LISTNUM             32584
 
 
-// DocView (include\owl\docview.rh)
+// DocView (include/owl/docview.rh)
+//
 #define IDS_DOCMANAGERFILE      32500
 #define IDS_DOCLIST             32501
 #define IDS_VIEWLIST            32502
@@ -338,6 +353,7 @@
 #define IDS_EXITSERVER          32603
 
 // Text for clipboard format names
+//
 #define IDS_CFTEXT              32610
 #define IDS_CFBITMAP            32611
 #define IDS_CFMETAFILE          32612
@@ -353,14 +369,14 @@
 #define IDS_CFUNICODETEXT       32622
 #define IDS_CFENHMETAFILE       32623
 
-#define IDS_IN      			32700
+#define IDS_IN                  32700
 ##--END-- @QUERY_APPL_OLE != VALUE_NOOLE
 ##--END-- @OPT_APPL_DOCVIEW
 ##--BEGIN-- @OPT_APPL_PRINTING
 
 
 //
-// Printing error message string resource IDs (include\owl\printer.rh)
+// Printing error message string resource IDs (include/owl/printer.rh)
 //
 #define IDS_PRNON               32590
 #define IDS_PRNERRORTEMPLATE    32591
@@ -394,26 +410,34 @@
 ##--END-- @OPT_APPL_PRINTING
 
 
-// TInputDialog DIALOG resource (include\owl\inputdia.rh)
+//
+// TInputDialog DIALOG resource (include/owl/inputdia.rh)
+//
 #define IDD_INPUTDIALOG         32514
 #define ID_PROMPT               4091
 #define ID_INPUT                4090
 
 
-// TSlider bitmaps (horizontal and vertical) (include\owl\slider.rh)
+//
+// TSlider bitmaps (horizontal and vertical) (include/owl/slider.rh)
+//
 #define IDB_HSLIDERTHUMB        32000
 #define IDB_VSLIDERTHUMB        32001
 
 
-// Validation messages (include\owl\validate.rh)
+//
+// Validation messages (include/owl/validate.rh)
+//
 #define IDS_VALPXPCONFORM       32520
 #define IDS_VALINVALIDCHAR      32521
 #define IDS_VALNOTINRANGE       32522
 #define IDS_VALNOTINLIST        32523
 
 
-##QUERY_FILENAME_CPP [[Filename]]
-//#endif         // __[[Filename]]_rh sentry.
+##QUERY_FILENAME_CPP [[CPPFileName]]
+##--BEGIN-- StripDiacritic(CPPFileName) [[Filename]]
+//#endif  // [[Filename]]_rh
+##--END-- StripDiacritic(CPPFileName) [[Filename]]
 >>[RH]TApplication [[TApplication]]
 
 
@@ -421,7 +445,7 @@
 ' DEF file
 '
 <<[DEF]TApplication [[TApplication]]
-;------------------------------------------------
+;-----------------------------------------------------------------------------
 ##@QUERY_PRJ_NAME [[Project]]
 ;   Project [[Project]]
 ##@QUERY_PRJ_COMPANY [[CompanyName]] 2
@@ -431,16 +455,16 @@
 ;   [[Copyright]]
 ;
 ##@QUERY_TARGET_NAME [[Target]]
-;   SUBSYSTEM:    [[Target]] Module Defintion File
+;   SUBSYSTEM:    [[Target]] Module Definition File
 ##QUERY_FILENAME_CPP [[Filename]]
 ;   FILE:         [[Filename]].def
 ##@QUERY_PRJ_USER [[Author]]
 ;   AUTHOR:       [[Author]]
 ;
-;------------------------------------------------
+;-----------------------------------------------------------------------------
 
 ##@QUERY_PRJ_NAME [[Project]]
-NAME [[Project]]
+NAME '[[Project]]'
 
 ##@QUERY_PRJ_NAME [[Project]]
 ##@QUERY_PRJ_COMPANY [[CompanyName]]
@@ -450,8 +474,16 @@ DESCRIPTION '[[Project]] Application - [[Copyright]]'
 EXETYPE     WINDOWS
 CODE        PRELOAD MOVEABLE DISCARDABLE
 DATA        PRELOAD MOVEABLE
-HEAPSIZE    4096
-STACKSIZE   8192
+
+; Note: When compiling an application as a 32-bit target, the linker
+;       will generate a warning with the settings below.  If you intend
+;       to build your application as a 32-bit target only, you can
+;       safely delete the STACKSIZE setting to get rid of this warning.
+;
+;       The STACKSIZE of 16384 is recommended for 16-bit AppExpert
+;       applications using the large memory model.
+;
+STACKSIZE    16384
 >>[DEF]TApplication [[TApplication]]
 
 
@@ -469,7 +501,7 @@ WARNING=2
 
 [FILES]
 mainhelp.rtf      ; main topics
-##(((@QUERY_APPL_MODEL == VALUE_DIALOG) && @QUERY_APPL_DLGCLIENT_MENU) || (@QUERY_APPL_MODEL != VALUE_DIALOG))
+## (((@QUERY_APPL_MODEL == VALUE_DIALOG) && @QUERY_APPL_DLGCLIENT_MENU) || (@QUERY_APPL_MODEL != VALUE_DIALOG))
 ##@OPT_APPL_TOOLBAR
 toolbar.rtf       ; toolbar topics
 keys.rtf          ; keyboard topics
@@ -494,7 +526,7 @@ helpicon.bmp
 
 
 '
-' Additional files must be created (.BMP, .ICO, .CUR)
+' Additional files must be created(.BMP, .ICO, .CUR)
 <<[FILES]TApplication [[TApplication]]
 ##--BEGIN-- @OPT_APPL_PRINTING
 @ "apxprint.cpp" > *[CPP]
@@ -509,7 +541,7 @@ helpicon.bmp
 ##--END-- @OPT_APPL_PRINTING
 ##@QUERY_APPL_CONTROL == VALUE_BWCC
 COPY "borabout.bmp" [RC]
-##(((@QUERY_APPL_MODEL == VALUE_DIALOG) && @QUERY_APPL_DLGCLIENT_MENU) || (@QUERY_APPL_MODEL != VALUE_DIALOG))
+## (((@QUERY_APPL_MODEL == VALUE_DIALOG) && @QUERY_APPL_DLGCLIENT_MENU) || (@QUERY_APPL_MODEL != VALUE_DIALOG))
 ##--BEGIN-- @OPT_APPL_TOOLBAR
 COPY "new.bmp" [RC]
 COPY "open.bmp" [RC]
@@ -517,7 +549,7 @@ COPY "save.bmp" [RC]
 COPY "undo.bmp" [RC]
 COPY "cut.bmp" [RC]
 COPY "copy.bmp" [RC]
-COPY "paste.bmp" [RC] 
+COPY "paste.bmp" [RC]
 COPY "find.bmp" [RC]
 COPY "findnext.bmp" [RC]
 ##@OPT_APPL_PRINTING
@@ -530,8 +562,8 @@ COPY "preview1.bmp" [RC]
 COPY "preview2.bmp" [RC]
 COPY "prexit.bmp" [RC]
 ##--END-- @OPT_APPL_PRINTING
-##(((@QUERY_APPL_MODEL == VALUE_DIALOG) && @QUERY_APPL_DLGCLIENT_MENU) || (@QUERY_APPL_MODEL != VALUE_DIALOG))
-##(@OPT_APPL_TOOLBAR || @OPT_APPL_PRINTING)
+## (((@QUERY_APPL_MODEL == VALUE_DIALOG) && @QUERY_APPL_DLGCLIENT_MENU) || (@QUERY_APPL_MODEL != VALUE_DIALOG))
+## (@OPT_APPL_TOOLBAR || @OPT_APPL_PRINTING)
 COPY "print.bmp" [RC]
 ##--BEGIN-- @OPT_APPL_HELP
 COPY "help.bmp" [RC]
@@ -545,7 +577,7 @@ COPY "helpicon.bmp" [RC]
 @ "mainhelp.rtf" > [RC]
 ##:     AddToProject(\\"[[CPPDir]]mainhelp.rtf", \\"[[CPPDir]][[Target]].hpj")
 ##*
-##(((@QUERY_APPL_MODEL == VALUE_DIALOG) && @QUERY_APPL_DLGCLIENT_MENU) || (@QUERY_APPL_MODEL != VALUE_DIALOG))
+## (((@QUERY_APPL_MODEL == VALUE_DIALOG) && @QUERY_APPL_DLGCLIENT_MENU) || (@QUERY_APPL_MODEL != VALUE_DIALOG))
 ##@OPT_APPL_TOOLBAR 2
 @ "toolbar.rtf" > [RC]
 ##:     AddToProject(\\"[[CPPDir]]toolbar.rtf", \\"[[CPPDir]][[Target]].hpj")
@@ -561,4 +593,6 @@ COPY "[[Icon]]" [RC]
 ##@QUERY_APPL_MODEL == VALUE_MDI
 ##:     <<TMDIChild QUERY_WIND_ICON [[Icon]]
 COPY "[[Icon]]" [RC]
+COPY "hslider.bmp" [RC]
+COPY "vslider.bmp" [RC]
 >>[FILES]TApplication [[TApplication]]

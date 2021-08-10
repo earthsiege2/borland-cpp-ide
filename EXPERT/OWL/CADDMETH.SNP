@@ -9,11 +9,11 @@
 ##*
 ##--END-- ? ClassMarker [[Search]]
 ##^BOL
-##(OLEType == CPPType) && (OLEType != "TAutoCurrency") && (OLEType != "TAutoDate")
+## (OLEType == CPPType) && (OLEType != "TAutoCurrency") && (OLEType != "TAutoDate")
 ##      :StripPtrRef(OLEType, [[StripType]]) [[AnyStripping]]
 ##      :StripType OLEType
 ##*
-    EXPOSE_METHOD([[InternalName]], [[OLEType]], "[[InternalName]]", "[[Description]]", 0)
+  EXPOSE_METHOD([[InternalName]], [[OLEType]], "[[InternalName]]", "[[Description]]", 0)
 ##"" [[OLEArg]]
 ##"" [[ParamName]]
 ##"" [[CPPArg]]
@@ -28,7 +28,7 @@
 ##                  :StripPtrRef(OLEArg, [[StripArg]]) [[AnyStripping]]
 ##                  :StripArg OLEArg
 ##*
-        REQUIRED_ARG([[OLEArg]], "[[ParamName]]")
+    REQUIRED_ARG([[OLEArg]], "[[ParamName]]")
 ##          --Next-- Index
 ##      --END-- AutoCount() [[Count]]
 ##--END-- AutoParse([[CPPArguments]], [[OLEArguments]])
@@ -44,9 +44,9 @@
 ##          --BEGIN-- TRUE
 
 
-[[CPPType]] [[ClassName]]::[[InternalName]] [[CPPArguments]]
+[[CPPType]] [[ClassName]]::[[InternalName]][[CPPArguments]]
 {
-    // INSERT>> Your code here.
+  // INSERT>> Your code here.
 
 }
 ##          --END-- TRUE

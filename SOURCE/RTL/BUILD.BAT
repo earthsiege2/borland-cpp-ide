@@ -23,6 +23,10 @@ REM ######################################################################
 if not exist obj\dpmi16\nul md obj\dpmi16
 if not exist obj\dpmi32\nul md obj\dpmi32
 
+REM ######################################################################
+REM # Set enironment flag to denote a build of the RTL SOURCE
+REM ######################################################################
+set RTLSOURCE=1
 
 REM ######################################################################
 REM # Ensure log file creation.
@@ -51,7 +55,7 @@ goto win16
 :bdos
 echo Building DOS RTLs
 if not exist obj\dos\t\nul md obj\dos\t
-make OS=DOS MODEL=t all >> %LOGFILE% 
+make OS=DOS MODEL=t all >> %LOGFILE%
 if errorlevel 1 goto builderr
 make OS=DOS MODEL=s all >> %LOGFILE% 
 if errorlevel 1 goto builderr
@@ -82,7 +86,7 @@ make OS=WIN16 MODEL=m all >> %LOGFILE%
 if errorlevel 1 goto builderr
 make OS=WIN16 MODEL=c all >> %LOGFILE% 
 if errorlevel 1 goto builderr
-make OS=WIN16 MODEL=l all >> %LOGFILE% 
+make OS=WIN16 MODEL=l all >> %LOGFILE%
 if errorlevel 1 goto builderr
 
 echo Building Windows DLL 
@@ -116,13 +120,13 @@ goto dpmi32
 echo Building Win32 libraries 
 make OS=WIN32 all >> %LOGFILE%
 if errorlevel 1 goto builderr
-echo Building Multi-thread Win32 libraries 
+echo Building Multi-thread Win32 libraries
 make OS=WIN32 -DMT all >> %LOGFILE%
 if errorlevel 1 goto builderr
-echo Building Win32 DLL 
+echo Building Win32 DLL
 make OS=WIN32 -DDLL all >> %LOGFILE%
 if errorlevel 1 goto builderr
-echo Building Multi-thread Win32 DLL 
+echo Building Multi-thread Win32 DLL
 make OS=WIN32 -DMT -DDLL all >> %LOGFILE%
 if errorlevel 1 goto builderr
 
@@ -136,7 +140,7 @@ if [%1] == [dpmi32] goto bdpmi32
 goto exit
 
 :bdpmi32
-echo Building DPMI32 libraries 
+echo Building DPMI32 libraries
 make OS=DPMI32 all >> %LOGFILE%
 if errorlevel 1 goto builderr
 goto exit
@@ -171,3 +175,4 @@ REM # Cleanup and exit.
 REM ######################################################################
 :exit
 set LOGFILE=
+set RTLSOURCE=

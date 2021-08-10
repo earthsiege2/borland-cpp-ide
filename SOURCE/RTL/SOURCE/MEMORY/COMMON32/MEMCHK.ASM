@@ -3,7 +3,7 @@
 ;[]-----------------------------------------------------------------[]
 
 ;
-;       C/C++ Run Time Library - Version 1.5
+;       C/C++ Run Time Library - Version 2.0
 ; 
 ;       Copyright (c) 1999 by Borland International
 ;       All Rights Reserved.

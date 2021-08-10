@@ -1,30 +1,32 @@
 #############################################################################
 # Configure the tools appropriately.                                        #
 #############################################################################
-AFLAGS   = -D__$(MODEL)__ -D_Windows -D_WINDOWS -o -m -mx -q -t -I$(BC45INCL) -I$(INCLBASE)\RTLINC\common16
-ASM      = tasm
+AFLAGS   = -D__$(MODEL)__ -D_Windows -D_WINDOWS -o -m -mx -q -t -I$(BCINCL) -I$(INCLBASE)\RTLINC\common16
+ASM      = tasmx
 BRCC     = brcc
 CC       = bcc $(CCPFX) +$(OBJDIR)\$(CFG) $(CCSFX)
 CFLAGS   = -a- -c -D_WINDOWS -w -w-asm -xc -X -zC_TEXT -zR_DATA -n$(OBJDIR) -I$(INCLUDES) -m$(MODEL)
-IMPLIB   = implib -i -c -o
-INCLUDES = $(BC45INCL);$(INCLBASE)\rtlinc\common16
-LINK     = tlink -s -c -Twd # -Oc -Oi -Oa -Or
+IMPLIB   = implib -i -o
+INCLUDES = $(BCINCL);$(INCLBASE)\rtlinc\common16
+LINK     = tlink -s -Twd # -Oc -Oi -Oa -Or
+PUBTOOL  = pubdup.exe
+PUBNAME  = names16.pub
 
 !if $d(DEBUG)
-    TLIB = tlib /C /P128 /E
+    TLIB = tlib /C /P128
 !else
-    TLIB = tlib /C /0 /E
+    TLIB = tlib /C /0
 !endif
 
 !if $d(DLL)
     AFLAGS     = $(AFLAGS) -D_BUILDRTLDLL
-    CFLAGS     = $(CFLAGS) -D_RTLDLL -D_BUILDRTLDLL -WDE
+    CFLAGS     = $(CFLAGS) -D_RTLDLL -D_BUILDRTLDLL -WDE -D_RWSTDBUILDDLL -D_RWSTDDLL
     DLLC0      = c0rtldll
     DLLDEF     = bcrtl
     DLLNAME    = bc$(DLLVER)rtl
-    DLLVER     = 450
+    DLLVER     = 500
     LIBNAME    = cwd
-    LINK       = $(LINK) -C
+    LINK       = $(LINK)
     IMPLIBNAME = crtldll
     IMPORT     = import
     OBJDIR     = $(OBJBASE)\d

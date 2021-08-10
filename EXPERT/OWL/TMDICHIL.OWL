@@ -1,30 +1,26 @@
-'////////////////////////////////////////////////////////////////////////////////////   
-'   Expert PROJECT
-'   Expert - (C) Copyright 1993, 1994 by Borland International, Inc. All Rights Reserved.
+'------------------------------------------------------------------------------
+'   Expert - (C) Copyright 1993, 1995 by Borland International, Inc.
+'                All Rights Reserved.
 '
 '   SUBSYSTEM:    OWL code template
 '   FILE:         TMDIChild.OWL
 '
 '
 '   OVERVIEW
-'   ========
-'////////////////////////////////////////////////////////////////////////////////////   
-
+'   ~~~~~~~~
+'------------------------------------------------------------------------------
 
 <<[H]TMDIChild [[TMDIChild]]
 ##{hheader.snp}
-#include <owl\owlpch.h>
-#pragma hdrstop
-
 ##<<TApplication QUERY_FILENAME_CPP [[Filename]]
 #include "[[Filename]].rh"            // Definition of all resources.
 
 
 //{{TMDIChild = [[TMDIChild]]}}
 class [[TMDIChild]] : public TMDIChild {
-public:
-    [[TMDIChild]] (TMDIClient &parent, const char far *title, TWindow *clientWnd, bool shrinkToClient = false, TModule* module = 0);
-    virtual ~[[TMDIChild]] ();
+  public:
+    [[TMDIChild]](TMDIClient& parent, const char far* title, TWindow* clientWnd, bool shrinkToClient = false, TModule* module = 0);
+    virtual ~[[TMDIChild]]();
 };    //{{[[TMDIChild]]}}
 ##{hfooter.snp}
 >>[H]TMDIChild [[TMDIChild]]
@@ -35,8 +31,7 @@ public:
 '
 <<[CPP]TMDIChild [[TMDIChild]]
 ##{cheader.snp}
-#include <owl\owlpch.h>
-#pragma hdrstop
+#include <owl/pch.h>
 
 ##<<TApplication QUERY_FILE_H [[FileName]]
 #include "[[FileName]]"
@@ -58,12 +53,14 @@ public:
 
 
 ##--BEGIN-- @QUERY_APPL_COMMENT == VALUE_VERBOSE
-//////////////////////////////////////////////////////////
+//--------------------------------------------------------
 // [[TMDIChild]]
-// ==========
+// ~~~~~~~~~~
 // Construction/Destruction handling.
+//
 ##--END-- @QUERY_APPL_COMMENT == VALUE_VERBOSE
-[[TMDIChild]]::[[TMDIChild]] (TMDIClient &parent, const char far *title, TWindow *clientWnd, bool shrinkToClient, TModule *module)
+[[TMDIChild]]::[[TMDIChild]](TMDIClient& parent, const char far* title, TWindow* clientWnd, bool shrinkToClient, TModule* module)
+:
 ##--BEGIN-- !@OPT_APPL_DOCVIEW
 ##"" [[BaseClient]]
 ##"" [[ClientClass]]
@@ -71,36 +68,32 @@ public:
 ##: <<*ClientClass QUERY_BASE_NAME [[BaseClient]]
 ##--BEGIN-- TRUE
 ##BaseClient == "TEditFile"
-    : TMDIChild (parent, title, clientWnd == 0 ? new [[ClientClass]](0, 0, 0) : clientWnd, shrinkToClient, module)
+  TMDIChild(parent, title, !clientWnd ? new [[ClientClass]](0, 0, 0) : clientWnd, shrinkToClient, module)
 ##BaseClient == "TListBox"
-    : TMDIChild (parent, title, clientWnd == 0 ? new [[ClientClass]](0, 0, 0, 0, 100, 100) : clientWnd, shrinkToClient, module)
+  TMDIChild(parent, title, !clientWnd ? new [[ClientClass]](0, 0, 0, 0, 100, 100) : clientWnd, shrinkToClient, module)
 ##BaseClient == "TWindow"
-    : TMDIChild (parent, title, clientWnd == 0 ? new [[ClientClass]](0, "") : clientWnd, shrinkToClient, module)
+  TMDIChild(parent, title, !clientWnd ? new [[ClientClass]](0, "") : clientWnd, shrinkToClient, module)
 ##--END-- TRUE
 ##--END-- !@OPT_APPL_DOCVIEW
 ##@OPT_APPL_DOCVIEW
-    : TMDIChild (parent, title, clientWnd, shrinkToClient, module)
+  TMDIChild(parent, title, clientWnd, shrinkToClient, module)
 {
 ##QUERY_WIND_STYLE [[StyleAttributes]]
 ##StyleAttributes != "" 3
-    // Override the default window style for TMDIChild.
-[[StyleAttributes]]
+  // Override the default window style for TMDIChild.
+  [[StyleAttributes]]
 
-##QUERY_WIND_BACKGRND [[BackgroundColor]]
-##BackgroundColor != "" 3
-    // Change the window's background color
-    SetBkgndColor([[BackgroundColor]]);
-
-    // INSERT>> Your constructor code here.
+##{wndbkgd.snp}
+  // INSERT>> Your constructor code here.
 
 }
 
 
-[[TMDIChild]]::~[[TMDIChild]] ()
+[[TMDIChild]]::~[[TMDIChild]]()
 {
-    Destroy();
+  Destroy();
 
-    // INSERT>> Your destructor code here.
+  // INSERT>> Your destructor code here.
 
 }
 >>[CPP]TMDIChild [[TMDIChild]]

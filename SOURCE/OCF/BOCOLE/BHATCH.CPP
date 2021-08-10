@@ -1,37 +1,30 @@
+//----------------------------------------------------------------------------
+// ObjectComponents
+// Copyright (c) 1994, 1996 by Borland International, All Rights Reserved
 //
-//**************************************************************************
+// $Revision:   2.6  $
 //
-// Bhatch.cpp - An implementation of the hatched border around inplace
-//              active windows.
+// An implementation of the hatched border around inplace active windows.
 //
-// Modifications to OLE2UI version:
-//              - C++ version
-//              - removed restriction that parent must be non-null in CreateHatchWindow
-//              - changed window from a child to a popup to allow null parent
-//              - "extra bytes" removed in favor of member data
-//              - added Paint() and InitWidth() to unclutter wnd proc
-//              - added hit testing and correct cursors for handles
-//              - added resizing for handles
-//              - added NegotiateSize() to mediate inplace size negotiations between
-//                the container and the server
-//
-// Copyright (c) 1993,94 by Borland International, Inc. All rights reserved
-//
-//**************************************************************************
-
+//  Modifications to OLE2UI version:
+//    - C++ version
+//    - removed restriction that parent must be non-null in CreateHatchWindow
+//    - changed window from a child to a popup to allow null parent
+//    - "extra bytes" removed in favor of member data
+//    - added Paint() and InitWidth() to unclutter wnd proc
+//    - added hit testing and correct cursors for handles
+//    - added resizing for handles
+//    - added NegotiateSize() to mediate inplace size negotiations between
+//      the container and the server
+//----------------------------------------------------------------------------
 #include "BOle.h"
 
-// #define STRICT  1
 #define STRICT
 #include "OLE2UI.h"
 #include "BHatch.h"
 
 // class name of hatch window
-#ifdef ANSI
-  #define CLASS_HATCH "BOle Hatch Window"
-#else
-  #define CLASS_HATCH OLESTR("BOle Hatch Window")
-#endif
+  #define CLASS_HATCH TEXT("BOle Hatch Window")
 
 // local function prototypes
 LRESULT FAR PASCAL EXPORT BOleHatchWndProc (HWND, UINT, WPARAM, LPARAM);
@@ -51,23 +44,10 @@ void SetRectExt (LPRECT r, UINT x, UINT y, UINT extent)
 BOleHatchWindow::BOleHatchWindow(HWND hWndParent, HINSTANCE hInst, BOleSite *p)
 {
   pBack = p; // assign BOleSite
-#ifdef ANSI
-  hWndHatch = ::CreateWindowExA(
-    0,
-    CLASS_HATCH,    // Class name
-    "Hatch Window", // Window name
-    WS_CHILDWINDOW | WS_CLIPCHILDREN | WS_CLIPSIBLINGS,
-    0, 0, 0, 0,
-    GetDesktopWindow(),
-    (HMENU)NULL,
-    hInst,
-    this
-  );
-#else
   hWndHatch = ::CreateWindowEx(
     0,
     CLASS_HATCH,    // Class name
-    OLESTR("Hatch Window"), // Window name
+    TEXT ("Hatch Window"), // Window name
     WS_CHILDWINDOW | WS_CLIPCHILDREN | WS_CLIPSIBLINGS,
     0, 0, 0, 0,
     GetDesktopWindow(),
@@ -75,13 +55,13 @@ BOleHatchWindow::BOleHatchWindow(HWND hWndParent, HINSTANCE hInst, BOleSite *p)
     hInst,
     this
   );
-#endif
 
   hatchRect.left = hatchRect.top = hatchRect.bottom = hatchRect.right = 0;
   MoveRect.left = MoveRect.top = MoveRect.bottom = MoveRect.right = 0;
   nClippedFlag = 0;
   pSite = NULL;
   fInMouseDown = FALSE;
+  GrayFrame = NULL;
 }
 
 //***************************************************************************
@@ -113,11 +93,7 @@ BOleHatchWindow::~BOleHatchWindow ()
 //***************************************************************************
 BOOL BOleHatchWindow::Register (HINSTANCE hInst)
 {
-#ifdef ANSI
-  WNDCLASSA wc;
-#else
   WNDCLASS wc;
-#endif
 
   // Register Hatch Window Class
   wc.style = CS_BYTEALIGNWINDOW;
@@ -131,11 +107,7 @@ BOOL BOleHatchWindow::Register (HINSTANCE hInst)
   wc.lpszMenuName = NULL;
   wc.lpszClassName = CLASS_HATCH;
 
-#ifdef ANSI
-  if (!::RegisterClassA(&wc))
-#else
   if (!::RegisterClass(&wc))
-#endif
     return FALSE;
   else
     return TRUE;
@@ -150,13 +122,8 @@ BOOL BOleHatchWindow::Register (HINSTANCE hInst)
 //***************************************************************************
 void BOleHatchWindow::InitWidth ()
 {
-#ifdef ANSI
-  hatchWidth = GetProfileIntA("windows", "oleinplaceborderwidth",
-			      DEFAULT_HATCHBORDER_WIDTH);
-#else
-  hatchWidth = GetProfileInt(OLESTR("windows"), OLESTR("oleinplaceborderwidth"),
+  hatchWidth = GetProfileInt (TEXT ("windows"), TEXT ("oleinplaceborderwidth"),
 			     DEFAULT_HATCHBORDER_WIDTH);
-#endif
 }
 
 //***************************************************************************
@@ -200,11 +167,7 @@ UINT BOleHatchWindow::GetWidth ()
 //                      LRESULT                         0L to continue creation process
 //
 //****************************************************************
-#ifdef ANSI
-LRESULT BOleHatchWindow::wmCreate (LPCREATESTRUCTA)
-#else
 LRESULT BOleHatchWindow::wmCreate (LPCREATESTRUCT)
-#endif
 {
 	BOleHatchWindow::InitWidth ();
 	return 0L;
@@ -230,12 +193,10 @@ LRESULT BOleHatchWindow::wmPaint ()
 
 	hDC = ::BeginPaint(hWndHatch, &ps);
 	// get hatchRect to paint hatch border
-	rcHatchRect = hatchRect;
-	SetRect((LPRECT)&rcHatchRect,rcHatchRect.left, rcHatchRect.top,
-								rcHatchRect.right,
-									rcHatchRect.bottom);
-	OleUIDrawShading(&rcHatchRect, hDC, OLEUI_SHADE_BORDERIN,
-			hatchWidth);
+	//rcHatchRect = hatchRect;
+	::CopyRect (&rcHatchRect, &hatchRect);
+	OleUIDrawShading(&rcHatchRect, hDC, OLEUI_SHADE_BORDERIN, hatchWidth);
+
 	// get the real visible rect to draw handles
 	GetWindowRect(hWndHatch, (LPRECT)&rcHatchRect);
 	SetRect((LPRECT)&rcHatchRect,0, 0, rcHatchRect.right-rcHatchRect.left,
@@ -244,7 +205,6 @@ LRESULT BOleHatchWindow::wmPaint ()
 	OleUIDrawHandles (&rcHatchRect, hDC, OLEUI_HANDLES_OUTSIDE,
 		hatchWidth+1, TRUE);
 	::EndPaint (hWndHatch, &ps);
-
 	return 0L;
 }
 
@@ -387,30 +347,106 @@ UINT BOleHatchWindow::wmMouseActivate (HWND, UINT, UINT)
 //****************************************************************
 LRESULT BOleHatchWindow::wmNCLButtonDown (UINT nTestCode, LPPOINT lpPoint)
 {
+	RECT WinRect;
+	
+	GetWindowRect( hWndHatch, (LPRECT)&WinRect);
+
 	// first resize window if needed
 	if (nClippedFlag & CLIPPED) {
-		RECT WinRect;
-		// get the real (visible) window in client coordinates
-		GetWindowRect( hWndHatch, (LPRECT)&WinRect);
-		ScreenToClient( GetParent( hWndHatch), (LPPOINT)&WinRect);
-
 		// if clipped left or top hatchRect adjust top and/or left
 		if (nClippedFlag & CLIPPED_LEFT)
 			WinRect.left += hatchRect.left;
 		if (nClippedFlag & CLIPPED_TOP)
 			WinRect.top += hatchRect.top;
-		// move window
-		MoveWindow( hWndHatch, WinRect.left, WinRect.top,
-							hatchRect.right - hatchRect.left,
-							hatchRect.bottom - hatchRect.top,
-							FALSE);
+    
+    WinRect.right = WinRect.left + hatchRect.right - hatchRect.left;
+    WinRect.bottom = WinRect.top + hatchRect.bottom - hatchRect.top;
 	}
 
 	// set flag indicating the user is moving the window and initiating
 	// all space negotiation procedure
 	fInMouseDown=TRUE;
 
-	return ::DefWindowProc (hWndHatch, WM_NCLBUTTONDOWN, nTestCode, *((long *)lpPoint));
+	//\\//\\//\\/\\//\\/\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\
+	////\\//\\//\\/\\//\\/\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//
+	GrayFrame = new GrayGhostRect (WinRect, nTestCode);
+	GrayFrame->SetStartMove (*lpPoint);
+	SetCapture (hWndHatch);
+	GrayFrame->MoveFrame (*lpPoint, FALSE);
+
+	return 0L;
+	//return ::DefWindowProc (hWndHatch, WM_NCLBUTTONDOWN, nTestCode, *((long *)lpPoint));
+}
+
+//****************************************************************
+// Member function: wmMouseMove
+//
+// Purpose:
+// 	Move around the fake window rect in XOR with the screen
+//
+// Parameters:
+// 	UINT            hit test code as returned from WM_NCHITTEST
+//  LPOINT          cursor coordinates
+//
+// Return Value:
+//  LRESULT         0L
+//
+//****************************************************************
+LRESULT BOleHatchWindow::wmMouseMove (UINT nTestCode, LPPOINT lpPoint)
+{
+	if (fInMouseDown) {
+		// transform point in screen coordinates
+		ClientToScreen (hWndHatch, lpPoint);
+		GrayFrame->MoveFrame (*lpPoint, TRUE);
+
+		return 0L;
+	}
+	else {
+		DWORD lParam = MAKELONG((WORD)(lpPoint->x),(WORD)(lpPoint->y));
+		return ::DefWindowProc (hWndHatch, WM_MOUSEMOVE, nTestCode, lParam);
+	}
+
+}
+
+//****************************************************************
+// Member function: wmLButtonUp
+//
+// Parameters:
+//  UINT            hit test code as returned from WM_NCHITTEST
+//  LPOINT          cursor coordinates
+//
+// Return Value:
+//  LRESULT         0L
+//
+//****************************************************************
+LRESULT BOleHatchWindow::wmLButtonUp (UINT nTestCode, LPPOINT lpPoint)
+{
+	if (fInMouseDown) {
+		POINT TopLeft;
+		POINT WidthHeight;
+
+		ClientToScreen (hWndHatch, lpPoint);
+		GrayFrame->MoveFrame (*lpPoint, FALSE);
+
+		GrayFrame->UpperCorner (TopLeft);
+		GrayFrame->Size (WidthHeight);
+		ScreenToClient (GetParent (hWndHatch), (LPPOINT)&TopLeft);
+		// move the window now
+		MoveWindow (hWndHatch, TopLeft.x, TopLeft.y, WidthHeight.x, WidthHeight.y, TRUE);
+		InvalidateRect (hWndHatch, NULL, TRUE);
+
+		delete GrayFrame;
+
+		// release mouse
+		ReleaseCapture();
+    
+		return 0L;
+	}
+	else {
+		DWORD lParam = MAKELONG((WORD)(lpPoint->x),(WORD)(lpPoint->y));
+		return ::DefWindowProc (hWndHatch, WM_LBUTTONUP, nTestCode, lParam);
+	}
+
 }
 
 //****************************************************************
@@ -449,17 +485,6 @@ LRESULT BOleHatchWindow::wmGetMinMaxInfo (MINMAXINFO* pMMI)
 //****************************************************************
 LRESULT BOleHatchWindow::wmWindowPosChanging (LPWINDOWPOS pWP)
 {
-		  if (hWndHatch == GetCapture()) {
-				RECT TempRect;
-				fInMouseDown = TRUE;
-				::DefWindowProc (hWndHatch, WM_WINDOWPOSCHANGING, 0, (DWORD)(LPVOID)pWP);
-				::InvalidateRect(hWndHatch, NULL, FALSE);
-				::CopyRect((LPRECT)&TempRect, (LPRECT)&hatchRect);
-				::InflateRect((LPRECT)&TempRect, -hatchWidth, -hatchWidth);
-				::ValidateRect(hWndHatch, (LPRECT)&TempRect);
-				return 0L;
-		  }
-
 		  if (fInMouseDown) {
 					 int minWidth = (GetWidth() * 2) + 15;
 					 if (pWP->cx < minWidth) {
@@ -578,17 +603,17 @@ void BOleHatchWindow::SetSize(
 	else {
 		// this information will be used in the WM_WINDOWPOSCHANGING
 		// message to change WINDOWPOS structure values
-					 ::SetRect(&MoveRect, rcVisRect.left, rcVisRect.top,
-																rcVisRect.right-rcVisRect.left,
-																					 rcVisRect.bottom-rcVisRect.top);
-		  }
+	 	::SetRect(&MoveRect, rcVisRect.left, rcVisRect.top,
+													rcVisRect.right-rcVisRect.left,
+													rcVisRect.bottom-rcVisRect.top);
+  }
 
 
 	nClippedFlag = 0; // clear clipped flag
 	// store clipping information
-	if (!(::EqualRect(&rcVisRect,&rcHatchRect))) {
+	if (!(::EqualRect (&rcVisRect, &rcHatchRect))) {
 		nClippedFlag |= CLIPPED;
-		if (rcVisRect.left != rcHatchRect.left ) {
+		if (rcVisRect.left != rcHatchRect.left) {
 			nClippedFlag |= CLIPPED_LEFT;
 		}
 		if (rcVisRect.top != rcHatchRect.top) {
@@ -601,7 +626,8 @@ void BOleHatchWindow::SetSize(
 	ptOffset.x = - rcVisRect.left;
 	ptOffset.y = - rcVisRect.top;
 	::OffsetRect(&rcHatchRect, ptOffset.x, ptOffset.y);
-	hatchRect = rcHatchRect;
+  ::CopyRect (&hatchRect, &rcHatchRect);
+	//hatchRect = rcHatchRect;
 
 	// calculate offset required to position in-place
 	// server doc window (output value)
@@ -687,33 +713,22 @@ void BOleHatchWindow::NegotiateSize (WINDOWPOS *pwp)
 //***************************************************************************
 LRESULT FAR PASCAL EXPORT BOleHatchWndProc (HWND hWnd, UINT Message, WPARAM wParam, LPARAM lParam)
 {
-#ifdef ANSI
-  BOleHatchWindow *pHW  = (BOleHatchWindow*) ::GetWindowLongA(hWnd, 0);
-#else
   BOleHatchWindow *pHW  = (BOleHatchWindow*) ::GetWindowLong(hWnd, 0);
-#endif
+
   // if pHW is NULL, assign it if WM_NCCREATE otherwise
   // return DefWindowProc
   if (!pHW) {
     if (Message==WM_NCCREATE) {
-#ifdef ANSI
-      CREATESTRUCTA FAR* lpcs = (CREATESTRUCTA FAR*)lParam;
-      ::SetWindowLongA(hWnd, 0, (DWORD)(LPVOID)(lpcs->lpCreateParams));
-#else
+
       CREATESTRUCT FAR* lpcs = (CREATESTRUCT FAR*)lParam;
       ::SetWindowLong(hWnd, 0, (DWORD)(LPVOID)(lpcs->lpCreateParams));
-#endif
     }
     return ::DefWindowProc (hWnd, Message, wParam, lParam);
   }
 
   switch (Message) {
     case WM_CREATE:
-#ifdef ANSI
-      return pHW->wmCreate((LPCREATESTRUCTA)lParam);
-#else
       return pHW->wmCreate((LPCREATESTRUCT)lParam);
-#endif
 
     case WM_PAINT:
       return pHW->wmPaint ();
@@ -728,10 +743,10 @@ LRESULT FAR PASCAL EXPORT BOleHatchWndProc (HWND hWnd, UINT Message, WPARAM wPar
     //
     case WM_NCHITTEST:
       if (pHW) {
-	POINT pt;
-	pt.x = LOWORD(lParam);
-	pt.y = HIWORD(lParam);
-	return pHW->wmNCHitTest ((LPPOINT) &pt);
+				POINT pt;
+				pt.x = LOWORD(lParam);
+				pt.y = HIWORD(lParam);
+				return pHW->wmNCHitTest ((LPPOINT) &pt);
       }
 
     // Any window that is used during in-place activation
@@ -756,8 +771,41 @@ LRESULT FAR PASCAL EXPORT BOleHatchWndProc (HWND hWnd, UINT Message, WPARAM wPar
     //   initiated actions and for ::MoveWindow-initiated changes, we
     //   keep a flag which prevents changes during mousedowns
     //
-    case WM_NCLBUTTONDOWN:
-      return pHW->wmNCLButtonDown(wParam, (LPPOINT)&lParam);
+    //case WM_NCLBUTTONDOWN:
+    //  return pHW->wmNCLButtonDown(wParam, (LPPOINT)&lParam);
+
+		case WM_NCLBUTTONDOWN: {
+			short xPos, yPos;
+			POINT pt;
+			xPos = LOWORD(lParam);
+			yPos = HIWORD(lParam);
+			pt.x = xPos;
+			pt.y = yPos;
+			return pHW->wmNCLButtonDown(wParam, (LPPOINT)&pt);
+			//return ::DefWindowProc(hWnd, Message, wParam, lParam);
+		}
+
+		case WM_MOUSEMOVE: {
+			short xPos, yPos;
+			POINT pt;
+			xPos = LOWORD(lParam);
+			yPos = HIWORD(lParam);
+			pt.x = xPos;
+			pt.y = yPos;
+			return pHW->wmMouseMove(wParam, (LPPOINT)&pt);
+			//return ::DefWindowProc(hWnd, Message, wParam, lParam);
+		}
+
+		case WM_LBUTTONUP: {
+			short xPos, yPos;
+			POINT pt;
+			xPos = LOWORD(lParam);
+			yPos = HIWORD(lParam);
+			pt.x = xPos;
+			pt.y = yPos;
+			return pHW->wmLButtonUp(wParam, (LPPOINT)&pt);
+			//return ::DefWindowProc(hWnd, Message, wParam, lParam);
+		}
 
     case WM_WINDOWPOSCHANGING:
       return pHW->wmWindowPosChanging((WINDOWPOS*) lParam);
@@ -766,7 +814,6 @@ LRESULT FAR PASCAL EXPORT BOleHatchWndProc (HWND hWnd, UINT Message, WPARAM wPar
       return ::DefWindowProc (hWnd, Message, wParam, lParam);
   }
 }
-
 
 
 

@@ -5,10 +5,10 @@
 ##:     \\"DEFINE_RESPONSE_TABLE1([[ClassName]], TDialog)" [[NormalResponseTable]]
 ##:     ^BOF
 ##:     ? NormalResponseTable Search
-##(VBXRspSearch == FALSE) && (Search == FALSE)
+## (VBXRspSearch == FALSE) && (Search == FALSE)
 ##:         %\\"[[ClassName]] missing DEFINE_RESPONSE_TABLE1(...).  "
 ##*
-##(VBXRspSearch == FALSE) && (Search == TRUE)
+## (VBXRspSearch == FALSE) && (Search == TRUE)
 ##:     ^BOL
 ##:     ^DELL
 [[VBXResponseTable]]

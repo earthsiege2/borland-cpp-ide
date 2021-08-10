@@ -1,0 +1,442 @@
+:Base bcpp.hlp
+1 Lexical elements overview
+2 Lexical Elements = LexicalElements
+2 Whitespace Overview
+3 Whitespace = Whitespace
+3 Comments = Comments
+2 Tokens Overview
+3 Tokens = Tokens
+3 Keywords overview
+4 Keywords = Keywords
+4 Table of C++ specific keywords = Keywords_Cplusplus
+4 Table of Borland C++ register pseudovariables = TableOfRegisterPseudovariables
+4 Borland C++ keyword extensions = Keywords_BorlandExtensions
+3 Identifiers Overview
+4 Identifiers = Identifiers
+3 Constants overview
+4 Constants = Constants
+4 Integer constants = IntegerConstants
+4 Borland C++ integer constants without L or U = BorlandCPPIntegerConstantsWithoutLOrU
+4 Floating-point constants = Floating_PointConstants
+4 Character constants overview
+5 Character constants = CharacterConstants
+5 The three char types = TheThreeCharTypes
+5 Escape sequences = EscapeSequences
+5 Wide-character and multi-character constants = Wide_CharacterConstants
+4 String constants overview
+5 String constants = StringConstants
+4 Enumeration constants
+5 Enumeration constants = EnumerationConstants
+4 Constants and internal representation
+5 Constants and internal representation = ConstantsAndInternalRepresentation
+5 Data Types (16-bit) = DataTypesBorland
+5 Data Types (32-bit) = DataTypesBorland_32
+4 Internal representation of numerical types
+5 Internal representation of numerical types = InternalRepresentationOfNumericalTypes
+4 Constant expressions
+5 Constant expressions = ConstantExpressions
+3 Punctuators overview
+4 Punctuators = punctuators
+
+1 Language structure
+2 Introduction to Language structure =LanguageStructure
+2 Declarations
+3 Introduction to Declarations =Declarations
+3 Objects
+4 Introduction to Objects =Objects
+4 lvalues =lvalues
+4 rvalues =rvalues
+3 Storage classes and types
+4 Storage classes and types =StorageClassesAndTypes
+3 Scope
+4 Introduction to Scope =Scope
+4 Name spaces =NameSpaces
+3 Visibility
+4 Visibility =Visibility
+3 Duration
+4 Introduction to Duration =Duration
+4 Static =Static
+4 Local =Local
+4 Dynamic =Dynamic
+3 Translation units
+4 Translation units =TranslationUnits
+3 Linkage
+4 Introduction to Linkage =Linkage
+4 Name mangling =NameMangling
+2 Declaration syntax
+3 Introduction to Declaration syntax =DeclarationSyntax
+3 Tentative definitions =TentativeDefinitions
+3 Possible declarations =PossibleDeclarations
+3 External declarations and definitions =ExternalDeclarationsAndDefinitions
+3 Type specifiers =Keywords_TypeSpecifiers
+3 Type categories
+4 Introduction to type categories =TypeCategories
+4 Type void = Void
+3 The fundamental types
+4 Introduction to the fundamental types =TheFundamentalTypes
+4 Integral types =IntegralTypes
+4 Floating-point types =Floating_PointTypes
+4 Standard arithmetic conversions = StandardArithmeticConversions
+4 Special char, int, and enum conversions =SpecialCharIntAndEnumConversions
+3 Initialization
+4 Introduction to Initialization =Initialization
+4 Arrays, structures, and unions =ArraysStructuresAndUnions
+3 Declarations and declarators
+4 Declarations and declarators =DeclarationsAndDeclarators
+3 Use of storage class specifiers
+4 Use of storage class specifiers =Keywords_StorageClassSpecifiers
+3 Variable Modifiers
+4 Introduction to Variable Modifiers =VariableModifiers
+4 const =const
+4 volatile =volatile
+3 Mixed-language calling conventions
+4 Mixed-language calling conventions =Mixed_LanguageCallingConventions
+4 _ _cdecl = cdecl
+4 _ _pascal =pascal
+4 _ _stdcall =_stdcall
+4 _ _fastcall =_fastcall
+3 Multithread variables
+4 Multithread variables =__thread
+3 Pointer modifiers
+4 Pointer modifiers =PointerModifiers
+3 Function modifiers
+4 Function modifiers =FunctionModifiers
+4 __interrupt functions =interrupt
+2 Pointers
+3 Introduction to Pointers =Pointers
+3 Pointers to objects =PointersToObjects
+3 Pointers to functions =PointersToFunctions
+3 Pointer declarations =PointerDeclarations
+3 Pointer constants =PointerConstants
+3 Pointer arithmetic =PointerArithmetic
+3 Pointer conversions =PointerConversions
+3 C++ reference declarations =CPPreferencedeclarations
+2 Arrays
+2 Introduction to Arrays in C =Arrays
+2 Functions
+3 Introduction to Functions =Functions
+3 Declarations and definitions =DeclarationsAndDefinitions
+3 Declarations and prototypes =DeclarationsAndPrototypes
+3 Definitions =Definitions
+3 Formal parameter declarations =FormalParameterDeclarations
+3 Function calls and argument conversions =FunctionCallsAndArgumentConversions
+2 Structures
+3 Introduction to Structures =Structures
+3 Untagged structures and typedefs =UntaggedStructuresAndTypedefs
+3 Structure member declarations =StructureMemberDeclarations
+3 Structures and functions =StructuresAndFunctions
+3 Structure member access =StructureMemberAccess
+3 Structure word alignment =StructureWordAlignment
+3 Structure name spaces =StructureNameSpaces
+3 Incomplete declarations =IncompleteDeclarations
+3 Bit fields =BitFields
+2 Unions
+3 Introduction to Unions =Unions
+3 Anonymous unions (C++ only) =AnonymousUnions
+3 Union declarations =UnionDeclarations
+2 Enumerations
+3 Enumerations =Enumerations
+2 Expressions
+3 Introduction to Expressions =Expressions
+3 Precedence of Operators = Ops_Precedence
+3 Expressions and C++ =ExpressionsAndCPP
+3 Evaluation order =EvaluationOrder
+3 Errors and overflows =ErrorsAndOverflows
+
+2 Operators Summary
+3 Operators Summary = Op_Summary
+2 Primary Expression Operators
+3 Primary Expression Operators = PrimaryExpressionOperators
+2 Postfix Expression Operators
+3 Postfix Expression Operators = Postfix_ops
+4 Array subscript operator = bracket_ops
+4 Function call operator = parens_ops
+4 Direct member selector = Op_Period
+4 Indirect member selector = Op_RightArrow
+4 Increment/Decrement operators = inc_decrement
+2 Unary operators
+3 Unary operators = unary_ops
+3 Reference/Indirect operators = ref_deref_ops
+3 Plus/Minus operators = plus_minus
+3 Increment/Decrement operators = inc_decrement
+3 Arithmetic Operators = Arithmetic_ops
+3 The sizeof operator = sizeof
+2 Binary operators
+3 Introduction to Binary operators = binary_ops
+3 Multiplicative Operators = multiplicative_ops
+3 Bitwise operators =Bitwise_Ops
+3 Relational operators =Relational_Ops
+3 Equality operators =EqualityOperators
+3 Logical operators =Logical_Ops
+3 Conditional Operator = conditional_op
+3 Assignment Operators = assignment_ops
+3 Comma Punctuator and Operator = comma_op
+3 C++ Specific Operators = CPlus_ops
+2 Statements
+3 Introduction to Statements =Statements
+3 Blocks =Blocks
+3 Labeled statements =LabeledStatements
+3 Expression statements =ExpressionStatements
+3 Selection statements =SelectionStatements
+3 Iteration statements =IterationStatements
+3 Jump statements =JumpStatements
+
+1 C++ specifics
+2 Introduction to C++ specifics =CPPSpecifics
+2 C++ namespaces
+3 Namespaces overview = CPPNamespaces
+3 Defining a namespace = DefiningANamespace
+3 Declaring a namespace = ANamespace
+3 Namespace alias = NamespaceAlias
+3 Extending a namespace = ExtendingANamespace
+3 Anonymous namespaces = AnonymousNamespaces
+3 Accessing elements of a namespace = AccessingElementsOfANamespace
+3 Using directive = UsingDirective
+3 Using declaration = UsingDeclaration
+3 Explicit access qualification = ExplicitAccessQualification
+2 New-style typecasting
+3 const_cast = const_cast
+3 dynamic_cast = dynamic_cast
+3 reinterpret_cast = reinterpret_cast
+3 static_cast = static_cast
+2 Run-time type identification (RTTI)
+3 Run-time type identification (RTTI) overview = RunTimeTypeIdentificationRTTIOverview
+3 The typeid operator = typeid
+4 _ _rtti and the -RT option = __rtti
+4 -RT option and destructors = RTOptionAndDestructors
+2 Referencing
+3 Introduction to Referencing =Referencing
+3 Simple references =SimpleReferences
+3 Reference arguments =ReferenceArguments
+2 The scope resolution operator
+3 Scope resolution operator =ScopeResolutionOperator
+2 The new and delete operators
+3 operator new =new
+3 operator delete =delete
+3 operator new placement syntax = OperatorNewPlacementSyntax
+3 The Operator new with Arrays = TheOperatorNewWithArrays
+3 The Operator delete with Arrays = TheOperatorDeleteWithArrays
+3 ::operator new = TheOperatorNew
+3 Overloading the operator new = OverloadingNew
+3 Overloading the operator delete = OverloadingDelete
+3 Example of overloading the new and delete operators = OverloadingNewAndDelete_Ex
+
+2 Classes
+3 Introduction to Classes =CPPClasses
+3 Class memory model specifications =ClassMemoryModelSpecifications
+3 Class names =ClassNames
+3 Class types =ClassTypes
+3 Class name scope =ClassNameScope
+3 Class objects =ClassObjects
+3 Class member list =ClassMemberList
+3 Member functions =MemberFunctions
+3 The keyword this =TheKeywordThis
+4 Static members =StaticMembers
+3 Inline functions
+4 Introduction to Inline functions =InlineFunctions
+4 Inline functions and exceptions =InlineFunctionsAndExceptions
+3 Member scope
+4 Introduction to Member scope =MemberScope
+4 Nested types =NestedTypes
+4 Member access control =MemberAccessControl
+4 Base and derived class access =BaseAndDerivedClassAccess
+3 Virtual base classes
+4 Virtual base classes =VirtualBaseClasses
+3 Friends of classes
+4 Friends of classes =FriendsOfClasses
+2 Constructors and destructors
+3 Introduction to Constructors and destructors =ConstructorsAndDestructors
+3 Constructors
+4 Introduction to Constructors =Constructors
+4 Constructor defaults =ConstructorDefaults
+4 The copy constructor =TheCopyConstructor
+4 Overloading constructors =OverloadingConstructors
+4 Order of calling constructors =OrderOfCallingConstructors
+4 Class initialization =ClassInitialization
+3 Destructors
+4 Introduction to Destructors =Destructors
+4 Invoking destructors =InvokingDestructors
+4 atexit, #pragma exit, and destructors =atexitPoundSignpragmaexitAndDestructors
+4 exit and destructors =exitAndDestructors
+4 abort and destructors =abortAndDestructors
+4 Virtual destructors =VirtualDestructors
+2 Operator overloading overview
+3 Overloading Operators = Ops_Overload
+3 How to construct a class of complex vectors
+4 Example for Overloading Operators =OverloadingOperatorsExample
+
+2 Overloading Operator Functions Overview
+4 Overloading Operator Functions = OpsOverload_OperatorFunctions
+4 Overloaded Operators and Inheritance = OpsOverload_OperatorsAndInheritance
+4 Overloading Unary Operators = OpsOverload_UnaryOperators
+4 Overloading Binary Operators = OpsOverload_BinaryOperators
+4 Overloading the Assignment Operator = OpsOverload_AssignmentOperator
+4 Overloading the Function Call Operator ( ) = OpsOverload_FunctionCallOperator
+4 Overloading the Subscript Operator [ ] = OpsOverload_SubscriptOperator
+4 Overloading the Class Member Access Operator -> = OpsOverload_ClassMemberAccessOperator
+2 Polymorphic classes
+3 Introduction to Polymorphic classes =PolymorphicClasses
+3 virtual functions
+4 Introduction to virtual functions =VirtualFunctions
+4 virtual function return types =VirtualFunctionReturnTypes
+3 Abstract classes
+4 Abstract classes =AbstractClasses
+2 C++ scope
+3 Introduction to C++ scope =CPPScope
+3 Class scope =ClassScope
+3 Hiding =Hiding
+3 C++ scoping rules summary =CPPScopingRulesSummary
+2 Templates
+4 Using Templates = Templates
+4 Template Syntax = Template
+4 Template Body Parsing =TemplateBodyParsing
+3 Function templates overview
+4 Function Templates = FunctionTemplates
+4 Overriding a Template Function = OverridingATemplateFunction
+4 Implicit and Explicit Template Functions = ImplicitAndExplicitTemplateFunctions
+3 Class templates overview
+4 Class Templates = ClassTemplates
+4 Template Arguments = Arguments
+4 Using Angle Brackets in Templates = AngleBrackets
+4 Using Type-safe Generic Lists in Templates = TypesafeGenericLists
+4 Eliminating Pointers in Templates = EliminatingPointers
+3 Compiler template switches
+4 Using Template Compiler Switches = TemplateCompilerSwitches
+3 Exporting and importing templates
+4 Exporting and importing templates =ExportingAndImportingTemplates
+
+1 Exception handling
+4 C++ Exception Handling = Exceptions_CPP
+4 Throwing an Exception = Exceptions_Throwing
+4 Handling an Exception = Exceptions_Handling
+4 Exception Specifications = Exceptions_Specifications
+4 Constructors and Destructors in Exception Handling = Exceptions_ConstructorsAndDestructors
+4 Unhandled Exceptions = Exceptions_Unhandled
+4 Setting Exception Handling Options = SettingExceptionHandlingOptions
+4 C-Based Structured Exceptions = StructuredExceptions
+4 Using C-Based Exceptions in C++ Programs = StructuredExceptionsInCPP
+
+1 The Preprocessor
+2 Preprocessor Directives
+3 # (null directive) = PndSnnull
+3 Preprocessor Directives = PreprocessorDirectives
+2 Defining and undefining macros
+3 #define = PndSndefine
+3 #undef = PndSnUndef
+3 Using the-D and -U Command-line Options = DAndUOptions
+3 Keywords and Protected Words as Macros = KeywordsandProtectedWords
+2 Macros with Parameters overview
+3 Macros with Parameters = MacrosWithParameters
+2 File inclusion with #include
+3 #include = PndSnInclude
+3 Header File Search with <header_name> = HeaderFileSearchWithBrackets
+3 Header File Search with "header_name" = HeaderFileSearchWithQuotes
+2 Conditional compilation
+3 operator defined = defined
+3 #if, #elif, #else, and #endif conditional directives = PndSnif
+3 #ifdef and #ifndef conditional directives = PndSnifdef
+2 The #line control directive
+3 #line = PndSnLine
+2 The #error directive
+3 #error = PndSnerror
+2 Pragma directives overview
+3 Pragma summary = PndSnpragma
+3 #pragma argsused = PndSnpragmaArgsused
+3 #pragma codeseg = PndSnpragmaCodeseg
+3 #pragma comment = PndSnpragmaComment
+3 #pragma exit and #pragma startup = PndSnpragmaExitAndPndSnpragmaStartup
+3 #pragma hdrfile = PndSnpragmaHdrfile
+3 #pragma hdrstop = PndSnpragmaHdrstop
+3 #pragma inline = PndSnpragmaInline
+3 #pragma intrinsic = PndSnpragmaIntrinsic
+3 #pragma message = PndSnpragmaMessage
+3 #pragma option = PndSnpragmaOption
+3 #pragma saveregs = PndSnpragmaSaveregs
+3 #pragma warn = PndSnpragmaWarn
+2 Predefined macros overview
+3 Predefined macros = Macros_Predefined
+
+1 Programming for portability
+2 Programming for portability = ProgrammingForPortability
+2 Compiling and linking a Windows program = CompilingAndLinkingAWindowsProgram
+2 Resource script files = ResourceScriptFiles
+2 Module definition files = ModuleDefinitionFiles
+2 Import libraries = ImportLibraries
+2 WinMain = WinMain
+2 Prologs and epilogs overview
+3 Prologs and epilogs = PrologsAndEpilogs
+3 The _export keyword = _export
+3 The _import keyword = import
+2 Prologs, Epilogs, and Exports: A Summary
+3 Prologs, Epilogs, and Exports: A Summary = SummaryProEpiExp
+3 Compiler Options and the _ _export Keyword = CompOptsAndExpKeywd
+2 The Borland heap manager
+3 The Borland heap manager = TheBorlandHeapManager
+2 32-bit Windows programming
+3 32-bit Windows programming = 32BitWindowsProgramming
+3 Win32
+4 Win32 = Win32
+4 The Win32 API = TheWin32API
+3 Writing portable Windows code
+4 Writing portable Windows code = WritingPortableWindowsCode
+4 STRICT
+5 STRICT = STRICT
+5 STRICT compliant types constants, helper macros, and handles = STRICTCompliantTypes
+5 Making your code STRICT compliant = MakingYourCodeSTRICTCompliant
+5 STRICT conversion hints = STRICTConversionHints
+4 The UINT and WORD types
+5 The UINT and WORD types = TheUINTAndWORDTypes
+4 The WINAPI and CALLBACK calling conventions
+5 The WINAPI and CALLBACK calling conventions = TheWINAPIAndCALLBACKCallingConventions
+4 Extracting message data
+5 Extracting message data = ExtractingMessageData
+4 Message crackers
+5 Message crackers = MessageCrackers
+4 Porting DOS system calls
+5 Porting DOS system calls = PortingDOSSystemCalls
+4 INT 21 and Win32 equivalent functions
+5 INT 21 and Win32 equivalent functions = INT21AndWin32EquivalentFunctions
+4 Common compiler errors and warnings
+5 Common compiler errors and warnings = CommonCompilerErrorsAndWarnings
+4 Building Win32 executables
+5 Building Win32 executables = BuildingWin32Executables
+
+1 Writing dynamic-link libraries
+2 Using Dynamic-Link Libraries = UsingDynamicLinkLibraries
+2 What is a DLL? = DLL
+2 Dynamic linking = DynamicLinking
+2 Static linking = StaticLinking
+2 LibMain and DllEntryPoint = LibMainAndDllEntryPoint
+2 WEP (Windows Exit Procedure) = WEP
+2 Exporting and Importing Functions
+3 Exporting and Importing Functions = ExportingAndImportingFunctions
+3 DLLs and 16-bit memory models = DLLsand16bitMemoryModels
+2 Exporting and Importing Classes
+3 Exporting and Importing Classes = ExportingAndImportingClasses
+3 Using _export with C++ Classes = UsingExpWCPPClasses
+2 Static Data in 16-bit DLLs
+3 Static Data in 16-bit DLLs = StaticDataIn16BitDLLs
+2 Borland DLLs
+3 Borland DLLs = BorlandDLLs
+
+1 EasyWin overview
+3 Using EasyWin = EasyWin
+3 Converting DOS applications to Windows = EZWinConvDOStoWin
+3 Using EasyWin from within a Windows program = EZWinUsingFromAWinProg
+3 EasyWin features = NewFeaturesOfEasyWin
+3 EasyWin: Scrolling Buffer = Easywin_ScrollingBuffer
+
+1 Floating-point I/O
+2 About floating point I/O = Floating-PointI/O
+2 Floating-point options
+3 About floating point options = Floating-PointOptions
+3 Emulating the 80x87 chip = EmulatingThe80x87Chip
+3 Using the 80x87 code = UsingThe80x87Code
+3 No floating-point code = NoFloating-PointCode
+3 Fast floating-point option = FastFloating-PointOption
+3 The 87 environment variable = The87EnvironmentVariable
+3 Registers and the 80x87 = RegistersAndThe80x87
+3 Disabling floating-point exceptions = DisablingFloating-PointExceptions
+
+1 ANSI implementation-specific standards
+2 ANSI implementation-specific standards = ANSIImplSpecs

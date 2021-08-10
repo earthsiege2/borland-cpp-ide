@@ -6,9 +6,9 @@
  *--------------------------------------------------------------------------*/
 
 /*
- *      C/C++ Run Time Library - Version 1.5
+ *      C/C++ Run Time Library - Version 2.0
  *
- *      Copyright (c) 1991, 1994 by Borland International
+ *      Copyright (c) 1991, 1996 by Borland International
  *      All Rights Reserved.
  *
  */
@@ -29,6 +29,7 @@
 extern void _statcvt(
     struct stat *bufP,      /* stat structure to be filled in */
     DWORD attr,             /* NT file attributes */
+    FILETIME *ctime,        /* NT time of file creation */
     FILETIME *atime,        /* NT time of last access */
     FILETIME *wtime,        /* NT time of last write */
     DWORD fsize);           /* NT low word of file size */
@@ -110,7 +111,7 @@ int _RTLENTRY _EXPFUNC fstat (int fd, struct stat *bufP)
          */
         _statcvt(bufP,
                  _openfd[fd] & _O_WRITABLE ? 0 : FILE_ATTRIBUTE_READONLY,
-                 &atime, &wtime,
+                 &ctime, &atime, &wtime,
                  GetFileSize(h, NULL));
         break;
 

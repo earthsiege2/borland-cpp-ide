@@ -9,12 +9,10 @@
 ##:     %\\"Unable to add response table marker to [[FileName]].  "
 ##*
 ##^BOL
-##--BEGIN-- @QUERY_APPL_COMMENT == VALUE_VERBOSE
+##@QUERY_APPL_COMMENT == VALUE_VERBOSE 3
 //
-// Build a response table for all messages/commands handled
-// by the application.
+// Build a response table for all messages/commands handled by the application.
 //
-##--END-- @QUERY_APPL_COMMENT == VALUE_VERBOSE
 ##VBXMIXIN == FALSE
 DEFINE_RESPONSE_TABLE1([[ClassName]], [[BaseName]])
 ##VBXMIXIN == TRUE

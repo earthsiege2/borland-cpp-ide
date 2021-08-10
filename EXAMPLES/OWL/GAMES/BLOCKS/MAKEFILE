@@ -1,0 +1,16 @@
+#----------------------------------------------------------------------------
+# ObjectWindows - (C) Copyright 1991, 1993 by Borland International
+#   examples\owl\owlapi\vbxctl\makefile
+#----------------------------------------------------------------------------
+
+LIBEXE=$(BCLIBDIR)\bivbx.lib
+MODELS=ldf
+EXERES=blocks
+OBJEXE=blocks.obj
+#MAPEXE=blocks.map
+#DEFEXE=blocks.def
+
+!include $(BCEXAMPLEDIR)\owlmake.gen
+!if $(_32BIT_)
+  LIBEXE=$(BCLIBDIR)\bivbx32.lib
+!endif

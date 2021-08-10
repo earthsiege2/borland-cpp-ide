@@ -6,9 +6,9 @@
  *-----------------------------------------------------------------------*/
 
 /*
- *      C/C++ Run Time Library - Version 1.5
+ *      C/C++ Run Time Library - Version 2.0
  *
- *      Copyright (c) 1990, 1994 by Borland International
+ *      Copyright (c) 1990, 1996 by Borland International
  *      All Rights Reserved.
  *
  */
@@ -18,7 +18,7 @@
 
 typedef void _cdecl    (* appCdecl)   (void *, int, void *);
 typedef void _pascal   (* appPascal)  (int, void *, void *);
-typedef void _fastcall (* appFastcall)(int, void *, void *);
+typedef void _fastcall (* appFastcall)(void *, int, void *);
 typedef void _stdcall  (* appStdcall) (void *, int, void *);
 #if defined(__OS2__)
 typedef void _syscall  (* appSyscall) (void *, int, void *);
@@ -55,7 +55,7 @@ void _RTLENTRY _EXPFUNC _vector_vapply_(
             {
             case 1: (*(appCdecl)    app)((void *) dest, 0, (void *) src); break;
             case 2: (*(appPascal)   app)(0, (void *) src, (void *) dest); break;
-            case 3: (*(appFastcall) app)(0, (void *) src, (void *) dest); break;
+            case 3: (*(appFastcall) app)((void *) dest, 0, (void *) src); break;
             case 5: (*(appStdcall)  app)((void *) dest, 0, (void *) src); break;
 #if defined(__OS2__)
             case 6: (*(appSyscall)  app)((void *) dest, 0, (void *) src); break;

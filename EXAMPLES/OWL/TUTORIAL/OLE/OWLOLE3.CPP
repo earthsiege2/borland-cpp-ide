@@ -2,7 +2,7 @@
 // ObjectWindows - (C) Copyright 1991, 1994 by Borland International
 //   Ole tutorial application -- owlole3.cpp
 //----------------------------------------------------------------------------
-#include <owl/owlpch.h>
+#include <owl/pch.h>
 #include <owl/applicat.h>
 #include <owl/decframe.h>
 #include <owl/dc.h>
@@ -19,6 +19,7 @@
 #include <classlib/arrays.h>
 #include <stdlib.h>
 #include <string.h>
+#include <stdio.h>
 #include "owlole3.rc"
 
 // Registrar & app dictionary
@@ -53,7 +54,7 @@ BEGIN_REGISTRATION(DocReg)
   REGFORMAT(1, ocrMetafilePict, ocrContent, ocrMfPict,   ocrGet)
 END_REGISTRATION
 
-// Doc reg linked list & list head ptr 
+// Doc reg linked list & list head ptr
 //
 static TRegLink* RegLinkHead;
 TRegLink  scribbleLink(::DocReg, RegLinkHead);
@@ -292,11 +293,14 @@ void
 TScribbleWindow::SetupWindow()
 {
   TOleWindow::SetupWindow();
+  char title[1024];
 
   if (*FileData.FileName)
     OpenFile();
-  else
-    SetDocTitle("Untitled", 0);
+  else  {
+    sprintf(title, "%s - Untitled", ::AppReg["appname"]);
+    SetDocTitle(title, 0);
+  }
 }
 
 bool
@@ -617,7 +621,7 @@ class TScribbleApp : public TApplication, public TOcModule {
   DECLARE_RESPONSE_TABLE(TScribbleApp);
 };
 
-DEFINE_RESPONSE_TABLE(TScribbleApp)
+DEFINE_RESPONSE_TABLE1(TScribbleApp, TApplication)
   EV_COMMAND(CM_FILENEW, CmFileNew),
   EV_COMMAND(CM_FILEOPEN, CmFileOpen),
 END_RESPONSE_TABLE;
@@ -656,9 +660,12 @@ TScribbleApp::InitMainWindow()
   frame->Insert(*sb, TDecoratedFrame::Bottom);
   frame->Insert(*cb, TDecoratedFrame::Top);
 
-  // Set the main window and its menu
+  // Set the menu & icon
+  frame->SetMenuDescr(TMenuDescr(IDM_SCRIBBLE));
+  frame->SetIcon(this, IDI_TUTORIAL);
+
+  // Set the main window
   SetMainWindow(frame);
-  GetMainWindow()->SetMenuDescr(TMenuDescr(IDM_SCRIBBLE));
 }
 
 //

@@ -9,9 +9,9 @@
  *-----------------------------------------------------------------------*/
 
 /*
- *      C/C++ Run Time Library - Version 6.5
+ *      C/C++ Run Time Library - Version 7.0
  *
- *      Copyright (c) 1991, 1994 by Borland International
+ *      Copyright (c) 1991, 1996 by Borland International
  *      All Rights Reserved.
  *
  */
@@ -45,7 +45,7 @@ extern "C"
                                     unsigned __flags);
 }
 
-void *malloc(size_t size)
+void * _FARFUNC malloc(size_t size)
 {
 #if (LDATA)
     return(_farmallocf(size, _WinAllocFlag));
@@ -55,7 +55,7 @@ void *malloc(size_t size)
 }
 
 
-void *realloc(void *block, size_t size)
+void * _FARFUNC realloc(void *block, size_t size)
 {
 #if (LDATA)
     return(_farreallocf(block, size, _WinAllocFlag));
@@ -74,7 +74,7 @@ void *realloc(void *block, size_t size)
 }
 
 
-void *calloc(size_t nitems, size_t size)
+void * _FARFUNC calloc(size_t nitems, size_t size)
 {
 #if (LDATA)
     return(_farcallocf(nitems, size, _WinAllocFlag));
@@ -84,7 +84,7 @@ void *calloc(size_t nitems, size_t size)
 }
 
 
-void free(void *block)
+void _FARFUNC free(void *block)
 {
 #if (LDATA)
     _farfreef(block, _WinAllocFlag);

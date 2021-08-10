@@ -1,26 +1,25 @@
 //----------------------------------------------------------------------------
 // ObjectWindows
-// (C) Copyright 1992, 1994 by Borland International, All Rights Reserved
+// Copyright (c) 1992, 1996 by Borland International, All Rights Reserved
+//
+//$Revision:   10.3  $
 //
 //----------------------------------------------------------------------------
 #if !defined(OWL_COMPAT_H)
 #define OWL_COMPAT_H
-
-#if defined(__WIN32__)
-#pragma message Check maximum identifier length setting.  Must equal 55 or greater.
-#endif
 
 
 #if !defined(BI_OLDNAMES)
 # define BI_OLDNAMES
 #endif
 
-#include <owl/owlpch.h>
-
-#if !defined(OWL_OWLDEFS_H)
-# include <owl/owldefs.h>
+#if !defined(OWL_DEFS_H)
+# include <owl/defs.h>
 #endif
 
+//
+// struct TMessage
+// ~~~~~~ ~~~~~~~~
 struct TMessage {
   HWND  Receiver;
   uint16  Message;
@@ -74,7 +73,6 @@ TMessage _OWLFUNC __GetTMessageWin(TWindow* win);
 
 #define CM_RESERVED             CM_INTERNAL - CM_FIRST
 
-
 //
 // Error conditions
 //
@@ -84,7 +82,6 @@ TMessage _OWLFUNC __GetTMessageWin(TWindow* win);
 #define EM_INVALIDMODULE        -4
 #define EM_INVALIDWINDOW        -5
 #define EM_OUTOFMEMORY          -6
-
 
 typedef int _FAR & Rint;
 typedef int _FAR * Pint;

@@ -13,9 +13,9 @@
 */
 
 /*
- *      C/C++ Run Time Library - Version 6.5
+ *      C/C++ Run Time Library - Version 7.0
  *
- *      Copyright (c) 1990, 1994 by Borland International
+ *      Copyright (c) 1990, 1996 by Borland International
  *      All Rights Reserved.
  *
  */
@@ -31,14 +31,14 @@
 #include <_defs.h>
 #endif
 
-#if !defined(__MEM_H)
-#include <mem.h>    // to get memcpy and NULL
+#if !defined(__STRING_H)
+#include <string.h>    // to get strnicmp, memcpy and NULL
 #endif
 
 
 #if !defined(RC_INVOKED)
 
-#pragma option -a-      // byte packing
+#pragma pack(push, 1)
 
 #if defined(__BCOPT__)
 #if !defined(_RTL_ALLOW_po) && !defined(__FLAT__)
@@ -109,9 +109,9 @@ public:
         left      = 0x0002, // left-adjust output
         right     = 0x0004, // right-adjust output
         internal  = 0x0008, // padding after sign or base indicator
-        dec   = 0x0010,     // decimal conversion
-        oct   = 0x0020,     // octal conversion
-        hex   = 0x0040,     // hexadecimal conversion
+        dec       = 0x0010, // decimal conversion
+        oct       = 0x0020, // octal conversion
+        hex       = 0x0040, // hexadecimal conversion
         showbase  = 0x0080, // use base indicator on output
         showpoint = 0x0100, // force decimal point (floating output)
         uppercase = 0x0200, // upper-case hex output
@@ -119,7 +119,8 @@ public:
         scientific= 0x0800, // use 1.2345E2 floating notation
         fixed     = 0x1000, // use 123.45 floating notation
         unitbuf   = 0x2000, // flush all streams after insertion
-        stdio     = 0x4000  // flush stdout, stderr after insertion
+        stdio     = 0x4000, // flush stdout, stderr after insertion
+        boolalpha = 0x8000  // insert/extract bools as text or numeric
         };
 
     // constants for second parameter of seft()
@@ -177,6 +178,8 @@ static void _RTLENTRY sync_with_stdio();
     // obsolete, for streams 1.2 compatibility
     int     _RTLENTRY skip(int);
 
+    int     delbuf() {return x_delbuf;}
+    int     delbuf(int _new) {int _x=x_delbuf;x_delbuf=_new;return _x;}
 protected:
     // additional state flags for ispecial and ospecial
     enum { skipping = 0x100, tied = 0x200 };
@@ -192,7 +195,7 @@ protected:
     int     x_fill;         // padding character on output
     int     isfx_special;   // unused       ***
     int     osfx_special;   // unused       ***
-    int     delbuf;         // unused       ***
+    int     x_delbuf;       // unused       ***
     int     assign_private; // unused       ***
 /*
  * The data members marked with *** above are not documented in the AT&T
@@ -464,6 +467,7 @@ virtual _RTLENTRY ~istream();
     /*
      * Formatted extraction operations
      */
+    istream _FAR & _RTLENTRY operator>> (bool _FAR &);
     istream _FAR & _RTLENTRY operator>> (istream _FAR & (_RTLENTRY *_f)(istream _FAR &));
     istream _FAR & _RTLENTRY operator>> (ios _FAR & (_RTLENTRY *_f)(ios _FAR &) );
     istream _FAR & _RTLENTRY operator>> (         char _FAR *);
@@ -613,6 +617,9 @@ virtual _RTLENTRY ~ostream();
     /*
      * Formatted insertion operations
      */
+    // insert "true" or "false" for bool
+    ostream _FAR & _RTLENTRY ostream::operator<< (bool);
+
     // insert the character
     ostream _FAR & _RTLENTRY operator<< (         char);
     ostream _FAR & _RTLENTRY operator<< (  signed char);
@@ -844,7 +851,8 @@ extern "C" void  _RTLENTRY _InitEasyWin(void);
 #endif
 #endif
 
-#pragma option -a.      // restore default packing
+/* restore default packing */
+#pragma pack(pop)
 
 #if defined(__STDC__)
 #pragma warn .nak

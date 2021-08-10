@@ -1,19 +1,33 @@
 //----------------------------------------------------------------------------
 // ObjectWindows
-// (C) Copyright 1993, 1994 by Borland International, All Rights Reserved
+// Copyright (c) 1993, 1996 by Borland International, All Rights Reserved
 //
-//   Implementation of TPXPictureValidator, Paradox-picture input validator
+//$Revision:   10.3  $
+//
+// Implementation of TPXPictureValidator, Paradox-picture input validator
 //----------------------------------------------------------------------------
 #pragma hdrignore SECTION
-#include <owl/owlpch.h>
-#include <owl/validate.h>
-#include <owl/applicat.h>
-#include <owl/appdict.h>
-#include <owl/framewin.h>
+#include <owl/pch.h>
+#if !defined(OWL_VALIDATE_H)
+# include <owl/validate.h>
+#endif
+#if !defined(OWL_APPLICAT_H)
+# include <owl/applicat.h>
+#endif
+#if !defined(OWL_APPDICT_H)
+# include <owl/appdict.h>
+#endif
+#if !defined(OWL_FRAMEWIN_H)
+# include <owl/framewin.h>
+#endif
 #include <ctype.h>
+#include <stdio.h>
 
 #if !defined(SECTION) || SECTION == 1
 
+//
+//
+//
 TPXPictureValidator::TPXPictureValidator(const char far* pic, bool autoFill)
 :
   TValidator(),
@@ -23,46 +37,68 @@ TPXPictureValidator::TPXPictureValidator(const char far* pic, bool autoFill)
   if (autoFill)
     Options |= voFill;
   if (Picture(0, false) != prEmpty)
-    THROW( TValidator::TXValidator() );
+    TXValidator::Raise();
 }
 
+//
+//
+//
 void
-TPXPictureValidator::Error()
+TPXPictureValidator::Error(TWindow* owner)
 {
-  TApplication* app = GetApplicationObject();
-  string msgTmpl = app->LoadString(IDS_VALPXPCONFORM).c_str();
-  char* msg = new char[msgTmpl.length() + Pic.length() + 1];
-  wsprintf(msg, msgTmpl.c_str(), (const char far*)Pic.c_str());
-  TWindow* w = GetWindowPtr(app->GetMainWindow()->GetLastActivePopup());
-  if (w)
-    w->MessageBox(msg, app->GetName(), MB_ICONEXCLAMATION|MB_OK);
-  else
-    ::MessageBox(0, msg, app->GetName(), MB_ICONEXCLAMATION|MB_OK|MB_TASKMODAL);
-  delete [] msg;
+  PRECONDITION(owner);
+  TApplication* app = owner->GetApplication();
+  string msgTmpl = app->LoadString(IDS_VALPXPCONFORM);
+  TAPointer<char> msg = new char[msgTmpl.length() + Pic.length() + 1];
+  sprintf(msg, msgTmpl.c_str(), (const char far*)Pic.c_str());
+  owner->MessageBox(msg, app->GetName(), MB_ICONEXCLAMATION|MB_OK);
 }
 
+//
+//
+//
 bool
-TPXPictureValidator::IsValidInput(char far* str, bool suppressFill)
+TPXPictureValidator::IsValidInput(char far* input, bool suppressFill)
 {
   bool autoFill = (Options&voFill) && !suppressFill;
-  return Pic.is_null() || Picture(str, autoFill) != prError;
+  return Pic.is_null() || Picture(input, autoFill) != prError;
 }
 
+//
+//
+//
 bool
-TPXPictureValidator::IsValid(const char far* str)
+TPXPictureValidator::IsValid(const char far* input)
 {
   if (Pic.is_null())
     return true;
-  TPicResult rslt = Picture((char far*)str, false);
+  TPicResult rslt = Picture(CONST_CAST(char far*,input), false);
   return rslt == prComplete || rslt == prEmpty;
 }
 
+//
+// Adjust the 'value' of the text, given a cursor position & an amount
+// Return the actual amount adjusted.
+//
+int
+TPXPictureValidator::Adjust(string& /*text*/, uint& /*begPos*/,
+                            uint& /*endPos*/, int /*amount*/)
+{
+  return 0;
+}
+
+//
+//
+//
 inline bool
 TPXPictureValidator::IsComplete(TPicResult rslt)
 {
   return rslt == prComplete || rslt == prAmbiguous;
 }
 
+//
+//
+//
 inline bool
 TPXPictureValidator::IsIncomplete(TPicResult rslt)
 {
@@ -89,12 +125,12 @@ TPXPictureValidator::ToGroupEnd(uint termCh, uint& i)
       case ';': i++; break;
       case '*':
         i++;
-        while (isdigit(Pic[i]))
+        while (isdigit((uchar)Pic[i]))
           i++;
         ToGroupEnd(termCh, i);
         continue;
     }
-    i++;
+    i += CharSize((const char far*)Pic.c_str() + i);
   } while (brkLevel || brcLevel);
 }
 
@@ -139,7 +175,7 @@ TPXPictureValidator::Iteration(char far* input, uint termCh, uint& i, uint& j)
   // Retrieve number
 
   uint itr = 0;
-  for (; isdigit(Pic[i]); i++)
+  for (; isdigit((uchar)Pic[i]); i++)
     itr = itr * 10 + Pic[i] - '0';
 
   if (i >= termCh)
@@ -152,7 +188,7 @@ TPXPictureValidator::Iteration(char far* input, uint termCh, uint& i, uint& j)
   //
   uint k = i;
   if (itr) {
-    for (int m = 0; m < itr; m++) {
+    for (uint m = 0; m < itr; m++) {
       i = k;
       rslt = Process(input, newTermCh, i, j);
       if (!IsComplete(rslt)) {
@@ -204,7 +240,7 @@ TPXPictureValidator::CheckComplete(uint termCh, uint& i, TPicResult rslt)
         ToGroupEnd(termCh, j);
 
       else if (Pic[j] == '*') {
-        if (!isdigit(Pic[j+1])) {
+        if (!isdigit((uchar)Pic[j+1])) {
           j++;
           ToGroupEnd(termCh, j);
         }
@@ -221,6 +257,9 @@ TPXPictureValidator::CheckComplete(uint termCh, uint& i, TPicResult rslt)
   return rslt;
 }
 
+//
+//
+//
 TPicResult
 TPXPictureValidator::Scan(char far* input, uint termCh, uint& i, uint& j)
 {
@@ -235,7 +274,7 @@ TPXPictureValidator::Scan(char far* input, uint termCh, uint& i, uint& j)
     ch = input[j];
     switch (Pic[i]) {
       case '#':
-        if (!isdigit(ch))
+        if (!isdigit((uchar)ch))
           return prError;
         else {
           input[j++] = ch;
@@ -243,7 +282,7 @@ TPXPictureValidator::Scan(char far* input, uint termCh, uint& i, uint& j)
         }
         break;
       case '?':
-        if (!isalpha(ch))
+        if (!isalpha((uchar)ch))
           return prError;
         else {
           input[j++] = ch;
@@ -251,21 +290,43 @@ TPXPictureValidator::Scan(char far* input, uint termCh, uint& i, uint& j)
         }
         break;
       case '&':
-        if (!isalpha(ch))
+        if (!isalpha((uchar)ch))
           return prError;
         else {
           input[j++] = (char)toupper(ch);
           i++;
         }
         break;
-      case '!':
+      case '!': {
+#if defined(BI_DBCS_SUPPORT)
+        uint n = CharSize(&input[j]);
+        if (j + n >= len)
+          j = len;
+        else {
+          if (n == 1)
+            input[j++] = (char)toupper((uchar)ch);
+          else
+            j += n;
+        }
+#else
         input[j++] = (char)toupper(ch);
+#endif
         i++;
         break;
-      case '@':
+      }
+      case '@': {
+#if defined(BI_DBCS_SUPPORT)
+        uint n = CharSize(&input[j]);
+        if (j + n >= len)
+          j = len;
+        else
+          j += n;
+#else
         input[j++] = ch;
+#endif
         i++;
         break;
+      }
       case '*':
         rslt = Iteration(input, termCh, i, j);
         if (!IsComplete(rslt))
@@ -285,7 +346,39 @@ TPXPictureValidator::Scan(char far* input, uint termCh, uint& i, uint& j)
         if (rslt == prError)
           rslt = prAmbiguous;
         break;
-      default:
+      default: {
+#if defined(BI_DBCS_SUPPORT)
+        if (Pic[i] == ';')
+          i++;
+        uint n  = CharSize(&input[j]);
+        uint n2 = CharSize((const char far*)Pic.c_str() + i);
+
+        if (j + n >= len)
+          n = len - j;
+        if (n == 1) {
+          if (ch == ' ') {
+            if (n != n2)
+              return prError;
+            input[j++] = Pic[i++];
+          }
+          else {
+            if (n != n2)
+              return prError;
+            if (toupper((uchar)Pic[i]) != toupper((uchar)ch))
+              return prError;
+            input[j++] = Pic[i++];
+          }
+        }
+        else {
+          if (n > n2)
+            return prError;
+          for (uint i1 = 0; i1 < n; i1++)
+            if (input[j+i1] != Pic[i+i1])
+              return prError;
+          while (n-- > 0)
+            input[j++] = Pic[i++];
+        }
+#else
         if (Pic[i] == ';')
           i++;
         if (toupper(Pic[i]) != toupper(ch))
@@ -295,6 +388,8 @@ TPXPictureValidator::Scan(char far* input, uint termCh, uint& i, uint& j)
             return prError;
         input[j++] = Pic[i];
         i++;
+#endif
+      }
     }
     if (rslt == prAmbiguous)
       rslt = prIncompNoFill;
@@ -305,6 +400,9 @@ TPXPictureValidator::Scan(char far* input, uint termCh, uint& i, uint& j)
   return (rslt == prIncompNoFill) ? prAmbiguous : prComplete;
 }
 
+//
+//
+//
 TPicResult
 TPXPictureValidator::Process(char far* input, uint termCh, uint& i, uint& j)
 {
@@ -350,6 +448,9 @@ TPXPictureValidator::Process(char far* input, uint termCh, uint& i, uint& j)
   return (rslt == prComplete && incomp) ? prAmbiguous : rslt;
 }
 
+//
+//
+//
 bool
 TPXPictureValidator::SyntaxCheck()
 {
@@ -362,7 +463,7 @@ TPXPictureValidator::SyntaxCheck()
 
   int brkLevel = 0;
   int brcLevel = 0;
-  for (int i = 0; i < Pic.length(); i++) {
+  for (uint i = 0; i < Pic.length(); ) {
     switch (Pic[i]) {
       case '[': brkLevel++; break;
       case ']': brkLevel--; break;
@@ -370,10 +471,14 @@ TPXPictureValidator::SyntaxCheck()
       case '}': brcLevel--; break;
       case ';': i++;
     }
+    i += CharSize((const char far*)Pic.c_str() + i);
   }
   return !(brkLevel || brcLevel);
 }
 
+//
+//
+//
 TPicResult
 TPXPictureValidator::Picture(char far* input, bool autoFill)
 {
@@ -397,7 +502,16 @@ TPXPictureValidator::Picture(char far* input, bool autoFill)
     while (i < Pic.length() && !strchr("#?&!@*{}[],", Pic[i])) {
       if (Pic[i] == ';')
         i++;
+#if defined(BI_DBCS_SUPPORT)
+      uint k = strlen(input);
+      uint n = CharSize((const char far*)Pic.c_str() + i);
+      memmove(input + k, Pic.c_str() + i, n);
+      input[k + n] = '\0';
+      i += n;
+      j += n;
+#else
       input[j++] = Pic[i++];
+#endif
       reprocess = true;
     }
     if (reprocess) {
@@ -416,6 +530,11 @@ TPXPictureValidator::Picture(char far* input, bool autoFill)
 
 IMPLEMENT_STREAMABLE1(TPXPictureValidator, TValidator);
 
+#if !defined(BI_NO_OBJ_STREAMING)
+
+//
+//
+//
 void*
 TPXPictureValidator::Streamer::Read(ipstream& is, uint32 /*version*/) const
 {
@@ -424,6 +543,9 @@ TPXPictureValidator::Streamer::Read(ipstream& is, uint32 /*version*/) const
   return GetObject();
 }
 
+//
+//
+//
 void
 TPXPictureValidator::Streamer::Write(opstream& os) const
 {
@@ -431,5 +553,6 @@ TPXPictureValidator::Streamer::Write(opstream& os) const
   os << GetObject()->Pic;
 }
 
-#endif
+#endif  // if !defined(BI_NO_OBJ_STREAMING)
 
+#endif

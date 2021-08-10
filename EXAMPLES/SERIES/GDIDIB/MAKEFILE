@@ -1,0 +1,17 @@
+#----------------------------------------------------------------------------
+# Borland C++
+# Copyright (c) 1987, 1996 Borland International Inc.  All Rights Reserved.
+#   examples\series\gdidib\makefile
+#----------------------------------------------------------------------------
+
+SYSTEMS = WIN32
+OSMAJOR = 4
+OSMINOR = 0
+EXERES  = gdidib
+CPCH    = -Hc -H"windows.h" -H=gdidib.csm
+OBJEXE  = gdidib.obj winmain.obj init.obj about.obj dispatch.obj misc.obj\
+          brushdlg.obj client.obj colordlg.obj dibutil.obj filedlg.obj\
+          fileio.obj filenew.obj infodlg.obj palctrl.obj palette.obj\
+          pendlg.obj print.obj statbar.obj toolbar.obj
+
+!include $(BCEXAMPLEDIR)\makefile.gen

@@ -6,9 +6,9 @@
  *-----------------------------------------------------------------------*/
 
 /*
- *      C/C++ Run Time Library - Version 1.5
+ *      C/C++ Run Time Library - Version 2.0
  *
- *      Copyright (c) 1991, 1994 by Borland International
+ *      Copyright (c) 1991, 1996 by Borland International
  *      All Rights Reserved.
  *
  */
@@ -16,6 +16,8 @@
 /* Set up argv[] from the command line.  If wildargs.obj is included, wildcard
  * filenames are expanded; see expndarg.c for more information.
  */
+
+#pragma inline
 
 #ifdef __OS2__
 #include <os2bc.h>
@@ -55,6 +57,8 @@ extern int    _C0argc;
 extern char **_C0argv;
 extern ULONG  _os2hmod;    /* module handle */
 
+extern char *_argv0;
+
 /*----------------------------------------------------------------------
  * The following variables points to the command line, and is
  * set up by the startup code.
@@ -67,11 +71,17 @@ extern char *_oscmd;
 int     _EXPDATA _argc;        /* number of arguments */
 char ** _EXPDATA _argv;        /* argument vector */
 
+/* Make aliases for _argc and _argv that are compatible with Microsoft */
+asm {
+       alias <___argv> = <__argv>
+       alias <___argc> = <__argc>
+}
+
 /*----------------------------------------------------------------------
  * Local variables
  */
-static int argmax;          /* maximum size of _argv[] */
-
+static int   argmax;          /* maximum size of _argv[] */
+static char *cmdsave;
 /*----------------------------------------------------------------------
  * Forward declarations
  */
@@ -105,6 +115,10 @@ void (* _EXPDATA _expandptr)(char *) = expand;
  */
 void _EXPFUNC _setargv(void)
 {
+#if !defined(_BUILDRTLDLL)
+#pragma startup _setargv 3      /* force _setargv to be called at startup */
+#endif
+
     char *src, *dst, *arg;
     char buffer[MAXPATH];
 
@@ -128,19 +142,31 @@ void _EXPFUNC _setargv(void)
     src += strlen(_oscmd) + 1;      /* program name is first argument, skip */
 #endif
 #ifdef __WIN32__
-    GetModuleFileName(NULL, buffer, sizeof(buffer));
-    _addarg(buffer, 1);
+
+    // Note: _exitargv0 (in setargv0.c) cleans up the original _argv0
+    //       Here, we make a copy for _argv[0], and clean it up in _exitargv
+
+    _addarg(_argv0, 1);
     while (is_space(*src))                  /* skip leading white space */
         src++;
-    while (!is_space(*src) && *src != '\0') /* skip program name */
-        src++;
+    if (*src == '"')                /* check for quoted program name */
+    {
+        ++src;                      /* skip leading quote */
+        while (*src != '"' && *src != '\0')
+            src++;                  /* skip the part in quotes */
+        if (*src == '"')            /* skip trailing quote */
+            ++src;
+    }
+    else
+        while (!is_space(*src) && *src != '\0') /* skip program name */
+            src++;
 #endif
 
     /* Allocate space for a copy of the command line.  We could modify
      * the command line in place, but some programs might want to look
      * at it unmodified.
      */
-    if ((dst = malloc(strlen(src)+1)) == NULL)
+    if ((cmdsave = dst = malloc(strlen(src)+1)) == NULL)
         _ErrorExit("No space for copy of command line");
 
     /* Add each argument from the command line to the argument list.
@@ -196,9 +222,29 @@ void _EXPFUNC _setargv(void)
     _C0argv = _argv;                    /*  in these variables */
 }
 
+/*----------------------------------------------------------------------
+ * _exitargv  - clean up _argc and _argv
+ *
+ * Cleans up the allocated memory.
+ *
+ */
+void _EXPFUNC _exitargv(void)
+{
 #if !defined(_BUILDRTLDLL)
-#pragma startup _setargv 3      /* force _setargv to be called at startup */
+#pragma exit _exitargv 3      /* force _exitargv to be called at cleanup */
 #endif
+
+    /* If we allocated _argv, _argv[0], and cmdsave clean them up (we won't
+       set them up in a DLL).
+       Note: Wildargs needs support later
+     */
+    if (_argv)
+    {
+	free(_argv[0]);
+	free(_argv);
+	free(cmdsave);
+    }
+}
 
 /*----------------------------------------------------------------------
  * copychar - copy next character from command line

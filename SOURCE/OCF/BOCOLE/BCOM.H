@@ -1,15 +1,14 @@
+//----------------------------------------------------------------------------
+// ObjectComponents
+// Copyright (c) 1994, 1996 by Borland International, All Rights Reserved
 //
-//**************************************************************************
+// $Revision:   2.5  $
 //
-// BCom.h -- Contains some macros and utility stuff for implementing COM
-//           support (i.e. IUnknown) in Bolero apps.
-//
-// Copyright (c) 1993,94 by Borland International, Inc. All rights reserved
-//
-//**************************************************************************
-
-#ifndef BCOM_H
-#define BCOM_H
+// Macros and utility stuff for implementing COM support (i.e. IUnknown) in 
+// Bolero apps.
+//----------------------------------------------------------------------------
+#ifndef _BCOM_H
+#define _BCOM_H
 
 /*
  *                      Include COM definitions
@@ -18,9 +17,19 @@
 #include <string.h>                     // for fmemcmp
 
 #ifdef  WIN32
-#include <objbase.h>                    // include COM definitions
+  #ifndef _OBJBASE_H_
+    #include <objbase.h>                    // include COM definitions
+  #endif
+  #ifndef _OLEAUTO_H_
+    #include <oleauto.h>
+  #endif
 #else
-#include <compobj.h>                    // include COM definitions
+  #ifndef __COMPOBJ_H
+    #include <compobj.h>                    // include COM definitions
+  #endif
+  #ifndef __DISPATCH_H
+    #include <Dispatch.h>
+  #endif
 #endif
 
 #ifdef INITGUID
@@ -53,7 +62,11 @@
         #define _ICLASS  FAR
 #endif
 
-#define _IFUNC STDMETHODCALLTYPE
+#ifdef WIN32
+	#define _IFUNC STDMETHODCALLTYPE
+#else
+	#define _IFUNC FAR CDECL
+#endif
 
 #ifndef NULLP
         #define NULLP 0L
@@ -183,5 +196,6 @@ inline PIUnknown AsPIUnknown(PIBUnknownMain pUnk) {return (PIUnknown)pUnk;}
 #include "poppack.h"
 #endif
 
-#endif
+#define  IDS_SAVEOBJ  32900
 
+#endif

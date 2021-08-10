@@ -6,11 +6,11 @@ Instructions for the ide example DELIVER.IDE.
 
 PLEASE read this entire explanation before venturing off to use the
 Deliver utilities. It is important to understand this program reads and
-*writes* to you disk so be careful.
+*writes* to your disk so be careful.
 
 Deliver and Deliverd are tools for basic file manipulation during the
 making of a project. They are called Deliver because their main purpose
-is intented to be used as moving project targets (.exe,.lib, etc.) from
+is intended to be used as moving project targets (.exe,.lib, etc.) from
 an intermediate area to a final 'delivery' area, however having the
 source code to these programs allows you to extend and enhance their
 functionality. It can be used as 'Tool' menu item to do general house-
@@ -18,14 +18,14 @@ cleaning.
 
 The Deliver.exe is the Windows16 version of the program. It will run
 fast but does not provide feedback of what's it's doing and being a
-Windows app it's 'return code' cannot be used to stop a build. The
+Windows app its 'return code' cannot be used to stop a build. The
 Deliverd.exe is the DOS16 version and can be used in make file scripts
 or in the IDE in conjunction with the $CAP MSG(BORL2MSG) filter to pump 
 status but it will run slower since it has to invoke a 'DOS box' to run. 
-Also, because it is a DOS app, it's return code can be used to stop 
+Also, because it is a DOS app, its return code can be used to stop 
 a build in progress in case of mishap.
 
-Deliver currently recognises the following commands:
+Deliver currently recognizes the following commands:
 
 COPY	 <source> [<source> ...] <destination>
 MOVE   <source> [<source> ...] <destination>
@@ -36,7 +36,7 @@ RENAME <oldname> <newname>
 Of these commands COPY, MOVE, and CLEAN take wildcards in the first
 argument(s).
 
-Any piece of a command line (incuding the command) can be placed into
+Any piece of a command line (including the command) can be placed into
 a response file. The response file name must be preceded with the '+'
 (plus) character. For example:
 
@@ -141,7 +141,7 @@ EXAMPLES:
 		Add a SourcePool called "Copy to safe"
 		Move all sources nodes you wish to copy under "Copy to safe"
 		Reference copy "Copy to safe" back to the target
-		On the original (bold) "Copy to safe" make 'Deliver' it's
+		On the original (bold) "Copy to safe" make 'Deliver' its
 		translator and put this local command line:
 			COPY +$RSP($DEPLIST) c:\safe\haven
 		
@@ -159,7 +159,7 @@ TIPS AND CAVEATS
 	out to be, place a $PROMPT at the beginning of the command line and
 	run the tool. In the prompt box you get a preview of the command 
 	line that would be passed to the tool. You should *CANCEL* from 
-	this box if you have doubts about it's validity.
+	this box if you have doubts about its validity.
 
 4. If you find yourself typing in the same local command more than a few
 	times, consider copying the original 'Deliver' tool. You do this 

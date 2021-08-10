@@ -1,7 +1,6 @@
-//
 //----------------------------------------------------------------------------
 // ObjectComponents
-// (C) Copyright 1994 by Borland International, All Rights Reserved
+// Copyright (c) 1994, 1996 by Borland International, All Rights Reserved
 //
 //   Automation Symbol Table, Command, and Proxy Macro Definitions
 //----------------------------------------------------------------------------
@@ -12,13 +11,18 @@
 # include <ocf/autodefs.h>
 #endif
 
-// suppress "Functions taking class-by-value arg(s) are not expanded inline"
-#pragma warn -inl
+//
+// Suppress "Functions taking class-by-value arg(s) are not expanded inline"
+//
+#if defined(BI_COMP_BORLANDC)
+# pragma warn -inl
+#endif
 
-//____________________________________________________________________________
+//----------------------------------------------------------------------------
 //
 // Macros for defining symbol tables
-//____________________________________________________________________________
+//
+//----------------------------------------------------------------------------
 //
 //  DEFINE_AUTOCLASS(C++ClassName)
 //
@@ -44,7 +48,8 @@
 //
 //  DEFINE_AUTOAGGREGATE(C++ClassName, AggregatorFunction)
 //  END_AUTOAGGREGATE(C++ClassName, ExtClassName, DocString, HelpContext)
-//____________________________________________________________________________
+//
+//----------------------------------------------------------------------------
 
 #define DEFINE_AUTOCLASS(cls) \
   TAutoSymbol cls::SymbolTable[] = {
@@ -131,6 +136,7 @@ struct TAutoEventDummy {
 #define EXPOSE_ITERATOR(cls, doc, help)     {{"_NewEnum"},{doc}, asIterator, \
   -4, &cls::ClassInfo, TAutoSymbol::InitAutoIterator(ThisClass::TIterator::Build), help},
 
+//
 // Macros to define enumeration lists
 //
 //   DEFINE_AUTOENUM(EnumName, TAuto????)
@@ -138,6 +144,7 @@ struct TAutoEventDummy {
 //     AUTOENUM(EnumString2,  constval2)
 //     AUTOENUM(EnumString3,  constval3)
 //   END_AUTOENUM(EnumName, TAuto????)
+//
 
 #define DEFINE_AUTOENUM(cls, type) \
   TAutoEnumVal<type##Enum> cls##_Table[] = {
@@ -159,10 +166,11 @@ typedef TAutoCurrency TAutoCurrencyEnum;
 typedef TAutoDate     TAutoDateEnum;
 typedef unsigned char TAutoByteEnum;
 
-//____________________________________________________________________________
+//----------------------------------------------------------------------------
 //
 // Macros for defining command objects
-//____________________________________________________________________________
+//
+//----------------------------------------------------------------------------
 //
 //  DECLARE_AUTOCLASS(C++ClassName)
 //    AUTOFUNC0 (InternalName, FuncName, Options)
@@ -186,7 +194,8 @@ typedef unsigned char TAutoByteEnum;
 //  use the following macro in place of DECLARE_AUTOCLASS:
 //
 //  DECLARE_AUTOAGGREGATE(C++ClassName)
-//____________________________________________________________________________
+//
+//----------------------------------------------------------------------------
 
 //
 // Macros to place in final argument to add capabilites, else leave empty
@@ -198,7 +207,7 @@ typedef unsigned char TAutoByteEnum;
 #define AUTONOHOOK TAutoCommand& Invoke() {Execute();}
 #define AUTOREPORT(errcode) long Report() {return errcode;}
 
-//____________________________________________________________________________
+//----------------------------------------------------------------------------
 
 //
 // Autoclass declaration, adding derived TAutoCommand class with this pointer
@@ -245,13 +254,16 @@ typedef unsigned char TAutoByteEnum;
         cls* This; \
     }; typedef cls ThisClass;
 
+//
 // Autoclass declaration for COM-aggregatable classes
+//
 
 #define DECLARE_AUTOAGGREGATE(cls) \
   public: \
     static IUnknown& Aggregator(ObjectPtr inst, TUnknown& inner); \
   DECLARE_AUTOCLASS(cls)
 
+//
 // Command object class definition for methods or get-only properties
 //
 #define RETARG(t) void Return(TAutoVal& v){v=Val;} t Val;
@@ -283,6 +295,7 @@ typedef unsigned char TAutoByteEnum;
         new TCommand_##name((ThisClass*)obj, attr,(type)args[TAutoStack::SetValue]);}\
     }; friend class TCommand_##name;
 
+//
 // Command object class definition for constructor commands
 //
 #define AUTOBUILD_(name, invoke, defs, defargs, bldargs, ctrargs, setargs) \
@@ -295,11 +308,13 @@ typedef unsigned char TAutoByteEnum;
       { return new TCommand_##name(attr bldargs); } \
     };
 
+//
 // Command object class definition for external object property
 //
 #define AUTOPROXY(name, proxy, defs) \
         AUTOPROP_(name, Val=This->proxy;, This->proxy.Bind(Val);, defs, IDispatch*)
 
+//
 // Iterator class definition
 //
 #define AUTOITERATOR(state, init, test, step, extract) \
@@ -677,18 +692,20 @@ typedef unsigned char TAutoByteEnum;
       ~TDetach(){Notify((int)&((ThisClass*)0)->dtr_notify,typeid(ThisClass));} \
     } dtr_notify; friend struct TDetach;
 
-//____________________________________________________________________________
+//----------------------------------------------------------------------------
 //
 // Macros for defining automation proxy call wrappers
-//____________________________________________________________________________
+//
+//----------------------------------------------------------------------------
 //
 //  RetType|void C++ClassName::C++MethodName(C++ArgumentList)
 //  {
-//    AUTONAMES?(FunctionName&NamedArgs)  // ? = named argument count
+//    AUTONAMES?(FunctionName&NamedArgs) // ? = named argument count
 //    AUTOARGS?(ArgumentList)            // ? = total argument count
-//    AUTOCALL_?                        // ? = call type and return value type
+//    AUTOCALL_?                         // ? = call type and return value type
 //  }
-//____________________________________________________________________________
+//
+//----------------------------------------------------------------------------
 
 #define AUTOCALL_ASSIGN \
    ExtObjRef operator =(ExtObjRef ifc) {return TAutoProxy::operator =(ifc);}
@@ -749,4 +766,3 @@ typedef unsigned char TAutoByteEnum;
 #define AUTOCALL_PROP_CONV(t)    return t(Invoke(acPropGet, a_, i_, i_));
 
 #endif  // OCF_AUTOMACR_H
-

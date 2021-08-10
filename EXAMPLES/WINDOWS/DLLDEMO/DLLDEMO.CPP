@@ -11,7 +11,7 @@
 #if defined(__WIN32__)
 #define _EXPORT
 #else
-#define _EXPORT huge
+#define _EXPORT _import
 #endif
 #include "bitmap.h"
 

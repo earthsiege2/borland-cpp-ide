@@ -1,5 +1,21 @@
 <<[CPP]
 ##^BOF
+##TRUE [[Search1]]
+##TRUE [[Search2]]
+##"#include <owl/olefacto.h>" [[IncludeFile]]
+##--BEGIN-- ? IncludeFile [[Search1]]
+##      Search1 == FALSE
+##      :? "#include " Search2
+##*
+##      Search2 == FALSE
+##:     %\\"Missing any #include for class instantiation.  "
+##*
+##      (Search1 == FALSE) && (Search2 == TRUE)
+##      :^BOL
+##      :^2
+[[IncludeFile]]
+##--END-- ? IncludeFile [[Search1]]
+##^BOF
 ##FALSE [[RegAndFact]]
 ##FALSE [[Template]]
 ##--BEGIN-- ? "BEGIN_REGISTRATION(ApplicationReg)" [[RegThere]]
@@ -21,21 +37,21 @@ static TPointer<TRegistrar> Registrar;
 ##@QUERY_APPL_OLE != VALUE_NOOLE
 static TPointer<TOcRegistrar> Registrar;
 
-REGISTRATION_FORMAT_BUFFER(100)
+REGISTRATION_FORMAT_BUFFER(200)
 
 BEGIN_REGISTRATION(ApplicationReg)
 ##          --BEGIN-- @QUERY_OLE_GUID [[GUID]]
 ##              :GUID != ""
-    REGDATA(clsid, "{[[GUID]]}")
+  REGDATA(clsid, "{[[GUID]]}")
 ##              :GUID == ""
-    REGDATA(clsid, "{544C5355-4547-4C4C-5248-4C4C75636173}")
+  REGDATA(clsid, "{544C5355-4547-4C4C-5248-4C4C75636173}")
 ##          --END-- @QUERY_OLE_GUID [[GUID]]
 ##          --BEGIN-- @QUERY_PRJ_NAME [[AppTitle]]
-    REGDATA(progid, "[[AppTitle]].Application.1")
-    REGDATA(appname, "[[AppTitle]] Server")
-    REGDATA(description, "[[AppTitle]] Server Application")
-    REGDATA(cmdline, "/Automation")
-//    REGDATA(debugger, "TDW")
+  REGDATA(progid, "[[AppTitle]].Application.1")
+  REGDATA(appname, "[[AppTitle]] Server")
+  REGDATA(description, "[[AppTitle]] Server Application")
+  REGDATA(cmdline, "/Automation")
+//  REGDATA(debugger, "TDW")
 ##          --END-- @QUERY_PRJ_NAME [[AppTitle]]
 END_REGISTRATION
 
@@ -55,7 +71,7 @@ END_REGISTRATION
 ##                              :XPos() [[X1Pos]]
 ##                              :^@CurrYLine, CurrXCol
 ##                              :^DROP
-##                              :^@CurrYLine, (X1Pos - 1)
+##                              :^@CurrYLine,(X1Pos - 1)
 ##                              :^RAISE
 ##                              :InsertText("::ApplicationReg[\"appname\"], ::Module, &::AppDictionary")
 ##*
@@ -73,15 +89,15 @@ END_REGISTRATION
 ##                      :^BOL
 ##                      :^DELL
 ##                      --BEGIN-- @QUERY_APPL_OLE == VALUE_NOOLE
-        ::Registrar = new TRegistrar(::ApplicationReg, TAutoFactory<[[ClassName]]>(), TApplication::GetCmdLine(), _hInstance);
-        if (::Registrar->IsOptionSet(amAnyRegOption))
-            return 0;
+  ::Registrar = new TRegistrar(::ApplicationReg, TAutoFactory<[[ClassName]]>(), TApplication::GetCmdLine(), _hInstance);
+  if (::Registrar->IsOptionSet(amAnyRegOption))
+    return 0;
 
 ##                      --END-- @QUERY_APPL_OLE == VALUE_NOOLE
 ##                      --BEGIN-- @QUERY_APPL_OLE != VALUE_NOOLE
-        ::Registrar = new TOcRegistrar(::ApplicationReg, TOleDocViewAutoFactory<[[ClassName]]>(), TApplication::GetCmdLine(), ::DocTemplateStaticHead);
-        if (::Registrar->IsOptionSet(amAnyRegOption))
-            return 0;
+  ::Registrar = new TOcRegistrar(::ApplicationReg, TOleDocViewAutoFactory<[[ClassName]]>(), TApplication::GetCmdLine(), ::DocTemplateStaticHead);
+  if (::Registrar->IsOptionSet(amAnyRegOption))
+    return 0;
 
 ##                      --END-- @QUERY_APPL_OLE != VALUE_NOOLE
 ##                      :? \\"App.Run(" AppFound
@@ -94,7 +110,7 @@ END_REGISTRATION
 ##                          :XPos() [[CurrXPos]]
 ##                          :^@CurrYPos, CurrXPos
 ##                          :^DROP
-##                          :^@CurrYPos, (CurrXPos + 3)
+##                          :^@CurrYPos,(CurrXPos + 3)
 ##                          :^RAISE
 ##                          :InsertText("::Registrar->")
 ##*
@@ -111,7 +127,7 @@ END_REGISTRATION
 ##                              :XPos() [[X2Pos]]
 ##                              :^@CurrYLine, X1Pos
 ##                              :^DROP
-##                              :^@CurrYLine, (X2Pos - 1)
+##                              :^@CurrYLine,(X2Pos - 1)
 ##                              :^RAISE
 ##                              --BEGIN-- TRUE
 ##                                  :@QUERY_APPL_OLE == VALUE_NOOLE

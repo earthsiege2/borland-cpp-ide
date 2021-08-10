@@ -21,11 +21,11 @@
 #############################################################################
 !if $(OS) != DPMI16
     OBJS =               \
-            signal.obj
+            signal.obj   \
+            errexit.obj
 
     AUXOBJS =            \
             setjmp.obj   \
-            errexit.obj  \
             setargv.obj  \
             setargv0.obj \
             setenv.obj   \

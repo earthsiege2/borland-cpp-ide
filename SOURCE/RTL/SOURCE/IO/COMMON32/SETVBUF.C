@@ -6,9 +6,9 @@
  *-----------------------------------------------------------------------*/
 
 /*
- *      C/C++ Run Time Library - Version 1.5
+ *      C/C++ Run Time Library - Version 2.0
  *
- *      Copyright (c) 1987, 1994 by Borland International
+ *      Copyright (c) 1987, 1996 by Borland International
  *      All Rights Reserved.
  *
  */
@@ -104,9 +104,6 @@ int _RTLENTRY _EXPFUNC setvbuf (FILE *fp, char *buf, int type, size_t size)
      */
     if (fp->level)
         fseek (fp, 0L, SEEK_CUR);
-
-    if (fp->flags & _F_BUF)
-        free (fp->buffer);
 
     /* Set up the buffering for this file.
      */

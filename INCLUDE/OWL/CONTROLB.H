@@ -1,8 +1,10 @@
 //----------------------------------------------------------------------------
 // ObjectWindows
-// (C) Copyright 1992, 1994 by Borland International, All Rights Reserved
+// Copyright (c) 1992, 1996 by Borland International, All Rights Reserved
 //
-//   Class TControlBar.
+//$Revision:   10.3  $
+//
+// Definition of class TControlBar.
 //----------------------------------------------------------------------------
 #if !defined(OWL_CONTROLB_H)
 #define OWL_CONTROLB_H
@@ -11,12 +13,15 @@
 # include <owl/gadgetwi.h>
 #endif
 
+// Generic definitions/compiler options (eg. alignment) preceeding the 
+// definition of classes
+#include <services/preclass.h>
+
 //
-//  class TControlBar
-//  ----- -----------
-//
-//  implements a control bar which provides mnemonic access for its button
-//  gadgets. by default positions itself at the top of the window
+// class TControlBar
+// ~~~~~ ~~~~~~~~~~~
+// Implements a control bar which provides mnemonic access for its button
+// gadgets. By default positions itself at the top of the window
 //
 class _OWLCLASS TControlBar : public TGadgetWindow {
   public:
@@ -24,13 +29,15 @@ class _OWLCLASS TControlBar : public TGadgetWindow {
                 TTileDirection  direction= Horizontal,
                 TFont*          font = new TGadgetWindowFont,
                 TModule*        module = 0);
+   ~TControlBar();
 
     bool    PreProcessMsg(MSG& msg);
 
-  protected:
-    void    PositionGadget(TGadget* previous, TGadget* next, TPoint& p);
-
   DECLARE_CASTABLE;
 };
+
+// Generic definitions/compiler options (eg. alignment) following the 
+// definition of classes
+#include <services/posclass.h>
 
 #endif  // OWL_CONTROLB_H

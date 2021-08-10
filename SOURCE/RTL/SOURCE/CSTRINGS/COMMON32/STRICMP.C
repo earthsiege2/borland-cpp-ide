@@ -7,9 +7,9 @@
  *-----------------------------------------------------------------------*/
 
 /*
- *      C/C++ Run Time Library - Version 1.5
+ *      C/C++ Run Time Library - Version 2.0
  *
- *      Copyright (c) 1987, 1994 by Borland International
+ *      Copyright (c) 1987, 1996 by Borland International
  *      All Rights Reserved.
  *
  */
@@ -46,7 +46,7 @@ Return value    stricmp return an integer value that is:
 
 int _RTLENTRYF _EXPFUNC stricmp(const char *str1, const char *str2)
 {
-    char c1, c2;
+    unsigned char c1, c2;
 
     while ((c1 = (char)toupper(*str1)) == (c2 = (char)toupper(*str2)) && c1 != '\0')
     {

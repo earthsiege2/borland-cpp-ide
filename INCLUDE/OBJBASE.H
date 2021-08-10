@@ -25,7 +25,7 @@
     #define EXTERN_C    extern
 #endif
 
-#if defined (_WIN32) && !defined (__BORLANDC__)
+#ifdef _WIN32
 
 // Win32 doesn't support __export
 
@@ -234,13 +234,13 @@
 
 #include <stdlib.h>
 
-#if defined(_ANONYMOUS_STRUCT)
 #define LISet32(li, v) ((li).HighPart = (v) < 0 ? -1 : 0, (li).LowPart = (v))
+
 #define ULISet32(li, v) ((li).HighPart = 0, (li).LowPart = (v))
-#else
-#define LISet32(li, v) ((li).u.HighPart = (v) < 0 ? -1 : 0, (li).u.LowPart = (v))
-#define ULISet32(li, v) ((li).u.HighPart = 0, (li).u.LowPart = (v))
-#endif
+
+
+
+
 
 
 #define CLSCTX_ALL              (CLSCTX_INPROC_SERVER| \

@@ -13,6 +13,11 @@
 #                                                                          #
 #--------------------------------------------------------------------------#
 
+!if $(SYSTEM)==WIN16 || $d(WIN16)
+ MODELS = smclh
+!endif
+SYSTEMS = DOS16 WIN16 CON32
+
 EXE     = strngmax  # this target used to generate rule for making an .exe
 
 !include $(BCEXAMPLEDIR)\bidsmake.gen

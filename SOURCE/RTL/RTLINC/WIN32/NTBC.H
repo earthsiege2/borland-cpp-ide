@@ -6,9 +6,9 @@
  *-----------------------------------------------------------------------*/
 
 /*
- *      C/C++ Run Time Library - Version 1.5
+ *      C/C++ Run Time Library - Version 2.0
  *
- *      Copyright (c) 1993, 1994 by Borland International
+ *      Copyright (c) 1993, 1996 by Borland International
  *      All Rights Reserved.
  *
  */
@@ -49,6 +49,7 @@
 #include <dosexcpt.h>       /* OS-2 compatible exception definitions */
 
 #ifdef INCL_USER
+#include <wingdi.h>
 #include <winuser.h>
 #endif
 

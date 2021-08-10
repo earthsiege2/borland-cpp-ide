@@ -1,6 +1,0 @@
-#include "filtrc.h"
-
-STRINGTABLE
-BEGIN
-IDS_CANNOTFILTER "Transfer error: unable to process tool output."
-END

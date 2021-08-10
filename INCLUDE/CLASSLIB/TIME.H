@@ -1,29 +1,25 @@
-/*------------------------------------------------------------------------*/
-/*                                                                        */
-/*  TIME.H                                                                */
-/*                                                                        */
-/*  Copyright (c) 1993, 1994 Borland International                        */
-/*  All Rights Reserved                                                   */
-/*                                                                        */
-/*------------------------------------------------------------------------*/
-
+//----------------------------------------------------------------------------
+// Borland Class Library
+// Copyright (c) 1993, 1996 by Borland International, All Rights Reserved
+//
+//$Revision:   5.3  $
+//
+//----------------------------------------------------------------------------
 #if !defined(CLASSLIB_TIME_H)
 #define CLASSLIB_TIME_H
 
-#if !defined( __TIME_H )
-#include <time.h>
+#if !defined(CLASSLIB_DEFS_H)
+# include <classlib/defs.h>
 #endif
-
-#if !defined( CLASSLIB_DEFS_H )
-#include <classlib/defs.h>
+#if !defined(CLASSLIB_DATE_H)
+# include <classlib/date.h>
 #endif
-
-#if !defined( CLASSLIB_DATE_H )
-#include <classlib/date.h>
+#if !defined(__TIME_H)
+# include <time.h>
 #endif
 
 #if defined( BI_CLASSLIB_NO_po )
-#pragma option -po-
+# pragma option -po-
 #endif
 
 class _EXPCLASS string;
@@ -214,8 +210,7 @@ inline HashValue( TTime _BIDSFAR & t )
 }
 
 #if defined( BI_CLASSLIB_NO_po )
-#pragma option -po.
+# pragma option -po.
 #endif
 
 #endif  // CLASSLIB_TIME_H
-

@@ -3,7 +3,7 @@
 //   Tutorial application
 //   OLE 2 container example
 //----------------------------------------------------------------------------
-#include <owl/owlpch.h>
+#include <owl/pch.h>
 #include <owl/dc.h>
 #include <owl/inputdia.h>
 #include <owl/chooseco.h>
@@ -13,6 +13,7 @@
 #include <classlib/arrays.h>
 #include <owl/oledoc.h>
 #include <owl/oleview.h>
+#include <owl/edit.rh>
 #include "step14dv.rc"
 
 typedef TArray<TPoint> TPoints;

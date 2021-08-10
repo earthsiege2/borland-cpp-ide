@@ -6,9 +6,9 @@
  *-----------------------------------------------------------------------*/
 
 /*
- *      C/C++ Run Time Library - Version 1.5
+ *      C/C++ Run Time Library - Version 2.0
  *
- *      Copyright (c) 1990, 1994 by Borland International
+ *      Copyright (c) 1990, 1996 by Borland International
  *      All Rights Reserved.
  *
  */
@@ -55,7 +55,7 @@ void _RTLENTRY _EXPFUNC _vector_apply_(
             {
             case 1: (*(appCdecl)    app)((void *) dest, (void *) src); break;
             case 2: (*(appPascal)   app)((void *) src, (void *) dest); break;
-            case 3: (*(appFastcall) app)((void *) src, (void *) dest); break;
+            case 3: (*(appFastcall) app)((void *) dest, (void *) src); break;
             case 5: (*(appStdcall)  app)((void *) dest, (void *) src); break;
 #if defined(__OS2__)
             case 6: (*(appSyscall)  app)((void *) dest, (void *) src); break;

@@ -1,157 +1,156 @@
-LIBRARY     OLE32.DLL
-
+LIBRARY OLE32
 EXPORTS
-    BindMoniker                    @1   
-    CLSIDFromProgID                @2   
-    CLSIDFromString                @3   
-    CoBuildVersion                 @4   
-    CoCreateGuid                   @5   
-    CoCreateInstance               @6   
-    CoDisconnectObject             @7   
-    CoDosDateTimeToFileTime        @8   
-    CoFileTimeNow                  @9   
-    CoFileTimeToDosDateTime        @10  
-    CoFreeAllLibraries             @11  
-    CoFreeLibrary                  @12  
-    CoFreeUnusedLibraries          @13  
-    CoGetCallerTID                 @14  
-    CoGetClassObject               @15  
-    CoGetCurrentProcess            @16  
-    CoGetMalloc                    @17  
-    CoGetMarshalSizeMax            @18  
-    CoGetStandardMarshal           @19  
-    CoGetState                     @20  
-    CoGetTreatAsClass              @21  
-    CoInitialize                   @22  
-    CoInitializeEx                 @23  
-    CoInitializeWOW                @24  
-    CoIsHandlerConnected           @25  
-    CoIsOle1Class                  @26  
-    CoLoadLibrary                  @27  
-    CoLockObjectExternal           @28  
-    CoMarshalHresult               @29  
-    CoMarshalInterface             @30  
-    CoQueryReleaseObject           @31  
-    CoRegisterClassObject          @32  
-    CoRegisterMessageFilter        @33  
-    CoReleaseMarshalData           @34  
-    CoRevokeClassObject            @35  
-    CoSetState                     @36  
-    CoTaskMemAlloc                 @37  
-    CoTaskMemFree                  @38  
-    CoTaskMemRealloc               @39  
-    CoTreatAsClass                 @40  
-    CoUninitialize                 @41  
-    CoUnmarshalHresult             @42  
-    CoUnmarshalInterface           @43  
-    CreateAntiMoniker              @44  
-    CreateBindCtx                  @45  
-    CreateDataAdviseHolder         @46  
-    CreateDataCache                @47  
-    CreateFileMoniker              @48  
-    CreateGenericComposite         @49  
-    CreateILockBytesOnHGlobal      @50  
-    CreateItemMoniker              @51  
-    CreateOleAdviseHolder          @52  
-    CreatePointerMoniker           @53  
-    CreateStreamOnHGlobal          @54  
-    DllDebugObjectRPCHook          @55  
-    DllGetClassObject              @56  
-    DllGetClassObjectWOW           @57  
-    DoDragDrop                     @58  
-    GetClassFile                   @59  
-    GetConvertStg                  @60  
-    GetDocumentBitStg              @61  
-    GetHGlobalFromILockBytes       @62  
-    GetHGlobalFromStream           @63  
-    GetRunningObjectTable          @64  
-    IIDFromString                  @65  
-    IsAccelerator                  @66  
-    IsEqualGUID                    @67  
-    IsValidIid                     @68  
-    IsValidInterface               @69  
-    IsValidPtrIn                   @70  
-    IsValidPtrOut                  @71  
-    MkParseDisplayName             @72  
-    MonikerCommonPrefixWith        @73  
-    MonikerRelativePathTo          @74  
-    OleBuildVersion                @75  
-    OleConvertIStorageToOLESTREAM  @76  
-    OleConvertIStorageToOLESTREAMEx @77  
-    OleConvertOLESTREAMToIStorage  @78  
-    OleConvertOLESTREAMToIStorageEx @79  
-    OleCreate                      @80  
-    OleCreateDefaultHandler        @81  
-    OleCreateEmbeddingHelper       @82  
-    OleCreateFromData              @83  
-    OleCreateFromFile              @84  
-    OleCreateLink                  @85  
-    OleCreateLinkFromData          @86  
-    OleCreateLinkToFile            @87  
-    OleCreateMenuDescriptor        @88  
-    OleCreateStaticFromData        @89  
-    OleDestroyMenuDescriptor       @90  
-    OleDoAutoConvert               @91  
-    OleDraw                        @92  
-    OleDuplicateData               @93  
-    OleFlushClipboard              @94  
-    OleGetAutoConvert              @95  
-    OleGetClipboard                @96  
-    OleGetIconOfClass              @97  
-    OleGetIconOfFile               @98  
-    OleInitialize                  @99  
-    OleInitializeEx                @100 
-    OleInitializeWOW               @101 
-    OleIsCurrentClipboard          @102 
-    OleIsRunning                   @103 
-    OleLoad                        @104 
-    OleLoadFromStream              @105 
-    OleLockRunning                 @106 
-    OleMetafilePictFromIconAndLabel @107 
-    OleNoteObjectVisible           @108 
-    OleQueryCreateFromData         @109 
-    OleQueryLinkFromData           @110 
-    OleRegEnumFormatEtc            @111 
-    OleRegEnumVerbs                @112 
-    OleRegGetMiscStatus            @113 
-    OleRegGetUserType              @114 
-    OleRun                         @115 
-    OleSave                        @116 
-    OleSaveToStream                @117 
-    OleSetAutoConvert              @118 
-    OleSetClipboard                @119 
-    OleSetContainedObject          @120 
-    OleSetMenuDescriptor           @121 
-    OleTranslateAccelerator        @122 
-    OleUninitialize                @123 
-    OpenOrCreateStream             @124 
-    ProgIDFromCLSID                @125 
-    ReadClassStg                   @126 
-    ReadClassStm                   @127 
-    ReadFmtUserTypeStg             @128 
-    ReadOleStg                     @129 
-    ReadStringStream               @130 
-    RegisterDragDrop               @131 
-    ReleaseStgMedium               @132 
-    RevokeDragDrop                 @133 
-    SetConvertStg                  @134 
-    SetDocumentBitStg              @135 
-    StgCreateDocfile               @136 
-    StgCreateDocfileOnILockBytes   @137 
-    StgIsStorageFile               @138 
-    StgIsStorageILockBytes         @139 
-    StgOpenStorage                 @140 
-    StgOpenStorageOnILockBytes     @141 
-    StgSetTimes                    @142 
-    StringFromCLSID                @143 
-    StringFromGUID2                @144 
-    StringFromIID                  @145 
-    UtConvertDvtd16toDvtd32        @146 
-    UtConvertDvtd32toDvtd16        @147 
-    UtGetDvtd16Info                @148 
-    UtGetDvtd32Info                @149 
-    WriteClassStg                  @150 
-    WriteClassStm                  @151 
-    WriteFmtUserTypeStg            @152 
-    WriteOleStg                    @153 
-    WriteStringStream              @154 
+
+    BindMoniker
+    CLSIDFromProgID
+    CLSIDFromString
+    CoBuildVersion
+    CoCreateGuid
+    CoCreateInstance
+    CoDisconnectObject
+    CoDosDateTimeToFileTime
+    CoFileTimeNow
+    CoFileTimeToDosDateTime
+    CoFreeAllLibraries
+    CoFreeLibrary
+    CoFreeUnusedLibraries
+    CoGetCallerTID
+    CoGetClassObject
+    CoGetCurrentProcess
+    CoGetMalloc
+    CoGetMarshalSizeMax
+    CoGetStandardMarshal
+    CoGetState
+    CoGetTreatAsClass
+    CoInitialize
+    CoInitializeEx
+    CoInitializeWOW
+    CoIsHandlerConnected
+    CoIsOle1Class
+    CoLoadLibrary
+    CoLockObjectExternal
+    CoMarshalHresult
+    CoMarshalInterface
+    CoQueryReleaseObject
+    CoRegisterClassObject
+    CoRegisterMessageFilter
+    CoReleaseMarshalData
+    CoRevokeClassObject
+    CoSetState
+    CoTaskMemAlloc
+    CoTaskMemFree
+    CoTaskMemRealloc
+    CoTreatAsClass
+    CoUninitialize
+    CoUnmarshalHresult
+    CoUnmarshalInterface
+    CreateAntiMoniker
+    CreateBindCtx
+    CreateDataAdviseHolder
+    CreateDataCache
+    CreateFileMoniker
+    CreateGenericComposite
+    CreateILockBytesOnHGlobal
+    CreateItemMoniker
+    CreateOleAdviseHolder
+    CreatePointerMoniker
+    CreateStreamOnHGlobal
+    DllDebugObjectRPCHook
+    DllGetClassObjectWOW
+    DoDragDrop
+    GetClassFile
+    GetConvertStg
+    GetDocumentBitStg
+    GetHGlobalFromILockBytes
+    GetHGlobalFromStream
+    GetRunningObjectTable
+    IIDFromString
+    IsAccelerator
+    IsEqualGUID
+    IsValidIid
+    IsValidInterface
+    IsValidPtrIn
+    IsValidPtrOut
+    MkParseDisplayName
+    MonikerCommonPrefixWith
+    MonikerRelativePathTo
+    OleBuildVersion
+    OleConvertIStorageToOLESTREAM
+    OleConvertIStorageToOLESTREAMEx
+    OleConvertOLESTREAMToIStorage
+    OleConvertOLESTREAMToIStorageEx
+    OleCreate
+    OleCreateDefaultHandler
+    OleCreateEmbeddingHelper
+    OleCreateFromData
+    OleCreateFromFile
+    OleCreateLink
+    OleCreateLinkFromData
+    OleCreateLinkToFile
+    OleCreateMenuDescriptor
+    OleCreateStaticFromData
+    OleDestroyMenuDescriptor
+    OleDoAutoConvert
+    OleDraw
+    OleDuplicateData
+    OleFlushClipboard
+    OleGetAutoConvert
+    OleGetClipboard
+    OleGetIconOfClass
+    OleGetIconOfFile
+    OleInitialize
+    OleInitializeEx
+    OleInitializeWOW
+    OleIsCurrentClipboard
+    OleIsRunning
+    OleLoad
+    OleLoadFromStream
+    OleLockRunning
+    OleMetafilePictFromIconAndLabel
+    OleNoteObjectVisible
+    OleQueryCreateFromData
+    OleQueryLinkFromData
+    OleRegEnumFormatEtc
+    OleRegEnumVerbs
+    OleRegGetMiscStatus
+    OleRegGetUserType
+    OleRun
+    OleSave
+    OleSaveToStream
+    OleSetAutoConvert
+    OleSetClipboard
+    OleSetContainedObject
+    OleSetMenuDescriptor
+    OleTranslateAccelerator
+    OleUninitialize
+    OpenOrCreateStream
+    ProgIDFromCLSID
+    ReadClassStg
+    ReadClassStm
+    ReadFmtUserTypeStg
+    ReadOleStg
+    ReadStringStream
+    RegisterDragDrop
+    ReleaseStgMedium
+    RevokeDragDrop
+    SetConvertStg
+    SetDocumentBitStg
+    StgCreateDocfile
+    StgCreateDocfileOnILockBytes
+    StgIsStorageFile
+    StgIsStorageILockBytes
+    StgOpenStorage
+    StgOpenStorageOnILockBytes
+    StgSetTimes
+    StringFromCLSID
+    StringFromGUID2
+    StringFromIID
+    UtConvertDvtd16toDvtd32
+    UtConvertDvtd32toDvtd16
+    UtGetDvtd16Info
+    UtGetDvtd32Info
+    WriteClassStg
+    WriteClassStm
+    WriteFmtUserTypeStg
+    WriteOleStg
+    WriteStringStream

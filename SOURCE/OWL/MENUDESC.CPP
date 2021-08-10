@@ -1,13 +1,19 @@
 //----------------------------------------------------------------------------
 // ObjectWindows
-// (C) Copyright 1991, 1994 by Borland International, All Rights Reserved
+// Copyright (c) 1991, 1996 by Borland International, All Rights Reserved
 //
-//   Implementation of class TMenuDescr
+//$Revision:   10.4  $
+//
+// Implementation of class TMenuDescr
 //----------------------------------------------------------------------------
 #pragma hdrignore SECTION
-#include <owl/owlpch.h>
-#include <owl/menu.h>
-#include <owl/module.h>
+#include <owl/pch.h>
+#if !defined(OWL_MENU_H)
+# include <owl/menu.h>
+#endif
+#if !defined(OWL_MODULE_H)
+# include <owl/module.h>
+#endif
 
 #if !defined(SECTION) || SECTION == 1
 
@@ -106,7 +112,7 @@ TMenuDescr::~TMenuDescr()
 TMenuDescr&
 TMenuDescr::operator =(const TMenuDescr& other)
 {
-  *static_cast<TMenu*>(this) = *static_cast<const TMenu*>(&other);
+  *STATIC_CAST(TMenu*,this) = *STATIC_CAST(const TMenu*,&other);
   Id = other.Id;
   Module = other.Module;
   for (int i = 0; i < NumGroups; i++)
@@ -221,6 +227,10 @@ TMenuDescr::Merge(const TMenuDescr& srcMenuDescr, TMenu& dstMenu)
 #endif
 #if !defined(SECTION) || SECTION == 2
 
+#if !defined(BI_NO_OBJ_STREAMING)
+//
+// Extract the menu descriptor from the persistent stream.
+//
 ipstream& _OWLFUNC
 operator >>(ipstream& is, TMenuDescr& m)
 {
@@ -231,6 +241,9 @@ operator >>(ipstream& is, TMenuDescr& m)
   return is;
 }
 
+//
+// Insert the menu descriptor into the persistent stream.
+//
 opstream& _OWLFUNC
 operator <<(opstream& os, const TMenuDescr& m)
 {
@@ -241,5 +254,6 @@ operator <<(opstream& os, const TMenuDescr& m)
   return os;
 }
 
+#endif  // #if !defined(BI_NO_OBJ_STREAMING)
 
 #endif

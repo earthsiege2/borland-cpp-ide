@@ -11,7 +11,7 @@
 ##          :^@StartLine
 ##          :^BOL
 ##          :0 [[CurrAutoLine]]
-##          --FOR-- AutoEntry = 1 TO ((EndLine - StartLine) + 1)
+##          --FOR-- AutoEntry = 1 TO((EndLine - StartLine) + 1)
 ##              :ScanAutoEntry([[InternalName]], [[Kind]], [[GetExtName]], [[SetExtName]], [[GetProp]], [[SetProp]])
 ##              --BEGIN-- TRUE
 ##                  :YPos() CurrAutoLine

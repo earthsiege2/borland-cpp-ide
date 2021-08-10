@@ -3,7 +3,7 @@
 //*******************************************************************
 //
 // program - sounder.c
-// purpose - a C windows program to demonstrate sound APIs in Win 3.1
+// purpose - a C windows program to demonstrate sound APIs.
 //
 //*******************************************************************
 

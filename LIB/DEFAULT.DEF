@@ -1,5 +1,10 @@
 EXETYPE WINDOWS
 CODE PRELOAD MOVEABLE DISCARDABLE
 DATA PRELOAD MOVEABLE
-HEAPSIZE 4096
-STACKSIZE 8192
+
+; Note: The following are recommended settings for the default
+; values when the application is compiled as a 16-bit target.
+;
+; HEAPSIZE    4096
+; STACKSIZE   8192
+

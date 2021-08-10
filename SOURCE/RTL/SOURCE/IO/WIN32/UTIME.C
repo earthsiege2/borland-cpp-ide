@@ -6,9 +6,9 @@
  *-----------------------------------------------------------------------*/
 
 /*
- *      C/C++ Run Time Library - Version 1.5
+ *      C/C++ Run Time Library - Version 2.0
  *
- *      Copyright (c) 1991, 1994 by Borland International
+ *      Copyright (c) 1991, 1996 by Borland International
  *      All Rights Reserved.
  *
  */
@@ -29,7 +29,7 @@ static BOOL unixtofile(time_t tim, FILETIME *ftp)
     /* Convert supplied modification time to System date and time.
      * This code was stolen from unixtodos().
      */
-    tim -= 24L * 60L * 60L * 3652L + timezone;
+    tim -= 24L * 60L * 60L * 3652L + _timezone;
     st.wSecond = tim % 60;
     tim /= 60;                              /* Time in minutes */
     st.wMinute = tim % 60;
@@ -43,7 +43,7 @@ static BOOL unixtofile(time_t tim, FILETIME *ftp)
             st.wYear += (int)(tim / (365 * 24));
             tim %= 365 * 24;
     }
-    if (daylight && _isDST( (int)(tim % 24), (int)(tim / 24), 0, st.wYear-1970 ))
+    if (_daylight && _isDST( (int)(tim % 24), (int)(tim / 24), 0, st.wYear-1970 ))
             tim++;
     st.wHour = tim % 24;
     tim /= 24;                              /* Time in days */

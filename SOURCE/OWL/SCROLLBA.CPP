@@ -1,13 +1,20 @@
 //----------------------------------------------------------------------------
 // ObjectWindows
-// (C) Copyright 1991, 1994 by Borland International, All Rights Reserved
+// Copyright (c) 1991, 1996 by Borland International, All Rights Reserved
 //
-//   Implementation of class TScrollBar.  This defines the basic
-//   behavior of all scrollbar controls.
+//$Revision:   10.5  $
+//
+// Implementation of class TScrollBar.  This defines the basic behavior of all
+// scrollbar controls.
 //----------------------------------------------------------------------------
 #pragma hdrignore SECTION
-#include <owl/owlpch.h>
-#include <owl/scrollba.h>
+#include <owl/pch.h>
+#if !defined(OWL_SCROLLBA_H)
+# include <owl/scrollba.h>
+#endif
+#if !defined(WINSYS_UIMETRIC_H)
+# include <winsys/uimetric.h>
+#endif
 
 #if !defined(SECTION) || SECTION == 1
 
@@ -17,9 +24,9 @@ DEFINE_RESPONSE_TABLE1(TScrollBar, TControl)
 END_RESPONSE_TABLE;
 
 //
-// constructor for a TScrollBar object
+// Constructor for a TScrollBar object
 //
-// if the size attribute(H for horizontal scrollbars, W for vertical) is
+// If the size attribute (H for horizontal scrollbars, W for vertical) is
 // zero, the attribute is set to the appropriate system metric
 //
 TScrollBar::TScrollBar(TWindow*        parent,
@@ -37,16 +44,21 @@ TScrollBar::TScrollBar(TWindow*        parent,
     Attr.Style |= SBS_HORZ;
 
     if (Attr.H == 0)
-      Attr.H = GetSystemMetrics(SM_CYHSCROLL);
+      Attr.H = TUIMetric::CyHScroll;
   }
   else {
     Attr.Style |= SBS_VERT;
 
     if (Attr.W == 0)
-      Attr.W = GetSystemMetrics(SM_CXVSCROLL);
+      Attr.W = TUIMetric::CxVScroll;
   }
 }
 
+//
+// Constructor for a scrollbar from resource (dialog child)
+// The LineMagnitude is set to 1 by default.
+// The PageMagnitude is set to 10 by default.
+//
 TScrollBar::TScrollBar(TWindow*   parent,
                        int        resourceId,
                        TModule*   module)
@@ -58,9 +70,9 @@ TScrollBar::TScrollBar(TWindow*   parent,
 }
 
 //
-// transfers state information for a TScrollbar
+// Transfers state information for a TScrollbar
 //
-// direction specifies whether data is to be read from or written to the
+// Direction specifies whether data is to be read from or written to the
 // buffer, or whether the data element size is simply to be returned
 //
 // the return value is the size (in bytes) of the transfer data
@@ -92,7 +104,7 @@ TScrollBar::GetClassName()
 }
 
 //
-// initialize the scrollbar to the default range of 0 .. 100
+// Initialize the scrollbar to the default range of 0 .. 100
 //
 void
 TScrollBar::SetupWindow()
@@ -101,17 +113,58 @@ TScrollBar::SetupWindow()
   TControl::SetupWindow();
 }
 
+#if defined(BI_PLAT_WIN32)
 //
-// sets the position of the thumb
+// Set scrollbar info
+//
+void
+TScrollBar::SetScrollInfo(SCROLLINFO* info, bool redraw)
+{
+  PRECONDITION(GetHandle());
+  ::SetScrollInfo(GetHandle(), SB_CTL, info, redraw);
+}
+
+//
+// Retrieve the scroll info.
+//
+void
+TScrollBar::GetScrollInfo(SCROLLINFO* info) const
+{
+  PRECONDITION(GetHandle());
+  ::GetScrollInfo(GetHandle(), SB_CTL, info);
+}
+#endif
+
+//
+// Return the current position of the thumb.
+//
+int
+TScrollBar::GetPosition() const
+{
+  PRECONDITION(GetHandle());
+#if defined(BI_PLAT_WIN16)
+  return ::GetScrollPos(GetHandle(), SB_CTL);
+#else
+  SCROLLINFO info;
+  ZeroMemory(&info, sizeof info);
+  info.cbSize = sizeof info;
+  info.fMask = SIF_POS;
+  GetScrollInfo(&info);
+  return info.nPos;
+#endif
+}
+
+//
+// Sets the position of the thumb.
 //
 void
 TScrollBar::SetPosition(int thumbPos)
 {
+  PRECONDITION(GetHandle());
   int  min, max;
   GetRange(min, max);
 
-  //
-  // constrain "thumbPos" to be in the range "min .. max"
+  // Constrain "thumbPos" to be in the range "min .. max"
   //
   if (thumbPos > max)
     thumbPos = max;
@@ -119,12 +172,91 @@ TScrollBar::SetPosition(int thumbPos)
   else if (thumbPos < min)
     thumbPos = min;
 
-  if (thumbPos != GetPosition())
-    ::SetScrollPos(HWindow, SB_CTL, thumbPos, true);
+  if (thumbPos != GetPosition()) {
+#if defined(BI_PLAT_WIN16)
+    ::SetScrollPos(GetHandle(), SB_CTL, thumbPos, true);
+#else
+    SCROLLINFO info;
+    ZeroMemory(&info, sizeof info);
+    info.cbSize = sizeof info;
+    info.fMask = SIF_POS;
+    info.nPos = thumbPos;
+    SetScrollInfo(&info);
+#endif
+  }
 }
 
 //
-// changes the position of the thumb by "delta" and returns the new position
+// Return the current delta to move the thumb when page up/page down is
+// received.
+//
+int
+TScrollBar::GetPageMagnitude() const
+{
+  return PageMagnitude;
+}
+
+//
+// Set the delta to move the thumb when page up/page down is received.
+//
+void
+TScrollBar::SetPageMagnitude(int pagemagnitude)
+{
+  PageMagnitude = pagemagnitude;
+#if defined(BI_PLAT_WIN32)
+  PRECONDITION(GetHandle());
+  SCROLLINFO info;
+  ZeroMemory(&info, sizeof info);
+  info.cbSize = sizeof info;
+  info.fMask = SIF_PAGE;
+  info.nPage = pagemagnitude;
+  SetScrollInfo(&info);
+#endif
+}
+
+//
+// Return the range of the scrollbar.
+//
+void
+TScrollBar::GetRange(int& min, int& max) const
+{
+  PRECONDITION(GetHandle());
+#if defined(BI_PLAT_WIN16)
+  ::GetScrollRange(GetHandle(), SB_CTL, &min, &max);
+#else
+  SCROLLINFO info;
+  ZeroMemory(&info, sizeof info);
+  info.cbSize = sizeof info;
+  info.fMask = SIF_RANGE;
+  GetScrollInfo(&info);
+  min = info.nMin;
+  max = info.nMax;
+#endif
+}
+
+//
+// Sets the range of the scrollbar.
+//
+void
+TScrollBar::SetRange(int min, int max)
+{
+  PRECONDITION(GetHandle());
+#if defined(BI_PLAT_WIN16)
+  ::SetScrollRange(GetHandle(), SB_CTL, min, max, false);
+#else
+  SCROLLINFO info;
+  ZeroMemory(&info, sizeof info);
+  info.cbSize = sizeof info;
+  info.fMask = SIF_RANGE;
+  info.nMin = min;
+  info.nMax = max;
+  SetScrollInfo(&info);
+#endif
+}
+
+
+//
+// Changes the position of the thumb by "delta" and returns the new position
 //
 int
 TScrollBar::DeltaPos(int delta)
@@ -136,7 +268,7 @@ TScrollBar::DeltaPos(int delta)
 }
 
 //
-// changes the position of the thumb by "LineMagnitude"
+// Changes the position of the thumb by "LineMagnitude"
 //
 void
 TScrollBar::SBLineUp()
@@ -145,7 +277,7 @@ TScrollBar::SBLineUp()
 }
 
 //
-// changes the position of the thumb by "LineMagnitude"
+// Changes the position of the thumb by "LineMagnitude"
 //
 void
 TScrollBar::SBLineDown()
@@ -154,7 +286,7 @@ TScrollBar::SBLineDown()
 }
 
 //
-// changes the position of the thumb by "PageMagnitude"
+// Changes the position of the thumb by "PageMagnitude"
 //
 void
 TScrollBar::SBPageUp()
@@ -163,7 +295,7 @@ TScrollBar::SBPageUp()
 }
 
 //
-// changes the position of the thumb by "PageMagnitude"
+// Changes the position of the thumb by "PageMagnitude"
 //
 void
 TScrollBar::SBPageDown()
@@ -172,7 +304,7 @@ TScrollBar::SBPageDown()
 }
 
 //
-// moves the thumb to the new position
+// Moves the thumb to the new position
 //
 void
 TScrollBar::SBThumbPosition(int thumbPos)
@@ -181,7 +313,7 @@ TScrollBar::SBThumbPosition(int thumbPos)
 }
 
 //
-// moves the thumb to the new position
+// Moves the thumb to the new position
 //
 void
 TScrollBar::SBThumbTrack(int thumbPos)
@@ -190,7 +322,7 @@ TScrollBar::SBThumbTrack(int thumbPos)
 }
 
 //
-// moves the thumb to the top of the scrollbar
+// Moves the thumb to the top of the scrollbar
 //
 void
 TScrollBar::SBTop()
@@ -201,7 +333,7 @@ TScrollBar::SBTop()
 }
 
 //
-// moves the thumb to the bottom of the scrollbar
+// Moves the thumb to the bottom of the scrollbar
 //
 void
 TScrollBar::SBBottom()
@@ -211,13 +343,20 @@ TScrollBar::SBBottom()
   SetPosition(max);
 }
 
+//
+// User released the mouse after scrolling
+//
 void
 TScrollBar::SBEndScroll()
 {
 }
 
+//
+// Horizontal message handler.
+// Dispatch messages to virtual functions.
+//
 void
-TScrollBar::EvHScroll(uint scrollCode, uint thumbPos, HWND /*hWndCtl*/)
+TScrollBar::EvHScroll(uint scrollCode, uint thumbPos, THandle /*hCtl*/)
 {
   switch (scrollCode) {
     case SB_LINEDOWN:      SBLineDown(); break;
@@ -232,16 +371,21 @@ TScrollBar::EvHScroll(uint scrollCode, uint thumbPos, HWND /*hWndCtl*/)
   }
 }
 
+//
+// Forward vertical message to horizontal message handler.
+//
 void
-TScrollBar::EvVScroll(uint scrollCode, uint thumbPos, HWND hWndCtl)
+TScrollBar::EvVScroll(uint scrollCode, uint thumbPos, THandle hCtl)
 {
-  EvHScroll(scrollCode, thumbPos, hWndCtl);
+  EvHScroll(scrollCode, thumbPos, hCtl);
 }
 
 #endif
 #if !defined(SECTION) || SECTION == 2
 
 IMPLEMENT_STREAMABLE1(TScrollBar, TControl);
+
+#if !defined(BI_NO_OBJ_STREAMING)
 
 //
 // Reads an instance of TScrollBar from the passed ipstream.
@@ -265,5 +409,7 @@ TScrollBar::Streamer::Write(opstream& os) const
   os << GetObject()->LineMagnitude
      << GetObject()->PageMagnitude;
 }
+
+#endif  // if !defined(BI_NO_OBJ_STREAMING)
 
 #endif

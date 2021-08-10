@@ -1,11 +1,15 @@
 //----------------------------------------------------------------------------
 // ObjectWindows
-// (C) Copyright 1991, 1994 by Borland International, All Rights Reserved
+// Copyright (c) 1991, 1996 by Borland International, All Rights Reserved
 //
-//   Default implementation of LibMain() for user DLLs
+//$Revision:   10.3  $
+//
+// Default implementation of LibMain() for user DLLs
 //----------------------------------------------------------------------------
-#include <owl/owlpch.h>
-#include <owl/applicat.h>
+#include <owl/pch.h>
+#if !defined(OWL_APPLICAT_H)
+# include <owl/applicat.h>
+#endif
 
 DIAG_DEFINE_GROUP_INIT(OWL_INI, OwlMain, true, 0);
 
@@ -16,7 +20,7 @@ DllEntryPoint(HINSTANCE hInstance, uint32 reason, LPVOID)
 {
   TRACEX(OwlMain, 0, "DllEntryPoint(" << hInstance << ", " << reason << ", " <<
          ") called");
-  
+
   switch (reason) {
     case DLL_PROCESS_ATTACH:
       // If no global ::Module ptr exists yet, provide a default now
@@ -26,7 +30,7 @@ DllEntryPoint(HINSTANCE hInstance, uint32 reason, LPVOID)
         ::Module = &module;
       }
       TApplication::SetWinMainParams(hInstance, 0, 0, SW_SHOWNORMAL);
- 
+
       TRY {
         int retVal = OwlMain(0, 0);
         TRACEX(OwlMain, 0, "DllEntryPoint() returns " << retVal);
@@ -45,19 +49,40 @@ DllEntryPoint(HINSTANCE hInstance, uint32 reason, LPVOID)
 //
 #if defined(_OWLDLL)
 
-static HINSTANCE BidsInst;
-static HINSTANCE OwlInst;
+#if !defined(BIDS_DLLNAME)
+# if defined(__TRACE)
+#   define BIDS_DLLNAME "BIDS50D"
+# else
+#   define BIDS_DLLNAME "BIDS50"
+# endif
+#endif
+#if !defined(OWL_DLLNAME)
+# if defined(__TRACE)
+#   define OWL_DLLNAME "OWL50D"
+# else
+#   define OWL_DLLNAME "OWL50"
+# endif
+#endif
+
+static char BidsDllName[] = BIDS_DLLNAME ".DLL";
+static char OwlDllName[] = OWL_DLLNAME ".DLL";
+
+static HINSTANCE BidsInst = 0;
+static HINSTANCE OwlInst = 0;
+
 void lockDlls()
 {
-  BidsInst = ::LoadLibrary("BIDS45.DLL");  // load lowlevel to hilevel order
-  OwlInst = ::LoadLibrary("OWL252.DLL");
+  BidsInst = ::LoadLibrary(BidsDllName);  // load lowlevel to hilevel order
+  OwlInst = ::LoadLibrary(OwlDllName);
 }
 #pragma startup lockDlls 0
 
 void unlockDlls()
 {
-  ::FreeLibrary(OwlInst);  // unload hilevel to lowlevel order (reversed)
-  ::FreeLibrary(BidsInst);
+  if (BidsInst > HINSTANCE(HINSTANCE_ERROR))
+    ::FreeLibrary(OwlInst);  // unload hilevel to lowlevel order (reversed)
+  if (OwlInst > HINSTANCE(HINSTANCE_ERROR))
+    ::FreeLibrary(BidsInst);
 }
 #pragma exit unlockDlls 0
 
@@ -70,7 +95,7 @@ LibMain(HINSTANCE   hInstance,
         uint16    /*cbHeapSize*/,
         char far*   cmdLine)
 {
-  TRACEX(OwlMain, 0, "LibMain(" << hex << uint(hInstance) << ", " << 
+  TRACEX(OwlMain, 0, "LibMain(" << hex << uint(hInstance) << ", " <<
                                   TResId(cmdLine)  << ") called");
 
   // If no global ::Module ptr exists yet, provide a default now

@@ -11,9 +11,9 @@
 ##      --END-- ? ClassMarker [[Search]]
 ##      :^BOL
 ##      :GetProperty == TRUE
-    [[CPPType]] [[GetName]] ();
+    [[CPPType]] [[GetName]]();
 ##      :SetProperty == TRUE
-    void [[SetName]] ([[CPPType]]);
+    void [[SetName]]([[CPPType]]);
 ##--END-- GetGlobal() == FALSE
 ##"//{{[[ClassName]]AUTO_TBL_END}}" [[ClassTMarker]]
 ##\\ClassTMarker [[ClassMarker]]
@@ -28,11 +28,9 @@
 ##"" [[XlateOLEProp]]
 ##"" [[Comment]]
 ##--BEGIN-- "" [[OLEAutoProp]]
-##      OLEType == "TAutoBool"
-##          :"TAutoBool" CPPType
 ##*
 ##      ^BOL
-##      (OLEType == CPPType) && (OLEType != "TAutoCurrency") && (OLEType != "TAutoDate") && (OLEType != "TAutoBool")
+##     (OLEType == CPPType) && (OLEType != "TAutoCurrency") && (OLEType != "TAutoDate")
 ##      --BEGIN-- StripPtrRef(CPPType, [[StripCPPType]]) [[AnyStripping]]
 ##          !AnyStripping
 ##              :\\"TAutoObject<[[CPPType]]>" OLEAutoProp
@@ -43,24 +41,24 @@
 ##              :"    // Change to TAutoObjectDelete if owned by automation." Comment
 ##*
 ##      --END-- StripPtrRef(CPPType, [[StripCPPType]]) [[AnyStripping]]
-##      (OLEType != CPPType) && (OLEType != "TAutoString")
+##     (OLEType != CPPType) && (OLEType != "TAutoString")
 ##          :"[[CPPType]]" OLEAutoProp
 ##*
-##      (OLEType == CPPType) && ((OLEType == "TAutoCurrency") || (OLEType == "TAutoDate") || (OLEType == "TAutoBool"))
+##     (OLEType == CPPType) && ((OLEType == "TAutoCurrency") || (OLEType == "TAutoDate"))
 ##          :"[[CPPType]]" OLEAutoProp
 ##*
-##      (OLEType == "TAutoString") && (CPPType != "string")
+##     (OLEType == "TAutoString") && (CPPType != "string")
 ##          :"TAutoString" OLEAutoProp
 ##*
-##      (OLEType == "TAutoString") && (CPPType == "string")
+##     (OLEType == "TAutoString") && (CPPType == "string")
 ##          :"string" OLEAutoProp
 ##*
 ##      \\OLEAutoProp XlateOLEProp
-##      (GetProperty == TRUE) && (SetProperty == TRUE)
+##     (GetProperty == TRUE) && (SetProperty == TRUE)
 AUTOPROP([[InternalName]], [[GetName]], [[SetName]], [[XlateOLEProp]],)[[Comment]]
-##      (GetProperty == TRUE) && (SetProperty == FALSE)
+##     (GetProperty == TRUE) && (SetProperty == FALSE)
 AUTOPROPRO([[InternalName]], [[GetName]], [[XlateOLEProp]], )[[Comment]]
-##      (GetProperty == FALSE) && (SetProperty == TRUE)
+##     (GetProperty == FALSE) && (SetProperty == TRUE)
 AUTOPROPWO([[InternalName]], [[SetName]], [[XlateOLEProp]], )[[Comment]]
 ##--END-- "" [[OLEAutoProp]]
 ##FALSE [[IncludeSearch]]
@@ -75,4 +73,4 @@ AUTOPROPWO([[InternalName]], [[SetName]], [[XlateOLEProp]], )[[Comment]]
 ##       : ^BOF
 ##       : ?\\"#include \""
 ##       : ^BOL
-[[IncludeFile]]     
+[[IncludeFile]]

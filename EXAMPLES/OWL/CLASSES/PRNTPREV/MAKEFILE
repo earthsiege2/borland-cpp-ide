@@ -1,0 +1,10 @@
+#----------------------------------------------------------------------------
+# ObjectWindows
+# Copyright (c) 1993, 1995 by Borland International, All Rights Reserved
+#----------------------------------------------------------------------------
+
+MODELS = ldft
+
+EXERES = prntprev
+
+!include $(BCEXAMPLEDIR)\owlmake.gen

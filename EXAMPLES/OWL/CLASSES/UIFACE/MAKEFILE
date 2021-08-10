@@ -1,0 +1,13 @@
+#----------------------------------------------------------------------------
+# ObjectWindows
+# Copyright (c) 1995, 1995 by Borland International, All Rights Reserved
+#----------------------------------------------------------------------------
+
+MODELS = ldft
+
+EXERES = uiface
+OBJEXE = uifacex.obj
+
+!include $(BCEXAMPLEDIR)\owlmake.gen
+
+

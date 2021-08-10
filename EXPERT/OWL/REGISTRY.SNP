@@ -1,0 +1,85 @@
+##--BEGIN-- @OPT_APPL_REGISTRY
+##--BEGIN-- @QUERY_APPL_COMMENT == VALUE_VERBOSE
+//--------------------------------------------------------
+// [[TApplication]]
+// ~~~~~
+// Process command line parameters.
+//
+##--END-- @QUERY_APPL_COMMENT == VALUE_VERBOSE
+void [[TApplication]]::ProcessCmdLine(char * CmdLine)
+{
+  TCmdLine cmd(CmdLine);
+
+  while (cmd.Kind != TCmdLine::Done) {
+    if (cmd.Kind == TCmdLine::Option) {
+      if (strnicmp(cmd.Token, "unregister", cmd.TokenLen) == 0) {
+        UnRegisterInfo();
+        return;
+      }
+    }
+    cmd.NextToken();
+  }
+
+  RegisterInfo();
+}
+
+
+##--BEGIN-- @QUERY_APPL_COMMENT == VALUE_VERBOSE
+//--------------------------------------------------------
+// [[TApplication]]
+// ~~~~~
+// Register application info.
+//
+##--END-- @QUERY_APPL_COMMENT == VALUE_VERBOSE
+void [[TApplication]]::RegisterInfo()
+{
+  TAPointer<char> buffer = new char[_MAX_PATH];
+
+  GetModuleFileName(buffer, _MAX_PATH);
+
+##@QUERY_TARGET_NAME [[Target]]
+  TRegKey(TRegKey::ClassesRoot, "[[Target]].Application\\DefaultIcon").SetDefValue(0, REG_SZ, buffer, strlen(buffer));
+  strcat(buffer, ",1");
+##--BEGIN-- @QUERY_APPL_MODEL != VALUE_DIALOG
+##@QUERY_TARGET_NAME [[Target]] 2
+  TRegKey(TRegKey::ClassesRoot, "[[Target]].Document.1\\DefaultIcon").SetDefValue(0, REG_SZ, buffer, strlen(buffer));
+  strcpy(buffer, "[[Target]].Document.1");
+##OPT_DV_RESET
+##OPT_DV_NEXT
+##@QUERY_DV_EXT [[Ext]]
+  TRegKey(TRegKey::ClassesRoot, ".[[Ext]]").SetDefValue(0, REG_SZ, buffer, strlen(buffer));
+##--END-- @QUERY_APPL_MODEL != VALUE_DIALOG
+}
+
+
+##--BEGIN-- @QUERY_APPL_COMMENT == VALUE_VERBOSE
+//--------------------------------------------------------
+// [[TApplication]]
+// ~~~~~
+// Unregister application info.
+//
+##--END-- @QUERY_APPL_COMMENT == VALUE_VERBOSE
+void [[TApplication]]::UnRegisterInfo()
+{
+  TAPointer<char> buffer = new char[_MAX_PATH];
+
+  GetModuleFileName(buffer, _MAX_PATH);
+
+##@QUERY_TARGET_NAME [[Target]] 4
+  TRegKey(TRegKey::ClassesRoot, "[[Target]].Application").DeleteKey("DefaultIcon");
+  TRegKey(TRegKey::ClassesRoot, "[[Target]].Document.1").DeleteKey("DefaultIcon");
+
+  TRegKey::ClassesRoot.DeleteKey("[[Target]].Application");
+##--BEGIN-- @QUERY_APPL_MODEL != VALUE_DIALOG
+##@QUERY_TARGET_NAME [[Target]]
+  TRegKey::ClassesRoot.DeleteKey("[[Target]].Document.1");
+##OPT_DV_RESET
+##OPT_DV_NEXT
+##@QUERY_DV_EXT [[Ext]]
+  TRegKey::ClassesRoot.DeleteKey(".[[Ext]]");
+##--END-- @QUERY_APPL_MODEL != VALUE_DIALOG
+}
+
+
+##--END-- @OPT_APPL_REGISTRY
+

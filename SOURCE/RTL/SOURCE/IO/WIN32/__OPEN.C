@@ -6,9 +6,9 @@
  *-----------------------------------------------------------------------*/
 
 /*
- *      C/C++ Run Time Library - Version 1.5
+ *      C/C++ Run Time Library - Version 2.0
  *
- *      Copyright (c) 1991, 1994 by Borland International
+ *      Copyright (c) 1991, 1996 by Borland International
  *      All Rights Reserved.
  *
  */
@@ -148,7 +148,7 @@ int _cdecl __open(const char *pathP, int oflag, ...)
     if ((oflag & O_BINARY) == 0)
         oflag |= O_TEXT;
 
-    /* Map the POSIX O_CREATE, O_EXCL, and O_TRUNC flags to 
+    /* Map the POSIX O_CREATE, O_EXCL, and O_TRUNC flags to
      * NT's CreateFile dwCreateDisposition parameter:
      *
      * POSIX                NT
@@ -268,7 +268,7 @@ int _cdecl __open(const char *pathP, int oflag, ...)
     /* Save the open flags and find free file handle table slot.
      * Save the NT file handle in the table, return the table index.
      */
-    if (__isatty((int)handle))
+    if (__isatty_osfhandle((long)handle))
         oflag |= O_DEVICE;
     if ((attr & FILE_ATTRIBUTE_READONLY) == 0)
         oflag |= _O_WRITABLE;       /* fstat() uses this bit */

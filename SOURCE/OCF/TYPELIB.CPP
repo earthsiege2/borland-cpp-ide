@@ -1,13 +1,15 @@
-//
 //----------------------------------------------------------------------------
 // ObjectComponents
-// (C) Copyright 1994 by Borland International, All Rights Reserved
+// Copyright (c) 1994, 1996 by Borland International, All Rights Reserved
 //
-//   TServedObject implementation and OLE Type library generation
+// $Revision:   2.9  $
+//
+// TServedObject implementation and OLE Type library generation
 //----------------------------------------------------------------------------
-#include <ocf/ocfpch.h>
+#include <ocf/pch.h>
 #include <ocf/appdesc.h>
-#include <osl/inlines.h>
+#include <services/memory.h>
+#include <ocf/occtrl.h>   // for DISPID_DEFAULT_EVENT
 
 #if defined(BI_PLAT_WIN32)
 # define OLE_TYPELIB_FILE L"stdole32.tlb"
@@ -15,16 +17,20 @@
 # define OLE_TYPELIB_FILE "stdole.tlb"
 #endif
 
-//____________________________________________________________________________
-//
+//----------------------------------------------------------------------------
 // TServedObject implementation
-//____________________________________________________________________________
+//
 
 TServedObjectCreator::TServedObjectCreator(TAppDescriptor& appDesc)
-: AppDesc(appDesc), AppObject(0) {}
+:
+  AppDesc(appDesc),
+  AppObject(0)
+{
+}
 
-TUnknown* TServedObjectCreator::CreateObject(TObjectDescriptor objDesc,
-                                       IUnknown* outer)
+TUnknown*
+TServedObjectCreator::CreateObject(TObjectDescriptor objDesc,
+                                   IUnknown* outer)
 {
   TServedObject* ifc = AppDesc.FindServed(objDesc);
   if (!ifc)
@@ -34,8 +40,8 @@ TUnknown* TServedObjectCreator::CreateObject(TObjectDescriptor objDesc,
   return ifc;
 }
 
-IDispatch* TServedObjectCreator::CreateDispatch(TObjectDescriptor objDesc,
-                                 IUnknown* outer)
+IDispatch*
+TServedObjectCreator::CreateDispatch(TObjectDescriptor objDesc, IUnknown* outer)
 {
   TServedObject* obj = AppDesc.FindServed(objDesc);
   if (!obj)
@@ -45,13 +51,15 @@ IDispatch* TServedObjectCreator::CreateDispatch(TObjectDescriptor objDesc,
   return *obj;
 }
 
-void TServedObjectCreator::Attach(TServedObject& obj)
+void
+TServedObjectCreator::Attach(TServedObject& obj)
 {
   AppDesc.AddServed(obj);
   ++ObjCount;
 }
 
-void TServedObjectCreator::Detach(TServedObject& obj)
+void
+TServedObjectCreator::Detach(TServedObject& obj)
 {
   AppDesc.RemoveServed(obj);
   if (--ObjCount == 0)
@@ -67,11 +75,15 @@ DEFINE_COMBASES2(TServedCOM, IDispatch, ITypeInfo)
 
 HRESULT TServedObject::QueryObject(const GUID far& iid, void far* far* pif)
 {
+  GUID qid = iid;
+
   if (iid == IID_TServedObject) {
     *pif = this;       // return actual pointer to this object
     return HR_NOERROR; // non-interface returned, no AddRef(), do not Release
   }
-  return TServedCOM::QueryObject(iid,pif);  // query inherited bases
+  if ((iidEvent != IID_NULL) && (iid == iidEvent))
+    qid = IID_IDispatch;
+  return TServedCOM::QueryObject (qid, pif);  // query inherited bases
 }
 
 TServedObject::TServedObject(TObjectDescriptor& objDesc,
@@ -79,7 +91,7 @@ TServedObject::TServedObject(TObjectDescriptor& objDesc,
                              IUnknown* outer)
 :
   Object(const_cast<void*>(objDesc.Object)), Destruct(objDesc.Destruct),
-  Creator(creator), Class(objDesc.Class)
+  Creator(creator), Class(objDesc.Class), iidEvent(IID_NULL)
 {
   SetOuter(outer ? outer
        : &objDesc.Class->Aggregate(const_cast<void*>(objDesc.Object), *this));
@@ -104,7 +116,9 @@ TServedObject::~TServedObject()
   Creator.Detach(*this);
 }
 
+//
 // IDispatch implementation
+//
 
 HRESULT _IFUNC
 TServedObject::GetTypeInfoCount(unsigned int far* pctinfo)
@@ -157,17 +171,22 @@ TServedObject::Invoke(DISPID dispidMember, const IID far& /*riid*/, LCID lcid,
   ObjectPtr object = Object;  // make copy in case of this pointer adjustment
   if (!object)      // check if C++ object still exists
     return HR_DISP_MEMBERNOTFOUND;
-  TAutoStack stack(dispparams->rgvarg, lcid, dispparams->cArgs,
-                   dispparams->cNamedArgs, dispparams->rgdispidNamedArgs, this);
-  stack.Symbol = Class->FindId((short)dispidMember, object);
-  if (!stack.Symbol)
-    return HR_DISP_MEMBERNOTFOUND;
+  TAutoStack stack(dispidMember, dispparams->rgvarg, lcid, dispparams->cArgs,
+                   dispparams->cNamedArgs, dispparams->rgdispidNamedArgs,
+                   this);
+  stack.Symbol = Class->FindId(dispidMember, object);
+  if (!stack.Symbol) {
+    if ((stack.Symbol = Class->FindId(DISPID_DEFAULT_EVENT, object)) == NULL)
+      return HR_DISP_MEMBERNOTFOUND;
+  }
   if (!stack.Symbol->TestFlag(wFlags)) // check attr bits for supported type
     return HR_DISP_MEMBERNOTFOUND;
   if (wFlags & (DISPATCH_PROPERTYPUT | DISPATCH_PROPERTYPUTREF))
     varResult = 0;
-  if ((stack.ArgSymbolCount=Class->GetArgCount(*stack.Symbol)) +
-  ((wFlags&(DISPATCH_PROPERTYPUT|DISPATCH_PROPERTYPUTREF))!=0) < stack.ArgCount)
+  if (((stack.ArgSymbolCount = Class->GetArgCount(*stack.Symbol)) +
+        ((wFlags&(DISPATCH_PROPERTYPUT|DISPATCH_PROPERTYPUTREF)) != 0) <
+                                                         stack.ArgCount) &&
+      (stack.Symbol->DispId != DISPID_DEFAULT_EVENT) )
     return HR_DISP_BADPARAMCOUNT;
 
   switch(Class->Dispatch(object, Creator, *this, wFlags, stack,
@@ -246,7 +265,7 @@ TServedObject::ReleaseTypeAttr(TYPEATTR far* ptypeattr)
 HRESULT _IFUNC
 TServedObject::GetFuncDesc(unsigned int index, FUNCDESC far* far* retDesc)
 {
-  int cmdId = 0;   // must initialize, FindFunction recursively adjusts it
+  MEMBERID cmdId = 0;   // must initialize, FindFunction recursively adjusts it
   TAutoSymbol* sym = Class->FindFunction(index, cmdId);
   if (!sym || !retDesc)
     return HR_INVALIDARG;
@@ -313,7 +332,7 @@ TServedObject::GetVarDesc(unsigned int index, VARDESC far* far* retDesc)
   VARDESC* vd = (VARDESC*)new char[sizeof(VARDESC) + sizeof(TYPEDESC)];
   TYPEDESC* ptrtd = (TYPEDESC*)((char*)vd + sizeof(VARDESC));
   memset(vd, 0, sizeof(VARDESC)+sizeof(TYPEDESC));
-  int cmdId = 0;   // must initialize, FindVariable recursively adjusts it
+  MEMBERID cmdId = 0;   // must initialize, FindVariable recursively adjusts it
   TAutoSymbol* sym = Class->FindVariable(index, cmdId);
   if (!sym || !retDesc)
     return HR_INVALIDARG;
@@ -352,7 +371,7 @@ TServedObject::GetNames(MEMBERID memid, BSTR far* rgbstrNames,
                         unsigned int cMaxNames, unsigned int far* pcNames)
 {
   ObjectPtr noObj = 0;
-  TAutoSymbol* sym = Class->FindId((short)memid, noObj);
+  TAutoSymbol* sym = Class->FindId(memid, noObj);
   if (!sym)
     return HR_DISP_MEMBERNOTFOUND;
   int nameCount = Class->GetArgCount(*sym) + 1;
@@ -413,9 +432,52 @@ TServedObject::GetDocumentation(MEMBERID memid,
     sym = Class->GetClassSymbol();
   } else {
     ObjectPtr noObj = 0;
-    if ((sym = Class->FindId((short)memid, noObj)) == 0)
+    if ((sym = Class->FindId(memid, noObj)) == 0)
       return HR_DISP_MEMBERNOTFOUND;
   }
+  if (retName)
+    *retName = ::SysAllocString(sym->Name.Translate(ReqLang));
+  if (retDoc)
+    *retDoc  = ::SysAllocString(sym->Doc.Translate(ReqLang));
+  if (retHelpContext)
+    *retHelpContext = sym->HelpId;
+  if (retHelpFile)
+    *retHelpFile = ::SysAllocString(Creator.AppDesc.GetHelpFile(ReqLang));
+  return HR_NOERROR;
+}
+
+HRESULT _IFUNC
+TServedObject::GetFuncDocFromIndex(unsigned index,
+                                   BSTR far* retName, BSTR far* retDoc,
+                                   ulong far* retHelpContext,
+                                   BSTR far* retHelpFile)
+{
+  MEMBERID cmdId = 0;
+  TAutoSymbol* sym = Class->FindFunction(index, cmdId);
+  if (!sym)
+    return HR_INVALIDARG;
+  return GetDocFromSym(sym, retName, retDoc,retHelpContext, retHelpFile);
+}
+
+HRESULT _IFUNC
+TServedObject::GetVarDocFromIndex(unsigned index,
+                                  BSTR far* retName, BSTR far* retDoc,
+                                  ulong far* retHelpContext,
+                                  BSTR far* retHelpFile)
+{
+  MEMBERID cmdId = 0;
+  TAutoSymbol* sym = Class->FindVariable(index, cmdId);
+  if (!sym)
+    return HR_INVALIDARG;
+  return GetDocFromSym(sym, retName, retDoc,retHelpContext, retHelpFile);
+}
+
+HRESULT _IFUNC
+TServedObject::GetDocFromSym(TAutoSymbol* sym,
+                             BSTR far* retName, BSTR far* retDoc,
+                             ulong far* retHelpContext,
+                             BSTR far* retHelpFile)
+{
   if (retName)
     *retName = ::SysAllocString(sym->Name.Translate(ReqLang));
   if (retDoc)
@@ -670,6 +732,7 @@ TOleCreateList::FixupTypeDescRef(int typeIndex, TYPEDESC far& typeDesc)
 void
 TAppDescriptor::WriteTypeLibrary(TLangId lang, const char far* file)
 {
+  TServedObject* servedObject;
   TBSTR libName;
   TBSTR libDoc;
   ulong helpId;
@@ -680,10 +743,18 @@ TAppDescriptor::WriteTypeLibrary(TLangId lang, const char far* file)
     TOleCreateInfo& curInfo = typeList.List[nInfo];
     ITypeInfo* typeInfo = curInfo.OurTypeInfo;
     ICreateTypeInfo* newInfo  = curInfo.CreateInfo;
-    for (int index = 0; index < curInfo.FuncCount; index++) {
+    int index;
+    for (index = 0; index < curInfo.FuncCount; index++) {
       OLECALL(typeInfo->GetFuncDesc(index, &funcDesc), "GetFuncDesc");
-      OLECALL(typeInfo->GetDocumentation(funcDesc->memid, libName, libDoc,
-                              &helpId, 0), "Get method name and doc");
+      // Using the GetDocumentation call fails when creating a typelib, so attempt to
+      // use the function GetFuncDocFromIndex to get around this problem
+      servedObject = dynamic_cast<TServedObject*>(typeInfo);
+      if (servedObject)
+        OLECALL(servedObject->GetFuncDocFromIndex(index, libName, libDoc,
+                                                  &helpId, 0), "Get method name and doc");
+      else
+        OLECALL(typeInfo->GetDocumentation(funcDesc->memid, libName, libDoc,
+                                           &helpId, 0), "Get method name and doc");
       for (int nArg = funcDesc->cParams; nArg-- >=0; ) {
         ELEMDESC far* elem = nArg < 0 ? &funcDesc->elemdescFunc
                                       : &funcDesc->lprgelemdescParam[nArg];
@@ -705,8 +776,15 @@ TAppDescriptor::WriteTypeLibrary(TLangId lang, const char far* file)
     }
     for (index = 0; index < curInfo.VarCount; index++) {
       OLECALL(typeInfo->GetVarDesc(index, &varDesc), "GetVarDesc");
-      OLECALL(typeInfo->GetDocumentation(varDesc->memid, libName, libDoc,
-                             &helpId, 0), "Get propery name and doc");
+      // Using the GetDocumentation call fails when creating a typelib, so attempt to
+      // use the function GetVarDocFromIndex to get around this problem
+      servedObject = dynamic_cast<TServedObject*>(typeInfo);
+      if (servedObject)
+        OLECALL(servedObject->GetVarDocFromIndex(index, libName, libDoc,
+                                                 &helpId, 0), "Get propery name and doc");
+      else
+        OLECALL(typeInfo->GetDocumentation(varDesc->memid, libName, libDoc,
+                                           &helpId, 0), "Get propery name and doc");
       typeList.FixupTypeDescRef(nInfo, varDesc->elemdescVar.tdesc);
       OLECALL(newInfo->AddVarDesc(index, varDesc), "AddVarDesc");
       OLECALL(newInfo->SetVarName(index, libName),"Set property name");
@@ -753,7 +831,7 @@ TAppDescriptor::WriteTypeLibrary(TLangId lang, const char far* file)
     strcpy(buf, "CLSID\\");
     strcat(buf, AppClassId[iGuid]);
     strcat(buf, "\\TypeLib");
-    ::RegSetValue(HKEY_CLASSES_ROOT,buf,REG_SZ, AppClassId[LibGuidOffset], 0);
+    ::RegSetValue(TRegKey::ClassesRoot,buf,REG_SZ, AppClassId[LibGuidOffset], 0);
     iGuid ^= DebugGuidOffset;    // remains 0 if no debug guid assigned
   } while (iGuid);
 }
@@ -1209,5 +1287,4 @@ TCoClassInfo::AddressOfMember(MEMBERID, INVOKEKIND, void far* far*)
 {
   return HR_TYPE_WRONGTYPEKIND;
 }
-
 

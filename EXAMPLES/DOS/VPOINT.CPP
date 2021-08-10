@@ -1,6 +1,6 @@
 // Borland C++ - (C) Copyright 1991 by Borland International
 
-/* VPOINT.CPP--Example from Getting Started */
+// VPOINT.CPP
 
 // VPOINT.CPP contains the definitions for the Point and Location
 // classes that are declared in the file vpoint.h
@@ -39,7 +39,7 @@ void Point::Hide(void) {
    putpixel(X, Y, getbkcolor()); // uses background color to erase
 };
 
-Boolean Point::IsVisible(void) {
+bool Point::IsVisible(void) {
    return Visible;
 };
 

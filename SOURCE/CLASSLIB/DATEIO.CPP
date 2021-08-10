@@ -1,34 +1,26 @@
-/*------------------------------------------------------------------------*/
-/*                                                                        */
-/*  DATEIO.CPP                                                            */
-/*                                                                        */
-/*  Copyright (c) 1993, 1994 Borland International                        */
-/*  All Rights Reserved                                                   */
-/*                                                                        */
-/*------------------------------------------------------------------------*/
-
-#if !defined( __STDIO_H )
-#include <stdio.h>
-#endif
-
-#if !defined( __CTYPE_H )
-#include <ctype.h>
-#endif
-
-#if !defined( __STRSTREA_H )
-#include <strstrea.h>
-#endif
-
-#if !defined( __CSTRING_H )
-#include <cstring.h>
-#endif
-
-#if !defined( CLASSLIB_DATE_H )
+//----------------------------------------------------------------------------
+// Borland Class Library
+// Copyright (c) 1993, 1996 by Borland International, All Rights Reserved
+//
+//$Revision:   5.4  $
+//
+// TDate class IO and conversion implementation
+//----------------------------------------------------------------------------
+#include <classlib/pch.h>
 #include <classlib/date.h>
-#endif
+#include <services/cstring.h>
+#include <stdio.h>
+#include <ctype.h>
+#include <strstrea.h>
 
+//
+//
+//
 TDate::HowToPrint TDate::PrintOption = TDate::Normal;
 
+//
+//
+//
 string TDate::AsString() const
 {
     char buf[80];
@@ -38,6 +30,9 @@ string TDate::AsString() const
     return temp;
 }
 
+//
+//
+//
 TDate::HowToPrint TDate::SetPrintOption( HowToPrint h )
 {
     HowToPrint oldoption = PrintOption;
@@ -45,7 +40,9 @@ TDate::HowToPrint TDate::SetPrintOption( HowToPrint h )
     return oldoption;
 }
 
+//
 // Skip any characters except alphanumeric characters
+//
 static void _BIDSNEARFUNC SkipDelim( istream _BIDSFAR & strm )
 {
     char c;
@@ -60,7 +57,9 @@ static void _BIDSNEARFUNC SkipDelim( istream _BIDSFAR & strm )
         strm.putback(c);
 }
 
+//
 // Parse the name of a month from input stream.
+//
 static const char* _BIDSNEARFUNC ParseMonth( istream _BIDSFAR & s )
 {
     static char month[12];
@@ -79,13 +78,13 @@ static const char* _BIDSNEARFUNC ParseMonth( istream _BIDSFAR & s )
     return month;
 }
 
+//
 //  Parse a date from the specified input stream.  
 //    The date must be in one of the following forms: 
 //                dd-mmm-yy, mm/dd/yy, or mmm dd,yy
 //        e.g.: 10-MAR-86,  3/10/86, or March 10, 1986.  
 //  Any non-alphanumeric character may be used as a delimiter.
-
-
+//
 void TDate::ParseFrom( istream _BIDSFAR & s )
 {
     unsigned d,m,y;
@@ -124,12 +123,16 @@ void TDate::ParseFrom( istream _BIDSFAR & s )
         s.clear(ios::badbit);
 }
 
+//
+//
+//
 ostream _BIDSFAR & _BIDSFUNC operator << ( ostream _BIDSFAR & s, const TDate _BIDSFAR & d )
 {
     char buf[80];
 
     // we use an ostrstream to format into buf so that
     // we don't affect the ostream's width setting.
+    //
     ostrstream out( buf, sizeof(buf) );
   
     switch ( TDate::PrintOption )
@@ -164,7 +167,7 @@ ostream _BIDSFAR & _BIDSFUNC operator << ( ostream _BIDSFAR & s, const TDate _BI
 
     // now we write out the formatted buffer, and the ostream's
     // width setting will control the actual width of the field.
+    //
     s << buf;
     return s;
 }
-

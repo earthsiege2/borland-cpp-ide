@@ -1,4 +1,3 @@
-//
 /*
  * COMMON.H
  *
@@ -49,7 +48,7 @@
 						, MAKELONG(hControl, wCode))
 #endif  //SendCommand
 
-#endif  //
+#endif  
 
 
 
@@ -168,4 +167,3 @@ extern UINT       cfFileName;
 #define ID_NULL                         98
 
 #endif //_COMMON_H_
-

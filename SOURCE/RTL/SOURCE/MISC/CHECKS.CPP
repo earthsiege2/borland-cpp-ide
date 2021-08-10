@@ -5,9 +5,9 @@
 /*------------------------------------------------------------------------*/
 
 /*
- *      C/C++ Run Time Library - Version 6.5
+ *      C/C++ Run Time Library - Version 7.0
  *
- *      Copyright (c) 1993, 1994 by Borland International
+ *      Copyright (c) 1993, 1996 by Borland International
  *      All Rights Reserved.
  *
  */
@@ -54,7 +54,23 @@ DIAG_DEFINE_GROUP(Def,1,0);
 // construction, probably with the same sort of mechanism as
 // in the standard iostreams.
 //
-ostrstream TDiagBase::Out(new char[DIAG_MAXBUFFER],DIAG_MAXBUFFER);
+
+// Use dynamically allocated buffer so that we can clean up.
+static char *buffer;
+
+static void initbuffer()
+{
+    buffer = new char[DIAG_MAXBUFFER];
+}
+#pragma startup initbuffer 31
+
+static void freebuffer()
+{
+    delete [] buffer;
+}
+#pragma exit freebuffer 31
+
+ostrstream TDiagBase::Out(buffer, DIAG_MAXBUFFER);
 
 //
 // TDiagBase::Output - Sends the specified message to the debug output
@@ -71,7 +87,7 @@ void TDiagBase::Output( const char *msg )
 #if defined(__FLAT__)
    if(__isGUI)
 	   ::OutputDebugString(msg);
-    else	   
+    else	
 		cout << msg;
 #else
 #if defined(_Windows)

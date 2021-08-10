@@ -7,9 +7,9 @@
  *-----------------------------------------------------------------------*/
 
 /*
- *      C/C++ Run Time Library - Version 1.5
+ *      C/C++ Run Time Library - Version 2.0
  *
- *      Copyright (c) 1991, 1994 by Borland International
+ *      Copyright (c) 1991, 1996 by Borland International
  *      All Rights Reserved.
  *
  */
@@ -56,6 +56,19 @@ DWORD new_thread(THREAD_DATA *t)
 {
     EXCEPTIONREGISTRATIONRECORD hand;
     MEMORY_BASIC_INFORMATION info;
+    DWORD extra = 0;
+    OSVERSIONINFO ov;
+
+    ov.dwOSVersionInfoSize = sizeof (ov);
+    GetVersionEx (&ov);
+
+    if (ov.dwPlatformId == 1) /*  If under Win95 we cannot go below
+                               *  64K above what the system says is
+                               *  the bottom of the stack
+                               */
+        extra = 0x10000;
+
+
 
     /* Save a pointer to the thread data structure in NT's thread
      * local storage.
@@ -65,7 +78,7 @@ DWORD new_thread(THREAD_DATA *t)
     /* Store the thread's stack base in the thread local storage.
      */
     VirtualQuery((void *)&info, &info, sizeof(info));
-    TlsSetValue(_stkindex, (void *)info.AllocationBase);
+    TlsSetValue(_stkindex, (void *)((DWORD)info.AllocationBase + extra));
 
     _ExceptInit(t->thread_exceptvars);
 

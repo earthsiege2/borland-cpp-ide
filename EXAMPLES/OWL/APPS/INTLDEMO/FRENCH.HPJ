@@ -1,0 +1,20 @@
+//----------------------------------------------------------------------------
+// ObjectWindows - (C) Copyright 1991, 1996 by Borland International
+//   french.hpj
+//
+//----------------------------------------------------------------------------
+
+[Config]
+BrowseButtons()
+
+[Options]
+Title=IntlDemo Help File
+
+[Map]
+#include <intldemo.hh>
+
+[Files]
+French.rtf
+
+
+

@@ -1,0 +1,17 @@
+##----------------------------------------------------------------------------
+## ObjectWindows
+## Copyright (c) 1995, 1995 by Borland International, All Rights Reserved
+##----------------------------------------------------------------------------
+
+SYSTEMS = WIN32
+OSMAJOR = 4
+OSMINOR = 0
+EXERES  = CtxtHelp
+OBJEXE  = CtxtHelp.obj
+
+HLP     = TestHelp
+HLP_    = TestHelp.hpj TestHelp.rtf HelpIds.hh
+
+!include $(BCEXAMPLEDIR)\owlmake.gen
+
+

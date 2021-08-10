@@ -6,29 +6,29 @@
 ##QUERY_SNP_DATA_NAME [[DataName]]
 ##--BEGIN-- TRUE
 ##--BEGIN-- ControlType == "BUTTON"
-##(ControlSubType == "DEFPUSHBUTTON") || (ControlSubType == "USERBUTTON") || (ControlSubType == "PUSHBUTTON")
+## (ControlSubType == "DEFPUSHBUTTON") || (ControlSubType == "USERBUTTON") || (ControlSubType == "PUSHBUTTON")
 ##:     \\"TButton *[[DataName]];" ClassDefLine
 ##:     \\"[[DataName]] = new TButton(this, [[Constant]]);" ConstructorLine
 ##:     "" StructDefLine
-##:     "#include <owl\\button.h>" IncludeFile
+##:     "#include <owl/button.h>" IncludeFile
 ##*
-##(ControlSubType == "GROUPBOX")
+## (ControlSubType == "GROUPBOX")
 ##:     \\"TGroupBox *[[DataName]];" ClassDefLine
 ##:     \\"[[DataName]] = new TGroupBox(this, [[Constant]]);" ConstructorLine
 ##:     "" StructDefLine
-##:     "#include <owl\\groupbox.h>" IncludeFile
+##:     "#include <owl/groupbox.h>" IncludeFile
 ##*
-##(ControlSubType == "CHECKBOX") || (ControlSubType == "AUTOCHECKBOX") || (ControlSubType == "3STATE") || (ControlSubType == "AUTO3STATE") 
+## (ControlSubType == "CHECKBOX") || (ControlSubType == "AUTOCHECKBOX") || (ControlSubType == "3STATE") || (ControlSubType == "AUTO3STATE")
 ##:     \\"TCheckBox *[[DataName]];" ClassDefLine
 ##:     \\"[[DataName]] = new TCheckBox(this, [[Constant]], 0);" ConstructorLine
-##:     \\"bool    [[DataName]];" StructDefLine
-##:     "#include <owl\\checkbox.h>" IncludeFile
+##:     \\"uint    [[DataName]];" StructDefLine
+##:     "#include <owl/checkbox.h>" IncludeFile
 ##*
-##(ControlSubType == "RADIOBUTTON") || (ControlSubType == "AUTORADIOBUTTON")
+## (ControlSubType == "RADIOBUTTON") || (ControlSubType == "AUTORADIOBUTTON")
 ##:     \\"TRadioButton *[[DataName]];" ClassDefLine
 ##:     \\"[[DataName]] = new TRadioButton(this, [[Constant]], 0);" ConstructorLine
-##:     \\"bool    [[DataName]];" StructDefLine
-##:     "#include <owl\\radiobut.h>" IncludeFile
+##:     \\"uint    [[DataName]];" StructDefLine
+##:     "#include <owl/radiobut.h>" IncludeFile
 ##*
 ##--END-- ControlType == "BUTTON"
 ##--BEGIN-- ControlType == "STATIC"
@@ -38,7 +38,7 @@
 ##:     \\"TStatic *[[DataName]];" ClassDefLine
 ##:     \\"[[DataName]] = new TStatic(this, [[Constant]], [[DataTypeSize]]);" ConstructorLine
 ##:     \\"char    [[DataName]][ [[DataTypeSize]] ];" StructDefLine
-##:     "#include <owl\\static.h>" IncludeFile
+##:     "#include <owl/static.h>" IncludeFile
 ##--END-- ControlType == "STATIC"
 ##--BEGIN-- ControlType == "EDIT"
 ##DataTypeSize == ""
@@ -47,19 +47,19 @@
 ##:     \\"TEdit *[[DataName]];" ClassDefLine
 ##:     \\"[[DataName]] = new TEdit(this, [[Constant]], [[DataTypeSize]]);" ConstructorLine
 ##:     \\"char    [[DataName]][ [[DataTypeSize]] ];" StructDefLine
-##:     "#include <owl\\edit.h>" IncludeFile
+##:     "#include <owl/edit.h>" IncludeFile
 ##--END-- ControlType == "EDIT"
 ##--BEGIN-- ControlType == "LISTBOX"
 ##:     \\"TListBox *[[DataName]];" ClassDefLine
 ##:     \\"[[DataName]] = new TListBox(this, [[Constant]]);" ConstructorLine
 ##:     \\"TListBoxData  [[DataName]];" StructDefLine
-##:     "#include <owl\\listbox.h>" IncludeFile
+##:     "#include <owl/listbox.h>" IncludeFile
 ##--END-- ControlType == "LISTBOX"
 ##--BEGIN-- ControlType == "SCROLLBAR"
 ##:     \\"TScrollBar *[[DataName]];" ClassDefLine
 ##:     \\"[[DataName]] = new TScrollBar(this, [[Constant]]);" ConstructorLine
 ##:     \\"TScrollBarData    [[DataName]];" StructDefLine
-##:     "#include <owl\\scrollba.h>" IncludeFile
+##:     "#include <owl/scrollba.h>" IncludeFile
 ##--END-- ControlType == "SCROLLBAR"
 ##--BEGIN-- ControlType == "COMBOBOX"
 ##DataTypeSize == ""
@@ -68,9 +68,9 @@
 ##:     \\"TComboBox *[[DataName]];" ClassDefLine
 ##:     \\"[[DataName]] = new TComboBox(this, [[Constant]], [[DataTypeSize]]);" ConstructorLine
 ##:     \\"TComboBoxData  [[DataName]];" StructDefLine
-##:     "#include <owl\\combobox.h>" IncludeFile
+##:     "#include <owl/combobox.h>" IncludeFile
 ##--END-- ControlType == "COMBOBOX"
-##(ClassDefLine == "") && (ConstructorLine == "") && (StructDefLine == "")
+## (ClassDefLine == "") && (ConstructorLine == "") && (StructDefLine == "")
 ##:     %\\"Unknown Control Type [[ControlType]].  "
 ##*
 ##--END-- TRUE

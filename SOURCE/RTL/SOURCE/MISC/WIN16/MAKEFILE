@@ -34,6 +34,10 @@ OBJS =              \
         MISC = dummy.obj
 
         RES  = version.res
+!   else
+        OBJS =  $(OBJS)      \
+                errno.obj    \
+		        getstrm.obj
 !   endif
 !endif
 

@@ -1,0 +1,15 @@
+#----------------------------------------------------------------------------
+# ObjectWindows
+# Copyright (c) 1991, 1995 by Borland International, All Rights Reserved
+#----------------------------------------------------------------------------
+
+MODELS = ldf
+
+EXERES = wchess
+MAPEXE = wchess
+
+OBJEXE = wchess.obj talk.obj board.obj display.obj info.obj small.obj \
+         timelib.obj movgen.obj search.obj evalu.obj saverest.obj edit.obj \
+         colors.obj drag.obj pvalue.obj
+
+!include $(BCEXAMPLEDIR)\owlmake.gen

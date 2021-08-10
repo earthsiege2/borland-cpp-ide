@@ -5,9 +5,9 @@
 */
 
 /*
- *      C/C++ Run Time Library - Version 6.5
+ *      C/C++ Run Time Library - Version 7.0
  *
- *      Copyright (c) 1987, 1994 by Borland International
+ *      Copyright (c) 1987, 1996 by Borland International
  *      All Rights Reserved.
  *
  */
@@ -30,7 +30,7 @@ extern "C" {
 #pragma warn -nak
 #endif
 
-#pragma option -a-
+#pragma pack(push, 1)
 
 #endif  /* !RC_INVOKED */
 
@@ -49,7 +49,7 @@ typedef struct __jmp_buf {
     unsigned    j_si;
     unsigned    j_ds;
 
-#if !defined(__TINY__)    
+#if !defined(__TINY__)
     unsigned    j_excep;
     unsigned    j_context;
 #endif  /* !__TINY__ */
@@ -89,7 +89,8 @@ int     _RTLENTRYF _EXPFUNC setjmp(jmp_buf __jmpb);
 
 #if !defined(RC_INVOKED)
 
-#pragma option -a.  /* restore default packing */
+/* restore default packing */
+#pragma pack(pop)
 
 #if defined(__STDC__)
 #pragma warn .nak

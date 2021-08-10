@@ -1,0 +1,8 @@
+#----------------------------------------------------------------------------
+# ObjectWindows
+# Copyright (c) 1993, 1996 by Borland International, All Rights Reserved
+#----------------------------------------------------------------------------
+EXERES = validate
+OBJEXE = validatx.obj
+
+!include $(BCEXAMPLEDIR)\owlmake.gen

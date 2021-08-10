@@ -6,9 +6,9 @@
  *-----------------------------------------------------------------------*/
 
 /*
- *      C/C++ Run Time Library - Version 6.5
+ *      C/C++ Run Time Library - Version 7.0
  *
- *      Copyright (c) 1991, 1994 by Borland International
+ *      Copyright (c) 1991, 1996 by Borland International
  *      All Rights Reserved.
  *
  */
@@ -53,6 +53,7 @@ char ** _argv;        /* argument vector */
  * Local variables
  */
 static int argmax;          /* maximum size of _argv[] */
+static char *cmdLineCopy;
 
 /*----------------------------------------------------------------------
  * Forward declarations
@@ -103,7 +104,6 @@ void _setargv(void)
 {
     char *src = 0;
     char *dst, *arg;
-    char buffer[MAXCMDLINE];
     char _oscmd[MAXCMDLINE];    /* Store a copy of the command line. */
     char far *_oscmdline;       /* Points to the real command line.  */
 
@@ -118,8 +118,10 @@ void _setargv(void)
     _argc = argmax = 0;
     _argv = NULL;
 
-    strcpy(buffer, _argv0);
-    _addarg(buffer, 1);
+    /* Note that we never allocate a new block for argv[0], we rely on this behavior
+     * to free memory at exit.  If you change this then fix the cleanup code in SETARGV0.C
+     */
+    _addarg(_argv0, 0);
 
     if  (src)
     {
@@ -132,7 +134,7 @@ void _setargv(void)
          * the command line in place, but some programs might want to look
          * at it unmodified.
          */
-        if ((dst = malloc(strlen(src)+1)) == NULL)
+        if ((cmdLineCopy = dst = malloc(strlen(src)+1)) == NULL)
             _errorExitBox("No space for copy of command line", 3);
 
         /* Add each argument from the command line to the argument list.
@@ -192,9 +194,6 @@ void _setargv(void)
     _addarg(NULL, 0);                   /* add a dummy NULL argument */
     _argc--;                            /* but don't count it */
 
-    free(_argv0);
-    _argv0 = _argv[0];
-
 #if defined(__DPMI16__)
     _C0argc = _argc;                    /* startup code expects args */
     _C0argv = _argv;                    /*  in these variables */
@@ -202,6 +201,20 @@ void _setargv(void)
 }
 
 #pragma startup _setargv 10   // NOTE:  Must be executed after _setenv (8)
+
+
+/*
+ *  Release _argv
+ */
+static void _rlsargv(void)
+{
+    if (_argv)
+	free(_argv);
+    if (cmdLineCopy)
+	free(cmdLineCopy);
+}
+
+#pragma exit _rlsargv 10
 
 
 /*----------------------------------------------------------------------

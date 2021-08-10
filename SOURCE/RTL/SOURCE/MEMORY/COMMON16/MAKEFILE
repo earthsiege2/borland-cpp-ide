@@ -21,16 +21,30 @@
 #############################################################################
 !if $d(DLL)
     AUXOBJS =          \
-            alloca.obj
+	alloca.obj
 !else
     OBJS =             \
-            alloca.obj
+	alloca.obj
 
 !   if $(MODEL) != t
         MISC =             \
-                newnx.obj
+		setnewnx.obj
 !   endif
 !endif
+
+
+OBJS =		     \
+	$(OBJS)      \
+        del.obj      \
+        delarray.obj \
+	new.obj      \
+	newarray.obj \
+        newf.obj     \
+        newfarry.obj \
+        newfpl.obj   \
+        newfplar.obj \
+        newpl.obj    \
+        newplarr.obj 
 
 AUXOBJS =            \
         $(AUXOBJS)   \
@@ -40,18 +54,9 @@ AUXOBJS =            \
         peek.obj     \
         poke.obj     \
         stklen.obj   \
-        del.obj      \
-        delarray.obj \
         delf.obj     \
         delfarry.obj \
-        new.obj      \
-        newarray.obj \
-        newf.obj     \
-        newfarry.obj \
-        newfpl.obj   \
-        newfplar.obj \
-        newpl.obj    \
-        newplarr.obj \
+	setnew.obj   \
         vapp.obj     \
         vappv.obj    \
         vdel.obj     \
@@ -82,5 +87,5 @@ TASMCFG = 1        # Force tasm.cfg creation
 #############################################################################
 # MISC explicit rules.                                                      #
 #############################################################################
-newnx.obj : new.cpp
+setnewnx.obj : setnew.cpp
     $(CC) -o$(OBJDIR)\$& -DNOXX $?

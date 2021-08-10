@@ -1,17 +1,13 @@
 //----------------------------------------------------------------------------
-// (C) Copyright 1994 by Borland International, All Rights Reserved
+// Copyright (c) 1994, 1996 by Borland International, All Rights Reserved
 //
-// TUString implementation (others functions are inline)
+//$Revision:   5.6  $
 //
+// TString (& TUString) implementation (others functions are inline)
 //----------------------------------------------------------------------------
-#if !defined(_Windows)
-# define _Windows      // pretend we are in windows to get the headers we need
-#endif
-#if !defined(INC_OLE2)
-# define INC_OLE2      // Make sure we get Ole2 headers
-#endif
-#include <osl/ustring.h>
-#include <osl/inlines.h>
+#include <winsys/pch.h>
+#include <winsys/string.h>
+#include <services/memory.h>
 #include <string.h>
 
 TUString TUString::Null;   // null TAutoStrings reference this object
@@ -69,7 +65,7 @@ char* TUString::ChangeToCopy()
       break;
     case isWCopy:
       dst = ConvertWtoA(WCopy);
-      delete [] WCopy;
+      delete[] WCopy;
       break;
 #endif
 #if defined(BI_OLECHAR_WIDE)
@@ -116,7 +112,7 @@ wchar_t* TUString::ChangeToWCopy()
       break;
     case isCopy:
       dst = ConvertAtoW(Copy);
-      delete [] Copy;
+      delete[] Copy;
       break;
     case isWConst:
       src = WConst;
@@ -129,15 +125,11 @@ wchar_t* TUString::ChangeToWCopy()
     case isExtBstr:
       src = Bstr;
       len = ::SysStringLen(Bstr);
-      if (Kind == isBstr)
-        ::SysFreeString(Bstr);
       break;
 #else                // This case probably never happens
     case isBstr:
     case isExtBstr:
       dst = ConvertAtoW(Bstr, ::SysStringLen(Bstr));
-      if (Kind == isBstr)
-        ::SysFreeString(Bstr);
       break;
 #endif
     case isString:
@@ -147,6 +139,8 @@ wchar_t* TUString::ChangeToWCopy()
     dst = new wchar_t[len+1];
     memcpy(dst, src, (len+1) * sizeof(wchar_t));
   }
+  if (Kind == isBstr)
+    ::SysFreeString(Bstr);
   Kind = isWCopy;
   WCopy = dst;
   return WCopy;
@@ -154,14 +148,21 @@ wchar_t* TUString::ChangeToWCopy()
 #endif
 
 //------------------------------------------------------------------------
-// inline ctors used by Create functions
+// inline ctors used by Create functions.
+// Note: these are never made public or exported from this unit
+//
 
+//
 inline TUString::TUString(const char far& str)
 :
-  Kind(isConst), Const(&str), RefCnt(1), Lang(0)
+  Kind(isConst),
+  Const(&str),
+  RefCnt(1),
+  Lang(0)
 {
 }
 
+//
 inline TUString::TUString(char& str)
 :
   Kind(isCopy), RefCnt(1), Lang(0)
@@ -171,29 +172,53 @@ inline TUString::TUString(char& str)
 }
 
 #if defined(BI_HAS_WCHAR)
+
+//
 inline TUString::TUString(const wchar_t& str)
 :
-  Kind(isWConst), WConst(&str), RefCnt(1), Lang(0)
+  Kind(isWConst),
+  WConst(&str),
+  RefCnt(1),
+  Lang(0)
 {
 }
   
+//
 inline TUString::TUString(wchar_t& str)
 :
-  Kind(isWCopy), RefCnt(1), Lang(0)
+  Kind(isWCopy),
+  RefCnt(1),
+  Lang(0)
 {
   WCopy = new wchar_t[strlen(&str)+1];
   strcpy(WCopy, &str);
 }
 #endif
 
+//
 inline TUString::TUString(BSTR str, bool loan, TLangId lang)
 :
-  Kind(loan ? isExtBstr : isBstr), Bstr(str), RefCnt(loan ? 2 : 1), Lang(lang)
+  Kind(loan ? isExtBstr : isBstr),
+  Bstr(str),
+  RefCnt(int16(loan ? 2 : 1)),
+  Lang(lang)
 {
 }
 
+//
+inline TUString::TUString(TSysStr& str, bool loan, TLangId lang)
+:
+  Kind(loan ? isExtBstr : isBstr),
+  Bstr(str.operator BSTR()),
+  RefCnt(int16(loan ? 2 : 1)),
+  Lang(lang)
+{
+}
+
+//
 inline void* operator new(size_t, TStringRef** p) {return p;}
 
+//
 inline TUString::TUString(const string& str)
 :
   Kind(isString), RefCnt(1), Lang(0)
@@ -202,29 +227,38 @@ inline TUString::TUString(const string& str)
 }
 
 //------------------------------------------------------------------------
+// Static creation, or factory functions return pointers to new UStrings, or
+// pointers to the Null UString
+// 
 
+//
 TUString* TUString::Create(const char far* str)
 {
-  return str && *str ? new TUString(*str) : &++Null;
+  return str /*&& *str*/ ? new TUString(*str) : &++Null;
 }
 
+//
 TUString* TUString::Create(char* str)
 {
-  return str && *str ? new TUString(*str) : &++Null;
+  return str /*&& *str*/ ? new TUString(*str) : &++Null;
 }
 
 #if defined(BI_HAS_WCHAR)
+
+//
 TUString* TUString::Create(const wchar_t* str)
 {
-  return str && *str ? new TUString(*str) : &++Null;
+  return str /*&& *str*/ ? new TUString(*str) : &++Null;
 }
 
+//
 TUString* TUString::Create(wchar_t* str)
 {
-  return str && *str ? new TUString(*str) : &++Null;
+  return str /*&& *str*/ ? new TUString(*str) : &++Null;
 }
 #endif
 
+//
 TUString* TUString::Create(BSTR str, bool loan, TLangId lang)
 {
   if (str && ::SysStringLen(str))
@@ -234,11 +268,23 @@ TUString* TUString::Create(BSTR str, bool loan, TLangId lang)
   return &++Null;
 }
 
+//
+TUString* TUString::Create(TSysStr& str, bool loan, TLangId lang)
+{
+  return Create(str.operator BSTR(), loan, lang);
+}
+
+//
 TUString* TUString::Create(const string& str)
 {
   return str.length() ? new TUString(str) : &++Null;
 }
 
+//------------------------------------------------------------------------
+// 
+//
+
+//
 TUString* TUString::Assign(const TUString& s)
 {
   if (RefCnt == 1 && Kind != isNull && Kind != isExtBstr)
@@ -250,6 +296,7 @@ TUString* TUString::Assign(const TUString& s)
   return &CONST_CAST(TUString&,s);
 }
 
+//
 TUString* TUString::Assign(const string& s)
 {
   if (s.length() && RefCnt == 1 && Kind != isNull && Kind != isExtBstr) {
@@ -264,6 +311,7 @@ TUString* TUString::Assign(const string& s)
   }
 }
 
+//
 TUString* TUString::Assign(const char far* s)
 {
   if (s && *s && RefCnt == 1 && Kind != isNull && Kind != isExtBstr) {
@@ -278,6 +326,7 @@ TUString* TUString::Assign(const char far* s)
   }
 }
 
+//
 TUString* TUString::Assign(char* s)
 {
   if (s && *s && RefCnt == 1 && Kind != isNull && Kind != isExtBstr) {
@@ -294,6 +343,8 @@ TUString* TUString::Assign(char* s)
 }
 
 #if defined(BI_HAS_WCHAR)
+
+//
 TUString* TUString::Assign(const wchar_t* s)
 {
   if (s && *s && RefCnt == 1 && Kind != isNull && Kind != isExtBstr) {
@@ -308,6 +359,7 @@ TUString* TUString::Assign(const wchar_t* s)
   }
 }
 
+//
 TUString* TUString::Assign(wchar_t* s)
 {
   if (s && *s && RefCnt == 1 && Kind != isNull && Kind != isExtBstr) {
@@ -324,6 +376,7 @@ TUString* TUString::Assign(wchar_t* s)
 }
 #endif
 
+//
 TUString* TUString::Assign(BSTR str, TLangId lang)
 {
   if (RefCnt==1 && Kind != isNull && Kind != isExtBstr) {
@@ -342,6 +395,9 @@ TUString* TUString::Assign(BSTR str, TLangId lang)
   }
 }
 
+//------------------------------------------------------------------------
+
+//
 TUString::operator const char far*() const
 {
   switch (Kind) {
@@ -362,12 +418,15 @@ TUString::operator const char far*() const
   return 0; // suppress warning
 }
 
+//
 TUString::operator char*()
 {
   return ChangeToCopy();
 }
 
 #if defined(BI_HAS_WCHAR)
+
+//
 TUString::operator const wchar_t*() const
 {
   switch (Kind) {
@@ -388,11 +447,14 @@ TUString::operator const wchar_t*() const
   return 0; // suppress warning
 }
 
+//
 TUString::operator wchar_t*()
 {
   return ChangeToWCopy();
 }
 #endif
+
+//------------------------------------------------------------------------
 
 //
 // 
@@ -414,30 +476,29 @@ int TUString::Length() const
   return 0; // suppress warning
 }
 
+//------------------------------------------------------------------------
+
 //
-// Revokes BSTR ownership from this UString
+// Revoke BSTR ownership from this UString, i.e. make this UString relinquish
 //
 void TUString::RevokeBstr(BSTR s)
 {
-  if (Kind != isExtBstr || Bstr != s)
+  if (Kind != isExtBstr || Bstr != s)  // Don't have it anymore
     return;
-  if (RefCnt == 1) {
+  if (RefCnt == 1) {   // We go away. Assume that our envelope knows about this!
     Kind = isNull;
     delete this;
     return;
   }
-  Kind = isCopy;
 #if defined(BI_OLECHAR_WIDE)
-  WCopy = new wchar_t[strlen(s)+1];
-  strcpy(WCopy, s);
+  ChangeToWCopy();     // Make an appropriate copy of it
 #else
-  Copy = new char[strlen(s)+1];
-  strcpy(Copy, s);
+  ChangeToCopy();
 #endif
 }
 
 //
-// Passes BSTR ownership to this UString
+// Pass BSTR ownership to this UString
 //
 void TUString::ReleaseBstr(BSTR s)
 {
@@ -445,8 +506,8 @@ void TUString::ReleaseBstr(BSTR s)
     Kind = isBstr;
     --*this;
   }
-  else       // has been overwritten with converted type
-    ::SysFreeString(Bstr);
+  else       // Has been overwritten with converted type, don't need anymore
+    ::SysFreeString(s);
 }
 
 //
@@ -456,9 +517,9 @@ void TUString::ReleaseBstr(BSTR s)
 void TUString::Free()
 {
   switch (Kind) {
-    case isCopy:    delete [] Copy; break;
+    case isCopy:    delete[] Copy; break;
 #if defined(BI_HAS_WCHAR)
-    case isWCopy:   delete [] WCopy; break;
+    case isWCopy:   delete[] WCopy; break;
 #endif
     case isBstr:    ::SysFreeString(Bstr); break;
     case isString:  ((string*)&String)->string::~string();

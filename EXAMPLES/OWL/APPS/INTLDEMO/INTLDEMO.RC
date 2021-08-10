@@ -1,0 +1,172 @@
+//----------------------------------------------------------------------------
+// ObjectWindows - (C) Copyright 1991, 1996 by Borland International
+//   intldemo.rc
+//----------------------------------------------------------------------------
+
+#include <osl\locale.rh>
+#include <owl/except.rc>
+
+WORLD_ICON ICON "world.ico"
+
+// AppReg strings
+
+Desc            XLAT "Automated Locale Application"
+                FRENCH "Application Locale"
+                GERMAN "Automatisierte Locale-Anwendung"
+                XEND
+
+appname         XLAT "Locale Application"
+                FRENCH "Application Locale"
+                GERMAN "Locale-Anwendung"
+                XEND
+
+typehelp        XLAT "english.hlp"
+                FRENCH "french.hlp"
+                GERMAN "german.hlp"
+                XEND
+
+// TLocaleApplication strings
+
+Application     XLAT
+                FRENCH "Application"
+                GERMAN "Anwendung"
+                XEND
+
+appobj_         XLAT "Application Object"
+                FRENCH "Application Objet"
+                GERMAN "Anwendungsobjekt"
+                XEND
+
+Quit            XLAT
+                FRENCH "Quitter"
+                GERMAN "Beenden"
+                XEND
+
+quitapp_        XLAT "Quit application"
+                FRENCH "Quitter application"
+                GERMAN "Programm beenden"
+                XEND
+
+Window	        XLAT
+                FRENCH "Fenêtre"
+                GERMAN "Fenster"
+                XEND
+
+window_         XLAT "Locale window"
+                FRENCH "Fenêtre locale"
+                GERMAN "Locale-Fenster"
+                XEND
+
+TLocaleApp_     XLAT "TLocaleApplication class"
+                FRENCH "Classe TLocaleApplication"
+                GERMAN "TLocaleApplication-Klasse"
+                XEND
+
+// TLocaleFrame strings
+
+TLocaleFrame_   XLAT "TLocaleFrame class"
+                FRENCH "Classe TLocaleFrame"
+                GERMAN "TLocaleFrame-Klasse"
+                XEND
+
+Wnd             XLAT "Window"
+                FRENCH "Fenêtre"
+                GERMAN "Fenster"
+                XEND
+
+wnd_            XLAT "Locale window"
+                FRENCH "Fenêtre Locale"
+                GERMAN "Locale-Fenster"
+                XEND
+
+CLocale         XLAT
+                FRENCH "CLocale"
+                GERMAN "CLocale"
+                XEND
+
+CLocale_        XLAT
+                FRENCH "Choisissez les locales \042C\042"
+                GERMAN "Die \042C\042-Konventionen auswählen"
+                XEND
+
+USLocale        XLAT
+                FRENCH "LocaleAméricaine"
+                GERMAN "AmerikanischeLocale"
+                XEND
+
+USLocale_       XLAT
+                FRENCH "Choisissez les locales américaines"
+                GERMAN "Die US-amerikanischen Konventionen auswählen"
+                XEND
+
+UKLocale        XLAT
+                FRENCH "LocaleAnglaise"
+                GERMAN "BritischeLocale"
+                XEND
+
+UKLocale_       XLAT
+                FRENCH "Choisissez les locales anglaises"
+                GERMAN "Die britischen Konventionen auswählen"
+                XEND
+
+FrenchLocale    XLAT
+                FRENCH "LocaleFrançaise"
+                GERMAN "FranzösischeLocale"
+                XEND
+
+FrenchLocale_   XLAT
+                FRENCH "Choisissez les locales françaises"
+                GERMAN "Die französichen Konventionen auswählen"
+                XEND
+
+GermanLocale    XLAT
+                FRENCH "LocaleAllemande"
+                GERMAN "DeutscheLocale"
+                XEND
+
+GermanLocale_   XLAT
+                FRENCH "Choisissez les locales allemandes"
+                GERMAN "Die deutschen Konventionen auswählen"
+                XEND
+
+EnglishLanguage XLAT
+                FRENCH "LangueAnglaise"
+                GERMAN "EnglischeSprache"
+                XEND
+
+EnglishLanguage_ XLAT "Change user interface to English"
+                FRENCH "Passer en interface anglaise"
+                GERMAN "Zu englischer Benutzeroberfläche wechseln"
+                XEND
+
+FrenchLanguage  XLAT
+                FRENCH "LangueFrançaise"
+                GERMAN "FranzösischeSprache"
+                XEND
+
+FrenchLanguage_ XLAT "Change user interface to French"
+                FRENCH "Passer en interface française"
+                GERMAN "Zu französischer Benutzeroberfläche wechseln"
+                XEND
+
+GermanLanguage  XLAT
+                FRENCH "LangueAllemande"
+                GERMAN "DeutscheSprache"
+                XEND
+
+GermanLanguage_ XLAT "Change user interface to German"
+                FRENCH "Passer en interface allemande"
+                GERMAN "Zu deutscher Benutzeroberfläche wechseln"
+                XEND
+
+// TLocaleWindow string
+
+TLocaleWindow_  XLAT "TLocaleWindow class"
+                FRENCH "Classe TLocaleWindow"
+                GERMAN "TLocaleWindow-Klasse"
+                XEND
+
+
+
+
+

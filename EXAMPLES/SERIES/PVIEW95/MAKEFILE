@@ -1,0 +1,15 @@
+#----------------------------------------------------------------------------
+# Borland C++
+# Copyright (c) 1987, 1996 Borland International Inc.  All Rights Reserved.
+#   examples\series\pview95\makefile
+#----------------------------------------------------------------------------
+
+SYSTEMS = WIN32
+OSMAJOR = 4
+OSMINOR = 0
+EXERES  = pview95
+CPCH    = -Hc -H"windows.h" -H=pview95.csm
+OBJEXE  = pview95.obj winmain.obj init.obj about.obj dispatch.obj misc.obj\
+          listview.obj procthrd.obj toolbar.obj
+
+!include $(BCEXAMPLEDIR)\makefile.gen

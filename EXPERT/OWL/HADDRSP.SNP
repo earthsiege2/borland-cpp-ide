@@ -10,7 +10,7 @@
 ##^BOL
 
 //{{[[ClassName]]RSP_TBL_BEGIN}}
-protected:
+  protected:
 //{{[[ClassName]]RSP_TBL_END}}
 DECLARE_RESPONSE_TABLE([[ClassName]]);
 ##^-1

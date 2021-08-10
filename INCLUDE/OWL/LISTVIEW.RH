@@ -1,11 +1,17 @@
 //----------------------------------------------------------------------------
 // ObjectWindows
-// (C) Copyright 1993, 1994 by Borland International, All Rights Reserved
+// Copyright (c) 1993, 1996 by Borland International, All Rights Reserved
 //
-//   Menu and accelerator IDs for use with TListView
+//$Revision:   10.3  $
+//
+// Menu and accelerator IDs for use with TListView
 //----------------------------------------------------------------------------
+#if !defined(OWL_LISTVIEW_RH)
+#define OWL_LISTVIEW_RH
 
-#include <owl/window.rh>
+#if !defined(OWL_WINDOW_RH)
+# include <owl/window.rh>
+#endif
 
 //
 // Many list view specific CMs are just backward compatible names for common
@@ -23,3 +29,5 @@
 #define IDM_LISTVIEW        32582
 #define IDA_LISTVIEW        32583
 #define IDS_LISTNUM         32584
+
+#endif  //  OWL_LISTVIEW_RH

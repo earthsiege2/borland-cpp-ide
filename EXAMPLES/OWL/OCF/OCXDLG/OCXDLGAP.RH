@@ -1,0 +1,32 @@
+//----------------------------------------------------------------------------
+//  Project OcxDlg
+//  Borland International, Inc.
+//  Copyright © 1996. All Rights Reserved.
+//
+//  SUBSYSTEM:    OcxDlg Application
+//  FILE:         OcxDlgAp.h
+//  AUTHOR:       Chris McConn
+//
+//  OVERVIEW
+//  ~~~~~~~~
+//  Constant definitions for all resources defined in OcxDlgAp.rc.
+//
+//----------------------------------------------------------------------------
+
+#if !defined(_OCXDLGAPP_RH) // Sentry use file only if it's not already included.
+#define _OCXDLGAPP_RH
+
+
+//============================================================================
+// Application specific definitions:
+#define IDI_SDIAPPLICATION      1001 // Application icon
+
+//============================================================================
+// Client Dialog
+#define IDD_CLIENT              2000
+#define IDC_SPREADSHEET	         101
+#define IDC_GRAPH                102
+#define IDC_PIE_RAD              103
+#define IDC_GRAPH_RAD	           104
+
+#endif // _OCXDLGAPP_RH sentry

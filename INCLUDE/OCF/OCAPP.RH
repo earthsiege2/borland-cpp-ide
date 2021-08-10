@@ -1,11 +1,11 @@
-// 
 //----------------------------------------------------------------------------
 // ObjectComponents
-// (C) Copyright 1994 by Borland International, All Rights Reserved
+// Copyright (c) 1994, 1996 by Borland International, All Rights Reserved
 //
 //   String resource ids used by ocapp for clipboard format names
 //----------------------------------------------------------------------------
 
+//
 // Text for clipboard format names
 //
 #define IDS_CFFIRST         32610   // first id for standard clipboard format
@@ -25,5 +25,7 @@
 #define IDS_CFENHMETAFILE   32623
 #define IDS_CFLAST          32623   // last id for standard clipboard format
 
+//
 // word " in ", used in the window title when a server is embedded
+//
 #define IDS_IN      			 32700

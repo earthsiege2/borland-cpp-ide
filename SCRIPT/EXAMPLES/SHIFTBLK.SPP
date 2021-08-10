@@ -1,0 +1,38 @@
+//--------------------------------------------------------------------------
+// Object Scripting
+// Copyright (c) 1996 by Borland International, All Rights Reserved
+//
+// SHIFTBLK.SPP: Shift Block. Shifts the current block right or left a
+//   column at a time.
+//
+// USE: Run script. Use Alt-right arrow and Alt-left arrow to shift the
+//   block.
+//
+// NOTE: The key combinations used by this script are already in use under
+//   Epsilon emulation. They are assigned to IDE.ViewActivate(). The keys
+//   are #def'd below. Brief emulation provides functionality similar to
+//   Shift Block.
+//--------------------------------------------------------------------------
+print "shiftblk.spp";
+
+//
+// IDE imports.
+//
+import IDE;
+
+//
+// Hot key sequences.
+//
+#define HOT_KEY_LEFT   "<Alt-Left>"
+#define HOT_KEY_RIGHT  "<Alt-Right>"
+
+shiftblk()
+{
+  // Assign keys in the editor's keyboard to the indent method. 
+  //
+  declare edKB = IDE.KeyboardManager.GetKeyboard("Editor");
+  edKB.Assign(HOT_KEY_LEFT, "editor.TopView.Block.Indent(-1);",
+              ASSIGN_IMPLICIT_KEYPAD);
+  edKB.Assign(HOT_KEY_RIGHT, "editor.TopView.Block.Indent(1);",
+              ASSIGN_IMPLICIT_KEYPAD);
+}

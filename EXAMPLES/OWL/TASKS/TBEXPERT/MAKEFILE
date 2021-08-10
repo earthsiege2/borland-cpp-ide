@@ -1,0 +1,14 @@
+#----------------------------------------------------------------------------
+# ObjectWindows - (C) Copyright 1995 by Borland International
+#----------------------------------------------------------------------------
+SYSTEMS = WIN32
+MODELS  = dft
+
+MYROOT  = TBExpert
+EXERES  = $(MYROOT)
+OBJEXE  = app.obj $(MYROOT).obj statmgr.obj gadgtmgr.obj gadgfact.obj \
+          gmplace.obj dynbtnga.obj
+
+!include $(BCEXAMPLEDIR)\owlmake.gen
+
+

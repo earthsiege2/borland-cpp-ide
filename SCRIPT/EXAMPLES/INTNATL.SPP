@@ -1,0 +1,33 @@
+//--------------------------------------------------------------------------
+// Object Scripting
+// Copyright (c) 1996 by Borland International, All Rights Reserved
+//
+// INTNATL.SPP: International. Demonstrates the use of FormatString() for
+//   localization of strings in scripts.
+//--------------------------------------------------------------------------
+print "intnatl.spp";
+
+//
+// IDE imports.
+//
+import IDE;
+
+//
+// Display message to user. When strings are translated, the position and
+// order of some words may change. If there are variables in a string,
+// this can be a problem. FormatString() makes it easier to translate such
+// strings.
+//
+NumScandals = CalcNumScandals();
+Player = "Bob";
+Text = FormatString("Player %1 has lived through %2 scandals.", Player,
+                    NumScandals);
+IDE.Message(Text, INFORMATION);
+
+//
+// Calculate the number of scandals.
+//
+CalcNumScandals()
+{
+  return 12;
+}

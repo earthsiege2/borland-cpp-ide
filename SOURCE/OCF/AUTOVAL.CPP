@@ -1,17 +1,18 @@
-//
 //----------------------------------------------------------------------------
 // ObjectComponents
-// (C) Copyright 1994 by Borland International, All Rights Reserved
+// Copyright (c) 1994, 1996 by Borland International, All Rights Reserved
+//
+// $Revision:   2.6  $
 //
 // TAutoVal implementation
 //----------------------------------------------------------------------------
-#include <ocf/ocfpch.h>
+#include <ocf/pch.h>
 #include <ocf/autodefs.h>
+#include <services/memory.h>
 
-//____________________________________________________________________________
-//
+//----------------------------------------------------------------------------
 // TAutoVal assignment operators (others are inline)
-//____________________________________________________________________________
+//
 
 void TAutoVal::operator =(TAutoString s)
 {
@@ -32,10 +33,9 @@ void TAutoVal::operator =(const string& s)
 // this requires Set/GetLocale to be used for atVoid initialized variants
 //
 
-//____________________________________________________________________________
-//
+//----------------------------------------------------------------------------
 // TAutoVal conversion operators
-//____________________________________________________________________________
+//
 
 void TAutoVal::SetLocale(TLocaleId locale)
 {
@@ -72,7 +72,7 @@ TLangId TAutoVal::GetLanguage() const
 TAutoVal::operator unsigned char()
 {
   unsigned char v;
-  switch(vt) {
+  switch (vt) {
   case atByte:    return bVal;
   case atShort:   if(::VarUI1FromI2(iVal,  &v)) break; return v;
   case atLong:    if(::VarUI1FromI4(lVal,  &v)) break; return v;
@@ -99,7 +99,7 @@ TAutoVal::operator unsigned char()
 TAutoVal::operator short()
 {
   short v;
-  switch(vt) {
+  switch (vt) {
   case atByte:    return (short)bVal;
   case atShort:   return iVal;
   case atLong:    if (lVal>0x7FFFL || lVal <0xFFFF8000L) break; return (short)lVal;
@@ -126,7 +126,7 @@ TAutoVal::operator short()
 TAutoVal::operator long()
 {
   long v;
-  switch(vt) {
+  switch (vt) {
   case atByte:    return (long)bVal;
   case atShort:   return (long)iVal;
   case atLong:    return lVal;
@@ -152,7 +152,7 @@ TAutoVal::operator long()
 
 TAutoVal::operator TBool()
 {
-  switch(vt) {
+  switch (vt) {
   case atByte:    return static_cast<TBool>(bVal != 0);
   case atShort:   return static_cast<TBool>(iVal != 0);
   case atLong:    return static_cast<TBool>(lVal != 0);
@@ -179,7 +179,7 @@ TAutoVal::operator TBool()
 TAutoVal::operator float()
 {
   float v;
-  switch(vt) {
+  switch (vt) {
   case atByte:     if(::VarR4FromUI1(bVal,&v)) break; return v;
   case atShort:    if(::VarR4FromI2(iVal, &v)) break; return v;
   case atLong:     if(::VarR4FromI4(lVal, &v)) break; return v;
@@ -206,7 +206,7 @@ TAutoVal::operator float()
 TAutoVal::operator double()
 {
   double v;
-  switch(vt) {
+  switch (vt) {
   case atByte:    if(::VarR8FromUI1(bVal,&v)) break; return v;
   case atShort:   if(::VarR8FromI2(iVal, &v)) break; return v;
   case atLong:    if(::VarR8FromI4(lVal, &v)) break; return v;
@@ -233,7 +233,7 @@ TAutoVal::operator double()
 TAutoVal::operator TAutoDate()
 {
   DATE v;
-  switch(vt) {
+  switch (vt) {
   case atByte:     if(::VarDateFromUI1(bVal,&v)) break; return v;
   case atShort:    if(::VarDateFromI2(iVal, &v)) break; return v;
   case atLong:     if(::VarDateFromI4(lVal, &v)) break; return v;
@@ -257,9 +257,11 @@ TAutoVal::operator TAutoDate()
 
 TAutoVal::operator TAutoCurrency()
 {
-  TAutoCurrency v;
+  CY v;
+  TAutoCurrency& rv = *(TAutoCurrency*)&v;
+
   HRESULT stat = HR_NOERROR;
-  switch(vt) {
+  switch (vt) {
   case atByte:     stat = ::VarCyFromUI1(bVal, &v); break;
   case atShort:    stat = ::VarCyFromI2(iVal,  &v); break;
   case atLong:     stat = ::VarCyFromI4(lVal,  &v); break;
@@ -281,7 +283,7 @@ TAutoVal::operator TAutoCurrency()
   }
   if (stat != HR_NOERROR)
     throw TXAuto(TXAuto::xConversionFailure);
-  return v;
+  return rv;
 }
 
 //
@@ -380,6 +382,11 @@ TAutoVal::operator string()
   return s;
 }
 
+TAutoVal::operator TString()
+{
+  return operator string();
+}
+
 TAutoVal::operator unsigned short()
 {
   long temp = operator long();
@@ -402,11 +409,15 @@ TAutoVal::operator TBool   far*() {ConvRef(atBool); return (TBool far*)pbool;}
 TAutoVal::operator float  far*() {ConvRef(atFloat);  return pfltVal;}
 TAutoVal::operator double far*() {ConvRef(atDouble); return pdblVal;}
 TAutoVal::operator TAutoDate far*() {ConvRef(atDatetime); return (TAutoDate far*)pdate;}
-TAutoVal::operator TAutoCurrency far*() {ConvRef(atDatetime); return pcyVal;}
+TAutoVal::operator TAutoCurrency far*() {ConvRef(atCurrency); return pcyVal;}
 
 void TAutoVal::ConvRef(int type)
 {
-  if (type != (vt | atByRef)) {
+#if 1
+  if (vt != (type | atByRef)) {     
+#else
+  if (type != (vt | atByRef)) {     
+#endif
     throw TXAuto(TXAuto::xConversionFailure);
   }
 }
@@ -459,4 +470,3 @@ TAutoVal::operator IUnknown&()
     return **ppunkVal;
   throw TXAuto(TXAuto::xConversionFailure);
 }
-

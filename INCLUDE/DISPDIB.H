@@ -172,7 +172,7 @@ UINT FAR PASCAL DisplayDibEx(LPBITMAPINFOHEADER lpbi, int x, int y, LPSTR lpBits
 //
 // inline function to send a message to a DisplayDibWindow
 //
-__inline UINT DisplayDibWindowMessage(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam, DWORD cbSize)
+static __inline UINT DisplayDibWindowMessage(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam, DWORD cbSize)
 {
 #if defined(_WIN32) || defined(WIN32)
         COPYDATASTRUCT cds;
@@ -188,7 +188,7 @@ __inline UINT DisplayDibWindowMessage(HWND hwnd, UINT msg, WPARAM wParam, LPARAM
 //
 // inline function to create a DisplayDibWindow
 //
-__inline HWND DisplayDibWindowCreateEx(HWND hwndParent, HINSTANCE hInstance, DWORD dwStyle)
+static __inline HWND DisplayDibWindowCreateEx(HWND hwndParent, HINSTANCE hInstance, DWORD dwStyle)
 {
 #if defined(_WIN32) || defined(WIN32)
     DWORD show = 2;

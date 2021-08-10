@@ -1,0 +1,193 @@
+//----------------------------------------------------------------------------
+// cScript
+// (C) Copyright 1995 by Borland International, All Rights Reserved
+//
+// BRIEFEX.SPP
+//    Provides support services for BRIEF operations.
+//
+// $Revision:   1.6  $
+//
+//----------------------------------------------------------------------------
+
+import IDE;
+import editor;
+import scriptEngine;
+
+assign_to_key(declare key, declare function)
+{
+ if (!initialized(key))
+   key = IDE.SimpleDialog("Key to Assign :","<");
+
+ if (!initialized(function))
+   function = IDE.SimpleDialog("Function to Assign :","");
+
+ declare kbd = IDE.KeyboardManager.GetKeyboard("Editor");
+ kbd.Assign(key,function,ASSIGN_IMPLICIT_MODIFIER|ASSIGN_IMPLICIT_SHIFT|ASSIGN_IMPLICIT_KEYPAD);
+}
+
+block_search()
+{
+ // Togggle case sensitive option.
+ editor.SearchOptions.WholeFile = !editor.SearchOptions.WholeFile;
+
+ // Notify user.
+ if (editor.SearchOptions.WholeFile) {
+	  IDE.StatusBar = "Block Searching on.";
+ } else {
+	  IDE.StatusBar = "Block Searching off.";
+ }
+}
+
+center()
+{
+ declare ep = editor.TopView.Position;
+
+ ep.Save();
+ ep.MoveBOL();
+
+ declare String Line(ep.Read());
+ Line = Line.Trim(TRUE);
+ declare nSpacesNeeded = (editor.Options.BufferOptions.Margin / 2) - (Line.Length / 2);
+
+ while (nSpacesNeeded--)
+	 Line = new String(" " + Line.Text);
+
+ editor.DeleteLine();
+ ep.InsertText(Line.Text);
+ ep.Restore();
+}
+
+delete_macro()
+{
+ declare acModule = IDE.SimpleDialog("Macro to delete(unload):");
+ if (acModule != "" && scriptEngine.Unload(acModule))
+	 IDE.StatusBar = acModule + " unloaded.";
+ else
+	 IDE.StatusBar = "delete_macro : " + acModule + " macro isn't loaded.";
+}
+
+load_macro()
+{
+ declare acModule = IDE.SimpleDialog("Macro to load:");
+ if (acModule != "" && scriptEngine.Load(acModule))
+	 IDE.StatusBar = acModule + " loaded.";
+ else
+	 IDE.StatusBar = "Unable to load macro file : " + acModule;
+}
+
+unload_macro()
+{
+ declare acModule = IDE.SimpleDialog("Macro to delete:");
+ if (acModule != "" && scriptEngine.Unload(acModule))
+	 IDE.StatusBar = acModule + " deleted.";
+ else
+	 IDE.StatusBar = "Unable to delete macro file : " + acModule;
+}
+
+next_char(declare nAmount)
+{
+ declare ep = editor.TopView.Position;
+ declare nR = ep.Row;
+ declare nC = ep.Column;
+
+ if (!initialized(nAmount))
+    nAmount = 1;
+
+ while (nAmount--) {
+    if (ep.Character == 13) {
+       editor.ModalMoveRelative(1,0);
+       editor.ModalMoveBOL();
+    } else {
+       editor.ModalMoveRelative(0,1);
+    }
+ }
+
+ if (ep.Row != nR || ep.Column != nC)
+   return TRUE;
+ else
+   return FALSE;
+}
+
+prev_char(declare nAmount)
+{
+ declare ep = editor.TopView.Position;
+ declare nR = ep.Row;
+ declare nC = ep.Column;
+
+ if (!initialized(nAmount))
+    nAmount = 1;
+
+ while(nAmount--) {
+    if (ep.Column == 1) {
+       editor.ModalMoveRelative(-1,0);
+       editor.ModalMoveEOL();
+    } else {
+       editor.ModalMoveRelative(0,-1);
+    }
+ }
+
+ if (ep.Row != nR || ep.Column != nC)
+    return TRUE;
+ else
+    return FALSE;
+}
+
+reform()
+{
+
+}
+
+tolower()
+{
+ declare eb = editor.BlockExists();
+ if (eb) { // Do the block only.
+    eb.LowerCase();
+ } else { // Do the entire line.
+    declare ep = editor.TopView.Position;
+    ep.Save();
+    ep.MoveBOL();
+    declare String sLine(ep.Read());
+    sLine = sLine.Lower();
+    editor.DeleteLine();
+    ep.InsertText(sLine.Text);
+    ep.Restore();
+ }
+}
+
+toupper()
+{
+ declare eb = editor.BlockExists();
+ if (eb) { // Do the block only.
+    eb.UpperCase();
+ } else { // Do the entire line.
+    declare ep = editor.TopView.Position;
+    ep.Save();
+    ep.MoveBOL();
+    declare String sLine(ep.Read());
+    sLine = sLine.Upper();
+    editor.DeleteLine();
+    ep.InsertText(sLine.Text);
+    ep.Restore();
+ }
+}
+
+i_search() {
+ editor.IncrementalSearch();
+}
+
+swap_anchor() {
+
+ declare eb = editor.BlockExists();
+
+ if (eb != NULL) {
+    
+    declare ep = editor.TopView.Position;
+
+    if (ep.Row == eb.EndingRow && ep.Column == eb.EndingColumn)
+       editor.MoveCursorToMarkBegin();
+    else
+       editor.MoveCursorToMarkEnd();  
+ }
+}
+
+

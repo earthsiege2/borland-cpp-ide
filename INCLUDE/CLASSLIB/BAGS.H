@@ -1,34 +1,29 @@
-/*------------------------------------------------------------------------*/
-/*                                                                        */
-/*  BAGS.H                                                                */
-/*                                                                        */
-/*  Copyright (c) 1991, 1994 Borland International                        */
-/*  All Rights Reserved                                                   */
-/*                                                                        */
-/*------------------------------------------------------------------------*/
-
+//----------------------------------------------------------------------------
+// Borland BIDS Container Library
+// Copyright (c) 1991, 1996 by Borland International, All Rights Reserved
+//
+//$Revision:   5.4  $
+//
+//----------------------------------------------------------------------------
 #if !defined( CLASSLIB_BAGS_H )
 #define CLASSLIB_BAGS_H
 
-#if !defined( __CHECKS_H )
-#include <checks.h>
-#endif
-
 #if !defined( CLASSLIB_DEFS_H )
-#include <classlib/defs.h>
+# include <classlib/defs.h>
 #endif
-
 #if !defined( CLASSLIB_SHDDEL_H )
-#include <classlib/shddel.h>
+# include <classlib/shddel.h>
 #endif
-
 #if !defined( CLASSLIB_VECTIMP_H )
-#include <classlib/vectimp.h>
+# include <classlib/vectimp.h>
+#endif
+#if !defined( SERVICES_CHECKS_H )
+# include <services/checks.h>
 #endif
 
 #pragma option -Vo-
 #if defined( BI_CLASSLIB_NO_po )
-#pragma option -po-
+# pragma option -po-
 #endif
 
 /*------------------------------------------------------------------------*/
@@ -451,7 +446,7 @@ public:
         {
         }
 
-}
+};
 
 template <class T> class TBagIterator :
     public TBagAsVectorIterator<T>

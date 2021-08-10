@@ -1,0 +1,14 @@
+//----------------------------------------------------------------------------
+// ObjectWindows
+// Copyright (c) 1995, 1996 by Borland International, All Rights Reserved
+//----------------------------------------------------------------------------
+
+#define CM_CMD1     0x1001
+#define CM_CMD2     0x1002
+#define CM_CMD3     0x1003
+#define CM_CMD4     0x1004
+#define CM_CMD5     0x1005
+#define CM_CMD6     0x1006
+#define CM_CMD7     0x1007
+#define CM_CMD8     0x1008
+#define CM_CMD9     0x1009

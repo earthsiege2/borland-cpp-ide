@@ -1,0 +1,438 @@
+//----------------------------------------------------------------------------
+//  Project ApxDlgDv
+//  Borland International
+//  Copyright © 1996. All Rights Reserved.
+//
+//  SUBSYSTEM:  ApxDlgDv Application
+//  FILE:     apxdlgda.rc
+//  AUTHOR:     
+//
+//  OVERVIEW
+//  ~~~~~~~~
+//  All resources defined here.
+//
+//----------------------------------------------------------------------------
+
+#if !defined(WORKSHOP_INVOKED)
+# include <windows.h>
+#endif
+#include "apxdlgda.rh"
+
+
+IDM_SDI MENU
+BEGIN
+  POPUP "&File"
+  BEGIN
+    MENUITEM "&New", CM_FILENEW
+    MENUITEM "&Open...", CM_FILEOPEN
+    MENUITEM SEPARATOR
+    MENUITEM "&Save", CM_FILESAVE, GRAYED
+    MENUITEM "Save &As...", CM_FILESAVEAS, GRAYED
+    MENUITEM SEPARATOR
+    MENUITEM "Sen&d...", CM_FILESEND, GRAYED
+    MENUITEM SEPARATOR
+    MENUITEM "E&xit\tAlt+F4", CM_EXIT
+  END
+
+  MENUITEM SEPARATOR
+
+  POPUP "&Edit"
+  BEGIN
+    MENUITEM "&Undo\tAlt+BkSp", CM_EDITUNDO, GRAYED
+    MENUITEM SEPARATOR
+    MENUITEM "Cu&t\tShift+Del", CM_EDITCUT, GRAYED
+    MENUITEM "&Copy\tCtrl+Ins", CM_EDITCOPY, GRAYED
+    MENUITEM "&Paste\tShift+Ins", CM_EDITPASTE, GRAYED
+    MENUITEM SEPARATOR
+    MENUITEM "Clear &All\tCtrl+Del", CM_EDITCLEAR, GRAYED
+    MENUITEM "&Delete\tDel", CM_EDITDELETE, GRAYED
+  END
+
+  POPUP "&Search"
+  BEGIN
+    MENUITEM "&Find...", CM_EDITFIND, GRAYED
+    MENUITEM "&Replace...", CM_EDITREPLACE, GRAYED
+    MENUITEM "&Next\aF3", CM_EDITFINDNEXT, GRAYED
+  END
+
+  MENUITEM SEPARATOR
+
+  MENUITEM SEPARATOR
+
+  MENUITEM SEPARATOR
+
+
+  MENUITEM SEPARATOR
+
+  POPUP "&Help"
+  BEGIN
+    MENUITEM "&About...", CM_HELPABOUT
+  END
+
+END
+
+
+// Accelerator table for short-cut to menu commands. (include/owl/editfile.rc)
+//
+IDM_SDI ACCELERATORS
+BEGIN
+  VK_DELETE, CM_EDITCUT, VIRTKEY, SHIFT
+  VK_INSERT, CM_EDITCOPY, VIRTKEY, CONTROL
+  VK_INSERT, CM_EDITPASTE, VIRTKEY, SHIFT
+  VK_DELETE, CM_EDITCLEAR, VIRTKEY, CONTROL
+  VK_BACK,   CM_EDITUNDO, VIRTKEY, ALT
+  VK_F3,     CM_EDITFINDNEXT, VIRTKEY
+END
+
+
+
+// Menu merged in when TEditView is active, notice the extra MENUITEM SEPARATORs which are
+// for menu negotation.  These separators are used as group markers by OWL.
+//
+IDM_EDITVIEW MENU LOADONCALL MOVEABLE PURE DISCARDABLE
+BEGIN
+  MENUITEM SEPARATOR
+
+  POPUP "&Edit"
+  BEGIN
+    MENUITEM "&Undo\aCtrl+Z", CM_EDITUNDO
+    MENUITEM SEPARATOR
+    MENUITEM "&Cut\aCtrl+X", CM_EDITCUT
+    MENUITEM "C&opy\aCtrl+C", CM_EDITCOPY
+    MENUITEM "&Paste\aCtrl+V", CM_EDITPASTE
+    MENUITEM "&Delete\aDel", CM_EDITDELETE
+    MENUITEM "C&lear All\aCtrl+Del", CM_EDITCLEAR
+  END
+
+  POPUP "&Search"
+  BEGIN
+    MENUITEM "&Find...", CM_EDITFIND
+    MENUITEM "&Replace...", CM_EDITREPLACE
+    MENUITEM "&Next\aF3", CM_EDITFINDNEXT
+  END
+
+  MENUITEM SEPARATOR
+
+  MENUITEM SEPARATOR
+
+  MENUITEM SEPARATOR
+
+  MENUITEM SEPARATOR
+END
+
+
+// Menu merged in when TListView is active, notice the extra MENUITEM SEPARATORs which are
+// for menu negotation.  These separators are used as group markers by OWL.
+//
+IDM_LISTVIEW MENU LOADONCALL MOVEABLE PURE DISCARDABLE
+BEGIN
+  MENUITEM SEPARATOR
+
+  POPUP "&Edit"
+  BEGIN
+    MENUITEM "&Undo\aCtrl+Z", CM_EDITUNDO
+    MENUITEM SEPARATOR
+    MENUITEM "&Cut\aCtrl+X", CM_EDITCUT
+    MENUITEM "C&opy\aCtrl+C", CM_EDITCOPY
+    MENUITEM "&Paste\aCtrl+V", CM_EDITPASTE
+    MENUITEM "&Delete\aDel", CM_EDITDELETE
+    MENUITEM "&Add Item\aIns", CM_EDITADD
+    MENUITEM "&Edit Item\aEnter", CM_EDITEDIT
+    MENUITEM "C&lear All\aCtrl+Del", CM_EDITCLEAR
+  END
+
+  MENUITEM SEPARATOR
+
+  MENUITEM SEPARATOR
+
+  MENUITEM SEPARATOR
+
+  MENUITEM SEPARATOR
+END
+
+
+IDM_DOCMANAGERFILE MENU LOADONCALL MOVEABLE PURE DISCARDABLE
+BEGIN
+  MENUITEM "&New", CM_FILENEW
+  MENUITEM "&Open...", CM_FILEOPEN
+  MENUITEM SEPARATOR
+  MENUITEM "&Save", CM_FILESAVE, GRAYED
+  MENUITEM "Save &As...", CM_FILESAVEAS, GRAYED
+  MENUITEM SEPARATOR
+  MENUITEM "E&xit\tAlt+F4", CM_EXIT
+END
+
+
+// Table of help hints displayed in the status bar.
+//
+STRINGTABLE
+BEGIN
+  -1,                   "File/document operations"
+  CM_FILENEW,           "Creates a new document"
+  CM_FILEOPEN,          "Opens an existing document"
+  CM_VIEWCREATE,        "Creates a new view for this document"
+  CM_FILEREVERT,        "Reverts changes to last document save"
+  CM_FILECLOSE,         "Closes the active document"
+  CM_FILESAVE,          "Saves the active document"
+  CM_FILESAVEAS,        "Saves the active document with a new name"
+  CM_FILESEND,          "Sends the active document using electronic mail"
+  CM_EXIT,              "Quits ApxDlgDv and prompts to save the documents"
+  CM_EDITUNDO-1,        "Edit operations"
+  CM_EDITUNDO,          "Reverses the last operation"
+  CM_EDITCUT,           "Cuts the selection and puts it on the Clipboard"
+  CM_EDITCOPY,          "Copies the selection and puts it on the Clipboard"
+  CM_EDITPASTE,         "Inserts the Clipboard contents at the insertion point"
+  CM_EDITDELETE,        "Deletes the selection"
+  CM_EDITCLEAR,         "Clears the active document"
+  CM_EDITADD,           "Inserts a new line"
+  CM_EDITEDIT,          "Edits the current line"
+  CM_EDITFIND-1,        "Search/replace operations"
+  CM_EDITFIND,          "Finds the specified text"
+  CM_EDITREPLACE,       "Finds the specified text and changes it"
+  CM_EDITFINDNEXT,      "Finds the next match"
+  CM_HELPABOUT-1,       "Access About"
+  CM_HELPABOUT,         "About the ApxDlgDv application"
+END
+
+
+//
+// OWL string table
+//
+
+// EditFile (include/owl/editfile.rc and include/owl/editsear.rc)
+//
+STRINGTABLE LOADONCALL MOVEABLE DISCARDABLE
+BEGIN
+  IDS_CANNOTFIND,       "Cannot find ""%s""."
+  IDS_UNABLEREAD,       "Unable to read file %s from disk."
+  IDS_UNABLEWRITE,      "Unable to write file %s to disk."
+  IDS_FILECHANGED,      "The text in the %s file has changed.\n\nDo you want to save the changes?"
+  IDS_FILEFILTER,       "Text files|*.txt|AllFiles|*.*|"
+END
+
+
+// ListView (include/owl/listview.rc)
+//
+STRINGTABLE LOADONCALL MOVEABLE DISCARDABLE
+BEGIN
+  IDS_LISTNUM,  "Line number %d"
+END
+
+
+// Doc/View (include/owl/docview.rc)
+//
+STRINGTABLE LOADONCALL MOVEABLE DISCARDABLE
+BEGIN
+  IDS_DOCMANAGERFILE,   "&File"
+  IDS_DOCLIST,          "--Document Type--"
+  IDS_VIEWLIST,         "--View Type--"
+  IDS_UNTITLED,         "Document"
+  IDS_UNABLEOPEN,       "Unable to open document."
+  IDS_UNABLECLOSE,      "Unable to close document."
+  IDS_READERROR,        "Document read error."
+  IDS_WRITEERROR,       "Document write error."
+  IDS_DOCCHANGED,       "The document has been changed.\n\nDo you want to save the changes?"
+  IDS_NOTCHANGED,       "The document has not been changed."
+  IDS_NODOCMANAGER,     "Document Manager not present."
+  IDS_NOMEMORYFORVIEW,  "Insufficient memory for view."
+  IDS_DUPLICATEDOC,     "Document already loaded."
+END
+
+
+// Exception string resources (include/owl/except.rc)
+//
+STRINGTABLE LOADONCALL MOVEABLE DISCARDABLE
+BEGIN
+  IDS_OWLEXCEPTION,     "ObjectWindows Exception"
+  IDS_UNHANDLEDXMSG,    "Unhandled Exception"
+  IDS_OKTORESUME,       "OK to resume?"
+  IDS_UNKNOWNEXCEPTION, "Unknown exception"
+
+  IDS_UNKNOWNERROR,     "Unknown error"
+  IDS_NOAPP,            "No application object"
+  IDS_OUTOFMEMORY,      "Out of memory"
+  IDS_INVALIDMODULE,    "Invalid module specified for window"
+  IDS_INVALIDMAINWINDOW,"Invalid MainWindow"
+  IDS_VBXLIBRARYFAIL,   "VBX Library init failure"
+
+  IDS_INVALIDWINDOW,    "Invalid window %s"
+  IDS_INVALIDCHILDWINDOW,"Invalid child window %s"
+  IDS_INVALIDCLIENTWINDOW,"Invalid client window %s"
+
+  IDS_CLASSREGISTERFAIL,"Class registration fail for window %s"
+  IDS_CHILDREGISTERFAIL,"Child class registration fail for window %s"
+  IDS_WINDOWCREATEFAIL, "Create fail for window %s"
+  IDS_WINDOWEXECUTEFAIL,"Execute fail for window %s"
+  IDS_CHILDCREATEFAIL,  "Child create fail for window %s"
+
+  IDS_MENUFAILURE,      "Menu creation failure"
+  IDS_VALIDATORSYNTAX,  "Validator syntax error"
+  IDS_PRINTERERROR,     "Printer error"
+
+  IDS_LAYOUTINCOMPLETE, "Incomplete layout constraints specified in window %s"
+  IDS_LAYOUTBADRELWIN,  "Invalid relative window specified in layout constraint in window %s"
+
+  IDS_GDIFAILURE,       "GDI failure"
+  IDS_GDIALLOCFAIL,     "GDI allocate failure"
+  IDS_GDICREATEFAIL,    "GDI creation failure"
+  IDS_GDIRESLOADFAIL,   "GDI resource load failure"
+  IDS_GDIFILEREADFAIL,  "GDI file read failure"
+  IDS_GDIDELETEFAIL,    "GDI object %X delete failure"
+  IDS_GDIDESTROYFAIL,   "GDI object %X destroy failure"
+  IDS_INVALIDDIBHANDLE, "Invalid DIB handle %X"
+END
+
+
+// General Window's status bar messages. (include/owl/statusba.rc)
+//
+STRINGTABLE
+BEGIN
+  IDS_MODES             "EXT|CAPS|NUM|SCRL|OVR|REC"
+  IDS_MODESOFF          "   |  |   |  |   |   "
+  SC_SIZE,              "Changes the size of the window"
+  SC_MOVE,              "Moves the window to another position"
+  SC_MINIMIZE,          "Reduces the window to an icon"
+  SC_MAXIMIZE,          "Enlarges the window to it maximum size"
+  SC_RESTORE,           "Restores the window to its previous size"
+  SC_CLOSE,             "Closes the window"
+  SC_TASKLIST,          "Opens task list"
+  SC_NEXTWINDOW,        "Switches to next window"
+END
+
+
+// Validator messages (include/owl/validate.rc)
+//
+STRINGTABLE LOADONCALL MOVEABLE DISCARDABLE
+BEGIN
+  IDS_VALPXPCONFORM     "Input does not conform to picture:\n""%s"""
+  IDS_VALINVALIDCHAR    "Invalid character in input"
+  IDS_VALNOTINRANGE     "Value is not in the range %ld to %ld."
+  IDS_VALNOTINLIST      "Input is not in valid-list"
+END
+
+
+//
+// Misc application definitions
+//
+
+// Application ICON
+//
+IDI_SDIAPPLICATION ICON "appldocv.ico"
+
+
+// Client Dialog
+//
+IDD_CLIENT DIALOG 6, 15, 207, 111
+STYLE DS_MODALFRAME | WS_POPUP | WS_CAPTION
+CAPTION "Dialog Client"
+FONT 8, "MS Sans Serif"
+BEGIN
+  DEFPUSHBUTTON "OK", IDOK, 40, 88, 50, 14
+  PUSHBUTTON "Cancel", IDCANCEL, 116, 88, 50, 14
+END
+
+
+// About box.
+//
+
+
+// TInputDialog class dialog box.
+//
+IDD_INPUTDIALOG DIALOG 20, 24, 180, 64
+STYLE WS_POPUP | WS_CAPTION | DS_SETFONT
+FONT 8, "Helv"
+BEGIN
+  LTEXT "", ID_PROMPT, 10, 8, 160, 10, SS_NOPREFIX
+  CONTROL "", ID_INPUT, "EDIT", WS_CHILD | WS_VISIBLE | WS_BORDER | WS_TABSTOP | ES_AUTOHSCROLL, 10, 20, 160, 12
+  DEFPUSHBUTTON "&OK", IDOK, 47, 42, 40, 14
+  PUSHBUTTON "&Cancel", IDCANCEL, 93, 42, 40, 14
+END
+
+// Slider thumb bitmaps for TSlider and TVSlider (include/owl/slider.rc)
+//
+IDB_HSLIDERTHUMB BITMAP "hslider.bmp"
+IDB_VSLIDERTHUMB BITMAP "hslider.bmp"
+
+// Version info.
+//
+#if !defined(__DEBUG_)
+
+// Non-Debug VERSIONINFO
+//
+1 VERSIONINFO LOADONCALL MOVEABLE
+FILEVERSION 1, 0, 0, 0
+PRODUCTVERSION 1, 0, 0, 0
+FILEFLAGSMASK 0
+FILEFLAGS VS_FFI_FILEFLAGSMASK
+#if defined(BI_PLAT_WIN32)
+FILEOS VOS__WINDOWS32
+#else
+FILEOS VOS__WINDOWS16
+#endif
+FILETYPE VFT_APP
+BEGIN
+  BLOCK "StringFileInfo"
+  BEGIN
+    // Language type = U.S. English(0x0409) and Character Set = Windows, Multilingual(0x04e4)
+    BLOCK "040904E4"              // Matches VarFileInfo Translation hex value.
+    BEGIN
+      VALUE "CompanyName", "Borland International\000"
+      VALUE "FileDescription", "ApxDlgDv for Windows\000"
+      VALUE "FileVersion", "1.0\000"
+      VALUE "InternalName", "ApxDlgDv\000"
+      VALUE "LegalCopyright", "Copyright © 1996. All Rights Reserved.\000"
+      VALUE "LegalTrademarks", "Windows(TM) is a trademark of Microsoft Corporation\000"
+      VALUE "OriginalFilename", "ApxDlgDv.exe\000"
+      VALUE "ProductName", "ApxDlgDv\000"
+      VALUE "ProductVersion", "1.0\000"
+    END
+  END
+
+  BLOCK "VarFileInfo"
+  BEGIN
+    VALUE "Translation", 0x0409, 0x04e4    // U.S. English(0x0409) & Windows Multilingual(0x04e4) 1252
+  END
+END
+
+#else
+
+// Debug VERSIONINFO
+//
+1 VERSIONINFO LOADONCALL MOVEABLE
+FILEVERSION 1, 0, 0, 0
+PRODUCTVERSION 1, 0, 0, 0
+FILEFLAGSMASK VS_FF_DEBUG | VS_FF_PRERELEASE | VS_FF_PATCHED | VS_FF_PRIVATEBUILD | VS_FF_SPECIALBUILD
+FILEFLAGS VS_FFI_FILEFLAGSMASK
+#if defined(BI_PLAT_WIN32)
+FILEOS VOS__WINDOWS32
+#else
+FILEOS VOS__WINDOWS16
+#endif
+FILETYPE VFT_APP
+BEGIN
+  BLOCK "StringFileInfo"
+  BEGIN
+    // Language type = U.S. English(0x0409) and Character Set = Windows, Multilingual(0x04e4)
+    BLOCK "040904E4"              // Matches VarFileInfo Translation hex value.
+    BEGIN
+      VALUE "CompanyName", "Borland International\000"
+      VALUE "FileDescription", "ApxDlgDv for Windows\000"
+      VALUE "FileVersion", "1.0\000"
+      VALUE "InternalName", "ApxDlgDv\000"
+      VALUE "LegalCopyright", "Copyright © 1996. All Rights Reserved.\000"
+      VALUE "LegalTrademarks", "Windows(TM) is a trademark of Microsoft Corporation\000"
+      VALUE "OriginalFilename", "ApxDlgDv.exe\000"
+      VALUE "ProductName", "ApxDlgDv\000"
+      VALUE "ProductVersion", "1.0\000"
+      VALUE "SpecialBuild", "Debug Version\000"
+      VALUE "PrivateBuild", "Built by \000"
+    END
+  END
+
+  BLOCK "VarFileInfo"
+  BEGIN
+    VALUE "Translation", 0x0409, 0x04e4    // U.S. English(0x0409) & Windows Multilingual(0x04e4) 1252
+  END
+END
+
+#endif

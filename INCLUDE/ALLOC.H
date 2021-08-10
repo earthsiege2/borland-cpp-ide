@@ -5,9 +5,9 @@
 */
 
 /*
- *      C/C++ Run Time Library - Version 6.5
+ *      C/C++ Run Time Library - Version 7.0
  *
- *      Copyright (c) 1987, 1994 by Borland International
+ *      Copyright (c) 1987, 1996 by Borland International
  *      All Rights Reserved.
  *
  */
@@ -175,6 +175,7 @@ void far  * _RTLENTRY farrealloc(void far *__oldblock, unsigned long __nbytes);
 struct heapinfo
 {
   void *    ptr;
+  void *    ptr2;
   unsigned  size;
   int       in_use;
 };

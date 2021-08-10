@@ -1,11 +1,8 @@
-#if !defined( __TODODLGS_H )
-#define __TODODLGS_H
-
 //---------------------------------------------------------------------
 //
 //  TODODLGS.H
 //
-//      Copyright (c) 1991, 1993 by Borland International
+//      Copyright (c) 1991, 1995 by Borland International
 //      All Rights Reserved.
 //
 //  Defines the following classes, which handle all the dialog boxes for
@@ -20,12 +17,10 @@
 //                    Todo list.
 //
 //---------------------------------------------------------------------
+#if !defined(TODODLGS_H)
+#define TODODLGS_H
 
-#if !defined( STRICT )
-#define STRICT
-#endif
-
-#include <windows.h>
+#include <services/wsysinc.h>
 #include <commdlg.h>
 #include <dir.h>
 #include <strstrea.h>
@@ -134,5 +129,4 @@ inline EditBox::EditBox( HWND hOwner, TodoEntry& td ) :
 {
 }
 
-#endif  // __TODODLGS_H
-
+#endif  // TODODLGS_H

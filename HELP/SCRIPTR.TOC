@@ -1,0 +1,720 @@
+:Base SCRIPT.HLP>main
+1 cScript Language Reference
+2 cScript keywords and functions
+3 About cScript keywords and functions=cScr_KeywordIndex
+3 array=cScr_array
+3 attach=cScr_attach
+3 break=cScr_break
+3 breakpoint=cScr_breakpoint
+3 call=cScr_call
+3 case=cScr_case
+3 class=cScr_class
+3 continue=cScr_continue
+3 declare=cScr_declare
+3 default=cScr_default
+3 delete=cScr_delete
+3 detach=cSCr_detach
+3 do=cScr_do
+3 export=cScr_export
+3 for=cScr_forkeyword
+3 FormatString=cScr_FormatString
+3 from=cScr_from
+3 if=cScr_if
+3 import=cScr_import
+3 initialized=cScr_initialized
+3 iterate=cScr_iterate
+3 load=cScr_load
+3 module command=cScr_module_Command
+3 module function=cScr_module_Function
+3 new=cScr_new
+3 of=cScr_of
+3 on=cScr_on
+3 pass=cScr_pass
+3 print=cScr_print
+3 reload=cScr_reload
+3 return=cScr_return
+3 run=cScr_run
+3 select=cScr_select
+3 selection=cScr_selection
+3 super=cScr_super
+3 switch=cScr_switch
+3 this=cScr_this
+3 typeid=cScr_typeid
+3 unload=cScr_unload
+3 while=cScr_while
+3 with=cScr_with
+3 yield=cScr_yield
+2 cScript operators
+3 About cScript operators=cScr_Op_Summary
+3 Precedence of operators=cScr_Ops_Precedence
+3 Arithmetic operators=cScr_Arithmetic_ops
+3 Assignment operators=cScr_assignment_ops
+3 Binary operators=cScr_binary_ops
+3 Bitwise operators=cScr_Bitwise_ops
+3 Enclosing operators=cScr_enclosing_ops
+3 Increment and decrement operators=cScr_inc_decrement
+3 Logical operators=cScr_Logical_ops
+3 Multiplicative operators=cScr_multiplicative_ops
+3 Plus and minus operators=cScr_plus_minus
+3 Object-oriented operators=cScr_OOP_ops
+3 Relational operators=cScr_Relational_ops
+3 Unary operators=cScr_unary_ops
+3 Array subscript operator=cScr_bracket_ops
+3 Comma (,) punctuator and operator=cScr_comma_op
+3 Parentheses operator=cScr_parens_ops
+3 Preprocessor operator=cScr_Preprocessor_ops
+3 Reference (&) operator=cScr_ref_op
+3 OLE index ([[]]) operator=cScr_DblBraces
+3 Punctuators
+4 Punctuator list=cScr_punctuators
+4 Braces punctuators=cScr_BracesPunc
+4 Semicolon punctuator=cScr_SemiColonPunc
+4 Colon punctuator=cScr_ColonPunc
+4 Equal sign punctuator=cScr_EqualSignPunc
+2 cScript preprocessor directives
+3 About the preprocessor directives=cScr_PreprocessorDirectives
+3 #define=CScr_define
+3 #ifdef, #ifndef, #else, and #endif=CScr_ifdef
+3 #include=CScr_include
+3 #undef=CScr_undef
+3 #warn=CScr_warn
+3 Macros with Parameters=cScr_MacrosWithParameters
+1 IDE Class Library Reference
+2 BufferOptions Class
+3 BufferOptions class members=BufferOptions
+3 Properties
+4 CreateBackup=BufferOptions_CreateBackup
+4 CursorThroughTabs=BufferOptions_CursorThroughTabs
+4 HorizontalScrollBar=BufferOptions_HorizontalScrollBar
+4 InsertMode=BufferOptions_InsertMode
+4 LeftGutterWidth=BufferOptions_LeftGutterWidth
+4 Margin=BufferOptions_Margin
+4 OverwriteBlocks=BufferOptions_OverwriteBlocks
+4 PersistentBlocks=BufferOptions_PersistentBlocks
+4 PreserveLineEnds=BufferOptions_PreserveLineEnds
+4 SyntaxHighlight=BufferOptions_SyntaxHighlight
+4 TabRack=BufferOptions_TabRack
+4 TokenFileName=BufferOptions_TokenFileName
+4 UseTabCharacter=BufferOptions_UseTabCharacter
+4 VerticalScrollBar=BufferOptions_VerticalScrollBar
+3 Methods
+4 Copy=BufferOptions_Copy
+2 Debugger Class
+3 Debugger class members=Debugger
+3 Properties
+4 HasProcess=Debugger_HasProcess
+3 Methods
+4 AddBreakpoint=Debugger_AddBreakpoint
+4 AddBreakpointFileLine=Debugger_AddBreakpointFileLine
+4 AddWatch=Debugger_AddWatch
+4 Animate=Debugger_Animate
+4 Attach=Debugger_Attach
+4 BreakpointOptions=Debugger_BreakpointOptions
+4 Evaluate=Debugger_Evaluate
+4 EvaluateWindow=Debugger_EvaluateWindow
+4 FindExecutionPoint=Debugger_FindExecutionPoint
+4 Inspect=Debugger_Inspect
+4 InstructionStepInto=Debugger_InstructionStepInto
+4 InstructionStepOver=Debugger_InstructionStepOver
+4 Load=Debugger_Load
+4 PauseProgram=Debugger_PauseProgram
+4 Reset=Debugger_Reset
+4 Run=Debugger_Run
+4 RunToAddress=Debugger_RunToAddress
+4 RunToFileLine=Debugger_RunToFileLine
+4 StatementStepInto=Debugger_StatementStepInto
+4 StatementStepOver=Debugger_StatementStepOver
+4 TerminateProgram=Debugger_TerminateProgram
+4 ToggleBreakpoint=Debugger_ToggleBreakpoint
+4 ViewBreakpoint=Debugger_ViewBreakpoint
+4 ViewCallStack=Debugger_ViewCallStack
+4 ViewCpu=Debugger_ViewCpu
+4 ViewCpuFileLIne=Debugger_ViewCpuFileLIne
+4 ViewProcess=Debugger_ViewProcess
+4 ViewWatch=Debugger_ViewWatch
+3 Events
+4 DebugeeAboutToRun=Debugger_DebugeeAboutToRun
+4 DebugeeCreated=Debugger_DebugeeCreated
+4 DebugeeStopped=Debugger_DebugeeStopped
+4 DebugeeTerminated=Debugger_DebugeeTerminated
+2 EditBlock Class
+3 EditBlock class description=EditBlock_Description_Topic
+3 EditBlock class members=EditBlock
+3 Properties
+4 IsValid=EditBlock_IsValid
+4 EndingColumn=EditBlock_EndingColumn
+4 EndingRow=EditBlock_EndingRow
+4 Hide=EditBlock_Hide
+4 Size=EditBlock_Size
+4 StartingColumn=EditBlock_StartingColumn
+4 StartingRow=EditBlock_StartingRow
+4 Style=EditBlock_Style
+4 Text=EditBlock_Text
+3 Methods
+4 Begin=EditBlock_Begin
+4 Copy=EditBlock_Copy
+4 Cut=EditBlock_Cut
+4 Delete=EditBlock_Delete
+4 End=EditBlock_End
+4 Extend=EditBlock_Extend
+4 ExtendPageDown=EditBlock_ExtendPageDown
+4 ExtendPageUp=EditBlock_ExtendPageUp
+4 ExtendReal=EditBlock_ExtendReal
+4 ExtendRelative=EditBlock_ExtendRelative
+4 Indent=EditBlock_Indent
+4 LowerCase=EditBlock_LowerCase
+4 Print=EditBlock_Print
+4 Reset=EditBlock_Reset
+4 Restore=EditBlock_Restore
+4 Save=EditBlock_Save
+4 SaveToFile=EditBlock_SaveToFile
+4 ToggleCase=EditBlock_ToggleCase
+4 UpperCase=EditBlock_UpperCase
+2 EditBuffer Class
+3 EditBuffer class description=EditBuffer_Description_Topic
+3 EditBuffer class members=EditBuffer
+3 Properties
+4 Block=EditBuffer_Block
+4 CurrentDate=EditBuffer_CurrentDate
+4 Directory=EditBuffer_Directory
+4 Drive=EditBuffer_Drive
+4 Extension=EditBuffer_Extension
+4 FileName=EditBuffer_FileName
+4 FullName=EditBuffer_FullName
+4 InitialDate=EditBuffer_InitialDate
+4 IsModified=EditBuffer_IsModified
+4 IsPrivate=EditBuffer_IsPrivate
+4 IsReadOnly=EditBuffer_IsReadOnly
+4 IsValid=EditBuffer_IsValid
+4 Position=EditBuffer_Position
+4 TopView=EditBuffer_TopView
+3 Methods
+4 ApplyStyle=EditBuffer_ApplyStyle
+4 Describe=EditBuffer_Describe
+4 Destroy=EditBuffer_Destroy
+4 NextBuffer=EditBuffer_NextBuffer
+4 NextView=EditBuffer_NextView
+4 Print=EditBuffer_Print
+4 PriorBuffer=EditBuffer_PriorBuffer
+4 Rename=EditBuffer_Rename
+4 Save=EditBuffer_Save
+3 Events
+4 AttemptToModifyReadOnlyBuffer=EditBuffer_AttemptToModifyReadOnlyBuffer
+4 AttemptToWriteReadOnlyFile=EditBuffer_AttemptToWriteReadOnlyFile
+4 HasBeenModified=EditBuffer_HasBeenModified
+2 EditOptions Class
+3 EditOptions class description=EditOptions_Description_Topic
+3 EditOptions class members=EditOptions
+3 Properties
+4 BackupPath=EditOptions_BackupPath
+4 BlockIndent=EditOptions_BlockIndent
+4 BufferOptions=EditOptions_BufferOptions
+4 MirrorPath=EditOptions_MirrorPath
+4 OriginalPath=EditOptions_OriginalPath
+4 SyntaxHighlightTypes=EditOptions_SyntaxHighlightTypes
+4 UseBRIEFCursorShapes=EditOptions_UseBRIEFCursorShapes
+4 UseBRIEFRegularExpression=EditOptions_UseBRIEFRegularExpression
+2 Editor Class
+3 Editor class description=Editor_Description_Topic
+3 Editor class members=Editor
+3 Properties
+4 FirstStyle=Editor_FirstStyle
+4 Options=Editor_Options
+4 SearchOptions=Editor_SearchOptions
+4 TopBuffer=Editor_TopBuffer
+4 TopView=Editor_TopView
+3 Methods
+4 ApplyStyle=Editor_ApplyStyle
+4 BufferList=Editor_BufferList
+4 BufferOptionsCreate=Editor_BufDataCreate
+4 BufferRedo=Editor_BufferRedo
+4 BufferUndo=Editor_BufferUndo
+4 EditBufferCreate=Editor_EditBufferCreate
+4 EditOptionsCreate=Editor_EditOptionsCreate
+4 EditStyleCreate=Editor_EditStyleCreate
+4 EditWindowCreate=Editor_EditWindowCreate
+4 GetWindow=Editor_GetWindow
+4 IsFileLoaded=Editor_IsFileLoaded
+4 StyleGetNext=Editor_StyleGetNext
+4 ViewRedo=Editor_ViewRedo
+4 ViewUndo=Editor_ViewUndo
+3 Events
+4 BufferCreated=Editor_BufferCreated
+4 MouseBlockCreated=Editor_MouseBlockCreated
+4 MouseTipRequested=Editor_MouseTipRequested
+4 OptionsChanged=Editor_OptionsChanged
+4 OptionsChanging=Editor_OptionsChanging
+4 ViewCreated=Editor_ViewActivated
+4 ViewActivated=Editor_ViewActivated
+4 ViewCreated=Editor_ViewCreated
+4 ViewDestroyed=Editor_ViewDestroyed
+2 EditPosition Class
+3 EditPosition class description=EditPosition_Description_Topic
+3 EditPosition class members=EditPosition
+3 Properties
+4 Character=EditPosition_Character
+4 Column=EditPosition_Column
+4 IsSpecialCharacter=EditPosition_IsSpecialCharacter
+4 IsWhiteSpace=EditPosition_IsWhiteSpace
+4 IsWordCharacter=EditPosition_IsWordCharacter
+4 LastRow=EditPosition_LastRow
+4 Row=EditPosition_Row
+4 SearchOptions=EditPosition_SearchOptions
+3 Methods
+4 Align=EditPosition_Align
+4 BackspaceDelete=EditPosition_BackspaceDelete
+4 Delete=EditPosition_Delete
+4 DistanceToTab=EditPosition_DistanceToTab
+4 GotoLine=EditPosition_GotoLine
+4 InsertBlock=EditPosition_InsertBlock
+4 InsertCharacter=EditPosition_InsertCharacter
+4 InsertFile=EditPosition_InsertFile
+4 InsertScrap=EditPosition_InsertScrap
+4 InsertText=EditPosition_InsertText
+4 Move=EditPosition_Move
+4 MoveBOL=EditPosition_MoveBOL
+4 MoveCursor=EditPosition_MoveCursor
+4 MoveEOF=EditPosition_MoveEOF
+4 MoveEOL=EditPosition_MoveEOL
+4 MoveReal=EditPosition_MoveReal
+4 MoveRelative=EditPosition_MoveRelative
+4 Read=EditPosition_Read
+4 Replace=EditPosition_Replace
+4 ReplaceAgain=EditPosition_ReplaceAgain
+4 Restore=EditPosition_Restore
+4 RipText=EditPosition_RipText
+4 Save=EditPosition_Save
+4 Search=EditPosition_Search
+4 SearchAgain=EditPosition_SearchAgain
+4 Tab=EditPosition_Tab
+2 EditStyle Class
+3 EditStyle class description=EditStyle_Description_Topic
+3 EditStyle class members=EditStyle
+3 EditMode property=EditStyle_EditMode
+3 Identifier property=EditStyle_Identifier
+3 Name property=EditStyle_Name
+2 EditView Class
+3 EditView class description=EditView_Description_Topic
+3 EditView class members=EditView
+3 Properties
+4 Block=EditView_Block
+4 BottomRow=EditView_BottomRow
+4 Buffer=EditView_Buffer
+4 Identifier=EditView_Identifier
+4 IsValid=EditView_IsValid
+4 IsZoomed=EditView_IsZoomed
+4 LastEditColumn=EditView_LastEditColumn
+4 LastEditRow=EditView_LastEditRow
+4 LeftColumn=EditView_LeftColumn
+4 Next=EditView_Next
+4 Position=EditView_Position
+4 Prior=EditView_Prior
+4 RightColumn=EditView_RightColumn
+4 TopRow=EditView_TopRow
+4 Window=EditView_Window
+3 Methods
+4 Attach=EditView_Attach
+4 BookmarkGoto=EditView_BookmarkGoto
+4 BookmarkRecord=EditView_BookmarkRecord
+4 Center=EditView_Center
+4 MoveCursorToView=EditView_MoveCursorToView
+4 MoveViewToCursor=EditView_MoveViewToCursor
+4 PageDown=EditView_PageDown
+4 PageUp=EditView_PageUp
+4 Paint=EditView_Paint
+4 PositionCreate=EditView_PositionCreate
+4 Scroll=EditView_Scroll
+4 SetTopLeft=EditView_SetTopLeft
+2 EditWindow Class
+3 EditWindow class description=EditWindow_Description_Topic
+3 Properties
+4 Identifier=EditWindow_Identifier
+4 IsHidden=EditWindow_IsHidden
+4 IsValid=EditWindow_IsValid
+4 Next=EditWindow_Next
+4 Prior=EditWindow_Prior
+4 Title=EditWindow_Title
+4 View=EditWindow_View
+3 Methods
+4 Activate=EditWindow_Activate
+4 Attach=EditWindow_Attach
+4 Close=EditWindow_Close
+4 Paint=EditWindow_Paint
+4 ViewActivate=EditWindow_ViewActivate
+4 ViewCreate=EditWindow_ViewCreate
+4 ViewDelete=EditWindow_ViewDelete
+4 ViewExists=EditWindow_ViewExists
+4 ViewSlide=EditWindow_ViewSlide
+2 IDEApplication Class
+3 IDEApplication class members=IDEApplication
+3 Properties
+4 Application=IDEApplication_Application
+4 Caption=IDEApplication_Caption
+4 CurrentDirectory=IDEApplication_CurrentDirectory
+4 CurrentProjectNode=IDEApplication_CurrentProjectNode
+4 DefaultFilePath=IDEApplication_DefaultFilePath
+4 Editor=IDEApplication_Editor
+4 FullName=IDEApplication_FullName
+4 Height=IDEApplication_Height
+4 IdleTime=IDEApplication_IdleTime
+4 IdleTimeout=IDEApplication_IdleTimeout
+4 LoadTime=IDEApplication_LoadTime
+4 KeyboardAssignmentFile=IDEApplication_KeyboardAssignmentFile
+4 KeyboardManager=IDEApplication_KeyboardManager
+4 Left=IDEApplication_Left
+4 ModuleName=IDEApplication_ModuleName
+4 Name=IDEApplication_Name
+4 Parent=IDEApplication_Parent
+4 RaiseDialogCreatedEvent=IDEApplication_RaiseDialogCreatedEvent
+4 StatusBar=IDEApplication_StatusBar
+4 Top=IDEApplication_Top
+4 Version=IDEApplication_Version
+4 Visible=IDEApplication_Visible
+4 Width=IDEApplication_Width
+3 Methods
+4 CloseWindow=IDEApplication_CloseWindow
+4 ScriptCommands=IDEApplication_ScriptCommands
+4 ScriptCompileFile=IDEApplication_ScriptCompileFile
+4 ScriptModules=IDEApplication_ScriptModules
+4 ScriptRun=IDEApplication_ScriptRun
+4 ScriptRunFile=IDEApplication_ScriptRunFile
+4 DebugAddBreakpoint=IDEApplication_DebugAddBreakpoint
+4 DebugAddWatch=IDEApplication_DebugAddWatch
+4 DebugAnimate=IDEApplication_DebugAnimate
+4 DebugAttach=IDEApplication_DebugAttach
+4 DebugBreakpointOptions=IDEApplication_BreakpointOptions
+4 DebugEvaluate=IDEApplication_DebugEvaluate
+4 DebugInspect=IDEApplication_DebugInspect
+4 DebugInstructionStepInto=IDEApplication_DebugInstructionStepInto
+4 DebugInstructionStepOver=IDEApplication_DebugInstructionStepOver
+4 DebugLoad=IDEApplication_DebugLoad
+4 DebugLoadSymbolTable=IDEApplication_DebugLoadSymbolTable
+4 DebugPauseProcess=IDEApplication_DebugPauseProcess
+4 DebugResetThisProcess=IDEApplication_DebugResetThisProcess
+4 DebugRun=IDEApplication_DebugRun
+4 DebugRunTo=IDEApplication_DebugRunTo
+4 DebugSourceAtExecutionPoint=IDEApplication_DebugSourceAtExecutionPoint
+4 DebugStatementStepInto=IDEApplication_DebugStatementStepInto
+4 DebugStatementStepOver=IDEApplication_DebugStatementStepOver
+4 DebugTerminateProcess=IDEApplication_DebugTerminateProcess
+4 DirectionDialog=IDEApplication_DirectionDialog
+4 DirectoryDialog=IDEApplication_DirectoryDialog
+4 DoFileOpen=IDEApplication_DoFileOpen
+4 EditBufferList=IDEApplication_EditBufferList
+4 EditCopy=IDEApplication_EditCopy
+4 EditCut=IDEApplication_EditCut
+4 EditPaste=IDEApplication_EditPaste
+4 EditRedo=IDEApplication_EditRedo
+4 EditSelectAll=IDEApplication_EditSelectAll
+4 EditUndo=IDEApplication_EditUndo
+4 EndWaitCursor=IDEApplication_EndWaitCursor
+4 ExpandWindow=IDEApplication_ExpandWindow
+4 EnterContextHelpMode=IDEApplication_EnterContextHelpMode
+4 FileClose=IDEApplication_FileClose
+4 FileDialog=IDEApplication_FileDialog
+4 FileExit=IDEApplication_FileExit
+4 FileNew=IDEApplication_FileNew
+4 FileOpen=IDEApplication_FileOpen
+4 FilePrint=IDEApplication_FilePrint
+4 FilePrinterSetup=IDEApplication_FilePrinterSetup
+4 FileSave=IDEApplication_FileSave
+4 FileSaveAll=IDEApplication_FileSaveAll
+4 FileSaveAs=IDEApplication_FileSaveAs
+4 FileSend=IDEApplication_FileSend
+4 GetRegionBottom=IDEApplication_GetRegionBottom
+4 GetRegionLeft=IDEApplication_GetRegionLeft
+4 GetRegionRight=IDEApplication_GetRegionRight
+4 GetRegionTop=IDEApplication_GetRegionTop
+4 GetWindowState=IDEApplication_GetWindowState
+4 Help=IDEApplication_Help
+4 HelpAbout=IDEApplication_HelpAbout
+4 HelpContents=IDEApplication_HelpContents
+4 HelpKeyboard=IDEApplication_HelpKeyboard
+4 HelpKeywordSearch=IDEApplication_HelpKeywordSearch
+4 HelpOWLAPI=IDEApplication_HelpOWLAPI
+4 HelpUsingHelp=IDEApplication_HelpUsingHelp
+4 HelpWindowsAPI=IDEApplication_HelpWindowsAPI
+4 KeyPressDialog=IDEApplication_KeyPressDialog
+4 ListDialog=IDEApplication_ ListDialog
+4 Menu=IDEApplication_Menu
+4 Message=IDEApplication_Message
+4 MessageCreate=IDEApplication_MessageCreate
+4 NextWindow=IDEApplication_NextWindow
+4 OptionsEnvironment=IDEApplication_OptionsEnvironment
+4 OptionsProject=IDEApplication_OptionsProject
+4 OptionsSave=IDEApplication_OptionsSave
+4 OptionsStyleSheets=IDEApplication_OptionsStyleSheets
+4 OptionsTools=IDEApplication_OptionsTools
+4 ProjectAppExpert=IDEApplication_ProjectAppExpert
+4 ProjectBuildAll=IDEApplication_ProjectBuildAll
+4 ProjectCloseProject=IDEApplication_ProjectCloseProject
+4 ProjectCompile=IDEApplication_ProjectCompile
+4 ProjectGenerateMakefile=IDEApplication_ProjectGenerateMakefile
+4 ProjectMakeAll=IDEApplication_ProjectMakeAll
+4 ProjectManagerInitialize=IDEApplication_ProjectManagerInitialize
+4 ProjectNewProject=IDEApplication_ProjectNewProject
+4 ProjectNewTarget=IDEApplication_ProjectNewTarget
+4 ProjectOpenProject=IDEApplication_ProjectOpenProject
+4 Quit=IDEApplication_Quit
+4 SaveMessages=IDEApplication_SaveMessages
+4 SearchBrowseSymbol=IDEApplication_SearchBrowseSymbol
+4 SearchFind=IDEApplication_SearchFind
+4 SearchLocateSymbol=IDEApplication_SearchLocateSymbol
+4 SearchNextMessage=IDEApplication_SearchNextMessage
+4 SearchPreviousMessage=IDEApplication_SearchPreviousMessage
+4 SearchReplace=IDEApplication_SearchReplace
+4 SearchSearchAgain=IDEApplication_SearchSearchAgain
+4 SetRegion=IDEApplication_SetRegion
+4 SetWindowState=IDEApplication_SetWindowState
+4 SimpleDialog=IDEApplication_SimpleDialog
+4 SpeedMenu=IDEApplication_SpeedMenu
+4 StartWaitCursor=IDEApplication_StartWaitCursor
+4 StatusBarDialog=IDEApplication_StatusBarDialog
+4 Tool=IDEApplication_Tool
+4 Undo=IDEApplication_Undo
+4 ViewActivate=IDEApplication_ViewActivate
+4 ViewBreakpoint=IDEApplication_ViewBreakpoint
+4 ViewCallStack=IDEApplication_ViewCallStack
+4 ViewClasses=IDEApplication_ViewClasses
+4 ViewClassExpert=IDEApplication_ViewClassExpert
+4 ViewCpu=IDEApplication_ViewCpu
+4 ViewGlobals=IDEApplication_ViewGlobals
+4 ViewMessage=IDEApplication_ViewMessage
+4 ViewProcess=IDEApplication_ViewProcess
+4 ViewProject=IDEApplication_ViewProject
+4 ViewSlide=IDEApplication_ViewSlide
+4 ViewWatch=IDEApplication_ViewWatch
+4 WindowArrangeIcons=IDEApplication_WindowArrangeIcons
+4 WindowCascade=IDEApplication_WindowCascade
+4 WindowCloseAll=IDEApplication_WindowCloseAll
+4 WindowMinimizeAll=IDEApplication_WindowMinimizeAll
+4 WindowRestoreAll=IDEApplication_WindowRestoreAll
+4 WindowTileHorizontal=IDEApplication_WindowTileHorizontal
+4 WindowTileVertical=IDEApplication_WindowTileVertical
+4 YesNoDialog=IDEApplication_YesNoDialog
+3 Events
+4 BuildComplete=IDEApplication_BuildComplete
+4 BuildStarted=IDEApplication_BuildStarted
+4 DialogCreated=IDEApplication_DialogCreated
+4 Exiting=IDEApplication_Exiting
+4 HelpRequested=IDEApplication_HelpRequested
+4 Idle=IDEApplication_Idle
+4 KeyboardAssignmentsChanging=IDEApplication_KeyboardAssignmentsChanging
+4 KeyboardAssignmentsChanged=IDEApplication_KeyboardAssignmentsChanged
+4 MakeComplete=IDEApplication_MakeComplete
+4 MakeStarted=IDEApplication_MakeStarted
+4 ProjectClosed=IDEApplication_ProjectClosed
+4 ProjectOpened=IDEApplication_ProjectOpened
+4 SecondElapsed=IDEApplication_SecondElapsed
+4 Started=IDEApplication_Started
+4 SubsytemActivated=IDEApplication_SubsytemActivated
+4 TransferOutputExists=IDEApplication_TransferOutputExists
+4 TranslateComplete=IDEApplication_TranslateComplete
+2 Keyboard Class
+3 Keyboard class description=Keyboard_Description_Topic
+3 Keyboard class members=Keyboard
+3 Properties
+4 Assignments=Keyboard_Assignments
+4 DefaultAssignment=Keyboard_DefaultAssignment
+3 Methods
+4 Assign=Keyboard_Assign
+4 AssignTypeables=Keyboard_AssignTypeables
+4 Copy=Keyboard_Copy
+4 CountAssignments=Keyboard_CountAssignments
+4 GetCommand=Keyboard_GetCommand
+4 GetKeySequence=Keyboard_GetKeySequence
+4 HasUniqueMapping=Keyboard_HasUniqueMapping
+4 Unassign=Keyboard_Unassign
+2 KeyboardManager Class
+3 KeyboardManager class members=KeyboardManager
+3 Properties
+4 AreKeysWaiting=KeyboardManager_AreKeysWaiting
+4 CurrentPlayback=KeyboardManager_CurrentPlayback
+4 CurrentRecord=KeyboardManager_CurrentRecord
+4 KeyboardFlags=KeyboardManager_KeyboardFlags
+4 KeysProcessed=KeyboardManager_KeysProcessed
+4 LastKeyProcessed=KeyboardManager_LastKeyProcessed
+4 Recording=KeyboardManager_Recording
+4 ScriptAbortKey=KeyboardManager_ScriptAbortKey
+3 Methods
+4 CodeToKey=KeyboardManager_CodeToKey
+4 Flush=KeyboardManager_Flush
+4 GetKeyboard=KeyboardManager_GetKeyboard
+4 KeyToCode=KeyboardManager_KeyToCode
+4 PausePlayback=KeyboardManager_PausePlayback
+4 Playback=KeyboardManager_Playback
+4 Pop=KeyboardManager_Pop
+4 ProcessPendingKeystrokes=KeyboardManager_ProcessPendingKeystrokes
+4 Push=KeyboardManager_Push
+4 ReadChar=KeyboardManager_ReadChar
+4 ResumePlayback=KeyboardManager_ResumePlayback
+4 ResumeRecord=KeyboardManager_ResumeRecord
+4 SendKeys=KeyboardManager_SendKeys
+4 StartRecord=KeyboardManager_StartRecord
+4 StopRecord=KeyboardManager_StopRecord
+2 ListWindow Class
+3 ListWindow class members=ListWindow
+3 Properties
+4 Caption=ListWindow_Caption
+4 Count=ListWindow_Count
+4 CurrentIndex=ListWindow_CurrentIndex
+4 Data=ListWindow_Data
+4 Height=ListWindow_Height
+4 Hidden=ListWindow_Hidden
+4 MultiSelect=ListWindow_MultiSelect
+4 Sorted=ListWindow_Sorted
+4 Width=ListWindow_Width
+3 Methods
+4 Add=ListWindow_Add
+4 Clear=ListWindow_Clear
+4 Close=ListWindow_Close
+4 Execute=ListWindow_Execute
+4 FindString=ListWindow_FindString
+4 GetString=ListWindow_GetString
+4 Insert=ListWindow_Insert
+4 Remove=ListWindow_Remove
+3 Events
+4 Accept=ListWindow_Accept
+4 Cancel=ListWindow_Cancel
+4 Closed=ListWindow_Closed
+4 Delete=ListWindow_Delete
+4 KeyPressed=ListWindow_KeyPressed
+4 LeftClick=ListWindow_LeftClick
+4 Move=ListWindow_Move
+4 RightClick=ListWindow_RightClick
+2 PopupMenu Class
+3 PopupMenu class members=PopupMenu
+3 Data=PopupMenu_Data
+3 Append=PopupMenu_Append
+3 FindString=PopupMenu_FindString
+3 GetString=PopupMenu_GetString
+3 Remove=PopupMenu_Remove
+3 Track=PopupMenu_Track
+2 ProjectNode Class
+3 ProjectNode class members=ProjectNode
+3 Properties
+4 ChildNodes=ProjectNode_ChildNodes
+4 IncludePath=ProjectNode_IncludePath
+4 InputName=ProjectNode_InputName
+4 IsValid=ProjectNode_IsValid
+4 LibraryPath=ProjectNode_LibraryPath
+4 Name=ProjectNode_Name
+4 OutOfDate=ProjectNode_OutOfDate
+4 OutputName=ProjectNode_OutputName
+4 SourcePath=ProjectNode_SourcePath
+4 Type=ProjectNode_Type
+3 Methods
+4 Add=ProjectNode_Add
+4 Build=ProjectNode_Build
+4 Make=ProjectNode_Make
+4 MakePreview=ProjectNode_MakePreview
+4 Remove=ProjectNode_Remove
+4 Translate=ProjectNode_Translate
+3 Events
+4 Built=ProjectNode_Built
+4 Made=ProjectNode_Made
+4 Translated=ProjectNode_Translated
+2 Record Class
+3 Record class members=Record
+3 Properties
+4 IsPaused=Record_IsPaused
+4 IsRecording=Record_IsRecording
+4 KeyCount=Record_KeyCount
+4 Name=Record_Name
+3 Methods
+4 Append=Record_Append
+4 GetCommand=Record_GetCommand
+4 GetKeyCode=Record_GetKeyCode
+4 Next=Record_Next
+2 ScriptEngine Class
+3 ScriptEngine class members=ScriptEngine
+3 Properties
+4 AppendToLog=ScriptEngine_AppendToLog
+4 DiagnosticMessageMask=ScriptEngine_DiagnosticMessageMask
+4 DiagnosticMessages=ScriptEngine_DiagnosticMessages
+4 LogFileName=ScriptEngine_LogFileName
+4 Logging=ScriptEngine_Logging
+4 ScriptPath=ScriptEngine_ScriptPath
+4 StartupDirectory=ScriptEngine_StartupDirectory
+3 Methods
+4 Debug=ScriptEngine_Debug
+4 Execute=ScriptEngine_Execute
+4 HasMethod=ScriptEngine_HasMethod
+4 HasProperty=ScriptEngine_HasProperty
+4 IsAClass=ScriptEngine_IsAClass
+4 IsAFunction=ScriptEngine_IsAFunction
+4 IsAMethod=ScriptEngine_IsAMethod
+4 IsAProperty=ScriptEngine_IsAProperty
+4 IsLoaded=ScriptEngine_IsLoaded
+4 Load=ScriptEngine_Load
+4 Modules=ScriptEngine_Modules
+4 Reset=ScriptEngine_Reset
+4 SymbolLoad=ScriptEngine_SymbolLoad
+4 Unload=ScriptEngine_Unload
+3 Events
+4 Loaded=ScriptEngine_Loaded
+4 Unloaded=ScriptEngine_Unloaded
+2 SearchOptions class
+3 SearchOptions class members=SearchOptions
+3 Properties
+4 CaseSensitive=SearchOptions_CaseSensitive
+4 FromCursor=SearchOptions_FromCursor
+4 GoForward=SearchOptions_GoForward
+4 PromptOnReplace=SearchOptions_PromptOnReplace
+4 RegularExpression=SearchOptions_RegularExpression
+4 ReplaceAll=SearchOptions_ReplaceAll
+4 ReplaceText=SearchOptions_ReplaceText
+4 SearchReplaceText=SearchOptions_SearchReplaceText
+4 SearchText=SearchOptions_SearchText
+4 WholeFile=SearchOptions_WholeFile
+4 WordBoundary=SearchOptions_WordBoundary
+3 Methods
+4 Copy=SearchOptions_Copy
+2 StackFrame Class
+3 StackFrame class members=StackFrame
+3 Properties
+4 ArgActual=StackFrame_ArgActual
+4 ArgPadding=StackFrame_ArgPadding
+4 Caller=StackFrame_Caller
+4 IsValid=StackFrame_IsValid
+3 Methods
+4 InqType=StackFrame_InqType
+4 GetParm=StackFrame_GetParm
+2 String Class
+3 String class members=String
+3 Properties
+4 Character=String_Character
+4 Integer=String_Integer
+4 IsAlphaNumeric=String_IsAlphaNumeric
+4 Length=String_Length
+4 Text=String_Text
+3 Methods
+4 Compress=String_Compress
+4 Contains=String_Contains
+4 Index=String_Index
+4 Lower=String_Lower
+4 SubString=String_SubString
+4 Trim=String_Trim
+4 Upper=String_Upper
+2 TimeStamp Class
+3 TimeStamp class members=TimeStamp
+3 Properties
+4 Day=TimeStamp_Day
+4 Hour=TimeStamp_Hour
+4 Hundredth=TimeStamp_Hundredth
+4 Millisecond=TimeStamp_Millisecond
+4 Minute=TimeStamp_Minute
+4 Month=TimeStamp_Month
+4 Second=TimeStamp_Second
+4 Year=TimeStamp_Year
+3 Methods
+4 Compare=TimeStamp_Compare
+4 DayName=TimeStamp_DayName
+4 MonthName=TimeStamp_MonthName
+2 TransferOutput Class
+3 TransferOutput class members=TransferOutput
+3 MessageId=TransferOutput_MessageId
+3 Provider=TransferOutput_Provider
+3 ReadLine=TransferOutput_ReadLine
+1 ObjectScripting Error Messages
+2 ObjectScripting Error Messages=ObjectScriptingErrors

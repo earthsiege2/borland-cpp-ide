@@ -1,12 +1,10 @@
-/*------------------------------------------------------------------------*/
-/*                                                                        */
-/*  DEQUES.H                                                              */
-/*                                                                        */
-/*  Copyright (c) 1991, 1994 Borland International                        */
-/*  All Rights Reserved                                                   */
-/*                                                                        */
-/*------------------------------------------------------------------------*/
-
+//----------------------------------------------------------------------------
+// Borland BIDS Container Library
+// Copyright (c) 1991, 1996 by Borland International, All Rights Reserved
+//
+//$Revision:   5.4  $
+//
+//----------------------------------------------------------------------------
 #if !defined( CLASSLIB_DEQUES_H )
 #define CLASSLIB_DEQUES_H
 
@@ -1073,7 +1071,7 @@ public:
         {
         }
 
-}
+};
 
 template <class T> class TDequeIterator :
     public TDequeAsVectorIterator<T>

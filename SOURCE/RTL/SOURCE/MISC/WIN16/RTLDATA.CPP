@@ -5,9 +5,9 @@
  *-----------------------------------------------------------------------*/
 
 /*
- *      C/C++ Run Time Library - Version 6.5
+ *      C/C++ Run Time Library - Version 7.0
  *
- *      Copyright (c) 1991, 1994 by Borland International
+ *      Copyright (c) 1991, 1996 by Borland International
  *      All Rights Reserved.
  *
  */
@@ -105,7 +105,7 @@ _RTLDataClass::_RTLDataClass()
 
 void *_RTLDataClass::operator new (size_t s)
 {
-    return GlobalLock(GlobalAlloc(GMEM_ZEROINIT, s));
+    return GlobalLock(GlobalAlloc(GMEM_MOVEABLE | GMEM_ZEROINIT, s));
 }
 
 void _RTLDataClass::operator delete(void *ptr)

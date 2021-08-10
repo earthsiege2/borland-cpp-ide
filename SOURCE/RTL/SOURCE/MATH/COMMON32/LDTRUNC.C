@@ -6,9 +6,9 @@
  *-----------------------------------------------------------------------*/
 
 /*
- *      C/C++ Run Time Library - Version 1.5
+ *      C/C++ Run Time Library - Version 2.0
  *
- *      Copyright (c) 1987, 1994 by Borland International
+ *      Copyright (c) 1987, 1996 by Borland International
  *      All Rights Reserved.
  *
  */
@@ -103,7 +103,7 @@ double __ldtrunc(int flag, long double x, double xhuge)
     if (exponent == maxexp)
     {
         cword = _control87(0,0);    /* save control word */
-        _control87(RC_CHOP,MCW_RC); /* set rounding to chop */
+        _control87(MCW_RC,RC_CHOP); /* set rounding to chop */
         if (flag == 0)
         {
             floatval = (float)x;    /* chop value to float */
@@ -111,7 +111,7 @@ double __ldtrunc(int flag, long double x, double xhuge)
         }
         else
             doubleval = (double)x;  /* chop value to double */
-        _control87(RC_CHOP,cword);  /* restore control word */
+        _control87(cword,RC_CHOP);  /* restore control word */
         return doubleval;
     }
 

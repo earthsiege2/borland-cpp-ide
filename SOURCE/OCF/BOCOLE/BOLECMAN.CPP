@@ -1,28 +1,30 @@
+//----------------------------------------------------------------------------
+// ObjectComponents
+// Copyright (c) 1994, 1996 by Borland International, All Rights Reserved
 //
-//**************************************************************************
-// 
-// BOleCMan.cpp -- Declares an IBClassMgr "factory" which can create Bolero
-//                 helper objects. 
+// $Revision:   2.9  $
 //
-//                 Since callers of BOleClassManager don't have the class 
-//                 definition, they can't call operator new to create a
-//                 helper object.
+//  Declares an IBClassMgr "factory" which can create Bolero helper objects.
 //
-//                 BOleClassMgr has a pointer to the service, so you need a
-//                 BOleClassMgr for every Bolero connection you maintain.
+//    Since callers of BOleClassManager don't have the class
+//    definition, they can't call operator new to create a
+//    helper object.
 //
-// Copyright (c) 1993,94 by Borland International, Inc. All rights reserved
-//
-//**************************************************************************
-
+//    BOleClassMgr has a pointer to the service, so you need a
+//    BOleClassMgr for every Bolero connection you maintain.
+//----------------------------------------------------------------------------
 #include "BOleCMan.h"
 #include "BOleSvc.h"
 #include "BOleDoc.h"
 #include "BOleIPS.h"
 #include "BOleSite.h"
+#include "BOleCtrl.h"
+#include "BOleFont.h"
+#include "BOlePict.h"
 #include "BOleCont.h"
 #include "BOleData.h"
 #include "BOleFact.h"
+#include "BOcxCtrl.h"
 
 HRESULT _IFUNC BOleClassManager::QueryInterfaceMain(REFIID iid, LPVOID FAR *ppv)
 {
@@ -43,18 +45,22 @@ HRESULT _IFUNC BOleClassManager::QueryInterfaceMain(REFIID iid, LPVOID FAR *ppv)
 
 
 BOleClassManager::BOleClassManager(IBUnknownMain *pObj) :
-	pSvc (NULLP), BOleComponent(this, pObj)
+	pSvc (NULLP), pFont (NULLP), BOleComponent(this, pObj)
 {
 	nServerCount = 0;
 }
 
-//
 
 BOleClassManager::~BOleClassManager()
 {
 	if (pSvc != NULLP) {
 		pSvc->ReleaseMain();
 		pSvc = NULLP;
+	}
+
+	if (pFont != NULLP) {
+		pFont->ReleaseMain();
+		pFont = NULLP;
 	}
 
 	OLE::OleUninitialize (); // Req'd to free OLE2's clipboard window
@@ -104,6 +110,12 @@ HRESULT _IFUNC BOleClassManager::ComponentCreate( PIUnknown FAR * ppObj, PIUnkno
 					*ppObj = AsPIUnknown(new BOlePart(this, pOuter, pSvc->pActiveDoc));
 				break;
 			}
+		case cidBOleControl:
+			{
+				if (pSvc != NULLP)
+					*ppObj = AsPIUnknown(new BOleControl(this, pOuter, pSvc->pActiveDoc));
+				break;
+			}
 		case cidBOleSite:
 			{
 				*ppObj = AsPIUnknown(new BOleSite(this, pOuter, pSvc));
@@ -119,6 +131,12 @@ HRESULT _IFUNC BOleClassManager::ComponentCreate( PIUnknown FAR * ppObj, PIUnkno
 				*ppObj = AsPIUnknown(new BOleInProcHandler(this, pOuter, pSvc));
 				break;
 			}
+
+		case cidBOleControlSite:
+			{
+				*ppObj = AsPIUnknown(new BOleControlSite(this, pOuter));
+				break;
+			}
 		case cidBOleData:
 			*ppObj = AsPIUnknown (new BOleData(this, pOuter));
 			break;
@@ -131,9 +149,47 @@ HRESULT _IFUNC BOleClassManager::ComponentCreate( PIUnknown FAR * ppObj, PIUnkno
 				*ppObj = AsPIUnknown (new BOleFact(this, pOuter));
 				break;
 			}
+		case cidBOleControlFactory:
+			// not aggregated directly by clients
+			// we create one on the clients behalf in IService::RegisterControlClass
+			// and release it in IService::UnregisterControlClass
+			{
+				*ppObj = AsPIUnknown (new BOleControlFact(this, pOuter));
+				break;
+			}
+		case cidBOleFont:
+			{
+   			*ppObj = AsPIUnknown(new BOleFont (this, pOuter));
+				break;
+			}
+		case cidBOlePicture:
+			{
+   			*ppObj = AsPIUnknown(new BOlePicture (this, pOuter));
+				break;
+			}
 	}
 	return (*ppObj) ? NOERROR : ResultFromScode (E_FAIL);
 }
+
+
+void BOleClassManager::SetFontCache(BOleFontObj *pFontObj)
+{
+  if (!pFontObj || (pFontObj == pFont)) {
+    if (pFont) {
+      pFont = pFont->GetNext ();
+      if (pFont)
+        pFont->SetPrev (NULL);
+    }
+  } else if (pFontObj) {
+    if (pFont) 
+      pFont->SetPrev (pFontObj);
+    pFontObj->SetNext (pFont);
+    pFontObj->SetPrev (NULL);
+    pFont = pFontObj;
+  }
+}
+
+
 
 // CreateClassMgr -- This is the way to initiate a connection with Bolero.
 //                   To help us be version-resilient, it's the only exported
@@ -150,8 +206,3 @@ HRESULT PASCAL FAR _export _loadds CreateClassMgr (
 	*pCM = new BOleClassManager (AsPIUnknownMain(pOuter));
 	return (*pCM) ?NOERROR:ResultFromScode(E_OUTOFMEMORY);
 }
-
-
-
-
-

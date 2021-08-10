@@ -1,15 +1,17 @@
 //----------------------------------------------------------------------------
-// ObjectWindows - (C) Copyright 1991, 1993 by Borland International
+// ObjectWindows
+// Copyright (c) 1991, 1995 by Borland International, All Rights Reserved
 //----------------------------------------------------------------------------
-#ifndef WORKSHOP_INVOKED
+#if !defined(WORKSHOP_INVOKED)
   #include <windows.h>
 #endif
 #include "sysinfo.h"
 
-#include <owl\except.rc>
+#include <owl/except.rc>
+#include <owl/window.rh>
 
-IDD_SysInfo16 DIALOG 11, 20, 169, 108
-STYLE WS_CHILD | WS_VISIBLE | WS_BORDER
+IDD_SYSINFO16 DIALOG 11, 20, 169, 108
+STYLE WS_CHILD | WS_VISIBLE | WS_BORDER | DS_3DLOOK
 FONT 8, "MS Sans Serif"
 {
  LTEXT "Number Of Instances", -1, 6, 5, 74, 14, SS_LEFT | WS_CHILD | WS_VISIBLE
@@ -28,8 +30,8 @@ FONT 8, "MS Sans Serif"
  LTEXT "", IDC_VERSIONDOS, 89, 89, 74, 14, SS_LEFT | WS_CHILD | WS_VISIBLE
 }
 
-IDD_SysInfo32 DIALOG 12, 8, 169, 149
-STYLE WS_CHILD | WS_VISIBLE | WS_BORDER
+IDD_SYSINFO32 DIALOG 12, 8, 169, 149
+STYLE WS_CHILD | WS_VISIBLE | WS_BORDER | DS_3DLOOK
 FONT 8, "MS Sans Serif"
 {
  LTEXT "Window's Version", -1, 6, 4, 74, 14, SS_LEFT | WS_CHILD | WS_VISIBLE

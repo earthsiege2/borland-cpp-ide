@@ -6,9 +6,9 @@
 */
 
 /*
- *      C/C++ Run Time Library - Version 6.5
+ *      C/C++ Run Time Library - Version 7.0
  *
- *      Copyright (c) 1987, 1994 by Borland International
+ *      Copyright (c) 1987, 1996 by Borland International
  *      All Rights Reserved.
  *
  */
@@ -80,15 +80,15 @@ extern long double  _RTLENTRY _EXPDATA _tiny_ldble;
 #ifdef __cplusplus
 extern "C" {
 #endif
-unsigned int _RTLENTRY _EXPFUNC _clear87(void);
-unsigned int _RTLENTRY _EXPFUNC _control87(unsigned int __newcw, unsigned int __mask);
-void         _RTLENTRY _EXPFUNC _fpreset(void);
-unsigned int _RTLENTRY _EXPFUNC _status87(void);
+unsigned int _RTLENTRY          _clear87(void);
+unsigned int _RTLENTRY          _control87(unsigned int __newcw, unsigned int __mask);
+void         _RTLENTRY          _fpreset(void);
+unsigned int _RTLENTRY          _status87(void);
 #ifdef __cplusplus
 }
 #endif
 
-#if !__STDC__
+#if !defined(__STDC__)
 
 /* 387 Status Word format   */
 

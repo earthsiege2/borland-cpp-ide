@@ -1,0 +1,7 @@
+:Base BWCC.HLP
+:Title BWCC Reference
+:Index BWCC Reference=BWCC.HLP
+:Index Borland C++ Users Guide=BCW.HLP
+:Index Resource Workshop Users Guide=WORKSHOP.HLP
+:Include OpenHelp.cnt
+:Include bwcc.toc

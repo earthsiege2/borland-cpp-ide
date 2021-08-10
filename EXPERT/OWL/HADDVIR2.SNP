@@ -10,6 +10,6 @@
 ##^BOL
 
 //{{[[ClassName]]VIRTUAL_BEGIN}}
-public:
+  public:
 //{{[[ClassName]]VIRTUAL_END}}
 ##--END-- QUERY_CLASS_NAME [[ClassName]]

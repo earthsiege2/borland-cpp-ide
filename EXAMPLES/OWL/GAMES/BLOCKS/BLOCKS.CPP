@@ -1,6 +1,7 @@
 //--------------------------------------------------------------------------
 // Turbo Blocks -- Copyright (c) 1995, Borland International
 //--------------------------------------------------------------------------
+#include <owl/pch.h>
 #include <owl/applicat.h>
 #include <owl/framewin.h>
 #include <owl/window.h>
@@ -97,14 +98,7 @@ TPen pen[8] = { TPen( TColor( 0, 0, 64 ) ),
                 TPen( TColor( 0,255,255 ) ),
                 TPen( TColor( 255,255,255 ) ) };
 
-TBrush brush[8] = { TBrush( TColor( 0, 0, 64 ) ),
-                    TBrush( TColor( 0, 0, 128 ) ),
-                    TBrush( TColor( 0, 128, 0 ) ),
-                    TBrush( TColor( 128, 0, 0 ) ),
-                    TBrush( TColor( 128,128,0 ) ),
-                    TBrush( TColor( 128,0,128 ) ),
-                    TBrush( TColor( 0,128,128 ) ),
-                    TBrush( TColor( 128,128,128 ) ) };
+TBrush* brush[8];
 
 
 // BlocksWindow is the class that actually defines the game.  It is used
@@ -433,7 +427,7 @@ void TBlocksWindow::PlaceBlock() {
 //
 void TBlocksWindow::DrawBlock( TDC& dc, TBlock& block, TPoint& pos ) {
   int i,j,size=block.size;
-  dc.SelectObject( brush[ color ] );
+  dc.SelectObject( *brush[ color ] );
   dc.SelectObject( pen[ color ] );
   for (i=0;i<size;i++)
     for (j=0;j<size;j++)
@@ -455,7 +449,7 @@ void TBlocksWindow::Paint( TDC& dc, bool /*erase*/, TRect& /*rect*/ ) {
   // if the game is paused, blank the screen (to prevent cheating!)
 
   if (gameState==gsPaused) {
-    memDC->FillRect( GetClientRect(), brush[0] );
+    memDC->FillRect( GetClientRect(), *brush[0] );
     memDC->SetTextColor( TColor( 0, 255, 255 ) );
     memDC->SetBkColor( TColor( 0, 0, 128 ) );
     memDC->TextOut( blockSize*2,blockSize*9, " * * P A U S E D * * " );
@@ -465,7 +459,7 @@ void TBlocksWindow::Paint( TDC& dc, bool /*erase*/, TRect& /*rect*/ ) {
 
   // clear the memory DC
 
-  memDC->FillRect( GetClientRect(), brush[0] );
+  memDC->FillRect( GetClientRect(), *brush[0] );
 
   // draw the permanent blocks
 
@@ -473,7 +467,7 @@ void TBlocksWindow::Paint( TDC& dc, bool /*erase*/, TRect& /*rect*/ ) {
     for (i=0;i<GAME_WIDTH;i++)
       if ( board[j][i+1]!=0 ){
         memDC->SelectObject( pen[ board[j][i+1] ] );
-        memDC->SelectObject( brush[ board[j][i+1] ] );
+        memDC->SelectObject( *brush[ board[j][i+1] ] );
         memDC->Rectangle( i*blockSize,j*blockSize,
                          i*blockSize+blockSize,j*blockSize+blockSize );
       }
@@ -528,6 +522,21 @@ END_RESPONSE_TABLE;
 // the main program
 
 int OwlMain( int, char *[] ) {
+
+  brush[0] = new TBrush( TColor( 0, 0, 64 ) );
+  brush[1] = new TBrush( TColor( 0, 0, 128 ) );
+  brush[2] = new TBrush( TColor( 0, 128, 0 ) );
+  brush[3] = new TBrush( TColor( 128, 0, 0 ) );
+  brush[4] = new TBrush( TColor( 128,128,0 ) );
+  brush[5] = new TBrush( TColor( 128,0,128 ) );
+  brush[6] = new TBrush( TColor( 0,128,128 ) );
+  brush[7] = new TBrush( TColor( 128,128,128 ) );
+
   randomize();
-  return TBlocksApp().Run();
+  int retVal = TBlocksApp().Run();
+
+  for (int i = 0; i < 8 ; i++) {
+    delete brush[i];
+  }
+  return retVal;
 }

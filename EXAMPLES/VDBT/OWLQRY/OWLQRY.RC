@@ -1,0 +1,38 @@
+// query.rc
+//............................................................................
+// includes
+
+#include <windows.h>
+#include "resource.h"
+
+//............................................................................
+// Icons
+
+IDI_MAIN ICON owlqry.ico
+
+//............................................................................
+// Menus
+
+IDM_MAIN MENU
+{
+	MENUITEM " |< ", IDM_NAV_FIRST
+	MENUITEM " << ", IDM_NAV_PRIORSET
+	MENUITEM " <  ", IDM_NAV_PRIOR
+	MENUITEM "  > ", IDM_NAV_NEXT
+	MENUITEM " >> ", IDM_NAV_NEXTSET
+	MENUITEM " >| ", IDM_NAV_LAST
+}
+
+//............................................................................
+// Strings
+
+STRINGTABLE
+{
+#ifdef __FLAT__
+	IDS_MAINTITLE,	"OWL Query 32"
+#else
+	IDS_MAINTITLE,	"OWL Query 16"
+#endif
+}
+
+//............................................................................

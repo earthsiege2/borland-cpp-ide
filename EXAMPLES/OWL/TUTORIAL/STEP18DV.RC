@@ -1,0 +1,177 @@
+//----------------------------------------------------------------------------
+// ObjectWindows - (C) Copyright 1994 by Borland International
+//   Tutorial application
+//----------------------------------------------------------------------------
+#include <owl/window.rh>
+#include <owl/oleview.rh>
+
+#define CM_ABOUT            205  // same as step17.rc's
+#define CM_PEN              300
+#define CM_SELECT           302
+#define CM_PENSIZE          306
+#define CM_PENCOLOR         307
+#define CM_ORGSIZE          308
+#define CM_DOUBLESIZE       309
+#define CM_HALFSIZE         310
+#define CM_NEWCONTROL       311
+#define CM_CONTROLPROPS     312
+#define CM_CONTROLCAPTION   313
+#define CM_CONTROLFONT      314
+#define CM_CONTAINERMODE    315
+#define CM_REGISTEROCX      316
+#define CM_UNREGISTEROCX    317
+
+#define IDM_DRAWVIEW        218
+#define IDM_DRAWLISTVIEW    219
+#define IDA_DRAWLISTVIEW    220
+#define IDS_FILEINFO        221
+#define IDA_DRAWVIEW        222
+
+#define IDC_PENCIL          400
+
+#ifdef RC_INVOKED
+#ifndef WORKSHOP_INVOKED
+# include <windows.h>
+#endif
+
+#include <owl/inputdia.rc>
+// define __OLEVIEW_RC_OCF_RC_COMMON_STRINGS so that string table entries
+// common to both ocf.rc and oleview.rc do not produce duplicate string warnings
+#define __OLEVIEW_RC_OCF_RC_COMMON_STRINGS
+#include <owl/oleview.rc>
+
+IDM_DRAWVIEW MENU
+{
+ MENUITEM Separator  // Edit Group
+
+ POPUP "&Edit"
+ {
+  MENUITEM "&Undo\aCtrl+Z",        CM_EDITUNDO
+  MENUITEM Separator
+  MENUITEM "&Cut\aCtrl+X",         CM_EDITCUT
+  MENUITEM "C&opy\aCtrl+C",        CM_EDITCOPY
+  MENUITEM "&Paste\aCtrl+V",       CM_EDITPASTE
+  MENUITEM "Paste &Special...",    CM_EDITPASTESPECIAL
+  MENUITEM "Paste &Link",          CM_EDITPASTELINK
+  MENUITEM "&Delete\aDel",         CM_EDITDELETE
+  MENUITEM "C&lear All\aCtrl+Del", CM_EDITCLEAR
+  MENUITEM Separator
+  MENUITEM "Pen Si&ze",            CM_PENSIZE
+  MENUITEM "Pen Colo&r",           CM_PENCOLOR
+  MENUITEM Separator
+  MENUITEM "&Insert Object...",    CM_EDITINSERTOBJECT
+  MENUITEM "&Insert Control...",   CM_EDITINSERTCONTROL
+  MENUITEM "&Links...",            CM_EDITLINKS
+  MENUITEM "&Object",              CM_EDITOBJECT
+  MENUITEM Separator
+  MENUITEM "&Show Objects",        CM_EDITSHOWOBJECTS
+ }
+
+ MENUITEM Separator  // Container Group (2)
+ POPUP "&Tools"
+ {
+  MENUITEM "&Pen",    CM_PEN, CHECKED
+  MENUITEM "&Select", CM_SELECT
+  MENUITEM Separator
+  MENUITEM "&My Insert Control...\aCtrl+I",    CM_NEWCONTROL
+  MENUITEM "&Control Properties...",  CM_CONTROLPROPS
+  MENUITEM "&Change Control Caption", CM_CONTROLCAPTION
+  MENUITEM "&Change Control Font",    CM_CONTROLFONT
+  MENUITEM "&Design Mode",            CM_CONTAINERMODE
+  MENUITEM Separator
+  MENUITEM "&Register Control...",    CM_REGISTEROCX
+  MENUITEM "&Unregister Control...",  CM_UNREGISTEROCX
+ }
+
+ POPUP "&Zoom"
+ {
+  MENUITEM "&100%", CM_ORGSIZE, CHECKED
+  MENUITEM "&200%", CM_DOUBLESIZE
+  MENUITEM "&50%",  CM_HALFSIZE
+ }
+}
+
+
+IDA_DRAWVIEW ACCELERATORS
+BEGIN
+  "^z",      CM_EDITUNDO,
+  "^x",      CM_EDITCUT,
+  "^c",      CM_EDITCOPY,
+  "^v",      CM_EDITPASTE,
+  "^i",      CM_NEWCONTROL,
+  VK_DELETE, CM_EDITDELETE VIRTKEY
+  VK_DELETE, CM_EDITCUT,   VIRTKEY, SHIFT
+  VK_DELETE, CM_EDITCLEAR, VIRTKEY, CONTROL
+  VK_INSERT, CM_EDITCOPY,  VIRTKEY, CONTROL
+  VK_INSERT, CM_EDITPASTE, VIRTKEY, SHIFT
+  VK_BACK,   CM_EDITUNDO,  VIRTKEY, ALT
+END
+
+
+
+IDM_DRAWLISTVIEW MENU
+{
+ MENUITEM Separator
+ POPUP "&Edit"
+ {
+  MENUITEM "&Undo\aCtrl+Z",        CM_EDITUNDO
+  MENUITEM Separator
+  MENUITEM "&Delete\aDel",         CM_EDITDELETE
+  MENUITEM "C&lear All\aCtrl+Del", CM_EDITCLEAR
+  MENUITEM Separator
+  MENUITEM "Pen Si&ze",            CM_PENSIZE
+  MENUITEM "Pen Colo&r",           CM_PENCOLOR
+ }
+}
+
+IDA_DRAWLISTVIEW ACCELERATORS
+BEGIN
+  "^z",      CM_EDITUNDO,
+  VK_DELETE, CM_EDITDELETE,  VIRTKEY
+  VK_DELETE, CM_EDITCLEAR,   VIRTKEY, CONTROL
+  VK_BACK,   CM_EDITUNDO,    VIRTKEY, ALT
+END
+
+
+STRINGTABLE
+{
+ CM_PEN,        "Selects the pen for drawing on the screen"
+ CM_SELECT,     "Tool for selecting/moving/resizing individual line object"
+ CM_PENSIZE,    "Changes the pen width"
+ CM_PENCOLOR,   "Changes the pen color"
+ CM_EDITUNDO,   "Undo last action"
+ CM_EDITCUT,    "Cut the selected object"
+ CM_EDITCOPY,   "Copy the selected object"
+ CM_EDITPASTE,  "Paste object on the clipboard"
+ CM_EDITDELETE, "Delete selected object"
+ CM_EDITCLEAR,  "Erase all lines"
+ IDS_FILEINFO,  "Lines from Step 17"
+}
+
+
+IDC_PENCIL CURSOR
+{
+ '00 00 02 00 01 00 20 20 00 00 03 00 1C 00 30 01'
+ '00 00 16 00 00 00 28 00 00 00 20 00 00 00 40 00'
+ '00 00 01 00 01 00 00 00 00 00 00 02 00 00 00 00'
+ '00 00 00 00 00 00 02 00 00 00 00 00 00 00 00 00'
+ '00 00 FF FF FF 00 00 00 00 00 00 00 00 00 00 00'
+ '00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00'
+ '00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00'
+ '00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00'
+ '00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00'
+ '00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00'
+ '00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00'
+ '00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00'
+ '00 00 00 00 00 00 FF FF FF FF FF FF FF FF FF FF'
+ 'FF FF EF FF FF FF F3 FF FF FF F0 FF FF FF F9 0F'
+ 'FF FF FB D7 FF FF FD 3B FF FF FC 7D FF FF FC CE'
+ 'FF FF FD E7 7F FF FE F3 BF FF FF 79 DF FF FF BC'
+ 'EF FF FF DE 77 FF FF EF 3B FF FF F7 9D FF FF FB'
+ 'CE FF FF FD E7 7F FF FE F3 BF FF FF 79 BF FF FF'
+ 'BF 7F FF FF DE FF FF FF ED FF FF FF F3 FF FF FF'
+ 'FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF'
+ 'FF FF FF FF FF FF'
+}
+
+#endif  // RC_INVOKED

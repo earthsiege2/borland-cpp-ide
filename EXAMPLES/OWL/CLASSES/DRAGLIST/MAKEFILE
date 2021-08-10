@@ -1,0 +1,12 @@
+#----------------------------------------------------------------------------
+# ObjectWindows
+# Copyright (c) 1995, 1996 by Borland International, All Rights Reserved
+#----------------------------------------------------------------------------
+
+MODELS  = dft
+SYSTEMS = WIN32
+
+EXERES = draglist
+OBJEXE = draglisx.obj
+
+!include $(BCEXAMPLEDIR)\owlmake.gen

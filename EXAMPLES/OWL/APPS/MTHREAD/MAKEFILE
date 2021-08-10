@@ -1,0 +1,14 @@
+#----------------------------------------------------------------------------
+# ObjectWindows - (C) Copyright 1991, 1995 by Borland International
+#----------------------------------------------------------------------------
+EXERES=mthread
+SYSTEMS=WIN32
+SYSTEM=WIN32
+MODELS=t
+WIN32=1
+!if !$d(MODEL)
+ MODEL=t
+!endif
+OBJEXE=mthread.obj arty.obj line.obj
+
+!include $(BCEXAMPLEDIR)\owlmake.gen

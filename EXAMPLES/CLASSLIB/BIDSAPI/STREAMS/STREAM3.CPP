@@ -22,6 +22,7 @@ void ReadStream()
     ifp >> p3;
     if( p3 )
         p3->Draw();
+    delete p3;
 }
 
 int main()

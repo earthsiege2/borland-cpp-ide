@@ -3,9 +3,9 @@
 ;[]-----------------------------------------------------------------[]
 
 ;
-;       C/C++ Run Time Library - Version 1.5
+;       C/C++ Run Time Library - Version 2.0
 ; 
-;       Copyright (c) 1991, 1994 by Borland International
+;       Copyright (c) 1991, 1996 by Borland International
 ;       All Rights Reserved.
 ; 
 
@@ -30,6 +30,7 @@ jmp_buf ENDS
 
 ExtFunc@ _CurrExcContext, _RTLENTRY, 4
 ExtFunc@ _Local_unwind, _RTLENTRY, 8
+
 
 ;-----------------------------------------------------------------------
 ;
@@ -183,7 +184,10 @@ done_unwind:
     if PopParms@ eq 0
         sub     esp, 4                  ; fake setjmp arg for caller to pop
     endif
+__DoLongJump__:
         jmp     dword ptr [ecx.j_ret]   ; jump to return address
+
+public __DoLongJump__
 
 EndFunc@ longjmp
 

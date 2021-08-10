@@ -9,9 +9,9 @@
  *--------------------------------------------------------------------------*/
 
 /*
- *      C/C++ Run Time Library - Version 1.5
+ *      C/C++ Run Time Library - Version 2.0
  *
- *      Copyright (c) 1991, 1994 by Borland International
+ *      Copyright (c) 1991, 1996 by Borland International
  *      All Rights Reserved.
  *
  */
@@ -188,6 +188,23 @@ static void _init_video(void)
     _video.windowy1 = 0;
     _video.windowx2 = _video.screenwidth  - 1;
     _video.windowy2 = _video.screenheight - 1;
+}
+
+
+/*--------------------------------------------------------------------------*
+Name            _exit_video - crt shutdown routine
+
+Usage           void _exit_video(void);
+
+Description     _init_video is called by the startup code to cleanup CONIO
+*---------------------------------------------------------------------------*/
+
+static void _exit_video(void)
+{
+#pragma exit _exit_video 1
+
+    CloseHandle(_hin);
+    CloseHandle(_hout);
 }
 
 

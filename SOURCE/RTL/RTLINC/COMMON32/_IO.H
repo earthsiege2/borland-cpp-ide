@@ -6,9 +6,9 @@
  *-----------------------------------------------------------------------*/
 
 /*
- *      C/C++ Run Time Library - Version 1.5
+ *      C/C++ Run Time Library - Version 2.0
  *
- *      Copyright (c) 1987, 1994 by Borland International
+ *      Copyright (c) 1987, 1996 by Borland International
  *      All Rights Reserved.
  *
  */
@@ -41,6 +41,9 @@ int      _RTLENTRY  __dup2   (int __oldhandle, int __newhandle);
 int      _RTLENTRY  __eof    (int __handle);
 int      _RTLENTRY  __ftruncate(int __handle, long __size);
 int      _RTLENTRY  __isatty (int __handle);
+#if defined(__WIN32__)
+int      _RTLENTRY  __isatty_osfhandle(long __handle);
+#endif
 long     _RTLENTRYF __lseek  (int __handle, long __offset, int __fromwhere);
 int      __cdecl    __open   (const char *__path, int __access,... /*unsigned mode*/);
 int      _RTLENTRYF __read   (int __handle, void *__buf, unsigned __len);

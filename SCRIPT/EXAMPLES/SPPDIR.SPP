@@ -1,0 +1,18 @@
+//--------------------------------------------------------------------------
+// Object Scripting
+// Copyright (c) 1996 by Borland International, All Rights Reserved
+//
+// SPPDIR.SPP: Script Directory. Displays the Script Manager directory.
+//
+// MAIN FILE: SPPMAN.SPP
+//--------------------------------------------------------------------------
+print "sppdir.spp";
+
+import SppMan;  // Script Manager object.
+
+sppdir()
+{
+  // Invoke the script manager object to display the script directory.
+  //
+  SppMan.DisplayDirectory();
+}

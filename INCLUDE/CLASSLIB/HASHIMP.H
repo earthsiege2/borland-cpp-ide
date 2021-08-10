@@ -1,43 +1,41 @@
-/*------------------------------------------------------------------------*/
-/*                                                                        */
-/*  HASHIMP.H                                                             */
-/*                                                                        */
-/*  Copyright (c) 1991, 1994 Borland International                        */
-/*  All Rights Reserved                                                   */
-/*                                                                        */
-/*  Note: Hash tables can determine the hash value of an object by        */
-/*  calling a member function or global function named HashValue().       */
-/*                                                                        */
-/*  For member functions, the following prototype should be used:         */
-/*                                                                        */
-/*      unsigned HashValue() const;                                       */
-/*                                                                        */
-/*  For global functions, then following prototype should be used:        */
-/*                                                                        */
-/*      unsigned HashValue( const T& t );                                 */
-/*                                                                        */
-/*  If the global function is used, the member function does not need to  */
-/*  be defined.                                                           */
-/*                                                                        */
-/*------------------------------------------------------------------------*/
-
+//----------------------------------------------------------------------------
+// Borland BIDS Container Library
+// Copyright (c) 1991, 1996 by Borland International, All Rights Reserved
+//
+//$Revision:   5.3  $
+//
+// Note: Hash tables can determine the hash value of an object by
+//       calling a member function or global function named HashValue().
+//
+// For member functions, the following prototype should be used:
+//
+//   unsigned HashValue() const;
+//
+// For global functions, then following prototype should be used:
+//
+//   unsigned HashValue( const T& t );
+//
+// If the global function is used, the member function does not need to be
+// defined.
+//
+//----------------------------------------------------------------------------
 #if !defined( CLASSLIB_HASHIMP_H )
 #define CLASSLIB_HASHIMP_H
 
-#if !defined( __CHECKS_H )
-#include <checks.h>
+#if !defined(CLASSLIB_DEFS_H)
+# include <classlib/defs.h>
 #endif
-
-#if !defined( CLASSLIB_DEFS_H )
-#include <classlib/defs.h>
+#if !defined(SERVICES_CHECKS_H)
+# include <services/checks.h>
 #endif
-
-#if !defined( CLASSLIB_LISTIMP_H )
-#include <classlib/listimp.h>
+#if !defined(CLASSLIB_LISTIMP_H)
+# include <classlib/listimp.h>
 #endif
-
-#if !defined( CLASSLIB_VECTIMP_H )
-#include <classlib/vectimp.h>
+#if !defined(CLASSLIB_VECTIMP_H)
+# include <classlib/vectimp.h>
+#endif
+#if !defined(CLASSLIB_RESOURCE_H)
+# include <classlib/resource.h>
 #endif
 
 #pragma option -Vo-
@@ -266,7 +264,9 @@ public:
     Parent::GetItemsInContainer;
     Parent::IsEmpty;
     Parent::operator delete;
+#if !defined(BI_NO_ARRAYNEW)
     Parent::operator delete [];
+#endif
 
 private:
 
@@ -590,4 +590,3 @@ public:
 #pragma option -Vo.
 
 #endif  // CLASSLIB_HASHIMP_H
-

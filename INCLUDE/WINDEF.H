@@ -38,7 +38,7 @@ typedef char *PSZ;
 #define MAX_PATH          260
 
 #ifndef NULL
-#ifdef __cplusplus
+#if defined(__cplusplus) || defined(_Windows)
 #define NULL    0
 #else
 #define NULL    ((void *)0)
@@ -78,7 +78,7 @@ typedef char *PSZ;
 #define _WIN32
 #endif
 #ifndef __cplusplus
-#ifndef _WCHAR_T
+#if !defined(_WCHAR_T) && !defined(_WCHAR_T_DEFINED)
 #define _WCHAR_T
 #define _WCHAR_T_DEFINED  /* For WINDOWS.H */
 typedef unsigned short wchar_t;
@@ -95,7 +95,7 @@ typedef unsigned short wchar_t;
 #define pascal
 #endif
 
-#ifdef DOSWIN32 || defined(__BORLANDC__)
+#if defined(DOSWIN32) || defined(__BORLANDC__)
 #define cdecl _cdecl
 #ifndef CDECL
 #define CDECL _cdecl
@@ -109,7 +109,7 @@ typedef unsigned short wchar_t;
 
 #if (_MSC_VER >= 800) || defined(_STDCALL_SUPPORTED) || defined(__BORLANDC__)
 #define CALLBACK    __stdcall
-#define WINAPI      __stdcall __import
+#define WINAPI      __stdcall
 #define WINAPIV     __cdecl
 #define APIENTRY    WINAPI
 #define APIPRIVATE  __stdcall

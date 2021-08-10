@@ -3,7 +3,7 @@
 //   Tutorial application -- step15dv.cpp
 //   Embed/Linking Server example
 //----------------------------------------------------------------------------
-#include <owl/owlpch.h>
+#include <owl/pch.h>
 #include <owl/dc.h>
 #include <owl/inputdia.h>
 #include <owl/chooseco.h>
@@ -16,6 +16,7 @@
 #include <owl/olemdifr.h>
 #include <owl/oledoc.h>
 #include <owl/oleview.h>
+#include <owl/edit.rh>
 #include "step15dv.rc"
 
 typedef TArray<TPoint> TPoints;

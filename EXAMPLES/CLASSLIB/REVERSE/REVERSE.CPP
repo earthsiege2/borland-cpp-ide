@@ -2,24 +2,15 @@
 /*                                                                        */
 /*  REVERSE.CPP                                                           */
 /*                                                                        */
-/*  Copyright (c) 1991, 1993 Borland International                        */
+/*  Copyright (c) 1991, 1995 Borland International                        */
 /*  All Rights Reserved.                                                  */
 /*                                                                        */
 /*  TStack example file                                                   */
 /*                                                                        */
 /*------------------------------------------------------------------------*/
-
-#if !defined( __STACKS_H )
-#include "classlib\stacks.h"
-#endif  // __STACKS_H
-
-#if !defined( __CSTRING_H )
-#include <cstring.h>
-#endif  // __CSTRING_H
-
-#ifndef __IOSTREAM_H
+#include <classlib/stacks.h>
+#include <services/cstring.h>
 #include <iostream.h>       
-#endif
 
 int main()
 {

@@ -1,0 +1,23 @@
+;-----------------------------------------------------------------------------
+;   Project Shell
+;   Borland International
+;   Copyright © 1995 Borland International. All Rights Reserved.
+;
+;   SUBSYSTEM:    shell.exe Module Defintion File
+;   FILE:         shellapp.def
+;   AUTHOR:       The OWL Team
+;
+;-----------------------------------------------------------------------------
+
+NAME Shell
+
+DESCRIPTION 'Shell Application - Copyright © 1995 Borland International. All Rights Reserved.'
+EXETYPE     WINDOWS
+CODE        PRELOAD MOVEABLE DISCARDABLE
+DATA        PRELOAD MOVEABLE
+
+; Note: The following are recommended settings for the default
+;       AppExpert application when compiled as a 16-bit target.
+;
+; HEAPSIZE    4096
+; STACKSIZE   8192

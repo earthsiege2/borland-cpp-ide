@@ -55,13 +55,13 @@ STRINGTABLE
 }
 
 IDD_ABOUT DIALOG 37, 25, 170, 95
-STYLE DS_MODALFRAME | WS_POPUP | WS_VISIBLE | WS_CAPTION | WS_SYSMENU
+STYLE DS_MODALFRAME | WS_POPUP | WS_VISIBLE | WS_CAPTION | WS_SYSMENU | DS_3DLOOK
 CAPTION "About Drawing Pad"
 FONT 8, "MS Sans Serif"
 {
  DEFPUSHBUTTON "Ok", IDOK, 60, 73, 50, 14
- CTEXT "ObjectWindows 2.5 Tutorial Application", -1, 10, 46, 150, 10
- CTEXT "Copyright 1991, 1994 by Borland International", -1, 10, 57, 150, 8
+ CTEXT "ObjectWindows 5.0 Tutorial Application", -1, 10, 46, 150, 10
+ CTEXT "Copyright 1991, 1996 by Borland International", -1, 10, 57, 150, 8
  ICON "IDI_TUTORIAL", -1, 78, 11, 14, 16
  CTEXT "Drawing Pad", -1, 10, 35, 150, 8
 }

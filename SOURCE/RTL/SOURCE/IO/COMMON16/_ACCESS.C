@@ -6,9 +6,9 @@
  *-----------------------------------------------------------------------*/
 
 /*
- *      C/C++ Run Time Library - Version 6.5
+ *      C/C++ Run Time Library - Version 7.0
  *
- *      Copyright (c) 1993, 1994 by Borland International
+ *      Copyright (c) 1993, 1996 by Borland International
  *      All Rights Reserved.
  *
  */
@@ -53,8 +53,13 @@ int _CType _FARFUNC _access(const char *filename, int amode)
         attrib = _rtl_chmod(filename, 0);
         if (attrib == -1)
                 return(attrib);
+	/*
+	 * If not checking for write permission or file is not read-only
+	 * then return success.
+	 */
         if ((amode & 0x0002) == 0 || (attrib & FA_RDONLY) == 0)
                 return(0);
+	/* File exists but permission is denied */
         errno = EACCES;
         return(-1);
 }

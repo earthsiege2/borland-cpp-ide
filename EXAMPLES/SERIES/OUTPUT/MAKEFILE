@@ -1,0 +1,14 @@
+#----------------------------------------------------------------------------
+# Borland C++
+# Copyright (c) 1987, 1996 Borland International Inc.  All Rights Reserved.
+#   examples\series\output\makefile
+#----------------------------------------------------------------------------
+
+SYSTEMS = WIN16 WIN32
+OSMAJOR = 4
+OSMINOR = 0
+EXERES  = output
+CPCH    = -Hc -H"windows.h" -H=output.csm
+OBJEXE  = output.obj winmain.obj init.obj
+
+!include $(BCEXAMPLEDIR)\makefile.gen

@@ -6,9 +6,9 @@
 */
 
 /*
- *      C/C++ Run Time Library - Version 6.5
+ *      C/C++ Run Time Library - Version 7.0
  *
- *      Copyright (c) 1987, 1994 by Borland International
+ *      Copyright (c) 1987, 1996 by Borland International
  *      All Rights Reserved.
  *
  */
@@ -35,7 +35,7 @@
 
 #if !defined(RC_INVOKED)
 
-#pragma option -a-
+#pragma pack(push, 1)
 
 #if defined(__BCOPT__)
 #if !defined(_RTL_ALLOW_po) && !defined(__FLAT__)
@@ -402,7 +402,8 @@ istream _FAR & __pascal _EXPFUNC operator>>(istream _FAR &, bcd _FAR &);
 #endif
 #endif
 
-#pragma option -a.
+/* restore default packing */
+#pragma pack(pop)
 
 #endif  /* !RC_INVOKED */
 

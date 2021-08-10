@@ -1,0 +1,8 @@
+
+print "sstest.spp";
+
+
+SSAddOnTest() {
+  print "SSAddOnTest";
+  return 42;
+}

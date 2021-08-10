@@ -1,0 +1,9 @@
+#----------------------------------------------------------------------------
+# ObjectWindows - (C) Copyright 1995 by Borland International
+#----------------------------------------------------------------------------
+
+MODELS=lfd
+EXERES=drawedge
+!include $(BCEXAMPLEDIR)\owlmake.gen
+
+

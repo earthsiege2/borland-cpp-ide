@@ -6,9 +6,9 @@
  *-----------------------------------------------------------------------*/
 
 /*
- *      C/C++ Run Time Library - Version 1.5
+ *      C/C++ Run Time Library - Version 2.0
  *
- *      Copyright (c) 1991, 1994 by Borland International
+ *      Copyright (c) 1991, 1996 by Borland International
  *      All Rights Reserved.
  *
  */
@@ -26,6 +26,7 @@
 extern void _statcvt(
     struct stat *bufP,      /* stat structure to be filled in */
     DWORD attr,             /* NT file attributes */
+    FILETIME *ctime,        /* NT time of file creation */
     FILETIME *atime,        /* NT time of last access */
     FILETIME *wtime,        /* NT time of last write */
     DWORD fsize);           /* NT low word of file size */
@@ -106,6 +107,9 @@ int _RTLENTRY _EXPFUNC stat (const char *pathP, struct stat *bufP)
             free(full);
             return 0;
         }
+        else
+            if (full)
+                free (full);
 
         /* It may not be a disk file.  Try to open the file for reading
          * so we can find out the type of the file.
@@ -125,8 +129,8 @@ int _RTLENTRY _EXPFUNC stat (const char *pathP, struct stat *bufP)
     /* It it a disk file, convert the NT file info to a stat structure.
      */
     FindClose(hfile);
-    _statcvt(bufP, ff.dwFileAttributes, &ff.ftLastAccessTime,
-             &ff.ftLastWriteTime, ff.nFileSizeLow);
+    _statcvt(bufP, ff.dwFileAttributes, &ff.ftCreationTime,
+             &ff.ftLastAccessTime, &ff.ftLastWriteTime, ff.nFileSizeLow);
 
     /* Determine the disk device by parsing the drive name.
      * If no drive name, assume current drive.

@@ -1,13 +1,12 @@
+//----------------------------------------------------------------------------
+// ObjectComponents
+// Copyright (c) 1994, 1996 by Borland International, All Rights Reserved
 //
-//**************************************************************************
+// $Revision:   2.2  $
 //
-// BOleFact.h --   Declares the server-side helper for allowing OLE2 to
-//                 create objects made available by Bolero server apps.
-//
-// Copyright (c) 1993,94 by Borland International, Inc. All rights reserved
-//
-//**************************************************************************
-
+//  Implements the server-side helper for allowing OLE2 to create objects 
+//  made available by Bolero server apps.
+//----------------------------------------------------------------------------
 #ifndef _BOLEFACT_H
 #define _BOLEFACT_H
 
@@ -39,8 +38,8 @@ public:
 	virtual HRESULT _IFUNC Register(BOOL fSingleUse);
 	virtual HRESULT _IFUNC Revoke();
 	virtual HRESULT _IFUNC GetClassID(LPCLSID pClass);
-	virtual BOOL _IFUNC IsA(REFCLSID);
-	virtual BOOL _IFUNC AllowEmbedFromSelf ();
+	virtual BOOL    _IFUNC IsA(REFCLSID);
+	virtual BOOL    _IFUNC AllowEmbedFromSelf ();
 	virtual HRESULT _IFUNC GetEmbeddingHelperFactory (LPUNKNOWN *ppF);
 	
 	IBClassMgr * ClassMgrGet() { return pObjCM; }
@@ -60,6 +59,34 @@ public:
 	HRESULT _IFUNC LockServer(BOOL fLock);
 };
 
+
+// class BOleControlFact -- OLE 2.0 Factory helper
+//
+class _ICLASS BOleControlFact : public BOleFact, public IClassFactory2
+{
+public:
+
+	BOleControlFact(BOleClassManager * pFact, IBUnknownMain *pOuter);
+	~BOleControlFact();
+
+	virtual HRESULT _IFUNC QueryInterfaceMain(REFIID iid, LPVOID FAR* pif);
+
+	// IUnknown Methods
+	//
+	DEFINE_IUNKNOWN(pObjOuter);
+
+	// IClassFactory methods
+	//
+	HRESULT _IFUNC CreateInstance(IUnknown FAR* pUnk, REFIID iid, LPVOID FAR* ppv);
+	HRESULT _IFUNC LockServer(BOOL fLock)      { return BOleFact::LockServer (fLock);};
+
+	//  IClassFactory2 methods
+	HRESULT _IFUNC GetLicInfo (LPLICINFO pLicInfo);
+	HRESULT _IFUNC RequestLicKey (DWORD dwResrved, BSTR FAR* pbstrKey);
+	HRESULT _IFUNC CreateInstanceLic (LPUNKNOWN pUnkOuter,
+            	     LPUNKNOWN pUnkReserved, REFIID riid, BSTR bstrKey,
+               	  LPVOID FAR* ppvObject);
+};
 
 // 
 // BOleInProcFactory -- Private factory used when a server object is
@@ -96,4 +123,3 @@ class _ICLASS BOleInProcFactory : public BOleComponent, public IClassFactory
 };
 
 #endif
-

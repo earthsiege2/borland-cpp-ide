@@ -1,30 +1,35 @@
 //----------------------------------------------------------------------------
 // ObjectWindows
-// (C) Copyright 1991, 1994 by Borland International, All Rights Reserved
+// Copyright (c) 1991, 1996 by Borland International, All Rights Reserved
 //
-//   Defines class TAppDictionary. This class manages associations between
-//   processes/tasks and TApplication pointers.
+//$Revision:   10.3  $
+//
+// Definition of class TAppDictionary. This class manages associations between
+// processes/tasks and TApplication pointers.
 //----------------------------------------------------------------------------
 #if !defined(OWL_APPDICT_H)
 #define OWL_APPDICT_H
 
-#if !defined(OWL_OWLDEFS_H)
-# include <owl/owldefs.h>
+#if !defined(OWL_DEFS_H)
+# include <owl/defs.h>
 #endif
 class _OWLCLASS TApplication;
 
 #if !defined(BI_PLAT_WIN32)
-  inline unsigned GetCurrentProcessId() {return (unsigned)GetCurrentTask();}
+  inline uint GetCurrentProcessId() {return (uint)GetCurrentTask();}
 #endif
 
+// Generic definitions/compiler options (eg. alignment) preceeding the 
+// definition of classes
+#include <services/preclass.h>
+
 //
-//  class TAppDictionary
-//  ----- --------------
-//
+// class TAppDictionary
+// ~~~~~ ~~~~~~~~~~~~~~
 class _OWLCLASS TAppDictionary {
   public:
     struct TEntry {
-      unsigned       Pid;
+      uint           Pid;
       TApplication*  App;
     };
     typedef void (*TEntryIterator)(TEntry&);
@@ -33,11 +38,11 @@ class _OWLCLASS TAppDictionary {
     TAppDictionary();
    ~TAppDictionary();
 
-    TApplication* GetApplication(unsigned pid = 0);  // default to current pid
+    TApplication* GetApplication(uint pid = 0);  // default to current pid
 
-    void          Add(TApplication* app, unsigned pid = 0);
+    void          Add(TApplication* app, uint pid = 0);
     void          Remove(TApplication* app);
-    void          Remove(unsigned pid);
+    void          Remove(uint pid);
     void          Condemn(TApplication* app);
 
     bool          DeleteCondemned();
@@ -51,6 +56,10 @@ class _OWLCLASS TAppDictionary {
 #endif
 };
 
+// Generic definitions/compiler options (eg. alignment) following the 
+// definition of classes
+#include <services/posclass.h>
+
 //
 // Global exported TAppDictionary in Owl. User Component DLLs should have a
 // similar 'AppDictionary'.
@@ -62,7 +71,7 @@ extern TAppDictionary _OWLDATA OwlAppDictionary;
 // Used by EXEs, or DLLs statically linking Owl. Never returns 0, will make
 // an alias app if needed. Primarily for compatibility
 //
-TApplication* _OWLFUNC GetApplicationObject(unsigned pid = 0);
+TApplication* _OWLFUNC GetApplicationObject(uint pid = 0);
 
 //
 // Convenient macro to define a 'AppDictionary' ref and object as needed
@@ -70,58 +79,78 @@ TApplication* _OWLFUNC GetApplicationObject(unsigned pid = 0);
 //
 #if defined(BI_APP_DLL) && defined(_OWLDLL)
 # define DEFINE_APP_DICTIONARY(AppDictionary)    \
-   TAppDictionary  AppDictionary
+  TAppDictionary  AppDictionary
 #else
 # define DEFINE_APP_DICTIONARY(AppDictionary)    \
-   TAppDictionary& AppDictionary = ::OwlAppDictionary
+  TAppDictionary& AppDictionary = ::OwlAppDictionary
 #endif
-
 
 //----------------------------------------------------------------------------
 // inlines
 
+//
+// 16bit static link exe models 
+//
 #if !defined(BI_APP_DLL) && !defined(_OWLDLL) && !defined(BI_PLAT_WIN32)
 
+//
+// Constructor
+//
 inline TAppDictionary::TAppDictionary() {
   E.App = 0;
   E.Pid = 0;
 }
 
-inline TAppDictionary::~TAppDictionary() {DeleteCondemned();}
+//
+// Destructor
+//
+inline TAppDictionary::~TAppDictionary() {
+  DeleteCondemned();
+}
 
-inline TApplication* TAppDictionary::GetApplication(unsigned /*pid*/) {
+//
+// GetApplication
+//
+inline TApplication* TAppDictionary::GetApplication(uint /*pid*/) {
   return E.App;
 }
 
-inline void TAppDictionary::Add(TApplication* app, unsigned pid) {
+//
+// Add
+//
+inline void TAppDictionary::Add(TApplication* app, uint pid) {
   E.App = app;
   E.Pid = pid;
 }
 
+//
+// Remove
+//
 inline void TAppDictionary::Remove(TApplication* /*app*/) {
   E.App = 0;
 }
 
-inline void TAppDictionary::Remove(unsigned /*pid*/) {
+//
+// Remove
+//
+inline void TAppDictionary::Remove(uint /*pid*/) {
   E.App = 0;
 }
 
+//
+// Condemn an application
+//
 inline void TAppDictionary::Condemn(TApplication* /*app*/) {
   E.Pid = 0;
 }
 
-inline bool TAppDictionary::DeleteCondemned() {
-  if (!E.Pid) {
-    delete E.App;
-    E.App = 0;
-  }
-  return false;
-}
-
+//
+// Iterate
+//
 inline void TAppDictionary::Iterate(TEntryIterator iter) {
   (*iter)(E);
 }
 
-#endif // !defined(BI_APP_DLL) && !defined(_OWLDLL)
+#endif // !defined(BI_APP_DLL) && !defined(_OWLDLL) && !defined(BI_PLAT_WIN32)
 
 #endif  // OWL_APPDICT_H

@@ -1,0 +1,19 @@
+#----------------------------------------------------------------------------
+# ObjectWindows
+# Copyright (c) 1994, 1995 by Borland International, All Rights Reserved
+#----------------------------------------------------------------------------
+
+MODELS=ldft
+
+EXE=cmdenab1
+RESEXE=cmdenabl.res
+
+EXEALL=cmdenab1.exe cmdenab2.exe cmdenab3.exe cmdenab4.exe
+EXEMAKE= $(CMD1) $(CMD2) $(CMD3) $(CMD4)
+
+CMD1=$(EXERULE)
+CMD2=$(CMD1:cmdenab1=cmdenab2)
+CMD3=$(CMD1:cmdenab1=cmdenab3)
+CMD4=$(CMD1:cmdenab1=cmdenab4)
+
+!include $(BCEXAMPLEDIR)\owlmake.gen

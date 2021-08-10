@@ -10,7 +10,7 @@
 ##*
 ##      --END-- ? ClassMarker [[Search]]
 ##      :^BOL
-    [[CPPType]] [[InternalName]] [[CPPArguments]];
+    [[CPPType]] [[InternalName]][[CPPArguments]];
 ##--END-- GetGlobal() == FALSE
 ##"//{{[[ClassName]]AUTO_TBL_END}}" [[ClassTMarker]]
 ##\\ClassTMarker [[ClassMarker]]

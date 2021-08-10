@@ -812,6 +812,7 @@ int PASCAL FAR WSAAsyncSelect(SOCKET s, HWND hWnd, u_int wMsg,
 
 int PASCAL FAR WSARecvEx (SOCKET s, char FAR * buf, int len, int FAR *flags);
 
+#if defined(__FLAT__)
 typedef struct _TRANSMIT_FILE_BUFFERS {
     PVOID Head;
     DWORD HeadLength;
@@ -830,6 +831,7 @@ TransmitFile (
     IN LPTRANSMIT_FILE_BUFFERS lpTransmitBuffers,
     IN DWORD dwReserved
     );
+#endif
 
 #ifdef __cplusplus
 }

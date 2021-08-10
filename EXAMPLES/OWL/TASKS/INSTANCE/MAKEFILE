@@ -1,0 +1,8 @@
+#----------------------------------------------------------------------------
+# ObjectWindows
+# Copyright (c) 1991, 1995 by Borland International, All Rights Reserved
+#----------------------------------------------------------------------------
+
+EXE = instance
+
+!include $(BCEXAMPLEDIR)\owlmake.gen

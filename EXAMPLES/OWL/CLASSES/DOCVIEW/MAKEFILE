@@ -1,0 +1,64 @@
+#----------------------------------------------------------------------------
+# ObjectWindows
+# Copyright (c) 1993, 1995 by Borland International, All Rights Reserved
+#
+#   Use MODEL=l|d|f to statically link documents and viewers to application
+#   Use MODEL=x to build dynamically loaded document/view components
+#
+# This example combines an empty desktop with a variety of documents/views.
+# The list of document/view modules is specified below by DOCVIEW = {obj list}.
+# Document/view object files may be added or removed as desired from this list.
+# Each document/view file must include document template(s) for their classes.
+# The following document/view files are included in this examples:
+#  editlist.cpp - templates only, uses ObjectWindows TListView and TEditView
+#  dumpview.cpp - hex dump viewer/editor using TFileDocument
+#  odlistvw.cpp - owner-draw listbox viewer derived from example TODListBox
+#  infoview.cpp - viewer which displays all properties from any document
+#  xcptview.cpp - view which generates and logs a variety of exceptions
+#  linedoc.cpp  - graphic line document with graphic and listbox viewers
+#  dvloader.cpp - pseudo-document & template used to load doc/view components
+# These modules may be statically linked with the base application, or may be
+# linked as DLL's for dynamic loading (dvloader must be statically linked).
+#
+# This application uses command-line switches to select the main frame class:
+#	        -s  SDI plain main window (TFrameWindow)
+#	        -m  MDI plain main window (TDecoratedFrame)
+#	        -d  SDI main window with status bar (TDecoratedFrame)
+#  (no switch) MDI main window with status bar (TDecoratedMDIFrame)
+#
+# Drag and drop from the file manager is supported by creating a document and
+# view from the first document template with a matching file filter. Template
+# order is dependent on the link ordering.  In the dynmically built doc/view
+# model, doc/view components (*.DVC) may be dropped or loaded from FileOpen.
+#----------------------------------------------------------------------------
+
+MODELS = ldfxt
+EXE    = docviewx
+DOCVIEW= editlist.obj dumpview.obj linedoc.obj xcptview.obj infoview.obj odlistvw.obj
+
+!if "$(MODEL)" != "x"   # static link of all document/view modules
+
+OBJEXE = docviewx.obj odlistbx.obj $(DOCVIEW)
+RESEXE = docviewx.res $(DOCVIEW:obj=res)
+!include $(BCEXAMPLEDIR)\owlmake.gen
+EXERULE = $(EXERULE) @echo Ignore previous warning about duplicate resource
+
+!else    # build each document/view module into a DLL, static link of dvloader
+
+EXEBIN = docviewc.exe
+OBJEXE = docviewx.obj dvloader.obj
+RESEXE = docviewx.res dvloader.res
+DLLRES = editlist
+DLLBIN = editlist.dvc
+DLLALL = $(DOCVIEW:obj=dvc)
+DLLMAKE= $(EDITLIST) $(INFOVIEW) $(LINEDOC) $(XCPTVIEW) $(DUMPVIEW) $(ODLISTVW)
+EDITLIST = $(DLLRULE:editlist.res=)
+XCPTVIEW = $(DLLRULE:editlist=xcptview)
+DUMPVIEW = $(DLLRULE:editlist=dumpview)
+INFOVIEW = $(DLLRULE:editlist=infoview)
+LINEDOC  = $(DLLRULE:editlist=linedoc)
+ODLISTX  = $(DLLRULE:editlist=odlistvw)
+ODLISTVW = $(ODLISTX:odlistvw.obj=odlistbx.obj odlistvw.obj)
+!include $(BCEXAMPLEDIR)\owlmake.gen
+
+!endif

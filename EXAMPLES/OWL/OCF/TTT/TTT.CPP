@@ -13,7 +13,7 @@
 //   TAboutBox - A TDialog box for info about TicTacToe
 //
 //----------------------------------------------------------------------------
-#include <owl/owlpch.h>
+#include <owl/pch.h>
 #include <owl/applicat.h>
 #include <owl/framewin.h>
 #include <owl/decframe.h>
@@ -78,6 +78,7 @@ BEGIN_REGISTRATION(DocReg)
  REGDATA(extension,  "ttt")
  REGDATA(docfilter,  "*.ttt")
  REGDATA(verb0,      "&Play")
+// REGFORMAT(0, ocrEmbedSource,  ocrContent, ocrIStorage, ocrGet)
  REGFORMAT(0, ocrEmbedSource,  ocrContent, ocrIStorage, ocrGet)
  REGFORMAT(1, ocrMetafilePict, ocrContent, ocrMfPict,   ocrGet)
 END_REGISTRATION
@@ -130,7 +131,9 @@ freeSquare(int mask, int i, int& square)
     mask ^= 0x111;
   else
     mask ^= 0x054;
-  for (int j = 0, test = 1; test; test <<= 1, j++)
+  int j;
+  int test;
+  for (j = 0, test = 1; test; test <<= 1, j++)
     if (test & mask)
       break;
   square = j;
@@ -363,7 +366,8 @@ TGame::ComputerTurn()
       MakeAMark(sq, ComputerSide);    // #4 is the middle of 3x3
 
     } else {
-      for (int i = 0; mask & 1; mask >>= 1)
+      int i;
+      for (i = 0; mask & 1; mask >>= 1)
         i++;
       MakeAMark(i, ComputerSide);
     }
@@ -453,9 +457,14 @@ class TSquare : public TButtonGadget {
     void      SetGlyph(int g);
     void      Paint(TDC& dc);
 
+	public:
+    static TGame* Game;
+
   protected:
     void      Activate(TPoint& p);
     int       Glyph;
+
+    void      LButtonDown(uint modKeys, TPoint& p);
 
   private:
     static TCelArray*  StateCels[3];
@@ -464,6 +473,7 @@ class TSquare : public TButtonGadget {
 typedef TSquare* PTSquare;
 
 TCelArray* TSquare::StateCels[SqsCount]; // entry for each state
+TGame* TSquare::Game = NULL;
 static TResId StateResId[SqsCount] = { IDB_EMPTY, IDB_X, IDB_O };
 
 TSquare::TSquare(int id)
@@ -498,7 +508,9 @@ TSquare::Paint(TDC& dc)
   // slip in the correct cel array just before painting
   //
   CelArray = StateCels[Glyph];
+  
   TButtonGadget::Paint(dc);
+  
   CelArray = 0;
 }
 
@@ -514,6 +526,16 @@ TSquare::Activate(TPoint& pt)
   } else
     CancelPressed(pt);
 }
+
+//
+// if game is over don't change button state
+//
+void      
+TSquare::LButtonDown(uint modKeys, TPoint& p)
+{
+	if (Game->IsPlaying ())
+  	TButtonGadget::LButtonDown(modKeys, p);
+}	
 
 //----------------------------------------------------------------------------
 class TGameView : public TToolBox {
@@ -544,12 +566,12 @@ class TGameView : public TToolBox {
     bool   EvOcViewClipData(TOcFormatData far&);
     bool   EvOcViewClose();
     bool   EvOcViewAttachWindow(bool attach);
-
+		bool 	 EvOcViewPartSize(TOcPartSize far& ps);
     void   CmGameNew();
     void   CmGameOptions();
 
     bool   IdleAction(long idleCount);
-    
+
     enum TEndReason { Scratch, UserWon, ComputerWon };
     void      GameOver(TEndReason why);
 
@@ -578,8 +600,8 @@ DEFINE_RESPONSE_TABLE1(TGameView, TToolBox)
   EV_OC_VIEWGETPALETTE,
   EV_OC_VIEWCLIPDATA,
   EV_OC_VIEWCLOSE,
-
-  EV_OC_VIEWATTACHWINDOW, //!
+  EV_OC_VIEWATTACHWINDOW, 
+  EV_OC_VIEWPARTSIZE,
 
   EV_COMMAND(CM_GAMENEW, CmGameNew),
   EV_COMMAND(CM_GAMEOPTIONS, CmGameOptions),
@@ -600,6 +622,7 @@ TGameView::TGameView(TGame& game)
   TOcApp* ocApp = Game.GetApplication()->OcApp;
   Document = new TOcDocument(*ocApp, 0, 0);  // temp file (deletes on close)
 
+	TSquare::Game = &game; // assign static member
   for (int i = 0; i < Dim; i++)
     for (int j = 0; j < Dim; j++) {
       TSquare* sq = new TSquare(CM_SQUARE + i*Dim + j);
@@ -685,7 +708,7 @@ TGameView::EvCommand(UINT id, HWND hWndCtl, UINT notifyCode)
 
     int square = id - CM_SQUARE;
 
-    if (Game.GetState(square) != SqsEmpty)// || !Game->IsPlaying())
+    if (Game.GetState(square) != SqsEmpty || !Game.IsPlaying())
       return 0;
 
     Game.UserTurn(square);
@@ -986,6 +1009,13 @@ TGameView::EvOcViewClipData(TOcFormatData far&)
   return 0;
 }
 
+bool 	 
+TGameView::EvOcViewPartSize(TOcPartSize far& ps)
+{
+	GetWindowRect (ps.PartRect);
+	return true;  
+}	
+
 void
 TGameView::CmGameNew()
 {
@@ -1152,6 +1182,7 @@ TGameApp::InitMainWindow()
   MainWindow = new TAppFrame(GetName(), "IDM_TTTGAME", this);
   MainWindow->Attr.Style &= ~(WS_THICKFRAME|WS_MAXIMIZEBOX);
   MainWindow->SetIcon(this, IDI_TTT);
+  MainWindow->SetFlag (wfPropagateIdle);
 }
 
 TUnknown*
@@ -1201,7 +1232,7 @@ OwlMain(int /*argc*/, char* /*argv*/ [])
     //
     if (Registrar->IsOptionSet(amAnyRegOption))
       return 0;  // Could display a msg box here if desired
-    
+
     return Registrar->Run();
   }
   catch (xmsg& x) {

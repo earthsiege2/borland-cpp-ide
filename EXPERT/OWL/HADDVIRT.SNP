@@ -9,7 +9,7 @@
 ##--BEGIN-- Search == TRUE
 ##^BOL
 //{{[[ClassName]]VIRTUAL_BEGIN}}
-public:
+  public:
 //{{[[ClassName]]VIRTUAL_END}}
 
 ##--END-- ? ResponseMarker [[Search]]

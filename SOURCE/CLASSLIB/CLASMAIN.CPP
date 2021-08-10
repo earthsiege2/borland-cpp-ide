@@ -1,31 +1,35 @@
-/*------------------------------------------------------------------------*/
-/*                                                                        */
-/*  CLASMAIN.CPP                                                          */
-/*                                                                        */
-/*  Copyright (c) 1991, 1994 Borland International                        */
-/*  All Rights Reserved                                                   */
-/*                                                                        */
-/*  Provides the LibMain() function for the DLL version                   */
-/*  of the class libraries                                                */
-/*                                                                        */
-/*------------------------------------------------------------------------*/
+//----------------------------------------------------------------------------
+// Borland Class Library
+// Copyright (c) 1991, 1996 by Borland International, All Rights Reserved
+//
+//$Revision:   5.6  $
+//
+// Provides the main entry point function for the DLL version of the class
+// libraries
+//----------------------------------------------------------------------------
+#include <classlib/pch.h>
+#include <classlib/defs.h>
+#include <services/wsysinc.h>
 
-#if !defined( __WINDOWS_H )
-#include <windows.h>
-#endif
+#if defined(BI_PLAT_WIN32)
 
-#if defined(__WIN32__)
-
-BOOL DllEntryPoint(HINSTANCE /*hInstance*/, DWORD /*flag*/, LPVOID)
+int WINAPI DllEntryPoint(HINSTANCE /*hInstance*/, DWORD /*flag*/, LPVOID)
 {
     return 1;
 }
 
-#else
+#elif defined(BI_PLAT_WIN16)
 
-extern "C" int FAR PASCAL LibMain( HANDLE, WORD, WORD, LPSTR )
+extern "C" int FAR PASCAL LibMain(HINSTANCE, WORD, WORD, LPSTR)
 {
     return 1;
+}
+
+#elif defined(BI_PLAT_OS2)
+
+int main()
+{
+    return 0;
 }
 
 #endif

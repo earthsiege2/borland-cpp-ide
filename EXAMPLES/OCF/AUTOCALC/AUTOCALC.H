@@ -1,9 +1,7 @@
 //----------------------------------------------------------------------------
-// ObjectComponents - (C) Copyright 1994 by Borland International
+// ObjectComponents - (C) Copyright 1994, 1996 by Borland International
 //----------------------------------------------------------------------------
-#include <ocf/ocfpch.h>
 #include <ocf/automacr.h>
-#include <ocf/ocreg.h>
 #include "autocalc.rh"
 
 class TUpdate : public TAutoProxy {
@@ -22,7 +20,7 @@ class TCalcButton : public TAutoBase {
     char* GetText(){static char b[21]; return ::GetWindowText(HWnd,b,20)? b:0;}
 
   DECLARE_AUTOCLASS(TCalcButton)
-    AUTOPROP  (Push, GetPush, SetPush, TAutoBool,)
+    AUTOPROP  (Push, GetPush, SetPush, bool,)
     AUTOPROP  (Text, GetText, SetText, TAutoString,)
 };
 
@@ -128,13 +126,13 @@ class TCalc : public TAutoBase {
     AUTODATA  (Accum,   Accum,     long,  )
     AUTODATA  (Opnd,    Opnd,      long,  )
     AUTODATA  (Op,      Op, short, AUTOVALIDATE(Val>=OP_NONE && Val<=OP_CLEAR))
-    AUTOFUNC0 (Eval,    Eval,      TAutoBool, )
+    AUTOFUNC0 (Eval,    Eval,      bool, )
     AUTOFUNC0V(Clear,   Clear,            )
     AUTOFUNC0V(Display, Display,          )
-    AUTOFUNC1 (Button,  Button,    TAutoBool, TAutoString,)
+    AUTOFUNC1 (Button,  Button,    bool, TAutoString,)
     AUTOPROPRO(Window,  GetWindow, TAutoObject<TCalcWindow>,  )
     AUTOFUNC1 (LookAt,  LookAtWindow, long, TAutoObject<const TCalcWindow>,)
     AUTODATARO(MyArray, Elem,      TAutoObjectByVal<TMyArray>,)
     AUTOPROXY (Update,  Update, )
-    AUTOPROP  (Visible, GetVisible, SetVisible, TAutoBool,)
+    AUTOPROP  (Visible, GetVisible, SetVisible, bool,)
 };

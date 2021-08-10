@@ -1,0 +1,203 @@
+//--------------------------------------------------------------------------
+// Object Scripting
+// Copyright (c) 1996 by Borland International, All Rights Reserved
+//
+// FASTOPEN.SPP: Fast Open. Opens files and projects based on a search
+//   path, so you don't have to navigate directories. Supports wildcards.
+//
+// USE: Set a search path in fastopen.cfg. Run script. When a fastopen
+//   dialog appears, enter a filespec for the file(s) to fastopen, enter a
+//   project name for the project to fastopen, or select Cancel for a
+//   normal open dialog. If your file is not found on the search path,
+//   fastopen raises a normal dialog.
+//
+// FILES: FASTOPEN.CFG, MSG.SPP, FILE.SPP, MISC.SPP
+//
+// NOTES: All fastopen.* files must reside in the same directory.
+//--------------------------------------------------------------------------
+print "fastopen.spp";
+
+//
+// IDE imports.
+//
+import IDE;
+import scriptEngine;
+
+//
+// Load support module(s).
+//
+if (!scriptEngine.IsLoaded("msg.spp")) scriptEngine.Load("msg.spp");
+if (!scriptEngine.IsLoaded("file.spp")) scriptEngine.Load("file.spp");
+if (!scriptEngine.IsLoaded("misc.spp")) scriptEngine.Load("misc.spp");
+
+Msg = new TMsg();                          // Message object.
+ModuleDir = GetModuleDir("fastopen.spp");  // Directory of this script.
+
+DataDirs = new array[];  // Array of directories in the search path.
+
+fastopen()
+{
+  declare sTmp = new String();
+
+  // Load configuration values.
+  //
+  declare file = new TConfigFile(ModuleDir + "\\fastopen.cfg");
+  declare searchPath = file.GetValue("SearchPath", "");
+  file.Close();
+
+  // Parse the search path.
+  //
+  declare position = 0;
+  declare i = 0;
+  sTmp.Text = searchPath;
+  do {
+    sTmp = sTmp.Trim();
+    position = sTmp.Index(";");
+    DataDirs[i] = sTmp.SubString(0, position - 1).Text;
+    sTmp = sTmp.SubString(position);
+    i++;
+  } while (position);
+}
+
+//
+// Hook File | Open for fast-opening.
+//
+on IDE:>FileOpen(name, toolName)
+{
+  //
+  // Pass if this is any script invocation of the method--we only want a
+  // fast-open dialog if the user selects the menu item, in which case,
+  // the parms are unitialized.
+  //
+  if (initialized(name)) {
+    return pass(name, toolName);
+  }
+
+  FastOpen("File");
+}
+
+//
+// Hook Project | Open project for fast-opening.
+//
+on IDE:>ProjectOpenProject(name)
+{
+  //
+  // Pass if this is any script invocation of the method--we only want a
+  // fast-open dialog if the user selects the menu item, in which case,
+  // the parms are unitialized.
+  //
+  if (initialized(name)) {
+    return pass(name);
+  }
+
+  FastOpen("Project");
+}
+
+//
+// Fast-opens a file or project. Pass "File" or "Project."
+//
+FastOpen(what)
+{
+  // Get the last successful project name or filespec from the config file.
+  //
+  declare file = new TConfigFile(ModuleDir + "\\fastopen.cfg");
+  declare key = (what == "File" ? "LastFileOpen" : "LastProjOpen");
+  declare lastOpen = file.GetValue(key, "");
+  file.Close();
+
+  // Get the project name or filespec from the user.
+  //
+  declare prompt = "OK for fast-open, Cancel for standard open";
+  declare openSpec = IDE.SimpleDialog(prompt, lastOpen);
+
+  // No name given. Open the normal dialog and go home.
+  //
+  if (!openSpec) {
+    if (what == "File") {
+      IDE.FileOpen(NULL, NULL);
+    }
+    else {
+      IDE.ProjectOpenProject(NULL);
+    }
+    return;
+  }
+
+  //
+  // Add extension if dealing with a project. Save the simple name for
+  // possible writing to config file.
+  //
+  declare projectOpenSpec;
+  if (what == "Project") {
+    projectOpenSpec = openSpec;
+    openSpec = openSpec + ".ide";
+  }
+
+  //
+  // Local function: For files, opens any matches in any search path
+  // directory. For Projects, opens the first found in a search path
+  // directory. Returns TRUE on success.
+  //
+  OpenMatchingFiles()
+  {
+    declare dir;
+    declare fileName;
+    declare gotOne = FALSE;
+    iterate (dir; DataDirs) {
+      fileName = FindFirstFile(dir + "\\" + openSpec);
+      if (fileName) {  // File found, open it.
+        do {
+          if (what == "File") {
+            IDE.FileOpen(dir + "\\" + fileName, "EditText");
+            gotOne = TRUE;
+          }
+          else {
+            IDE.ProjectOpenProject(dir + "\\" + fileName);
+            return TRUE;  // Only one project can be opened!
+          }
+          fileName = FindNextFile();
+        } while (fileName);
+      }
+    }
+    return gotOne;
+  }
+
+  // Open matches.
+  //
+  if (OpenMatchingFiles()) {  // Success.
+
+    // Write the filename to the configuration file.
+    //
+    file = NULL;
+    file = new TConfigFile(ModuleDir + "\\fastopen.cfg");
+    declare keyValue = (what == "File" ? openSpec : projectOpenSpec);
+    file.WriteValue(key, keyValue);
+    file.Close(TRUE);
+  }
+  else {  // Nothing found.
+
+    //
+    // Irritate the user with a message. Note we supress the message if the
+    // the file exists (although not on the search path) because FileOpen
+    // will open it when we pass the filespec as an initial value. This
+    // covers rare cases such as fully-qualified filenames and filenames in
+    // in the current directory, which would otherwise open right after
+    // we (correctly) said we couldn't "fast-open" them.
+    //
+    if (!FileExists(openSpec)) {
+      Msg.Info("Could not fast-open " + openSpec +
+               ". Be sure it is on the search path.");
+    }
+
+    //
+    // Open the normal dialog. For FileOpen, use the filename as a default
+    // value for the filename field.
+    //
+    if (what == "File") {
+      IDE.FileOpen(openSpec, NULL);
+    }
+    else {
+      IDE.ProjectOpenProject(NULL);
+    }
+  }
+}
+

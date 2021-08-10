@@ -1,0 +1,16 @@
+#----------------------------------------------------------------------------
+# ObjectWindows
+# Copyright (c) 1995, 1995 by Borland International, All Rights Reserved
+#----------------------------------------------------------------------------
+
+MODELS = dft
+SYSTEMS = WIN32
+
+EXERES = xexe
+EXEALL = celapp.exe drawcel.exe
+EXEMAKE = $(CELAPP) $(DRAWCEL)
+
+CELAPP = $(EXERULE:xexe=celapp)
+DRAWCEL = $(EXERULE:xexe=drawcel)
+
+!include $(BCEXAMPLEDIR)\owlmake.gen

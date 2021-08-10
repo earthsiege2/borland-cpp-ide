@@ -1,591 +1,562 @@
-LIBRARY     USER32.DLL
+    LIBRARY USER32
+    EXPORTS
 
-EXPORTS
-    ActivateKeyboardLayout         @1   
-    AdjustWindowRect               @2   
-    AdjustWindowRectEx             @3   
-    AnyPopup                       @4   
-    AppendMenuA                    @5   
-    AppendMenuW                    @6   
-    ArrangeIconicWindows           @7   
-    AttachThreadInput              @8   
-    BeginDeferWindowPos            @9   
-    BeginPaint                     @10  
-    BringWindowToTop               @11  
-    BroadcastSystemMessage         @12  
-    CalcChildScroll                @13  
-    CallMsgFilter                  @14  
-    CallMsgFilterA                 @15  
-    CallMsgFilterW                 @16  
-    CallNextHookEx                 @17  
-    CallWindowProcA                @18  
-    CallWindowProcW                @19  
-    CascadeChildWindows            @20  
-    CascadeWindows                 @21  
-    ChangeClipboardChain           @22  
-    ChangeMenuA                    @23  
-    ChangeMenuW                    @24  
-    CharLowerA                     @25  
-    CharLowerBuffA                 @26  
-    CharLowerBuffW                 @27  
-    CharLowerW                     @28  
-    CharNextA                      @29  
-    CharNextExA                    @30  
-    CharNextExW                    @31  
-    CharNextW                      @32  
-    CharPrevA                      @33  
-    CharPrevExA                    @34  
-    CharPrevExW                    @35  
-    CharPrevW                      @36  
-    CharToOemA                     @37  
-    CharToOemBuffA                 @38  
-    CharToOemBuffW                 @39  
-    CharToOemW                     @40  
-    CharUpperA                     @41  
-    CharUpperBuffA                 @42  
-    CharUpperBuffW                 @43  
-    CharUpperW                     @44  
-    CheckDlgButton                 @45  
-    CheckMenuItem                  @46  
-    CheckMenuRadioItem             @47  
-    CheckRadioButton               @48  
-    ChildWindowFromPoint           @49  
-    ChildWindowFromPointEx         @50  
-    ClientThreadConnect            @51  
-    ClientToScreen                 @52  
-    ClipCursor                     @53  
-    CloseClipboard                 @54  
-    CloseDesktop                   @55  
-    CloseWindow                    @56  
-    CloseWindowStation             @57  
-    CopyAcceleratorTableA          @58  
-    CopyAcceleratorTableW          @59  
-    CopyIcon                       @60  
-    CopyImage                      @61  
-    CopyRect                       @62  
-    CountClipboardFormats          @63  
-    CreateAcceleratorTableA        @64  
-    CreateAcceleratorTableW        @65  
-    CreateCaret                    @66  
-    CreateCursor                   @67  
-    CreateDesktopA                 @68  
-    CreateDesktopW                 @69  
-    CreateDialogIndirectParamA     @70  
-    CreateDialogIndirectParamAorW  @71  
-    CreateDialogIndirectParamW     @72  
-    CreateDialogParamA             @73  
-    CreateDialogParamW             @74  
-    CreateIcon                     @75  
-    CreateIconFromResource         @76  
-    CreateIconFromResourceEx       @77  
-    CreateIconIndirect             @78  
-    CreateMDIWindowA               @79  
-    CreateMDIWindowW               @80  
-    CreateMenu                     @81  
-    CreatePopupMenu                @82  
-    CreateWindowExA                @83  
-    CreateWindowExW                @84  
-    CreateWindowStationA           @85  
-    CreateWindowStationW           @86  
-    DdeAbandonTransaction          @87  
-    DdeAccessData                  @88  
-    DdeAddData                     @89  
-    DdeClientTransaction           @90  
-    DdeCmpStringHandles            @91  
-    DdeConnect                     @92  
-    DdeConnectList                 @93  
-    DdeCreateDataHandle            @94  
-    DdeCreateStringHandleA         @95  
-    DdeCreateStringHandleW         @96  
-    DdeDisconnect                  @97  
-    DdeDisconnectList              @98  
-    DdeEnableCallback              @99  
-    DdeFreeDataHandle              @100 
-    DdeFreeStringHandle            @101 
-    DdeGetData                     @102 
-    DdeGetLastError                @103 
-    DdeGetQualityOfService         @104 
-    DdeImpersonateClient           @105 
-    DdeInitializeA                 @106 
-    DdeInitializeW                 @107 
-    DdeKeepStringHandle            @108 
-    DdeNameService                 @109 
-    DdePostAdvise                  @110 
-    DdeQueryConvInfo               @111 
-    DdeQueryNextServer             @112 
-    DdeQueryStringA                @113 
-    DdeQueryStringW                @114 
-    DdeReconnect                   @115 
-    DdeSetQualityOfService         @116 
-    DdeSetUserHandle               @117 
-    DdeUnaccessData                @118 
-    DdeUninitialize                @119 
-    DefDlgProcA                    @120 
-    DefDlgProcW                    @121 
-    DefFrameProcA                  @122 
-    DefFrameProcW                  @123 
-    DefMDIChildProcA               @124 
-    DefMDIChildProcW               @125 
-    DefWindowProcA                 @126 
-    DefWindowProcW                 @127 
-    DeferWindowPos                 @128 
-    DeleteMenu                     @129 
-    DestroyAcceleratorTable        @130 
-    DestroyCaret                   @131 
-    DestroyCursor                  @132 
-    DestroyIcon                    @133 
-    DestroyMenu                    @134 
-    DestroyWindow                  @135 
-    DialogBoxIndirectParamA        @136 
-    DialogBoxIndirectParamAorW     @137 
-    DialogBoxIndirectParamW        @138 
-    DialogBoxParamA                @139 
-    DialogBoxParamW                @140 
-    DispatchMessageA               @141 
-    DispatchMessageW               @142 
-    DlgDirListA                    @143 
-    DlgDirListComboBoxA            @144 
-    DlgDirListComboBoxW            @145 
-    DlgDirListW                    @146 
-    DlgDirSelectComboBoxExA        @147 
-    DlgDirSelectComboBoxExW        @148 
-    DlgDirSelectExA                @149 
-    DlgDirSelectExW                @150 
-    DragDetect                     @151 
-    DragObject                     @152 
-    DrawAnimatedRects              @153 
-    DrawCaption                    @154 
-    DrawEdge                       @155 
-    DrawFocusRect                  @156 
-    DrawFrame                      @157 
-    DrawFrameControl               @158 
-    DrawIcon                       @159 
-    DrawIconEx                     @160 
-    DrawMenuBar                    @161 
-    DrawStateA                     @162 
-    DrawStateW                     @163 
-    DrawTextA                      @164 
-    DrawTextExA                    @165 
-    DrawTextExW                    @166 
-    DrawTextW                      @167 
-    EditWndProc                    @168 
-    EmptyClipboard                 @169 
-    EnableMenuItem                 @170 
-    EnableScrollBar                @171 
-    EnableWindow                   @172 
-    EndDeferWindowPos              @173 
-    EndDialog                      @174 
-    EndMenu                        @175 
-    EndPaint                       @176 
-    EndTask                        @177 
-    EnumChildWindows               @178 
-    EnumClipboardFormats           @179 
-    EnumDesktopsA                  @180 
-    EnumDesktopsW                  @181 
-    EnumDisplayDeviceModesA        @182 
-    EnumDisplayDeviceModesW        @183 
-    EnumDisplayDevicesA            @184 
-    EnumDisplayDevicesW            @185 
-    EnumPropsA                     @186 
-    EnumPropsExA                   @187 
-    EnumPropsExW                   @188 
-    EnumPropsW                     @189 
-    EnumThreadWindows              @190 
-    EnumWindowStationsA            @191 
-    EnumWindowStationsW            @192 
-    EnumWindows                    @193 
-    EqualRect                      @194 
-    ExcludeUpdateRgn               @195 
-    ExitWindowsEx                  @196 
-    FillRect                       @197 
-    FindWindowA                    @198 
-    FindWindowExA                  @199 
-    FindWindowExW                  @200 
-    FindWindowW                    @201 
-    FlashWindow                    @202 
-    FrameRect                      @203 
-    FreeDDElParam                  @204 
-    GetActiveWindow                @205 
-    GetAppCompatFlags              @206 
-    GetAsyncKeyState               @207 
-    GetCapture                     @208 
-    GetCaretBlinkTime              @209 
-    GetCaretPos                    @210 
-    GetClassInfoA                  @211 
-    GetClassInfoExA                @212 
-    GetClassInfoExW                @213 
-    GetClassInfoW                  @214 
-    GetClassLongA                  @215 
-    GetClassLongW                  @216 
-    GetClassNameA                  @217 
-    GetClassNameW                  @218 
-    GetClassWord                   @219 
-    GetClientRect                  @220 
-    GetClipCursor                  @221 
-    GetClipboardData               @222 
-    GetClipboardFormatNameA        @223 
-    GetClipboardFormatNameW        @224 
-    GetClipboardOwner              @225 
-    GetClipboardViewer             @226 
-    GetCursor                      @227 
-    GetCursorInfo                  @228 
-    GetCursorPos                   @229 
-    GetDC                          @230 
-    GetDCEx                        @231 
-    GetDesktopWindow               @232 
-    GetDialogBaseUnits             @233 
-    GetDlgCtrlID                   @234 
-    GetDlgItem                     @235 
-    GetDlgItemInt                  @236 
-    GetDlgItemTextA                @237 
-    GetDlgItemTextW                @238 
-    GetDoubleClickTime             @239 
-    GetFocus                       @240 
-    GetForegroundWindow            @241 
-    GetIconInfo                    @242 
-    GetInputDesktop                @243 
-    GetInputState                  @244 
-    GetInternalWindowPos           @245 
-    GetKBCodePage                  @246 
-    GetKeyNameTextA                @247 
-    GetKeyNameTextW                @248 
-    GetKeyState                    @249 
-    GetKeyboardLayout              @250 
-    GetKeyboardLayoutList          @251 
-    GetKeyboardLayoutNameA         @252 
-    GetKeyboardLayoutNameW         @253 
-    GetKeyboardState               @254 
-    GetKeyboardType                @255 
-    GetLastActivePopup             @256 
-    GetMenu                        @257 
-    GetMenuCheckMarkDimensions     @258 
-    GetMenuContextHelpId           @259 
-    GetMenuDefaultItem             @260 
-    GetMenuIndex                   @261 
-    GetMenuItemCount               @262 
-    GetMenuItemID                  @263 
-    GetMenuItemInfoA               @264 
-    GetMenuItemInfoW               @265 
-    GetMenuItemRect                @266 
-    GetMenuState                   @267 
-    GetMenuStringA                 @268 
-    GetMenuStringW                 @269 
-    GetMessageA                    @270 
-    GetMessageExtraInfo            @271 
-    GetMessagePos                  @272 
-    GetMessageTime                 @273 
-    GetMessageW                    @274 
-    GetNextDlgGroupItem            @275 
-    GetNextDlgTabItem              @276 
-    GetOpenClipboardWindow         @277 
-    GetParent                      @278 
-    GetPriorityClipboardFormat     @279 
-    GetProcessWindowStation        @280 
-    GetPropA                       @281 
-    GetPropW                       @282 
-    GetQueueStatus                 @283 
-    GetScrollInfo                  @284 
-    GetScrollPos                   @285 
-    GetScrollRange                 @286 
-    GetShellWindow                 @287 
-    GetSubMenu                     @288 
-    GetSysColor                    @289 
-    GetSysColorBrush               @290 
-    GetSystemMenu                  @291 
-    GetSystemMetrics               @292 
-    GetTabbedTextExtentA           @293 
-    GetTabbedTextExtentW           @294 
-    GetThreadDesktop               @295 
-    GetTopWindow                   @296 
-    GetUpdateRect                  @297 
-    GetUpdateRgn                   @298 
-    GetUserObjectInformationA      @299 
-    GetUserObjectInformationW      @300 
-    GetUserObjectSecurity          @301 
-    GetWindow                      @302 
-    GetWindowContextHelpId         @303 
-    GetWindowDC                    @304 
-    GetWindowLongA                 @305 
-    GetWindowLongW                 @306 
-    GetWindowPlacement             @307 
-    GetWindowRect                  @308 
-    GetWindowTextA                 @309 
-    GetWindowTextLengthA           @310 
-    GetWindowTextLengthW           @311 
-    GetWindowTextW                 @312 
-    GetWindowThreadProcessId       @313 
-    GetWindowWord                  @314 
-    GrayStringA                    @315 
-    GrayStringW                    @316 
-    HideCaret                      @317 
-    HiliteMenuItem                 @318 
-    ImpersonateDdeClientWindow     @319 
-    InSendMessage                  @320 
-    InflateRect                    @321 
-    InsertMenuA                    @322 
-    InsertMenuItemA                @323 
-    InsertMenuItemW                @324 
-    InsertMenuW                    @325 
-    InternalGetWindowText          @326 
-    IntersectRect                  @327 
-    InvalidateRect                 @328 
-    InvalidateRgn                  @329 
-    InvertRect                     @330 
-    IsCharAlphaA                   @331 
-    IsCharAlphaNumericA            @332 
-    IsCharAlphaNumericW            @333 
-    IsCharAlphaW                   @334 
-    IsCharLowerA                   @335 
-    IsCharLowerW                   @336 
-    IsCharUpperA                   @337 
-    IsCharUpperW                   @338 
-    IsChild                        @339 
-    IsClipboardFormatAvailable     @340 
-    IsDialogMessage                @341 
-    IsDialogMessageA               @342 
-    IsDialogMessageW               @343 
-    IsDlgButtonChecked             @344 
-    IsIconic                       @345 
-    IsMenu                         @346 
-    IsRectEmpty                    @347 
-    IsWindow                       @348 
-    IsWindowEnabled                @349 
-    IsWindowUnicode                @350 
-    IsWindowVisible                @351 
-    IsZoomed                       @352 
-    KillSystemTimer                @353 
-    KillTimer                      @354 
-    LoadAcceleratorsA              @355 
-    LoadAcceleratorsW              @356 
-    LoadBitmapA                    @357 
-    LoadBitmapW                    @358 
-    LoadCursorA                    @359 
-    LoadCursorFromFileA            @360 
-    LoadCursorFromFileW            @361 
-    LoadCursorW                    @362 
-    LoadIconA                      @363 
-    LoadIconW                      @364 
-    LoadImageA                     @365 
-    LoadImageW                     @366 
-    LoadKeyboardLayoutA            @367 
-    LoadKeyboardLayoutW            @368 
-    LoadLocalFonts                 @369 
-    LoadMenuA                      @370 
-    LoadMenuIndirectA              @371 
-    LoadMenuIndirectW              @372 
-    LoadMenuW                      @373 
-    LoadRemoteFonts                @374 
-    LoadStringA                    @375 
-    LoadStringW                    @376 
-    LockWindowStation              @377 
-    LockWindowUpdate               @378 
-    LookupIconIdFromDirectory      @379 
-    LookupIconIdFromDirectoryEx    @380 
-    MBToWCSEx                      @381 
-    MapDialogRect                  @382 
-    MapVirtualKeyA                 @383 
-    MapVirtualKeyExA               @384 
-    MapVirtualKeyW                 @385 
-    MapWindowPoints                @386 
-    MenuItemFromPoint              @387 
-    MenuWindowProcA                @388 
-    MenuWindowProcW                @389 
-    MessageBeep                    @390 
-    MessageBoxA                    @391 
-    MessageBoxExA                  @392 
-    MessageBoxExW                  @393 
-    MessageBoxIndirectA            @394 
-    MessageBoxIndirectW            @395 
-    MessageBoxW                    @396 
-    ModifyMenuA                    @397 
-    ModifyMenuW                    @398 
-    MoveWindow                     @399 
-    MsgWaitForMultipleObjects      @400 
-    OemKeyScan                     @401 
-    OemToCharA                     @402 
-    OemToCharBuffA                 @403 
-    OemToCharBuffW                 @404 
-    OemToCharW                     @405 
-    OffsetRect                     @406 
-    OpenClipboard                  @407 
-    OpenDesktopA                   @408 
-    OpenDesktopW                   @409 
-    OpenIcon                       @410 
-    OpenInputDesktop               @411 
-    OpenWindowStationA             @412 
-    OpenWindowStationW             @413 
-    PackDDElParam                  @414 
-    PaintDesktop                   @415 
-    PeekMessageA                   @416 
-    PeekMessageW                   @417 
-    PlaySoundEvent                 @418 
-    PostMessageA                   @419 
-    PostMessageW                   @420 
-    PostQuitMessage                @421 
-    PostThreadMessageA             @422 
-    PostThreadMessageW             @423 
-    PtInRect                       @424 
-    QuerySendMessage               @425 
-    RedrawWindow                   @426 
-    RegisterClassA                 @427 
-    RegisterClassExA               @428 
-    RegisterClassExW               @429 
-    RegisterClassW                 @430 
-    RegisterClipboardFormatA       @431 
-    RegisterClipboardFormatW       @432 
-    RegisterHotKey                 @433 
-    RegisterLogonProcess           @434 
-    RegisterSystemThread           @435 
-    RegisterTasklist               @436 
-    RegisterWindowMessageA         @437 
-    RegisterWindowMessageW         @438 
-    ReleaseCapture                 @439 
-    ReleaseDC                      @440 
-    RemoveMenu                     @441 
-    RemovePropA                    @442 
-    RemovePropW                    @443 
-    ReplyMessage                   @444 
-    ResetDisplay                   @445 
-    ReuseDDElParam                 @446 
-    ScreenToClient                 @447 
-    ScrollChildren                 @448 
-    ScrollDC                       @449 
-    ScrollWindow                   @450 
-    ScrollWindowEx                 @451 
-    SendDlgItemMessageA            @452 
-    SendDlgItemMessageW            @453 
-    SendMessageA                   @454 
-    SendMessageCallbackA           @455 
-    SendMessageCallbackW           @456 
-    SendMessageTimeoutA            @457 
-    SendMessageTimeoutW            @458 
-    SendMessageW                   @459 
-    SendNotifyMessageA             @460 
-    SendNotifyMessageW             @461 
-    ServerSetFunctionPointers      @462 
-    SetActiveWindow                @463 
-    SetCapture                     @464 
-    SetCaretBlinkTime              @465 
-    SetCaretPos                    @466 
-    SetClassLongA                  @467 
-    SetClassLongW                  @468 
-    SetClassWord                   @469 
-    SetClipboardData               @470 
-    SetClipboardViewer             @471 
-    SetCursor                      @472 
-    SetCursorContents              @473 
-    SetCursorPos                   @474 
-    SetDebugErrorLevel             @475 
-    SetDeskWallpaper               @476 
-    SetDlgItemInt                  @477 
-    SetDlgItemTextA                @478 
-    SetDlgItemTextW                @479 
-    SetDoubleClickTime             @480 
-    SetFocus                       @481 
-    SetForegroundWindow            @482 
-    SetInternalWindowPos           @483 
-    SetKeyboardState               @484 
-    SetLastErrorEx                 @485 
-    SetLogonNotifyWindow           @486 
-    SetMenu                        @487 
-    SetMenuContextHelpId           @488 
-    SetMenuDefaultItem             @489 
-    SetMenuItemBitmaps             @490 
-    SetMenuItemInfoA               @491 
-    SetMenuItemInfoW               @492 
-    SetMessageExtraInfo            @493 
-    SetMessageQueue                @494 
-    SetParent                      @495 
-    SetProcessWindowStation        @496 
-    SetPropA                       @497 
-    SetPropW                       @498 
-    SetRect                        @499 
-    SetRectEmpty                   @500 
-    SetScrollInfo                  @501 
-    SetScrollPos                   @502 
-    SetScrollRange                 @503 
-    SetShellWindow                 @504 
-    SetSysColors                   @505 
-    SetSysColorsTemp               @506 
-    SetSystemCursor                @507 
-    SetSystemMenu                  @508 
-    SetSystemTimer                 @509 
-    SetThreadDesktop               @510 
-    SetTimer                       @511 
-    SetUserObjectInformationA      @512 
-    SetUserObjectInformationW      @513 
-    SetUserObjectSecurity          @514 
-    SetWindowContextHelpId         @515 
-    SetWindowFullScreenState       @516 
-    SetWindowLongA                 @517 
-    SetWindowLongW                 @518 
-    SetWindowPlacement             @519 
-    SetWindowPos                   @520 
-    SetWindowStationUser           @521 
-    SetWindowTextA                 @522 
-    SetWindowTextW                 @523 
-    SetWindowWord                  @524 
-    SetWindowsHookA                @525 
-    SetWindowsHookExA              @526 
-    SetWindowsHookExW              @527 
-    SetWindowsHookW                @528 
-    ShowCaret                      @529 
-    ShowCursor                     @530 
-    ShowOwnedPopups                @531 
-    ShowScrollBar                  @532 
-    ShowStartGlass                 @533 
-    ShowWindow                     @534 
-    ShowWindowAsync                @535 
-    SubtractRect                   @536 
-    SwapMouseButton                @537 
-    SwitchDesktop                  @538 
-    SwitchToThisWindow             @539 
-    SystemParametersInfoA          @540 
-    SystemParametersInfoW          @541 
-    TabbedTextOutA                 @542 
-    TabbedTextOutW                 @543 
-    TileChildWindows               @544 
-    TileWindows                    @545 
-    ToAscii                        @546 
-    ToAsciiEx                      @547 
-    ToUnicode                      @548 
-    TrackPopupMenu                 @549 
-    TrackPopupMenuEx               @550 
-    TranslateAccelerator           @551 
-    TranslateAcceleratorA          @552 
-    TranslateAcceleratorW          @553 
-    TranslateCharsetInfo           @554 
-    TranslateMDISysAccel           @555 
-    TranslateMessage               @556 
-    UnhookWindowsHook              @557 
-    UnhookWindowsHookEx            @558 
-    UnionRect                      @559 
-    UnloadKeyboardLayout           @560 
-    UnlockWindowStation            @561 
-    UnpackDDElParam                @562 
-    UnregisterClassA               @563 
-    UnregisterClassW               @564 
-    UnregisterHotKey               @565 
-    UpdatePerUserSystemParameters  @566 
-    UpdateWindow                   @567 
-    UserClientDllInitialize        @568 
-    UserRealizePalette             @569 
-    UserRegisterWowHandlers        @570 
-    ValidateRect                   @571 
-    ValidateRgn                    @572 
-    VkKeyScanA                     @573 
-    VkKeyScanExA                   @574 
-    VkKeyScanExW                   @575 
-    VkKeyScanW                     @576 
-    WaitForInputIdle               @577 
-    WaitMessage                    @578 
-    WinHelpA                       @579 
-    WinHelpW                       @580 
-    WindowFromDC                   @581 
-    WindowFromPoint                @582 
-    keybd_event                    @583 
-    mouse_event                    @584 
-    _wsprintfA  = wsprintfA
-    _wsprintfW  = wsprintfW
-    wvsprintfA                     @587 
-    wvsprintfW                     @588 
+        ActivateKeyboardLayout
+        AdjustWindowRect
+        AdjustWindowRectEx
+        AnyPopup
+        AppendMenuA
+        AppendMenuW
+        ArrangeIconicWindows
+        AttachThreadInput
+        BeginDeferWindowPos
+        BeginPaint
+        BringWindowToTop
+        BroadcastSystemMessage
+        CalcChildScroll
+        CallMsgFilter
+        CallMsgFilterA
+        CallMsgFilterW
+        CallNextHookEx
+        CallWindowProcA
+        CallWindowProcW
+        CascadeChildWindows
+        CascadeWindows
+        ChangeClipboardChain
+        ChangeDisplaySettingsA
+        ChangeDisplaySettingsW
+        ChangeMenuA
+        ChangeMenuW
+        CharLowerA
+        CharLowerBuffA
+        CharLowerBuffW
+        CharLowerW
+        CharNextA
+        CharNextExA
+        CharNextExW
+        CharNextW
+        CharPrevA
+        CharPrevExA
+        CharPrevExW
+        CharPrevW
+        CharToOemA
+        CharToOemBuffA
+        CharToOemBuffW
+        CharToOemW
+        CharUpperA
+        CharUpperBuffA
+        CharUpperBuffW
+        CharUpperW
+        CheckDlgButton
+        CheckMenuItem
+        CheckMenuRadioItem
+        CheckRadioButton
+        ChildWindowFromPoint
+        ChildWindowFromPointEx
+        ClientToScreen
+        ClipCursor
+        CloseClipboard
+        CloseDesktop
+        CloseWindow
+        CloseWindowStation
+        CopyAcceleratorTableA
+        CopyAcceleratorTableW
+        CopyIcon
+        CopyImage
+        CopyRect
+        CountClipboardFormats
+        CreateAcceleratorTableA
+        CreateAcceleratorTableW
+        CreateCaret
+        CreateCursor
+        CreateDesktopA
+        CreateDesktopW
+        CreateDialogIndirectParamA
+        CreateDialogIndirectParamW
+        CreateDialogParamA
+        CreateDialogParamW
+        CreateIcon
+        CreateIconFromResource
+        CreateIconFromResourceEx
+        CreateIconIndirect
+        CreateMDIWindowA
+        CreateMDIWindowW
+        CreateMenu
+        CreatePopupMenu
+        CreateWindowExA
+        CreateWindowExW
+        CreateWindowStationA
+        CreateWindowStationW
+        DdeAbandonTransaction
+        DdeAccessData
+        DdeAddData
+        DdeClientTransaction
+        DdeCmpStringHandles
+        DdeConnect
+        DdeConnectList
+        DdeCreateDataHandle
+        DdeCreateStringHandleA
+        DdeCreateStringHandleW
+        DdeDisconnect
+        DdeDisconnectList
+        DdeEnableCallback
+        DdeFreeDataHandle
+        DdeFreeStringHandle
+        DdeGetData
+        DdeGetLastError
+        DdeGetQualityOfService
+        DdeImpersonateClient
+        DdeInitializeA
+        DdeInitializeW
+        DdeKeepStringHandle
+        DdeNameService
+        DdePostAdvise
+        DdeQueryConvInfo
+        DdeQueryNextServer
+        DdeQueryStringA
+        DdeQueryStringW
+        DdeReconnect
+        DdeSetQualityOfService
+        DdeSetUserHandle
+        DdeUnaccessData
+        DdeUninitialize
+        DefDlgProcA
+        DefDlgProcW
+        DefFrameProcA
+        DefFrameProcW
+        DefMDIChildProcA
+        DefMDIChildProcW
+        DefWindowProcA
+        DefWindowProcW
+        DeferWindowPos
+        DeleteMenu
+        DestroyAcceleratorTable
+        DestroyCaret
+        DestroyCursor
+        DestroyIcon
+        DestroyMenu
+        DestroyWindow
+        DialogBoxIndirectParamA
+        DialogBoxIndirectParamW
+        DialogBoxParamA
+        DialogBoxParamW
+        DispatchMessageA
+        DispatchMessageW
+        DlgDirListA
+        DlgDirListComboBoxA
+        DlgDirListComboBoxW
+        DlgDirListW
+        DlgDirSelectComboBoxExA
+        DlgDirSelectComboBoxExW
+        DlgDirSelectExA
+        DlgDirSelectExW
+        DragDetect
+        DragObject
+        DrawAnimatedRects
+        DrawCaption
+        DrawEdge
+        DrawFocusRect
+        DrawFrame
+        DrawFrameControl
+        DrawIcon
+        DrawIconEx
+        DrawMenuBar
+        DrawStateA
+        DrawStateW
+        DrawTextA
+        DrawTextExA
+        DrawTextExW
+        DrawTextW
+        EditWndProc
+        EmptyClipboard
+        EnableMenuItem
+        EnableScrollBar
+        EnableWindow
+        EndDeferWindowPos
+        EndDialog
+        EndPaint
+        EnumChildWindows
+        EnumClipboardFormats
+        EnumDesktopWindows
+        EnumDesktopsA
+        EnumDesktopsW
+        EnumDisplaySettingsA
+        EnumDisplaySettingsW
+        EnumPropsA
+        EnumPropsExA
+        EnumPropsExW
+        EnumPropsW
+        EnumThreadWindows
+        EnumWindowStationsA
+        EnumWindowStationsW
+        EnumWindows
+        EqualRect
+        ExcludeUpdateRgn
+        ExitWindowsEx
+        FillRect
+        FindWindowA
+        FindWindowExA
+        FindWindowExW
+        FindWindowW
+        FlashWindow
+        FrameRect
+        FreeDDElParam
+        GetActiveWindow
+        GetAsyncKeyState
+        GetCapture
+        GetCaretBlinkTime
+        GetCaretPos
+        GetClassInfoA
+        GetClassInfoExA
+        GetClassInfoExW
+        GetClassInfoW
+        GetClassLongA
+        GetClassLongW
+        GetClassNameA
+        GetClassNameW
+        GetClassWord
+        GetClientRect
+        GetClipCursor
+        GetClipboardData
+        GetClipboardFormatNameA
+        GetClipboardFormatNameW
+        GetClipboardOwner
+        GetClipboardViewer
+        GetCursor
+        GetCursorPos
+        GetDC
+        GetDCEx
+        GetDesktopWindow
+        GetDialogBaseUnits
+        GetDlgCtrlID
+        GetDlgItem
+        GetDlgItemInt
+        GetDlgItemTextA
+        GetDlgItemTextW
+        GetDoubleClickTime
+        GetFocus
+        GetForegroundWindow
+        GetIconInfo
+        GetInputDesktop
+        GetInputState
+        GetKBCodePage
+        GetKeyNameTextA
+        GetKeyNameTextW
+        GetKeyState
+        GetKeyboardLayout
+        GetKeyboardLayoutList
+        GetKeyboardLayoutNameA
+        GetKeyboardLayoutNameW
+        GetKeyboardState
+        GetKeyboardType
+        GetLastActivePopup
+        GetMenu
+        GetMenuCheckMarkDimensions
+        GetMenuContextHelpId
+        GetMenuDefaultItem
+        GetMenuItemCount
+        GetMenuItemID
+        GetMenuItemInfoA
+        GetMenuItemInfoW
+        GetMenuItemRect
+        GetMenuState
+        GetMenuStringA
+        GetMenuStringW
+        GetMessageA
+        GetMessageExtraInfo
+        GetMessagePos
+        GetMessageTime
+        GetMessageW
+        GetNextDlgGroupItem
+        GetNextDlgTabItem
+        GetOpenClipboardWindow
+        GetParent
+        GetPriorityClipboardFormat
+        GetProcessWindowStation
+        GetPropA
+        GetPropW
+        GetQueueStatus
+        GetScrollInfo
+        GetScrollPos
+        GetScrollRange
+        GetShellWindow
+        GetSubMenu
+        GetSysColor
+        GetSysColorBrush
+        GetSystemMenu
+        GetSystemMetrics
+        GetTabbedTextExtentA
+        GetTabbedTextExtentW
+        GetThreadDesktop
+        GetTopWindow
+        GetUpdateRect
+        GetUpdateRgn
+        GetUserObjectInformationA
+        GetUserObjectInformationW
+        GetUserObjectSecurity
+        GetWindow
+        GetWindowContextHelpId
+        GetWindowDC
+        GetWindowLongA
+        GetWindowLongW
+        GetWindowPlacement
+        GetWindowRect
+        GetWindowRgn
+        GetWindowTextA
+        GetWindowTextLengthA
+        GetWindowTextLengthW
+        GetWindowTextW
+        GetWindowThreadProcessId
+        GetWindowWord
+        GrayStringA
+        GrayStringW
+        HideCaret
+        HiliteMenuItem
+        ImpersonateDdeClientWindow
+        InSendMessage
+        InflateRect
+        InsertMenuA
+        InsertMenuItemA
+        InsertMenuItemW
+        InsertMenuW
+        IntersectRect
+        InvalidateRect
+        InvalidateRgn
+        InvertRect
+        IsCharAlphaA
+        IsCharAlphaNumericA
+        IsCharAlphaNumericW
+        IsCharAlphaW
+        IsCharLowerA
+        IsCharLowerW
+        IsCharUpperA
+        IsCharUpperW
+        IsChild
+        IsClipboardFormatAvailable
+        IsDialogMessage
+        IsDialogMessageA
+        IsDialogMessageW
+        IsDlgButtonChecked
+        IsIconic
+        IsMenu
+        IsRectEmpty
+        IsWindow
+        IsWindowEnabled
+        IsWindowUnicode
+        IsWindowVisible
+        IsZoomed
+        KillSystemTimer
+        KillTimer
+        LoadAcceleratorsA
+        LoadAcceleratorsW
+        LoadBitmapA
+        LoadBitmapW
+        LoadCursorA
+        LoadCursorFromFileA
+        LoadCursorFromFileW
+        LoadCursorW
+        LoadIconA
+        LoadIconW
+        LoadImageA
+        LoadImageW
+        LoadKeyboardLayoutA
+        LoadKeyboardLayoutW
+        LoadMenuA
+        LoadMenuIndirectA
+        LoadMenuIndirectW
+        LoadMenuW
+        LoadStringA
+        LoadStringW
+        LockWindowUpdate
+        LookupIconIdFromDirectory
+        LookupIconIdFromDirectoryEx
+        MapDialogRect
+        MapVirtualKeyA
+        MapVirtualKeyExA
+        MapVirtualKeyExW
+        MapVirtualKeyW
+        MapWindowPoints
+        MenuItemFromPoint
+        MessageBeep
+        MessageBoxA
+        MessageBoxExA
+        MessageBoxExW
+        MessageBoxIndirectA
+        MessageBoxIndirectW
+        MessageBoxW
+        ModifyMenuA
+        ModifyMenuW
+        MoveWindow
+        MsgWaitForMultipleObjects
+        OemKeyScan
+        OemToCharA
+        OemToCharBuffA
+        OemToCharBuffW
+        OemToCharW
+        OffsetRect
+        OpenClipboard
+        OpenDesktopA
+        OpenDesktopW
+        OpenIcon
+        OpenInputDesktop
+        OpenWindowStationA
+        OpenWindowStationW
+        PackDDElParam
+        PaintDesktop
+        PeekMessageA
+        PeekMessageW
+        PlaySoundEvent
+        PostMessageA
+        PostMessageW
+        PostQuitMessage
+        PostThreadMessageA
+        PostThreadMessageW
+        PtInRect
+        RedrawWindow
+        RegisterClassA
+        RegisterClassExA
+        RegisterClassExW
+        RegisterClassW
+        RegisterClipboardFormatA
+        RegisterClipboardFormatW
+        RegisterHotKey
+        RegisterWindowMessageA
+        RegisterWindowMessageW
+        ReleaseCapture
+        ReleaseDC
+        RemoveMenu
+        RemovePropA
+        RemovePropW
+        ReplyMessage
+        ResetDisplay
+        ReuseDDElParam
+        ScreenToClient
+        ScrollChildren
+        ScrollDC
+        ScrollWindow
+        ScrollWindowEx
+        SendDlgItemMessageA
+        SendDlgItemMessageW
+        SendMessageA
+        SendMessageCallbackA
+        SendMessageCallbackW
+        SendMessageTimeoutA
+        SendMessageTimeoutW
+        SendMessageW
+        SendNotifyMessageA
+        SendNotifyMessageW
+        SetActiveWindow
+        SetCapture
+        SetCaretBlinkTime
+        SetCaretPos
+        SetClassLongA
+        SetClassLongW
+        SetClassWord
+        SetClipboardData
+        SetClipboardViewer
+        SetCursor
+        SetCursorPos
+        SetDebugErrorLevel
+        SetDeskWallpaper
+        SetDlgItemInt
+        SetDlgItemTextA
+        SetDlgItemTextW
+        SetDoubleClickTime
+        SetFocus
+        SetForegroundWindow
+        SetKeyboardState
+        SetLastErrorEx
+        SetMenu
+        SetMenuContextHelpId
+        SetMenuDefaultItem
+        SetMenuItemBitmaps
+        SetMenuItemInfoA
+        SetMenuItemInfoW
+        SetMessageExtraInfo
+        SetMessageQueue
+        SetParent
+        SetProcessWindowStation
+        SetPropA
+        SetPropW
+        SetRect
+        SetRectEmpty
+        SetScrollInfo
+        SetScrollPos
+        SetScrollRange
+        SetShellWindow
+        SetSysColors
+        SetSysColorsTemp
+        SetSystemCursor
+        SetSystemMenu
+        SetSystemTimer
+        SetThreadDesktop
+        SetTimer
+        SetUserObjectInformationA
+        SetUserObjectInformationW
+        SetUserObjectSecurity
+        SetWindowContextHelpId
+        SetWindowLongA
+        SetWindowLongW
+        SetWindowPlacement
+        SetWindowPos
+        SetWindowRgn
+        SetWindowTextA
+        SetWindowTextW
+        SetWindowWord
+        SetWindowsHookA
+        SetWindowsHookExA
+        SetWindowsHookExW
+        SetWindowsHookW
+        ShowCaret
+        ShowCursor
+        ShowOwnedPopups
+        ShowScrollBar
+        ShowWindow
+        ShowWindowAsync
+        SubtractRect
+        SwapMouseButton
+        SwitchDesktop
+        SystemParametersInfoA
+        SystemParametersInfoW
+        TabbedTextOutA
+        TabbedTextOutW
+        TileChildWindows
+        TileWindows
+        ToAscii
+        ToAsciiEx
+        ToUnicode
+        ToUnicodeEx
+        TrackPopupMenu
+        TrackPopupMenuEx
+        TranslateAccelerator
+        TranslateAcceleratorA
+        TranslateAcceleratorW
+        TranslateMDISysAccel
+        TranslateMessage
+        UnhookWindowsHook
+        UnhookWindowsHookEx
+        UnionRect
+        UnloadKeyboardLayout
+        UnpackDDElParam
+        UnregisterClassA
+        UnregisterClassW
+        UnregisterHotKey
+        UpdateWindow
+        ValidateRect
+        ValidateRgn
+        VkKeyScanA
+        VkKeyScanExA
+        VkKeyScanExW
+        VkKeyScanW
+        WaitForInputIdle
+        WaitMessage
+        WinHelpA
+        WinHelpW
+        WindowFromDC
+        WindowFromPoint
+        keybd_event
+        mouse_event
+        _wsprintfA  = wsprintfA
+        _wsprintfW  = wsprintfW
+        wvsprintfA
+        wvsprintfW

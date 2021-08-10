@@ -1,13 +1,13 @@
-LIBRARY     MGMTAPI.DLL
-
+LIBRARY MGMTAPI
 EXPORTS
-    SnmpMgrClose                   @1   
-    SnmpMgrGetTrap                 @2   
-    SnmpMgrMIB2Disk                @3   
-    SnmpMgrOidToStr                @4   
-    SnmpMgrOpen                    @5   
-    SnmpMgrRequest                 @6   
-    SnmpMgrStrToOid                @7   
-    SnmpMgrTrapListen              @8   
-    dbginit                        @9   
-    serverTrapThread               @10  
+
+    SnmpMgrClose
+    SnmpMgrGetTrap
+    SnmpMgrMIB2Disk
+    SnmpMgrOidToStr
+    SnmpMgrOpen
+    SnmpMgrRequest
+    SnmpMgrStrToOid
+    SnmpMgrTrapListen
+    dbginit
+    serverTrapThread

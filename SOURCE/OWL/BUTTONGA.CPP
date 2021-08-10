@@ -1,43 +1,46 @@
 //----------------------------------------------------------------------------
 // ObjectWindows
-// (C) Copyright 1992, 1994 by Borland International, All Rights Reserved
+// Copyright (c) 1992, 1996 by Borland International, All Rights Reserved
 //
-//   Implementation of class TButtonGadget.
+//$Revision:   10.10  $
+//
+// Implementation of class TButtonGadget.
 //----------------------------------------------------------------------------
-#include <owl/owlpch.h>
-#include <owl/buttonga.h>
-#include <owl/gadgetwi.h>
-#include <owl/celarray.h>
+#include <owl/pch.h>
+#if !defined(OWL_BUTTONGA_H)
+# include <owl/buttonga.h>
+#endif
+#if !defined(OWL_GADGETWI_H)
+# include <owl/gadgetwi.h>
+#endif
+#if !defined(OWL_CELARRAY_H)
+# include <owl/celarray.h>
+#endif
+#if !defined(OWL_UIHELPER_H)
+# include <owl/uihelper.h>
+#endif
+#if !defined(WINSYS_UIMETRIC_H)
+# include <winsys/uimetric.h>
+#endif
+#if !defined(WINSYS_SYSTEM_H)
+# include <winsys/system.h>
+#endif
+
+DIAG_DECLARE_GROUP(OwlGadget);
 
 //
-// make the monochrome bitmap large enough to hold any possible bitmap
-//
-#define GLYPH_MASK_WIDTH   128
-#define GLYPH_MASK_HEIGHT  128
-const long RopPSDPxax = 0x00B8074AL;  //
-const long RopDSPDxax = 0x00E20746L;  // 
-
-//
-// local 'class' vars
-//
-static THatch8x8Brush ditherBrush(THatch8x8Brush::Hatch11F1,
-                                  ::GetSysColor(COLOR_BTNHIGHLIGHT),
-                                  ::GetSysColor(COLOR_BTNHIGHLIGHT));
-
-static TBitmap      glyphMask(GLYPH_MASK_WIDTH, GLYPH_MASK_HEIGHT, 1, 1, 0);
-
-//
-// command enabler for button gadgets
+// Command enabler for button gadgets
 //
 class _OWLCLASS TButtonGadgetEnabler : public TCommandEnabler {
   public:
-    TButtonGadgetEnabler(HWND hWndReceiver, TButtonGadget* g)
-      : TCommandEnabler(g->GetId(), hWndReceiver) {
-      Gadget = g;
+    TButtonGadgetEnabler(TWindow::THandle hReceiver, TButtonGadget* g)
+    :
+      TCommandEnabler(g->GetId(), hReceiver),
+      Gadget(g)
+    {
     }
 
-    //
-    // override member functions of TCommandEnabler
+    // Override TCommandEnabler virtuals
     //
     void  Enable(bool);
     void  SetText(const char far*);
@@ -47,6 +50,9 @@ class _OWLCLASS TButtonGadgetEnabler : public TCommandEnabler {
     TButtonGadget*  Gadget;
 };
 
+//
+// Enable or disable the button gadget
+//
 void
 TButtonGadgetEnabler::Enable(bool enable)
 {
@@ -54,34 +60,60 @@ TButtonGadgetEnabler::Enable(bool enable)
   Gadget->SetEnabled(enable);
 }
 
+//
+// Handle the SetText request for a button gadget. Currently does nothing.
+//
 void
 TButtonGadgetEnabler::SetText(const char far*)
 {
 # pragma warn -ccc
-  CHECK(false);
+  CHECK(true);
 # pragma warn .ccc
 }
 
+//
+// Set the check-state for the button gadget
+//
 void
 TButtonGadgetEnabler::SetCheck(int state)
 {
   Gadget->SetButtonState(TButtonGadget::TState(state));
 }
 
-TButtonGadget::TButtonGadget(TResId bmpResId,
+//----------------------------------------------------------------------------
+
+//
+// Construct a button gadget that loads its own bitmap resource
+//
+TButtonGadget::TButtonGadget(TResId glyphResIdOrIndex,
                              int    id,
                              TType  type,
                              bool   enabled,
                              TState state,
-                             bool   repeat)
+                             bool   sharedGlyph)
 :
-  TGadget(id, Plain)
+  TGadget(id, ButtonUp),
+  SharingGlyph(sharedGlyph)
 {
-  ResId = bmpResId.IsString() ? strnewdup(bmpResId) : (char far*)bmpResId;
+  // If we are sharing the glyph held by our window, then we won't need to load
+  // the resource
+  //
+  if (sharedGlyph) {
+    ResId = 0;
+    GlyphIndex = (int)(const char far*)glyphResIdOrIndex;
+    GlyphCount = 1;
+  }
+  else {
+    ResId = glyphResIdOrIndex.IsString() ?
+                strnewdup(glyphResIdOrIndex) : (char far*)glyphResIdOrIndex;
+    GlyphIndex = -1;   // Need to get during BuildCelArray
+    GlyphCount = 4;
+  }
+
   CelArray = 0;
   BitmapOrigin.x = BitmapOrigin.y = 0;
   Type = type;
-  Repeat = repeat;
+//  Repeat = repeat;  
   TrackMouse = true;
   State = state;
   NotchCorners = true;
@@ -89,76 +121,98 @@ TButtonGadget::TButtonGadget(TResId bmpResId,
   SetEnabled(enabled);
   SetShadowStyle(DoubleShadow);
   SetAntialiasEdges(true);
+
+  TRACEX(OwlGadget, OWL_CDLEVEL, "TButtonGadget constructed @" << (void*)this);
 }
 
+//
+// Destruct this button gadget, freeing up allocated resources
+//
 TButtonGadget::~TButtonGadget()
 {
   delete CelArray;
   if (ResId.IsString())
-    delete (char far*)ResId;
+    delete[] (char far*)ResId;
+
+  TRACEX(OwlGadget, OWL_CDLEVEL, "TButtonGadget destructed @" << (void*)this);
 }
 
+//
+// Set the shadow style for this button. May be ignored on some 3d UI platforms
+//
 void
 TButtonGadget::SetShadowStyle(TShadowStyle shadowStyle)
 {
-  TBorders  borders;
+  if (!TSystem::Has3dUI()) {
+    TBorders  borders;
 
-  ShadowStyle = shadowStyle;
-  borders.Left = borders.Top = 2;
-  borders.Right = borders.Bottom = ShadowStyle + 1;
-  SetBorders(borders);
+    ShadowStyle = shadowStyle;
+    borders.Left = borders.Top = 2;
+    borders.Right = borders.Bottom = ShadowStyle + 1;
+    SetBorders(borders);
+  }
 }
 
+//
+// Initiate a command enable for this button gadget
+//
 void
 TButtonGadget::CommandEnable()
 {
+  PRECONDITION(Window);
+
   // Must send, not post here, since a ptr to a temp is passed
   //
-  Window->Parent->HandleMessage(
+  Window->HandleMessage(
     WM_COMMAND_ENABLE,
     0,
-    (LPARAM)&TButtonGadgetEnabler(*Window->Parent, this)
+    TParam2(&TButtonGadgetEnabler(*Window, this))
   );
 }
 
+//
+// Respond to a WM_SYSCOLORCHANGE, in this case to rebuild the CelArray with
+// possibly new 3d colors
+//
 void
 TButtonGadget::SysColorChange()
 {
-  ditherBrush.Reconstruct(THatch8x8Brush::Hatch11F1,
-                          ::GetSysColor(COLOR_BTNHIGHLIGHT),
-                          ::GetSysColor(COLOR_BTNHIGHLIGHT));
-  BuildCelArray();
 }
 
+//
+// Perform an exclusive checking of this gadget by unchecking the neighboring
+// exclusive button gadgets
+//
 void
 TButtonGadget::CheckExclusively()
 {
+  PRECONDITION(Window);
+
   if (State != Down) {
     if (Window) {
-      TGadget*        g = Window->FirstGadget();
       TButtonGadget*  first = 0;
       TButtonGadget*  last = this;
 
+      // Look for the start of the group in which this button is located
       //
-      // look for the start of the group in which the receiver is located
-      //
-      while (g != this) {
+      for (TGadget* g = Window->FirstGadget(); g && g != this;
+        g = Window->NextGadget(*g)) {
+
         TButtonGadget* bg = TYPESAFE_DOWNCAST(g, TButtonGadget);
         if (!bg || bg->Type != Exclusive)
           first = 0;
 
         else if (!first)
           first = bg;
-
-        g = g->NextGadget();
       }
+
       if (!first)
         first = this;
 
-      // Look for the end of the group in which the receiver is located
+      // Look for the end of the group in which this button is located
       //
-      while (last->NextGadget()) {
-        TButtonGadget* bg = TYPESAFE_DOWNCAST(last->NextGadget(), TButtonGadget);
+      while (Window->NextGadget(*last)) {
+        TButtonGadget* bg = TYPESAFE_DOWNCAST(Window->NextGadget(*last), TButtonGadget);
         if (!bg || bg->Type != Exclusive)
           break;
 
@@ -166,15 +220,17 @@ TButtonGadget::CheckExclusively()
           last = bg;
       }
 
+      // Walk all the gadget between first and last (inclusive) and pop them up
+      // if they are down
+      //
       while (true) {
-        CHECK(first);     // Already know they are buttons, but just in case...
         if (first->State == Down) {
           first->State = Up;
           first->Invalidate();
           first->Update();
         }
 
-        if (first == last)
+        if (first == last)  // All done
           break;
 
         first = TYPESAFE_DOWNCAST(first->NextGadget(), TButtonGadget);
@@ -185,142 +241,94 @@ TButtonGadget::CheckExclusively()
   }
 }
 
+//
+// Set the state of a button. Handles setting down on an exclusive button to
+// pop out the neighbors
+//
 void
-TButtonGadget::SetButtonState(TState state)
+TButtonGadget::SetButtonState(TState newState)
 {
-  if (state != State) {
-    if (Type == Exclusive && state == Down)
-      CheckExclusively();
+  if ((Type == Exclusive || Type == SemiExclusive) && newState == Down)
+    CheckExclusively();
 
-    State = state;
+  if (newState != State) {
+    State = newState;
     Invalidate();
     Update();
   }
 }
 
+//
+// Set the bounding rect for this button gadget. Also takes care of
+// re-centering the glyph
+//
 void
-TButtonGadget::SetBounds(TRect& bounds)
+TButtonGadget::SetBounds(const TRect& bounds)
 {
-  TRect  innerRect;
-  TSize  bitmapSize = CelArray->CelSize();
+  PRECONDITION(Window);
+  TRACEX(OwlGadget, 1, "TButtonGadget::SetBounds() enter @" << this <<
+    " bounds " << bounds);
 
   TGadget::SetBounds(bounds);
 
   // Center the glyph within the inner bounds
   //
+  TRect  innerRect;
   GetInnerRect(innerRect);
 
+  TSize  bitmapSize = CelArray ? CelArray->CelSize() : Window->GetCelArray().CelSize();
   BitmapOrigin.x = innerRect.left + (innerRect.Width() - bitmapSize.cx) / 2;
   BitmapOrigin.y = innerRect.top + (innerRect.Height() - bitmapSize.cy) / 2;
+  TRACEX(OwlGadget, 1, "TButtonGadget::SetBounds() leave @" << this <<
+    " bounds " << bounds);
 }
 
+//
+// Find out how big this button gadget wants to be. Calculated using the base
+// size to get the borders, etc. plus the glyph size.
+//
 void
 TButtonGadget::GetDesiredSize(TSize& size)
 {
+  PRECONDITION(Window);
+  TRACEX(OwlGadget, 1, "TButtonGadget::GetDesiredSize() enter @"<< this <<
+    " size " << size);
+
   TGadget::GetDesiredSize(size);
 
-  if (!CelArray)
+  // Build our CelArray or CelArray entry if not done already
+  //
+  if (!CelArray && GlyphIndex < 0)
     BuildCelArray();
 
-  size += CelArray->CelSize();
+  size += CelArray ? CelArray->CelSize() : Window->GetCelArray().CelSize();
+  TRACEX(OwlGadget, 1, "TButtonGadget::GetDesiredSize() leave @"<< this <<
+    " size " << size);
 }
 
-//
-// determines the parts of "r1" that do not lie within "r2"
-//
-// returns the resulting number of rectangles which will be in the
-// range "0 .. 4" inclusive
-//
-uint
-Subtract(TRect& r1, TRect& r2, TRect result[4])
-{
-  if (!r1.Touches(r2)) {
-    result[0] = r1;
-    return 1;
-  }
-  else {
-    uint  i = 0;
-
-    if (r2.top > r1.top) {
-      result[i].left = r1.left;
-      result[i].top = r1.top;
-      result[i].right = r1.right;
-      result[i].bottom = r2.top;
-      i++;
-    }
-
-    if (r2.bottom < r1.bottom) {
-      result[i].left = r1.left;
-      result[i].top = r2.bottom;
-      result[i].right = r1.right;
-      result[i].bottom = r1.bottom;
-      i++;
-    }
-
-    if (r2.left > r1.left) {
-      result[i].left = r1.left;
-      result[i].top = max(r1.top, r2.top);
-      result[i].right = r2.left;
-      result[i].bottom = min(r1.bottom, r2.bottom);
-      i++;
-    }
-
-    if (r2.right < r1.right) {
-      result[i].left = r2.right;
-      result[i].top = max(r1.top, r2.top);
-      result[i].right = r1.right;
-      result[i].bottom = min(r1.bottom, r2.bottom);
-      i++;
-    }
-    return i;
-  }
-}
 
 //
-// build a monochrome mask bitmap for the glyph that has 1's where
-// COLOR_BTNFACE is and 0's everywhere else. assumes glyphDC is already setup
+// Virtual function responsible for supplying the dib for the glyph. Can be
+// overriden to get dib from elsewhere, cache it, map colors differently, etc.
 //
-static void
-BuildMask(TDC& maskDC, TRect& maskRect, TDC& glyphDC, TRect& glyphRect)
-{
-  maskDC.PatBlt(0, 0, maskRect.Width(), maskRect.Height(), WHITENESS);
-  glyphDC.SetBkColor(GetSysColor(COLOR_BTNFACE));  // btnface to white
-  maskDC.BitBlt(maskRect.left, maskRect.top, glyphRect.Width(), glyphRect.Height(),
-                glyphDC, glyphRect.left, glyphRect.top, SRCCOPY);
-}
-
-//
-// tiles the rectangle with a even dithered (checkerboard) pattern
-//
-// maskDC determines the stencil area of dither
-//
-static void
-DitherBackground(TDC& dc, TDC& maskDC, TRect& rect)
-{
-  dc.SelectObject(HBRUSH(ditherBrush));
-
-  dc.SetTextColor(RGB(0, 0, 0));      // 0 to black
-  dc.SetBkColor(RGB(255, 255, 255));  // 1 to white
-
-  dc.BitBlt(rect, maskDC, TPoint(0, 0), RopDSPDxax);
-}
-
-//
-// virtual function responsible for supplying glyphdib. Can be overriden to
-// get dib from elsewhere, cache it, map colors differently, etc.
+// Returns 0 if no resource was specified for this button
 //
 TDib*
 TButtonGadget::GetGlyphDib()
 {
-  TDib* glyph = new TDib(*Window->GetModule(), ResId);
-  glyph->MapUIColors(
-    TDib::MapFace | TDib::MapText | TDib::MapShadow | TDib::MapHighlight
-  );
-  return glyph;
+  PRECONDITION(Window);
+
+  if (ResId) {
+    TDib* glyph = new TDib(*Window->GetModule(), ResId);
+    glyph->MapUIColors( TDib::MapFace | TDib::MapText | TDib::MapShadow |
+      TDib::MapHighlight );
+    return glyph;
+  }
+  return 0;
 }
 
 //
-// virtual function responsible for releasing glyph dib as needed based on how
+// Virtual function responsible for releasing glyph dib as needed based on how
 // GetGlyphDib() got it (if different from new/delete).
 //
 void
@@ -332,234 +340,106 @@ TButtonGadget::ReleaseGlyphDib(TDib* glyph)
 //
 // Build the CelArray member using the resource bitmap as the base glyph
 // CelArray may contain an existing cel array that should be deleted if
-// replaced
+// replaced.
+//
+// The CelArray and glyph painting can work in one of the following ways:
+//   1. ResId ctor is used, ...., glyph states are cached in this CelArray
+//   2. ResId ctor is used, CelArray holds single glyph and paints state on
+//      the fly
+//   3. ResId ctor is used, glyph is added to Window's CelArray and paints
+//      state on the fly
+//   4. glyphIndex ctor is used, uses Window's CelArray glyph and paints state
+//      on the fly
 //
 void
 TButtonGadget::BuildCelArray()
 {
-  //
-  // Get the base glyph as a dib, & map the colors to current SysColors.
-  //
+  PRECONDITION(Window);
+
   TDib*  glyph = GetGlyphDib();
-  TSize  celSize = glyph->Size();
 
+  // Case 4, no resource of our own--using a cel in our Window's CelArray
   //
-  // Create a TCelArray if we don't already have one, else use existing one.
+  if (!glyph)
+    return;
+
+
+  // Case 3, add (or replace old) our glyph to our Window's CelArray
   //
-  if (!CelArray) {
-    TBitmap*   bitmap = new TBitmap(TScreenDC(), celSize.cx*CelsTotal,
-                                    celSize.cy);
-    CelArray = new TCelArray(bitmap, CelsTotal);
+  TSize glyphSize(glyph->Width(), glyph->Height());
+  TCelArray& celArray = Window->GetCelArray(glyph->Width(), glyph->Height());
+
+  if (SharingGlyph && (glyphSize == celArray.CelSize())) {
+    if (GlyphIndex >= 0)
+      celArray.Replace(GlyphIndex, *glyph);
+    else
+      GlyphIndex = celArray.Add(*glyph);
   }
-  
-  TMemoryDC maskDC;
-  maskDC.SelectObject(glyphMask);
-  TRect maskRect(0,0, celSize.cx, celSize.cy);
+  else {
 
-  TMemoryDC celDC;
-  celDC.SelectObject(*CelArray);
-  
-  //
-  // CelArray[CelNormal]: normal appearance, blit directly from the glyph dib
-  //
-  TRect nrmlCelRect = CelArray->CelRect(CelNormal);
-  celDC.StretchDIBits(nrmlCelRect, maskRect, *glyph);
-  
+    // Case 2, build a CelArray containing only the normal glyph state
+    //
+    delete CelArray;
+    CelArray = new TCelArray(*glyph, 1); //CelsTotal);
+    GlyphIndex = 0;
+    SharingGlyph = false;
+  }
+
   ReleaseGlyphDib(glyph);
 
+  // Case 1, for compatibility for now...
   //
-  // CelArray[CelDisabled]: disabled variant of glyph
-  //
-  TRect celRect = CelArray->CelRect(CelDisabled);
-
-  //
-  // make sure area under highlight color ends up face color
-  //
-  BuildMask(maskDC, maskRect, celDC, nrmlCelRect);
-  celDC.TextRect(celRect, GetSysColor(COLOR_BTNFACE));
-
-  //
-  // inactivate mask--convert the highlight color to 1's on existing mask
-  //
-  celDC.SetBkColor(GetSysColor(COLOR_BTNHIGHLIGHT));
-  maskDC.BitBlt(maskRect, celDC, nrmlCelRect.TopLeft(), SRCPAINT);
-
-  //
-  // make the image look embossed--highlight color offset down & right
-  //
-  celDC.SetTextColor(RGB(0, 0, 0));  // 0 to black
-  celDC.SetBkColor(RGB(255, 255, 255));  // 1 to white
-
-  TBrush  hiliteBrush(GetSysColor(COLOR_BTNHIGHLIGHT));
-  celDC.SelectObject(hiliteBrush);  // 0 -> highlight color
-  celDC.BitBlt(celRect.left + 1, celRect.top + 1,
-               celRect.Width() - 1, celRect.Height() - 1,
-               maskDC, 0, 0, RopPSDPxax);
-
-  //
-  // fade the image by replacing the button text color with the button
-  // shadow color
-  //
-  TBrush  shadowBrush(GetSysColor(COLOR_BTNSHADOW));
-  celDC.SelectObject(shadowBrush);  // 0 -> shadow
-  celDC.BitBlt(celRect, maskDC, TPoint(0, 0), RopPSDPxax);
-
-  //
-  // CelArray[CelIndeterm]: Indeterminate variant of glyph
-  //
-  celRect = CelArray->CelRect(CelIndeterm);
-
-  //
-  // fade the image by replacing the button text color with the button
-  // shadow color
-  //
-  celDC.SelectObject(shadowBrush);  // 0 -> shadow
-  celDC.BitBlt(celRect, maskDC, TPoint(0, 0), RopPSDPxax);
-
-  //
-  // dither the background everywhere except where the glyph is
-  //
-  DitherBackground(celDC, maskDC, celRect);
-
-  //
-  // CelArray[CelDown]: Down (but not Pressed) variant of glyph
-  //
-  celRect = CelArray->CelRect(CelDown);
-  celDC.BitBlt(celRect, celDC, CelArray->CelRect(CelNormal).TopLeft(), SRCCOPY);
-
-  //
-  // dither the background everywhere except where the glyph is
-  //
-  BuildMask(maskDC, maskRect, celDC, celRect);
-  DitherBackground(celDC, maskDC, celRect);
-
-  maskDC.RestoreBitmap();
-  celDC.RestoreBitmap();
-  celDC.RestoreBitmap();
-  celDC.RestoreBrush();
 }
 
 //
-//
+// Perform all of the painting for this button gadget
 //
 void
 TButtonGadget::Paint(TDC& dc)
 {
-  int     cxBorder = GetSystemMetrics(SM_CXBORDER);
-  int     cyBorder = GetSystemMetrics(SM_CYBORDER);
-  TPoint  bitmapOrigin = BitmapOrigin;
-  TRect   innerRect(cxBorder, cyBorder,
-                    Bounds.Width()-cxBorder, Bounds.Height()-cyBorder);
+  PRECONDITION(Window);
 
-  PaintBorder(dc);  // Assumes Plain border--other styles will be overpainted
-
-  TBrush  faceBrush(GetSysColor(COLOR_BTNFACE));
-  TBrush  hiliteBrush(GetSysColor(COLOR_BTNHIGHLIGHT));
-  TBrush  shadowBrush(GetSysColor(COLOR_BTNSHADOW));
-
+  // Make sure our style matches our state, then paint our gadget borders
   //
-  // draw top and left
+  BorderStyle = (Pressed || State == Down) ? ButtonDn : ButtonUp;
+  PaintBorder(dc);
+
+  // Determine which CelArray to paint from: ours or our Window's
   //
-  int shadow = Pressed && Type != Command ? 2 : 1;
-  dc.SelectObject(Pressed || State == Down ? shadowBrush : hiliteBrush);
-  dc.PatBlt(innerRect.left, innerRect.top,
-            innerRect.Width(), shadow * cyBorder, PATCOPY);
-  dc.PatBlt(innerRect.left, innerRect.top,
-            shadow * cxBorder, innerRect.Height(), PATCOPY);
+  TCelArray& celArray = CelArray ? *CelArray : Window->GetCelArray();
 
-  if (Pressed || State == Down) {
-    innerRect.left += shadow * cxBorder;
-    innerRect.top += shadow * cyBorder;
-  }
-  else {
-    int  i = 0;
-
-    //
-    // draw right and bottom
-    //
-    dc.SelectObject(shadowBrush);
-    innerRect.bottom -= cyBorder;
-    innerRect.right -= cxBorder;
-
-    while (true) {
-      dc.PatBlt(innerRect.left, innerRect.bottom,
-                innerRect.Width() + cxBorder, cyBorder, PATCOPY);
-      dc.PatBlt(innerRect.right, innerRect.top,
-                cxBorder, innerRect.Height(), PATCOPY);
-
-      if (++i == ShadowStyle)
-        break;
-
-      innerRect.Inflate(-cxBorder, -cyBorder);
-    }
-  }
-
-  if (NotchCorners || AntialiasEdges && State == Up && !Pressed) {
-    dc.SelectObject(faceBrush);
-    
-    if (NotchCorners) {
-      dc.PatBlt(0, 0, cxBorder, cyBorder);
-      dc.PatBlt(Bounds.Width() - cxBorder, 0, cxBorder, cyBorder);
-      dc.PatBlt(0, Bounds.Height() - cyBorder, cxBorder, cyBorder);
-      dc.PatBlt(Bounds.Width() - cxBorder, Bounds.Height() - cyBorder,
-                cxBorder, cyBorder);
-    }
-    if (AntialiasEdges && State == Up && !Pressed) {
-      TRect edge(0, 0, Bounds.Width(), Bounds.Height());
-      for (int i = 0; i <= shadow; i++) {
-        edge.Inflate(-cxBorder,-cyBorder);
-        dc.PatBlt(edge.right-cxBorder, edge.top, cxBorder, cyBorder);
-        dc.PatBlt(edge.left, edge.bottom-cyBorder, cxBorder, cyBorder);
-      }
-    }
-    dc.RestoreBrush();
-  }
-
+  // Get the inner rect to use as the button face
   //
-  // adjust the bitmap origin based on the state
+  TRect  faceRect;
+  GetInnerRect(faceRect);
+
+  // Calc the source rect from the celarray. The dest point of the glyph is
+  // relative to the face rect.
   //
-  if (Pressed || State == Down)
-    bitmapOrigin.Offset(shadow * cxBorder, shadow * cyBorder);
-  TRect  bitmapRect(bitmapOrigin, CelArray->CelSize());
+  TRect  srcRect(celArray.CelRect(GlyphIndex));
+  TPoint dstPt(BitmapOrigin - faceRect.TopLeft());
 
-  TMemoryDC celDC;
-  celDC.SelectObject(*CelArray);
-
+  // Create a UI Face object for this button & let it paint the button face
   //
-  // blit the appropriate cel at the calculated origin
-  //
-  if (!GetEnabled() || State == Indeterminate) {
-    if (!GetEnabled())
-      dc.BitBlt(bitmapRect, celDC, CelArray->CelRect(CelDisabled).TopLeft());
+  TUIFace face(faceRect, celArray);
 
-    else //(State == Indeterminate)
-      dc.BitBlt(bitmapRect, celDC, CelArray->CelRect(CelIndeterm).TopLeft());
-  }
-  else {
-    TRect dirtyRects[4];
-    int   numRects = Subtract(innerRect, bitmapRect, dirtyRects);
-    if (numRects) {
-      dc.SetBkColor(GetSysColor(COLOR_BTNFACE));
-      while (numRects--)
-        dc.TextRect(dirtyRects[numRects]);
-    }
-    if (State == Down && !Pressed)
-      dc.BitBlt(bitmapRect, celDC, CelArray->CelRect(CelDown).TopLeft());
-    else //(State == Up || Pressed)
-      dc.BitBlt(bitmapRect, celDC, CelArray->CelRect(CelNormal).TopLeft());
-  }
-
-  celDC.RestoreBitmap();
-  dc.RestoreBrush();
+  if (!GetEnabled())
+    face.Paint(dc, srcRect, dstPt, TUIFace::Disabled, false);
+  else if (State == Indeterminate)
+    face.Paint(dc, srcRect, dstPt, TUIFace::Indeterm, Pressed);
+  else if (State == Down && !Pressed)
+    face.Paint(dc, srcRect, dstPt, TUIFace::Down, false);
+  else
+    face.Paint(dc, srcRect, dstPt, TUIFace::Normal, Pressed);
 }
 
+//
+// Invalidate the rectangle used by this gadget to cause it to repaint
+//
 void
 TButtonGadget::Invalidate()
 {
-  TRect  r(0, 0, Bounds.Width(), Bounds.Height());
-
-  r.Inflate(-GetSystemMetrics(SM_CXBORDER), -GetSystemMetrics(SM_CYBORDER));
-  InvalidateRect(r, false);
+  InvalidateRect(TRect(0, 0, Bounds.Width(), Bounds.Height()), false);
 }
 
 //
@@ -588,6 +468,18 @@ TButtonGadget::CancelPressed(TPoint&)
     Window->SetHintCommand(-1);
 }
 
+//
+// The action method called on a completed 'click', generates WM_COMMAND
+//
+// Invoked by mouse-up event inside the Gadget. Sets member data "Pressed"
+// to false, changes state for attribute buttons, and paints the button
+// in its current state.
+//
+// Command buttons just send the command
+// Exclusive buttons check themselves and uncheck neighbors.
+// NonExclusive buttons toggle their check state.
+// SemiExclusive uncheck neighbors on press, but can also be unpressed.
+//
 void
 TButtonGadget::Activate(TPoint& pt)
 {
@@ -600,14 +492,30 @@ TButtonGadget::Activate(TPoint& pt)
     case NonExclusive:
       State = State == Up ? Down : Up;
       break;
+
+    case SemiExclusive:
+      if (State != Down)
+        CheckExclusively();
+      else
+        State = Up;
+      break;
   }
 
+  // Unpress the button
+  //
   CancelPressed(pt);
 
-  if (!(Type == Exclusive && State != Down) && GetEnabled())
-    Window->Parent->PostMessage(WM_COMMAND, GetId());
+  // Send the associated command for all enabled buttons except for exclusive
+  // buttons that are being poped up
+  //
+  if (!((Type == Exclusive || Type == SemiExclusive) && State != Down) &&
+      GetEnabled())
+    Window->PostMessage(WM_COMMAND, GetId()); 
 }
 
+//
+// Handle the mouse left button down & enter the pressed state
+//
 void
 TButtonGadget::LButtonDown(uint modKeys, TPoint& pt)
 {
@@ -615,12 +523,28 @@ TButtonGadget::LButtonDown(uint modKeys, TPoint& pt)
   BeginPressed(pt);
 }
 
+//
+// Mouse has entered this button, (not pressed). Show hints if that style
+// is enabled
+//
+void
+TButtonGadget::MouseEnter(uint modKeys, TPoint& pt)
+{
+  TGadget::MouseEnter(modKeys, pt);
+  if (Window->GetHintMode() == TGadgetWindow::EnterHints)
+    Window->SetHintCommand(GetId());
+}
+
+//
+// Mouse has moved (back) into this gadget. Push or pull the button up & down
+// as needed.
+//
 void
 TButtonGadget::MouseMove(uint modKeys, TPoint& pt)
 {
   TGadget::MouseMove(modKeys, pt);
 
-  bool  hit = PtIn(pt);
+  bool hit = PtIn(pt);
   if (Pressed) {
     if (!hit)
       CancelPressed(pt);
@@ -630,14 +554,10 @@ TButtonGadget::MouseMove(uint modKeys, TPoint& pt)
   }
 }
 
-void
-TButtonGadget::MouseEnter(uint modKeys, TPoint& pt)
-{
-  TGadget::MouseEnter(modKeys, pt);
-  if (Window->GetHintMode() == TGadgetWindow::EnterHints)
-    Window->SetHintCommand(GetId());
-}
-
+//
+// Mouse has left this button, (not pressed). Hide hints if that style
+// is enabled
+//
 void
 TButtonGadget::MouseLeave(uint modKeys, TPoint& pt)
 {
@@ -646,6 +566,11 @@ TButtonGadget::MouseLeave(uint modKeys, TPoint& pt)
     Window->SetHintCommand(-1);
 }
 
+//
+// Handle the mouse left button up & leave the pressed state. If the mouse is
+// still on this button, i.e. it is still pressed, then perform the button
+// action.
+//
 void
 TButtonGadget::LButtonUp(uint modKeys, TPoint& pt)
 {

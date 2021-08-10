@@ -1,8 +1,10 @@
 //----------------------------------------------------------------------------
 // ObjectWindows
-// (C) Copyright 1992, 1994 by Borland International, All Rights Reserved
+// Copyright (c) 1992, 1996 by Borland International, All Rights Reserved
 //
-//   Base class TGadget and helper class TSeparatorGadget.
+//$Revision:   10.8  $
+//
+// Base class TGadget and simple derived TSeparatorGadget.
 //----------------------------------------------------------------------------
 #if !defined(OWL_GADGET_H)
 #define OWL_GADGET_H
@@ -13,14 +15,27 @@
 #if !defined(OWL_DC_H)
 # include <owl/dc.h>
 #endif
-
 class _OWLCLASS TGadgetWindow;
 
+#define IDG_FIRST       30000   // first predefined gadget ID
+#define IDG_LAST        31000   // last predefined gadget ID
+#define IDG_MESSAGE     IDG_FIRST + 0    // + 0 is for backwards compatability
+#define IDG_STATUS_EXT  IDG_FIRST + 1
+#define IDG_STATUS_CAPS IDG_FIRST + 2
+#define IDG_STATUS_NUM  IDG_FIRST + 3
+#define IDG_STATUS_SCRL IDG_FIRST + 4
+#define IDG_STATUS_OVR  IDG_FIRST + 5
+#define IDG_STATUS_REC  IDG_FIRST + 6
+#define IDG_SIZEGRIP    IDG_FIRST + 7    // The ID for a size grip gadget
+
+// Generic definitions/compiler options (eg. alignment) preceeding the 
+// definition of classes
+#include <services/preclass.h>
+
 //
-//  struct TMargins
-//  ------ --------
-//
-//  Used by class TGadgetWindow and class TGadget.
+// struct TMargins
+// ~~~~~~ ~~~~~~~~
+// Margin units & dimensions used by class TGadgetWindow and class TGadget.
 //
 struct TMargins {
   enum TUnits {Pixels, LayoutUnits, BorderUnits};
@@ -33,200 +48,321 @@ struct TMargins {
   int  Bottom : 8;
 
   TMargins() {Units = LayoutUnits; Left = Right = Top = Bottom = 0;}
+
+  TMargins(TUnits u, int l, int r, int t, int b)
+      {Units = u; Left = l; Right = r; Top = t; Bottom = b;}
+
+  void GetPixels(int& left, int& right, int& top, int& bottom, int fontHeight) const;
 };
 
 //
-//  class TGadget
-//  ----- -------
+// class TGadget
+// ~~~~~ ~~~~~~~
+// Gadgets have outer borders and margins within, belong to a gadget window
+// in a gadget list, and have their own coordinate system.
 //
-//  gadgets have borders and margins, belong to a gadget window, and have
-//  their own coordinate system
+// Margins are the same as for TGadgetWindow and borders are always in
+// border units
 //
-//  margins are the same as for TGadgetWindow and borders are always in
-//  border units
+// Default behavior for gadgets is to shrink wrap to "fit" around their
+// contents you can control this by setting "ShrinkWrapWidth" and
+// "ShrinkWrapHeight"
 //
-//  default behavior for gadgets is to shrink wrap to "fit" around their contents
-//  you can control this by setting "ShrinkWrapWidth" and "ShrinkWrapHeight"
-//
+#if defined(BI_NO_RTTI)
+class _OWLCLASS TGadget : public TStreamableBase {
+#else
 class _OWLCLASS TGadget {
+#endif
   public:
-    enum TBorderStyle {None, Plain, Raised, Recessed, Embossed};
+    // Gadget border styles. These match TIUBorder's TStyles exactly
+    //
+    enum TBorderStyle {
+      None,             //  No border painted at all
+      Plain,            //  Plain plain window frame
+      Raised,           //  Status field style raised
+      Recessed,         //  Status field style recessed
+      Embossed,         //  Grouping raised emboss bead
+      Grooved,          //  Grouping groove
+      ButtonUp,         //  Button in up position
+      ButtonDn,         //  Button in down position
+      WndRaised,        //  Raised window outer+inner edge
+      WndRecessed,      //  Input field & other window recessed
+      WellSet,          //  Well option set (auto grows + 1)
+    };
 
-    TGadget(int id = 0, TBorderStyle = None);
+    TGadget(int id = 0, TBorderStyle borderStyle = None);
     virtual ~TGadget();
 
+    // Border dimensions
+    //
     struct TBorders {
-      unsigned  Left   : 8;
-      unsigned  Right  : 8;
-      unsigned  Top    : 8;
-      unsigned  Bottom : 8;
+      uint  Left   : 8;
+      uint  Right  : 8;
+      uint  Top    : 8;
+      uint  Bottom : 8;
 
       TBorders() {Left = Right = Top = Bottom = 0;}
     };
 
-    int            GetId () {return Id;}
+    int            GetId() const;
 
-    //
-    // typically you would either choose a border style (which automatically
+    // Typically you would either choose a border style (which automatically
     // sets the individual border edges) or set the borders and then override
     // member function PaintBorder() to create a custom look
     //
     // NOTE: changing the borders, margins, or border style all end up invoking
     //       the gadget window's GadgetChangedSize() member function
     //
-    void           SetBorders(TBorders& borders);
-    TBorders&      GetBorders() {return Borders;}
+    void           SetBorders(const TBorders& borders);
+    TBorders&      GetBorders();
 
-    void           SetMargins(TMargins& margins);
-    TMargins&      GetMargins() {return Margins;}
+    void           SetMargins(const TMargins& margins);
+    TMargins&      GetMargins();
 
-    void           SetBorderStyle(TBorderStyle);
-    TBorderStyle   GetBorderStyle() {return BorderStyle;}
+    void           SetBorderStyle(TBorderStyle bs);
+    TBorderStyle   GetBorderStyle() const;
 
-    TRect&         GetBounds() {return Bounds;}
+    TRect&         GetBounds();
 
-    virtual void   SetEnabled(bool);
-    bool           GetEnabled() {return Enabled;}
+    virtual void   SetEnabled(bool enabled);
+    bool           GetEnabled() const;
 
-    //
-    // simply sets the corresponding member data. call the gadget window's
-    // GadgetChangedSize() member function if you want to affect a change in size
+    void           SetVisible(bool visible);
+    bool           IsVisible() const;
+
+    void           SetEndOfRow(bool eor);
+    bool           IsEndOfRow() const;
+
+    // Simply sets the corresponding member data.
     //
     void           SetShrinkWrap(bool shrinkWrapWidth, bool shrinkWrapHeight);
 
-    //
-    // directly alters the size of the gadget. calls the gadget window's
-    // GadgetChangedSize() member function for the size change to take affect
-    //
-    // you would only use this member function if you turned off shrink wrapping
-    // in one or both dimension; otherwise the GetDesiredSize() member function
-    // will return the fitted size which will be different
+    // Directly alters the size of the gadget.
     //
     void           SetSize(TSize& size);
 
-    //
-    // message send by the gadget window to query the gadget's size.
-    // if shrink wrapping was requested just returns the size needed to
-    // accomodate the borders and margins; otherwise the current width/height
-    // are returned
-    //
-    // if you requested "WideAsPossible" then "size.cx" is ignored
+    // Get the size that this gadget would like to be
     //
     virtual void   GetDesiredSize(TSize& size);
 
-    //
-    // returns the amount of space in pixels taken up by the borders and margins
+    // Returns the amount of space in pixels taken up by the borders and
+    // margins
     //
     void           GetOuterSizes(int& left, int& right, int& top, int& bottom);
 
+    // Returns the area excluding the borders and margins
     //
-    // sent by the gadget window to inform the gadget of a change in its
-    // bounding rectangle. default behavior just updates instance variable
-    // "Bounds" but derived classes might override this method to update
-    // internal state
-    //
-    virtual void   SetBounds(TRect& rect);
+    void           GetInnerRect(TRect& rect);
 
+    // Set the bounding rectangle for this gadget
+    //
+    virtual void   SetBounds(const TRect& rect);
+
+    virtual bool   IdleAction(long idleCount);
     virtual void   CommandEnable();
     virtual void   SysColorChange();
 
-    TGadget*       NextGadget() {return Next;}
+    TGadget*       NextGadget();
 
   protected:
+
+    // The following virtual methods are called to allow the gadget
+    // to initialize, cleanup or update any internal information
+    // when its inserted into a window, moved or removed.
     //
-    // Virtuals called after inserting into window & before removing to allow
-    // gadget a change to initialize or clean up.
-    //
+    virtual void   Created();
     virtual void   Inserted();
+    virtual void   Moved();
     virtual void   Removed();
-    
+
     void           Invalidate(bool erase = true);
-    void           InvalidateRect(const TRect& rect,  // receiver's coord system
+    void           InvalidateRect(const TRect& rect, // receiver's coord system
                                   bool  erase = true);
     void           Update();  // Paint now if possible
 
-    //
-    // default behavior returns true if the point is within the receiver's
+    // Default behavior returns true if the point is within the receiver's
     // bounding rect. "point" is in the receiver's coordinate system
     //
-    virtual bool   PtIn(TPoint& point);
+    virtual bool   PtIn(const TPoint& point);
 
     virtual void   Paint(TDC& dc);
 
-    //
-    // self sent by method Paint(). override this is if you want to
+    // Self sent by method Paint(). Override this is if you want to
     // implement a border style that isn't supported
     //
     virtual void   PaintBorder(TDC& dc);
 
-    //
-    // computes the area excluding the borders and margins
-    //
-    void           GetInnerRect(TRect& rect);
+    // Mouse virtuals forwarded from TGadgetWindows message handlers.
+    // "point" is in the receiver's coordinate system.
 
+    // MouseMove is only called if the mouse is captured. Enter & leave when
+    // mouse enters & leaves a gadget & is not captured.
     //
-    // "point" is in the receiver's coordinate system. MouseMove is only 
-    // called if the mouse is captured.
-    //
-    virtual void   MouseMove(uint modKeys, TPoint& point);
     virtual void   MouseEnter(uint modKeys, TPoint& point);
+    virtual void   MouseMove(uint modKeys, TPoint& point);
     virtual void   MouseLeave(uint modKeys, TPoint& point);
 
-    //
-    // captures the mouse if "TrackMouse" is set. "point" is in the receiver's
-    // coordinate system
+    // Captures the mouse if "TrackMouse" is set.
     //
     virtual void   LButtonDown(uint modKeys, TPoint& point);
 
-    //
-    // releases the mouse capture if "TrackMouse" is set. "point" is in the
-    // receiver's coordinate system
+    // Releases the mouse capture if "TrackMouse" is set.
     //
     virtual void   LButtonUp(uint modKeys, TPoint& point);
 
-  public:
-    bool             Clip;            // false
-    bool             WideAsPossible;  // false
+  // Data members -- will become private
+  //
+  public_data:
+    bool             Clip;         // Does this gadget need clip rgn set? false
+    bool             WideAsPossible;  // Should this gadget be made wide? false
 
-  protected:
-    TGadgetWindow*   Window;
-    TRect            Bounds;
-    TBorderStyle     BorderStyle;
-    TBorders         Borders;
-    TMargins         Margins;
-    bool             ShrinkWrapWidth;
-    bool             ShrinkWrapHeight;
-    bool             TrackMouse;      // false
-    int              Id;
+  protected_data:
+    TGadgetWindow*   Window;          // The window that this gadget is in
+    TRect            Bounds;          // The bounding rectangle of this gadget
+    TBorderStyle     BorderStyle;     // Style of border to use
+    TBorders         Borders;         // Size of each of the 4 borders
+    TMargins         Margins;         // Size & units of the 4 margins within
+    bool             ShrinkWrapWidth; // Shrink the width to fit contents?
+    bool             ShrinkWrapHeight;// Shrink the height to fit contents?
+    bool             TrackMouse;      // Should gadget capture the mouse? false
+    int              Id;              // Integer id of this gadget
 
   private:
     TGadget*         Next;
-    bool             Enabled;
+    enum {
+      Enabled  = 0x01,
+      Visible  = 0x02,
+      EndOfRow = 0x04,
+    };
+    uint16           Flags;           // Enabled, EndOfRow flags
 
-    friend class _OWLCLASS TGadgetWindow;
-
-    //
-    // hidden to prevent accidental copying or assignment
+    // Hidden to prevent accidental copying or assignment
     //
     TGadget(const TGadget&);
     TGadget& operator =(const TGadget&);
+
+  friend class _OWLCLASS TGadgetList;   // Access to Next for containment
+  friend class _OWLCLASS TGadgetWindow; // Access to Next for containment
+  DECLARE_CASTABLE;
 };
 
 //
-//  class TSeparatorGadget
-//  ----- ----------------
+// class TSeparatorGadget
+// ~~~~~ ~~~~~~~~~~~~~~~~
+// Simple helper class that you can use when you want a separator between
+// gadgets. You specify the size of the separator and the separator disables
+// itself and turns off shrink wrapping
 //
-//  simple helper class that you can use when you want a separator between
-//  gadgets. you specify the size of the separator (in units of SM_CXBORDER
-//  and SM_CYBORDER) and the separator disables itself and turns off shrink
-//  wrapping
-//
-//  "size" is used for both the width and the height
+// "size" is used for both the width and the height
 //
 class _OWLCLASS TSeparatorGadget : public TGadget {
   public:
-    TSeparatorGadget(int size = 6);
+    TSeparatorGadget(int size = 0, int id = 0);
     void   Inserted();
 };
+
+//
+// class TSizeGripGadget
+// ~~~~~ ~~~~~~~~~~~~~~~
+// A gadget that is used on the far right of a status bar to provide re-sizing
+// grip for the host window.
+//
+class _OWLCLASS TSizeGripGadget : public TSeparatorGadget {
+  public:
+    TSizeGripGadget(int id = IDG_SIZEGRIP);
+    void Paint(TDC& dc);
+};
+
+// Generic definitions/compiler options (eg. alignment) following the 
+// definition of classes
+#include <services/posclass.h>
+
+//----------------------------------------------------------------------------
+// Inline implementations
+//
+
+//
+// Return the Id of the gadget
+//
+inline int TGadget::GetId () const {
+  return Id;
+}
+
+//
+// Return the current border of the gadget
+//
+inline TGadget::TBorders& TGadget::GetBorders() {
+  return Borders;
+}
+
+//
+// Return the margins of the gadget
+//
+inline TMargins& TGadget::GetMargins() {
+  return Margins;
+}
+
+//
+// Return the borderstyle the gadget is using
+//
+inline TGadget::TBorderStyle TGadget::GetBorderStyle() const {
+  return BorderStyle;
+}
+
+//
+// Return the bounds of the gadget
+//
+inline TRect& TGadget::GetBounds() {
+  return Bounds;
+}
+
+//
+// Return true if the gadget is enabled
+//
+inline bool TGadget::GetEnabled() const {
+  return Flags & Enabled;
+}
+
+//
+// Change the visibility of the gadget
+//
+inline void TGadget::SetVisible(bool visible) {
+  if (visible)
+    Flags |= Visible;
+  else
+    Flags &= ~Visible;
+}
+
+//
+// Return true if the gadget is visible
+//
+inline bool TGadget::IsVisible() const {
+  return Flags & Visible;
+}
+
+//
+// Set the end of row property for the gadget
+// The end of row property is used to tile gadgets
+//
+inline void TGadget::SetEndOfRow(bool eor) {
+  if (eor)
+    Flags |= EndOfRow;
+  else
+    Flags &= ~EndOfRow;
+}
+
+//
+// Return true if this gadget is at the end of a row
+//
+inline bool TGadget::IsEndOfRow() const {
+  return Flags & EndOfRow;
+}
+
+//
+// Return the next gadget after this one
+//
+inline TGadget* TGadget::NextGadget() {
+  return Next;
+}
 
 #endif  // OWL_GADGET_H

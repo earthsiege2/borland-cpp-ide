@@ -1,13 +1,11 @@
 // Borland C++ - (C) Copyright 1991 by Borland International
 
-/* vpoint.h--Example from Getting Started */
+// vpoint.h
 
 // version of point.h with virtual functions for use with VCIRCLE
 // vpoint.h contains two classes:
 // class Location describes screen locations in X and Y coordinates
 // class Point describes whether a point is hidden or visible
-
-enum Boolean {false, true};
 
 class Location {
 protected:          // allows derived class to access private data
@@ -23,12 +21,12 @@ class Point : public Location {      // derived from class Location
 // public derivation means that X and Y are protected within Point
 
    protected:
-   Boolean Visible;  // classes derived from Point will need access    
+	bool Visible;  // classes derived from Point will need access
 
 public:
    Point(int InitX, int InitY);      // constructor
    virtual void Show();
    virtual void Hide();
-   Boolean IsVisible();
+	bool IsVisible();
    void MoveTo(int NewX, int NewY);
 };

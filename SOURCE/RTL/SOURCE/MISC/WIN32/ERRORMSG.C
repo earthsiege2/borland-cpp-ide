@@ -7,9 +7,9 @@
  *-----------------------------------------------------------------------*/
 
 /*
- *      C/C++ Run Time Library - Version 1.5
+ *      C/C++ Run Time Library - Version 2.0
  *
- *      Copyright (c) 1991, 1994 by Borland International
+ *      Copyright (c) 1995, 1996 by Borland International
  *      All Rights Reserved.
  *
  */
@@ -20,8 +20,23 @@
 #include <string.h>
 #include <stdlib.h>
 
+char * _RTLENTRY _EXPDATA _messagefile = NULL; /* used to determine if error
+                                                  messages are sent to
+                                                  MessageBox/stderr or
+                                                  directed to this file name
+
+                                                  Set _messagefile to -1 to
+                                                  prevent anything from being
+                                                  displayed. Or set to filespec
+                                                  to have the message written
+                                                  to that file.
+                                               */
+
+
 extern unsigned char __isGUI;   /* defined in c0nt.asm, to determine at runtime
                                    if we're a GUI or Console mode application */
+
+void _ErrorMessageHelper (const char *, const char *);
 
 #pragma argsused
 static BOOL CALLBACK threadHasWnd(HWND h, BOOL* has) { *has = TRUE; return FALSE; }
@@ -56,30 +71,42 @@ Return value    None.
 
 void _RTLENTRY _EXPFUNC _ErrorMessage(const char *s)
 {
-   if(__isGUI)
+   if (_messagefile == NULL)
    {
-    char filename[80];
-    char *progname;
+       if(__isGUI)
+       {
+        char filename[80];
+        char *progname;
 
-    GetModuleFileName(NULL, (PSTR)&filename, sizeof(filename));
-    if ((progname = strrchr(filename,'\\')) == NULL &&
-        (progname = strrchr(filename, ':')) == NULL)
-        progname = filename;
-    else
-        progname++;
-    MessageBox(NULL, (LPSTR)s, (LPSTR)progname, mbModalFlag() | MB_ICONSTOP);
-   }
-   else /* console mode */
-   {
-    DWORD nwritten;
-    HANDLE herr;
+        GetModuleFileName(NULL, (PSTR)&filename, sizeof(filename));
+        if ((progname = strrchr(filename,'\\')) == NULL &&
+            (progname = strrchr(filename, ':')) == NULL)
+            progname = filename;
+        else
+            progname++;
+        MessageBox(NULL, (LPSTR)s, (LPSTR)progname, mbModalFlag() | MB_ICONSTOP | MB_SETFOREGROUND);
+       }
+       else /* console mode */
+       {
+        DWORD nwritten;
+        HANDLE herr;
 
-    herr = GetStdHandle(STD_ERROR_HANDLE);
+        herr = GetStdHandle(STD_ERROR_HANDLE);
 
-    WriteFile(herr, "\r\n", 2, &nwritten, NULL);
-    WriteFile(herr, (PVOID)s, strlen(s), &nwritten, NULL);
-    WriteFile(herr, "\r\n", 2, &nwritten, NULL);
-   }
+        WriteFile(herr, "\r\n", 2, &nwritten, NULL);
+        WriteFile(herr, (PVOID)s, strlen(s), &nwritten, NULL);
+        WriteFile(herr, "\r\n", 2, &nwritten, NULL);
+       }
+    }
+    else  /* _messagefile points to a file, attempt to write to it. */
+    {
+        if ((long)_messagefile == -1L)
+            return;
+
+        if (!_messagefile || !_messagefile[0])
+            return;
+        _ErrorMessageHelper(_messagefile, s);
+    }
 }
 
 /* The following function is present only for compatibility with CLASSLIBS.

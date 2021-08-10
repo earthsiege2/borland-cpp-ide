@@ -1,5 +1,7 @@
 //----------------------------------------------------------------------------
-// ObjectConnections - (C) Copyright 1994 by Borland International
+// ObjectComponents
+// Copyright (c) 1994, 1996 by Borland International, All Rights Reserved
+//
 //----------------------------------------------------------------------------
 
 #include "register.rh"
@@ -47,7 +49,7 @@ FONT 8, "MS Sans Serif"
  ICON 1, -1, 45, 137, 18, 20
  PUSHBUTTON "OK", IDOK, 95, 140, 30, 16
 
- CTEXT "Copyright 1994 Borland International Inc. All Rights Reserved", -1, 0, 162, 219, 9, SS_CENTER
+ CTEXT "Copyright 1994, 1996 Borland International Inc. All Rights Reserved", -1, 0, 162, 219, 9, SS_CENTER
 }
 
 IDI_1 ICON 

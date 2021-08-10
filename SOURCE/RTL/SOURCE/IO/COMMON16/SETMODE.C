@@ -6,9 +6,9 @@
  *-----------------------------------------------------------------------*/
 
 /*
- *      C/C++ Run Time Library - Version 6.5
+ *      C/C++ Run Time Library - Version 7.0
  *
- *      Copyright (c) 1987, 1994 by Borland International
+ *      Copyright (c) 1987, 1996 by Borland International
  *      All Rights Reserved.
  *
  */
@@ -38,19 +38,18 @@ Return value    setmode returns 0 if successful; on error it returns -1 and
 *---------------------------------------------------------------------------*/
 int _FARFUNC setmode(int fildes, register int mode)
 {
-        register int newmode;
+    register int newmode;
     _QRTLDataBlock;
 
     if ((unsigned)fildes >= _QRTLInstanceData(_nfile))
-                return(__IOerror (e_badHandle));
-        if ((newmode = mode & (O_TEXT | O_BINARY)) == mode &&
-                newmode != (int)(O_TEXT | O_BINARY))
-            {
-            mode = _QRTLInstanceData(_openfd) [fildes];
-            _QRTLInstanceData(_openfd) [fildes] =
-                (mode & ~(O_TEXT | O_BINARY)) | newmode;
-            return((mode & (O_TEXT | O_BINARY)));
-            }
-        else
-            return __IOerror(e_badFunction);
+        return(__IOerror (e_badHandle));
+    if ((newmode = mode & (O_TEXT | O_BINARY)) == mode &&
+        newmode != (int)(O_TEXT | O_BINARY))
+    {
+        mode = _QRTLInstanceData(_openfd) [fildes];
+        _QRTLInstanceData(_openfd) [fildes] = (mode & ~(O_TEXT | O_BINARY)) | newmode;
+        return((mode & (O_TEXT | O_BINARY)));
+    }
+    else
+        return __IOerror(e_badFunction);
 }

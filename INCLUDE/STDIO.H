@@ -5,9 +5,9 @@
 */
 
 /*
- *      C/C++ Run Time Library - Version 6.5
+ *      C/C++ Run Time Library - Version 7.0
  *
- *      Copyright (c) 1987, 1994 by Borland International
+ *      Copyright (c) 1987, 1996 by Borland International
  *      All Rights Reserved.
  *
  */
@@ -34,7 +34,7 @@
 #pragma warn -nak
 #endif
 
-#pragma option -a-
+#pragma pack(push, 1)
 
 #endif  /* !RC_INVOKED */
 
@@ -214,6 +214,7 @@ int     _RTLENTRY          putchar(const int __c);
 int     _RTLENTRY          putc(const int __c, FILE _FAR *__fp);
 int     _RTLENTRY          feof(FILE _FAR *__fp);
 int     _RTLENTRY          ferror(FILE _FAR *__fp);
+int     _RTLENTRY          fileno(FILE _FAR *__fp);
 
 int     _RTLENTRY _EXPFUNC fcloseall(void);
 FILE    _FAR *_RTLENTRY _EXPFUNC fdopen(int __handle, char _FAR *__type);
@@ -228,15 +229,13 @@ int     _RTLENTRY          rmtmp(void);
 char    _FAR * _RTLENTRY _EXPFUNC _strerror(const char _FAR *__s);
 char    _FAR * _RTLENTRY _EXPFUNC tempnam(char _FAR *__dir, char _FAR *__pfx);
 
-#define fileno(f)       ((f)->fd)
-
 int      _RTLENTRY _EXPFUNC _fgetc(FILE _FAR *__stream);           /* used by getc() macro */
 int      _RTLENTRY _EXPFUNC _fputc(char __c, FILE _FAR *__stream); /* used by putc() macro */
 void     _RTLENTRY _InitEasyWin(void);  /* Initialization call for Easy Windows */
 
 #ifdef  __cplusplus
 }
-#endif
+#endif   /* __cplusplus */
 
 #else    /* defined __FLAT__ */
 
@@ -256,7 +255,7 @@ typedef struct  {
 
 /* Number of files that can be open simultaneously
 */
-#if __STDC__
+#if defined(__STDC__)
 #define FOPEN_MAX (_NFILE_)
 #else
 #define FOPEN_MAX (_NFILE_)
@@ -273,6 +272,18 @@ extern  unsigned    _RTLENTRY _EXPDATA _nfile;
 #define stdin   (&_streams[0])
 #define stdout  (&_streams[1])
 #define stderr  (&_streams[2])
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+/* __getStream() is used internally with CG only, but prototyped here for
+  consistancy with the 16-bit version.
+*/
+FILE * _RTLENTRY _EXPFUNC __getStream( int );
+#ifdef __cplusplus
+}
+#endif
+
 
 #ifdef __cplusplus
 extern "C" {
@@ -320,6 +331,11 @@ void    _RTLENTRY  _EXPFUNC setbuf(FILE * __stream, char * __buf);
 int     _RTLENTRY  _EXPFUNC setvbuf(FILE * __stream, char * __buf,
                                     int __type, size_t __size);
 int     _RTLENTRY  _EXPFUNC sprintf(char * __buffer, const char * __format, ...);
+#if defined(__MFC_COMPAT__)
+int     _RTLENTRY  _EXPFUNC swprintf(wchar_t * __buffer, const wchar_t * __format, ...);
+/* swprintf is used internally, and does not fully support wide characters */
+#endif  /* __MFC_COMPAT__ */
+
 int     _RTLENTRY  _EXPFUNC sscanf(const char * __buffer,
                                    const char * __format, ...);
 char  * _RTLENTRY _EXPFUNC strerror(int __errnum);
@@ -344,6 +360,7 @@ int     _RTLENTRY _EXPFUNC putchar(const int __c);
 int     _RTLENTRY _EXPFUNC putc(const int __c, FILE * __fp);
 int     _RTLENTRY _EXPFUNC feof(FILE * __fp);
 int     _RTLENTRY _EXPFUNC ferror(FILE * __fp);
+int     _RTLENTRY _EXPFUNC fileno(FILE _FAR *__fp);
 
 int     _RTLENTRY _EXPFUNC fcloseall(void);
 FILE  * _RTLENTRY _EXPFUNC fdopen(int __handle, char * __type);
@@ -357,7 +374,6 @@ int     _RTLENTRY _EXPFUNC putw(int __w, FILE * __stream);
 int     _RTLENTRY _EXPFUNC rmtmp(void);
 char  * _RTLENTRY _EXPFUNC _strerror(const char * __s);
 char  * _RTLENTRY _EXPFUNC tempnam(char * __dir, char * __pfx);
-#define fileno(f)       ((f)->fd)
 
 int      _RTLENTRY _EXPFUNC _fgetc(FILE * __stream);           /* used by getc() macro */
 int      _RTLENTRY _EXPFUNC _fputc(char __c, FILE * __stream); /* used by putc() macro */
@@ -365,12 +381,28 @@ int      _RTLENTRY _EXPFUNC _fputc(char __c, FILE * __stream); /* used by putc()
 }
 #endif
 
+#if defined(__MFC_COMPAT__)
+inline FILE _FAR *_RTLENTRY _fdopen(int __handle, char _FAR *__type)
+                            { return fdopen(__handle, __type); }
+inline int        _RTLENTRY _fileno(FILE _FAR *__fp) { return fileno(__fp); }
+inline int        _RTLENTRY _fgetchar(void) { return fgetchar(); }
+inline int        _RTLENTRY _fputchar(int __c) { return fputchar(__c); }
+#endif   /* __MFC_COMPAT__ */
+
 #endif  /* __FLAT__ */
 
 /*  The following macros provide for common functions */
 
+#if !defined(__CODEGUARD__)
+
 #define ferror(f)   ((f)->flags & _F_ERR)
 #define feof(f)     ((f)->flags & _F_EOF)
+#if !defined(__MFC_COMPAT__)
+#define fileno(f)   ((f)->fd)
+#endif
+#if defined(__MSC) && !defined(__MFC_COMPAT__)
+#define _fileno(f)  fileno(f)
+#endif
 
 #define getc(f) \
   ((--((f)->level) >= 0) ? (unsigned char)(*(f)->curp++) : \
@@ -383,12 +415,14 @@ int      _RTLENTRY _EXPFUNC _fputc(char __c, FILE * __stream); /* used by putc()
 #define getchar()  getc(stdin)
 #define putchar(c) putc((c), stdout)
 
-#define ungetc(c,f) ungetc((c),f)   /* traditionally a macro */
+#endif
 
+#define ungetc(c,f) ungetc((c),f)   /* traditionally a macro */
 
 #if !defined(RC_INVOKED)
 
-#pragma option -a. /* restore default packing */
+/* restore default packing */
+#pragma pack(pop)
 
 #if defined(__STDC__)
 #pragma warn .nak

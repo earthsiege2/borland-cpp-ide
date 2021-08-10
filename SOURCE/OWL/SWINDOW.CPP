@@ -1,22 +1,40 @@
 //----------------------------------------------------------------------------
 // ObjectWindows
-// (C) Copyright 1991, 1994 by Borland International, All Rights Reserved
+// Copyright (c) 1991, 1996 by Borland International, All Rights Reserved
 //
-//   Streamable object implementation for TWindow.
+//$Revision:   10.3  $
+//
+// Streamable object implementation for TWindow.
 //----------------------------------------------------------------------------
-#include <owl/owlpch.h>
-#include <owl/applicat.h>
-#include <owl/appdict.h>
-#include <owl/window.h>
-#include <owl/scroller.h>
+#include <owl/pch.h>
+#if !defined(OWL_APPLICAT_H)
+# include <owl/applicat.h>
+#endif
+#if !defined(OWL_APPDICT_H)
+# include <owl/appdict.h>
+#endif
+#if !defined(OWL_WINDOW_H)
+# include <owl/window.h>
+#endif
+#if !defined(OWL_SCROLLER_H)
+# include <owl/scroller.h>
+#endif
 
-extern WNDPROC CreateInstanceThunk(TWindow*);
+//
+// Externs defined in owl.cpp
+//
+extern WNDPROC CreateInstanceThunk(TWindow*, TThunkProc);
 
 IMPLEMENT_STREAMABLE(TWindow);
 
 const int StreamIsTop      = 1;
 const int StreamIsTopChild = 2;
 
+#if !defined(BI_NO_OBJ_STREAMING)
+
+//
+//
+//
 void *
 TWindow::Streamer::Read(ipstream& is, uint32 version) const
 {
@@ -28,13 +46,13 @@ TWindow::Streamer::Read(ipstream& is, uint32 version) const
     return o;           // we only need to read our child list
   }
 
-  o->HWindow = 0;
+  o->Handle = 0;
   o->Parent = 0;
   o->SiblingList = 0;
   o->ChildList = 0;
   o->TransferBuffer = 0;
   o->DefaultProc = 0;
-  o->hAccel = 0;
+  o->HAccel = 0;
   o->SetUniqueId();
 
   is >> o->Module;
@@ -111,13 +129,16 @@ TWindow::Streamer::Read(ipstream& is, uint32 version) const
   o->HCursor = 0;
   is >> o->CursorModule >> o->CursorResId;
   o->SetCursor(o->CursorModule, o->CursorResId);
-  is >> o->BkgndColor;
+  is >> o->BkgndColor;  
 
-  o->Thunk = CreateInstanceThunk(o);
+  o->Thunk = CreateInstanceThunk(o, StdWndProc);
 
   return o;
 }
 
+//
+//
+//
 void
 TWindow::Streamer::Write(opstream& os) const
 {
@@ -141,7 +162,7 @@ TWindow::Streamer::Write(opstream& os) const
   os << TResId(o->Title);
 
   uint32 saveFlags = o->Flags;
-  if (o->HWindow)
+  if (o->GetHandle())
     saveFlags |= wfAutoCreate;
   os << saveFlags;
 
@@ -149,7 +170,7 @@ TWindow::Streamer::Write(opstream& os) const
     uint32 saveStyle = o->Attr.Style &
                       ~(WS_MINIMIZE | WS_MAXIMIZE | WS_DISABLED | WS_VISIBLE);
 
-    if (o->HWindow)
+    if (o->GetHandle())
       saveStyle |= o->GetWindowLong(GWL_STYLE) &
                    (WS_MINIMIZE | WS_MAXIMIZE | WS_DISABLED | WS_VISIBLE);
 
@@ -187,6 +208,7 @@ TWindow::Streamer::Write(opstream& os) const
       writeSiblings = true;
     }
   }
+
 #endif
 
   os << o->Scroller;
@@ -194,3 +216,5 @@ TWindow::Streamer::Write(opstream& os) const
   os << o->CursorModule << o->CursorResId;
   os << o->BkgndColor;
 }
+
+#endif  // if !defined(BI_NO_OBJ_STREAMING)

@@ -1,0 +1,8 @@
+//----------------------------------------------------------------------------
+// ObjectWindows
+// Copyright (c) 1995, 1995 by Borland International, All Rights Reserved
+//----------------------------------------------------------------------------
+
+#define IDM_MAINMENU    1
+#define CM_PICKITEM     101
+#define CM_PICKPOPITEM  102

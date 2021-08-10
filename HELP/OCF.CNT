@@ -1,0 +1,9 @@
+:BASE OCF.HLP
+:TITLE ObjectComponents Programmer's Guide and Language Reference
+:INDEX ObjectComponents Programmer's Guide and Language Reference = OCF.HLP
+:INDEX ObjectWindows Reference = OWL.HLP
+
+:INCLUDE OPENHELP.CFG
+:INCLUDE OCFPG.TOC
+:INCLUDE OCFLR.TOC
+

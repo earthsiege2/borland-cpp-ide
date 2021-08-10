@@ -21,7 +21,16 @@
 #############################################################################
 MISC =                         \
         $(LIBDIR)\import32.lib \
-        $(LIBDIR)\ole2w32.lib
+        $(LIBDIR)\ole2w32.lib  \
+        $(LIBDIR)\msextra.lib       # new for WIN95 (must be separate from
+                                    # import32.lib because NT has same
+                                    # functions listed in a different module)
+
+MISC =  $(MISC)                \
+        $(LIBDIR)\rpcextra.lib      # Used for RPC (must be separate from
+                                    # import32.lib because NT has same
+                                    # functions listed in a different module)
+
 
 #############################################################################
 # Configure the environment appropriately.                                  #
@@ -42,27 +51,34 @@ CONLIBS =            \
         netapi32.def \
         nddeapi.def  \
         rasapi32.def \
-        rpcdce4.def  \
         rpcns4.def   \
         rpcrt4.def   \
         vdmdbg.def   \
         version.def  \
         win32spl.def \
-        winstrm.def  \
         wsock32.def  \
         winspool.def
+
+WIN95LIBS =          \
+        imm32.def    \
+        mapi32.def   \
+        tapi32.def   \
+        pkpd32.def   \
+        url.def
+
+RPCEXTRALIB =        \
+        rpcdce4.def
 
 GUILIBS =            \
         avicap32.def \
         avifil32.def \
         comctl32.def \
         comdlg32.def \
+        ctl3d32.def  \
         gdi32.def    \
         glu32.def    \
         msacm32.def  \
         msvfw32.def  \
-        olecli32.def \
-        olesvr32.def \
         opengl32.def \
         shell32.def  \
         user32.def   \
@@ -71,9 +87,23 @@ GUILIBS =            \
 
 OLE2LIBS =           \
         ole32.def    \
-        oleaut32.def
+        oleaut32.def \
+        oledlg.def
 
-$(LIBDIR)\import32.lib : $(CONLIBS:.def=.fst) $(GUILIBS:.def=.fst)
+OLE1LIBS =           \
+        olecli32.def \
+        olesvr32.def
+
+
+MSEXTRALIB =          \
+        mfcuia32.def  \
+        svrapi.def    \
+        penwin32.def  \
+        winstrm.def   \
+        $(OLE1LIBS)
+
+
+$(LIBDIR)\import32.lib : $(CONLIBS:.def=.fst) $(GUILIBS:.def=.fst) $(WIN95LIBS:.def=.fst) guid.obj
     makersp "-+!s &\n" &&|
         $?
 |   > $&.rsp
@@ -91,3 +121,20 @@ $(LIBDIR)\ole2w32.lib : $(OLE2LIBS:.def=.fst) uuid.obj
     del temp.lst
     if exist $*.bak del $*.bak
 
+$(LIBDIR)\msextra.lib : $(MSEXTRALIB:.def=.fst)
+    makersp "-+!s &\n" &&|
+        $?
+|   > $&.rsp
+    $(TLIB) $< @$&.rsp, temp.lst
+    del *.rsp
+    del temp.lst
+    if exist $*.bak del $*.bak
+
+$(LIBDIR)\rpcextra.lib : $(RPCEXTRALIB:.def=.fst)
+    makersp "-+!s &\n" &&|
+        $?
+|   > $&.rsp
+    $(TLIB) $< @$&.rsp, temp.lst
+    del *.rsp
+    del temp.lst
+    if exist $*.bak del $*.bak

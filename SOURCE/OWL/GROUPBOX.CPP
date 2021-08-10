@@ -1,15 +1,24 @@
 //----------------------------------------------------------------------------
 // ObjectWindows
-// (C) Copyright 1991, 1994 by Borland International, All Rights Reserved
+// Copyright (c) 1991, 1996 by Borland International, All Rights Reserved
 //
-//   Implementation of class TGroupBox.  This defines the basic behavior
-//   for all group boxes.
+//$Revision:   10.3  $
+//
+// Implementation of class TGroupBox.  This defines the basic behavior for all
+// group boxes.
 //----------------------------------------------------------------------------
 #pragma hdrignore SECTION
-#include <owl/owlpch.h>
-#include <owl/groupbox.h>
-#include <owl/applicat.h>
-#include <bwcc.h>
+#include <owl/pch.h>
+#if !defined(OWL_GROUPBOX_H)
+# include <owl/groupbox.h>
+#endif
+#if !defined(OWL_APPLICAT_H)
+# include <owl/applicat.h>
+#endif
+
+#if defined(BI_COMP_BORLANDC)
+# include <bwcc.h>
+#endif
 
 #if !defined(SECTION) || SECTION == 1
 
@@ -34,12 +43,14 @@ TGroupBox::TGroupBox(TWindow*        parent,
 //
 // Return name of predefined BWCC shade or Windows groupbox class
 //
-char far* 
+char far*
 TGroupBox::GetClassName()
 {
+#if defined(BI_COMP_BORLANDC)
   if (GetApplication()->BWCCEnabled())
     return SHADE_CLASS;
   else
+#endif
     return "BUTTON";
 }
 
@@ -55,7 +66,8 @@ TGroupBox::GetClassName()
 TGroupBox::TGroupBox(TWindow*   parent,
                      int        resourceId,
                      TModule*   module)
-  : TControl(parent, resourceId, module)
+:
+  TControl(parent, resourceId, module)
 {
   NotifyParent = true;
   DisableTransfer();
@@ -72,18 +84,20 @@ void
 TGroupBox::SelectionChanged(int controlId)
 {
   if (NotifyParent)
-    #if defined(BI_PLAT_WIN32)
-      Parent->PostMessage(WM_COMMAND, MAKEWPARAM(Attr.Id, controlId),
-                          (LPARAM) HWindow);
-    #else
-      Parent->PostMessage(WM_COMMAND, Attr.Id, MAKELPARAM(HWindow, controlId));
-    #endif
+#if defined(BI_PLAT_WIN32)
+    Parent->PostMessage(WM_COMMAND, MkParam1(Attr.Id, controlId),
+                        TParam2(GetHandle()));
+#else
+    Parent->PostMessage(WM_COMMAND, Attr.Id, MkParam2(uint16(GetHandle()), controlId));
+#endif
 }
 
 #endif
 #if !defined(SECTION) || SECTION == 2
 
 IMPLEMENT_STREAMABLE1(TGroupBox, TControl);
+
+#if !defined(BI_NO_OBJ_STREAMING)
 
 //
 // reads an instance of TGroupBox from the passed ipstream
@@ -105,4 +119,6 @@ TGroupBox::Streamer::Write(opstream& os) const
   WriteBaseObject((TControl*)GetObject(), os);
   os << GetObject()->NotifyParent;
 }
+#endif  // if !defined(BI_NO_OBJ_STREAMING)
+
 #endif

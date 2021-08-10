@@ -21,8 +21,10 @@
 #############################################################################
 OBJS =           \
     errormsg.obj \
+    ermsghlp.obj \
     platform.obj \
-    version.obj
+    version.obj  \
+    getstrm.obj
 
 !if $d(DLL)
     RES  = version.res

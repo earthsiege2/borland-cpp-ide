@@ -2,7 +2,7 @@
 // ObjectWindows - (C) Copyright 1991, 1994 by Borland International
 //   Tutorial application -- step04.cpp
 //----------------------------------------------------------------------------
-#include <owl/owlpch.h>
+#include <owl/pch.h>
 #include <owl/applicat.h>
 #include <owl/framewin.h>
 #include <owl/dc.h>

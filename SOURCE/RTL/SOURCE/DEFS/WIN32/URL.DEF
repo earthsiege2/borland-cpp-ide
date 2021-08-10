@@ -1,0 +1,10 @@
+LIBRARY URL
+EXPORTS
+
+  URLAssociationDialogW
+  URLAssociationDialogA
+  TranslateURLW
+  TranslateURLA
+  MIMEAssociationDialogW
+  MIMEAssociationDialogA
+  InetIsOffline

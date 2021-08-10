@@ -8,9 +8,9 @@
 */
 
 /*
- *      C/C++ Run Time Library - Version 1.5
+ *      C/C++ Run Time Library - Version 2.0
  *
- *      Copyright (c) 1992, 1994 by Borland International
+ *      Copyright (c) 1992, 1996 by Borland International
  *      All Rights Reserved.
  *
  */
@@ -34,7 +34,7 @@
 #include <dir.h>
 #endif
 
-#pragma option -a-
+#pragma pragma pack(push, 1)    
 
 /* version info */
 #define LCLIB_MAJOR_VERSION                      1
@@ -494,19 +494,19 @@ struct LocaleLib {
 
 struct LocaleLibraryStatus {
 
-	struct LocaleLibraryHeader LibHdr;
+        struct LocaleLibraryHeader LibHdr;
 
-	struct LocaleLocation Location;
+        struct LocaleLocation Location;
 
-	struct CategoryHeader TempCatHdr;
+        struct CategoryHeader TempCatHdr;
 
-	int  Lhandle;
+        int  Lhandle;
 
-	const char *plocalename;
+        const char *plocalename;
 
-	int  localename_len;
+        int  localename_len;
 
-	unsigned char LoadDefaultCategory;
+        unsigned char LoadDefaultCategory;
 
     struct LOCALEOBJECT *ptmplocale;
 };
@@ -540,7 +540,7 @@ struct LOCALEOBJECT {
 
     /* collation function */
     int    _RTLENTRY _EXPFUNC (*pcollate) ( const char *__s1, const char *__s2 );
-					
+                                        
     /* collation transform function */
     size_t _RTLENTRY _EXPFUNC (*ptransform) ( char *__s1, const char *__s2, size_t __n );
 
@@ -565,17 +565,17 @@ struct LOCALEOBJECT {
 
 struct path_components {
 
-	char	_drive_[ MAXDRIVE ];
-	char	_dir_  [ MAXDIR ];
-	char	_name_ [ MAXFILE ];
-	char	_ext_  [ MAXEXT ];
+        char    _drive_[ MAXDRIVE ];
+        char    _dir_  [ MAXDIR ];
+        char    _name_ [ MAXFILE ];
+        char    _ext_  [ MAXEXT ];
 };
 
 /* macros */
 
 #define _ISLOCALESTRING( str )                                         \
                                                                        \
-	   ( ( (str != NULL) && strchr( str, LOCALE_STR_SYM ) != NULL ) ? 1 : 0 )
+           ( ( (str != NULL) && strchr( str, LOCALE_STR_SYM ) != NULL ) ? 1 : 0 )
 
 #define _CHECKVERSION( hdr )                                           \
                                                                        \
@@ -591,7 +591,7 @@ struct path_components {
 
 #define _OSFILEREAD( fhandle, buffer, nBytes, nRead )                  \
                                                                        \
-	    ( nRead = read( fhandle, buffer, nBytes ) )
+            ( nRead = read( fhandle, buffer, nBytes ) )
 
 #define _OSFILECLOSE( fhandle )                                        \
                                                                        \
@@ -683,6 +683,8 @@ extern struct lconv _localeconvention;
 extern char _LocaleLibName[ MAXPATH + 1 ];
 
 #define __pLocale _pLocale
+
+#pragma pragma pack(pop)        
 
 #endif /* ___LOCALE_H */
 

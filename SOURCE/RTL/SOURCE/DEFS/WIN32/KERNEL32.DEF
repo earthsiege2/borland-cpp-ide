@@ -1,619 +1,704 @@
-LIBRARY     KERNEL32.DLL
+    LIBRARY KERNEL32
+    EXPORTS
 
-EXPORTS
-    AddAtomA                       @1   
-    AddAtomW                       @2   
-    AddConsoleAliasA               @3   
-    AddConsoleAliasW               @4   
-    AllocConsole                   @5   
-    AreFileApisANSI                @6   
-    BackupRead                     @7   
-    BackupSeek                     @8   
-    BackupWrite                    @9   
-    BaseAttachCompleteThunk        @10  
-    BasepDebugDump                 @11  
-    Beep                           @12  
-    BeginUpdateResourceA           @13  
-    BeginUpdateResourceW           @14  
-    BuildCommDCBA                  @15  
-    BuildCommDCBAndTimeoutsA       @16  
-    BuildCommDCBAndTimeoutsW       @17  
-    BuildCommDCBW                  @18  
-    CallNamedPipeA                 @19  
-    CallNamedPipeW                 @20  
-    ClearCommBreak                 @21  
-    ClearCommError                 @22  
-    CloseConsoleHandle             @23  
-    CloseHandle                    @24  
-    CloseProfileUserMapping        @25  
-    CmdBatNotification             @26  
-    CommConfigDialogA              @27  
-    CommConfigDialogW              @28  
-    CompareFileTime                @29  
-    CompareStringA                 @30  
-    CompareStringW                 @31  
-    ConnectNamedPipe               @32  
-    ConsoleMenuControl             @33  
-    ConsoleSubst                   @34  
-    ContinueDebugEvent             @35  
-    ConvertDefaultLocale           @36  
-    CopyFileA                      @37  
-    CopyFileW                      @38  
-    CreateConsoleScreenBuffer      @39  
-    CreateDirectoryA               @40  
-    CreateDirectoryExA             @41  
-    CreateDirectoryExW             @42  
-    CreateDirectoryW               @43  
-    CreateEventA                   @44  
-    CreateEventW                   @45  
-    CreateFileA                    @46  
-    CreateFileMappingA             @47  
-    CreateFileMappingW             @48  
-    CreateFileW                    @49  
-    CreateIoCompletionPort         @50  
-    CreateMailslotA                @51  
-    CreateMailslotW                @52  
-    CreateMutexA                   @53  
-    CreateMutexW                   @54  
-    CreateNamedPipeA               @55  
-    CreateNamedPipeW               @56  
-    CreatePipe                     @57  
-    CreateProcessA                 @58  
-    CreateProcessW                 @59  
-    CreateRemoteThread             @60  
-    CreateSemaphoreA               @61  
-    CreateSemaphoreW               @62  
-    CreateTapePartition            @63  
-    CreateThread                   @64  
-    CreateVirtualBuffer            @65  
-    DebugActiveProcess             @66  
-    DebugBreak                     @67  
-    DefineDosDeviceA               @68  
-    DefineDosDeviceW               @69  
-    DeleteAtom                     @70  
-    DeleteCriticalSection          @71  
-    DeleteFileA                    @72  
-    DeleteFileW                    @73  
-    DeviceIoControl                @74  
-    DisableThreadLibraryCalls      @75  
-    DisconnectNamedPipe            @76  
-    DosDateTimeToFileTime          @77  
-    DuplicateConsoleHandle         @78  
-    DuplicateHandle                @79  
-    EndUpdateResourceA             @80  
-    EndUpdateResourceW             @81  
-    EnterCriticalSection           @82  
-    EnumCalendarInfoA              @83  
-    EnumCalendarInfoW              @84  
-    EnumDateFormatsA               @85  
-    EnumDateFormatsW               @86  
-    EnumResourceLanguagesA         @87  
-    EnumResourceLanguagesW         @88  
-    EnumResourceNamesA             @89  
-    EnumResourceNamesW             @90  
-    EnumResourceTypesA             @91  
-    EnumResourceTypesW             @92  
-    EnumSystemCodePagesA           @93  
-    EnumSystemCodePagesW           @94  
-    EnumSystemLocalesA             @95  
-    EnumSystemLocalesW             @96  
-    EnumTimeFormatsA               @97  
-    EnumTimeFormatsW               @98  
-    EraseTape                      @99  
-    EscapeCommFunction             @100 
-    ExitProcess                    @101 
-    ExitThread                     @102 
-    ExitVDM                        @103 
-    ExpandEnvironmentStringsA      @104 
-    ExpandEnvironmentStringsW      @105 
-    ExpungeConsoleCommandHistoryA  @106 
-    ExpungeConsoleCommandHistoryW  @107 
-    ExtendVirtualBuffer            @108 
-    FatalAppExitA                  @109 
-    FatalAppExitW                  @110 
-    FatalExit                      @111 
-    FileTimeToDosDateTime          @112 
-    FileTimeToLocalFileTime        @113 
-    FileTimeToSystemTime           @114 
-    FillConsoleOutputAttribute     @115 
-    FillConsoleOutputCharacterA    @116 
-    FillConsoleOutputCharacterW    @117 
-    FindAtomA                      @118 
-    FindAtomW                      @119 
-    FindClose                      @120 
-    FindCloseChangeNotification    @121 
-    FindFirstChangeNotificationA   @122 
-    FindFirstChangeNotificationW   @123 
-    FindFirstFileA                 @124 
-    FindFirstFileW                 @125 
-    FindNextChangeNotification     @126 
-    FindNextFileA                  @127 
-    FindNextFileW                  @128 
-    FindResourceA                  @129 
-    FindResourceExA                @130 
-    FindResourceExW                @131 
-    FindResourceW                  @132 
-    FlushConsoleInputBuffer        @133 
-    FlushFileBuffers               @134 
-    FlushInstructionCache          @135 
-    FlushViewOfFile                @136 
-    FoldStringA                    @137 
-    FoldStringW                    @138 
-    FormatMessageA                 @139 
-    FormatMessageW                 @140 
-    FreeConsole                    @141 
-    FreeEnvironmentStringsA        @142 
-    FreeEnvironmentStringsW        @143 
-    FreeLibrary                    @144 
-    FreeLibraryAndExitThread       @145 
-    FreeResource                   @146 
-    FreeVirtualBuffer              @147 
-    GenerateConsoleCtrlEvent       @148 
-    GetACP                         @149 
-    GetAtomNameA                   @150 
-    GetAtomNameW                   @151 
-    GetBinaryType                  @152 
-    GetBinaryTypeA                 @153 
-    GetBinaryTypeW                 @154 
-    GetCPInfo                      @155 
-    GetCommConfig                  @156 
-    GetCommMask                    @157 
-    GetCommModemStatus             @158 
-    GetCommProperties              @159 
-    GetCommState                   @160 
-    GetCommTimeouts                @161 
-    GetCommandLineA                @162 
-    GetCommandLineW                @163 
-    GetCompressedFileSizeA         @164 
-    GetCompressedFileSizeW         @165 
-    GetComputerNameA               @166 
-    GetComputerNameW               @167 
-    GetConsoleAliasA               @168 
-    GetConsoleAliasExesA           @169 
-    GetConsoleAliasExesLengthA     @170 
-    GetConsoleAliasExesLengthW     @171 
-    GetConsoleAliasExesW           @172 
-    GetConsoleAliasW               @173 
-    GetConsoleAliasesA             @174 
-    GetConsoleAliasesLengthA       @175 
-    GetConsoleAliasesLengthW       @176 
-    GetConsoleAliasesW             @177 
-    GetConsoleCP                   @178 
-    GetConsoleCommandHistoryA      @179 
-    GetConsoleCommandHistoryLengthA @180 
-    GetConsoleCommandHistoryLengthW @181 
-    GetConsoleCommandHistoryW      @182 
-    GetConsoleCursorInfo           @183 
-    GetConsoleDisplayMode          @184 
-    GetConsoleFontInfo             @185 
-    GetConsoleFontSize             @186 
-    GetConsoleHardwareState        @187 
-    GetConsoleInputWaitHandle      @188 
-    GetConsoleMode                 @189 
-    GetConsoleOutputCP             @190 
-    GetConsoleScreenBufferInfo     @191 
-    GetConsoleTitleA               @192 
-    GetConsoleTitleW               @193 
-    GetCurrencyFormatA             @194 
-    GetCurrencyFormatW             @195 
-    GetCurrentConsoleFont          @196 
-    GetCurrentDirectoryA           @197 
-    GetCurrentDirectoryW           @198 
-    GetCurrentProcess              @199 
-    GetCurrentProcessId            @200 
-    GetCurrentThread               @201 
-    GetCurrentThreadId             @202 
-    GetDateFormatA                 @203 
-    GetDateFormatW                 @204 
-    GetDefaultCommConfigA          @205 
-    GetDefaultCommConfigW          @206 
-    GetDiskFreeSpaceA              @207 
-    GetDiskFreeSpaceW              @208 
-    GetDriveTypeA                  @209 
-    GetDriveTypeW                  @210 
-    GetEnvironmentStrings          @211 
-    GetEnvironmentStringsA         @212 
-    GetEnvironmentStringsW         @213 
-    GetEnvironmentVariableA        @214 
-    GetEnvironmentVariableW        @215 
-    GetExitCodeProcess             @216 
-    GetExitCodeThread              @217 
-    GetFileAttributesA             @218 
-    GetFileAttributesW             @219 
-    GetFileInformationByHandle     @220 
-    GetFileSize                    @221 
-    GetFileTime                    @222 
-    GetFileType                    @223 
-    GetFullPathNameA               @224 
-    GetFullPathNameW               @225 
-    GetHandleInformation           @226 
-    GetLargestConsoleWindowSize    @227 
-    GetLastError                   @228 
-    GetLocalTime                   @229 
-    GetLocaleInfoA                 @230 
-    GetLocaleInfoW                 @231 
-    GetLogicalDriveStringsA        @232 
-    GetLogicalDriveStringsW        @233 
-    GetLogicalDrives               @234 
-    GetMailslotInfo                @235 
-    GetModuleFileNameA             @236 
-    GetModuleFileNameW             @237 
-    GetModuleHandleA               @238 
-    GetModuleHandleW               @239 
-    GetNamedPipeHandleStateA       @240 
-    GetNamedPipeHandleStateW       @241 
-    GetNamedPipeInfo               @242 
-    GetNextVDMCommand              @243 
-    GetNumberFormatA               @244 
-    GetNumberFormatW               @245 
-    GetNumberOfConsoleFonts        @246 
-    GetNumberOfConsoleInputEvents  @247 
-    GetNumberOfConsoleMouseButtons @248 
-    GetOEMCP                       @249 
-    GetOverlappedResult            @250 
-    GetPriorityClass               @251 
-    GetPrivateProfileIntA          @252 
-    GetPrivateProfileIntW          @253 
-    GetPrivateProfileSectionA      @254 
-    GetPrivateProfileSectionW      @255 
-    GetPrivateProfileStringA       @256 
-    GetPrivateProfileStringW       @257 
-    GetProcAddress                 @258 
-    GetProcessAffinityMask         @259 
-    GetProcessHeap                 @260 
-    GetProcessHeaps                @261 
-    GetProcessShutdownParameters   @262 
-    GetProcessTimes                @263 
-    GetProcessWorkingSetSize       @264 
-    GetProfileIntA                 @265 
-    GetProfileIntW                 @266 
-    GetProfileSectionA             @267 
-    GetProfileSectionW             @268 
-    GetProfileStringA              @269 
-    GetProfileStringW              @270 
-    GetQueuedCompletionStatus      @271 
-    GetShortPathNameA              @272 
-    GetShortPathNameW              @273 
-    GetStartupInfoA                @274 
-    GetStartupInfoW                @275 
-    GetStdHandle                   @276 
-    GetStringTypeA                 @277 
-    GetStringTypeExA               @278 
-    GetStringTypeExW               @279 
-    GetStringTypeW                 @280 
-    GetSystemDefaultLCID           @281 
-    GetSystemDefaultLangID         @282 
-    GetSystemDirectoryA            @283 
-    GetSystemDirectoryW            @284 
-    GetSystemInfo                  @285 
-    GetSystemTime                  @286 
-    GetSystemTimeAdjustment        @287 
-    GetTapeParameters              @288 
-    GetTapePosition                @289 
-    GetTapeStatus                  @290 
-    GetTempFileNameA               @291 
-    GetTempFileNameW               @292 
-    GetTempPathA                   @293 
-    GetTempPathW                   @294 
-    GetThreadContext               @295 
-    GetThreadLocale                @296 
-    GetThreadPriority              @297 
-    GetThreadSelectorEntry         @298 
-    GetThreadTimes                 @299 
-    GetTickCount                   @300 
-    GetTimeFormatA                 @301 
-    GetTimeFormatW                 @302 
-    GetTimeZoneInformation         @303 
-    GetUserDefaultLCID             @304 
-    GetUserDefaultLangID           @305 
-    GetVDMCurrentDirectories       @306 
-    GetVersion                     @307 
-    GetVersionExA                  @308 
-    GetVersionExW                  @309 
-    GetVolumeInformationA          @310 
-    GetVolumeInformationW          @311 
-    GetWindowsDirectoryA           @312 
-    GetWindowsDirectoryW           @313 
-    GlobalAddAtomA                 @314 
-    GlobalAddAtomW                 @315 
-    GlobalAlloc                    @316 
-    GlobalCompact                  @317 
-    GlobalDeleteAtom               @318 
-    GlobalFindAtomA                @319 
-    GlobalFindAtomW                @320 
-    GlobalFix                      @321 
-    GlobalFlags                    @322 
-    GlobalFree                     @323 
-    GlobalGetAtomNameA             @324 
-    GlobalGetAtomNameW             @325 
-    GlobalHandle                   @326 
-    GlobalLock                     @327 
-    GlobalMemoryStatus             @328 
-    GlobalReAlloc                  @329 
-    GlobalSize                     @330 
-    GlobalUnWire                   @331 
-    GlobalUnfix                    @332 
-    GlobalUnlock                   @333 
-    GlobalWire                     @334 
-    HeapAlloc                      @335 
-    HeapCompact                    @336 
-    HeapCreate                     @337 
-    HeapDestroy                    @338 
-    HeapFree                       @339 
-    HeapLock                       @340 
-    HeapReAlloc                    @341 
-    HeapSize                       @342 
-    HeapUnlock                     @343 
-    HeapValidate                   @344 
-    HeapWalk                       @345 
-    InitAtomTable                  @346 
-    InitializeCriticalSection      @347 
-    InterlockedDecrement           @348 
-    InterlockedExchange            @349 
-    InterlockedIncrement           @350 
-    InvalidateConsoleDIBits        @351 
-    IsBadCodePtr                   @352 
-    IsBadHugeReadPtr               @353 
-    IsBadHugeWritePtr              @354 
-    IsBadReadPtr                   @355 
-    IsBadStringPtrA                @356 
-    IsBadStringPtrW                @357 
-    IsBadWritePtr                  @358 
-    IsDBCSLeadByte                 @359 
-    IsDBCSLeadByteEx               @360 
-    IsValidCodePage                @361 
-    IsValidLocale                  @362 
-    LCMapStringA                   @363 
-    LCMapStringW                   @364 
-    LeaveCriticalSection           @365 
-    LoadLibraryA                   @366 
-    LoadLibraryExA                 @367 
-    LoadLibraryExW                 @368 
-    LoadLibraryW                   @369 
-    LoadModule                     @370 
-    LoadResource                   @371 
-    LocalAlloc                     @372 
-    LocalCompact                   @373 
-    LocalFileTimeToFileTime        @374 
-    LocalFlags                     @375 
-    LocalFree                      @376 
-    LocalHandle                    @377 
-    LocalLock                      @378 
-    LocalReAlloc                   @379 
-    LocalShrink                    @380 
-    LocalSize                      @381 
-    LocalUnlock                    @382 
-    LockFile                       @383 
-    LockFileEx                     @384 
-    LockResource                   @385 
-    MapViewOfFile                  @386 
-    MapViewOfFileEx                @387 
-    MoveFileA                      @388 
-    MoveFileExA                    @389 
-    MoveFileExW                    @390 
-    MoveFileW                      @391 
-    MulDiv                         @392 
-    MultiByteToWideChar            @393 
-    OpenConsoleW                   @394 
-    OpenEventA                     @395 
-    OpenEventW                     @396 
-    OpenFile                       @397 
-    OpenFileMappingA               @398 
-    OpenFileMappingW               @399 
-    OpenMutexA                     @400 
-    OpenMutexW                     @401 
-    OpenProcess                    @402 
-    OpenProfileUserMapping         @403 
-    OpenSemaphoreA                 @404 
-    OpenSemaphoreW                 @405 
-    OutputDebugStringA             @406 
-    OutputDebugStringW             @407 
-    PeekConsoleInputA              @408 
-    PeekConsoleInputW              @409 
-    PeekNamedPipe                  @410 
-    PrepareTape                    @411 
-    PulseEvent                     @412 
-    PurgeComm                      @413 
-    QueryDosDeviceA                @414 
-    QueryDosDeviceW                @415 
-    QueryPerformanceCounter        @416 
-    QueryPerformanceFrequency      @417 
-    QueryWin31IniFilesMappedToRegistry @418 
-    RaiseException                 @419 
-    ReadConsoleA                   @420 
-    ReadConsoleInputA              @421 
-    ReadConsoleInputW              @422 
-    ReadConsoleOutputA             @423 
-    ReadConsoleOutputAttribute     @424 
-    ReadConsoleOutputCharacterA    @425 
-    ReadConsoleOutputCharacterW    @426 
-    ReadConsoleOutputW             @427 
-    ReadConsoleW                   @428 
-    ReadFile                       @429 
-    ReadFileEx                     @430 
-    ReadProcessMemory              @431 
-    RegisterConsoleVDM             @432 
-    RegisterWaitForInputIdle       @433 
-    RegisterWowBaseHandlers        @434 
-    RegisterWowExec                @435 
-    ReleaseMutex                   @436 
-    ReleaseSemaphore               @437 
-    RemoveDirectoryA               @438 
-    RemoveDirectoryW               @439 
-    ResetEvent                     @440 
-    ResumeThread                   @441 
-    RtlFillMemory                  @442 
-    RtlMoveMemory                  @443 
-    RtlUnwind                      @444 
-    RtlZeroMemory                  @445 
-    ScrollConsoleScreenBufferA     @446 
-    ScrollConsoleScreenBufferW     @447 
-    SearchPathA                    @448 
-    SearchPathW                    @449 
-    SetCommBreak                   @450 
-    SetCommConfig                  @451 
-    SetCommMask                    @452 
-    SetCommState                   @453 
-    SetCommTimeouts                @454 
-    SetComputerNameA               @455 
-    SetComputerNameW               @456 
-    SetConsoleActiveScreenBuffer   @457 
-    SetConsoleCP                   @458 
-    SetConsoleCommandHistoryMode   @459 
-    SetConsoleCtrlHandler          @460 
-    SetConsoleCursor               @461 
-    SetConsoleCursorInfo           @462 
-    SetConsoleCursorPosition       @463 
-    SetConsoleDisplayMode          @464 
-    SetConsoleFont                 @465 
-    SetConsoleHardwareState        @466 
-    SetConsoleKeyShortcuts         @467 
-    SetConsoleMaximumWindowSize    @468 
-    SetConsoleMenuClose            @469 
-    SetConsoleMode                 @470 
-    SetConsoleNumberOfCommandsA    @471 
-    SetConsoleNumberOfCommandsW    @472 
-    SetConsoleOutputCP             @473 
-    SetConsolePalette              @474 
-    SetConsoleScreenBufferSize     @475 
-    SetConsoleTextAttribute        @476 
-    SetConsoleTitleA               @477 
-    SetConsoleTitleW               @478 
-    SetConsoleWindowInfo           @479 
-    SetCurrentDirectoryA           @480 
-    SetCurrentDirectoryW           @481 
-    SetDefaultCommConfigA          @482 
-    SetDefaultCommConfigW          @483 
-    SetEndOfFile                   @484 
-    SetEnvironmentVariableA        @485 
-    SetEnvironmentVariableW        @486 
-    SetErrorMode                   @487 
-    SetEvent                       @488 
-    SetFileApisToANSI              @489 
-    SetFileApisToOEM               @490 
-    SetFileAttributesA             @491 
-    SetFileAttributesW             @492 
-    SetFilePointer                 @493 
-    SetFileTime                    @494 
-    SetHandleCount                 @495 
-    SetHandleInformation           @496 
-    SetLastConsoleEventActive      @497 
-    SetLastError                   @498 
-    SetLocalTime                   @499 
-    SetLocaleInfoA                 @500 
-    SetLocaleInfoW                 @501 
-    SetMailslotInfo                @502 
-    SetNamedPipeHandleState        @503 
-    SetPriorityClass               @504 
-    SetProcessShutdownParameters   @505 
-    SetProcessWorkingSetSize       @506 
-    SetStdHandle                   @507 
-    SetSystemTime                  @508 
-    SetSystemTimeAdjustment        @509 
-    SetTapeParameters              @510 
-    SetTapePosition                @511 
-    SetThreadAffinityMask          @512 
-    SetThreadContext               @513 
-    SetThreadLocale                @514 
-    SetThreadPriority              @515 
-    SetTimeZoneInformation         @516 
-    SetUnhandledExceptionFilter    @517 
-    SetVDMCurrentDirectories       @518 
-    SetVolumeLabelA                @519 
-    SetVolumeLabelW                @520 
-    SetupComm                      @521 
-    ShowConsoleCursor              @522 
-    SizeofResource                 @523 
-    Sleep                          @524 
-    SleepEx                        @525 
-    SuspendThread                  @526 
-    SystemTimeToFileTime           @527 
-    SystemTimeToTzSpecificLocalTime @528 
-    TerminateProcess               @529 
-    TerminateThread                @530 
-    TlsAlloc                       @531 
-    TlsFree                        @532 
-    TlsGetValue                    @533 
-    TlsSetValue                    @534 
-    TransactNamedPipe              @535 
-    TransmitCommChar               @536 
-    TrimVirtualBuffer              @537 
-    UnhandledExceptionFilter       @538 
-    UnlockFile                     @539 
-    UnlockFileEx                   @540 
-    UnmapViewOfFile                @541 
-    UpdateResourceA                @542 
-    UpdateResourceW                @543 
-    VDMConsoleOperation            @544 
-    VDMOperationStarted            @545 
-    VerLanguageNameA               @546 
-    VerLanguageNameW               @547 
-    VerifyConsoleIoHandle          @548 
-    VirtualAlloc                   @549 
-    VirtualBufferExceptionHandler  @550 
-    VirtualFree                    @551 
-    VirtualLock                    @552 
-    VirtualProtect                 @553 
-    VirtualProtectEx               @554 
-    VirtualQuery                   @555 
-    VirtualQueryEx                 @556 
-    VirtualUnlock                  @557 
-    WaitCommEvent                  @558 
-    WaitForDebugEvent              @559 
-    WaitForMultipleObjects         @560 
-    WaitForMultipleObjectsEx       @561 
-    WaitForSingleObject            @562 
-    WaitForSingleObjectEx          @563 
-    WaitNamedPipeA                 @564 
-    WaitNamedPipeW                 @565 
-    WideCharToMultiByte            @566 
-    WinExec                        @567 
-    WriteConsoleA                  @568 
-    WriteConsoleInputA             @569 
-    WriteConsoleInputVDMA          @570 
-    WriteConsoleInputVDMW          @571 
-    WriteConsoleInputW             @572 
-    WriteConsoleOutputA            @573 
-    WriteConsoleOutputAttribute    @574 
-    WriteConsoleOutputCharacterA   @575 
-    WriteConsoleOutputCharacterW   @576 
-    WriteConsoleOutputW            @577 
-    WriteConsoleW                  @578 
-    WriteFile                      @579 
-    WriteFileEx                    @580 
-    WritePrivateProfileSectionA    @581 
-    WritePrivateProfileSectionW    @582 
-    WritePrivateProfileStringA     @583 
-    WritePrivateProfileStringW     @584 
-    WriteProcessMemory             @585 
-    WriteProfileSectionA           @586 
-    WriteProfileSectionW           @587 
-    WriteProfileStringA            @588 
-    WriteProfileStringW            @589 
-    WriteTapemark                  @590 
-    _hread                         @591 
-    _hwrite                        @592 
-    _lclose                        @593 
-    _lcreat                        @594 
-    _llseek                        @595 
-    _lopen                         @596 
-    _lread                         @597 
-    _lwrite                        @598 
-    lstrcat                        @599 
-    lstrcatA                       @600 
-    lstrcatW                       @601 
-    lstrcmp                        @602 
-    lstrcmpA                       @603 
-    lstrcmpW                       @604 
-    lstrcmpi                       @605 
-    lstrcmpiA                      @606 
-    lstrcmpiW                      @607 
-    lstrcpy                        @608 
-    lstrcpyA                       @609 
-    lstrcpyW                       @610 
-    lstrcpyn                       @611 
-    lstrcpynA                      @612 
-    lstrcpynW                      @613 
-    lstrlen                        @614 
-    lstrlenA                       @615 
-    lstrlenW                       @616 
+        AddAtomA
+        AddAtomW
+        AddConsoleAliasA
+        AddConsoleAliasW
+        AllocConsole
+	AllocLSCallback
+	AllocSLCallback
+        AreFileApisANSI
+        BackupRead
+        BackupSeek
+        BackupWrite
+        BaseAttachCompleteThunk
+	BasepDebugDump
+        Beep
+        BeginUpdateResourceA
+        BeginUpdateResourceW
+        BuildCommDCBA
+        BuildCommDCBAndTimeoutsA
+        BuildCommDCBAndTimeoutsW
+        BuildCommDCBW
+        CallNamedPipeA
+        CallNamedPipeW
+        ClearCommBreak
+        ClearCommError
+        CloseConsoleHandle
+        CloseHandle
+        CloseProfileUserMapping
+        CmdBatNotification
+	CloseSystemHandle
+        CommConfigDialogA
+        CommConfigDialogW
+        CompareFileTime
+        CompareStringA
+        CompareStringW
+        ConnectNamedPipe
+        ConsoleMenuControl
+	ConsoleSubst
+        ContinueDebugEvent
+        ConvertDefaultLocale
+	ConvertToGlobalHandle
+        CopyFileA
+        CopyFileW
+        CreateConsoleScreenBuffer
+        CreateDirectoryA
+        CreateDirectoryExA
+        CreateDirectoryExW
+        CreateDirectoryW
+        CreateEventA
+        CreateEventW
+        CreateFileA
+        CreateFileMappingA
+        CreateFileMappingW
+        CreateFileW
+        CreateIoCompletionPort
+	CreateKernelThread
+        CreateMailslotA
+        CreateMailslotW
+        CreateMutexA
+        CreateMutexW
+        CreateNamedPipeA
+        CreateNamedPipeW
+        CreatePipe
+        CreateProcessA
+        CreateProcessW
+        CreateRemoteThread
+        CreateSemaphoreA
+        CreateSemaphoreW
+	CreateSocketHandle
+        CreateTapePartition
+        CreateThread
+        CreateVirtualBuffer
+	CreateToolhelp32Snapshot
+        DebugActiveProcess
+        DebugBreak
+        DefineDosDeviceA
+        DefineDosDeviceW
+        DeleteAtom
+        DeleteCriticalSection
+        DeleteFileA
+        DeleteFileW
+        DeviceIoControl
+        DisableThreadLibraryCalls
+        DisconnectNamedPipe
+        DosDateTimeToFileTime
+        DuplicateConsoleHandle
+        DuplicateHandle
+        EndUpdateResourceA
+        EndUpdateResourceW
+        EnterCriticalSection
+        EnumCalendarInfoA
+        EnumCalendarInfoW
+        EnumDateFormatsA
+        EnumDateFormatsW
+        EnumResourceLanguagesA
+        EnumResourceLanguagesW
+        EnumResourceNamesA
+        EnumResourceNamesW
+        EnumResourceTypesA
+        EnumResourceTypesW
+        EnumSystemCodePagesA
+        EnumSystemCodePagesW
+        EnumSystemLocalesA
+        EnumSystemLocalesW
+        EnumTimeFormatsA
+        EnumTimeFormatsW
+        EraseTape
+        EscapeCommFunction
+        ExitProcess
+        ExitThread
+        ExitVDM
+        ExpandEnvironmentStringsA
+        ExpandEnvironmentStringsW
+        ExpungeConsoleCommandHistoryA
+        ExpungeConsoleCommandHistoryW
+        ExtendVirtualBuffer
+        FatalAppExitA
+        FatalAppExitW
+        FatalExit
+        FileTimeToDosDateTime
+        FileTimeToLocalFileTime
+        FileTimeToSystemTime
+        FillConsoleOutputAttribute
+        FillConsoleOutputCharacterA
+        FillConsoleOutputCharacterW
+        FindAtomA
+        FindAtomW
+        FindClose
+        FindCloseChangeNotification
+        FindFirstChangeNotificationA
+        FindFirstChangeNotificationW
+        FindFirstFileA
+        FindFirstFileW
+        FindNextChangeNotification
+        FindNextFileA
+        FindNextFileW
+        FindResourceA
+        FindResourceExA
+        FindResourceExW
+        FindResourceW
+        FlushConsoleInputBuffer
+        FlushFileBuffers
+        FlushInstructionCache
+        FlushViewOfFile
+        FoldStringA
+        FoldStringW
+        FormatMessageA
+        FormatMessageW
+        FreeConsole
+        FreeEnvironmentStringsA
+        FreeEnvironmentStringsW
+	FreeLSCallback
+        FreeLibrary
+        FreeLibraryAndExitThread
+        FreeResource
+        FreeVirtualBuffer
+	FreeSLCallback
+        GenerateConsoleCtrlEvent
+        GetACP
+        GetAtomNameA
+        GetAtomNameW
+        GetBinaryType
+        GetBinaryTypeA
+        GetBinaryTypeW
+        GetCPInfo
+        GetCommConfig
+        GetCommMask
+        GetCommModemStatus
+        GetCommProperties
+        GetCommState
+        GetCommTimeouts
+        GetCommandLineA
+        GetCommandLineW
+        GetCompressedFileSizeA
+        GetCompressedFileSizeW
+        GetComputerNameA
+        GetComputerNameW
+        GetConsoleAliasA
+        GetConsoleAliasExesA
+        GetConsoleAliasExesLengthA
+        GetConsoleAliasExesLengthW
+        GetConsoleAliasExesW
+        GetConsoleAliasW
+        GetConsoleAliasesA
+        GetConsoleAliasesLengthA
+        GetConsoleAliasesLengthW
+        GetConsoleAliasesW
+        GetConsoleCP
+        GetConsoleCommandHistoryA
+        GetConsoleCommandHistoryLengthA
+        GetConsoleCommandHistoryLengthW
+        GetConsoleCommandHistoryW
+        GetConsoleCursorInfo
+        GetConsoleDisplayMode
+        GetConsoleFontInfo
+        GetConsoleFontSize
+        GetConsoleHardwareState
+        GetConsoleInputWaitHandle
+        GetConsoleMode
+        GetConsoleOutputCP
+        GetConsoleScreenBufferInfo
+        GetConsoleTitleA
+        GetConsoleTitleW
+        GetCurrencyFormatA
+        GetCurrencyFormatW
+        GetCurrentConsoleFont
+        GetCurrentDirectoryA
+        GetCurrentDirectoryW
+        GetCurrentProcess
+        GetCurrentProcessId
+        GetCurrentThread
+        GetCurrentThreadId
+        GetDateFormatA
+        GetDateFormatW
+	GetDaylightFlag
+        GetDefaultCommConfigA
+        GetDefaultCommConfigW
+        GetDiskFreeSpaceA
+        GetDiskFreeSpaceW
+        GetDriveTypeA
+        GetDriveTypeW
+        GetEnvironmentStrings
+        GetEnvironmentStringsA
+        GetEnvironmentStringsW
+        GetEnvironmentVariableA
+        GetEnvironmentVariableW
+	GetErrorMode
+        GetExitCodeProcess
+        GetExitCodeThread
+        GetFileAttributesA
+        GetFileAttributesW
+        GetFileInformationByHandle
+        GetFileSize
+        GetFileTime
+        GetFileType
+        GetFullPathNameA
+        GetFullPathNameW
+	GetHandleContext
+        GetHandleInformation
+	GetLSCallbackTarget
+	GetLSCallbackTemplate
+        GetLargestConsoleWindowSize
+        GetLastError
+        GetLocalTime
+        GetLocaleInfoA
+        GetLocaleInfoW
+        GetLogicalDriveStringsA
+        GetLogicalDriveStringsW
+        GetLogicalDrives
+        GetMailslotInfo
+        GetModuleFileNameA
+        GetModuleFileNameW
+        GetModuleHandleA
+        GetModuleHandleW
+        GetNamedPipeHandleStateA
+        GetNamedPipeHandleStateW
+        GetNamedPipeInfo
+        GetNextVDMCommand
+        GetNumberFormatA
+        GetNumberFormatW
+        GetNumberOfConsoleFonts
+        GetNumberOfConsoleInputEvents
+        GetNumberOfConsoleMouseButtons
+        GetOEMCP
+        GetOverlappedResult
+        GetPriorityClass
+        GetPrivateProfileIntA
+        GetPrivateProfileIntW
+        GetPrivateProfileSectionA
+        GetPrivateProfileSectionNamesA
+        GetPrivateProfileSectionNamesW
+        GetPrivateProfileSectionW
+        GetPrivateProfileStringA
+        GetPrivateProfileStringW
+        GetPrivateProfileStructA
+        GetPrivateProfileStructW
+        GetProcAddress
+        GetProcessAffinityMask
+	GetProcessFlags
+        GetProcessHeap
+        GetProcessHeaps
+        GetProcessShutdownParameters
+        GetProcessTimes
+        GetProcessVersion
+        GetProcessWorkingSetSize
+	GetProductName
+        GetProfileIntA
+        GetProfileIntW
+        GetProfileSectionA
+        GetProfileSectionW
+        GetProfileStringA
+        GetProfileStringW
+        GetQueuedCompletionStatus
+	GetSLCallbackTarget
+	GetSLCallbackTemplate
+        GetShortPathNameA
+        GetShortPathNameW
+        GetStartupInfoA
+        GetStartupInfoW
+        GetStdHandle
+        GetStringTypeA
+        GetStringTypeExA
+        GetStringTypeExW
+        GetStringTypeW
+        GetSystemDefaultLCID
+        GetSystemDefaultLangID
+        GetSystemDirectoryA
+        GetSystemDirectoryW
+        GetSystemInfo
+        GetSystemPowerStatus
+        GetSystemTime
+        GetSystemTimeAdjustment
+        GetSystemTimeAsFileTime
+        GetTapeParameters
+        GetTapePosition
+        GetTapeStatus
+        GetTempFileNameA
+        GetTempFileNameW
+        GetTempPathA
+        GetTempPathW
+        GetThreadContext
+        GetThreadLocale
+        GetThreadPriority
+        GetThreadSelectorEntry
+        GetThreadTimes
+        GetTickCount
+        GetTimeFormatA
+        GetTimeFormatW
+        GetTimeZoneInformation
+        GetUserDefaultLCID
+        GetUserDefaultLangID
+        GetVDMCurrentDirectories
+        GetVersion
+        GetVersionExA
+        GetVersionExW
+        GetVolumeInformationA
+        GetVolumeInformationW
+        GetWindowsDirectoryA
+        GetWindowsDirectoryW
+        GlobalAddAtomA
+        GlobalAddAtomW
+        GlobalAlloc
+        GlobalCompact
+        GlobalDeleteAtom
+        GlobalFindAtomA
+        GlobalFindAtomW
+        GlobalFix
+        GlobalFlags
+        GlobalFree
+        GlobalGetAtomNameA
+        GlobalGetAtomNameW
+        GlobalHandle
+        GlobalLock
+        GlobalMemoryStatus
+        GlobalReAlloc
+        GlobalSize
+        GlobalUnWire
+        GlobalUnfix
+        GlobalUnlock
+        GlobalWire
+	Heap32First
+	Heap32ListFirst
+	Heap32ListNext
+	Heap32Next
+        HeapAlloc
+        HeapCompact
+        HeapCreate
+	HeapCreateTagsW
+        HeapDestroy
+	HeapExtend
+        HeapFree
+        HeapLock
+	HeapQueryTagW
+        HeapReAlloc
+	'HeapSize'
+	HeapSummary
+	HeapSetFlags
+        HeapUnlock
+	HeapUsage
+        HeapValidate
+        HeapWalk
+        InitAtomTable
+        InitializeCriticalSection
+        InterlockedDecrement
+        InterlockedExchange
+        InterlockedIncrement
+        InvalidateConsoleDIBits
+	InvalidateNLSCache
+        IsBadCodePtr
+        IsBadHugeReadPtr
+        IsBadHugeWritePtr
+        IsBadReadPtr
+        IsBadStringPtrA
+        IsBadStringPtrW
+        IsBadWritePtr
+        IsDBCSLeadByte
+        IsDBCSLeadByteEx
+	IsDebuggerPresent
+	IsLSCallback
+	IsSLCallback
+        IsValidCodePage
+        IsValidLocale
+	K32Thk1632Epilog
+	K32Thk1632Prolog
+        LCMapStringA
+        LCMapStringW
+        LeaveCriticalSection
+        LoadLibraryA
+        LoadLibraryExA
+        LoadLibraryExW
+        LoadLibraryW
+        LoadModule
+        LoadResource
+        LocalAlloc
+        LocalCompact
+        LocalFileTimeToFileTime
+        LocalFlags
+        LocalFree
+        LocalHandle
+        LocalLock
+        LocalReAlloc
+        LocalShrink
+        LocalSize
+        LocalUnlock
+        LockFile
+        LockFileEx
+        LockResource
+	MakeCriticalSectionGlobal
+	MapHInstLS
+	MapHInstLS_PN
+	MapHInstSL
+	MapHInstSL_PN
+	MapHModuleLS
+	MapHModuleSL
+	MapLS
+	MapSL
+	MapSLFix
+        MapViewOfFile
+        MapViewOfFileEx
+	Module32First
+	Module32Next
+        MoveFileA
+        MoveFileExA
+        MoveFileExW
+        MoveFileW
+        MulDiv
+        MultiByteToWideChar
+        OpenConsoleW
+	NotifyNLSUserCache
+        OpenEventA
+        OpenEventW
+        OpenFile
+        OpenFileMappingA
+        OpenFileMappingW
+        OpenMutexA
+        OpenMutexW
+        OpenProcess
+        OpenProfileUserMapping
+        OpenSemaphoreA
+        OpenSemaphoreW
+	OpenVxDHandle
+        OutputDebugStringA
+        OutputDebugStringW
+        PeekConsoleInputA
+        PeekConsoleInputW
+        PeekNamedPipe
+        PostQueuedCompletionStatus
+        PrepareTape
+	Process32First
+	Process32Next
+        PulseEvent
+        PurgeComm
+	QT_Thunk
+        QueryDosDeviceA
+        QueryDosDeviceW
+	QueryNumberOfEventLogRecords
+	QueryOldestEventLogRecord
+        QueryPerformanceCounter
+        QueryPerformanceFrequency
+	QueryWin31IniFilesMappedToRegistry
+	QueryWin31IniFilesMappedToRegis418
+	QueueUserAPC
+        RaiseException
+        ReadConsoleA
+        ReadConsoleInputA
+        ReadConsoleInputW
+        ReadConsoleOutputA
+        ReadConsoleOutputAttribute
+        ReadConsoleOutputCharacterA
+        ReadConsoleOutputCharacterW
+        ReadConsoleOutputW
+        ReadConsoleW
+        ReadFile
+        ReadFileEx
+        ReadProcessMemory
+        RegisterConsoleVDM
+        RegisterWaitForInputIdle
+        RegisterWowBaseHandlers
+        RegisterWowExec
+	RegisterServiceProcess
+	ReinitializeCriticalSection
+        ReleaseMutex
+        ReleaseSemaphore
+        RemoveDirectoryA
+        RemoveDirectoryW
+        ResetEvent
+        ResumeThread
+        RtlFillMemory
+        RtlMoveMemory
+        RtlUnwind
+        RtlZeroMemory
+	SMapLS
+        ScrollConsoleScreenBufferA
+        ScrollConsoleScreenBufferW
+        SearchPathA
+        SearchPathW
+        SetCommBreak
+        SetCommConfig
+        SetCommMask
+        SetCommState
+        SetCommTimeouts
+        SetComputerNameA
+        SetComputerNameW
+        SetConsoleActiveScreenBuffer
+        SetConsoleCP
+        SetConsoleCommandHistoryMode
+        SetConsoleCtrlHandler
+        SetConsoleCursor
+        SetConsoleCursorInfo
+        SetConsoleCursorPosition
+        SetConsoleDisplayMode
+        SetConsoleFont
+        SetConsoleHardwareState
+        SetConsoleKeyShortcuts
+        SetConsoleMaximumWindowSize
+        SetConsoleMenuClose
+        SetConsoleMode
+        SetConsoleNumberOfCommandsA
+        SetConsoleNumberOfCommandsW
+        SetConsoleOutputCP
+        SetConsolePalette
+        SetConsoleScreenBufferSize
+        SetConsoleTextAttribute
+        SetConsoleTitleA
+        SetConsoleTitleW
+        SetConsoleWindowInfo
+        SetCurrentDirectoryA
+        SetCurrentDirectoryW
+	SetDaylightFlag
+        SetDefaultCommConfigA
+        SetDefaultCommConfigW
+        SetEndOfFile
+        SetEnvironmentVariableA
+        SetEnvironmentVariableW
+        SetErrorMode
+        SetEvent
+        SetFileApisToANSI
+        SetFileApisToOEM
+        SetFileAttributesA
+        SetFileAttributesW
+        SetFilePointer
+        SetFileTime
+	SetHandleContext
+        SetHandleCount
+        SetHandleInformation
+        SetLastConsoleEventActive
+        SetLastError
+        SetLocalTime
+        SetLocaleInfoA
+        SetLocaleInfoW
+        SetMailslotInfo
+        SetNamedPipeHandleState
+        SetPriorityClass
+        SetProcessShutdownParameters
+        SetProcessWorkingSetSize
+        SetStdHandle
+        SetSystemPowerState
+        SetSystemTime
+        SetSystemTimeAdjustment
+        SetTapeParameters
+        SetTapePosition
+        SetThreadAffinityMask
+        SetThreadContext
+        SetThreadLocale
+        SetThreadPriority
+        SetTimeZoneInformation
+        SetUnhandledExceptionFilter
+        SetVDMCurrentDirectories
+        SetVolumeLabelA
+        SetVolumeLabelW
+        SetupComm
+        ShowConsoleCursor
+        SizeofResource
+        Sleep
+        SleepEx
+        SuspendThread
+        SystemTimeToFileTime
+        SystemTimeToTzSpecificLocalTime
+        TerminateProcess
+        TerminateThread
+	Thread32First
+	Thread32Next
+	ThunkConnect32
+        TlsAlloc
+	TlsAllocInternal
+        TlsFree
+	TlsFreeInternal
+        TlsGetValue
+        TlsSetValue
+	Toolhelp32ReadProcessMemory
+        TransactNamedPipe
+        TransmitCommChar
+        TrimVirtualBuffer
+	UTRegister
+	UTUnRegister
+	UnMapLS
+	UnMapSLFixArray
+        UnhandledExceptionFilter
+	UninitializeCriticalSection
+        UnlockFile
+        UnlockFileEx
+        UnmapViewOfFile
+        UpdateResourceA
+        UpdateResourceW
+        VDMConsoleOperation
+        VDMOperationStarted
+        VerLanguageNameA
+        VerLanguageNameW
+        VerifyConsoleIoHandle
+        VirtualAlloc
+        VirtualBufferExceptionHandler
+        VirtualFree
+        VirtualLock
+        VirtualProtect
+        VirtualProtectEx
+        VirtualQuery
+        VirtualQueryEx
+        VirtualUnlock
+        WaitCommEvent
+        WaitForDebugEvent
+        WaitForMultipleObjects
+        WaitForMultipleObjectsEx
+        WaitForSingleObject
+        WaitForSingleObjectEx
+        WaitNamedPipeA
+        WaitNamedPipeW
+        WideCharToMultiByte
+        WinExec
+        WriteConsoleA
+        WriteConsoleInputA
+        WriteConsoleInputVDMA
+        WriteConsoleInputVDMW
+        WriteConsoleInputW
+        WriteConsoleOutputA
+        WriteConsoleOutputAttribute
+        WriteConsoleOutputCharacterA
+        WriteConsoleOutputCharacterW
+        WriteConsoleOutputW
+        WriteConsoleW
+        WriteFile
+        WriteFileEx
+        WritePrivateProfileSectionA
+        WritePrivateProfileSectionW
+        WritePrivateProfileStringA
+        WritePrivateProfileStringW
+        WritePrivateProfileStructA
+        WritePrivateProfileStructW
+        WriteProcessMemory
+        WriteProfileSectionA
+        WriteProfileSectionW
+        WriteProfileStringA
+        WriteProfileStringW
+        WriteTapemark
+	_DebugOut
+	_DebugPrintf
+        _hread
+        _hwrite
+        _lclose
+        _lcreat
+        _llseek
+        _lopen
+        _lread
+        _lwrite
+	dprintf
+        lstrcat
+        lstrcatA
+        lstrcatW
+        lstrcmp
+        lstrcmpA
+        lstrcmpW
+        lstrcmpi
+        lstrcmpiA
+        lstrcmpiW
+        lstrcpy
+        lstrcpyA
+        lstrcpyW
+        lstrcpyn
+        lstrcpynA
+        lstrcpynW
+        lstrlen
+        lstrlenA
+	lstrlenW

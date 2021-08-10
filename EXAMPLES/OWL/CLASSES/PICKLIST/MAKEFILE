@@ -1,0 +1,9 @@
+#----------------------------------------------------------------------------
+# ObjectWindows
+# Copyright (c) 1995, 1995 by Borland International, All Rights Reserved
+#----------------------------------------------------------------------------
+
+EXERES  = picklist
+OBJEXE  = picklisx.obj
+
+!include $(BCEXAMPLEDIR)\owlmake.gen

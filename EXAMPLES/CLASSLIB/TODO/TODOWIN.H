@@ -1,11 +1,8 @@
-#if !defined( __TODOWIN_H )
-#define __TODOWIN_H
-
 //---------------------------------------------------------------------
 //
 //  TODOWIN.H
 //
-//      Copyright (c) 1991, 1993 by Borland International
+//      Copyright (c) 1991, 1995 by Borland International
 //      All Rights Reserved.
 //
 //  Defines the following classes, which are useful for building
@@ -21,15 +18,13 @@
 //            Inherits from WinBase, which is a virtual base.
 //
 //---------------------------------------------------------------------
+#if !defined(TODOWIN_H)
+#define TODOWIN_H
 
-#if !defined( STRICT )
-#define STRICT
-#endif
-
-#include <windows.h>
-#include <except.h>
-#include <checks.h>
-#include <cstring.h>
+#include <winsys/wsysinc.h>
+#include <services/except.h>
+#include <services/checks.h>
+#include <services/cstring.h>
 
 class FileError : public xmsg
 {
@@ -260,5 +255,4 @@ inline void Window::Insert()
     WinList = this;
 }
 
-#endif  // __TODOWIN_H
-
+#endif  // TODOWIN_H

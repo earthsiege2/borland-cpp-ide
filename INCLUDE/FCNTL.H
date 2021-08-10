@@ -5,9 +5,9 @@
 */
 
 /*
- *      C/C++ Run Time Library - Version 6.5
+ *      C/C++ Run Time Library - Version 7.0
  *
- *      Copyright (c) 1987, 1994 by Borland International
+ *      Copyright (c) 1987, 1996 by Borland International
  *      All Rights Reserved.
  *
  */
@@ -19,7 +19,6 @@
 #include <_defs.h>
 #endif
 
-
 #if !defined(RC_INVOKED)
 
 #if defined(__STDC__)
@@ -27,7 +26,6 @@
 #endif
 
 #endif  /* !RC_INVOKED */
-
 
 #if defined(__FLAT__)
 
@@ -88,6 +86,20 @@ extern int _RTLENTRY _fmode;
 #define O_DENYREAD  0x30
 #define O_DENYNONE  0x40
 
+#if defined(__MFC_COMPAT__)
+#define _O_APPEND      O_APPEND
+#define _O_BINARY      O_BINARY
+#define _O_CREAT       O_CREAT
+#define _O_EXCL        O_EXCL
+#define _O_NOINHERIT   O_NOINHERIT
+#define _O_RANDOM      O_RANDOM
+#define _O_RAW         O_BINARY
+#define _O_RDONLY      O_RDONLY
+#define _O_RDWR        O_RDWR
+#define _O_TEXT        O_TEXT
+#define _O_TRUNC       O_TRUNC
+#define _O_WRONLY      O_WRONLY
+#endif
 
 #if !defined(RC_INVOKED)
 
@@ -97,6 +109,4 @@ extern int _RTLENTRY _fmode;
 
 #endif  /* !RC_INVOKED */
 
-
 #endif  /* __FCNTL_H */
-

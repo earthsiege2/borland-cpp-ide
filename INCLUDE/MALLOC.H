@@ -5,9 +5,9 @@
 */
 
 /*
- *      C/C++ Run Time Library - Version 6.5
+ *      C/C++ Run Time Library - Version 7.0
  *
- *      Copyright (c) 1991, 1994 by Borland International
+ *      Copyright (c) 1991, 1996 by Borland International
  *      All Rights Reserved.
  *
  */
@@ -42,26 +42,26 @@ extern "C" {
 #endif
 
 #if !defined(_Windows) || defined(__FLAT__)
-/* _HEAPINFO structure returned by heapwalk */
-
 
 #if !defined(RC_INVOKED)
-#pragma option -a-
+#pragma pack(push, 1)
 #endif
 
+/* _HEAPINFO structure returned by heapwalk */
 
 typedef struct _heapinfo
 {
     int     *_pentry;
+    int     *__pentry;
     size_t  _size;
     int     _useflag;
 } _HEAPINFO;
 
 
 #if !defined(RC_INVOKED)
-#pragma option -a.
+/* restore default packing */
+#pragma pack(pop)
 #endif
-
 
 #endif  /* _Windows */
 
@@ -104,6 +104,7 @@ void *      _Cdecl alloca     (size_t __size);
 void *      _Cdecl __alloca__ (size_t __size);
 
 #if defined(__BCOPT__ ) && !defined(_Windows)
+#undef      alloca      /* to remove a redefinition warning */
 #define     alloca(__size)  __alloca__(__size)
 #endif
 
@@ -117,8 +118,16 @@ void *      __cdecl   _EXPFUNC alloca( size_t __size );
 void *      __cdecl            __alloca__ (size_t __size);
 
 #if (__CGVER__ >= 0x200)
-#define		alloca(__size) __alloca__(__size)
+  #define alloca(__size)       __alloca__(__size)
+  #if defined(__MFC_COMPAT__)
+    #define _alloca(__size)    __alloca__(__size)
+  #endif
+#else
+  #if defined(__MFC_COMPAT__)
+    #define _alloca alloca
+  #endif
 #endif
+
 
 size_t      _RTLENTRY _EXPFUNC stackavail  (void);
 int         _RTLENTRY _EXPFUNC _heapadd    (void * __block, size_t __size);

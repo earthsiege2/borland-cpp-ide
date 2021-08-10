@@ -1,0 +1,9 @@
+#----------------------------------------------------------------------------
+# ObjectWindows
+# Copyright (c) 1995, 1996 by Borland International, All Rights Reserved
+#----------------------------------------------------------------------------
+EXERES = apxsdidv
+RESEXE = apxsddva.res
+OBJEXE = apxprev.obj apxprint.obj apxsddad.obj apxsddev.obj apxsddva.obj
+
+!include $(BCEXAMPLEDIR)\owlmake.gen

@@ -1,9 +1,11 @@
 //----------------------------------------------------------------------------
 // ObjectWindows
-// (C) Copyright 1991, 1994 by Borland International, All Rights Reserved
+// Copyright (c) 1991, 1996 by Borland International, All Rights Reserved
 //
-//   Defines class TScrollBar.  This defines the basic
-//   behavior of all scrollbar controls.
+//$Revision:   10.4  $
+//
+// Definition of class TScrollBar.  This defines the basic behavior of all
+// scrollbar controls.
 //----------------------------------------------------------------------------
 #if !defined(OWL_SCROLLBAR_H)
 #define OWL_SCROLLBAR_H
@@ -12,10 +14,13 @@
 # include <owl/control.h>
 #endif
 
+// Generic definitions/compiler options (eg. alignment) preceeding the
+// definition of classes
+#include <services/preclass.h>
+
 //
-//  class TScrollBar
-//  ----- ----------
-//
+// class TScrollBar
+// ~~~~~ ~~~~~~~~~~
 class _OWLCLASS TScrollBar : public TControl {
   public:
     TScrollBar(TWindow*        parent,
@@ -24,28 +29,33 @@ class _OWLCLASS TScrollBar : public TControl {
                bool            isHScrollBar,
                TModule*        module = 0);
 
-    TScrollBar(TWindow* parent, int resourceId, TModule*   module = 0);
+    TScrollBar(TWindow* parent, int resourceId, TModule* module = 0);
 
-    //
+    int    GetLineMagnitude() const;
+    void   SetLineMagnitude(int linemagnitude);
+
+    int    GetPageMagnitude() const;
+    void   SetPageMagnitude(int pagemagnitude);
+
     // Virtual functions to interface to scrollbars & derived
     //
-    virtual void  GetRange(int& min, int& max) const
-                    {::GetScrollRange(HWindow, SB_CTL, &min, &max);}
-    virtual int   GetPosition() const {return ::GetScrollPos(HWindow, SB_CTL);}
-    virtual void  SetRange(int min, int max)
-                    {::SetScrollRange(HWindow, SB_CTL, min, max, false);}
+    virtual void  GetRange(int& min, int& max) const;
+    virtual int   GetPosition() const;
+    virtual void  SetRange(int min, int max);
     virtual void  SetPosition(int thumbPos);
     virtual int   DeltaPos(int delta);
+#if defined(BI_PLAT_WIN32)
+    virtual void  GetScrollInfo(SCROLLINFO* info) const;
+    virtual void  SetScrollInfo(SCROLLINFO* info, bool redraw = true);
+#endif
 
-    //
     // Override TWindow virtual member functions
     //
     uint          Transfer(void* buffer, TTransferDirection direction);
 
+    // Called by EvHScroll and EvVScroll response table handlers
     //
-    // called by EvHScroll and EvVScroll response table handlers
-    //
-    // these routines all end up calling SetPosition()
+    // These routines all end up calling SetPosition()
     //
     virtual void  SBLineUp();
     virtual void  SBLineDown();
@@ -57,27 +67,24 @@ class _OWLCLASS TScrollBar : public TControl {
     virtual void  SBBottom();
     virtual void  SBEndScroll();
 
-    //
-    // response table handlers that call above virtual functions in 
+    // Response table handlers that call above virtual functions in
     // response to messages sent by to us by TWindow::DispatchScroll()
     //
     void          EvHScroll(uint scrollCode, uint thumbPos, HWND hWndCtl);
     void          EvVScroll(uint scrollCode, uint thumbPos, HWND hWndCtl);
-    
-  public:
-    int  LineMagnitude;
-    int  PageMagnitude;
 
   protected:
-    //
     // Override TWindow virtual member functions
     //
     char far*     GetClassName();
     void          SetupWindow();
 
+  public_data:
+    int  LineMagnitude;
+    int  PageMagnitude;
+
   private:
-    //
-    // hidden to prevent accidental copying or assignment
+    // Hidden to prevent accidental copying or assignment
     //
     TScrollBar(const TScrollBar&);
     TScrollBar& operator=(const TScrollBar&);
@@ -100,9 +107,8 @@ class _OWLCLASS TScrollBar : public TControl {
 // EV_SB_BEGINTRACK(id, method)
 
 //
-//  struct TScrollBarData
-//  ------ --------------
-//
+// struct TScrollBarData
+// ~~~~~~ ~~~~~~~~~~~~~~
 //  TScrollBar transfer structure
 //
 struct TScrollBarData {
@@ -110,5 +116,30 @@ struct TScrollBarData {
   int  HighValue;
   int  Position;
 };
+
+// Generic definitions/compiler options (eg. alignment) following the
+// definition of classes
+#include <services/posclass.h>
+
+//----------------------------------------------------------------------------
+// Inline implementation
+//
+
+//
+// Return the current delta to move the thumb when line up/line down is
+// received.
+//
+inline int TScrollBar::GetLineMagnitude() const
+{
+  return LineMagnitude;
+}
+
+//
+// Set the delta to move the thumb when line up/line down is received.
+//
+inline void TScrollBar::SetLineMagnitude(int linemagnitude)
+{
+  LineMagnitude = linemagnitude;
+}
 
 #endif  // OWL_SCROLLBAR_H

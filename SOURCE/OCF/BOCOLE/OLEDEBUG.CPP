@@ -1,13 +1,12 @@
+//----------------------------------------------------------------------------
+// ObjectComponents
+// Copyright (c) 1991, 1996 by Borland International, All Rights Reserved
 //
-//**************************************************************************
+// $Revision:   2.1  $
 //
 // OleDebug.cpp -- Some debugging utilities for getting symbolic output
 //                 from the OLE2 error codes and enums
-//
-// Copyright (c) 1993,94 by Borland International, Inc. All rights reserved
-//
-//**************************************************************************
-
+//----------------------------------------------------------------------------
 #include <BOle.h>
 #include <Olestd.h>
 #include <OleDebug.h>
@@ -1485,5 +1484,4 @@ ReleaseWatcher::Release(){
 }
 
 #endif
-
 

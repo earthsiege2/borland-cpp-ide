@@ -1,7 +1,7 @@
 //----------------------------------------------------------------------------
 // ObjectWindows - (C) Copyright 1994 by Borland International
 //----------------------------------------------------------------------------
-#include <owl/owlpch.h>
+#include <owl/pch.h>
 #include <owl/applicat.h>
 #include <owl/editfile.h>
 #include <owl/mdi.h>
@@ -11,10 +11,10 @@
 #include <owl/buttonga.h>
 #include <owl/gdiobjec.h>
 #include <owl/ocfevent.h>
-#include <owl/uihandle.h>
+#include <owl/uihelper.h>
 #include <owl/oleframe.h>
 
-#include <ocf/ocfpch.h>
+#include <ocf/pch.h>
 #include <ocf/ocapp.h>
 #include <ocf/ocdoc.h>
 #include <ocf/ocview.h>

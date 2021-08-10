@@ -8,9 +8,9 @@
 /*[]------------------------------------------------------------[]*/
 
 /*
- *      C/C++ Run Time Library - Version 6.5
+ *      C/C++ Run Time Library - Version 7.0
  *
- *      Copyright (c) 1990, 1994 by Borland International
+ *      Copyright (c) 1990, 1996 by Borland International
  *      All Rights Reserved.
  *
  */
@@ -23,6 +23,11 @@ ios::~ios()
 {
     if( userwords )
         delete[] userwords;
+    if (delbuf() == 2)
+    {
+        delete bp;
+        bp = 0;
+    }
 }
 
 // static members of ios

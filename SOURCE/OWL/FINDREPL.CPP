@@ -1,19 +1,26 @@
 //----------------------------------------------------------------------------
 // ObjectWindows
-// (C) Copyright 1992, 1994 by Borland International, All Rights Reserved
+// Copyright (c) 1992, 1996 by Borland International, All Rights Reserved
 //
-//   Implementation of FindReplace- abstract, Find-, Replace- common Dialog
-//   classes
+//$Revision:   10.5  $
+//
+// Implementation of abstract class TFindReplaceDialog, and leaf classes
+// TFindDialog and TReplaceDialog that encapsulate Common Dialogs
 //----------------------------------------------------------------------------
 #pragma hdrignore SECTION
-#include <owl/owlpch.h>
-#include <owl/findrepl.h>
+#include <owl/pch.h>
+#if !defined(OWL_FINDREPL_H)
+# include <owl/findrepl.h>
+#endif
 #if !defined(ctlFirst)
 # include <dlgs.h>
 #endif
 
 #if !defined(SECTION) || SECTION == 1
 
+//
+//
+//
 TFindReplaceDialog::TData::TData(uint32 flags, int buffSize)
 :
   Flags(flags), BuffSize(buffSize), Error(0)
@@ -23,6 +30,9 @@ TFindReplaceDialog::TData::TData(uint32 flags, int buffSize)
   *FindWhat = *ReplaceWith = 0;
 }
 
+//
+//
+//
 TFindReplaceDialog::TData::TData(const TData& src)
 :
   Flags(src.Flags),
@@ -34,12 +44,18 @@ TFindReplaceDialog::TData::TData(const TData& src)
 }
 
 
+//
+//
+//
 TFindReplaceDialog::TData::~TData()
 {
-  delete [] FindWhat;
-  delete [] ReplaceWith;
+  delete[] FindWhat;
+  delete[] ReplaceWith;
 }
 
+//
+//
+//
 TFindReplaceDialog::TData&
 TFindReplaceDialog::TData::operator =(const TData& src)
 {
@@ -47,10 +63,10 @@ TFindReplaceDialog::TData::operator =(const TData& src)
   BuffSize = src.BuffSize;
   Error = 0;
 
-  delete [] FindWhat;
+  delete[] FindWhat;
   FindWhat = strnewdup(src.FindWhat, BuffSize);
 
-  delete [] ReplaceWith;
+  delete[] ReplaceWith;
   ReplaceWith = strnewdup(src.ReplaceWith, BuffSize);
 
   return *this;
@@ -65,12 +81,15 @@ END_RESPONSE_TABLE;
 
 IMPLEMENT_CASTABLE(TFindReplaceDialog);
 
+//
+//
+//
 void
 TFindReplaceDialog::Init(TResId templateId)
 {
   memset(&fr, 0, sizeof(FINDREPLACE));
   fr.lStructSize = sizeof(FINDREPLACE);
-  fr.hwndOwner = Parent ? Parent->HWindow : 0;
+  fr.hwndOwner = Parent ? Parent->GetHandle() : 0;
   fr.hInstance = *GetModule();
   Data.Flags &= ~(FR_FINDNEXT|FR_REPLACE|FR_REPLACEALL|FR_DIALOGTERM);
   fr.Flags = FR_ENABLEHOOK | Data.Flags;
@@ -87,6 +106,9 @@ TFindReplaceDialog::Init(TResId templateId)
   fr.wReplaceWithLen = (uint16)Data.BuffSize;
 }
 
+//
+//
+//
 TFindReplaceDialog::TFindReplaceDialog(TWindow*        parent,
                                        TData&          data,
                                        TResId          templateId,
@@ -99,16 +121,22 @@ TFindReplaceDialog::TFindReplaceDialog(TWindow*        parent,
   Init(templateId);
 }
 
-HWND
+//
+//
+//
+TWindow::THandle
 TFindReplaceDialog::DoCreate()
 {
   return 0;
 }
 
+//
+//
+//
 bool
-TFindReplaceDialog::DialogFunction(uint msg, WPARAM wParam, LPARAM lParam)
+TFindReplaceDialog::DialogFunction(uint msg, TParam1 param1, TParam2 param2)
 {
-  return TCommonDialog::DialogFunction(msg, wParam, lParam);
+  return TCommonDialog::DialogFunction(msg, param1, param2);
 }
 
 //
@@ -121,11 +149,15 @@ TFindReplaceDialog::EvNCDestroy()
   TWindow::EvNCDestroy();
 }
 
+//
+// Update the flags from the passed-in parameter.
+// Assumes the parameters is a pointer to a FINDREPLACE structure.
+//
 void
-TFindReplaceDialog::UpdateData(LPARAM lParam)
+TFindReplaceDialog::UpdateData(TParam2 param2)
 {
-  if (lParam)
-    Data.Flags = ((LPFINDREPLACE)lParam)->Flags;
+  if (param2)
+    Data.Flags = ((LPFINDREPLACE)param2)->Flags;
   else
     Data.Flags = fr.Flags;
 }
@@ -134,19 +166,26 @@ TFindReplaceDialog::UpdateData(LPARAM lParam)
 
 IMPLEMENT_CASTABLE(TFindDialog);
 
+//
+//
+//
 TFindDialog::TFindDialog(TWindow*        parent,
                          TData&          data,
                          TResId          templateId,
                          const char far* title,
                          TModule*        module)
-  : TFindReplaceDialog(parent, data, templateId, title, module)
+:
+  TFindReplaceDialog(parent, data, templateId, title, module)
 {
 }
 
-HWND
+//
+//
+//
+TWindow::THandle
 TFindDialog::DoCreate()
 {
-  (DLGPROC)fr.lpfnHook = (DLGPROC)(FARPROC)StdDlgProcInstance;
+  fr.lpfnHook = LPFRHOOKPROC(StdDlgProc);
   return ::FindText(&fr);
 }
 
@@ -154,19 +193,26 @@ TFindDialog::DoCreate()
 
 IMPLEMENT_CASTABLE(TReplaceDialog);
 
+//
+//
+//
 TReplaceDialog::TReplaceDialog(TWindow*        parent,
                                TData&          data,
                                TResId          templateId,
                                const char far* title,
                                TModule*        module)
-  : TFindReplaceDialog(parent, data, templateId, title, module)
+:
+  TFindReplaceDialog(parent, data, templateId, title, module)
 {
 }
 
-HWND
+//
+//
+//
+TWindow::THandle
 TReplaceDialog::DoCreate()
 {
-  (DLGPROC)fr.lpfnHook = (DLGPROC)(FARPROC)StdDlgProcInstance;
+  fr.lpfnHook = LPFRHOOKPROC(StdDlgProc);
   return ::ReplaceText(&fr);
 }
 
@@ -174,17 +220,25 @@ TReplaceDialog::DoCreate()
 #if !defined(SECTION) || SECTION == 2
 //Keep streaming out if not used
 
+//
+//
+//
 void
 TFindReplaceDialog::TData::Read(ipstream& is)
 {
   is >> Flags;
   is >> BuffSize;
+  delete[] FindWhat;
+  delete[] ReplaceWith;
   FindWhat = new char[BuffSize];
   ReplaceWith = new char[BuffSize];
   is.readBytes(FindWhat, BuffSize);
   is.readBytes(ReplaceWith, BuffSize);
 }
 
+//
+//
+//
 void
 TFindReplaceDialog::TData::Write(opstream& os)
 {

@@ -1,0 +1,12 @@
+#----------------------------------------------------------------------------
+# ObjectWindows
+# Copyright (c) 1995, 1995 by Borland International, All Rights Reserved
+#
+#----------------------------------------------------------------------------
+SYSTEMS = CON32
+MODELS = f
+SYSTEM = CON32
+MODEL = f
+
+EXE = outdeb32
+!include $(BCEXAMPLEDIR)\owlmake.gen

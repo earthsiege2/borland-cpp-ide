@@ -1,6 +1,8 @@
 // Borland C++ - (C) Copyright 1991 by Borland International
 
-# include <windows.h>
+#if !defined (WORKSHOP_INVOKED)
+#include <windows.h>
+#endif
 
 # include "msgwnd.h"
 

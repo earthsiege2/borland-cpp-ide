@@ -1,5 +1,5 @@
 <<[CPP]TApplication
-##"#include <owl\\vbxctl.h>" [[BIVBXInclude]]
+##"#include <owl/vbxctl.h>" [[BIVBXInclude]]
 ##^BOF
 ##? BIVBXInclude [[SearchIncl]]
 ##--BEGIN-- SearchIncl == FALSE
@@ -22,13 +22,13 @@
 ##^BOF
 ##? VBXInit [[Search]]
 ##Search == FALSE
-##:     "int OwlMain (" [[InitFunction]]
+##:     "int OwlMain(" [[InitFunction]]
 ##:     ^BOF
 ##:     ? InitFunction Search2
 ##--BEGIN-- Search2 == TRUE
 ##^BOL
 ##^2
-    TBIVbxLibrary   vbxSupport;                 // This application has VBX controls.
+  TBIVbxLibrary   vbxSupport;                 // This application has VBX controls.
 ##--END-- Search2 == TRUE
 ##--END-- QUERY_CLASS_NAME [[ClassName]]
 >>[CPP]TApplication

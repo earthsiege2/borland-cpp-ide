@@ -1,13 +1,25 @@
 //----------------------------------------------------------------------------
 // ObjectWindows
-// (C) Copyright 1993, 1994 by Borland International, All Rights Reserved
+// Copyright (c) 1993, 1996 by Borland International, All Rights Reserved
 //
-//   Implementation of THSlider, horizontal slider UI widget
+//$Revision:   10.5  $
+//
+// Implementation of THSlider, a horizontal slider UI widget
 //----------------------------------------------------------------------------
 #pragma hdrignore SECTION
-#include <owl/owlpch.h>
-#include <owl/slider.h>
-#include <owl/dc.h>
+#include <owl/pch.h>
+#if !defined(OWL_SLIDER_H)
+# include <owl/slider.h>
+#endif
+#if !defined(OWL_DC_H)
+# include <owl/dc.h>
+#endif
+#if !defined(OWL_COMMCTRL_H)
+# include <owl/commctrl.h>
+#endif
+#if !defined(OWL_UIHELPER_H)
+# include <owl/uihelper.h>
+#endif
 
 #if !defined(SECTION) || SECTION == 1
 
@@ -22,31 +34,52 @@ THSlider::THSlider(TWindow*        parent,
 :
   TSlider(parent, id, x, y, w, h, thumbResId, module)
 {
-  ThumbRect = TRect(0, 0, 9, 20);
-  CaretRect = TRect(3, 3, 3+3, 3+13);
-
-  // get slot size from Attr.H set by TScrollBar ?
   if (!h)
     Attr.H = 32;
-
-  SlotThick = 17;
+  Attr.Style |= TBS_HORZ;  // In case it is Native, else we dont care
 }
 
 //
-// Calculate and return position given a thumb upper left point
-// and vice versa.
+// Constructor for a slider object created from resource
+//
+THSlider::THSlider(TWindow*        parent,
+                   int             resId,
+                   TResId          thumbResId,
+                   TModule*        module)
+:
+  TSlider(parent, resId, thumbResId, module)
+{
+}
+
+
+//----------------------------------------------------------------------------
+// Protected implementation
+
+// Leave the whole implemenation out if built with OWL_NATIVECTRL_ALWAYS
+//
+#if !defined(OWL_NATIVECTRL_ALWAYS)
+
+//
+// Calculate and return position given a thumb upper left point and vice versa.
 //
 int
-THSlider::PointToPos(TPoint& point)
+THSlider::PointToPos(const TPoint& point)
 {
-  return int(((long)point.x*(long)Range)/(Attr.W-ThumbRect.Width()) + Min);
+  int pixelRange = Attr.W - ThumbRect.Width() - 2;  // 2 is room for focus rect
+  long scaledX = long(point.x-1) * long(Range);
+  return int(scaledX/pixelRange + Min);
 }
 
+//
+//
+//
 TPoint
 THSlider::PosToPoint(int pos)
 {
-  return TPoint(int(((long)(pos-Min)*(Attr.W-ThumbRect.Width()))/Range),
-                ThumbRect.top);
+  int pixelRange = Attr.W - ThumbRect.Width() - 2;  // 2 is room for focus rect
+  long relPos = pos - Min;
+  int  top = 1;
+  return TPoint(int((relPos*pixelRange)/Range)+1, top);
 }
 
 //
@@ -55,11 +88,11 @@ THSlider::PosToPoint(int pos)
 void
 THSlider::NotifyParent(int scrollCode, int pos)
 {
-  #if defined(BI_PLAT_WIN32)
-    Parent->HandleMessage(WM_HSCROLL, MAKEWPARAM(scrollCode, pos), LPARAM(HWindow));
-  #else
-    Parent->HandleMessage(WM_HSCROLL, scrollCode, MAKELPARAM(pos, HWindow));
-  #endif
+#if defined(BI_PLAT_WIN32)
+  Parent->HandleMessage(WM_HSCROLL, MkParam1(scrollCode, pos), TParam2(GetHandle()));
+#else
+  Parent->HandleMessage(WM_HSCROLL, scrollCode, MkParam2(pos, uint16(GetHandle())));
+#endif
 }
 
 //
@@ -92,37 +125,39 @@ THSlider::HitTest(TPoint& point)
 void
 THSlider::PaintRuler(TDC& dc)
 {
-  //  Clear ruler area to bk color
+  const int ticH = 3;
+
+  // Clear ruler area to bk color
   //
   dc.TextRect(0, ThumbRect.Height(), Attr.W, Attr.H, BkColor);
 
-  //  Draw left tic & internal tics if any, then right tic
+  // Draw left tic & internal tics if any, then right tic
   //
-  TBrush highlightbrush(::GetSysColor(COLOR_BTNHIGHLIGHT));
-  int    margin = ThumbRect.Width()/2;
-  int    rulerY = ThumbRect.Height()+1;
-  int    x;
+  int  margin = ThumbRect.Width()/2 + 1;
+  int  rulerY = ThumbRect.Height() + 2;
+  int  x;
+  int  h = ticH + 2;  // First & last are bigger
 
-  dc.SelectObject(highlightbrush);
-  dc.SetBkColor(::GetSysColor(COLOR_BTNTEXT));
+  dc.SetBkColor(TColor::SysBtnText);
 
-  for (int i = Min; i < Max; i += TicGap) {
-    x = PosToPoint(i).x + margin;
-    dc.TextRect(x, rulerY, x+1, rulerY+5);
-    dc.PatBlt(x+1, rulerY, 1, 5);
-    if (!TicGap)
-      break;
+  if (Tics && TicCount) {
+    for (int i = 0; i < TicCount; i++) {
+      x = PosToPoint(Tics[i]).x + margin;
+      dc.TextRect(x, rulerY, x+1, rulerY+h);
+      h = ticH;  // Middle ones are smaller
+    }
+  }
+  else {
+    for (int i = Min; i < Max; i += TicGap) {
+      x = PosToPoint(i).x + margin;
+      dc.TextRect(x, rulerY, x+1, rulerY+h);
+      if (!TicGap)
+        break;
+      h = ticH;  // Middle ones are smaller
+    }
   }
   x = Attr.W-margin-1;
-  dc.TextRect(x, rulerY, x+1, rulerY+5);
-  dc.PatBlt(x+1, rulerY, 1, 6);
-
-  //  Draw ruler bottom
-  //
-  dc.TextRect(margin, rulerY+5, Attr.W-margin, rulerY+6);
-  dc.PatBlt(margin, rulerY+6, Attr.W-2*margin+1, 1);
-
-  dc.RestoreBrush();
+  dc.TextRect(x, rulerY, x+1, rulerY + ticH + 2);
 }
 
 //
@@ -131,48 +166,63 @@ THSlider::PaintRuler(TDC& dc)
 void
 THSlider::PaintSlot(TDC& dc)
 {
-  int    hmargin = ThumbRect.Width()/2;                   // left & right margins
-  int    vmargin = (ThumbRect.Height()-SlotThick+1)/2+1;  // top & bottom
+  int    hmargin = ThumbRect.Width()/2 + 1;             // left & right margins
+  int    vmargin = (ThumbRect.Height()-SlotThick+1)/2+1;// top & bottom
 
-  //
-  // draw margins in background color
+  int    focusRectW = 1;  
+  int    focusRectH = 1;
+
+  // Draw margins around slot in background color
   //
   dc.SetBkColor(BkColor);
-  dc.TextRect(0, 0, Attr.W, vmargin);                               // above
-  dc.TextRect(0, vmargin, hmargin, vmargin+SlotThick);              // left
-  dc.TextRect(Attr.W-hmargin, vmargin, Attr.W, vmargin+SlotThick);  // right
-  dc.TextRect(0, SlotThick, Attr.W, SlotThick+vmargin);             // bottom
+  // Top
+  dc.TextRect(focusRectW, focusRectH,
+              Attr.W-focusRectW, vmargin-focusRectH+SlotThick);
+  // Left
+  dc.TextRect(focusRectW, vmargin+focusRectH,
+              hmargin-focusRectW, vmargin+SlotThick-focusRectH);
+  // Right
+  dc.TextRect(Attr.W-hmargin+focusRectW, vmargin+focusRectH,
+              Attr.W-focusRectW, vmargin+SlotThick-focusRectH);
+  // Bottom
+  dc.TextRect(focusRectW, SlotThick+vmargin-focusRectH,
+              Attr.W-focusRectW, SlotThick+vmargin+vmargin-focusRectH);
 
-  //
   // Draw slot frame, shadow, fill & highlight below
   //
-  dc.TextRect(hmargin, vmargin, Attr.W-hmargin, SlotThick-1,
-              ::GetSysColor(COLOR_BTNTEXT));
-  dc.FillRect(hmargin+1, vmargin+1, Attr.W-hmargin-1, vmargin+2,
-              TBrush(::GetSysColor(COLOR_BTNSHADOW)));
-  dc.TextRect(hmargin+1, vmargin+2, Attr.W-hmargin-1, SlotThick-2,
-              ::GetSysColor(COLOR_BTNFACE));
-  dc.FillRect(hmargin, SlotThick-1, Attr.W-hmargin, SlotThick,
-              TBrush(::GetSysColor(COLOR_BTNHIGHLIGHT)));
-  dc.RestoreBrush();
+  TRect slotR(hmargin, vmargin, Attr.W-hmargin, vmargin + SlotThick);
+  TUIBorder b(slotR, TUIBorder::WndRecessed);
+  b.Paint(dc);
 }
+
+#endif  // !defined(OWL_NATIVECTRL_ALWAYS)
 
 #endif
 #if !defined(SECTION) || SECTION == 2
 
 IMPLEMENT_STREAMABLE1(THSlider, TSlider);
 
+#if !defined(BI_NO_OBJ_STREAMING)
+
+//
+//
+//
 void*
-THSlider::Streamer::Read(ipstream& is, uint32 /* version */) const
+THSlider::Streamer::Read(ipstream& is, uint32 /*version*/) const
 {
   ReadBaseObject((TSlider*)GetObject(), is);
   return GetObject();
 }
 
+//
+//
+//
 void
 THSlider::Streamer::Write(opstream& os) const
 {
   WriteBaseObject((TSlider*)GetObject(), os);
 }
+
+#endif  // if !defined(BI_NO_OBJ_STREAMING)
 
 #endif

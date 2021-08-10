@@ -18,7 +18,7 @@ static [[ClassName]]Xfer [[ClassName]]Data;
 ##^1
 //{{[[ClassName]]XFER_USE}}
 
-    SetTransferBuffer(&[[ClassName]]Data);
+  SetTransferBuffer(&[[ClassName]]Data);
 //{{[[ClassName]]XFER_USE_END}}
 
 ##--END-- QUERY_CLASS_NAME [[ClassName]]

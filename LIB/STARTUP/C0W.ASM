@@ -3,13 +3,15 @@
 ;[]------------------------------------------------------------[]
 
 ;
-;       C/C++ Run Time Library - Version 6.5
+;       C/C++ Run Time Library - Version 7.0
 ; 
-;       Copyright (c) 1991, 1994 by Borland International
+;       Copyright (c) 1991, 1996 by Borland International
 ;       All Rights Reserved.
 ; 
 
 		locals
+
+.286
 
 		__C0__ = 1
 include         RULES.ASI
@@ -34,6 +36,9 @@ extrn           WAITEVENT:far
 extrn           LOCKSEGMENT:far
 extrn           UNLOCKSEGMENT:far
 extrn           GETWINFLAGS:far
+IFDEF __LARGE__
+extrn           MESSAGEBOX:far
+ENDIF
 IFDEF __DPMI16__
   extrn         _main:DIST
   extrn         _OkToInitWindowsRTL:DIST
@@ -119,7 +124,14 @@ IFDEF __DPMI16__
   extrn         __C0argc:word
 ENDIF
 
-CopyRight       db      'Borland C++ - Copyright 1994 Borland Intl.',0
+CopyRight       db      'Borland C++ - Copyright 1995 Borland Intl.',0
+
+IFDEF __LARGE__
+CGFailMessage	db	'CodeGuard cannot be run with multiple processes',0
+CGMessageTitle	db	'CodeGuard Message',0
+CGFail		dw	0
+ENDIF
+
 IFDEF __DPMI16__
 DPMI16Error_s   db      'This DPMI16 application was linked incorrectly and'
 		db      ' will fail.',10,13,'$'
@@ -129,6 +141,13 @@ ENDIF
 _TEXT           segment
 
 Main            proc near
+IFDEF __LARGE__
+		jmp	@@Start
+
+		db	'CGINITCB'	; signature
+		dw	offset CGFail	; offset in DGROUP of status word
+ENDIF
+@@Start:
 
 ;Windows initialization.  Sets up registers and stack.
 
@@ -136,7 +155,6 @@ IFDEF   __DPMI16__
 		mov     ax, seg DGROUP
 		mov     ds, ax
 ENDIF
-
 		push    bx cx es
 		xor     ax,ax
 		push    ax
@@ -192,7 +210,21 @@ ENDIF
 		call    WAITEVENT
 		push    __hInstance
 		call    INITAPP
-__INITAPPCALLED:or      ax,ax
+__INITAPPCALLED:
+
+IFDEF __LARGE__
+;Check whether CodeGuard detected multiple clients
+		cmp	CGFail,0
+		je	@@TestInit
+;If so then display message and fail initializaion
+		pusha
+		call	MESSAGEBOX pascal, 0, ds offset CGFailMessage, ds offset CGMessageTitle, 1010h ; MB_ICONSTOP | MB_SYSTEMMODAL
+		popa
+		xor	ax,ax
+ENDIF
+
+;Test whether INITAPP suceeded
+@@TestInit:	or      ax,ax
 		jnz     @@InitOK
 		jmp     @@Fail
 @@InitOK:

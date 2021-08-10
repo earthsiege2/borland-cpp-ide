@@ -5,9 +5,9 @@
 */
 
 /*
- *      C/C++ Run Time Library - Version 6.5
+ *      C/C++ Run Time Library - Version 7.0
  *
- *      Copyright (c) 1987, 1994 by Borland International
+ *      Copyright (c) 1987, 1996 by Borland International
  *      All Rights Reserved.
  *
  */
@@ -28,6 +28,13 @@
 
 #endif  /* !RC_INVOKED */
 
+#ifndef __cplusplus
+#if !defined(_WCHAR_T) && !defined(_WCHAR_T_DEFINED)
+#define _WCHAR_T
+#define _WCHAR_T_DEFINED  /* For WINDOWS.H */
+typedef unsigned short wchar_t;
+#endif
+#endif
 
 #if !defined(__FLAT__)
 
@@ -36,7 +43,7 @@
 typedef unsigned size_t;
 #endif
 
-extern unsigned char _Cdecl _ctype[ 257 ];
+extern unsigned char _RTLENTRY _ctype[ 257 ];
 
 #ifdef __cplusplus
 extern "C" {
@@ -79,25 +86,25 @@ int _CType isascii (int __c);
 /* C locale character classification macros */
 
 #define isalnum(c)   (_ctype[ (c)+1 ] & (_IS_ALNUM))
-                     
+
 #define isalpha(c)   (_ctype[ (c)+1 ] & (_IS_ALPHA))
-                     
+
 #define iscntrl(c)   (_ctype[ (c)+1 ] & (_IS_CTL))
-                     
+
 #define isdigit(c)   (_ctype[ (c)+1 ] & (_IS_DIG))
-                     
+
 #define isgraph(c)   (_ctype[ (c)+1 ] & (_IS_GRAPH))
-                     
+
 #define islower(c)   (_ctype[ (c)+1 ] & (_IS_LOW))
-                     
+
 #define isprint(c)   (_ctype[ (c)+1 ] & (_IS_GRAPH | _IS_BLK))
-                     
+
 #define ispunct(c)   (_ctype[ (c)+1 ] & (_IS_PUN))
-                     
+
 #define isspace(c)   (_ctype[ (c)+1 ] & (_IS_SP))
-                     
+
 #define isupper(c)   (_ctype[ (c)+1 ] & (_IS_UPP))
-                     
+
 #define isxdigit(c)  (_ctype[ (c)+1 ] & (_IS_HEX))
 
 #endif /* __USELOCALES__ */
@@ -118,7 +125,7 @@ int _CType _ltoupper(int __ch);
 }
 #endif
 
-#if !__STDC__
+#if !defined(__STDC__)
 #define _toupper(c) ((c) + 'A' - 'a')
 #define _tolower(c) ((c) + 'a' - 'A')
 #endif
@@ -181,25 +188,25 @@ int _RTLENTRY _EXPFUNC isascii (int __c);
 /* C locale character classification macros */
 
 #define isalnum(c)   (_ctype[ (c)+1 ] & (_IS_ALNUM))
-                     
+
 #define isalpha(c)   (_ctype[ (c)+1 ] & (_IS_ALPHA))
-                     
+
 #define iscntrl(c)   (_ctype[ (c)+1 ] & (_IS_CTL))
-                     
+
 #define isdigit(c)   (_ctype[ (c)+1 ] & (_IS_DIG))
-                     
+
 #define isgraph(c)   (_ctype[ (c)+1 ] & (_IS_GRAPH))
-                     
+
 #define islower(c)   (_ctype[ (c)+1 ] & (_IS_LOW))
-                     
+
 #define isprint(c)   (_ctype[ (c)+1 ] & (_IS_GRAPH | _IS_BLK))
-                     
+
 #define ispunct(c)   (_ctype[ (c)+1 ] & (_IS_PUN))
-                     
+
 #define isspace(c)   (_ctype[ (c)+1 ] & (_IS_SP))
-                     
+
 #define isupper(c)   (_ctype[ (c)+1 ] & (_IS_UPP))
-                     
+
 #define isxdigit(c)  (_ctype[ (c)+1 ] & (_IS_HEX))
 
 #endif /* __USELOCALES__ */
@@ -216,7 +223,7 @@ int _RTLENTRY _EXPFUNC _ltolower(int __ch);
 int _RTLENTRY _EXPFUNC toupper(int __ch);
 int _RTLENTRY _EXPFUNC _ltoupper(int __ch);
 
-#if !__STDC__             /* NON-ANSI */
+#if !defined(__STDC__)	/* NON-ANSI */
 #define _toupper(c) ((c) + 'A' - 'a')
 #define _tolower(c) ((c) + 'a' - 'A')
 #endif

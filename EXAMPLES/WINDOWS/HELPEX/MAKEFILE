@@ -1,9 +1,17 @@
-# Borland C++ - (C) Copyright 1993 by Borland International
-# Makefile for HELPEX program
+#----------------------------------------------------------------------------
+# Borland C++
+# Copyright (c) 1987, 1996 Borland International Inc.  All Rights Reserved.
+#   examples\windows\helpex\makefile
+#----------------------------------------------------------------------------
 
-EXERES = helpex
-RESEXE_= helpex.dlg helpex.h help.cur
-HLP    = helpex
-HLP_   = helpex.rtf keys.rtf terms.rtf\
-         bullet.bmp chkboff.bmp chkbon.bmp continue.bmp done.bmp
+SYSTEMS = WIN16 WIN32
+OSMAJOR = 4
+OSMINOR = 0
+CPCH    = -Hc -H"windows.h" -H=helpex.csm
+EXERES  = helpex
+RESEXE_ = helpex.dlg helpex.h help.cur
+HLP     = helpex
+HLP_    = helpex.rtf keys.rtf terms.rtf\
+          bullet.bmp chkboff.bmp chkbon.bmp continue.bmp done.bmp
+
 !include $(BCEXAMPLEDIR)\makefile.gen

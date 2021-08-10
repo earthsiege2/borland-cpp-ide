@@ -2,7 +2,7 @@
 // Copyright (C) 1994 Borland International
 // CppOcf2.cpp
 // ---------------------------------------------------------------------------
-#include <ocf/ocfpch.h>
+#include <ocf/pch.h>
 #include <ocf/ocapp.h>
 #include <windowsx.h>
 #include <ocf/ocreg.h>

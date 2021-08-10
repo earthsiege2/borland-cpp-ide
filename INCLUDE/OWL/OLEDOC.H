@@ -1,6 +1,8 @@
 //----------------------------------------------------------------------------
 // ObjectWindows
-// (C) Copyright 1994 by Borland International, All Rights Reserved
+// Copyright (c) 1994, 1996 by Borland International, All Rights Reserved
+//
+//$Revision:   10.4  $
 //
 //----------------------------------------------------------------------------
 #if !defined(OWL_OLEDOC_H)
@@ -16,12 +18,15 @@
 # include <ocf/ocdoc.h>
 #endif
 
+// Generic definitions/compiler options (eg. alignment) preceeding the 
+// definition of classes
+#include <services/preclass.h>
+
 class _OWLCLASS TOleWindow;
 
 //
 // class TOleDocument
-// ----- ------------
-//
+// ~~~~~ ~~~~~~~~~~~~
 // The ole document class.
 //
 class _USERCLASS TOleDocument : public TStorageDocument {
@@ -30,29 +35,34 @@ class _USERCLASS TOleDocument : public TStorageDocument {
    ~TOleDocument();
 
     // Accessors
-    void          SetOcDoc(TOcDocument* doc) {OcDoc = doc;}
-    TOcDocument*  GetOcDoc() {return OcDoc;}
+    //
+    void          SetOcDoc(TOcDocument* doc);
+    TOcDocument*  GetOcDoc();
     TOcApp*       GetOcApp();
 
-    // Overridables
-    virtual bool Commit(bool force);
-    virtual bool CommitSelection(TOleWindow& oleWin, void* userData) {return true;}
-    virtual bool Open(int mode, const char far* path = 0);
-    virtual bool Close();
+    // Overridables:
+    //   TDocument:
+    //
+    bool          Commit(bool force);
+    bool          Open(int mode, const char far* path = 0);
+    bool          Close();
+    bool          InitDoc();
+    bool          CanClose();
+    bool          Revert(bool clear);
 
-    bool Revert(bool clear);
-    virtual void      PreOpen();
-    virtual bool      Write();
-    virtual bool      Read();
-    virtual bool      SetStorage(IStorage* stg, bool remember = true);
-    virtual bool      RestoreStorage();
+    //   TStorageDocument:
+    bool          SetStorage(IStorage* stg, bool remember = true);
+    bool          RestoreStorage();
+    bool          ReleaseDoc();
 
-    virtual bool      CanClose();
-    virtual bool      ReleaseDoc();
-    virtual bool      InitDoc();
-    virtual IStorage* GetNewStorage();
+    //   TOleDocument:
+    virtual void  PreOpen();
+    virtual bool  Read();
+    virtual bool  Write();
+    virtual bool  CommitSelection(TOleWindow& oleWin, void* userData);
 
     // Utilities
+    //
     bool PathChanged();
     void OleViewClose();
 
@@ -60,5 +70,34 @@ class _USERCLASS TOleDocument : public TStorageDocument {
     TOcDocument*      OcDoc;    // OCF document partner
     bool              Closing;  // shutdown in progress
 };
+
+// Generic definitions/compiler options (eg. alignment) following the 
+// definition of classes
+#include <services/posclass.h>
+
+//----------------------------------------------------------------------------
+// Inline implementations
+//
+
+//
+inline void TOleDocument::SetOcDoc(TOcDocument* doc)
+{
+  OcDoc = doc;
+}
+
+//
+inline TOcDocument* TOleDocument::GetOcDoc()
+{
+  return OcDoc;
+}
+
+//
+// Virtual function to be overriden in TOleDocument-derived class which
+// serve or support linking to portions of a document's data.
+//
+inline bool TOleDocument::CommitSelection(TOleWindow& oleWin, void* userData)
+{
+  return true;
+}
 
 #endif

@@ -1,16 +1,25 @@
 //----------------------------------------------------------------------------
 // ObjectWindows
-// (C) Copyright 1994 by Borland International, All Rights Reserved
+// Copyright (c) 1994, 1996 by Borland International, All Rights Reserved
 //
-//   Implementation of class TOleMDIFrame.
+//$Revision:   10.2  $
+//
+// Implementation of class TOleMDIFrame.
 //----------------------------------------------------------------------------
 #define INC_OLE2
-#include <owl/owlpch.h>
-#include <owl/decmdifr.h>
-#include <owl/statusba.h>
-#include <owl/ocfevent.h>
-#include <owl/uihandle.h>
-#include <owl/olemdifr.h>
+#include <owl/pch.h>
+#if !defined(OWL_DECMDIFR_H)
+# include <owl/decmdifr.h>
+#endif
+#if !defined(OWL_STATUSBA_H)
+# include <owl/statusba.h>
+#endif
+#if !defined(OWL_OCFEVENT_H)
+# include <owl/ocfevent.h>
+#endif
+#if !defined(OWL_OLEMDIFR_H)
+# include <owl/olemdifr.h>
+#endif
 
 DIAG_DECLARE_GROUP(OwlOleMenu);
 
@@ -19,6 +28,9 @@ DEFINE_RESPONSE_TABLE2(TOleMDIFrame, TOleFrame, TMDIFrame)
   EV_OC_APPINSMENUS,
 END_RESPONSE_TABLE;
 
+//
+//
+//
 TOleMDIFrame::TOleMDIFrame(const char far* title,
                            TResId          menuResId,
                            TMDIClient&     clientWnd,
@@ -27,6 +39,8 @@ TOleMDIFrame::TOleMDIFrame(const char far* title,
 :
   TOleFrame(title, &clientWnd, trackMenuSelection, module),
   TMDIFrame(title, menuResId, clientWnd, module)
+//  ,TFrameWindow(0, title, &clientWnd, false, module),
+//  TWindow(0, title, module)
 {
 }
 
@@ -95,8 +109,11 @@ TOleMDIFrame::EvOcAppInsMenus(TOcMenuDescr far& sharedMenu)
   return true;
 }
 
-LRESULT
-TOleMDIFrame::DefWindowProc(uint message, WPARAM wParam, LPARAM lParam)
+//
+//
+//
+TResult
+TOleMDIFrame::DefWindowProc(uint message, TParam1 param1, TParam2 param2)
 {
   //
   // ::DefFrameProc() will response to WM_SIZE by making the MDI client the
@@ -105,5 +122,5 @@ TOleMDIFrame::DefWindowProc(uint message, WPARAM wParam, LPARAM lParam)
   //
   return message == WM_SIZE ?
                       0 :
-                      TMDIFrame::DefWindowProc(message, wParam, lParam);
+                      TMDIFrame::DefWindowProc(message, param1, param2);
 }

@@ -1,9 +1,9 @@
 ; C0NTW.ASM - C run time library entry point for Windows programs
 
 ;
-;       C/C++ Run Time Library - Version 1.5
+;       C/C++ Run Time Library - Version 2.0
 ; 
-;       Copyright (c) 1991, 1994 by Borland International
+;       Copyright (c) 1991, 1996 by Borland International
 ;       All Rights Reserved.
 ; 
 

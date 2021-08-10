@@ -1,14 +1,26 @@
 //----------------------------------------------------------------------------
 // ObjectWindows
-// (C) Copyright 1992, 1994 by Borland International, All Rights Reserved
+// Copyright (c) 1992, 1996 by Borland International, All Rights Reserved
 //
-//   Implementation of class TControlBar.
+//$Revision:   10.4  $
+//
+// Implementation of class TControlBar.
 //----------------------------------------------------------------------------
-#include <owl/owlpch.h>
-#include <owl/controlb.h>
+#include <owl/pch.h>
+#if !defined(OWL_CONTROLB_H)
+# include <owl/controlb.h>
+#endif
+#if !defined(WINSYS_UIMETRIC_H)
+# include <winsys/uimetric.h>
+#endif
+
+DIAG_DECLARE_GROUP(OwlWin);
 
 IMPLEMENT_CASTABLE(TControlBar);
 
+//
+//
+//
 TControlBar::TControlBar(TWindow*        parent,
                          TTileDirection  direction,
                          TFont*          font,
@@ -18,33 +30,30 @@ TControlBar::TControlBar(TWindow*        parent,
 {
   Margins.Units = TMargins::BorderUnits;
 
-  if (Direction == Horizontal) {
-    Margins.Left = Margins.Right = 6;
-    Margins.Top = Margins.Bottom = 2;
-  }
-  else {
-    Margins.Left = Margins.Right = 2;
-    Margins.Top = Margins.Bottom = 6;
-  }
+
+  Margins.Left = Margins.Right = TUIMetric::CxSizeFrame + 2;  // (6) fixed?
+  Margins.Top = Margins.Bottom = TUIMetric::CyFixedFrame;     // (2) fixed?
+
+  // Toolbars default to having tooltips 
+  //
+  WantTooltip = true;
+
+  TRACEX(OwlWin, OWL_CDLEVEL, "TControlBar constructed @" << (void*)this);
 }
 
+//
+//
+//
+TControlBar::~TControlBar()
+{
+  TRACEX(OwlWin, OWL_CDLEVEL, "TControlBar destructed @" << (void*)this);
+}
+
+//
+//
 bool
-TControlBar::PreProcessMsg(MSG&)
+TControlBar::PreProcessMsg(MSG& msg)
 {
-  return false;
-}
-
-void
-TControlBar::PositionGadget(TGadget* previous, TGadget* next, TPoint& origin)
-{
-  //
-  // overlap the button borders
-  //
-  if (previous->GetBorderStyle() == TGadget::Plain &&
-      next->GetBorderStyle() == TGadget::Plain)
-    if (Direction == Horizontal)
-      origin.x -= GetSystemMetrics(SM_CXBORDER);
-
-    else
-      origin.y -= GetSystemMetrics(SM_CYBORDER);
+  TRACEX(OwlWin, 1, "TControlBar::PreProcessMsg @" << (void*)this);
+  return TGadgetWindow::PreProcessMsg(msg);
 }

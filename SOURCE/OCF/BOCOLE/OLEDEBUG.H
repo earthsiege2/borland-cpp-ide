@@ -1,13 +1,12 @@
+//----------------------------------------------------------------------------
+// ObjectComponents
+// Copyright (c) 1991, 1996 by Borland International, All Rights Reserved
 //
-//**************************************************************************
+// $Revision:   2.1  $
 //
-// OleDebug.h -- Some debugging utilities for getting symbolic output
-//               from the OLE2 error codes and enums
-//
-// Copyright (c) 1993,94 by Borland International, Inc. All rights reserved
-//
-//**************************************************************************
-
+//  Some debugging utilities for getting symbolic output from the OLE2 error 
+//  codes and enums
+//----------------------------------------------------------------------------
 #ifndef _OLEDEBUG_H
 #define _OLEDEBUG_H
 
@@ -236,4 +235,3 @@ class _ICLASS cDebugEnum;
 #define OLE_FUNC DebugFunc
 
 #endif
-

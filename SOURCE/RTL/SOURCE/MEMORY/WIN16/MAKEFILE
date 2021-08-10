@@ -23,13 +23,13 @@
     OBJS =               \
             asmmem.obj   \
             winmem.obj   \
+            farheap.obj  \
+            heap.obj     \
             fheap.obj
 
     AUXOBJS =            \
             h_chkstk.obj \
             ptable.obj   \
-            farheap.obj  \
-            heap.obj     \
             suballoc.obj
 
 !    if $d(DLL)

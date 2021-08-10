@@ -19,7 +19,7 @@
 ##  :       0 Search
 ##*
 ##  :   FoundOnce != 0
-##  :       (-1) Search
+##  :      (-1) Search
 ##*
 ##  :   100 SearchItem
 ##  --END-- Search == FALSE

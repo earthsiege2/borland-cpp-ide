@@ -22,6 +22,7 @@ void ReadStream()
     ifp >> p2c;
     if( p2c )
         p2c->Draw();
+    delete p2c;
 }
 
 int main()

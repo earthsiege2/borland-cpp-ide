@@ -1,11 +1,12 @@
-//
 //----------------------------------------------------------------------------
 // ObjectComponents
-// (C) Copyright 1994 by Borland International, All Rights Reserved
+// Copyright (c) 1994, 1996 by Borland International, All Rights Reserved
 //
-//   Implementation of TOcDocument Class
+// $Revision:   2.6  $
+//
+// Implementation of TOcDocument Class
 //----------------------------------------------------------------------------
-#include <ocf/ocfpch.h>
+#include <ocf/pch.h>
 #include <ocf/ocstorag.h>
 #include <ocf/ocdoc.h>
 #include <ocf/ocpart.h>
@@ -16,23 +17,25 @@ DIAG_DECLARE_GROUP(OcRefCount);
 
 const char  DocStreamName[] = "OcDocument";
 
+//
+//
+//
 TOcDocument::TOcDocument(TOcApp& app, const char far* fileName)
 :
   OcApp(app),
 #if defined(BI_DATA_NEAR)
   Name(*new string(fileName)),
   PartCollection(*new TOcPartCollection),
-  ViewCollection(*new TOcViewCollection)
+  LinkCollection(*new TOcLinkCollection)
 #else
   Name(fileName),
   PartCollection(),
-  ViewCollection()
+  LinkCollection()
 #endif
 {
-  // client support...
+  // Host support...
   //
   ActiveView = 0;
-  NumViews   = 0;
   PartID     = 0;
   Storage    = 0;
 
@@ -41,40 +44,45 @@ TOcDocument::TOcDocument(TOcApp& app, const char far* fileName)
   TRACEX(OcRefCount, 1, "TOcDocument() @" << (void*)this);
 }
 
+//
+//
+//
 TOcDocument::TOcDocument(TOcApp& app, const char far* fileName, IStorage far* storageI)
 :
   OcApp(app),
 #if defined(BI_DATA_NEAR)
   Name(*new string(fileName)),
   PartCollection(*new TOcPartCollection),
-  ViewCollection(*new TOcViewCollection)
+  LinkCollection(*new TOcLinkCollection)
 #else
   Name(fileName),
   PartCollection(),
-  ViewCollection()
+  LinkCollection()
 #endif
 {
-  // client support...
+  // Host support...
   //
   ActiveView = 0;
-  NumViews   = 0;
   PartID     = 0;
   Storage    = 0;
   OrgStorage = 0;
 
-  if (storageI) // storage already created by application
+  if (storageI)   // Storage already created by host application
     Storage = new TOcStorage(storageI);
   else
-    Storage = 0; // no storage yet
+    Storage = 0;  // No storage yet, wait until a SetStorage() is called
   TRACEX(OcRefCount, 1, "TOcDocument() @" << (void*)this);
 }
 
+//
+//
+//
 TOcDocument::~TOcDocument()
 {
   delete Storage;
 #if defined(BI_DATA_NEAR)
   delete &PartCollection;
-  delete &ViewCollection;
+  delete &LinkCollection;
   delete &Name;
 #endif
 }
@@ -87,7 +95,7 @@ TOcDocument::~TOcDocument()
 void
 TOcDocument::SetStorage(IStorage* storage, bool remember)
 {
-  if (Storage && (storage == Storage->GetIStorage()))
+  if (Storage && storage == Storage->GetIStorage())
     return;
 
   if (remember) {
@@ -230,7 +238,8 @@ TOcDocument::LoadParts()
 
   // Clear the part collection
   //
-  PartCollection.Clear();
+  //PartCollection.Clear(); 
+                            // There is a case when clearing now causes a crash
 
   // Open a stream with part information
   //
@@ -250,6 +259,10 @@ TOcDocument::LoadParts()
     ulong value;
     if (!HRSucceeded(stream.Read(&value, sizeof value)))
       return false;
+
+    // Clear the part collection
+    //
+    PartCollection.Clear();
 
     // Rebuild the part collection
     //
@@ -279,6 +292,9 @@ TOcDocument::LoadParts()
   return true;
 }
 
+//
+//
+//
 void
 TOcDocument::RenameParts(IBRootLinkable far* bLDocumentI)
 {
@@ -296,6 +312,9 @@ TOcDocument::RenameParts(IBRootLinkable far* bLDocumentI)
   }
 }
 
+//
+//
+//
 void
 TOcDocument::Close()
 {
@@ -304,14 +323,17 @@ TOcDocument::Close()
     part.Close();
   }
 
-  for (TOcViewCollectionIter j(ViewCollection); j; j++) {
-    TOcLinkView& view = *j.Current();
-    view.Disconnect();
+  for (TOcLinkCollectionIter j(LinkCollection); j; j++) {
+    TOcLinkView& link = *j.Current();
+    link.Disconnect();
   }
 
-  ViewCollection.Clear(); // remove the link views now
+  LinkCollection.Clear();  // Remove the link views now
 }
 
+//
+//
+//
 void
 TOcDocument::SetActiveView(TOcView* view)
 {
@@ -326,11 +348,8 @@ TOcDocument::SetName(const string& newName)
 {
   Name = newName;
 
-  // create a moniker for this document
+  // Create a moniker for this document
   //
   if (!Name.is_null() && ActiveView)
     ActiveView->Rename();
 }
-
-
-

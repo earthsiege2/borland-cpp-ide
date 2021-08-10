@@ -1,14 +1,33 @@
 //----------------------------------------------------------------------------
 // ObjectWindows
-// (C) Copyright 1991, 1994 by Borland International, All Rights Reserved
+// Copyright (c) 1991, 1996 by Borland International, All Rights Reserved
 //
-//   Implementation of class TFrameWindow
+//$Revision:   10.29  $
+//
+// Implementation of class TFrameWindow, a TWindow with additional features
+// for frames, such as client window, menus, icons, etc.
 //----------------------------------------------------------------------------
 #pragma hdrignore SECTION
-#include <owl/owlpch.h>
-#include <owl/framewin.h>
-#include <owl/applicat.h>
-#include <owl/menu.h>
+#include <owl/pch.h>
+#if !defined(OWL_FRAMEWIN_H)
+# include <owl/framewin.h>
+#endif
+#if !defined(OWL_APPLICAT_H)
+# include <owl/applicat.h>
+#endif
+#if !defined(OWL_MENU_H)
+# include <owl/menu.h>
+#endif
+#if !defined(WINSYS_UIMETRIC_H)
+# include <winsys/uimetric.h>
+#endif
+#include <stdio.h>
+
+#if !defined(WM_SETICON)
+# define WM_SETICON 0x0080
+#endif
+
+DIAG_DECLARE_GROUP(OwlCmd);
 
 #if !defined(SECTION) || SECTION == 1
 
@@ -21,6 +40,8 @@ DEFINE_RESPONSE_TABLE1(TFrameWindow, TWindow)
   EV_WM_SIZE,
   EV_WM_PARENTNOTIFY,
   EV_WM_ENTERIDLE,
+  EV_WM_QUERYNEWPALETTE,
+  EV_WM_PALETTECHANGED,
 END_RESPONSE_TABLE;
 
 //
@@ -56,7 +77,7 @@ TMenuItemEnabler::SetCheck(int state)
 //----------------------------------------------------------------------------
 
 //
-// constructor for a TFrameWindow
+// Constructor for a TFrameWindow
 //
 TFrameWindow::TFrameWindow(TWindow*        parent,
                            const char far* title,
@@ -64,7 +85,6 @@ TFrameWindow::TFrameWindow(TWindow*        parent,
                            bool            shrinkToClient,
                            TModule*        module)
 {
-  //
   // Initialize virtual base, in case the derived-most used default ctor
   //
   TWindow::Init(parent, title, module);
@@ -75,11 +95,12 @@ TFrameWindow::TFrameWindow(TWindow*        parent,
 }
 
 //
-// constructor for a TFrameWindow. This ctor is generally not used by derived
-// classes, only as generic alias to a framewindow-like HWND
+// Constructor for a TFrameWindow. This ctor is generally not used by derived
+// classes, only as generic alias to a framewindow-like THandle
 //
-TFrameWindow::TFrameWindow(HWND hWnd, TModule* module)
-  : TWindow(hWnd, module)
+TFrameWindow::TFrameWindow(THandle THandle, TModule* module)
+:
+  TWindow(THandle, module)
 {
   Init(0);
 }
@@ -122,13 +143,17 @@ TFrameWindow::Init(TWindow* clientWnd)
 {
   HWndRestoreFocus = 0;
   KeyboardHandling = false;
-  ClientWnd = clientWnd;
+  ClientWnd        = clientWnd;
 
-  MenuDescr = 0;
+  MenuDescr   = 0;
   MergeModule = 0;
 
-  IconModule = ::Module;
-  IconResId = IDI_OWLAPP;
+  CurIcon      = 0;
+  CurIconSm    = 0;
+  IconModule   = 0;
+  IconSmModule = 0;
+  SetIcon(::Module, IDI_OWLAPP);
+  SetIconSm(::Module, IDI_OWLAPPSM);
 
   MinimizedPos = TPoint(-1,-1);  // Windows convention for never minimized
 
@@ -139,18 +164,28 @@ TFrameWindow::Init(TWindow* clientWnd)
   }
 }
 
+//
+// Destructor for a TFrameWindow
+//
 TFrameWindow::~TFrameWindow()
 {
+  if (IsFlagSet(wfMainWindow))
+    if (GetApplication()->GetMainWindow() == this)
+      GetApplication()->MainWindow = 0;
+
   delete MenuDescr;
 }
 
+//
+// Return a state mask representing the enabled menu items (up to 32)
+//
 static uint32
 GetMenuStateBits(HMENU hmenu, int count)
 {
   uint32 bit = 1;
   uint32 result = 0;
 
-  for (int i=0; i<count; i++) {
+  for (int i = 0; i < count; i++) {
     uint state = GetMenuState(hmenu, i, MF_BYPOSITION);
     if (state != (uint)-1) {
       if (!(state  & (MF_DISABLED | MF_GRAYED))) {
@@ -163,6 +198,10 @@ GetMenuStateBits(HMENU hmenu, int count)
   return result;
 }
 
+//
+// Responds to WM_INITMENUPOPUP by performing a command enable run on each
+// of the menu items in the popup menu
+//
 void
 TFrameWindow::EvInitMenuPopup(HMENU hPopupMenu, uint index, bool sysMenu)
 {
@@ -185,12 +224,6 @@ TFrameWindow::EvInitMenuPopup(HMENU hPopupMenu, uint index, bool sysMenu)
   }
 }
 
-static void
-DoIdleAction(TWindow* win, void* idleCount)
-{
-  win->IdleAction(*(long*)idleCount);
-}
-
 //
 // TFrameWindow processes idle action occurs once per block of messages
 //
@@ -203,81 +236,110 @@ TFrameWindow::IdleAction(long idleCount)
 #if defined(BI_PLAT_WIN32)
     if (GetFocus()) {
 #else
-    HWND focus = GetFocus();
+    THandle focus = GetFocus();
     if (focus && ::GetWindowTask(focus) == GetCurrentTask()) {
 #endif
       long style = ::GetWindowLong(*this, GWL_STYLE);
       if (!(style & WS_CHILD)) {
-        HMENU hMenu = ::GetMenu(*this);
-        if (IsMenu(hMenu))
-          HandleMessage(WM_INITMENUPOPUP, WPARAM(hMenu));
+        if (IsWindow()) {
+          HMENU hMenu = ::GetMenu(*this);
+          if (IsMenu(hMenu))
+            HandleMessage(WM_INITMENUPOPUP, TParam1(hMenu));
+        }
       }
     }
-    // give child windows an opportunity to do any idle processing
-    //
-    ForEach(DoIdleAction, &idleCount);
   }
-  return false;  // we don't need any more time for now
+  // give child windows an opportunity to do any idle processing
+  //
+  return TWindow::IdleAction(idleCount);
 }
 
 //
 // Locate and return the child window that is the target of command and command
 // enable messages.
 //
-HWND
+TWindow::THandle
 TFrameWindow::GetCommandTarget()
 {
   // Start with the focus window
   //
-  HWND  hFocus = ::GetFocus();
+  THandle  hFocus = ::GetFocus();
 
   // If its a child of ours, then return it.
   //
-  if (IsChild(hFocus))
-    return hFocus;
+  TWindow* client = GetClientWindow();
+  if (client) {
+    if (client->IsChild(hFocus)) {
+      TRACEX(OwlCmd, 1, "TFrameWindow::GetCommandTarget - returns focus "\
+                        "window, child of client: " << hex << uint(hFocus));
+      return hFocus;
+    }
+  }
+  else
+    if (IsChild(hFocus)) {
+      TRACEX(OwlCmd, 1, "TFrameWindow::GetCommandTarget - returns focus "\
+                        "window, child of frame: " << hex << uint(hFocus));
+      return hFocus;
+    }
 
   // The focus is not our descendent, use our most recently active child
   //
-  if (HWndRestoreFocus)
+  if (HWndRestoreFocus) {
+    TRACEX(OwlCmd, 1, "TFrameWindow::GetCommandTarget - " \
+                      " returns HWndRestoreFocus " \
+                      << hex << uint(HWndRestoreFocus));
     return HWndRestoreFocus;
+  }
 
   // If we have a client, fall back on that
   //
-  if (GetClientWindow())
+  if (GetClientWindow()) {
+    TRACEX(OwlCmd, 1, "TFrameWindow::GetCommandTarget - " \
+                      " returns ClientWindow " \
+                      << hex << uint(THandle(*GetClientWindow())));
     return *GetClientWindow();
+  }
 
   // Don't know who else to send it to, return ourselves
   //
+  TRACEX(OwlCmd, 1, "TFrameWindow::GetCommandTarget - " \
+                    " returns this frame " \
+                    << hex << uint(THandle(*this)));
   return *this;
 }
 
 //
-// Handle WM_COMMAND to provide extra processing for commands: send the
-// command down the command chain
+// Handle WM_COMMAND to provide extra processing for commands:
+// Extra processing for commands: starts with the command target window
+// (usually the focus window) and gives it and its parent windows an
+// opportunity to handle the command.
 //
-LRESULT
-TFrameWindow::EvCommand(uint id, HWND hWndCtl, uint notifyCode)
+TResult
+TFrameWindow::EvCommand(uint id, THandle hCtl, uint notifyCode)
 {
-  // walk the command chain from the focus child back up to us or until
+  TRACEX(OwlCmd, 1, "TFrameWindow::EvCommand - id(" << id << "), ctl(" <<\
+                     hex << uint(hCtl) << "), code(" << notifyCode  << ")");
+
+  // Walk the command chain from the command target back up to us or until
   // we hit a child that is an owl window. Delegate to owl-child or forward to
   // our base if no child is found.
   //
-  if (hWndCtl == 0) {
-    HWND  hCmdTarget = GetCommandTarget();
+  if (hCtl == 0) {
+    THandle  hCmdTarget = GetCommandTarget();
 
-    // Check owl parentage too in case the hWnds were reparented
+    // Check owl parentage too in case the THandles were reparented
     //
-    while (hCmdTarget && hCmdTarget != HWindow) {
+    while (hCmdTarget && hCmdTarget != GetHandle()) {
       TWindow*  cmdTarget = GetWindowPtr(hCmdTarget);
 
       if (cmdTarget)
-        return cmdTarget->EvCommand(id, hWndCtl, notifyCode);
+        return cmdTarget->EvCommand(id, hCtl, notifyCode);
 
       hCmdTarget = ::GetParent(hCmdTarget);
     }
   }
 
-  return TWindow::EvCommand(id, hWndCtl, notifyCode);
+  return TWindow::EvCommand(id, hCtl, notifyCode);
 }
 
 //
@@ -300,15 +362,15 @@ bool
 TFrameWindow::PreProcessMsg(MSG& msg)
 {
   if (TWindow::PreProcessMsg(msg))
-    return true;  // process accelerators
+    return true;  // Processed accelerators
 
   if (KeyboardHandling && msg.message >= WM_KEYFIRST &&
-                          msg.message <= WM_KEYLAST) {
-    HWND parent = ::GetParent(msg.hwnd);
+                          msg.message <= WM_KEYLAST)
+  {
+    THandle parent = ::GetParent(msg.hwnd);
 
-    //
-    // Retrieve the COMBO handle if we're in the EDIT ctl
-    // parented to the combobox
+    // Retrieve the COMBO handle if we're in the EDIT ctrl parented to the
+    // combobox
     //
     char szClassName[0x10];
     ::GetClassName(parent, szClassName, sizeof(szClassName));
@@ -338,10 +400,10 @@ TFrameWindow::SetMenu(HMENU newMenu)
 }
 
 //
-// Perform a high-level menu assignment either before or after the HWND for the
+// Perform a high-level menu assignment either before or after the THandle for the
 // window has been created.
 //
-// returns true if successful; false otherwise
+// Returns true if successful; false otherwise
 //
 bool
 TFrameWindow::AssignMenu(TResId menuResId)
@@ -353,10 +415,10 @@ TFrameWindow::AssignMenu(TResId menuResId)
     Attr.Menu = menuResId.IsString() ? strnewdup(menuResId) : (char far*)menuResId;
   }
 
-  // if the window has been created then load and set the new menu and destroy
+  // If the window has been created then load and set the new menu and destroy
   // the old menu
   //
-  if (!HWindow)
+  if (!GetHandle())
     return true;
 
   HMENU curMenu = GetMenu();
@@ -377,8 +439,55 @@ TFrameWindow::AssignMenu(TResId menuResId)
 bool
 TFrameWindow::SetIcon(TModule* module, TResId resId)
 {
+  // Delete old icon if not system icon
+  //
+  if (CurIcon && IconModule)
+    ::DestroyIcon(CurIcon);
+
   IconModule = module;
   IconResId = resId;
+
+  HINSTANCE hInstance = IconModule ? HINSTANCE(*IconModule) : HINSTANCE(0);
+
+  if (IconResId != 0)
+    CurIcon = TUser::LoadIcon(hInstance, IconResId);
+
+  if (CurIcon && IsWindow())
+    SendMessage(WM_SETICON, true, (LPARAM)(HICON)CurIcon);
+
+  return true;
+}
+
+//
+// Set the Small Icon (16 x 16)
+//
+bool
+TFrameWindow::SetIconSm(TModule* module, TResId resId)
+{
+  // Delete old icon if not system icon
+  //
+  if (CurIconSm && IconSmModule)
+    ::DestroyIcon(CurIconSm);
+
+  IconSmModule = module;
+  IconSmResId  = resId;
+
+  HINSTANCE hInstance = IconSmModule ? HINSTANCE(*IconSmModule) : HINSTANCE(0);
+  if (IconSmResId != 0) {
+#if defined(BI_PLAT_WIN32)
+    CurIconSm = (HICON)::LoadImage(hInstance, IconSmResId, IMAGE_ICON,
+                                   TUIMetric::CxSmIcon, TUIMetric::CySmIcon,
+                                   LR_DEFAULTCOLOR);
+    if (!CurIconSm)
+      CurIconSm = TUser::LoadIcon(hInstance, IconSmResId);
+#else
+    CurIconSm = TUser::LoadIcon(hInstance, IconSmResId);
+#endif
+  }
+
+  if (CurIconSm && IsWindow())
+    SendMessage(WM_SETICON, false, (LPARAM)(HICON)CurIconSm);
+
   return true;
 }
 
@@ -399,29 +508,33 @@ TWindow*
 TFrameWindow::SetClientWindow(TWindow* clientWnd)
 {
   TWindow* oldClientWnd = ClientWnd;
-  HWND oldHWnd = oldClientWnd ? oldClientWnd->HWindow : (HWND)0;
+  THandle oldWnd = oldClientWnd ? oldClientWnd->GetHandle() : (THandle)0;
   RemoveChild(ClientWnd);
 
-  if (HWndRestoreFocus == oldHWnd)
+  if (HWndRestoreFocus == oldWnd)
     HWndRestoreFocus = 0;
 
   ClientWnd = clientWnd;
 
   if (ClientWnd) {
     ClientWnd->SetParent(this);
-    if (!ClientWnd->HWindow)
-      ClientWnd->Create();
-    ClientWnd->Show(SW_NORMAL);
+    if (GetHandle()) {
+      if (!ClientWnd->GetHandle())
+        ClientWnd->Create();
+      ClientWnd->ShowWindow(SW_SHOWNOACTIVATE);
+    }
     SetBkgndColor(NoErase);         // no need to erase client area
-    ResizeClientWindow();
+    ResizeClientWindow(true); 
   }
   else
     SetBkgndColor(NoColor);         // will need to erase client area
 
-  if (ClientWnd && ClientWnd->HWindow)
+  // Pass the focus to the new client, but only if we have it currently
+  //
+  if (ClientWnd && ClientWnd->GetHandle() && GetFocus() == GetHandle()) {
     ClientWnd->SetFocus();
-  else
-    SetFocus();
+    HWndRestoreFocus = ClientWnd->GetHandle();
+  }
 
   return oldClientWnd;
 }
@@ -437,8 +550,9 @@ TFrameWindow::RemoveChild(TWindow* child)
   if (child) {
     if (child == ClientWnd)
       ClientWnd = 0;
-    if (child->HWindow == HWndRestoreFocus)
+    if (child->GetHandle() == HWndRestoreFocus) {
       HWndRestoreFocus = 0;
+    }
   }
 }
 
@@ -447,6 +561,7 @@ TFrameWindow::RemoveChild(TWindow* child)
 // modify the caption directly without modifying the Title data member.
 // Generates a composite title based on Title if it exists, docname, and index
 // if it is > 0.
+//
 //  [<Title> - ]<docname>[:<index>]
 //
 bool
@@ -459,7 +574,10 @@ TFrameWindow::SetDocTitle(const char far* docname, int index)
       title = Title;
       title += " - ";
     }
-    title += docname;
+
+    if (docname)
+      title += docname;
+
     if (index > 0) {
       title += ':';
       char num[10];
@@ -468,9 +586,7 @@ TFrameWindow::SetDocTitle(const char far* docname, int index)
     }
 
     SetWindowText(title.c_str());
-
   }  // else if index negative, simply acknowledge that title will display
-
   return true;
 }
 
@@ -512,15 +628,14 @@ void
 TFrameWindow::EvPaint()
 {
   if (IsIconic() && (IconResId || ClientWnd)) {
-    TPaintDC  dc(HWindow);
+    TPaintDC  dc(GetHandle());
 
     if (IconResId) {
-      HINSTANCE hInstance = IconModule ? HINSTANCE(*IconModule) : HINSTANCE(0);
-      HICON hIcon = ::LoadIcon(hInstance, IconResId);
-      ::DrawIcon(dc, 0, 0, hIcon ? hIcon : getAppIcon());
+      SendMessage(WM_ICONERASEBKGND, TParam1(HDC(dc)));
+      ::DrawIcon(dc, 0, 0, CurIcon ? CurIcon : getAppIcon());
     }
     else
-        ClientWnd->Paint(dc, dc.Ps.fErase, *(TRect*)&dc.Ps.rcPaint);
+      ClientWnd->Paint(dc, dc.Ps.fErase, *(TRect*)&dc.Ps.rcPaint);
   }
   else
     TWindow::EvPaint();
@@ -539,9 +654,9 @@ TFrameWindow::EvEraseBkgnd(HDC hDC)
 {
   if (IsIconic()) {
     if (!IconResId && ClientWnd)
-      return (bool)ClientWnd->HandleMessage(WM_ERASEBKGND, WPARAM(hDC));
+      return (bool)ClientWnd->HandleMessage(WM_ERASEBKGND, TParam1(hDC));
 
-    HandleMessage(WM_ICONERASEBKGND, WPARAM(hDC));
+    HandleMessage(WM_ICONERASEBKGND, TParam1(hDC));
     return true;
   }
   else
@@ -559,7 +674,7 @@ TFrameWindow::EvQueryDragIcon()
 {
   if (IconResId) {
     HINSTANCE hInstance = IconModule ? HINSTANCE(*IconModule) : HINSTANCE(0);
-    HICON hIcon = ::LoadIcon(hInstance, IconResId);
+    HICON hIcon = TUser::LoadIcon(hInstance, IconResId);
     return hIcon ? hIcon : getAppIcon();
   }
   else
@@ -581,7 +696,7 @@ SearchForChildWithTab(TWindow* win)
     TWindow*  child = firstChild;
 
     do {
-      if (child->HWindow) {
+      if (child->GetHandle()) {
         long  style = child->GetWindowLong(GWL_STYLE);
 
         if (IsEnabledVisibleChild(style)) {
@@ -605,16 +720,16 @@ SearchForChildWithTab(TWindow* win)
 static bool
 EnabledVisibleChild(TWindow* win, void*)
 {
-  return win->HWindow ? IsEnabledVisibleChild(win->GetWindowLong(GWL_STYLE)) :
+  return win->GetHandle() ? IsEnabledVisibleChild(win->GetWindowLong(GWL_STYLE)) :
                         false;
 }
 
 //
-// if the receiver doesn't have any children then returns 0. otherwise
-// we search for the first child with WS_TABSTOP; if no child has WS_TABSTOP
+// If the receiver doesn't have any children then returns 0. Otherwise
+// we search for the first child with WS_TABSTOP; If no child has WS_TABSTOP
 // then we return the first enabled visible child
 //
-// does a depth-first search of nested child windows
+// Does a depth-first search of nested child windows
 //
 // NOTE: we stop at the first child with WS_TABSTOP and do not search its
 //       children...
@@ -634,14 +749,14 @@ TFrameWindow::FirstChildWithTab()
 // return true if caller can stop searching for a window to hold its handle.
 //
 bool
-TFrameWindow::HoldFocusHWnd(HWND hWndLose, HWND hWndGain)
+TFrameWindow::HoldFocusHWnd(THandle hWndLose, THandle hWndGain)
 {
   if (IsChild(hWndLose)) {
     if (!hWndGain || !IsChild(hWndGain))
       HWndRestoreFocus = hWndLose;
     return true;
   }
-  return hWndLose == HWindow;
+  return hWndLose == GetHandle();
 }
 
 //
@@ -649,24 +764,23 @@ TFrameWindow::HoldFocusHWnd(HWND hWndLose, HWND hWndGain)
 // recently, or find the best one to give it to otherwise.
 //
 void
-TFrameWindow::EvSetFocus(HWND hWndLostFocus)
+TFrameWindow::EvSetFocus(THandle hWndLostFocus)
 {
   TWindow::EvSetFocus(hWndLostFocus);
 
+  if (HWndRestoreFocus == 0)
+    HWndRestoreFocus = GetCommandTarget();
+
+//  if (HWndRestoreFocus == hWndLostFocus)
+//    HWndRestoreFocus = GetHandle();
+
   if (HWndRestoreFocus) {
-    //
-    // Set focus to the saved HWND as long as it is still a valid window handle
+    // Set focus to the saved THandle as long as it is still a valid window handle
     //
     if (::IsWindow(HWndRestoreFocus))
       ::SetFocus(HWndRestoreFocus);
-
-    HWndRestoreFocus = 0;
-  }
-  else {
-    TWindow*  win = FirstChildWithTab();
-
-    if (win && win->HWindow != hWndLostFocus)
-      win->SetFocus();
+    else
+      HWndRestoreFocus = 0;
   }
 }
 
@@ -681,20 +795,21 @@ TFrameWindow::EvParentNotify(uint event,
                              uint childHandleOrX, uint /*childIDOrY*/)
 {
   if (event == WM_DESTROY) {
-    if (ClientWnd && ClientWnd->HWindow == HWND(childHandleOrX))
+    if (ClientWnd && ClientWnd->GetHandle() == THandle(childHandleOrX))
       PostMessage(WM_CLOSE);  // using ShutDownWindow() has side effects
 
-    TWindow* c = GetWindowPtr(HWND(childHandleOrX));
+    TWindow* c = GetWindowPtr(THandle(childHandleOrX));
     if (c)
       c->ClearFlag(wfFullyCreated);
   }
   else if (event == WM_SIZE) {
     if (IsFlagSet(wfShrinkToClient)
         && ClientWnd
-        && ClientWnd->HWindow == HWND(childHandleOrX)
+        && ClientWnd->GetHandle() == THandle(childHandleOrX)
         && !IsIconic())
-      ResizeClientWindow();
+      ResizeClientWindow(true); 
   }
+  DefaultProcessing();
 }
 
 //
@@ -702,11 +817,35 @@ TFrameWindow::EvParentNotify(uint event,
 // background processing can continue when they are up.
 //
 void
-TFrameWindow::EvEnterIdle(uint source, HWND hWndDlg)
+TFrameWindow::EvEnterIdle(uint source, THandle THandleDlg)
 {
   if (source == MSGF_DIALOGBOX && IsFlagSet(wfMainWindow))
     IdleAction(0);  // could call GetApplication()->IdleAction(0)...
-  TWindow::EvEnterIdle(source, hWndDlg);
+  TWindow::EvEnterIdle(source, THandleDlg);
+}
+
+//
+// Forwards the WM_QUERYNEWPALETTE message to the client window.
+//
+bool
+TFrameWindow::EvQueryNewPalette()
+{
+  if (GetClientWindow())
+    return GetClientWindow()->ForwardMessage();
+  else
+    return TWindow::EvQueryNewPalette();
+}
+
+//
+// Forwards the WM_PALETTECHANGED message to the client window.
+//
+void
+TFrameWindow::EvPaletteChanged(THandle hWndPalChg)
+{
+  if (GetClientWindow())
+    GetClientWindow()->ForwardMessage();
+  else
+    TWindow::EvPaletteChanged(hWndPalChg);
 }
 
 //
@@ -717,14 +856,16 @@ TFrameWindow::EvEnterIdle(uint source, HWND hWndDlg)
 // Adjust clients styles & make sure they get set.
 //
 bool
-TFrameWindow::ResizeClientWindow(bool redraw)
+TFrameWindow::ResizeClientWindow(bool repaint)
 {
+  bool hasThickFrame = Attr.Style & WS_THICKFRAME;
+  Attr.Style |= WS_THICKFRAME;
   if (!ClientWnd)
     return false;
 
-  // prevent recursion during resize by ignore calls from EvParentNotify and
-  // EvSize when we have already been called
-  // do this by disabling notifications while resizing using the
+  // Prevent recursion during resize by ignore calls from EvParentNotify and
+  // EvSize when we have already been called.
+  // Do this by disabling notifications while resizing using the
   // wfShrinkToClient flag as a semaphore on the client
   //
   if (ClientWnd->IsFlagSet(wfShrinkToClient))
@@ -732,18 +873,20 @@ TFrameWindow::ResizeClientWindow(bool redraw)
   ClientWnd->SetFlag(wfShrinkToClient);
 
   bool  clientResized = false;
-  TSize frameSize = GetClientRect().Size();
+  TSize clientAreaSize = GetClientRect().Size();
   TSize childSize = ClientWnd->GetWindowRect().Size();
 
-  // first time through, strip client window of thick borders
-  // if shrink-to-client, then must measure the client size first
-  // if the client has scrolls bars, we must hide them to obtain the correct
-  // size
+  // First time through, strip client window of thick borders.
+  // If shrink-to-client, then must measure the client size first
+  // If the client has scrolls bars, we must hide them to obtain the correct
+  // size.
   // Border style is left on & dealt with by hand below
   //
   const uint32 badClientStyles = WS_DLGFRAME | WS_THICKFRAME | // bad borders
                                  WS_POPUP | WS_OVERLAPPED;     // bad parenting
-  const uint32 badClientExStyles = WS_EX_DLGMODALFRAME;
+  const uint32 badClientExStyles = WS_EX_DLGMODALFRAME | WS_EX_WINDOWEDGE |
+                                   WS_EX_STATICEDGE;        // more bad borders
+
   if ((ClientWnd->Attr.Style & badClientStyles) ||
       (ClientWnd->Attr.ExStyle & badClientExStyles)) {
     if (IsFlagSet(wfShrinkToClient)) {
@@ -775,17 +918,14 @@ TFrameWindow::ResizeClientWindow(bool redraw)
   if (ClientWnd->Attr.Style & WS_BORDER) {
     childSize = ClientWnd->GetClientRect().Size();
   }
-  if (childSize != frameSize) {
+  if (childSize != clientAreaSize) {
     if (IsFlagSet(wfShrinkToClient)) {
       TRect outside = GetWindowRect();
-      TPoint outsideOrg(0, 0);
-      if (Parent)
-        Parent->ClientToScreen(outsideOrg); // adjust our rect by our parent's
-
-      TSize border = outside.Size() - frameSize;
-      MoveWindow(outside.left - outsideOrg.x, outside.top - outsideOrg.y,
-                 childSize.cx + border.cx, childSize.cy + border.cy, redraw);
-      frameSize = childSize;     // must move client, will not cause an EvSize
+      TSize border = outside.Size() - clientAreaSize;
+      SetWindowPos(0, 0, 0,
+                   childSize.cx + border.cx, childSize.cy + border.cy,
+                   SWP_NOACTIVATE|SWP_NOMOVE| (repaint ? 0 : SWP_NOREDRAW));
+      clientAreaSize = childSize; // must move client, will not cause an EvSize
     }
     else {
       clientResized = true;      // client will get resized
@@ -797,32 +937,40 @@ TFrameWindow::ResizeClientWindow(bool redraw)
   if (Attr.Style & WS_THICKFRAME)
     ClearFlag(wfShrinkToClient);
 
-  // Handle border style by shoving the client's borders under the frame
+  if (!hasThickFrame) {
+    Attr.Style &= ~WS_THICKFRAME;
+  }
+
+  // Handle simple border style by shoving the client's borders under the frame
+  // This code MUST not resize the client if shrinkToClient
   //
   if (ClientWnd->Attr.Style & WS_BORDER) {
-    int bx = ::GetSystemMetrics(SM_CXBORDER);
-    int by = ::GetSystemMetrics(SM_CYBORDER);
-    ClientWnd->MoveWindow(-bx, -by, frameSize.cx+bx+bx, frameSize.cy+by+by, redraw);
+    int bx = TUIMetric::CxBorder;
+    int by = TUIMetric::CyBorder;
+    ClientWnd->MoveWindow(-bx, -by, clientAreaSize.cx+bx+bx, clientAreaSize.cy+by+by, repaint);
   }
   else
-    ClientWnd->MoveWindow(0, 0, frameSize.cx, frameSize.cy, redraw);
+    ClientWnd->MoveWindow(0, 0, clientAreaSize.cx, clientAreaSize.cy, repaint);
 
+  // Turn off semaphore bit
+  //
   ClientWnd->ClearFlag(wfShrinkToClient);
+
   return clientResized;
 }
 
 //
-// called following a successful association between an MS-Windows interface
+// Called following a successful association between an MS-Windows interface
 // element and a TFrameWindow
 //
 void
 TFrameWindow::SetupWindow()
 {
-  // create windows in child list (this includes the client window)
+  // Create windows in child list (this includes the client window)
   //
   TWindow::SetupWindow();
 
-  ResizeClientWindow();
+  ResizeClientWindow(true); 
 
   if (MinimizedPos != TPoint(-1,-1)) {
     WINDOWPLACEMENT windata;
@@ -834,7 +982,7 @@ TFrameWindow::SetupWindow()
     SetWindowPlacement(&windata);
   }
 
-  // if SetMenuDescr() was called before window created, update the menu now
+  // If SetMenuDescr() was called before window created, update the menu now
   //
   if (IsFlagSet(wfMainWindow) && MenuDescr) {
     HMENU curMenu = GetMenu();
@@ -847,21 +995,40 @@ TFrameWindow::SetupWindow()
       ::DestroyMenu(newMenu);
   }
 
-  // if we haven't set HWndRestoreFocus then pick the first child with tabstop
+  // If we haven't set THandleRestoreFocus then pick the first child with tabstop
   //
   if (!HWndRestoreFocus) {
-    TWindow*  win = FirstChildWithTab();
-
-    HWndRestoreFocus = win ? win->HWindow : HWindow;
+    HWndRestoreFocus = GetCommandTarget();
   }
+
+  if (CurIcon)
+    SendMessage(WM_SETICON, true, (LPARAM)(HICON)CurIcon);
+
+  if (CurIconSm)
+    SendMessage(WM_SETICON, false, (LPARAM)(HICON)CurIconSm);
 }
 
 //
-// response method for an incoming WM_SIZE message
+// Cleans up any associated icons.
 //
-// if not minimizing resizes the client window to be the same size as the
+void
+TFrameWindow::CleanupWindow()
+{
+  // icon cleanup
+  //
+  SetIcon(0, 0);
+  SetIconSm(0, 0);
+
+  TWindow::CleanupWindow();
+}
+
+
+//
+// Response method for an incoming WM_SIZE message
+//
+// If not minimizing resizes the client window to be the same size as the
 // client rectangle,
-// if no WM_SIZE sent, forwards WM_SIZE message to client so it can recalc.
+// If no WM_SIZE sent, forwards WM_SIZE message to client so it can recalc.
 //
 void
 TFrameWindow::EvSize(uint sizeType, TSize& size)
@@ -871,7 +1038,7 @@ TFrameWindow::EvSize(uint sizeType, TSize& size)
   if (ClientWnd) {
     bool sizeSent = false;
     if (sizeType != SIZE_MINIMIZED) {
-      sizeSent = ResizeClientWindow();
+      sizeSent = ResizeClientWindow(true); 
       size = ClientWnd->GetClientRect().Size();
     }
     if (!sizeSent)
@@ -891,7 +1058,7 @@ TFrameWindow::SetMenuDescr(const TMenuDescr& menuDescr)
   delete MenuDescr;
   MenuDescr = new TMenuDescr(menuDescr);
 
-  if (IsFlagSet(wfMainWindow) && HWindow) {
+  if (IsFlagSet(wfMainWindow) && GetHandle()) {
     HMENU curMenu = GetMenu();
     TMenu newMenu(*MenuDescr, NoAutoDelete);
     if (SetMenu(newMenu))
@@ -909,7 +1076,7 @@ TFrameWindow::SetMenuDescr(const TMenuDescr& menuDescr)
 bool
 TFrameWindow::MergeMenu(const TMenuDescr& childMenuDescr)
 {
-  if (!MenuDescr || !HWindow)
+  if (!MenuDescr || !GetHandle())
     return false;
 
   MergeModule = childMenuDescr.GetModule();
@@ -934,7 +1101,8 @@ TFrameWindow::MergeMenu(const TMenuDescr& childMenuDescr)
 }
 
 //
-// Restore our menu to the one described by our menu descriptor
+// Restores this frame window's menu to the one described by our menu
+// descriptor
 //
 bool
 TFrameWindow::RestoreMenu()
@@ -953,13 +1121,16 @@ TFrameWindow::RestoreMenu()
   return true;
 }
 
+
 #endif
 #if !defined(SECTION) || SECTION == 3
 
 IMPLEMENT_STREAMABLE1(TFrameWindow, TWindow);
 
+#if !defined(BI_NO_OBJ_STREAMING)
+
 //
-// reads data of the uninitialized TFrameWindow from the passed ipstream
+// Reads data of the uninitialized TFrameWindow from the passed ipstream
 //
 void*
 TFrameWindow::Streamer::Read(ipstream& is, uint32 /*version*/) const
@@ -990,7 +1161,7 @@ TFrameWindow::Streamer::Read(ipstream& is, uint32 /*version*/) const
 }
 
 //
-// writes data of the TFrameWindow to the passed opstream
+// Writes data of the TFrameWindow to the passed opstream
 //
 void
 TFrameWindow::Streamer::Write(opstream& os) const
@@ -1015,5 +1186,7 @@ TFrameWindow::Streamer::Write(opstream& os) const
   o->GetWindowPlacement(&windata);
   os << TPoint(windata.ptMinPosition);
 }
+
+#endif  // if !defined(BI_NO_OBJ_STREAMING)
 
 #endif  // SECTION

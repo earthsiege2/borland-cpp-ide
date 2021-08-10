@@ -1,0 +1,9 @@
+#----------------------------------------------------------------------------
+# ObjectWindows
+# Copyright (c) 1996, 1996 by Borland International, All Rights Reserved
+#----------------------------------------------------------------------------
+EXERES=sockdemo
+OBJEXE=dlgaddr.obj dlgdgrm.obj dlglistn.obj dlgsrvc.obj dlgstrm.obj \
+       sockbout.obj sockdemo.obj
+
+!include $(BCEXAMPLEDIR)\owlmake.gen

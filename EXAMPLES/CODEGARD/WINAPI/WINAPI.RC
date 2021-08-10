@@ -1,0 +1,66 @@
+
+/*--------------------------------------------------------
+
+   WINAPI.RC -- Resources for CodeGuard Demo program
+  -------------------------------------------------------*/
+
+#include "winapi.rh"
+
+CG_MENU MENU
+{
+ POPUP "&Resource"
+ {
+  POPUP "&File"
+  {
+   MENUITEM "&Handle", CM_BADHANDLE
+   MENUITEM "&Stream", CM_FSTREAMS
+   MENUITEM "&RTL Mix", CM_RTLMIXH
+  }
+
+  POPUP "&Memory"
+  {
+   MENUITEM "&LocalAlloc", CM_LOCALALLOC
+   MENUITEM "&GlobalAlloc", CM_GLOBALALLOC
+   MENUITEM "&Windows module", CM_WINMODULE
+  }
+
+ }
+
+ POPUP "&Access"
+ {
+  POPUP "&Pointers"
+  {
+   MENUITEM "&Global Overrun", CM_OVERRUN
+   MENUITEM "&Stack Overrun", CM_SOVERRUN
+  }
+
+  MENUITEM "&RTL Mix", CM_RTLMIXP
+  MENUITEM "&Mix Types", CM_MIXTYPES
+  MENUITEM "&Bad Delete", CM_BADDELETE
+  MENUITEM "B&ad Local", CM_BADLOCAL
+ }
+
+ POPUP "&Exceptions"
+ {
+  MENUITEM "&GP Fault1", CM_GPFAULT1
+  MENUITEM "G&P Fault2", CM_GPFAULT2
+ }
+
+ POPUP "&Function failures"
+ {
+  MENUITEM "&Sscanf", CM_SSCANF
+  MENUITEM "S&etDIBits", CM_SETDIBITS
+ }
+
+ POPUP "&Help"
+ {
+  MENUITEM "&CodeGuard Help", CM_CODEGUARDHELP
+  MENUITEM SEPARATOR
+  MENUITEM "&About...", CM_ABOUT
+ }
+
+}
+
+
+
+

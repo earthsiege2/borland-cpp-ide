@@ -1,0 +1,243 @@
+//----------------------------------------------------------------------------
+// cScript
+// (C) Copyright 1995 by Borland International, All Rights Reserved
+//
+// DEBUG.SPP
+//    Provides support services for debugging operations.
+//
+// $Revision:   1.53  $
+//
+//----------------------------------------------------------------------------
+
+import editor;
+import IDE;
+
+import "bcwdbg.dll" {
+   void SetEIPToCurrent();
+}
+
+
+// mark this module as being a library module
+library;
+
+export debugger = new Debugger();
+
+//
+// Debugger Object Handlers.
+//
+
+on debugger:>SetEIPToSelected(){
+   SetEIPToCurrent();
+}
+
+on debugger:>AddBreakAtCurrent(){
+   declare fileName = editor.TopBuffer.FullName;
+   declare row = editor.TopBuffer.TopView.Position.Row;
+   .AddBreakpointFileLine(fileName, row);
+}
+
+on debugger:>WatchCurrent(){
+   if (IsEditKeyboard())
+      debugger.AddWatch(editor.GetWord(), FALSE);
+}
+
+on debugger:>ModifyCurrent(){
+   debugger.EvaluateWindow(editor.GetWord());
+}
+
+on debugger:>EvaluateCurrent(){
+   if (IsEditKeyboard())
+       debugger.EvaluateWindow(editor.GetWord());
+}
+
+on debugger:>InspectCurrent(){
+   if (IsEditKeyboard()) {
+      declare topView = editor.TopView;
+      debugger.Inspect(editor.GetWord(), topView, topView.Position.Row,
+          topView.Position.Column, FALSE);
+   }
+}
+
+on debugger:>ToggleBreakpoint(declare fileName, declare row){
+   if (!initialized(fileName))
+      fileName = editor.TopBuffer.FullName;
+   if (!initialized(row))
+      row = editor.TopBuffer.TopView.Position.Row;
+
+   pass(fileName, row);
+}
+
+on debugger:>ViewCpuFileLine(declare fileName, declare row ){
+    fileName = editor.TopBuffer.FullName;
+    row = editor.TopBuffer.TopView.Position.Row;
+    pass(fileName, row);
+}
+
+on debugger:>RunToCurrent(){
+   if (IDE.KeyboardManager.GetKeyboard() == IDE.KeyboardManager.GetKeyboard("CPU"))
+      debugger.RunToAddress();
+   else if (IsEditKeyboard())
+   {
+       declare fileName = editor.TopBuffer.FullName;
+       declare row = editor.TopBuffer.TopView.Position.Row;
+       debugger.RunToFileLine(fileName, row);
+   }
+}
+
+//
+// IDE Object Debug Menu Debugger Handlers.
+//
+
+on IDE:>DebugAddBreakpoint(){
+   if (IsEditKeyboard()) {
+        debugger.AddBreakAtCurrent();
+    } else {
+        debugger.AddBreakpoint();
+    }
+}
+
+on IDE:>DebugAddWatch(){
+   if (IsEditKeyboard()) {
+       debugger.AddWatch(editor.GetWord(), TRUE);
+    } else {
+       debugger.AddWatch();
+    }
+}
+
+on IDE:>DebugAnimate(){
+    debugger.Animate();
+}
+
+on IDE:>DebugAttach(){
+   debugger.Attach();
+}
+
+on IDE:>DebugBreakpointOptions(){
+    debugger.BreakpointOptions();
+}
+
+on IDE:>DebugEvaluate(){
+   if (IsEditKeyboard()) {
+        debugger.EvaluateWindow(editor.GetWord());
+   } else {
+        debugger.EvaluateWindow();
+   }
+}
+
+on IDE:>DebugInspect(){
+   if (IsEditKeyboard()) {
+       debugger.Inspect(editor.GetWord(), 0, 0, 0, TRUE);
+    } else {
+       debugger.Inspect("", 0, 0, 0, TRUE);
+    }
+}
+
+on IDE:>DebugInstructionStepInto(){
+   debugger.InstructionStepInto();
+}
+
+on IDE:>DebugInstructionStepOver(){
+    debugger.InstructionStepOver();
+}
+
+on IDE:>DebugLoad(){
+   debugger.Load();
+}
+
+on IDE:>DebugPauseProcess(){
+   debugger.PauseProgram();
+}
+
+on IDE:>DebugResetThisProcess(){
+   debugger.Reset();
+}
+
+on IDE:>DebugRun() {
+   debugger.Run();
+}
+
+on IDE:>DebugRunTo(){
+      debugger.RunToFileLine();
+}
+
+on IDE:>DebugSourceAtExecutionPoint(){
+   debugger.FindExecutionPoint();
+}
+
+on IDE:>DebugStatementStepInto(){
+    debugger.StatementStepInto();
+}
+
+on IDE:>DebugStatementStepOver(){
+    debugger.StatementStepOver();
+}
+
+on IDE:>DebugTerminateProcess(){
+    debugger.TerminateProgram();
+}
+
+//
+// IDE Object View Menu Debugger Handlers.
+//
+
+on IDE:>ViewBreakpoint(){
+    debugger.ViewBreakpoint();
+}
+
+on IDE:>ViewCallStack(){
+    debugger.ViewCallStack();
+}
+
+on IDE:>ViewCpu(){
+   debugger.ViewCpu();
+}
+
+on IDE:>ViewProcess(){
+    debugger.ViewProcess();
+}
+
+on IDE:>ViewWatch(){
+    debugger.ViewWatch();
+}
+
+
+// gmc revisit: the following commands were found in existing keymaps
+// We can either provide this functionality or drop it...
+// If we decide to keep it, these names need a rethink.  gmc 11/7/94
+//
+//   kbd.Assign("<Ctrl-p>", debugger.DetailBreakList();");
+//   kbd.Assign("<Ctrl-i>", debugger.InspectBreakList();");
+//   kbd.Assign("<Ctrl-e>", debugger.EditBreakList();");
+//   kbd.Assign("<Ctrl-r>", debugger.RemoveBreakList();");
+//   kbd.Assign("<Ctrl-a>", debugger.AddAtLineBreakList();");
+//   kbd.Assign("<Ctrl-i>", debugger.InspectCallStack();");
+//   kbd.Assign("<Ctrl-e>", debugger.EditCallStack();");
+//   kbd.Assign("<Escape>", debugger.CloseView();");
+//   kbd.Assign("<Ctrl-r>", debugger.RangeInspect();");
+//   kbd.Assign("<Ctrl-c>", debugger.Change();");
+//   kbd.Assign("<Ctrl-i>", debugger.InspectData();");
+//   kbd.Assign("<Ctrl-d>", debugger.Descend();");
+//   kbd.Assign("<Ctrl-n>", debugger.NewExpr();");
+//   kbd.Assign("<Ctrl-t>", debugger.Typecast();");
+//   kbd.Assign("<Ctrl-c>", debugger.CaptureLog();");
+//   kbd.Assign("<Ctrl-o>", debugger.LogOptions();");
+//   kbd.Assign("<Ctrl-a>", debugger.CommentLog();");
+//   kbd.Assign("<Ctrl-e>", debugger.EraseLog();");
+//   kbd.Assign("<Ctrl-h>", debugger.HexReg();");
+//   kbd.Assign("<Ctrl-d>", debugger.DecimalReg();");
+//   kbd.Assign("<Ctrl-w>", debugger.WordReg();");
+//   kbd.Assign("<Ctrl-u>", debugger.DWordReg();");
+//   kbd.Assign("<Ctrl-p>", debugger.DetailWatchList();");
+//   kbd.Assign("<Ctrl-r>", debugger.RemoveWatchList();");
+//   kbd.Assign("<Ctrl-a>", debugger.AddWatchList();");
+//   kbd.Assign("<Ctrl-F2>", "debugger.Terminate();");
+//   kbd.Assign("<Ctrl-F3>", "debugger.ViewCallStack();");
+//   kbd.Assign("<Ctrl-F5>", "debugger.AddWatch();");
+//   kbd.Assign("<Ctrl-F7>", "debugger.Modify();");
+//   kbd.Assign("<Ctrl-F9>", "debugger.Run();");
+//
+
+
+
+
+

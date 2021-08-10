@@ -1,17 +1,38 @@
 //----------------------------------------------------------------------------
 // ObjectWindows
-// (C) Copyright 1992, 1994 by Borland International, All Rights Reserved
+// Copyright (c) 1992, 1996 by Borland International, All Rights Reserved
 //
-//   Implementation of class TEditFile, a text edit which can find/replace
-//   and read/write from/to a file.
+//$Revision:   10.4  $
+//
+// Implementation of class TEditFile, a text edit which can find/replace and
+// read/write from/to a file.
 //----------------------------------------------------------------------------
 #pragma hdrignore SECTION
-#include <owl/owlpch.h>
-#include <owl/editfile.h>
-#include <owl/applicat.h>
+#include <owl/pch.h>
+#if !defined(OWL_WINDOW_H)
+# include <owl/window.h>
+#endif
+#if !defined(OWL_CONTROL_H)
+# include <owl/control.h>
+#endif
+#if !defined(OWL_EDIT_H)
+# include <owl/edit.h>
+#endif
+#if !defined(OWL_EDITSEAR_H)
+# include <owl/editsear.h>
+#endif
+#if !defined(OWL_EDITFILE_H)
+# include <owl/editfile.h>
+#endif
+#if !defined(OWL_APPLICAT_H)
+# include <owl/applicat.h>
+#endif
+#if !defined(WINSYS_SYSTEM_H)
+# include <winsys/system.h>
+#endif
 #include <string.h>
-#include <dir.h>
 #include <limits.h>
+#include <stdio.h>
 
 #if !defined(SECTION) || SECTION == 1
 
@@ -43,7 +64,7 @@ TEditFile::TEditFile(TWindow*        parent,
 //
 TEditFile::~TEditFile()
 {
-  delete FileName;
+  delete[] FileName;
 }
 
 //
@@ -54,15 +75,26 @@ TEditFile::SetupWindow()
 {
   TEditSearch::SetupWindow();
   FileData.Flags = OFN_FILEMUSTEXIST|OFN_HIDEREADONLY|OFN_OVERWRITEPROMPT;
+
+#if defined(BI_PLAT_WIN32)
+  FileData.Flags |= OFN_LONGNAMES;
+  //
+  // We currently cannot mix OFN_ENABLEHOOK & OFN_EXPLORER
+  // when running under NT 3.51[no new shell]
+  //
+  if (TSystem::IsWin95())
+    FileData.Flags |= OFN_EXPLORER;
+#endif
+
   FileData.SetFilter(GetModule()->LoadString(IDS_FILEFILTER).c_str());
 
   SetFileName(FileName);
   if (FileName && !Read()) {
     string msgTemplate(GetModule()->LoadString(IDS_UNABLEREAD));
-    char*  msg = new char[MAXPATH + msgTemplate.length()];
-    wsprintf(msg, msgTemplate.c_str(), FileName);
+    char*  msg = new char[_MAX_PATH + msgTemplate.length()];
+    sprintf(msg, msgTemplate.c_str(), FileName);
     MessageBox(msg, GetApplication()->GetName(), MB_ICONEXCLAMATION | MB_OK);
-    delete msg;
+    delete[] msg;
     SetFileName(0);
   }
 }
@@ -75,7 +107,7 @@ void
 TEditFile::SetFileName(const char far* fileName)
 {
   if (fileName != FileName) {
-    delete FileName;
+    delete[] FileName;
     FileName = fileName ? strnewdup(fileName) : 0;
   }
   string untitled(GetModule()->LoadString(IDS_UNTITLEDFILE));
@@ -109,10 +141,10 @@ TEditFile::ReplaceWith(const char far* fileName)
   }
   else {
     string msgTemplate(GetModule()->LoadString(IDS_UNABLEREAD));
-    char*  msg = new char[MAXPATH + msgTemplate.length()];
-    wsprintf(msg, msgTemplate.c_str(), fileName);
+    char*  msg = new char[_MAX_PATH + msgTemplate.length()];
+    sprintf(msg, msgTemplate.c_str(), fileName);
     MessageBox(msg, GetApplication()->GetName(), MB_ICONEXCLAMATION | MB_OK);
-    delete msg;
+    delete[] msg;
   }
 }
 
@@ -154,9 +186,9 @@ TEditFile::Read(const char far* fileName)
     _llseek(file, 0, SEEK_SET);
 
     if (charsToRead >= 0
-      #if !defined(BI_PLAT_WIN32)
+#if !defined(BI_PLAT_WIN32)
         && charsToRead < UINT_MAX     // limit 16bit edit ctrls to 1 segment
-      #endif
+#endif
       ) {
       Clear();
 
@@ -165,7 +197,7 @@ TEditFile::Read(const char far* fileName)
       //
       char far* editBuffer = LockBuffer(uint(charsToRead+1));
       if (editBuffer) {
-        if (_lread(file, editBuffer, uint(charsToRead)) == charsToRead) {
+        if (_lread(file, editBuffer, uint(charsToRead)) == uint(charsToRead)) {
 
           // 0 terminate Editor's buffer
           //
@@ -198,10 +230,10 @@ TEditFile::Save()
 
     if (!Write()) {
       string msgTemplate(GetModule()->LoadString(IDS_UNABLEWRITE));
-      char*  msg = new char[MAXPATH + msgTemplate.length()];
-      wsprintf(msg, msgTemplate.c_str(), FileName);
+      char*  msg = new char[_MAX_PATH + msgTemplate.length()];
+      sprintf(msg, msgTemplate.c_str(), FileName);
       MessageBox(msg, GetApplication()->GetName(), MB_ICONEXCLAMATION | MB_OK);
-      delete msg;
+      delete[] msg;
       return false;
     }
   }
@@ -229,10 +261,10 @@ TEditFile::SaveAs()
       return true;
     }
     string msgTemplate(GetModule()->LoadString(IDS_UNABLEWRITE));
-    char*  msg = new char[MAXPATH + msgTemplate.length()];
-    wsprintf(msg, msgTemplate.c_str(), FileName);
+    char*  msg = new char[_MAX_PATH + msgTemplate.length()];
+    sprintf(msg, msgTemplate.c_str(), FileName);
     MessageBox(msg, GetApplication()->GetName(), MB_ICONEXCLAMATION | MB_OK);
-    delete msg;
+    delete[] msg;
   }
   return false;
 }
@@ -291,18 +323,21 @@ TEditFile::CanClear()
   if (IsModified()) {
     string msgTemplate(GetModule()->LoadString(IDS_FILECHANGED));
     string untitled(GetModule()->LoadString(IDS_UNTITLEDFILE));
-    char*  msg = new char[MAXPATH+msgTemplate.length()];
+    char*  msg = new char[_MAX_PATH+msgTemplate.length()];
 
-    wsprintf(msg, msgTemplate.c_str(),
+    sprintf(msg, msgTemplate.c_str(),
              FileName ? (const char far*)FileName : untitled.c_str());
 
     int result = MessageBox(msg, GetApplication()->GetName(), MB_YESNOCANCEL|MB_ICONQUESTION);
-    delete msg;
+    delete[] msg;
     return result==IDYES ? Save() : result != IDCANCEL;
   }
   return true;
 }
 
+//
+//
+//
 bool
 TEditFile::CanClose()
 {
@@ -314,6 +349,8 @@ TEditFile::CanClose()
 
 
 IMPLEMENT_STREAMABLE1(TEditFile, TEditSearch);
+
+#if !defined(BI_NO_OBJ_STREAMING)
 
 //
 // reads an instance of TEditFile from the passed ipstream
@@ -342,6 +379,8 @@ TEditFile::Streamer::Write(opstream& os) const
   WriteBaseObject((TEditSearch*)o, os);
   os.fwriteString(o->FileName ? o->FileName : "");
 }
+
+#endif  // if !defined(BI_NO_OBJ_STREAMING)
 
 #endif
 

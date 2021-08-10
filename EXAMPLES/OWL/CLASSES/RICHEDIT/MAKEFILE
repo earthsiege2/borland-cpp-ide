@@ -1,0 +1,11 @@
+#----------------------------------------------------------------------------
+# ObjectWindows
+# Copyright (c) 1995, 1996 by Borland International, All Rights Reserved
+#----------------------------------------------------------------------------
+MODELS = fdt
+SYSTEM = WIN32            # RichEdit requires WIN32
+
+EXERES = richedap
+OBJEXE = richedap.obj 
+
+!include $(BCEXAMPLEDIR)\owlmake.gen

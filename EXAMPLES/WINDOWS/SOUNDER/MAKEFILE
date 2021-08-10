@@ -1,6 +1,13 @@
-# Borland C++ - (C) Copyright 1993 by Borland International
-# Makefile for SOUNDER program
+#----------------------------------------------------------------------------
+# Borland C++
+# Copyright (c) 1987, 1996 Borland International Inc.  All Rights Reserved.
+#   examples\windows\sounder\makefile
+#----------------------------------------------------------------------------
 
-SYSTEMS= WIN16 WIN32
-EXERES = sounder
+SYSTEMS = WIN16 WIN32
+OSMAJOR = 4
+OSMINOR = 0
+CPCH    = -Hc -H"windows.h" -H=sounder.csm
+EXERES  = sounder
+
 !include $(BCEXAMPLEDIR)\makefile.gen

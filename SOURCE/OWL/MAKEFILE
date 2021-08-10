@@ -1,46 +1,62 @@
 #-----------------------------------------------------------------------------
-# ObjectWindows - (C) Copyright 1991, 1993 by Borland International
-#
 # MAKEFILE for ObjectWindows Libraries
+# Copyright (c) 1991, 1996 by Borland International, All Rights Reserved
+#
+# $Revision:   10.65  $
 #
 # Defines:
-#   MODEL=<d|s|m|l|f>   one of: dll(default), small, medium, large or flat
-#   WIN32        enables win32 static (flat) or DLL
+#   MODEL=<d|l|f|t> one of:
+#     dll, large (WIN16 default)
+#     flat (WIN32 default), or multithreaded (implies flat)
+#   WIN32        enables win32
+#   WIN16        enables win16
+#   MT           builds OWL to be used with multithreaded rtl
+#   ALIGN=<1|2|4|8> specifies the alignment
 #   DIAGS        enables runtime diagnostics (adds 'd' to lib name before 'w')
-#   DEBUG        enables debug info for TDW & TD32
-#   NOOWLPCH     disables precompiled headers for owl
+#   DEBUG        enables debug info for debuggers
+#   OWLNOPCH     disables precompiled headers for OWL
 #   OWLSECTION   enables sectioning of sources into multiple small objs
-#   OWLNAME=Xxx  lib & DLL name base, Defaults to 'Owl'. Req. for non-diag DLLs
-#   OWLVER=nnn   version for Owl DLL. Defaults to 250. Req. for non-diag DLLs
-#   USERDLL      builds Owl for use in a user DLL (adds 'u' to lib name after
+#   OWLNAME=Xxx  lib & DLL name base, Defaults to 'owl'. Req. for non-diag DLLs
+#   OWLVER=nnn   version for OWL DLL. Defaults to 50. Req. for non-diag DLLs
+#   USERDLL      builds OWL for use in a user DLL (adds 'u' to lib name after
 #                model)
-#   OWLFARVTABLE moves owl class vtables out of dgroup
-#   DISABLE_EXCEPTIONS disables exception use in Owl & in macros
+#   OWLFARVTABLE moves OWL class vtables out of dgroup (only 16-bit)
+#   CODEGUARD    builds OWL with CodeGuard:  1=basic data, 2=full checking
+#   BCC32I       uses bcc32i instead of bcc32 to compile
+#   NO_EMULATED_CTRL   builds library using system implementation of common
+#                      controls
+#   REDEFINE_BOOL      builds library with BOOL mapped to bool
+#   DISABLE_EXCEPTIONS disables exception use in OWL & in macros
+#   NO_OWL1_COMPAT     builds library without API exposed for backward
+#                      compatibility with v1.0 of ObjectWindows.
+#   NO_OWL2_COMPAT     builds library without API exposed for backward
+#                      compatibility with v2.x of ObjectWindows.
+#                      NOTE: NO_OWL2_COMPAT implies NO_OWL1_COMPAT
+#   NO_WIN32S_SUPPORT  builds library without special code to make up for
+#                      WIN32s lack of support for safe exceptions
 #
-# Define these for alternate owl build directories:
+#
+#
+# Define these for alternate OWL build directories:
 #   OWLSRCDIR    defaults to: $(BCROOT)\source\owl
 #   OWLINCDIR    defaults to: $(BCROOT)\include
 #   OWLLIBDIR    defaults to: $(BCROOT)\lib
 #   OWLBINDIR    defaults to: $(BCROOT)\bin
 #
 # Standard builds:
-#   make MODEL=s -DOWLSECTION            small model library (owlws.lib)
-#   make MODEL=m -DOWLSECTION            medium model library (owlwm.lib)
-#   make MODEL=l -DOWLSECTION            large model library (owlwl.lib)
-#   make OWLNAME=Owl OWLVER=250          16bit DLL (owlwi.lib, owl250.dll)
-#   make -DWIN32 -DOWLSECTION            32bit flat model library (owlwf.lib)
-#   make -DWIN32 OWLNAME=Owl OWLVER=250  32bit DLL (owlwfi.lib, owl250f.dll)
+#   make MODEL=l OWLSECTION=1                    large model library (owlwl.lib)
+#   make MODEL=d OWLNAME=Owl OWLVER=50           16bit DLL (owlwi.lib, owl50.dll)
+#   make WIN32=1 OWLSECTION=1                    32bit flat model library (owlwf.lib)
+#   make MODEL=d WIN32=1 OWLNAME=owl OWLVER=50   32bit DLL (owlwfi.lib, owl50f.dll)
 #
 # Diagnostic builds:
-#   make MODEL=s -DOWLSECTION -DDIAGS  small model diag library (owldws.lib)
-#   make MODEL=m -DOWLSECTION -DDIAGS  medium model diag library (owldwm.lib)
-#   make MODEL=l -DOWLSECTION -DDIAGS  large model diag library (owldwl.lib)
-#   make -DDIAGS                       16bit diag DLL (owldwi.lib, owl250d.dll)
-#   make -DWIN32 -DOWLSECTION -DDIAGS  32bit flat model diag lib (owldwf.lib)
-#   make -DWIN32 -DDIAGS               32bit diag DLL (owldwfi.lib, owl250df.dll)
+#   make MODEL=l OWLSECTION=1 -DDIAGS  large model diag library (owldwl.lib)
+#   make MODEL=d DIAGS=1               16bit diag DLL (owldwi.lib, owl50d.dll)
+#   make WIN32=1 OWLSECTION=1 -DDIAGS  32bit flat model diag lib (owldwf.lib)
+#   make MODEL=d WIN32=1 DIAGS=1       32bit diag DLL (owldwfi.lib, owl50df.dll)
 #
 # Notes:
-#   The owl16.ord file should be maintained if Owl functions are changed
+#   The owl16.ord file should be maintained if OWL functions are changed
 #   otherwise warnings will be generated during the DLL link.
 #
 #-----------------------------------------------------------------------------
@@ -50,37 +66,85 @@
 .swap
 
 #--------------------------------------------------------------------
-# fill in defaults
-#--------------------------------------------------------------------
-!if !$d(MODEL) || $(MODEL) == d
+# Fill in defaults. The following table describes the logic used for
+# assigning defaults. Blank means "don't care", ! means not defined
+#
+#   MODEL | DLL | WIN16 | WIN32 | RESULTS
+#  -------+-----+-------+-------+--------------------------------
+#     !   |  !  |   !   |       | MODEL=f    WIN32=1  (default)
+#   ==f|t | ==1 |   !   |       | MODEL=f|t  WIN32=1  DLL=1
+#   ==f|t |  !  |   !   |       | MODEL=f|t  WIN32=1
+#     !   |  !  |  ==1  |   !   | MODEL=l    WIN16=1  DLL=1
+#         | ==1 |  ==1  |   !   | MODEL=l    WIN16=1  DLL=1
+#   ==l   |  !  |       |   !   | MODEL=l    WIN16=1
+#---------+-----+-------+-------+--------------------------------
+
+!if !$d(MODEL) && !defined(MT) && !$d(WIN16) && !$d(OS2)
+  MODEL = f    # default build model = flat static, Win32
+!endif
+
+!if $(MODEL) == d     # model d is short for building the DLL-- flat or large
   DLL = 1
+! if !$d(WIN16) && !$d(OS2)
+    WIN32 = 1         # DLL is 32bit by default
+! endif
 !endif
-!if $(MODEL) == f
-  WIN32 = 1
+
+!if ($(MODEL) == t || $(MODEL) == f) && !$d(OS2)
+  WIN32 = 1    # default to WIN32 switch on for flat or multi-threaded model
+!elif $(MODEL)==l
+  WIN16 = 1    # default to WIN16 switch on for large model
 !endif
+
+!if $(MODEL) == t || $d(MT)
+  MT = mt       # model t implies MT. Use MT as 'mt' to build library names
+!endif
+
 !if $d(WIN32)
-  MODEL = f
-!elif $d(DLL) || !$d(MODEL)
+! if $d(MT)
+    MODEL = t
+! else
+    MODEL = f
+! endif
+!elif $d(DLL)
   MODEL = l
 !endif
 
+#
+# Figure out default data alignment based on target
+#
+!if !$d(ALIGN)
+  ALIGN = 1
+!endif
+
+!if $d(DOS) && $d(MT)
+! error Cannot build multi-thread library for DOS.
+!endif
+
+!if $d(MODEL)
+! if $(MODEL)!=l && $(MODEL)!=f && $(MODEL)!=t
+!   error MODEL must be l, f, or t
+! endif
+!endif
+
 #--------------------------------------------------------------------
-# dir & name components
+# Dir & name components
 #--------------------------------------------------------------------
 !if $d(DLL)
 
 ! if !$d(OWLNAME) && !$d(DIAGS)
 !   error MUST DEFINE LIBRARY NAME, e.g. "MAKE MODEL=d OWLNAME=YourName"
 ! endif
+
 ! if $d(WIN32)
-    KEY = wfi                   # 32bit DLL import library
+    KEY = w$(MODEL)i            # 32bit flat or multithread DLL import library
 ! else
     KEY = wi                    # 16bit DLL import library
 ! endif
 
 !else
 
-KEY = w$(MODEL)                 # Static library
+KEY = w$(MODEL)                 # Static library uses w+model
 
 !endif  # if/else $d(DLL)
 
@@ -89,17 +153,17 @@ KEY = w$(MODEL)                 # Static library
 ! endif
 
 !if !$d(OWLNAME)
-  OWLNAME=Owl
+  OWLNAME = owl
 ! if !$d(OWLVER)
-    OWLVER=250
+    OWLVER = 50
 ! endif
 !endif
 
 #--------------------------------------------------------------------
-# debug & diagnostic flags
+# Debug & diagnostic flags
 #--------------------------------------------------------------------
 !if $d(DEBUG)
-  CDBG = -v -k -Od    # debug-info on, normal stack, no optimizations
+  CDBG = -v -k -Od #-vi # debug-info on, normal stack, no optimizations, inlines
 !endif
 !if 1 || $d(DEBUG)    # Leave public debug info in dll & strip to a .tds after
 ! if $d(WIN32)
@@ -113,8 +177,12 @@ KEY = w$(MODEL)                 # Static library
   __DEBUG=2
   __TRACE=1
   __WARN=1
-  BD=d                # Use Bids Diag version when Owl lib is diag
-  OD=d                # Owl libs & dll get a 'd' for Diag versions
+! if $d(WIN32)
+    BD=d              # Use Bids Diag version when OWL lib is diag
+! else
+    BD=db             # Extension compatible with traditional DOS names
+! endif
+  OD=d                # OWL libs & dll get a 'd' for Diag versions
 !endif
 
 #
@@ -131,7 +199,7 @@ KEY = w$(MODEL)                 # Static library
 !endif
 
 #--------------------------------------------------------------------
-# dir & search paths, & precompiled headers
+# Dir & search paths, & precompiled headers
 #--------------------------------------------------------------------
 
 #
@@ -144,50 +212,73 @@ KEY = w$(MODEL)                 # Static library
 !endif
 
 #
-# default bcroot to whatever is in bcroot.inc
+# Default bcroot to whatever is in bcroot.inc
 #
 !if !$d(BCROOT)
-  #BCROOT = $(MAKEDIR)\..
-  !include $(MAKEDIR)\bcroot.inc
-!endif
-
-#
-# Where to find Owl dirs-- can set these for special layouts
-#
-!if !$d(OWLSRCDIR)
-  OWLSRCDIR = $(BCROOT)\source\owl
-!endif
-
-!if !$d(OWLINCDIR)
-  OWLINCDIR = $(BCROOT)\include
-!endif
-
-!if !$d(OWLLIBDIR)
-  OWLLIBDIR = $(BCROOT)\lib
-!endif
-
-!if !$d(OWLBINDIR)
-  OWLBINDIR = $(BCROOT)\bin
+! include $(MAKEDIR)\bcroot.inc
 !endif
 
 #
 # Where to find BC tools, libraries and include files
 #
+BCSRCDIR = $(BCROOT)\source
 BCINCDIR = $(BCROOT)\include
 BCLIBDIR = $(BCROOT)\lib
+BCBINDIR = $(BCROOT)\bin
 
 #
-# Build search paths differently if Owl include dir is not below BC's
+# Where to find OWL dirs-- can set these for special layouts
+# Build search paths differently if OWL include dir is not below BC's
 #
-!if "$(OWLINCDIR)" == "$(BCINCDIR)"
-  INCLUDE       = $(BCINCDIR)
-  RCINCLUDEPATH = -i$(BCINCDIR)
-!else
-  INCLUDE       = $(OWLINCDIR);$(BCINCDIR)
-  RCINCLUDEPATH = -i$(OWLINCDIR) -i$(BCINCDIR)
+!if !$d(OWLSRCDIR)
+  OWLSRCDIR = $(BCSRCDIR)\owl
 !endif
 
-OWLOBJDIR = $(OWLSRCDIR)\object\$(OD)$(KEY)   # Keep seperate diag/nondiag dirs
+#
+# Build include paths of OWL dependencies
+#
+INCLUDE=$(BCINCDIR)
+!if $d(BIDSINCDIR)
+  INCLUDE=$(BIDSINCDIR);$(INCLUDE)
+!endif
+!if $d(OCFINCDIR)
+  INCLUDE=$(OCFINCDIR);$(INCLUDE)
+!endif
+
+#
+# Add OWL's include directory
+#
+!if !$d(OWLINCDIR)
+  OWLINCDIR     = $(BCINCDIR)
+  RCINCLUDEPATH = -i$(BCINCDIR)
+!else
+  RCINCLUDEPATH = -i$(OWLINCDIR) -i$(BCINCDIR)
+!endif
+INCLUDE=$(OWLINCDIR);$(INCLUDE)
+
+#
+# Library/Bin paths
+#
+LIBPATH=$(BCLIBDIR)
+!if $d(BIDSLIBDIR)
+  LIBPATH=$(BIDSLIBDIR);$(LIBPATH)
+!endif
+!if $d(OCFLIBDIR)
+  LIBPATH=$(OCFLIBDIR);$(LIBPATH)
+!endif
+!if $d(OWLLIBDIR)
+  LIBPATH=$(OWLLIBDIR);$(LIBPATH)
+!else
+  OWLLIBDIR=$(BCLIBDIR)
+!endif
+!if !$d(OWLBINDIR)
+  OWLBINDIR = $(BCBINDIR)
+!endif
+
+#
+# Paths for OBJs
+#
+OWLOBJDIR = $(OWLSRCDIR)\o\$(OD)$(KEY)   # Keep seperate diag/nondiag dirs
 
 .PATH.obj = $(OWLOBJDIR)
 .PATH.res = $(OWLOBJDIR)
@@ -196,21 +287,21 @@ OWLOBJDIR = $(OWLSRCDIR)\object\$(OD)$(KEY)   # Keep seperate diag/nondiag dirs
 .PATH.cpp = $(OWLSRCDIR)
 
 #
-# Define NOOWLPCH to disable the use of Precompiled headers when building Owl
+# Define OWLNOPCH to disable the use of Precompiled headers when building OWL
 #
-!if !$d(NOOWLPCH)
-  CPCH= -H=$(OWLLIBDIR)\$(OWLNAME)$(OD)$(KEY).csm -H"owl/owlpch.h" -D_OWLPCH
-! if $d(WIN32)
-  CPCH= $(CPCH) -Hc
+!if !$d(OWLNOPCH)
+  CPCH= -H=$(OWLLIBDIR)\$(OWLNAME)$(OD)$(KEY).csm -H"pch.h" -D_OWLPCH
+! if $d(WIN32) || $(__MAKE__) > 0x0370  # -Hc: !valid for 16-bit before v5.0
+    CPCH = $(CPCH) -Hc
 ! endif
 !endif
 
 #--------------------------------------------------------------------
-# library names
+# Library names
 #--------------------------------------------------------------------
 !if $d(DLL)
 ! if $d(WIN32)
-    OWLDLL = $(OWLBINDIR)\$(OWLNAME)$(OWLVER)$(OD)f.dll
+    OWLDLL = $(OWLBINDIR)\$(OWLNAME)$(OWLVER)$(OD)$(MODEL).dll
 ! else
     OWLDLL = $(OWLBINDIR)\$(OWLNAME)$(OWLVER)$(OD).dll
 ! endif
@@ -220,169 +311,278 @@ OWLOBJDIR = $(OWLSRCDIR)\object\$(OD)$(KEY)   # Keep seperate diag/nondiag dirs
 OWLLIB = $(OWLLIBDIR)\$(OWLNAME)$(OD)$(KEY).lib
 
 #--------------------------------------------------------------------
-# tools and options for 32bit
+# Tools and options for Win32
 #--------------------------------------------------------------------
+
+#
+# Options which are Win16/Win32 independent
+#
+!if $d(REDEFINE_BOOL)
+  CFLAGS = $(CFLAGS) -DBI_REDEFINE_BOOL
+!endif
+!if $d(NO_EMULATED_CTRL)            # Only use OS implementation of CmnCtrls
+  CFLAGS = $(CFLAGS) -DOWL_NATIVECTRL_ALWAYS
+!endif
+!if $d(NO_OWL2_COMPAT)              # Build without backward compatible API
+! if !$d(NO_OWL1_COMPAT)            # No OWL2 Compat => No OWL1 Compat
+    NO_OWL1_COMPAT = 1
+! endif
+  CFLAGS = $(CFLAGS) -DNO_OWL2_COMPAT
+!endif
+!if $d(NO_OWL1_COMPAT)              # Build without backward compatible API
+  CFLAGS = $(CFLAGS) -DNO_OWL1_COMPAT
+!endif
+!if $d(NO_WIN32S_SUPPORT)           # Build without special code for Win32s
+  CFLAGS = $(CFALGS) -DNO_WIN32S_SUPPORT
+!endif
+#
+#
+#
+
 !if $d(WIN32)
-  BCC      = $(BCBINDIR)\bcc32       # Compiler
-  BRCC     = brcc32                  # Resource compiler
-  BCCASM   = $(BCBINDIR)\tasm32      # Assembler
-  TLINK    = $(BCBINDIR)\tlink32     # Linker
-  TLIB     = $(BCBINDIR)\tlib        # Librarian
+! if $d(BCC32I)
+    CC     = $(BCBINDIR)\bcc32i      # Highly optimizing compiler
+! else
+    CC     = $(BCBINDIR)\bcc32       # Regular optimizing compiler
+! endif
+  RCC      = brcc32 -w32             # Resource compiler
+  ASM      = $(BCBINDIR)\tasm32      # Assembler
+  LINK     = $(BCBINDIR)\tlink32     # Linker
+  LIB      = $(BCBINDIR)\tlib        # Librarian
   IMPLIB   = $(BCBINDIR)\implib      # Import library generator
   TDSTRIP  = $(BCBINDIR)\tdstrp32    # Debug info extractor
 
-  COPTS    = -d -k- -O1gmpv          # Optimizations
+  CFLAGS   = $(CFLAGS) -3 -d -k- -Ogmpv   # Optimizations (-O1gmpv), stdcall
+! if $d(CODEGUARD)                   # d=add data, c=add calls, t=check this
+    CFLAGS = $(CFLAGS) -vGd -vGt
+!   if $(CODEGUARD) == 2
+      CFLAGS= $(CFLAGS) -vGc
+!   endif
+!  endif
+  CFLAGS   = $(CFLAGS) -i55          # Bump identifier length up to 55
   CFGFILE  = bcc32.cfg               # Name of compiler's config file
 ! if $d(DEBUG)
-    TLIBOPTS = /P512
+    LIBFLAGS = /P4096 #/C
 ! else
-    TLIBOPTS = /P32 /0
+    LIBFLAGS = /P128 /0 #/C
 ! endif
 
 ! if $d(DLL)
-    CWIN = -WDE -D_BUILDOWLDLL
-    LFLAGS   = $(LDBG) -Tpd -aa -s -c
+    CFLAGS = $(CFLAGS) -WDE -D_BUILDOWLDLL
+    LFLAGS = $(LDBG) -Tpd -aa -s -c
 !   if !$d(BIDSILIB)
-      BIDSILIB = bids$(BD)fi
+      BIDSILIB = bids$(BD)$(MODEL)i
 !   endif
-    STDLIBS  = import32 cw32i        # Libs for linking the Owl DLL
+    STDLIBS  = import32 cw32$(MT)i   # Libs for linking the DLL
+!   if $d(CODEGUARD)
+      STDLIBS  = cg32 $(STDLIBS)
+!   endif
+    STARTUP  = c0d32
 ! else
-    CWIN = -W
+    CFLAGS = $(CFLAGS) -W
+! endif
+
+! if $d(MT)
+    CFLAGS = $(CFLAGS) -WM
+! endif
+
+! if $d(ALIGN)
+    CFLAGS = $(CFLAGS) -a$(ALIGN)
 ! endif
 
 #--------------------------------------------------------------------
-# tools and options for 16bit
+# Tools and options for Win16
 #--------------------------------------------------------------------
 !else
-  BCC      = $(BCBINDIR)\bcc         # Compiler
-  BRCC     = brcc                    # Resource compiler
-  BCCASM   = $(BCBINDIR)\tasm        # Assembler
-  TLINK    = $(BCBINDIR)\tlink       # Linker
-  TLIB     = $(BCBINDIR)\tlib        # Librarian
+  CC       = $(BCBINDIR)\bcc         # Compiler
+  RCC      = brcc32 -31              # Resource compiler
+  ASM      = $(BCBINDIR)\tasm        # Assembler
+  LINK     = $(BCBINDIR)\tlink       # Linker
+  RLINK    = $(BCBINDIR)\rlink       # Resource linker
+  LIB      = $(BCBINDIR)\tlib        # Librarian
 
   # implib needs -o switch in 16 bit for compatibility
-  IMPLIB   = $(BCBINDIR)\implib -o   # Import library generator
+  IMPLIB   = $(BCBINDIR)\implib -o -w # Import library generator
   TDSTRIP  = $(BCBINDIR)\tdstrip     # Debug info extractor
 
-  CMDL     = -m$(MODEL)
-  COPTS    = -3 -d -k- -O1gmpv       # Optimizations
+  CFLAGS   = $(CFLAGS) -3 -d -k- -O1gmpv # Optimizations
+! if $d(CODEGUARD)                   # d=add data, c=add calls, t=check this
+    CFLAGS = $(CFLAGS) -vGd -vGt
+!  endif
+  CFLAGS   = -m$(MODEL) $(CFLAGS)    # Memory model
 
 ! if $(MODEL) != s && $(MODEL) != m  # Large models can put strs in code seg
-    COPTS = $(COPTS) -dc
+    CFLAGS = $(CFLAGS) -dc
 ! endif
-! if $(MODEL) == s                   # Small model turns off some options
-    DISABLE_EXCEPTIONS = 1
-    COPTS = $(COPTS) -DNO_GDI_ORPHAN_CONTROL
-! endif
+
 ! if $d(OWLFARVTABLE)
-    COPTS = $(COPTS) -D_OWLFARVTABLE;_BIDSFARVTABLE #;_RTLFARVTABLE
+    CFLAGS = $(CFLAGS) -D_OWLFARVTABLE;_BIDSFARVTABLE #;_RTLFARVTABLE
 ! endif
 ! if $d(DISABLE_EXCEPTIONS)
-    COPTS = $(COPTS) -DDISABLE_EXCEPTIONS -x-
+    CFLAGS = $(CFLAGS) -DDISABLE_EXCEPTIONS -x-
 ! endif
   CFGFILE = turboc.cfg
 
 ! if $d(DEBUG)
-    TLIBOPTS = /P512
+    LIBFLAGS = /P4096 /C
 ! else
-    TLIBOPTS = /P32 /0
+    LIBFLAGS = /P128  /0 /C
 ! endif
 
 ! if $d(DLL)                         # Build the 16bit Owl DLL
     # Dll, explicit export, far data into seg named OWL_FARDATA, compat excptns
-    CWIN = -WDE -D_BUILDOWLDLL -zEOWL_FARDATA -xc
-    LFLAGS = $(LDBG) -Twd -n -s -c -C -Oc -Oi -Oa -Or
+    CFLAGS = $(CFLAGS) -WDE -D_BUILDOWLDLL -zEOWL_FARDATA -xc
+    LFLAGS = $(LDBG) -Twd -n -s -c -C # -Oc -Oi -Oa -Or
+!   if $d(DEBUG)
+    LFLAGS = $(LFLAGS) -A=512
+!   endif
 !   if !$d(BIDSILIB)
       BIDSILIB = bids$(BD)i
 !   endif
-    STDLIBS  = import crtldll        # Libs for linking the Owl DLL
+    STDLIBS  = import crtldll         # Libs for linking the Owl DLL
+!if $d(CODEGUARD)
+    STDLIBS  = cg16 $(STDLIBS)
+!endif
+    STARTUP  = c0dl
 
 ! else
 !   if $d(USERDLL)
-      CWIN = -WDE -xc                # Build static Owl lib for use in DLLs
+      CFLAGS = $(CFLAGS) -WDE -xc    # Build static Owl lib for use in DLLs
 !   else
-      CWIN = -WSE                    # Build static Owl lib for use in EXEs
+      CFLAGS = $(CFLAGS) -WSE        # Build static Owl lib for use in EXEs
 !   endif
+! endif
+
+! if $d(ALIGN)
+    CFLAGS = $(CFLAGS) -a$(ALIGN)
 ! endif
 
 !endif
 
 #--------------------------------------------------------------------
-# rules
+# Rules
 #--------------------------------------------------------------------
 .rc.res:
-  $(BRCC) $(RCINCLUDEPATH) -fo$@ $.
+  $(RCC) $(RCINCLUDEPATH) -fo$@ $.
 
 .cpp.obj:
-  $(BCC) {$. }
+  $(CC) {$& }
+
+.asm.obj:
+  $(ASM) /mx $& $@
 
 #--------------------------------------------------------------------
 # Various file lists needed for dependency checking and LIBing.
 #
 #   OBJS_CMN are the objs common to static libs and the dll
 #   OBJS_LIB are the objs that go into libs and implibs only, not the dlls
-#   OBJS_DLL are the objs that go into the owl dll only
+#   OBJS_DLL are the objs that go into the dll only
 #   LIBDEPOBJS is the list of object files for lib/implib dependency checking
 #   LIBOBJS is the list of object files for building/addingto the libraries
 #   LINKOBJS is the list of object files for building the DLL
 #--------------------------------------------------------------------
 
-# Common Objs go into static libs and DLLs
+# Common, unsectioned objs go into static libs and DLLs
 #
 OBJS_CMN =\
  PFXappdict.obj\
  PFXbitmap.obj\
  PFXbitmapga.obj\
  PFXbitset.obj\
- PFXbrush.obj\
  PFXbuttonga.obj\
  PFXcelarray.obj\
+ PFXchecklst.obj\
  PFXchooseco.obj\
  PFXchoosefo.obj\
  PFXclipboar.obj\
  PFXclipview.obj\
- PFXcolor.obj\
+ PFXcolmnhdr.obj\
+ PFXcommctrl.obj\
  PFXcommdial.obj\
- PFXcompat.obj\
  PFXcontrolb.obj\
+ PFXcontain.obj\
  PFXcontrolg.obj\
  PFXcreatedc.obj\
  PFXcursor.obj\
+ PFXdatetime.obj\
  PFXdc.obj\
+ PFXdibdc.obj\
+ PFXdibitmap.obj\
  PFXdispatch.obj\
+ PFXdocking.obj\
  PFXeventhan.obj\
  PFXexcept.obj\
  PFXfont.obj\
  PFXgadget.obj\
+ PFXgadgetli.obj\
  PFXgadgetwi.obj\
  PFXgauge.obj\
  PFXgdibase.obj\
  PFXgdiobjec.obj\
+ PFXglyphbtn.obj\
+ PFXhotkey.obj\
  PFXicon.obj\
+ PFXimagelst.obj\
  PFXlayoutwi.obj\
+ PFXmailer.obj\
+ PFXmci.obj\
+ PFXmciwav.obj\
  PFXmemorydc.obj\
  PFXmenu.obj\
+ PFXmenugadg.obj\
  PFXmessageb.obj\
  PFXmetafile.obj\
  PFXmetafldc.obj\
- PFXmoduleob.obj\
+ PFXmodegad.obj\
+ PFXmodversi.obj\
+ PFXnotetab.obj\
  PFXowl.obj\
- PFXowldiag.obj\
  PFXpaintdc.obj\
  PFXpalette.obj\
+ PFXpanespli.obj\
  PFXpen.obj\
+ PFXpicklist.obj\
+ PFXpictwind.obj\
  PFXpreview.obj\
+ PFXprevwin.obj\
  PFXprintdc.obj\
- PFXprofile.obj\
+ PFXpropsht.obj\
+ PFXrcntfile.obj\
+ PFXresource.obj\
  PFXregion.obj\
+ PFXrolldial.obj\
+ PFXserialze.obj\
+ PFXsplashwi.obj\
  PFXstatusba.obj\
  PFXswindow.obj\
+ PFXtabctrl.obj\
  PFXtextgadg.obj\
+ PFXtimegadg.obj\
  PFXtoolbox.obj\
+ PFXtooltip.obj\
+ PFXuiborder.obj\
+ PFXuiface.obj\
  PFXuihandle.obj\
+ PFXuipart.obj\
+ PFXupdown.obj\
  PFXversion.obj\
  PFXwindow.obj\
- PFXwindowdc.obj
+ PFXwindowdc.obj\
+ PFXwing.obj\
+ PFXwinsock.obj\
+ PFXwskaddr.obj\
+ PFXwskerr.obj\
+ PFXwskhostm.obj\
+ PFXwsksockm.obj\
+ PFXwskservm.obj\
+ PFXwsksock.obj\
+ PFXwsksockd.obj
+
+!if !$d(NO_OWL1_COMPAT) && !$d(NO_OWL2_COMPAT)
+OBJS_CMN = $(OBJS_CMN) \
+ PFXcompat.obj\
+ PFXmoduleob.obj
+!endif
 
 # Add in these objs when sectioning
 #
@@ -392,6 +592,8 @@ OBJS_CMN = $(OBJS_CMN)\
  PFXapplica2.obj\
  PFXapplica3.obj\
  PFXapplica4.obj\
+ PFXbrush1.obj\
+ PFXbrush2.obj\
  PFXbutton1.obj\
  PFXbutton2.obj\
  PFXcheckbo1.obj\
@@ -412,12 +614,14 @@ OBJS_CMN = $(OBJS_CMN)\
  PFXdib4.obj\
  PFXdib5.obj\
  PFXdib6.obj\
+ PFXdib7.obj\
  PFXdocmang1.obj\
  PFXdocmang2.obj\
+ PFXdocmang3.obj\
  PFXdoctpl1.obj\
  PFXdoctpl2.obj\
- PFXdocview1.obj\
- PFXdocview2.obj\
+ PFXdocumen1.obj\
+ PFXdocumen2.obj\
  PFXedit1.obj\
  PFXedit2.obj\
  PFXeditfil1.obj\
@@ -487,6 +691,8 @@ OBJS_CMN = $(OBJS_CMN)\
  PFXtinycap2.obj\
  PFXvalidat1.obj\
  PFXvalidat2.obj\
+ PFXview1.obj\
+ PFXview2.obj\
  PFXvslider1.obj\
  PFXvslider2.obj
 
@@ -495,17 +701,18 @@ OBJS_CMN = $(OBJS_CMN)\
 !else
 OBJS_CMN = $(OBJS_CMN)\
  PFXapplicat.obj\
+ PFXbrush.obj\
  PFXbutton.obj\
  PFXcheckbox.obj\
  PFXcombobox.obj\
  PFXcontrol.obj\
  PFXdecframe.obj\
- PFXdib.obj\
- PFXdialog.obj\
  PFXdecmdifr.obj\
+ PFXdialog.obj\
+ PFXdib.obj\
  PFXdocmanag.obj\
  PFXdoctpl.obj\
- PFXdocview.obj\
+ PFXdocument.obj\
  PFXedit.obj\
  PFXeditfile.obj\
  PFXeditsear.obj\
@@ -528,8 +735,8 @@ OBJS_CMN = $(OBJS_CMN)\
  PFXmodule.obj\
  PFXopensave.obj\
  PFXpictval.obj\
- PFXprinter.obj\
  PFXprintdia.obj\
+ PFXprinter.obj\
  PFXprintout.obj\
  PFXradiobut.obj\
  PFXrangeval.obj\
@@ -539,7 +746,24 @@ OBJS_CMN = $(OBJS_CMN)\
  PFXstatic.obj\
  PFXtinycapt.obj\
  PFXvalidate.obj\
+ PFXview.obj\
  PFXvslider.obj
+!endif
+
+!if $d(WIN32)
+OBJS_CMN =$(OBJS_CMN)\
+ PFXanimctrl.obj\
+ PFXdraglist.obj\
+ PFXlistwind.obj\
+ PFXrichedit.obj\
+ PFXrichedpr.obj\
+ PFXdibblt32.obj\
+ PFXtreewind.obj\
+ PFXhlpmanag.obj
+!else
+OBJS_CMN =$(OBJS_CMN)\
+ PFXtreewn16.obj\
+ PFXdibblt16.obj
 !endif
 
 # Objs that go into static libs and import libs, but not in the owl dll itself
@@ -549,26 +773,22 @@ OBJS_CMN = $(OBJS_CMN)\
 OBJS_LIB =\
  PFXglobal.obj
 
-# OLE 2 classes get put into the lib. Small & medium model not supported
+# OLE 2 classes get put into the lib.
 #
-!if $(MODEL) == l || $(MODEL) == f
+!if $(MODEL) == l || $(MODEL) == f || $(MODEL) == t
 OBJS_OLE2=\
  PFXstgdoc.obj\
  PFXolewindo.obj\
  PFXoledoc.obj\
  PFXoleframe.obj\
  PFXolemdifr.obj\
- PFXoleview.obj
-!if $(MODEL) == l
-OBJS_OLE2=$(OBJS_OLE2)\
- PFXoledlg.obj\
- PFXchgicon.obj\
- PFXinsobj.obj\
- PFXpastespc.obj\
- PFXlinks.obj\
- PFXlinkguid.obj\
- PFXolemeta.obj
+ PFXoleview.obj\
+ PFXoledialg.obj
+
+!if $d(WIN32)
+OBJS_OLE2 = $(OBJS_OLE2) PFXshellitm.obj
 !endif
+
 OBJS_LIB = $(OBJS_LIB) $(OBJS_OLE2)
 !endif
 
@@ -588,13 +808,14 @@ OBJS_LIB = $(OBJS_LIB)\
 # Objs that go into the Owl DLL only
 #
 !if $d(DLL)
-OBJS_DLL =
+OBJS_DLL =\
+tmplinst.obj
 !endif
 
 # Put together obj groups into lists for different dependencies & tools
 #
 LIBDEPOBJS = $(OBJS_CMN:PFX=) $(OBJS_LIB:PFX=) $(OBJS_DLL:PFX=)
-!if $(DLL)
+!if $d(DLL)
  LIBOBJS   = $(OBJS_LIB:PFX=+)
  LINKOBJS  = $(OBJS_CMN:PFX=)  $(OBJS_DLL:PFX=)
 !else
@@ -602,28 +823,32 @@ LIBDEPOBJS = $(OBJS_CMN:PFX=) $(OBJS_LIB:PFX=) $(OBJS_DLL:PFX=)
 !endif
 
 #--------------------------------------------------------------------
-# targets
+# Targets
 #--------------------------------------------------------------------
-all: cfgfile $(OWLLIB)
+target: cfgfile $(OWLLIB)
 
 cfgfile:
-  @-if not exist $(OWLSRCDIR)\object\NUL md $(OWLSRCDIR)\object
-  @-if not exist $(OWLOBJDIR)\NUL md $(OWLOBJDIR)
+  @-if not exist $(.PATH.cpp)\o\NUL md $(.PATH.cpp)\o
+  @-if not exist $(.PATH.obj)\NUL md $(.PATH.obj)
   @copy &&|
 -I$(INCLUDE)
--c -w $(CMDL) $(CWIN) $(COPTS)
-$(CDBG) $(CDIAG)
-$(CPCH) -n$(.PATH.obj) $(CCFOWL)
+-c -w $(CFLAGS) $(CDBG) $(CDIAG)
+$(CPCH) -n$(.PATH.obj)
 | $(CFGFILE) > NUL
 
 !if $d(DLL)
+
+$(.PATH.obj)\$(OWLRES):
+  $(RCC) $&.rc @&&|
+$(RCINCLUDEPATH)
+| -fo$@
 
 !if $d(WIN32)
 
 $(OWLLIB): $(LIBDEPOBJS) $(.PATH.obj)\$(OWLDEF) $(.PATH.obj)\$(OWLRES)
   @cd $(.PATH.obj)
-  $(TLINK) @&&|
-$(LFLAGS) -L$(BCLIBDIR) c0d32 +
+  $(LINK) @&&|
+$(LFLAGS) -L$(LIBPATH) $(STARTUP) +
 $(LINKOBJS)
 $(OWLDLL)
 
@@ -631,37 +856,30 @@ $(BIDSILIB) $(STDLIBS)
 $(OWLDEF)
 $(OWLRES)
 |
-!if !$d(DIAGS)
   $(TDSTRIP) -s $(OWLDLL)
-!endif
   $(IMPLIB) $(OWLLIB) $(OWLDLL)
-  $(TLIB) $(TLIBOPTS) $(OWLLIB) @&&|
+  $(LIB) $(LIBFLAGS) $(OWLLIB) @&&|
 $(LIBOBJS)
 |
   @-del $*.bak
   @cd $(.PATH.cpp)
 
-$(.PATH.obj)\$(OWLRES):
-  $(BRCC) $(RCINCLUDEPATH) -fo$@ $&.rc
-
 $(.PATH.obj)\$(OWLDEF):
-  @cd $(.PATH.obj)
   @copy &&|
 LIBRARY     $(OWLNAME)$(OWLVER)$(OD)
 DESCRIPTION 'ObjectWindows DLL'
 EXETYPE     WINDOWS
 DATA        MULTIPLE NONSHARED
-| $(OWLDEF) > NUL
-  @cd $(.PATH.cpp)
+| $(.PATH.obj)\$(OWLDEF) > NUL
 
 # Compile objs that aren't part of the Owl DLL as if they were user EXE or
 # user DLL objs
 #
 $(OBJS_LIB:PFX=):
 !if $d(USERDLL)
-  $(BCC)    -D_OWLDLL -U_BUILDOWLDLL {$&.cpp }
+  $(CC)    -D_OWLDLL -U_BUILDOWLDLL {$&.cpp }
 !else
-  $(BCC) -W -D_OWLDLL -U_BUILDOWLDLL {$&.cpp }
+  $(CC) -W -D_OWLDLL -U_BUILDOWLDLL {$&.cpp }
 !endif
 
 !else  # ! WIN32
@@ -673,38 +891,35 @@ $(OBJS_LIB:PFX=):
 #
 $(OWLLIB): $(LIBDEPOBJS) $(.PATH.obj)\$(OWLDEF) $(.PATH.obj)\$(OWLRES)
   @cd $(.PATH.obj)
-  $(TLINK) @&&|
-$(LFLAGS) -Gn -L$(BCLIBDIR) c0dl +
+  $(LINK) @&&|
+$(LFLAGS) -Gn -L$(LIBPATH) $(STARTUP) +
 $(LINKOBJS)
 $(OWLDLL)
 
 $(BIDSILIB) $(STDLIBS)
 $(OWLDEF)
-
 |
+  $(RLINK) -v -k $(OWLRES) $(OWLDLL)
   $(IMPLIB) -i $(OWLLIB) $(OWLDEF) $(OWLDLL)
-  $(TLIB) $(TLIBOPTS) $(OWLLIB) @&&|
+  $(LIB) $(LIBFLAGS) $(OWLLIB) @&&|
 $(LIBOBJS)
-|
-  $(TLINK) @&&|
-$(LFLAGS) -Gr -Gn -L$(BCLIBDIR) c0dl +
+|                                     # OWL_QUICK_LINK is used mainly to
+!if !$d(OWL_QUICK_LINK)               # monitor the export tables of the DLL
+  $(LINK) @&&|
+$(LFLAGS) -Gr -Gn -L$(LIBPATH) $(STARTUP) +
 $(LINKOBJS)
 $(OWLDLL)
 
 $(BIDSILIB) $(STDLIBS)
 $(OWLDEF)
-$(OWLRES)
 |
-!if !$d(DIAGS)
-  $(TDSTRIP) -s $(OWLDLL)
 !endif
+  $(RLINK) -v -k $(OWLRES) $(OWLDLL)
+  $(TDSTRIP) -s $(OWLDLL)
   @-del $*.bak
   @cd $(.PATH.cpp)
 
-$(.PATH.obj)\$(OWLRES):
-  $(BRCC) $(RCINCLUDEPATH) -fo$@ $&.rc
-
-$(.PATH.obj)\$(OWLDEF): $(LIBDEPOBJS) $(.PATH.cpp)\owl16.ord
+$(.PATH.obj)\$(OWLDEF): $(.PATH.cpp)\owl16.ord
   @copy &&|
 LIBRARY     $(OWLNAME)$(OWLVER)$(OD)
 DESCRIPTION 'ObjectWindows DLL'
@@ -713,7 +928,6 @@ CODE        PRELOAD MOVEABLE DISCARDABLE
 DATA        PRELOAD MOVEABLE SINGLE
 HEAPSIZE    4096
 EXPORTS
-    WEP @1 RESIDENTNAME
 | + $(.PATH.cpp)\owl16.ord $(.PATH.obj)\$(OWLDEF) > NUL
 
 # Compile objs that aren't part of the Owl DLL as if they were user EXE or
@@ -721,14 +935,14 @@ EXPORTS
 #
 $(OBJS_LIB:PFX=):
 !if $d(USERDLL)
-  $(BCC)     -D_OWLDLL -U_BUILDOWLDLL {$&.cpp }
+  $(CC)     -D_OWLDLL -U_BUILDOWLDLL {$&.cpp }
 !else
   # smart callback, far data into normal data seg DATA, could use CODE if RO
-  $(BCC) -WS -D_OWLDLL -U_BUILDOWLDLL -zFDATA {$&.cpp }
+  $(CC) -WS -D_OWLDLL -U_BUILDOWLDLL -zFDATA {$&.cpp }
 !endif
 
 localex.obj: locale.cpp
-  $(BCC) -o$< locale.cpp
+  $(CC) -o$< locale.cpp
 
 !endif # if/else WIN32
 
@@ -737,9 +951,12 @@ localex.obj: locale.cpp
 $(OWLLIB): $(LIBDEPOBJS)
   @-del $(OWLLIB)
   @cd $(.PATH.obj)
-  $(TLIB) $(TLIBOPTS) $(OWLLIB) @&&|
+  $(LIB) $(LIBFLAGS) $(OWLLIB) @&&|
 $(LIBOBJS)
 |
+!if $d(DEBUG) && $d(WIN16) && $d(STRIP_OBJS)  # This is a space saver
+  $(TDSTRIP) *.obj
+!endif
   @cd $(.PATH.cpp)
 
 !endif
@@ -749,250 +966,272 @@ clean:
   @-if exist $(.PATH.obj)\*.obj del $(.PATH.obj)\*.obj
   @-if exist $(.PATH.obj)\*.csm del $(.PATH.obj)\*.csm
 
+!if $d(WIN16)
+NOOPT=-Od
+!endif
+
+applicat.obj: applicat.cpp
+  $(CC) $(NOOPT) applicat.cpp
+
 applica1.obj: applicat.cpp
-  $(BCC) -o$< -DSECTION=1 applicat.cpp
+  $(CC) $(NOOPT) -o$< -DSECTION=1 applicat.cpp
 applica2.obj: applicat.cpp
-  $(BCC) -o$< -DSECTION=2 applicat.cpp
+  $(CC) $(NOOPT) -o$< -DSECTION=2 applicat.cpp
 applica3.obj: applicat.cpp
-  $(BCC) -o$< -DSECTION=3 applicat.cpp
+  $(CC) $(NOOPT) -o$< -DSECTION=3 applicat.cpp
 applica4.obj: applicat.cpp
-  $(BCC) -o$< -DSECTION=4 applicat.cpp
+  $(CC) $(NOOPT) -o$< -DSECTION=4 applicat.cpp
+
+brush1.obj: brush.cpp
+  $(CC) -o$< -DSECTION=1 brush.cpp
+brush2.obj: brush.cpp
+  $(CC) -o$< -DSECTION=2 brush.cpp
 
 button1.obj: button.cpp
-  $(BCC) -o$< -DSECTION=1 button.cpp
+  $(CC) -o$< -DSECTION=1 button.cpp
 button2.obj: button.cpp
-  $(BCC) -o$< -DSECTION=2 button.cpp
+  $(CC) -o$< -DSECTION=2 button.cpp
 
 checkbo1.obj: checkbox.cpp
-  $(BCC) -o$< -DSECTION=1 checkbox.cpp
+  $(CC) -o$< -DSECTION=1 checkbox.cpp
 checkbo2.obj: checkbox.cpp
-  $(BCC) -o$< -DSECTION=2 checkbox.cpp
+  $(CC) -o$< -DSECTION=2 checkbox.cpp
 
 combobo1.obj: combobox.cpp
-  $(BCC) -o$< -DSECTION=1 combobox.cpp
+  $(CC) -o$< -DSECTION=1 combobox.cpp
 combobo2.obj: combobox.cpp
-  $(BCC) -o$< -DSECTION=2 combobox.cpp
+  $(CC) -o$< -DSECTION=2 combobox.cpp
 
 control1.obj: control.cpp
-  $(BCC) -o$< -DSECTION=1 control.cpp
+  $(CC) -o$< -DSECTION=1 control.cpp
 control2.obj: control.cpp
-  $(BCC) -o$< -DSECTION=2 control.cpp
+  $(CC) -o$< -DSECTION=2 control.cpp
 
 decfram1.obj: decframe.cpp
-  $(BCC) -o$< -DSECTION=1 decframe.cpp
+  $(CC) -o$< -DSECTION=1 decframe.cpp
 decfram2.obj: decframe.cpp
-  $(BCC) -o$< -DSECTION=2 decframe.cpp
+  $(CC) -o$< -DSECTION=2 decframe.cpp
 
 decmdif1.obj: decmdifr.cpp
-  $(BCC) -o$< -DSECTION=1 decmdifr.cpp
+  $(CC) -o$< -DSECTION=1 decmdifr.cpp
 decmdif2.obj: decmdifr.cpp
-  $(BCC) -o$< -DSECTION=2 decmdifr.cpp
+  $(CC) -o$< -DSECTION=2 decmdifr.cpp
 
 dialog1.obj: dialog.cpp
-  $(BCC) -o$< -DSECTION=1 dialog.cpp
+  $(CC) -o$< -DSECTION=1 dialog.cpp
 dialog2.obj: dialog.cpp
-  $(BCC) -o$< -DSECTION=2 dialog.cpp
+  $(CC) -o$< -DSECTION=2 dialog.cpp
 
 dib1.obj: dib.cpp
-  $(BCC) -o$< -DSECTION=1 dib.cpp
+  $(CC) -o$< -DSECTION=1 dib.cpp
 dib2.obj: dib.cpp
-  $(BCC) -o$< -DSECTION=2 dib.cpp
+  $(CC) -o$< -DSECTION=2 dib.cpp
 dib3.obj: dib.cpp
-  $(BCC) -o$< -DSECTION=3 dib.cpp
+  $(CC) -o$< -DSECTION=3 dib.cpp
 dib4.obj: dib.cpp
-  $(BCC) -o$< -DSECTION=4 dib.cpp
+  $(CC) -o$< -DSECTION=4 dib.cpp
 dib5.obj: dib.cpp
-  $(BCC) -o$< -DSECTION=5 dib.cpp
+  $(CC) -o$< -DSECTION=5 dib.cpp
 dib6.obj: dib.cpp
-  $(BCC) -o$< -DSECTION=6 dib.cpp
+  $(CC) -o$< -DSECTION=6 dib.cpp
+dib7.obj: dib.cpp
+  $(CC) -o$< -DSECTION=7 dib.cpp
 
 docmang1.obj: docmanag.cpp
-  $(BCC) -o$< -DSECTION=1 docmanag.cpp
+  $(CC) -o$< -DSECTION=1 docmanag.cpp
 docmang2.obj: docmanag.cpp
-  $(BCC) -o$< -DSECTION=2 docmanag.cpp
+  $(CC) -o$< -DSECTION=2 docmanag.cpp
+docmang3.obj: docmanag.cpp
+  $(CC) -o$< -DSECTION=3 docmanag.cpp
 
 doctpl1.obj: doctpl.cpp
-  $(BCC) -o$< -DSECTION=1 doctpl.cpp
+  $(CC) -o$< -DSECTION=1 doctpl.cpp
 doctpl2.obj: doctpl.cpp
-  $(BCC) -o$< -DSECTION=2 doctpl.cpp
+  $(CC) -o$< -DSECTION=2 doctpl.cpp
 
-docview1.obj: docview.cpp
-  $(BCC) -o$< -DSECTION=1 docview.cpp
-docview2.obj: docview.cpp
-  $(BCC) -o$< -DSECTION=2 docview.cpp
+documen1.obj: document.cpp
+  $(CC) -o$< -DSECTION=1 document.cpp
+documen2.obj: document.cpp
+  $(CC) -o$< -DSECTION=2 document.cpp
 
 edit1.obj: edit.cpp
-  $(BCC) -o$< -DSECTION=1 edit.cpp
+  $(CC) -o$< -DSECTION=1 edit.cpp
 edit2.obj: edit.cpp
-  $(BCC) -o$< -DSECTION=2 edit.cpp
+  $(CC) -o$< -DSECTION=2 edit.cpp
 
 editfil1.obj: editfile.cpp
-  $(BCC) -o$< -DSECTION=1 editfile.cpp
+  $(CC) -o$< -DSECTION=1 editfile.cpp
 editfil2.obj: editfile.cpp
-  $(BCC) -o$< -DSECTION=2 editfile.cpp
+  $(CC) -o$< -DSECTION=2 editfile.cpp
 
 editsea1.obj: editsear.cpp
-  $(BCC) -o$< -DSECTION=1 editsear.cpp
+  $(CC) -o$< -DSECTION=1 editsear.cpp
 editsea2.obj: editsear.cpp
-  $(BCC) -o$< -DSECTION=2 editsear.cpp
+  $(CC) -o$< -DSECTION=2 editsear.cpp
 
 editvie1.obj: editview.cpp
-  $(BCC) -o$< -DSECTION=1 editview.cpp
+  $(CC) -o$< -DSECTION=1 editview.cpp
 editvie2.obj: editview.cpp
-  $(BCC) -o$< -DSECTION=2 editview.cpp
+  $(CC) -o$< -DSECTION=2 editview.cpp
 
 filedoc1.obj: filedoc.cpp
-  $(BCC) -o$< -DSECTION=1 filedoc.cpp
+  $(CC) -o$< -DSECTION=1 filedoc.cpp
 filedoc2.obj: filedoc.cpp
-  $(BCC) -o$< -DSECTION=2 filedoc.cpp
+  $(CC) -o$< -DSECTION=2 filedoc.cpp
 
 filtval1.obj: filtval.cpp
-  $(BCC) -o$< -DSECTION=1 filtval.cpp
+  $(CC) -o$< -DSECTION=1 filtval.cpp
 filtval2.obj: filtval.cpp
-  $(BCC) -o$< -DSECTION=2 filtval.cpp
+  $(CC) -o$< -DSECTION=2 filtval.cpp
 
 findrep1.obj: findrepl.cpp
-  $(BCC) -o$< -DSECTION=1 findrepl.cpp
+  $(CC) -o$< -DSECTION=1 findrepl.cpp
 findrep2.obj: findrepl.cpp
-  $(BCC) -o$< -DSECTION=2 findrepl.cpp
+  $(CC) -o$< -DSECTION=2 findrepl.cpp
 
 floatfr1.obj: floatfra.cpp
-  $(BCC) -o$< -DSECTION=1 floatfra.cpp
+  $(CC) -o$< -DSECTION=1 floatfra.cpp
 floatfr2.obj: floatfra.cpp
-  $(BCC) -o$< -DSECTION=2 floatfra.cpp
+  $(CC) -o$< -DSECTION=2 floatfra.cpp
 
 framewi1.obj: framewin.cpp
-  $(BCC) -o$< -DSECTION=1 framewin.cpp
+  $(CC) -o$< -DSECTION=1 framewin.cpp
 framewi2.obj: framewin.cpp
-  $(BCC) -o$< -DSECTION=2 framewin.cpp
+  $(CC) -o$< -DSECTION=2 framewin.cpp
 framewi3.obj: framewin.cpp
-  $(BCC) -o$< -DSECTION=3 framewin.cpp
+  $(CC) -o$< -DSECTION=3 framewin.cpp
 
 groupbo1.obj: groupbox.cpp
-  $(BCC) -o$< -DSECTION=1 groupbox.cpp
+  $(CC) -o$< -DSECTION=1 groupbox.cpp
 groupbo2.obj: groupbox.cpp
-  $(BCC) -o$< -DSECTION=2 groupbox.cpp
+  $(CC) -o$< -DSECTION=2 groupbox.cpp
 
 hslider1.obj: hslider.cpp
-  $(BCC) -o$< -DSECTION=1 hslider.cpp
+  $(CC) -o$< -DSECTION=1 hslider.cpp
 hslider2.obj: hslider.cpp
-  $(BCC) -o$< -DSECTION=2 hslider.cpp
+  $(CC) -o$< -DSECTION=2 hslider.cpp
 
 inputdi1.obj: inputdia.cpp
-  $(BCC) -o$< -DSECTION=1 inputdia.cpp
+  $(CC) -o$< -DSECTION=1 inputdia.cpp
 inputdi2.obj: inputdia.cpp
-  $(BCC) -o$< -DSECTION=2 inputdia.cpp
+  $(CC) -o$< -DSECTION=2 inputdia.cpp
 
 listbox1.obj: listbox.cpp
-  $(BCC) -o$< -DSECTION=1 listbox.cpp
+  $(CC) -o$< -DSECTION=1 listbox.cpp
 listbox2.obj: listbox.cpp
-  $(BCC) -o$< -DSECTION=2 listbox.cpp
+  $(CC) -o$< -DSECTION=2 listbox.cpp
 
 listvie1.obj: listview.cpp
-  $(BCC) -o$< -DSECTION=1 listview.cpp
+  $(CC) -o$< -DSECTION=1 listview.cpp
 listvie2.obj: listview.cpp
-  $(BCC) -o$< -DSECTION=2 listview.cpp
+  $(CC) -o$< -DSECTION=2 listview.cpp
 
 lookval1.obj: lookval.cpp
-  $(BCC) -o$< -DSECTION=1 lookval.cpp
+  $(CC) -o$< -DSECTION=1 lookval.cpp
 lookval2.obj: lookval.cpp
-  $(BCC) -o$< -DSECTION=2 lookval.cpp
+  $(CC) -o$< -DSECTION=2 lookval.cpp
 
 mdichil1.obj: mdichild.cpp
-  $(BCC) -o$< -DSECTION=1 mdichild.cpp
+  $(CC) -o$< -DSECTION=1 mdichild.cpp
 mdichil2.obj: mdichild.cpp
-  $(BCC) -o$< -DSECTION=2 mdichild.cpp
+  $(CC) -o$< -DSECTION=2 mdichild.cpp
 
 mdiclie1.obj: mdiclien.cpp
-  $(BCC) -o$< -DSECTION=1 mdiclien.cpp
+  $(CC) -o$< -DSECTION=1 mdiclien.cpp
 mdiclie2.obj: mdiclien.cpp
-  $(BCC) -o$< -DSECTION=2 mdiclien.cpp
+  $(CC) -o$< -DSECTION=2 mdiclien.cpp
 
 mdifram1.obj: mdiframe.cpp
-  $(BCC) -o$< -DSECTION=1 mdiframe.cpp
+  $(CC) -o$< -DSECTION=1 mdiframe.cpp
 mdifram2.obj: mdiframe.cpp
-  $(BCC) -o$< -DSECTION=2 mdiframe.cpp
+  $(CC) -o$< -DSECTION=2 mdiframe.cpp
 
 menudes1.obj: menudesc.cpp
-  $(BCC) -o$< -DSECTION=1 menudesc.cpp
+  $(CC) -o$< -DSECTION=1 menudesc.cpp
 menudes2.obj: menudesc.cpp
-  $(BCC) -o$< -DSECTION=2 menudesc.cpp
+  $(CC) -o$< -DSECTION=2 menudesc.cpp
 
 module1.obj: module.cpp
-  $(BCC) -o$< -DSECTION=1 module.cpp
+  $(CC) -o$< -DSECTION=1 module.cpp
 module2.obj: module.cpp
-  $(BCC) -o$< -DSECTION=2 module.cpp
+  $(CC) -o$< -DSECTION=2 module.cpp
 module3.obj: module.cpp
-  $(BCC) -o$< -DSECTION=3 module.cpp
+  $(CC) -o$< -DSECTION=3 module.cpp
 module4.obj: module.cpp
-  $(BCC) -o$< -DSECTION=4 module.cpp
+  $(CC) -o$< -DSECTION=4 module.cpp
 
 opensav1.obj: opensave.cpp
-  $(BCC) -o$< -DSECTION=1 opensave.cpp
+  $(CC) -o$< -DSECTION=1 opensave.cpp
 opensav2.obj: opensave.cpp
-  $(BCC) -o$< -DSECTION=2 opensave.cpp
+  $(CC) -o$< -DSECTION=2 opensave.cpp
 
 pictval1.obj: pictval.cpp
-  $(BCC) -o$< -DSECTION=1 pictval.cpp
+  $(CC) -o$< -DSECTION=1 pictval.cpp
 pictval2.obj: pictval.cpp
-  $(BCC) -o$< -DSECTION=2 pictval.cpp
+  $(CC) -o$< -DSECTION=2 pictval.cpp
 
 printou1.obj: printout.cpp
-  $(BCC) -o$< -DSECTION=1 printout.cpp
+  $(CC) -o$< -DSECTION=1 printout.cpp
 printou2.obj: printout.cpp
-  $(BCC) -o$< -DSECTION=2 printout.cpp
+  $(CC) -o$< -DSECTION=2 printout.cpp
 
 printer1.obj: printer.cpp
-  $(BCC) -o$< -DSECTION=1 printer.cpp
+  $(CC) -o$< -DSECTION=1 printer.cpp
 printer2.obj: printer.cpp
-  $(BCC) -o$< -DSECTION=2 printer.cpp
+  $(CC) -o$< -DSECTION=2 printer.cpp
 
 printdi1.obj: printdia.cpp
-  $(BCC) -o$< -DSECTION=1 printdia.cpp
+  $(CC) -o$< -DSECTION=1 printdia.cpp
 printdi2.obj: printdia.cpp
-  $(BCC) -o$< -DSECTION=2 printdia.cpp
+  $(CC) -o$< -DSECTION=2 printdia.cpp
 
 radiobu1.obj: radiobut.cpp
-  $(BCC) -o$< -DSECTION=1 radiobut.cpp
+  $(CC) -o$< -DSECTION=1 radiobut.cpp
 radiobu2.obj: radiobut.cpp
-  $(BCC) -o$< -DSECTION=2 radiobut.cpp
+  $(CC) -o$< -DSECTION=2 radiobut.cpp
 
 rangevl1.obj: rangeval.cpp
-  $(BCC) -o$< -DSECTION=1 rangeval.cpp
+  $(CC) -o$< -DSECTION=1 rangeval.cpp
 rangevl2.obj: rangeval.cpp
-  $(BCC) -o$< -DSECTION=2 rangeval.cpp
+  $(CC) -o$< -DSECTION=2 rangeval.cpp
 
 scrolle1.obj: scroller.cpp
-  $(BCC) -o$< -DSECTION=1 scroller.cpp
+  $(CC) -o$< -DSECTION=1 scroller.cpp
 scrolle2.obj: scroller.cpp
-  $(BCC) -o$< -DSECTION=2 scroller.cpp
+  $(CC) -o$< -DSECTION=2 scroller.cpp
 
 scrollb1.obj: scrollba.cpp
-  $(BCC) -o$< -DSECTION=1 scrollba.cpp
+  $(CC) -o$< -DSECTION=1 scrollba.cpp
 scrollb2.obj: scrollba.cpp
-  $(BCC) -o$< -DSECTION=2 scrollba.cpp
+  $(CC) -o$< -DSECTION=2 scrollba.cpp
 
 slider1.obj: slider.cpp
-  $(BCC) -o$< -DSECTION=1 slider.cpp
+  $(CC) -o$< -DSECTION=1 slider.cpp
 slider2.obj: slider.cpp
-  $(BCC) -o$< -DSECTION=2 slider.cpp
+  $(CC) -o$< -DSECTION=2 slider.cpp
 
 static1.obj: static.cpp
-  $(BCC) -o$< -DSECTION=1 static.cpp
+  $(CC) -o$< -DSECTION=1 static.cpp
 static2.obj: static.cpp
-  $(BCC) -o$< -DSECTION=2 static.cpp
+  $(CC) -o$< -DSECTION=2 static.cpp
 
 tinycap1.obj: tinycapt.cpp
-  $(BCC) -o$< -DSECTION=1 tinycapt.cpp
+  $(CC) -o$< -DSECTION=1 tinycapt.cpp
 tinycap2.obj: tinycapt.cpp
-  $(BCC) -o$< -DSECTION=2 tinycapt.cpp
+  $(CC) -o$< -DSECTION=2 tinycapt.cpp
 
 validat1.obj: validate.cpp
-  $(BCC) -o$< -DSECTION=1 validate.cpp
+  $(CC) -o$< -DSECTION=1 validate.cpp
 validat2.obj: validate.cpp
-  $(BCC) -o$< -DSECTION=2 validate.cpp
+  $(CC) -o$< -DSECTION=2 validate.cpp
+
+view1.obj: view.cpp
+  $(CC) -o$< -DSECTION=1 view.cpp
+view2.obj: view.cpp
+  $(CC) -o$< -DSECTION=2 view.cpp
 
 vslider1.obj: vslider.cpp
-  $(BCC) -o$< -DSECTION=1 vslider.cpp
+  $(CC) -o$< -DSECTION=1 vslider.cpp
 vslider2.obj: vslider.cpp
-  $(BCC) -o$< -DSECTION=2 vslider.cpp
+  $(CC) -o$< -DSECTION=2 vslider.cpp
+

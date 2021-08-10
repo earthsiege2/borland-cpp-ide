@@ -30,44 +30,44 @@ BEGIN_REGISTRATION(__dvReg[[IncrV]])
 ##              :"" ViewBase
 ##              :<<*View QUERY_BASE_NAME ViewBase
 ##              --BEGIN-- ViewBase == "TOleView"
-    REGDATA(progid, "[[Title]].Document.[[IncrV]]")
+  REGDATA(progid, "[[Title]].Document.[[IncrV]]")
 ##                  :((@QUERY_APPL_OLE == VALUE_SERVER) || (@QUERY_APPL_OLE == VALUE_OLEBOTH))
-    REGDATA(description, "[[Title]] Document Version [[IncrV]]")
+  REGDATA(description, "[[Title]] Document Version [[IncrV]]")
 ##                  :((@QUERY_APPL_OLE != VALUE_SERVER) && (@QUERY_APPL_OLE != VALUE_OLEBOTH))
-    REGDATA(description, "[[Descr]]")
+  REGDATA(description, "[[Descr]]")
 ##              --END-- ViewBase == "TOleView"
 ##              :ViewBase != "TOleView"
-    REGDATA(description, "[[Descr]]")
+  REGDATA(description, "[[Descr]]")
 ##          --END-- @QUERY_APPL_OLE != VALUE_NOOLE
 ##      --END-- @QUERY_PRJ_NAME [[Title]]
 ##@QUERY_APPL_OLE == VALUE_NOOLE
-    REGDATA(description, "[[Descr]]")
-    REGDATA(extension, "[[Ext]]")
-    REGDATA(docfilter, "[[Filter]]")
+  REGDATA(description, "[[Descr]]")
+  REGDATA(extension, "[[Ext]]")
+  REGDATA(docfilter, "[[Filter]]")
 ##--BEGIN-- @QUERY_APPL_OLE != VALUE_NOOLE
 ##<<*View QUERY_BASE_NAME ViewBase
 ##ViewBase == "TOleView"
-    REGDOCFLAGS([[Style]] | dtAutoOpen | dtRegisterExt)
+  REGDOCFLAGS([[Style]] | dtAutoOpen | dtRegisterExt)
 ##ViewBase != "TOleView"
-    REGDOCFLAGS([[Style]])
+  REGDOCFLAGS([[Style]])
 ##--END-- @QUERY_APPL_OLE != VALUE_NOOLE
 ##@QUERY_APPL_OLE == VALUE_NOOLE
-    REGDOCFLAGS([[Style]])
-//    REGDATA(debugger, "TDW")
+  REGDOCFLAGS([[Style]])
+//  REGDATA(debugger, "TDW")
 ##<<*View QUERY_BASE_NAME ViewBase
 ##--BEGIN-- ViewBase == "TOleView"
 ##--BEGIN-- ((@QUERY_APPL_OLE == VALUE_SERVER) || (@QUERY_APPL_OLE == VALUE_OLEBOTH))
-    REGDATA(menuname, "[[View]]")
-    REGDATA(insertable, "")
-    REGDATA(verb0, "&Edit")
-    REGDATA(verb1, "&Open")
+  REGDATA(menuname, "[[View]]")
+  REGDATA(insertable, "")
+  REGDATA(verb0, "&Edit")
+  REGDATA(verb1, "&Open")
 ##--END-- ((@QUERY_APPL_OLE == VALUE_SERVER) || (@QUERY_APPL_OLE == VALUE_OLEBOTH))
 ##--BEGIN-- ((@QUERY_APPL_OLE == VALUE_CONTAINER) || (@QUERY_APPL_OLE == VALUE_OLEBOTH) || (@QUERY_APPL_OLE == VALUE_SERVER))
-    REGFORMAT(0, ocrEmbedSource,  ocrContent,  ocrIStorage, ocrGet)
-    REGFORMAT(1, ocrMetafilePict, ocrContent,  ocrMfPict | ocrStaticMed, ocrGet)
-    REGFORMAT(2, ocrBitmap, ocrContent,  ocrGDI | ocrStaticMed, ocrGet)
-    REGFORMAT(3, ocrDib, ocrContent,  ocrHGlobal | ocrStaticMed, ocrGet)
-    REGFORMAT(4, ocrLinkSource, ocrContent,  ocrIStream, ocrGet)
+  REGFORMAT(0, ocrEmbedSource,  ocrContent,  ocrIStorage, ocrGet)
+  REGFORMAT(1, ocrMetafilePict, ocrContent,  ocrMfPict | ocrStaticMed, ocrGet)
+  REGFORMAT(2, ocrBitmap, ocrContent,  ocrGDI | ocrStaticMed, ocrGet)
+  REGFORMAT(3, ocrDib, ocrContent,  ocrHGlobal | ocrStaticMed, ocrGet)
+  REGFORMAT(4, ocrLinkSource, ocrContent,  ocrIStream, ocrGet)
 ##--END-- ((@QUERY_APPL_OLE == VALUE_CONTAINER) || (@QUERY_APPL_OLE == VALUE_OLEBOTH) || (@QUERY_APPL_OLE == VALUE_SERVER))
 ##--END-- ViewBase == "TOleView"
 END_REGISTRATION

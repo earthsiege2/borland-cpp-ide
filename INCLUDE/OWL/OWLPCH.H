@@ -1,12 +1,19 @@
 //----------------------------------------------------------------------------
 // ObjectWindows
-// (C) Copyright 1992, 1994 by Borland International, All Rights Reserved
+// Copyright (c) 1995, 1996 by Borland International, All Rights Reserved
 //
-//   Include for Owl, gets owlcore.h or owlall.h when precompiled headers are
-//   enabled.
+//$Revision:   10.3  $
+//
+// Backward compatible header
 //----------------------------------------------------------------------------
-#if defined(_OWLALLPCH) && !defined(OWL_OWLALL_H)
-#  include <owl/owlall.h>
-#elif defined(_OWLPCH) && !defined(OWL_OWLCORE_H)
-#  include <owl/owlcore.h>
+#if !defined(OWL_OWLPCH_H)
+#define OWL_OWLPCH_H
+
+#if defined(NO_OWL2_COMPAT)
+# pragma message owl/owlpch.h has been replaced by owl/pch.h
 #endif
+#if !defined(OWL_PCH_H)
+# include <owl/pch.h>
+#endif
+
+#endif  //  OWL_OWLPCH_H

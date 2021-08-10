@@ -6,9 +6,9 @@
  *-----------------------------------------------------------------------*/
 
 /*
- *      C/C++ Run Time Library - Version 1.5
+ *      C/C++ Run Time Library - Version 2.0
  *
- *      Copyright (c) 1991, 1994 by Borland International
+ *      Copyright (c) 1991, 1996 by Borland International
  *      All Rights Reserved.
  *
  */
@@ -25,6 +25,12 @@
 #include <stdio.h>
 #include <_stdio.h>
 #include <_thread.h>
+
+#if defined(__MT__)
+void _cleanup_handle_locks(void);
+void _cleanup_stream_locks(void);
+#endif
+
 
 /*---------------------------------------------------------------------*
 
@@ -61,8 +67,17 @@ Return value    1 (success)
 #ifdef __WIN32__
 #pragma argsused
 typedef INT APIENTRY (*LIBMAINPTR)(HANDLE, ULONG, LPVOID);
+extern BOOL (WINAPI *_pRawDllMain)(HINSTANCE, DWORD, LPVOID);
 
 extern HINSTANCE _hInstance;
+
+#if defined(__WIN32__) && defined(_BUILDRTLDLL)
+typedef void __pascal (* _CGCALL)(HMODULE, int);
+static _CGCALL _pfnCG;
+static HMODULE _hCG;
+static HMODULE _hCGModHandle;
+#endif
+
 #endif
 
 extern char * _EXPDATA _osenv;             /* pointer to raw OS environment data */
@@ -98,6 +113,7 @@ ULONG cdecl _EXPFUNC _startupd
     VOIDFUNC func;
     MULTI_INIT *share__dll_table;
     MULTI_INIT _dll_table;
+    ULONG retval;
 
     /* Save a pointer to this DLL's module table.
     */
@@ -116,9 +132,23 @@ ULONG cdecl _EXPFUNC _startupd
             {               // Note: always true for nonshared data
 #endif
 
+#if defined(__WIN32__) && defined(_BUILDRTLDLL)
+        /* Hack for Gabor */
+        if (!_hCG && GetModuleHandle("CG32.DLL") != NULL)
+            {
+            _hCG = LoadLibrary("CG32.DLL");
+            _pfnCG = (_CGCALL) GetProcAddress(_hCG, "_CG_RTLDLLINIT");
+            _pfnCG(mod_handle, 1);
+	    _hCGModHandle = mod_handle;
+            }
+#endif
+
 #ifdef __WIN32__
         _osenv = GetEnvironmentStrings();
         _hInstance = mod_handle;
+
+	if (_pRawDllMain)
+            _pRawDllMain(_hInstance, reason, 0);
 #endif
         /* Call initialization functions for the DLL (not the application).
          * The app's init functions will be called later by startup().
@@ -177,6 +207,17 @@ ULONG cdecl _EXPFUNC _startupd
             while ((func = _init_exit_proc(&_dll_table, 1)) != NULLFUNC)
                 func();
 
+#if defined(__MT__)
+#if 0        /* Adding these two lines fixes a rare CG RTL memory leak.
+                It's commented out since it seems to adversly effect
+                other parts of the stream locking system.
+             */
+             _cleanup_handle_locks();
+             _cleanup_stream_locks();
+#endif /* 0 */
+#endif /* __MT__ */
+
+
             /* Call _dllmain on OS/2.
              */
 #ifdef __OS2__
@@ -193,7 +234,21 @@ ULONG cdecl _EXPFUNC _startupd
 #pragma warn -pro
     /* Call LibMain().
      */
-    return (*(LIBMAINPTR)(mod_table->main))(mod_handle, reason, reserved);
+    retval = (*(LIBMAINPTR)(mod_table->main))(mod_handle, reason, reserved);
+
+#ifdef __WIN32__
+    if (_pRawDllMain)
+	_pRawDllMain(_hInstance, reason, 0);
+#endif
+
+#if defined(__WIN32__) && defined(_BUILDRTLDLL)
+    if (_hCGModHandle == mod_handle && _hCG && reason == DLL_PROCESS_DETACH)
+        {
+        _pfnCG(mod_handle, 0);
+        FreeLibrary(_hCG);
+        }
+#endif
+    return retval;
 #pragma warn .pro
 #else
     return 1;

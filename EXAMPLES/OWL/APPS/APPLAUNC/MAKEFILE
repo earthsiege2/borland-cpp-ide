@@ -1,0 +1,16 @@
+#----------------------------------------------------------------------------
+# ObjectWindows - (C) Copyright 1991, 1993 by Borland International
+#----------------------------------------------------------------------------
+EXERES  = applaunc
+HLP     = applaunc
+HLP_    = applaunc.rtf
+RESEXE_ = applaunc.rh
+EXEALL  = applaunc.exe exitwin.exe
+EXEMAKE = $(APPLAUNC) $(EXITWIN)
+EXITWIN= $(EXERULE:applaunc=exitwin)
+#EXITWINX= $(EXERULE:applaunc=exitwin)
+#EXITWIN = $(EXITWINX:$(SYSLIBS)=)
+APPLAUNC= $(EXERULE:applaunc.obj=appmgr.obj appbtn.obj appbtnba.obj\
+                                 dialogs.obj appwin.obj applaunc.obj)
+MODELS = ldf
+!include $(BCEXAMPLEDIR)\owlmake.gen

@@ -11,7 +11,7 @@ International API
 
     The LOCALE.BLL  Support for these locales is contained in the
  file is installed  LOCALE.BLL library. By default, the "C" locale is in
-       in BC45\BIN  effect. However, a call to setlocale dynamically links
+       in BC5\BIN   effect. However, a call to setlocale dynamically links
         directory.  the LOCALE.BLL library to your program. A locale-
                     specific module is enabled by a call to setlocale. The
                     call will also specify which character set to use with
@@ -23,7 +23,7 @@ International API
 
                     If the call to setlocale can be resolved, several
                     character-handling functions change their behavior.
-                    Because Borland C++ 4.5 international API currently
+                    Because Borland C++ 5.0 international API currently
                     supports only 8-bit characters (thereby enabling
                     recognition of as many as 256 characters), only
                     single-byte character-handling functions are affected.
@@ -42,7 +42,7 @@ API sample program
                     sample program (named INTLDEMO.EXE) is an ObjectWindows
                     application. All source code and a project file for the
                     sample are provided. The sample program INTLDEMO (in
-                    BC45\EXAMPLES\WINDOWS\INTLDEMO) demonstrates how the
+                    BC5\EXAMPLES\OWL\APPS\INTLDEMO) demonstrates how the
                     setlocale function can produce an "internationally
                     aware" Windows application. You can switch the inter-
                     face language at run time between English, French, and
@@ -50,7 +50,7 @@ API sample program
 
 
                                                                           1
-
+
 
                     INTLDEMO displays all of the Windows ANSI character set
                     (also referred to as the WIN 1252 character set) in a
@@ -106,3 +106,40 @@ API sample program
                     this function in the current locale to be highlighted
                     in the main window.
 
+
+                    INTLDEMO also supports multi-lingual OLE automation. 
+                    Commands are exposed which allow a controller to select
+                      1. the locale, 
+                      2. the language of the UI, 
+                      3. the classification function. 
+
+                    These commands are available in English, French and 
+                    German. A controller program, CALLDEMO, is provided, 
+                    which illustrates this process.
+
+                    By default, the type library will be generated according
+                    to the current Control Panel settings. For example,
+                    running INTLDEMO with the -Typelib switch under French
+                    settings will generate intldemo.olb in French.
+
+                    To generate the type library in a given language, use
+                    the -Language switch. For example,
+                      intldemo.exe -Language=7 -Typelib=german.olb
+                    will generate a German type library called german.olb.
+
+                    Some localized BASIC scripts are also provided. These 
+                    scripts can be run from a VBA apllication, such as Excel.
+                    In order to run the French or German scripts in the US 
+                    version of Excel, it is necessary to load the appropriate
+                    localized object libraries. This process is fully 
+                    explained	in the description of the AUTOCALC example 
+                    program.
+
+                    In addition, Excel can be used to browse the type library 
+                    information. For example, browsing the German version of
+                    the type library displays localized names of methods and 
+                    properties, as well as brief descriptions. Localized 
+                    help text can also be invoked.
+
+ 
+

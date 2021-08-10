@@ -6,9 +6,9 @@
  *-----------------------------------------------------------------------*/
 
 /*
- *      C/C++ Run Time Library - Version 6.5
+ *      C/C++ Run Time Library - Version 7.0
  *
- *      Copyright (c) 1991, 1994 by Borland International
+ *      Copyright (c) 1991, 1996 by Borland International
  *      All Rights Reserved.
  *
  */
@@ -24,7 +24,7 @@ int main(int argc, char *argv[], char *env[]);
 asm extrn __InitEasyWin
 
 #pragma argsused
-int PASCAL WinMain(HANDLE hInstance, HANDLE hPrevInstance,
+int FAR PASCAL WinMain(HANDLE hInstance, HANDLE hPrevInstance,
                    LPSTR lpszCmdLine, int cmdShow)
 {
     return main(_argc, _argv, _environ);

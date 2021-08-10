@@ -1,0 +1,163 @@
+//----------------------------------------------------------------------------
+//  Project Shell
+//  Borland International
+//  Copyright © 1995 Borland International. All Rights Reserved.
+//
+//  SUBSYSTEM:  shell.exe Application
+//  FILE:     shellapp.rc
+//  AUTHOR:     The OWL Team
+//
+//  OVERVIEW
+//  ~~~~~~~~
+//  All resources defined here.
+//
+//----------------------------------------------------------------------------
+
+#if !defined(WORKSHOP_INVOKED)
+# include <windows.h>
+#endif
+#include "shellapp.rh"
+
+#include <owl/except.rc>
+
+IDM_MDI MENU
+BEGIN
+  POPUP "&File"
+  BEGIN
+    MENUITEM "&New", CM_MDIFILENEW
+    MENUITEM SEPARATOR
+    MENUITEM "E&xit\tAlt+F4", CM_EXIT
+  END
+  MENUITEM SEPARATOR
+  MENUITEM SEPARATOR
+  MENUITEM SEPARATOR
+  MENUITEM SEPARATOR
+  POPUP "&Window"
+  BEGIN
+    MENUITEM "&Cascade", CM_CASCADECHILDREN
+    MENUITEM "&Tile", CM_TILECHILDREN
+    MENUITEM "Arrange &Icons", CM_ARRANGEICONS
+    MENUITEM "C&lose All", CM_CLOSECHILDREN
+  END
+  MENUITEM SEPARATOR
+  POPUP "&Help"
+  BEGIN
+    MENUITEM "&About...", CM_HELPABOUT
+  END
+END
+
+// Table of help hints displayed in the status bar.
+//
+STRINGTABLE
+BEGIN
+  -1,                   "File operations"
+  CM_MDIFILENEW,        "Creates a desktop folder"
+  CM_EXIT,              "Quits ShellApp and prompts to save the documents"
+  CM_CASCADECHILDREN-1, "Window arrangement and selection"
+  CM_CASCADECHILDREN,   "Cascades open windows"
+  CM_TILECHILDREN,      "Tiles open windows"
+  CM_ARRANGEICONS,      "Arranges iconic windows along bottom"
+  CM_CLOSECHILDREN,     "Closes all open windows"
+  CM_HELPABOUT,         "About the Shell application"
+END
+
+//
+// Bitmaps used by the speedbar.  Each bitmap is associated with a
+// particular menu command.
+//
+CM_MDIFILENEW BITMAP "new.bmp"
+
+// Application ICON
+//
+IDI_SHELLAPP ICON "shellapp.ico"
+
+// About box.
+//
+IDD_ABOUT DIALOG 12, 17, 204, 65
+STYLE DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "About Shell"
+FONT 8, "MS Sans Serif"
+BEGIN
+ CTEXT "Version", IDC_VERSION, 2, 14, 200, 8, SS_NOPREFIX
+ CTEXT "OWL Win95 Shell Classes Sample Application", -1, 2, 4, 200, 8, SS_NOPREFIX
+ CTEXT "", IDC_COPYRIGHT, 2, 27, 200, 17, SS_NOPREFIX
+ RTEXT "", IDC_DEBUG, 136, 55, 66, 8, SS_NOPREFIX
+ ICON "IDI_SHELLAPP", -1, 2, 2, 34, 34
+ DEFPUSHBUTTON "OK", IDOK, 82, 48, 40, 14
+END
+
+// Version info.
+//
+#if !defined(__DEBUG_)
+
+// Non-Debug VERSIONINFO
+//
+1 VERSIONINFO LOADONCALL MOVEABLE
+FILEVERSION 1, 0, 0, 0
+PRODUCTVERSION 1, 0, 0, 0
+FILEFLAGSMASK 0
+FILEFLAGS VS_FFI_FILEFLAGSMASK
+FILEOS VOS__WINDOWS32
+FILETYPE VFT_APP
+BEGIN
+  BLOCK "StringFileInfo"
+  BEGIN
+    // Language type = U.S. English(0x0409) and Character Set = Windows, Multilingual(0x04e4)
+    BLOCK "040904E4"              // Matches VarFileInfo Translation hex value.
+    BEGIN
+      VALUE "CompanyName", "Borland International\000"
+      VALUE "FileDescription", "Shell for Windows\000"
+      VALUE "FileVersion", "1.0\000"
+      VALUE "InternalName", "Shell\000"
+      VALUE "LegalCopyright", "Copyright © 1995 Borland International. All Rights Reserved.\000"
+      VALUE "LegalTrademarks", "Windows(TM) is a trademark of Microsoft Corporation\000"
+      VALUE "OriginalFilename", "Shell.EXE\000"
+      VALUE "ProductName", "Shell\000"
+      VALUE "ProductVersion", "1.0\000"
+    END
+  END
+
+  BLOCK "VarFileInfo"
+  BEGIN
+    VALUE "Translation", 0x0409, 0x04e4    // U.S. English(0x0409) & Windows Multilingual(0x04e4) 1252
+  END
+END
+
+#else
+
+// Debug VERSIONINFO
+//
+1 VERSIONINFO LOADONCALL MOVEABLE
+FILEVERSION 1, 0, 0, 0
+PRODUCTVERSION 1, 0, 0, 0
+FILEFLAGSMASK VS_FF_DEBUG | VS_FF_PRERELEASE | VS_FF_PATCHED | VS_FF_PRIVATEBUILD | VS_FF_SPECIALBUILD
+FILEFLAGS VS_FFI_FILEFLAGSMASK
+FILEOS VOS__WINDOWS32
+FILETYPE VFT_APP
+BEGIN
+  BLOCK "StringFileInfo"
+  BEGIN
+    // Language type = U.S. English(0x0409) and Character Set = Windows, Multilingual(0x04e4)
+    BLOCK "040904E4"              // Matches VarFileInfo Translation hex value.
+    BEGIN
+      VALUE "CompanyName", "Borland International\000"
+      VALUE "FileDescription", "Shell for Windows\000"
+      VALUE "FileVersion", "1.0\000"
+      VALUE "InternalName", "Shell\000"
+      VALUE "LegalCopyright", "Copyright © 1995 Borland International. All Rights Reserved.\000"
+      VALUE "LegalTrademarks", "Windows(TM) is a trademark of Microsoft Corporation\000"
+      VALUE "OriginalFilename", "Shell.EXE\000"
+      VALUE "ProductName", "Shell\000"
+      VALUE "ProductVersion", "1.0\000"
+      VALUE "SpecialBuild", "Debug Version\000"
+      VALUE "PrivateBuild", "Built by The OWL Team\000"
+    END
+  END
+
+  BLOCK "VarFileInfo"
+  BEGIN
+    VALUE "Translation", 0x0409, 0x04e4    // U.S. English(0x0409) & Windows Multilingual(0x04e4) 1252
+  END
+END
+
+#endif

@@ -1,0 +1,60 @@
+//--------------------------------------------------------------------------
+// Object Scripting
+// Copyright (c) 1996 by Borland International, All Rights Reserved
+//
+// EVALTIPS.SPP: Evaluation Tips. When the debugger has a process loaded,
+//   evaluates the item under the cursor and displays the result in a
+//   mouse tip.
+//
+// USE: Run a process under the debugger and run script.
+//--------------------------------------------------------------------------
+print "evaltips.spp";
+
+//
+// IDE imports.
+//
+import editor;
+import debugger;
+import IDE;
+
+//
+// If debugging and we have a source file, evaluate the symbol under the
+// cursor when a mouse tip is "requested."
+//
+on editor:>MouseTipRequested(theView, line, col)
+{
+  if (debugger.HasProcess) {
+    declare topView = editor.TopView;
+    declare curPos  = topView.Position;
+    declare curBlk  = topView.Block;
+
+    // Get the block, or word under the cursor.
+    //
+    declare symbol;
+    if (curBlk.IsValid) {
+      symbol = curBlk.Text;
+    }
+    else {
+      curPos.Save();
+      curPos.Move(line, col);
+      symbol = .GetWord();
+      curPos.Restore();
+    }
+
+    //
+    // Evaluate.
+    //
+    declare evaluation;
+    if (symbol != "") {
+      evaluation = debugger.Evaluate(symbol + ",r");
+      return (evaluation != "" ? evaluation : "...");
+    }
+    else {
+      return "...";
+    }
+  }
+  else {  // No process under debugger.
+    return pass(theView, line, col);
+  }
+}
+

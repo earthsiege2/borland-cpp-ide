@@ -1,25 +1,19 @@
-/*------------------------------------------------------------------------*/
-/*                                                                        */
-/*  DATE.H                                                                */
-/*                                                                        */
-/*  Copyright (c) 1993, 1994 Borland International                        */
-/*  All Rights Reserved                                                   */
-/*                                                                        */
-/*------------------------------------------------------------------------*/
+//----------------------------------------------------------------------------
+// Borland Class Library
+// Copyright (c) 1993, 1996 by Borland International, All Rights Reserved
+//
+//$Revision:   5.3  $
+//
+//----------------------------------------------------------------------------
+#if !defined(CLASSLIB_DATE_H)
+#define CLASSLIB_DATE_H
 
-#if !defined( CLASSLIB__DATE_H )
-#define CLASSLIB__DATE_H
-
-#if !defined(___DEFS_H)
-#include <_defs.h>
+#if !defined(CLASSLIB_DEFS_H)
+# include <classlib/defs.h>
 #endif
 
-#if !defined( CLASSLIB_DEFS_H )
-#include <classlib/defs.h>
-#endif
-
-#if defined( BI_CLASSLIB_NO_po )
-#pragma option -po-
+#if defined(BI_CLASSLIB_NO_po)
+# pragma option -po-
 #endif
 
 class _EXPCLASS string;
@@ -288,7 +282,7 @@ inline HashValue( TDate _BIDSFAR & d )
 }
 
 #if defined( BI_CLASSLIB_NO_po )
-#pragma option -po.
+# pragma option -po.
 #endif
 
 #endif  // CLASSLIB_DATE_H

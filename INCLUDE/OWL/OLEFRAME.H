@@ -1,6 +1,8 @@
 //----------------------------------------------------------------------------
 // ObjectWindows
-// (C) Copyright 1994 by Borland International, All Rights Reserved
+// Copyright (c) 1994, 1996 by Borland International, All Rights Reserved
+//
+//$Revision:   10.2  $
 //
 //----------------------------------------------------------------------------
 #if !defined(OWL_OLEFRAME_H)
@@ -19,6 +21,11 @@
 # include <owl/olefacto.h>
 #endif
 
+// Generic definitions/compiler options (eg. alignment) preceeding the 
+// definition of classes
+#include <services/preclass.h>
+
+//
 // pad decorations IDs, 4 total: 32042, 32043, 32044, 32045
 //
 const int IDW_PADDECORATION = 32042;
@@ -30,8 +37,7 @@ class _ICLASS TOcApp;
 
 //
 // class TOleFrame
-// ----- ---------
-//
+// ~~~~~ ~~~~~~~~~
 // Decorated frame that supports OLE 2 using OCF
 //
 class _USERCLASS TOleFrame : public TDecoratedFrame {
@@ -41,11 +47,11 @@ class _USERCLASS TOleFrame : public TDecoratedFrame {
               bool            trackMenuSelection = false,
               TModule*        module = 0);
    ~TOleFrame();
-    TOcApp*    GetOcApp() {return OcApp;}
+    TOcApp*    GetOcApp();
     void       SetOcApp(TOcApp* app);
     void       AddUserFormatName(const char far* name, const char far* resultName, const char far* id);
 
-    TWindow*   GetRemViewBucket() {return ChildWithId(IDW_REMVIEWBUCKET);}
+    TWindow*   GetRemViewBucket();
     void       OleViewClosing(bool close);
 
   protected:
@@ -57,7 +63,7 @@ class _USERCLASS TOleFrame : public TDecoratedFrame {
     void       EvActivateApp(bool active, HTASK hTask);
     void       EvTimer(uint timerId);
 
-    LRESULT    EvOcEvent(WPARAM wParam, LPARAM lParam);
+    TResult    EvOcEvent(TParam1 param1, TParam2 param2);
     bool       EvOcAppInsMenus(TOcMenuDescr far& sharedMenu);
     bool       EvOcAppMenus(TOcMenuDescr far& md);
     bool       EvOcAppProcessMsg(MSG far* msg);
@@ -66,7 +72,7 @@ class _USERCLASS TOleFrame : public TDecoratedFrame {
     bool       EvOcAppBorderSpaceSet(TRect far* rect);
     void       EvOcAppStatusText(const char far* rect);
     void       EvOcAppRestoreUI();
-    void       EvOcAppDialogHelp(TOcDialogHelp far& dh) {}
+    void       EvOcAppDialogHelp(TOcDialogHelp far& dh);
     bool       EvOcAppShutdown();
 
   protected:
@@ -84,5 +90,33 @@ class _USERCLASS TOleFrame : public TDecoratedFrame {
 
   DECLARE_RESPONSE_TABLE(TOleFrame);
 };
+
+// Generic definitions/compiler options (eg. alignment) following the 
+// definition of classes
+#include <services/posclass.h>
+
+// --------------------------------------------------------------------------
+// Inline implementations
+//
+
+//
+inline TOcApp*
+TOleFrame::GetOcApp()
+{
+  return OcApp;
+}
+
+//
+inline TWindow*
+TOleFrame::GetRemViewBucket()
+{
+  return ChildWithId(IDW_REMVIEWBUCKET);
+}
+
+//
+inline void
+TOleFrame::EvOcAppDialogHelp(TOcDialogHelp far& dh)
+{
+}
 
 #endif  // OWL_OLEFRAME_H

@@ -1,11 +1,15 @@
 //----------------------------------------------------------------------------
 // ObjectWindows
-// (C) Copyright 1991, 1994 by Borland International, All Rights Reserved
+// Copyright (c) 1991, 1996 by Borland International, All Rights Reserved
 //
-//   Global data required for every module using OWL
+//$Revision:   10.5  $
+//
+// Global data required for every module using OWL
 //----------------------------------------------------------------------------
-#include <owl/owlpch.h>
-#include <owl/applicat.h>
+#include <owl/pch.h>
+#if !defined(OWL_APPLICAT_H)
+# include <owl/applicat.h>
+#endif
 
 class _OWLCLASS TDocTemplate;
 

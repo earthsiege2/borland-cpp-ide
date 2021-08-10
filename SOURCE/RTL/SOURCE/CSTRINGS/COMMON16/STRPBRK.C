@@ -7,9 +7,9 @@
  *-----------------------------------------------------------------------*/
 
 /*
- *      C/C++ Run Time Library - Version 6.5
+ *      C/C++ Run Time Library - Version 7.0
  *
- *      Copyright (c) 1987, 1994 by Borland International
+ *      Copyright (c) 1987, 1996 by Borland International
  *      All Rights Reserved.
  *
  */
@@ -36,7 +36,7 @@ Return value    strpbrk returns a pointer to the first occurrence of any of
 
 *---------------------------------------------------------------------*/
 
-/* alias records for C++ emplimentation of strpbrk() */
+/* alias records for C++ implementation of strpbrk() */
 
 #if !defined(__FARFUNCS__)
 

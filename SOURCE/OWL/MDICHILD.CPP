@@ -1,22 +1,35 @@
 //----------------------------------------------------------------------------
 // ObjectWindows
-// (C) Copyright 1991, 1994 by Borland International, All Rights Reserved
+// Copyright (c) 1991, 1996 by Borland International, All Rights Reserved
 //
-//   Implementation of TMDIChild. This defines the basic behavior of all MDI
-//   child windows
+//$Revision:   10.5  $
+//
+// Implementation of TMDIChild. This defines the basic behavior of all MDI
+// child windows
 //----------------------------------------------------------------------------
 #pragma hdrignore SECTION
-#include <owl/owlpch.h>
-#include <owl/mdichild.h>
-#include <owl/mdi.h>
-#include <owl/applicat.h>
+#include <owl/pch.h>
+#if !defined(OWL_MDICHILD_H)
+# include <owl/mdichild.h>
+#endif
+#if !defined(OWL_MDI_H)
+# include <owl/mdi.h>
+#endif
+#if !defined(OWL_APPLICAT_H)
+# include <owl/applicat.h>
+#endif
 
 DIAG_DECLARE_GROUP(OwlWin);  // diagnostic group for windows
 
-// Define to work around here in the child, the 'creating MDI child maximized
-// corrupts the menu bar' bug 
+#if !defined(WS_EX_MDICHILD)
+# define WS_EX_MDICHILD          0x00000040L
+#endif
+
 //
-#define MDIMAX_WORKAROUND
+// Define to not work around here in the client, the 'creating MDI child
+// maximized corrupts the menu bar' bug
+//
+//#define NO_MDIMAX_WORKAROUND
 
 #if !defined(SECTION) || SECTION == 1
 
@@ -26,7 +39,7 @@ DEFINE_RESPONSE_TABLE1(TMDIChild, TFrameWindow)
 END_RESPONSE_TABLE;
 
 //
-// constructor for a TMDIChild
+// Constructor for a TMDIChild
 //
 TMDIChild::TMDIChild(TMDIClient&     parent,
                      const char far* title,
@@ -34,7 +47,6 @@ TMDIChild::TMDIChild(TMDIClient&     parent,
                      bool            shrinkToClient,
                      TModule*        module)
 {
-  //
   // Initialize virtual bases, in case the derived-most used default ctor
   //
   TWindow::Init(&parent, title, module);
@@ -43,6 +55,9 @@ TMDIChild::TMDIChild(TMDIClient&     parent,
   Attr.Style = WS_VISIBLE | WS_CHILD | WS_CLIPSIBLINGS | WS_CLIPCHILDREN |
                WS_SYSMENU | WS_CAPTION | WS_THICKFRAME |
                WS_MINIMIZEBOX | WS_MAXIMIZEBOX;
+
+  Attr.ExStyle |= WS_EX_MDICHILD;
+
   Attr.Y = Attr.H = CW_USEDEFAULT;
 }
 
@@ -50,12 +65,20 @@ TMDIChild::TMDIChild(TMDIClient&     parent,
 // Constructor for a TMDIChild which is being used in a DLL as an alias
 // for a non-OWL window
 //
-TMDIChild::TMDIChild(HWND hWnd, TModule*   module)
+TMDIChild::TMDIChild(THandle handle, TModule* module)
 :
-  TFrameWindow(hWnd, module),
-  TWindow(hWnd, module)
+  TFrameWindow(handle, module),
+  TWindow(handle, module)
 {
   Attr.Style = WS_CLIPSIBLINGS;
+  Attr.ExStyle |= WS_EX_MDICHILD;
+}
+
+//
+// Destructor for a MDI child
+//
+TMDIChild::~TMDIChild()
+{
 }
 
 //
@@ -80,9 +103,9 @@ TMDIChild::ShowWindow(int cmdShow)
   // Process only if visible state has changed
   //
   if ((retVal != 0) != (cmdShow != SW_HIDE)) {
-    if ((HWND)Parent->HandleMessage(WM_MDIGETACTIVE) == *this) {
+    if ((THandle)Parent->HandleMessage(WM_MDIGETACTIVE) == *this) {
       if (cmdShow == SW_HIDE)
-        Parent->HandleMessage(WM_MDINEXT, (uint)(HWND)*this);
+        Parent->HandleMessage(WM_MDINEXT, (uint)(THandle)*this);
       else
         HandleMessage(WM_NCACTIVATE, true); // resend suppressed message
     }
@@ -107,8 +130,8 @@ TMDIChild::EnableWindow(bool enable)
   // Process only if disabled state has actually changed
   //
   if ((retVal!=0) != (enable==0)) {
-    if (!enable && (HWND)Parent->HandleMessage(WM_MDIGETACTIVE) == *this)
-      Parent->HandleMessage(WM_MDINEXT, (uint)(HWND)*this);
+    if (!enable && (THandle)Parent->HandleMessage(WM_MDIGETACTIVE) == *this)
+      Parent->HandleMessage(WM_MDINEXT, (uint)(THandle)*this);
 #if defined(BI_PLAT_WIN32)
     Parent->HandleMessage(WM_MDIREFRESHMENU);
 #else
@@ -118,21 +141,21 @@ TMDIChild::EnableWindow(bool enable)
   return retVal;
 }
 
+//
+// If the MDI child has requested keyboard navigation then TFrameWindow's
+// PreProcessMsg() member function will call ::IsDialogMessage() which will
+// eat the event and the MDI client window won't get a chance to do MDI
+// accelerator processing
+//
+// So, we will do it here to make sure it gets done
+//
 bool
 TMDIChild::PreProcessMsg(MSG& msg)
 {
-  //
-  // if the MDI child has requested keyboard navigation then TFrameWindow's
-  // PreProcessMsg() member function will call ::IsDialogMessage() which will
-  // eat the event and the MDI client window won't get a chance to do MDI
-  // accelerator processing
-  //
-  // so, we will do it here to make sure it gets done
-  //
   if (KeyboardHandling && Parent->PreProcessMsg(msg))
     return true;
 
-  if (hAccel && ::TranslateAccelerator(Parent->Parent->HWindow, hAccel, &msg))
+  if (HAccel && ::TranslateAccelerator(Parent->Parent->GetHandle(), HAccel, &msg))
     return true;
 
   return TFrameWindow::PreProcessMsg(msg);
@@ -144,24 +167,26 @@ TMDIChild::PreProcessMsg(MSG& msg)
 void
 TMDIChild::Destroy(int)
 {
-  if (HWindow) {
-    ForEach(DoEnableAutoCreate);  // use iterator function in window.cpp
+  if (GetHandle()) {
+    ForEach(::DoEnableAutoCreate);  // use iterator function in window.cpp
 
-    if (Parent) { // send destroy message to MDI client window
-      Parent->HandleMessage(WM_MDIDESTROY, (WPARAM)HWindow);
-      HWindow = 0;  // Assume success
+    if (Parent) {
+      // Send destroy message to MDI client window to have it destroy this THandle
+      //
+      Parent->HandleMessage(WM_MDIDESTROY, TParam1(GetHandle()));
+      SetHandle(0);  // Assume success
     }
     else {
-      if (::DestroyWindow(HWindow))
-        HWindow = 0;
+      if (::DestroyWindow(GetHandle()))
+        SetHandle(0);
       GetApplication()->ResumeThrow();
-      WARNX(OwlWin, HWindow, 0, "::DestroyWindow(" << (uint)HWindow << ") failed");
+      WARNX(OwlWin, GetHandle(), 0, "::DestroyWindow(" << (uint)GetHandle() << ") failed");
     }
   }
 }
 
 //
-// An MDI Child creates its HWindow by sending an MDI Create packet to the MDI
+// An MDI Child creates its GetHandle() by sending an MDI Create packet to the MDI
 // client.
 //
 void
@@ -178,7 +203,7 @@ TMDIChild::PerformCreate(int)
   createStruct.cx = Attr.W;
   createStruct.cy = Attr.H;
   createStruct.style = Attr.Style;
-  createStruct.lParam = (LPARAM)Attr.Param;
+  createStruct.lParam = TParam2(Attr.Param);
 
   // Work around a Windows MDI bug w/ bad menus if MDI child is created
   // maximized, by hiding child now & maximizing later
@@ -189,13 +214,13 @@ TMDIChild::PerformCreate(int)
     createStruct.style &= ~(WS_MAXIMIZE | WS_VISIBLE);
 #endif
 
-  HWindow = (HWND)Parent->HandleMessage(WM_MDICREATE, 0, (LPARAM)&createStruct);
+  SetHandle((THandle)Parent->HandleMessage(WM_MDICREATE, 0, TParam2(&createStruct)));
 
   // Finish up maximized MDI child workaround
   //
 #if defined(MDIMAX_WORKAROUND)
-  if (HWindow && (origStyle & WS_MAXIMIZE)) {
-    Parent->HandleMessage(WM_MDIMAXIMIZE, WPARAM(HWindow));
+  if (GetHandle() && (origStyle & WS_MAXIMIZE)) {
+    Parent->HandleMessage(WM_MDIMAXIMIZE, TParam1(GetHandle()));
 #if defined(BI_PLAT_WIN32)
     Parent->HandleMessage(WM_MDIREFRESHMENU);
 #else
@@ -205,15 +230,19 @@ TMDIChild::PerformCreate(int)
 #endif
 }
 
+//
+//
+//
 void
-TMDIChild::EvMDIActivate(HWND hWndActivated, HWND hWndDeactivated)
+TMDIChild::EvMDIActivate(THandle hActivated, THandle hDeactivated)
 {
-  if (HWindow == hWndActivated) {
+  if (GetHandle() == hActivated) {
+
     // A bug in Windows MDI causes the first MDI child to not get a
     // WM_SETFOCUS. Simulate it now
     //
-    if (!GetWindow(GW_HWNDNEXT) && GetFocus() != HWindow)
-      HandleMessage(WM_SETFOCUS, WPARAM(HWindow));
+    if (!GetWindow(GW_HWNDNEXT) && GetFocus() != GetHandle())
+      HandleMessage(WM_SETFOCUS, TParam1(GetHandle()));
 
     // Merge this windows menubar with the MDI frame's if there is a
     // MenuDescr assigned
@@ -228,7 +257,7 @@ TMDIChild::EvMDIActivate(HWND hWndActivated, HWND hWndDeactivated)
     // Restore the MDI frame's menubar if there is no other MDI child being
     // activated
     //
-    if (GetMenuDescr() && !hWndActivated) {
+    if (GetMenuDescr() && !hActivated) {
       TFrameWindow* frame = TYPESAFE_DOWNCAST(Parent->Parent,TFrameWindow);
       if (frame)
         frame->RestoreMenu();
@@ -241,22 +270,24 @@ TMDIChild::EvMDIActivate(HWND hWndActivated, HWND hWndDeactivated)
   TWindow* w = GetClientWindow();
   if (w && w->IsWindow())
 #if defined(BI_PLAT_WIN32)
-    w->HandleMessage(WM_MDIACTIVATE, WPARAM(hWndDeactivated), LPARAM(hWndActivated));
+    w->HandleMessage(WM_MDIACTIVATE, TParam1(hDeactivated), TParam2(hActivated));
 #else
-    w->HandleMessage(WM_MDIACTIVATE, 0, MAKELPARAM(hWndActivated,hWndDeactivated));
+    w->HandleMessage(WM_MDIACTIVATE, 0, MkParam2(hActivated,hDeactivated));
 #endif
+
+  DefaultProcessing();
 }
 
 //
-// override DefWindowProc to use DefMDIChildProc
+// Override DefWindowProc to use DefMDIChildProc
 //
-LRESULT
-TMDIChild::DefWindowProc(uint msg, WPARAM wParam, LPARAM lParam)
+TResult
+TMDIChild::DefWindowProc(uint msg, TParam1 param1, TParam2 param2)
 {
   if (IsFlagSet(wfAlias))
-    return TWindow::DefWindowProc(msg, wParam, lParam);
+    return TWindow::DefWindowProc(msg, param1, param2);
 
-  return ::DefMDIChildProc(HWindow, msg, wParam, lParam);
+  return ::DefMDIChildProc(GetHandle(), msg, param1, param2);
 }
 
 #endif
@@ -265,6 +296,11 @@ TMDIChild::DefWindowProc(uint msg, WPARAM wParam, LPARAM lParam)
 
 IMPLEMENT_STREAMABLE2(TMDIChild, TFrameWindow, TWindow);
 
+#if !defined(BI_NO_OBJ_STREAMING)
+
+//
+// Reads data of the TMDIChild from the passed opstream
+//
 void*
 TMDIChild::Streamer::Read(ipstream& is, uint32 /*version*/) const
 {
@@ -273,12 +309,14 @@ TMDIChild::Streamer::Read(ipstream& is, uint32 /*version*/) const
 }
 
 //
-// writes data of the TMDIChild to the passed opstream
+// Writes data of the TMDIChild to the passed opstream
 //
 void
 TMDIChild::Streamer::Write(opstream& os) const
 {
   WriteVirtualBase((TFrameWindow*)GetObject(), os);
 }
+
+#endif  // if !defined(BI_NO_OBJ_STREAMING)
 
 #endif

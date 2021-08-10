@@ -1,38 +1,32 @@
-/*------------------------------------------------------------------------*/
-/*                                                                        */
-/*  STACKS.H                                                              */
-/*                                                                        */
-/*  Copyright (c) 1991, 1994 Borland International                        */
-/*  All Rights Reserved                                                   */
-/*                                                                        */
-/*------------------------------------------------------------------------*/
-
-#if !defined( CLASSLIB_STACKS_H )
+//----------------------------------------------------------------------------
+// Borland BIDS Container Library
+// Copyright (c) 1991, 1996 by Borland International, All Rights Reserved
+//
+//$Revision:   5.4  $
+//
+//----------------------------------------------------------------------------
+#if !defined(CLASSLIB_STACKS_H)
 #define CLASSLIB_STACKS_H
 
-#if !defined( __CHECKS_H )
-#include <checks.h>
+#if !defined(CLASSLIB_DEFS_H)
+# include <classlib/defs.h>
 #endif
-
-#if !defined( CLASSLIB_DEFS_H )
-#include <classlib/defs.h>
+#if !defined(CLASSLIB_SHDDEL_H)
+# include <classlib/shddel.h>
 #endif
-
-#if !defined( CLASSLIB_SHDDEL_H )
-#include <classlib/shddel.h>
+#if !defined(CLASSLIB_VECTIMP_H)
+# include <classlib/vectimp.h>
 #endif
-
-#if !defined( CLASSLIB_VECTIMP_H )
-#include <classlib/vectimp.h>
+#if !defined(CLASSLIB_LISTIMP_H)
+# include <classlib/listimp.h>
 #endif
-
-#if !defined( CLASSLIB_LISTIMP_H )
-#include <classlib/listimp.h>
+#if !defined(SERVICES_CHECKS_H)
+# include <services/checks.h>
 #endif
 
 #pragma option -Vo-
 #if defined( BI_CLASSLIB_NO_po )
-#pragma option -po-
+# pragma option -po-
 #endif
 
 /*------------------------------------------------------------------------*/
@@ -750,7 +744,7 @@ public:
         {
         }
 
-}
+};
 
 template <class T> class TStackIterator :
     public TStackAsVectorIterator<T>

@@ -1,6 +1,8 @@
 //----------------------------------------------------------------------------
-// ObjectComponents - (C) Copyright 1994 by Borland International
+// ObjectComponents - (C) Copyright 1994, 1996 by Borland International
 //----------------------------------------------------------------------------
+#include <ocf/pch.h>
+#include <ocf/ocreg.h>
 #include "autocalc.h"
 #include "autocalc.hh"  // help constants (HC_???)
 

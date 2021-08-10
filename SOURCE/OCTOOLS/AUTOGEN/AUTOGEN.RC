@@ -1,5 +1,7 @@
 //----------------------------------------------------------------------------
-// ObjectConnections - (C) Copyright 1994 by Borland International
+// ObjectComponents
+// Copyright (c) 1994, 1996 by Borland International, All Rights Reserved
+//
 //----------------------------------------------------------------------------
 
 #include "autogen.rh"
@@ -12,6 +14,7 @@ STRINGTABLE LOADONCALL MOVEABLE PURE DISCARDABLE
  IDS_OUTFILEERR   "Error opening output file"
  IDS_BADTYPENAME  "Type name not found"
  IDS_OLEERROR     "OLE call failed"
+ IDS_TITLE        "AUTOGEN - TypeLib to C++ Conversion"
 }
 
 IDD_SELECT DIALOG 400, 300, 265, 134  // force to corner, same rect as commdlg
@@ -58,10 +61,10 @@ FONT 8, "MS Sans Serif"
  LTEXT "If no options are supplied, default is: -Header -Code", -1, 6, 125, 210, 12
  ICON IDI_MAIN, -1, 39, 138, 18, 20
  PUSHBUTTON "OK", IDOK, 93, 141, 30, 16
- CTEXT "Copyright 1994 Borland International Inc. All Rights Reserved", -1, 0, 165, 231, 9, SS_CENTER
+ CTEXT "Copyright 1994, 1996 Borland International Inc. All Rights Reserved", -1, 0, 165, 231, 9, SS_CENTER
 }
 
-IDI_MAIN ICON 
+IDI_MAIN ICON
 {
  '00 00 01 00 02 00 20 20 10 00 00 00 00 00 E8 02'
  '00 00 26 00 00 00 20 20 02 00 00 00 00 00 30 01'

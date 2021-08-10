@@ -1,0 +1,131 @@
+//----------------------------------------------------------------------------
+//  Project Shell
+//  Borland International
+//  Copyright © 1995 Borland International. All Rights Reserved.
+//
+//  SUBSYSTEM:    shell.exe Application
+//  FILE:         shellapp.h
+//  AUTHOR:       The OWL Team
+//
+//  OVERVIEW
+//  ~~~~~~~~
+//  Constant definitions for all resources defined in shellapp.rc.
+//
+//----------------------------------------------------------------------------
+//#if !defined(shellapp_rh)   // Sentry use file only if it's not already included.
+//#define shellapp_rh
+
+
+#define IDM_MDI                100             // Menu resource ID and Accelerator IDs
+
+//
+// CM_FILEnnnn commands (include/owl/editfile.rh except for CM_FILEPRINTPREVIEW)
+//
+#define CM_MDIFILENEW           24331
+
+
+//
+// Window commands (include/owl/window.rh)
+//
+#define CM_EXIT                 24310
+
+//
+// Windows menu commands (include/owl/mdi.rh)
+//
+#define CM_CASCADECHILDREN      24361
+#define CM_TILECHILDREN         24362
+#define CM_TILECHILDRENHORIZ    24363
+#define CM_ARRANGEICONS         24364
+#define CM_CLOSECHILDREN        24365
+#define CM_CREATECHILD          24366
+
+//
+// Help menu commands.
+//
+#define CM_HELPABOUT            2009
+
+
+//
+// About Dialogs
+//
+#define IDD_ABOUT               22000
+#define IDC_VERSION             22001
+#define IDC_COPYRIGHT           22002
+#define IDC_DEBUG               22003
+
+
+//
+// OWL defined strings
+//
+
+//
+// Statusbar
+//
+#define IDS_MODES               32530
+#define IDS_MODESOFF            32531
+
+//
+// EditFile
+//
+//#define IDS_UNTITLED            32550
+//#define IDS_UNABLEREAD          32551
+//#define IDS_UNABLEWRITE         32552
+//#define IDS_FILECHANGED         32553
+//#define IDS_FILEFILTER          32554
+
+//
+// EditSearch
+//
+//#define IDS_CANNOTFIND          32540
+
+
+//
+// General & application exception messages (include/owl/except.rh)
+//
+#define IDS_UNKNOWNEXCEPTION    32767
+#define IDS_OWLEXCEPTION        32766
+#define IDS_OKTORESUME          32765
+#define IDS_UNHANDLEDXMSG       32764
+#define IDS_UNKNOWNERROR        32763
+#define IDS_NOAPP               32762
+#define IDS_OUTOFMEMORY         32761
+#define IDS_INVALIDMODULE       32760
+#define IDS_INVALIDMAINWINDOW   32759
+#define IDS_VBXLIBRARYFAIL      32758
+
+//
+// Owl 1 compatibility messages
+//
+#define IDS_INVALIDWINDOW       32709
+#define IDS_INVALIDCHILDWINDOW  32708
+#define IDS_INVALIDCLIENTWINDOW 32707
+
+//
+// TXWindow messages
+//
+#define IDS_CLASSREGISTERFAIL   32749
+#define IDS_CHILDREGISTERFAIL   32748
+#define IDS_WINDOWCREATEFAIL    32747
+#define IDS_WINDOWEXECUTEFAIL   32746
+#define IDS_CHILDCREATEFAIL     32745
+
+#define IDS_MENUFAILURE         32744
+#define IDS_VALIDATORSYNTAX     32743
+#define IDS_PRINTERERROR        32742
+
+#define IDS_LAYOUTINCOMPLETE    32741
+#define IDS_LAYOUTBADRELWIN     32740
+
+//
+// TXGdi messages
+//
+#define IDS_GDIFAILURE          32739
+#define IDS_GDIALLOCFAIL        32738
+#define IDS_GDICREATEFAIL       32737
+#define IDS_GDIRESLOADFAIL      32736
+#define IDS_GDIFILEREADFAIL     32735
+#define IDS_GDIDELETEFAIL       32734
+#define IDS_GDIDESTROYFAIL      32733
+#define IDS_INVALIDDIBHANDLE    32732
+
+//#endif  // shellapp_rh

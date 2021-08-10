@@ -39,4 +39,9 @@ EXPORTS
    _IID_BOleShadowData            @278 
    _IID_IBClass                   @279 
    _IID_IBOverrideBrowseLinks		 @280
+   _IID_IBOverrideHelpButton      @281
+   _IID_IBSite2                   @282
+   _IID_BOleFont                  @283 
+   _IID_BOlePicture               @284 
+   _IID_IBPicture                 @285 
 

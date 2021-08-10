@@ -2,15 +2,13 @@
 // ObjectComponents - (C) Copyright 1994 by Borland International
 // Localization test
 //----------------------------------------------------------------------------
-
-#define STRICT
-#include <windows.h>
+#include <winsys/wsysinc.h>
 #include <stdio.h>
-#include <osl/locale.h>
+#include <winsys/lclstrng.h>
 #include "localize.rh"
 
-#if !defined(__WIN32__) // WINNLS defines these for WIN32
-#include "olenls.h"
+#if !defined(BI_PLAT_WIN32) // WINNLS defines these for WIN32
+# include "olenls.h"
 #endif
 
 TLangId TLocaleString::NativeLangId = 0x0009; // = LANG_ENGLISH;

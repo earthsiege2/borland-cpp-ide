@@ -3,7 +3,9 @@
 
 #define STRICT
 
+#if !defined (WORKSHOP_INVOKED)
 #include <windows.h>
+#endif
 #include "TrueType.h"
 
 STRINGTABLE
@@ -31,15 +33,14 @@ END
 
 
 About DIALOG 17, 23, 142, 120
-STYLE DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
-CAPTION "About"
+STYLE WS_POPUP | WS_DLGFRAME
+CAPTION "About TrueType"
 {
- PUSHBUTTON "&OK", 1, 52, 97, 38, 15
+ DEFPUSHBUTTON "OK", IDOK, 52, 97, 38, 15
  CTEXT "Borland C++", 103, 13, 51, 115, 10, SS_CENTER | WS_CHILD | WS_VISIBLE
  CTEXT "Copyright \xA9 1993", 104, 42, 72, 59, 10, SS_CENTER | WS_CHILD | WS_VISIBLE
  CTEXT "Borland International", 108, 36, 82, 70, 9, SS_CENTER | WS_CHILD | WS_VISIBLE
  CTEXT "TrueType Font Demo", -1, 25, 7, 92, 8
- CTEXT "Windows 3.1 Demo Program", -1, 19, 62, 104, 8
  ICON 1, -1, 63, 25, 16, 16, SS_ICON | WS_CHILD | WS_VISIBLE | WS_GROUP
 }
 

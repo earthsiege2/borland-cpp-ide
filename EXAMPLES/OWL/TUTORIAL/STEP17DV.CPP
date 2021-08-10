@@ -3,7 +3,7 @@
 //   Tutorial application -- step17dv.cpp
 //   Automation Container Server example
 //----------------------------------------------------------------------------
-#include <owl/owlpch.h>
+#include <owl/pch.h>
 #include <owl/dc.h>
 #include <owl/inputdia.h>
 #include <owl/chooseco.h>
@@ -20,6 +20,7 @@
 #include <ocf/automacr.h>
 #include <ocf/ocdata.h>
 #include <ocf/ocremvie.h>
+#include <owl/edit.rh>
 #include "step17dv.h"
 #include "step17.h"
 #include "step17dv.rc"
@@ -34,13 +35,9 @@ BEGIN_REGISTRATION(DocReg)
   REGDATA(extension,  "p17")
   REGDATA(docfilter,  "*.p17")
   REGDOCFLAGS(dtAutoOpen | dtAutoDelete | dtUpdateDir | dtCreatePrompt | dtRegisterExt)
-#if defined(BI_PLAT_WIN32)
-  REGDATA(debugger,   "TD32")
-#else
-  REGDATA(debugger,   "TDW")
-#endif
-  REGDATA(debugprogid,"DrawPad.Drawing.D.17")
-  REGDATA(debugdesc,  "DrawPad (Step17--AutoContServer, debug) Drawing")
+REGDATA(debugger,   "tdw -do")
+REGDATA(debugprogid,"DrawPad.Drawing.D.17")
+REGDATA(debugdesc,  "DrawPad (Step17--AutoContServer, debug) Drawing")
   REGDATA(insertable, "")
   REGDATA(verb0,      "&Edit")
   REGDATA(verb1,      "&Open")
@@ -381,28 +378,33 @@ TDrawDocument::OpenSelection(int mode, const char far* path, TPoint far* where)
   char fileinfo[100];
 
   TOleDocument::Open(mode, path);   // normally path should be null
-  TInStream* is = (TInStream*)InStream(ofRead);
-  if (!is)
-    return false;
+  //if (GetDocPath()) {
+    TInStream* is = (TInStream*)InStream(ofRead);
+    if (!is)
+      return false;
 
-  unsigned numLines;
-  *is >> numLines;
-  is->getline(fileinfo, sizeof(fileinfo));
-  while (numLines--) {
-    TLine line;
-    *is >> line;
-    if (where) {
-      TPoint newPos(where->x, where->y);
-      newPos -= line.GetBound().TopLeft();
-      line.UpdatePosition(newPos);
+    unsigned numLines;
+    *is >> numLines;
+    is->getline(fileinfo, sizeof(fileinfo));
+    while (numLines--) {
+      TLine line;
+      *is >> line;
+      if (where) {
+        TPoint newPos(where->x, where->y);
+        newPos -= line.GetBound().TopLeft();
+        line.UpdatePosition(newPos);
+      }
+      line.UpdateBound();
+      Lines->Add(line);
     }
-    line.UpdateBound();
-    Lines->Add(line);
+
+    delete is;
+
+  if (GetDocPath()) {
+    FileInfo = fileinfo;
+  } else {
+    FileInfo = string(*::Module,IDS_FILEINFO);
   }
-
-  delete is;
-
-  FileInfo = fileinfo;
   SetDirty(false);
   UndoState = UndoNone;
   return true;
@@ -657,7 +659,7 @@ TDrawView::SetupWindow()
   // Set this option to force all embedded servers to open out of place
   // when the container/server is inplace
   // GetOcView()->SetOption(voNoNestedInPlace,true);
-  
+
 }
 
 //
@@ -943,7 +945,8 @@ TDrawView::EvMouseMove(uint modKeys, TPoint& point)
     TOcDropAction outAction;
     TOcDataProvider* ocData = new TOcDataProvider(*OcView, &DocReg, 0,
                                                   (void*)Selected, CleanUp);
-    OcApp->Drag(ocData, daDropCopy | daDropMove | daDropLink, outAction);
+    OcApp->Drag(ocData, TOcDropAction(daDropCopy|daDropMove|daDropLink), 
+                outAction);
 
     if (outAction == daDropMove) {
       DrawDoc->DeleteLine(DrawDoc->GetLines()->Find(*Selected));
@@ -1206,7 +1209,6 @@ TDrawView::EvOcViewSetLink(TOcLinkView& view)
 bool
 TDrawView::PaintLink(TDC& dc, bool erase, TRect& rect, TString& moniker)
 {
-  TLine* line = 0;
   //Draw the whole document if linking to the whole doc
   //
   if (strcmp(moniker, OleStr(DocContent)) == 0) {
@@ -1216,7 +1218,7 @@ TDrawView::PaintLink(TDC& dc, bool erase, TRect& rect, TString& moniker)
 
   // Find the selection with the corresponding moniker
   //
-  line = DrawDoc->GetLine(moniker);
+  TLine* line = DrawDoc->GetLine(moniker);
 
   if (!line)
     return false;

@@ -1,40 +1,31 @@
-/*------------------------------------------------------------------------*/
-/*                                                                        */
-/*  ARRAYS.H                                                              */
-/*                                                                        */
-/*  Copyright (c) 1991, 1994 Borland International                        */
-/*  All Rights Reserved                                                   */
-/*                                                                        */
-/*------------------------------------------------------------------------*/
-
+//----------------------------------------------------------------------------
+// Borland BIDS Container Library
+// Copyright (c) 1991, 1996 by Borland International, All Rights Reserved
+//
+//$Revision:   5.5  $
+//
+//----------------------------------------------------------------------------
 #if !defined( CLASSLIB_ARRAYS_H )
 #define CLASSLIB_ARRAYS_H
 
 //#define TEMPLATES
 
-#if !defined( __MEM_H )
-#include <mem.h>
-#endif
-
 #if !defined( CLASSLIB_DEFS_H )
-#include <classlib/defs.h>
+# include <classlib/defs.h>
 #endif
-
 #if !defined( CLASSLIB_SHDDEL_H )
-#include <classlib/shddel.h>
+# include <classlib/shddel.h>
 #endif
-
 #if !defined( CLASSLIB_ALLOCTR_H )
-#include <classlib/alloctr.h>
+# include <classlib/alloctr.h>
 #endif
-
 #if !defined( CLASSLIB_VECTIMP_H )
-#include <classlib/vectimp.h>
+# include <classlib/vectimp.h>
 #endif
 
 #pragma option -Vo-
 #if defined( BI_CLASSLIB_NO_po )
-#pragma option -po-
+# pragma option -po-
 #endif
 
 /*------------------------------------------------------------------------*/
@@ -580,7 +571,7 @@ public:
     TSArrayAsVectorIterator( const TSArrayAsVector<T>& a ) :
         TMSArrayAsVectorIterator<T,TStandardAllocator>( a ) {}
 
-}
+};
 
 #if defined( BI_OLDNAMES )
 #define BI_SArrayAsVector TSArrayAsVector
@@ -845,4 +836,3 @@ public:
 #pragma option -Vo.
 
 #endif  // CLASSLIB_ARRAYS_H
-

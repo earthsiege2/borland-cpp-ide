@@ -27,19 +27,15 @@
 */
 
 /*
- *      C/C++ Run Time Library - Version 6.5
+ *      C/C++ Run Time Library - Version 7.0
  *
- *      Copyright (c) 1991, 1994 by Borland International
+ *      Copyright (c) 1991, 1996 by Borland International
  *      All Rights Reserved.
  *
  */
 
 #if !defined(___DEFS_H)
 #define ___DEFS_H
-
-#if defined(__MT__)
-#    define _MT
-#endif
 
 #if defined(__OS2__)
 #    define _RTLENTRY  __stdcall
@@ -53,9 +49,11 @@
 #endif
 
 #if defined(__PAS__)
-#    define _RTLENTRYF __pascal
+#    define _RTLENTRYF  __pascal
+#    define _USERENTRYF __pascal
 #else
-#    define _RTLENTRYF _RTLENTRY
+#    define _RTLENTRYF  _RTLENTRY
+#    define _USERENTRYF _USERENTRY
 #endif
 
 #if defined(__FLAT__)
@@ -132,9 +130,6 @@
 #define _FARFUNC    _EXPFUNC
 #define _FARCALL    _EXPFUNC __far
 
-#if defined(__FLAT__)
-#  define _M_IX86 300
-#endif
 
 #if !defined(__FLAT__) && defined(__MSC)
 #   define __emit db

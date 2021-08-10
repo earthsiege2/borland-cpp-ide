@@ -10,9 +10,9 @@
  *-----------------------------------------------------------------------*/
 
 /*
- *      C/C++ Run Time Library - Version 6.5
+ *      C/C++ Run Time Library - Version 7.0
  *
- *      Copyright (c) 1987, 1994 by Borland International
+ *      Copyright (c) 1987, 1996 by Borland International
  *      All Rights Reserved.
  *
  */
@@ -67,64 +67,73 @@ static unsigned pascal near
 CheckOpenType (register const char *type, unsigned *oflagsP, unsigned *modeP)
 
 {
-        extern void     (*_exitfopen)();
-        extern void     _xfclose();
+    extern void     (*_exitfopen)();
+    extern void     _xfclose();
 
-        unsigned        oflags = 0;
-        unsigned        mode   = 0;
-        unsigned        flags  = 0;
-        char    c;
+    unsigned        oflags = 0;
+    unsigned        mode   = 0;
+    unsigned        flags  = 0;
+    char            c;
 
     if ((c = *type++) == 'r')
     {
-                oflags =  O_RDONLY;
-                flags  = _F_READ;
-        }
+        oflags =  O_RDONLY;
+        flags  = _F_READ;
+    }
     else if (c == 'w')
     {
-                oflags = O_CREAT | O_WRONLY | O_TRUNC;
-                mode   = S_IWRITE;
-                flags  = _F_WRIT;
-        }
+        oflags = O_CREAT | O_WRONLY | O_TRUNC;
+        mode   = S_IWRITE;
+        flags  = _F_WRIT;
+    }
     else if (c == 'a')
     {
-                oflags = O_WRONLY | O_CREAT | O_APPEND;
-                mode   = S_IWRITE;
-                flags  = _F_WRIT;
-        }
-        else
-                return 0;
+        oflags = O_WRONLY | O_CREAT | O_APPEND;
+        mode   = S_IWRITE;
+        flags  = _F_WRIT;
+    }
+#if 0
+    else if (c == 'c')  /* New DOS 'commit' attribute */
+    {
+        // ...
+    }
+#endif
+    else
+        return 0;
 
-        c  = *type++;
+    c  = *type++;
 
-        if (c == '+' || (*type == '+' && (c == 't' || c == 'b')))
-        {
+    if (c == '+' || (*type == '+' && (c == 't' || c == 'b')))
+    {
         if (c == '+')
-                    c = *type;
+            c = *type;
         /* same modes, but both read and write */
-                oflags = (oflags & ~(O_WRONLY | O_RDONLY)) | O_RDWR;
-                mode   = S_IREAD | S_IWRITE;
-                flags  = _F_READ | _F_WRIT;
-        }
+        oflags = (oflags & ~(O_WRONLY | O_RDONLY)) | O_RDWR;
+        mode   = S_IREAD | S_IWRITE;
+        flags  = _F_READ | _F_WRIT;
+    }
 
-    if ('t' == c)
+    if (c == 't')
     {
-                oflags |= O_TEXT;
-        }
-    else if ('b' == c)
+        oflags |= O_TEXT;
+    }
+    else if (c == 'b')
     {
-                oflags |= O_BINARY;
-                flags |= _F_BIN;
-        }
-        else
-        {
+        oflags |= O_BINARY;
+        flags |= _F_BIN;
+    }
+    else
+    {
+        if ((c != '+') && (c != '\0'))
+            return 0;   /* bad character in mode string */
+
         if ((oflags |= (_RTLInstanceData(_fmode) & (O_TEXT | O_BINARY))) & O_BINARY)
               flags |= _F_BIN;
-        }
-        _exitfopen = _xfclose;
-        *oflagsP = oflags;
-        *modeP = mode;
-        return flags;
+    }
+    _exitfopen = _xfclose;
+    *oflagsP = oflags;
+    *modeP = mode;
+    return flags;
 }
 
 

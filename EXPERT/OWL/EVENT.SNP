@@ -1,7 +1,7 @@
 <<[CPP]
 ##QUERY_CLASS_NAME [[ClassName]]
 ##QUERY_BASE_NAME [[BaseClass]]
-##(BaseClass == "TDocument") || (BaseClass == "TFileDocument")
+## (BaseClass == "TDocument") || (BaseClass == "TFileDocument")
 ##:     %\\"[[ClassName]] does not support a response table.  "
 ##*
 ##QUERY_SNP_FUNC_NAME [[FunctionName]]
@@ -16,7 +16,7 @@
 ##"//{{[[ClassName]]RSP_TBL_END}}" [[ClassTMarker]]
 ##\\ClassTMarker [[ClassMarker]]
 ##^BOF
-##(VBXEvent != "") [[VBXMIXIN]]
+## (VBXEvent != "") [[VBXMIXIN]]
 ##--BEGIN-- ? ClassMarker [[Search]]
 ##Search == FALSE
 ##:     {CAddRsp.SNP}
@@ -26,7 +26,7 @@
 ##--END-- ? ClassMarker [[Search]]
 ##^BOL
 ##\\MCallParam [[MacroCallParam]]
-    [[MacroName]][[MacroCallParam]],
+  [[MacroName]][[MacroCallParam]],
 ##\\"[[ClassName]]::[[FunctionName]]" [[FindFunction]]
 ##^BOF
 ##FALSE [[Search]]
@@ -39,29 +39,29 @@
 ##          :(YPos() + 2) YPosition
 
 
-[[FunctionResult]] [[ClassName]]::[[FunctionName]] [[FunctionDefParam]]
+[[FunctionResult]] [[ClassName]]::[[FunctionName]][[FunctionDefParam]]
 {
 ##          --BEGIN-- Constant == ""
 ##              --BEGIN-- QUERY_BASE_NAME [[BaseClass]]
 ##                  --BEGIN-- FunctionResult != "void"
-    [[FunctionResult]] result;
+  [[FunctionResult]] result;
 
-##((BaseClass != "TApplication") && (BaseClass != "TModule") && (BaseClass != "TView"))
-    result = [[BaseClass]]::[[FunctionName]][[FunctionCallParam]];
+## ((BaseClass != "TApplication") && (BaseClass != "TModule") && (BaseClass != "TView"))
+  result = [[BaseClass]]::[[FunctionName]][[FunctionCallParam]];
 ##                  --END-- FunctionResult != "void"
 ##FunctionResult == "void"
-##((BaseClass != "TApplication") && (BaseClass != "TModule") && (BaseClass != "TView"))
+## ((BaseClass != "TApplication") && (BaseClass != "TModule") && (BaseClass != "TView"))
     [[BaseClass]]::[[FunctionName]][[FunctionCallParam]];
 
-    // INSERT>> Your code here.
+  // INSERT>> Your code here.
 ##      :YPos() YScrollLine
 
 ##FunctionResult != "void"
-    return result;
+  return result;
 ##              --END-- QUERY_BASE_NAME [[BaseClass]]
 ##          --END-- Constant == ""
 ##          --BEGIN-- Constant != ""
-    // INSERT>> Your code here.
+  // INSERT>> Your code here.
 ##      :YPos() YScrollLine
 
 ##          --END-- Constant != ""
@@ -119,6 +119,6 @@
 ##*
 ##--END-- ? ClassMarker [[Search]]
 ##^BOL
-    [[FunctionResult]] [[FunctionName]] [[FunctionDefParam]];
+  [[FunctionResult]] [[FunctionName]][[FunctionDefParam]];
 ##--END-- QUERY_CLASS_NAME [[ClassName]]
 >>[H]

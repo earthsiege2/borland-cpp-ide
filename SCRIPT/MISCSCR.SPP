@@ -1,0 +1,166 @@
+//----------------------------------------------------------------------------
+// cScript
+// (C) Copyright 1987, 1995 by Borland International, All Rights Reserved
+//
+// IDE.SPP
+//    IDE top level event handling.
+//
+// $Revision:   1.5  $
+//
+//----------------------------------------------------------------------------
+
+
+// This file directly accesses functionality provided by the Windows API
+// through the dynamically loaded library MISCSCR.DLL.  Check the file:
+// MISCSCR.CPP in the EXAMPLES\SCRIPT\SOURCE directory to see the 
+// implementation of the functions referenced here.
+
+import IDE;
+
+print "Processing MISCSCR.SPP script extensions.";
+
+import "MISCSCR.DLL" {
+   char CreateDirectory(char *);
+   char RemoveDirectory(char *);
+   void Abort();
+   void IDEMessageBeep(int);
+   char * FindFirstFile(char *);
+   char * FindNextFile();
+   char * GetEnvironmentVariable(char *);
+   void AssociateButton(int, char *);
+   char PlaySound(char *, int);
+   char CopyFile(char *, char *, bool);
+   char DeleteFile(char *);
+   char MoveFile(char *, char *);
+   unsigned GetFileAttributes(char *);
+   char SetFileAttributes(char *, unsigned);
+   char FileExists(char *);
+   char IsLegalFileName(char *);
+   char Spawn(const char *);
+   char *GetValueData(int, const char *, const char *);
+   char SetValueData(int, const char *, const char *, const char *);
+}
+
+on IDE:>CreateDirectory(dirName){
+   return CreateDirectory(dirName);
+}
+
+on IDE:>RemoveDirectory(fileName){
+   return RemoveDirectory(fileName);
+}
+
+on IDE:>Abort(){
+   Abort();
+}
+
+on IDE:>MessageBeep(soundType){
+   IDEMessageBeep(soundType);
+}
+
+on IDE:>FindFirstFile(filePattern){
+   return FindFirstFile(filePattern);
+}
+
+on IDE:>FindNextFile(){
+   return FindNextFile();
+}
+
+on IDE:>GetEnvironmentVariable(envVar){
+   return GetEnvironmentVariable(envVar);
+}
+
+on IDE:>AssociateButton(resId, scriptToExecute){
+   return AssociateButton(resId, scriptToExecute);
+}
+
+on IDE:>PlaySound(wavFile, optionsMask){
+   return PlaySound(wavFile, optionsMask);
+}
+
+on IDE:>CopyFile(src, dst, overWrite){
+   return CopyFile(src, dst, overWrite);
+}
+
+on IDE:>DeleteFile(fileName){
+   return DeleteFile(fileName);
+}
+
+on IDE:>MoveFile(src, dst){
+   return MoveFile(src, dst);
+}
+
+on IDE:>GetFileAttributes(fileName){
+   return GetFileAttributes(fileName);
+}
+
+on IDE:>SetFileAttributes(fileName, newAttrs){
+   return SetFileAttributes(fileName, newAttrs);
+}
+
+on IDE:>FileExists(fileName){
+   return FileExists(fileName);
+}
+
+on IDE:>IsLegalFileName(fileName){
+   return IsLegalFileName(fileName);
+}
+
+on IDE:>Spawn(cmdLine){
+   return Spawn(cmdLine);
+}
+
+on IDE:>GetValueData(topKey, subKey, valueName){
+   return GetValueData(topKey, subKey, valueName);
+}
+
+on IDE:>SetValueData(topKey, subKey, valueName, valueData){
+   return SetValueData(topKey, subKey, valueName, valueData);
+}
+
+FormatString(formatSpecifier, str1, str2, str3, str4, str5, str6, str7, str8, str9, str10,
+				 str11, str12, str13, str14, str15, str16, str17, str18, str19, str20)
+{
+
+  // get the stack frame
+  declare stk = new StackFrame (1);
+
+  // get the number of arguments
+  declare args = stk.ArgActual;
+
+  // get the format specifier
+  declare input = formatSpecifier;
+
+  // process arguments, starting with the last
+  for (declare i=args-1; i>=1; i--) {
+
+    // we will search for %1, %2, etc.
+    declare specifier ="";
+    specifier = "%" + i;
+	 
+    // find length of specifier
+    declare len;
+    if (i>9) len = 3; else len = 2;
+	 
+    // get the string to insert
+    declare insert = stk.GetParm(i);
+
+    declare inputStr = new String(input);
+    declare idx = inputStr.Index(specifier, SEARCH_FORWARD);
+
+    while (idx > 0) {
+
+      if (idx==1) {
+        input = insert + inputStr.SubString(idx-1+len).Text;
+      }
+      else {
+        input = inputStr.SubString(0, idx-1).Text
+           + insert
+           + inputStr.SubString(idx-1+len).Text;
+      }
+
+      inputStr = new String(input);
+      idx = inputStr.Index(specifier, SEARCH_FORWARD);                                  
+    }
+  }
+  return input;
+}

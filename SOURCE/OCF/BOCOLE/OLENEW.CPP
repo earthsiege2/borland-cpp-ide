@@ -1,12 +1,11 @@
+//----------------------------------------------------------------------------
+// ObjectComponents
+// Copyright (c) 1991, 1996 by Borland International, All Rights Reserved
 //
-//**************************************************************************
+// $Revision:   2.1  $
 //
 // OleNew.cpp -- Remap global operator new to use the current Ole2 allocator
-//
-// Copyright (c) 1993,94 by Borland International, Inc. All rights reserved
-//
-//**************************************************************************
-
+//----------------------------------------------------------------------------
 #include "BOle.h"
 #include <Windows.h>
 
@@ -86,5 +85,4 @@ void _cdecl _FARFUNC operator delete[] (void *p)
 {
 	OleFree(p);
 }
-
 

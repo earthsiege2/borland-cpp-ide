@@ -1,6 +1,8 @@
 //----------------------------------------------------------------------------
 // ObjectWindows
-// (C) Copyright 1993, 1994 by Borland International, All Rights Reserved
+// Copyright (c) 1993, 1996 by Borland International, All Rights Reserved
+//
+//$Revision:   10.3  $
 //
 //----------------------------------------------------------------------------
 #if !defined(OWL_VALIDATE_H)
@@ -17,6 +19,12 @@
 #endif
 #include <owl/validate.rh>
 
+// Generic definitions/compiler options (eg. alignment) preceeding the 
+// definition of classes
+#include <services/preclass.h>
+
+class _OWLCLASS_RTL TXValidator;
+
 //
 // Validator option flags
 //
@@ -29,41 +37,57 @@ enum TValidatorOptions {
 
 //
 // class TValidator
-// ----- ----------
-//
+// ~~~~~ ~~~~~~~~~~
 class _OWLCLASS TValidator : public TStreamableBase {
   public:
-    class _OWLCLASS_RTL TXValidator : public TXOwl {
-      public:
-        TXValidator(uint resId = IDS_VALIDATORSYNTAX);
-    };
-
     TValidator();
     virtual ~TValidator();
 
-    virtual void Error();
-    virtual bool IsValidInput(char far* str, bool suppressFill);
-    virtual bool IsValid(const char far* str);
-    virtual uint Transfer(char far* str, void* buffer, TTransferDirection direction);
+    virtual void Error(TWindow* owner);  
+    virtual bool IsValidInput(char far* input, bool suppressFill);
+    virtual bool IsValid(const char far* input);
+    virtual uint Transfer(char far* text, void* buffer, TTransferDirection direction);
+    virtual int  Adjust(string& text, uint& begPos, uint& endPos, int amount); 
 
     // Checks input against validator for completeness. Never modifies input.
     // Calls error if not valid.
     //
-    bool         Valid(const char far* str)
-                  {if (!IsValid(str)) {Error(); return false;} return true;}
+    bool         Valid(const char far* str, TWindow* owner = 0);
+    bool         HasOption(int option);
+    void         SetOption(int option);
+    void         UnsetOption(int option);
 
-    bool         HasOption(int option) {return Options & option;}
-    void         SetOption(int option) {Options |= uint16(option);}
-    void         UnsetOption(int option) {Options &= uint16(~option);}
+#if defined(OWL2_COMPAT)
+    typedef ::TXValidator TXValidator;  // Exception classes moved to global scope
+#endif
 
   protected:
     uint16   Options;
-    
+
   DECLARE_STREAMABLE(_OWLCLASS, TValidator, 1);
 };
 
 //
-// TPXPictureValidator result type
+// class TXValidator
+// ~~~~~ ~~~~~~~~~~~
+class _OWLCLASS_RTL TXValidator : public TXOwl {
+  public:
+    TXValidator(uint resId = IDS_VALIDATORSYNTAX);
+
+#if defined(BI_NO_COVAR_RET)
+    TXBase* Clone();
+#else
+    TXValidator* Clone();
+#endif
+    void Throw();
+
+    static void Raise();
+};
+
+//
+// enum TPXPictureValidator
+// ~~~~ ~~~~~~~~~~~~~~~~~~~
+// Validation result type
 //
 enum TPicResult {
   prComplete,
@@ -77,22 +101,25 @@ enum TPicResult {
 
 //
 // class TPXPictureValidator
-// ----- -------------------
-//
+// ~~~~~ ~~~~~~~~~~~~~~~~~~~
 class _OWLCLASS TPXPictureValidator : public TValidator {
   public:
     TPXPictureValidator(const char far* pic, bool autoFill=false);
 
+    // Override TValidator's virtuals
     //
-    // override TValidator's virtuals
-    //
-    void         Error();
+    void         Error(TWindow* owner);
     bool         IsValidInput(char far* str, bool suppressFill);
     bool         IsValid(const char far* str);
+    int          Adjust(string& text, uint& begPos, uint& endPos, int amount); 
 
     virtual TPicResult Picture(char far* input, bool autoFill=false);
 
   protected:
+    const string& GetPic() const;
+    void          SetPic(const string& pic);
+
+  protected_data:
     string       Pic;
 
   private:
@@ -114,20 +141,22 @@ class _OWLCLASS TPXPictureValidator : public TValidator {
 
 //
 // class TFilterValidator
-// ----- ----------------
-//
+// ~~~~~ ~~~~~~~~~~~~~~~~
 class _OWLCLASS TFilterValidator : public TValidator {
   public:
     TFilterValidator(const TCharSet& validChars);
 
+    // Override TValidator's virtuals
     //
-    // override TValidator's virtuals
-    //
-    void         Error();
+    void         Error(TWindow* owner);
     bool         IsValid(const char far* str);
     bool         IsValidInput(char far* str, bool suppressFill);
 
   protected:
+    const TCharSet&  GetValidChars();
+    void             SetValidChars(const TCharSet& vc);
+
+  protected_data:
     TCharSet     ValidChars;
 
   DECLARE_STREAMABLE(_OWLCLASS, TFilterValidator, 1);
@@ -135,20 +164,25 @@ class _OWLCLASS TFilterValidator : public TValidator {
 
 //
 // class TRangeValidator
-// ----- ---------------
-//
+// ~~~~~ ~~~~~~~~~~~~~~~
 class _OWLCLASS TRangeValidator : public TFilterValidator {
   public:
     TRangeValidator(long min, long max);
 
+    // Override TValidator's virtuals
     //
-    // override TValidator's virtuals
-    //
-    void         Error();
+    void         Error(TWindow* owner);
     bool         IsValid(const char far* str);
     uint         Transfer(char far* str, void* buffer, TTransferDirection direction);
+    int          Adjust(string& text, uint& begPos, uint& endPos, int amount); 
 
   protected:
+    long   GetMin();
+    void   SetMin(long min);
+    long   GetMax();
+    void   SetMax(long max);
+
+  protected_data:
     long   Min;
     long   Max;
 
@@ -157,18 +191,17 @@ class _OWLCLASS TRangeValidator : public TFilterValidator {
 
 //
 // class TLookupValidator
-// ----- ----------------
-//
+// ~~~~~ ~~~~~~~~~~~~~~~~
 class _OWLCLASS TLookupValidator : public TValidator {
   public:
     TLookupValidator();
 
-    //
-    // override TValidator's virtuals
+    // Override TValidator's virtuals
     //
     bool         IsValid(const char far* str);
 
-    // virtual lookup of a string
+    // Virtual lookup of a string
+    //
     virtual bool Lookup(const char far* str);
 
   DECLARE_STREAMABLE(_OWLCLASS, TLookupValidator, 1);
@@ -176,10 +209,8 @@ class _OWLCLASS TLookupValidator : public TValidator {
 
 //
 // class TSortedStringArray
-// ----- ------------------
-//
-class _OWLCLASS TSortedStringArray
-{
+// ~~~~~ ~~~~~~~~~~~~~~~~~~
+class _OWLCLASS TSortedStringArray {
   public:
     typedef void (*IterFunc)(string&, void*);
     typedef int  (*CondFunc)(const string&, void*);
@@ -187,10 +218,10 @@ class _OWLCLASS TSortedStringArray
     TSortedStringArray(int upper, int lower, int delta);
     int LowerBound() const;
     int UpperBound() const;
-    unsigned ArraySize() const;
+    uint ArraySize() const;
     int IsFull() const;
     int IsEmpty() const;
-    unsigned GetItemsInContainer() const;
+    uint GetItemsInContainer() const;
     int Add(const string& t);
     int Detach(const string& t);
     int Detach(int loc);
@@ -213,29 +244,156 @@ class _OWLCLASS TSortedStringArray
 
 //
 // class TStringLookupValidator
-// ----- ----------------------
-//
+// ~~~~~ ~~~~~~~~~~~~~~~~~~~~~~
 class _OWLCLASS TStringLookupValidator : public TLookupValidator {
   public:
     TStringLookupValidator(TSortedStringArray* strings);
    ~TStringLookupValidator();
 
+    // Override TValidator's virtuals
     //
-    // override TValidator's virtuals
-    //
-    void         Error();
+    void         Error(TWindow* owner);
+    int          Adjust(string& text, uint& begPos, uint& endPos, int amount); 
 
-    //
-    // override TLookupValidator's virtuals
+    // Override TLookupValidator's virtuals
     //
     bool         Lookup(const char far* str);
 
     void         NewStringList(TSortedStringArray* strings);
 
   protected:
+    const TSortedStringArray* GetStrings() const;
+    void                      SetStrings(TSortedStringArray* strings);
+
+  protected_data:
     TSortedStringArray* Strings;
 
   DECLARE_STREAMABLE(_OWLCLASS, TStringLookupValidator, 1);
 };
+
+// Generic definitions/compiler options (eg. alignment) following the 
+// definition of classes
+#include <services/posclass.h>
+
+//----------------------------------------------------------------------------
+// Inline Implementation
+//
+
+//
+// Return true if the entry for the validator is valid.
+//
+inline bool TValidator::Valid(const char far* str, TWindow* owner)
+{
+  if (!IsValid(str)) {
+    Error(owner);
+    return false;
+  }
+  return true;
+}
+
+//
+// Return true if the validator has a particular option.
+//
+inline bool TValidator::HasOption(int option)
+{
+  return Options & option;
+}
+
+//
+// Turn on a validator option.
+//
+inline void TValidator::SetOption(int option)
+{
+  Options |= uint16(option);
+}
+
+//
+// Turn off a validator option.
+//
+inline void TValidator::UnsetOption(int option)
+{
+  Options &= uint16(~option);
+}
+
+//
+// Return the picture mask used by the validator.
+//
+inline const string& TPXPictureValidator::GetPic() const
+{
+  return Pic;
+}
+
+//
+// Set the picture mask for the validator.
+//
+inline void TPXPictureValidator::SetPic(const string& pic)
+{
+  Pic = pic;
+}
+
+//
+// Return the valid character set for the validator.
+//
+inline const TCharSet& TFilterValidator::GetValidChars()
+{
+  return ValidChars;
+}
+
+//
+// Set the valid character set for the validator.
+//
+inline void TFilterValidator::SetValidChars(const TCharSet& vc)
+{
+  ValidChars = vc;
+}
+
+//
+// Return the minimum number the validator can accept.
+//
+inline long TRangeValidator::GetMin()
+{
+  return Min;
+}
+
+//
+// Set the minimum number the validator can accept.
+//
+inline void TRangeValidator::SetMin(long min)
+{
+  Min = min;
+}
+
+//
+// Return the maximum number the validator can accept.
+//
+inline long TRangeValidator::GetMax()
+{
+  return Max;
+}
+
+//
+// Set the maximum number the validator can accept.
+//
+inline void TRangeValidator::SetMax(long max)
+{
+  Max = max;
+}
+
+//
+// Return the set of valid strings used by the validator.
+//
+inline const TSortedStringArray* TStringLookupValidator::GetStrings() const
+{
+  return Strings;
+}
+
+//
+// Set the valid strings used by the validator.
+//
+inline void TStringLookupValidator::SetStrings(TSortedStringArray* strings)
+{
+  delete Strings;
+  Strings = strings;
+}
 
 #endif  // OWL_VALIDATE_H

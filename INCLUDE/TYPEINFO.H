@@ -4,9 +4,9 @@
 */
 
 /*
- *      C/C++ Run Time Library - Version 6.5
+ *      C/C++ Run Time Library - Version 7.0
  *
- *      Copyright (c) 1993, 1994 by Borland International
+ *      Copyright (c) 1993, 1996 by Borland International
  *      All Rights Reserved.
  *
  */
@@ -74,10 +74,10 @@ public:
 
     virtual     __cdecl ~typeinfo();
 
-    int         __cdecl operator==(const typeinfo _FAR &) const;
-    int         __cdecl operator!=(const typeinfo _FAR &) const;
+    bool        __cdecl operator==(const typeinfo _FAR &) const;
+    bool        __cdecl operator!=(const typeinfo _FAR &) const;
 
-    int         __cdecl before(const typeinfo _FAR &) const;
+    bool        __cdecl before(const typeinfo _FAR &) const;
 
     const char _FAR *__cdecl name() const;
 };

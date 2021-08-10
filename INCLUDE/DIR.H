@@ -6,9 +6,9 @@
 */
 
 /*
- *      C/C++ Run Time Library - Version 6.5
+ *      C/C++ Run Time Library - Version 7.0
  *
- *      Copyright (c) 1987, 1994 by Borland International
+ *      Copyright (c) 1987, 1996 by Borland International
  *      All Rights Reserved.
  *
  */
@@ -60,7 +60,7 @@ struct  ffblk   {
 #else  /* defined __FLAT__ */
 
 #if !defined(RC_INVOKED)
-#pragma option -a-
+#pragma pack(push, 1)
 #endif
 
 #ifndef _FFBLK_DEF
@@ -81,7 +81,7 @@ struct  ffblk   {
 #define MAXEXT    256
 
 #if !defined(RC_INVOKED)
-#pragma option -a.  /* restore default packing */
+#pragma pack(pop)	/* restore default packing */
 #endif
 
 #endif  /* __FLAT__  */

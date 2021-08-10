@@ -30,10 +30,20 @@ OBJS =               \
         _cwait.obj   \
         _getpid.obj
 
+!if !$d(DLL)
+MISC    = setjmpnx.obj
+!endif
+
 #############################################################################
 # Configure the environment appropriately.                                  #
 #############################################################################
 TASMCFG = 1        # Force tasm.cfg creation
 
 !include rules.mak
+
+#############################################################################
+# MISC explicit rules.                                                      #
+#############################################################################
+setjmpnx.obj : setjmp.asm
+    $(ASM) -DNOXX $?, $(OBJDIR)\$&
 

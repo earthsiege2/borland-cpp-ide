@@ -8,3 +8,4 @@ OBJEXE = mdiole.obj sampcont.obj
 RESEXE = mdiole.res sampcont.res
 
 !include $(BCEXAMPLEDIR)\owlocfmk.gen
+EXERULE = $(EXERULE) @echo Disregard previous warning about duplicate resources

@@ -1,0 +1,49 @@
+//----------------------------------------------------------------------------
+// ObjectWindows - (c) Copyright 1991, 1996 by Borland International
+//----------------------------------------------------------------------------
+#if !defined(WORKSHOP_INVOKED)
+  #include <windows.h>
+#endif
+#include <owl/except.rc>
+#include <owl/window.rh>
+#include "cursor.h"
+
+CursorDlg ICON "cursor.ico"
+
+CursorDlg DIALOG 20, 20, 170, 103
+STYLE DS_3DLOOK | WS_CHILD | WS_VISIBLE
+FONT 8, "MS Sans Serif"
+{
+ LTEXT "Screen:", -1, 6, 6, 28, 9, SS_LEFT | WS_CHILD | WS_VISIBLE
+ LTEXT "X:", -1, 39, 6, 8, 9, SS_LEFT | WS_CHILD | WS_VISIBLE
+ LTEXT "0", IDD_SX, 48, 6, 25, 9, SS_LEFT | WS_CHILD | WS_VISIBLE
+ LTEXT "Y:", -1, 74, 6, 8, 9, SS_LEFT | WS_CHILD | WS_VISIBLE
+ LTEXT "0", IDD_SY, 84, 6, 25, 9, SS_LEFT | WS_CHILD | WS_VISIBLE
+ LTEXT "Window:", -1, 6, 18, 28, 9, SS_LEFT | WS_CHILD | WS_VISIBLE
+ LTEXT "X:", -1, 39, 18, 8, 9, SS_LEFT | WS_CHILD | WS_VISIBLE
+ LTEXT "Y:", -1, 74, 18, 8, 9, SS_LEFT | WS_CHILD | WS_VISIBLE
+ LTEXT "0", IDD_WX, 48, 18, 25, 9, SS_LEFT | WS_CHILD | WS_VISIBLE
+ LTEXT "0", IDD_WY, 84, 18, 25, 9, SS_LEFT | WS_CHILD | WS_VISIBLE
+ LTEXT "HWND:", -1, 111, 18, 27, 9, SS_LEFT | WS_CHILD | WS_VISIBLE
+ LTEXT "0", IDD_HW, 138, 18, 24, 9, SS_LEFT | WS_CHILD | WS_VISIBLE
+ LTEXT "Parent:", -1, 6, 30, 28, 9, SS_LEFT | WS_CHILD | WS_VISIBLE
+ RTEXT "X:", -1, 39, 30, 8, 9, SS_RIGHT | WS_CHILD | WS_VISIBLE
+ RTEXT "Y:", -1, 74, 30, 8, 9, SS_RIGHT | WS_CHILD | WS_VISIBLE
+ LTEXT "0", IDD_PX, 48, 30, 25, 9, SS_LEFT | WS_CHILD | WS_VISIBLE
+ LTEXT "0", IDD_PY, 84, 30, 25, 9, SS_LEFT | WS_CHILD | WS_VISIBLE
+ LTEXT "HWND:", -1, 111, 30, 27, 9, SS_LEFT | WS_CHILD | WS_VISIBLE
+ LTEXT "0", IDD_HP, 138, 30, 24, 9, SS_LEFT | WS_CHILD | WS_VISIBLE
+ LTEXT "Focus Window:", -1, 6, 51, 52, 9, SS_LEFT | WS_CHILD | WS_VISIBLE
+ LTEXT "HWND:", -1, 111, 51, 27, 9, SS_LEFT | WS_CHILD | WS_VISIBLE
+ LTEXT "0", IDD_HF, 138, 51, 24, 9, SS_LEFT | WS_CHILD | WS_VISIBLE
+ RTEXT "Left:", -1, 27, 66, 20, 9, SS_RIGHT | WS_CHILD | WS_VISIBLE
+ LTEXT "0", IDD_LEFT, 48, 66, 25, 9, SS_LEFT | WS_CHILD | WS_VISIBLE
+ RTEXT "Top:", -1, 78, 66, 25, 9, SS_RIGHT | WS_CHILD | WS_VISIBLE
+ LTEXT "0", IDD_TOP, 104, 66, 25, 9, SS_LEFT | WS_CHILD | WS_VISIBLE
+ RTEXT "Right:", -1, 23, 78, 24, 9, SS_RIGHT | WS_CHILD | WS_VISIBLE
+ LTEXT "0", IDD_RIGHT, 48, 78, 25, 9, SS_LEFT | WS_CHILD | WS_VISIBLE
+ RTEXT "Bottom:", -1, 75, 78, 28, 9, SS_RIGHT | WS_CHILD | WS_VISIBLE
+ LTEXT "0", IDD_BOTTOM, 104, 78, 25, 9, SS_LEFT | WS_CHILD | WS_VISIBLE
+ CONTROL "", -1, "static", SS_BLACKFRAME | WS_CHILD | WS_VISIBLE, 3, 3, 162, 39
+ CONTROL "", -1, "static", SS_BLACKFRAME | WS_CHILD | WS_VISIBLE, 3, 48, 162, 46
+}

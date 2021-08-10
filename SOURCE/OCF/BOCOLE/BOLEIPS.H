@@ -1,18 +1,16 @@
+//----------------------------------------------------------------------------
+// ObjectComponents
+// Copyright (c) 1994, 1996 by Borland International, All Rights Reserved
 //
-//**************************************************************************
+// $Revision:   2.1  $
 //
-// BOleIPS.h -- Implements the Bolero half of the OLE2 in-process server
-//
-// BOleInProcSite  overrides some of the default handler implementation
-// for IViewObject and IBSite implementation on the BOleInProcServer
-// taking advantage of the fact that we're in a DLL.
-//
-// Copyright (c) 1993,94 by Borland International, Inc. All rights reserved
-//
-//**************************************************************************
-
+// 	Implements the Bolero half of the OLE2 in-process server object.
+//    BOleInProcSite  overrides some of the default handler implementation
+//    for IViewObject and IBSite implementation on the BOleInProcServer
+//    taking advantage of the fact that we're in a DLL.
+//----------------------------------------------------------------------------
 #ifndef _BOLEIPS_H
-#define _BOLEIPS_H 1
+#define _BOLEIPS_H 
 
 #include <BOleSite.h>
 
@@ -200,4 +198,3 @@ public:
 };
 
 #endif
-

@@ -1,9 +1,12 @@
 //----------------------------------------------------------------------------
-// ObjectComponents - (C) Copyright 1994 by Borland International
+// ObjectComponents - (C) Copyright 1994, 1996 by Borland International
 // Automated calculator example demonstrating class hierarchy and collections
 // Automation localized for simultaneous English and German use and typelibs
 // The example can be built as an .EXE or as an inproc .DLL server
 //----------------------------------------------------------------------------
+#include <ocf/pch.h>
+#include <classlib/pointer.h>
+#include <ocf/ocreg.h>
 #include "autocalc.h"
 
 BEGIN_REGISTRATION(AppReg)
@@ -14,10 +17,13 @@ BEGIN_REGISTRATION(AppReg)
   REGDATA(description,"@AppName")
   REGDATA(cmdline,    "/Automation")
 #if defined(BI_PLAT_WIN32)
-//  REGDATA(debugger,   "TD32")
+  REGDATA(debugger,   "TD32")
 #else
-//  REGDATA(debugger,   "TDW")
+  REGDATA(debugger,   "TDW")
 #endif
+  REGDATA(debugclsid, "{877B6201-7627-101B-B87C-0000C057CE4E}")
+  REGDATA(debugprogid,  APP_NAME ".Debug")
+  REGDATA(debugdesc,"@AppName")
 #else                 // building DLL inproc server
   REGDATA(clsid,      "{877B6280-7627-101B-B87C-0000C057CE4E}")
   REGDATA(progid,     APP_NAME ".DLLServer")

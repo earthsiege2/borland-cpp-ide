@@ -1,17 +1,21 @@
 //----------------------------------------------------------------------------
-// (C) Copyright 1994 by Borland International, All Rights Reserved
+// Borland WinSys Library
+// Copyright (c) 1994, 1996 by Borland International, All Rights Reserved
+//
+//$Revision:   5.7  $
 //
 // TLocaleString implementation - localized name support
+// TRegList implementation - runtime component and object registration list
+// TRegItem implementation - runtime component and object registration item
 //
 // NOTE: This code must reside in the same module that the strings are defined
 //       The cache, NativeLangId, HINSTANCE are managed on a per-module basis
 //       TLocaleString::NativeLangId may be user-implemented to symbol langid
 //       TLocaleString::Module may be reset from this to another resource DLL
 //----------------------------------------------------------------------------
-#if !defined(_Windows)
-# define _Windows      // pretend we are in windows to get the headers we need
-#endif
-#include <osl/locale.h>
+#include <winsys/pch.h>
+#include <winsys/lclstrng.h>
+#include <winsys/wsysinc.h>  // just for _hInstance
 #include <stdio.h>
 
 //----------------------------------------------------------------------------
@@ -21,7 +25,7 @@ TLangId TLocaleString::SystemDefaultLangId = TLocaleString::GetSystemLangId();
 TLangId TLocaleString::UserDefaultLangId   = TLocaleString::GetUserLangId();
 HINSTANCE TLocaleString::Module = _hInstance;
 TLocaleString TLocaleString::Null = {""};
-  
+
 //----------------------------------------------------------------------------
 // TLocaleCache definitions, private for implementation
 //
@@ -116,7 +120,7 @@ TLocaleCache* TLocaleCacheList::Lookup(const char* name)
   }
   pc = name;
   if (*name != AUTOLANG_RCID)
-    pc++;                    // '#' part of Id 
+    pc++;                    // '#' part of Id
   HRSRC resHdl = ::FindResource(TLocaleString::Module, pc, RT_LOCALIZATION);
   if (!resHdl) {
     new TLocaleCacheBase(name, hash);    // add cache entry for failed lookup
@@ -145,8 +149,8 @@ TLocaleCache* TLocaleCacheList::Lookup(const char* name)
       maxLen = (int)(pr-p);
   } while(c);
   TLocaleCache* cache = new(maxLen) TLocaleCache(neut, hash, resHdl, resData);
-  cache->Buf[0] = (*name == AUTOLANG_XLAT ? AUTOLANG_CACHEDNEUT
-                                          : AUTOLANG_CACHEDLOAD);
+  cache->Buf[0] = char(*name == AUTOLANG_XLAT ? AUTOLANG_CACHEDNEUT
+                                              : AUTOLANG_CACHEDLOAD);
   return cache;
 }
 
@@ -156,7 +160,8 @@ const char* TLocaleCache::Translate(TLangId reqLang)
   if (ReqLangId == InvalidLangId) { // if first time called after construction
     resData = *(HGLOBAL*)(Buf+1);
     ReqLangId = reqLang;
-  } else {
+  }
+  else {
     if (Buf[0]==AUTOLANG_CACHEDNEUT && TLocaleString::IsNativeLangId(reqLang))
       return Neutral;
     if (reqLang == ActLangId)
@@ -172,18 +177,22 @@ const char* TLocaleCache::Translate(TLangId reqLang)
     if ((resData = ::LoadResource(TLocaleString::Module, ResHdl)) == 0)
       return Neutral;   // should throw exception on failure?!!
   }
+
   unsigned char far* resBuf = (unsigned char far*)::LockResource(resData);
   unsigned char far* translation = 0;
   unsigned char far* pr = resBuf;
-  int actLang = InvalidLangId;
+  TLangId            actLang = InvalidLangId;
+  TLangId            resLang;
   unsigned char c;
-  int resLang;
+
   while ((c = *pr) != 0) {
     if (c > ' ') { // check for initial neutral string, used with CACHEDLOAD
       actLang = resLang = TLocaleString::NativeLangId;
       translation = pr;    // lowest preference match
-    } else {
-      resLang = ((c - 1)<<10) | *++pr,pr++;
+    }
+    else {
+      resLang = TLangId(((c - 1)<<10) | *++pr);
+      pr++;
     }
     if (resLang == reqLang) {     // exact match
       translation = pr;
@@ -196,7 +205,8 @@ const char* TLocaleCache::Translate(TLangId reqLang)
         actLang = resLang;
       }
     }
-    for ( ; *pr >= ' '; ++pr) ;   // skip over translation string till next Id
+    for ( ; *pr >= ' '; ++pr)   // skip over translation string till next Id
+      ;
   }
   const char* retVal;
   if (translation) {
@@ -212,9 +222,11 @@ const char* TLocaleCache::Translate(TLangId reqLang)
         ReqLangId = reqLang;
     }
     retVal = Buf+1;
-  } else if (Buf[0] == AUTOLANG_CACHEDNEUT) {
+  }
+  else if (Buf[0] == AUTOLANG_CACHEDNEUT) {
     retVal = Neutral;
-  } else {
+  }
+  else {
     retVal = 0;
   }
   ::FreeResource(resData);
@@ -306,113 +318,3 @@ int TLocaleString::IsNativeLangId(TLangId lang)
   return lang == NativeLangId || lang == (NativeLangId & 0x00FF);
 }
 
-//----------------------------------------------------------------------------
-// Registration parameter structures and formatting functions
-//
-
-const char* TRegList::Lookup(const char* key, TLangId lang)
-{
-  for (TRegItem* regItem = Items; regItem->Key != 0; regItem++) {
-    if (strcmp(regItem->Key, key) == 0)
-      if (regItem->Value.Private)  // current can't test Value directly
-        return regItem->Value.Translate(lang);
-      else
-        return "";
-  }
-  return 0;
-}
-
-TLocaleString& TRegList::LookupRef(const char* key)
-{
-  for (TRegItem* regItem = Items; regItem->Key != 0; regItem++) {
-    if (strcmp(regItem->Key, key) == 0)
-       return regItem->Value;
-  }
-  return TLocaleString::Null;
-}
-
-//----------------------------------------------------------------------------
-//
-
-// Maximum string length for REGFORMAT w/ string arg. String is clipped if too
-// long.
-//
-const int MaxFormatLen = 40;
-
-char* TRegItem::RegFormat(int f, int a, int t, int d, TRegFormatHeap& heap)
-{
-  // sprintf into sized auto buffer
-  // ints have a max of 11 digits: -2000000000. Add pad of 8 just in case
-  //
-  char temp[11+1+11+1+11+1+11+1 +8];
-  int len = sprintf(temp, "%d,%d,%d,%d", f,a,t,d);
-
-  // Check for potential overflow
-  //
-  char* str = heap.Data + heap.Used;
-  heap.Used += len + 1;
-  if (heap.Used > heap.Size)
-    return "";
-
-  // Copy into real static buffer & return it
-  //
-  return strcpy(str, temp);
-}
-
-char* TRegItem::RegFormat(const char* f, int a, int t, int d, TRegFormatHeap& heap)
-{
-  // sprintf into sized auto buffer
-  //
-  char temp[MaxFormatLen+1+11+1+11+1+11+1 +8];
-  int len = sprintf(temp, "%.*s,%d,%d,%d", MaxFormatLen,
-                           (char far*)f,a,t,d);
-
-  // Check for potential overflow
-  //
-  char* str = heap.Data + heap.Used;
-  heap.Used += len + 1;
-  if (heap.Used > heap.Size)
-    return "";
-
-  // Copy into real static buffer & return it
-  //
-  return strcpy(str, temp);
-}
-
-char* TRegItem::RegFlags(long flags, TRegFormatHeap& heap)
-{
-  // sprintf into sized auto buffer
-  //
-  char temp[11+1 +8];
-  int len = sprintf(temp, "%ld", flags);
-
-  // Check for potential overflow
-  //
-  char* str = heap.Data + heap.Used;
-  heap.Used += len + 1;
-  if (heap.Used > heap.Size)
-    return "";
-
-  // Copy into real static buffer & return it
-  //
-  return strcpy(str, temp);
-}
-
-char* TRegItem::RegVerbOpt(int mf, int sf, TRegFormatHeap& heap)
-{
-  // sprintf into sized auto buffer
-  //
-  char temp[11+1+11+1 +8];
-  int len = sprintf(temp, "%d,%d", mf, sf);
-
-  // Check for potential overflow
-  //
-  char* str = heap.Data + heap.Used;
-  heap.Used += len + 1;
-  if (heap.Used > heap.Size)
-    return "";
-
-  // Copy into real static buffer & return it
-  //
-  return strcpy(str, temp);
-}

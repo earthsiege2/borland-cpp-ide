@@ -7,9 +7,8 @@
 //
 //---------------------------------------------------------------------
 
-#define STRICT
 
-#include <windows.h>
+#include <services/wsysinc.h>
 #include <windowsx.h>
 #include <string.h>
 

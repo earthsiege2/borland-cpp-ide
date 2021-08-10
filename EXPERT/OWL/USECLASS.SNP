@@ -14,13 +14,31 @@
 ##              Search2 == FALSE
 ##:             %\\"Missing any #include for class instantiation.  "
 ##*
-##              (Search1 == FALSE) && (Search2 == TRUE) 2 
+##              (Search1 == FALSE) && (Search2 == TRUE)
 ##              :^BOL
 ##              :^2
-
 [[IncludeFile]]
 ##          --END-- ? IncludeFile [[Search1]]
 ##      --END-- QUERY_CLASS_NAME != "ZZZZZZZZZZzzzzzzzzzzZZZZZZZZZZ"
+##      --BEGIN-- QUERY_CLASS_NAME == "ZZZZZZZZZZzzzzzzzzzzZZZZZZZZZZ"
+##          QUERY_BASE_NAME [[BaseName]]
+##          GetIncludeFile(\\"[[BaseName]]") [[OwlIncludeFile]]
+##          \\"#include [[OwlIncludeFile]]" [[IncludeFile]]
+##          TRUE [[Search2]]
+##          ^BOF
+##          --BEGIN-- ? IncludeFile [[Search1]]
+##              Search1 == FALSE
+##              :? "#include " Search2
+##*
+##              Search2 == FALSE
+##:             %\\"Missing any #include for class instantiation.  "
+##*
+##              (Search1 == FALSE) && (Search2 == TRUE)
+##              :^BOL
+##              :^2
+[[IncludeFile]]
+##          --END-- ? IncludeFile [[Search1]]
+##      --END-- QUERY_CLASS_NAME == "ZZZZZZZZZZzzzzzzzzzzZZZZZZZZZZ"
 ##      --BEGIN-- "" [[ConstructorParam]]
 ##          "" [[ClientClass]]
 ##          "" [[ClientParam]]
@@ -42,7 +60,7 @@
 ##              ^@InsertPosition
 ##              ^BOL
 
-//    [[ClassName]]   x[[ClassName]][[ConstructorParam]];
+//  [[ClassName]]   x[[ClassName]][[ConstructorParam]];
 
 ##              ^@InsertPosition
 ##              ^SCROLL

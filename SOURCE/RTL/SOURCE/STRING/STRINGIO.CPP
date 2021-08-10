@@ -19,9 +19,9 @@
 /*------------------------------------------------------------------------*/
 
 /*
- *      C/C++ Run Time Library - Version 6.5
+ *      C/C++ Run Time Library - Version 7.0
  *
- *      Copyright (c) 1992, 1994 by Borland International
+ *      Copyright (c) 1992, 1996 by Borland International
  *      All Rights Reserved.
  *
  */
@@ -184,8 +184,10 @@ void TStringRef::read_token( istream _FAR & strm ) throw( xalloc )
 {
     nchars = 0;
 
-    while( (strm >> setw(capacity-nchars+1) >> (array+nchars)).good() )
-        {
+    while(1)
+    {
+	// Extractor will always store null byte
+	strm >> setw(capacity-nchars+1) >> (array+nchars);
         nchars += strlen( array+nchars );
         if( !strm.good() || isspace(strm.peek()) )
             break; // Was complete token read?

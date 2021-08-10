@@ -6,9 +6,9 @@
 /*------------------------------------------------------------------------*/
 
 /*
- *      C/C++ Run Time Library - Version 6.5
+ *      C/C++ Run Time Library - Version 7.0
  *
- *      Copyright (c) 1993, 1994 by Borland International
+ *      Copyright (c) 1993, 1996 by Borland International
  *      All Rights Reserved.
  *
  */
@@ -52,14 +52,14 @@
 #include <except.h>
 #endif
 
-#if defined(_Windows) && !defined(__WINDOWS_H)    
+#if defined(_Windows) && !defined(__WINDOWS_H)
 #include <windows.h>
 #endif
 
 
 #if !defined(RC_INVOKED)
 
-#pragma option -a-      // byte packing
+#pragma pack(push, 1)
 
 #if defined(__BCOPT__)
 #if !defined(_RTL_ALLOW_po) && !defined(__FLAT__)
@@ -155,21 +155,21 @@ public:
     _RTLENTRY string( const char _FAR *cp, size_t orig, size_t n = NPOS )
         throw( xalloc, lengtherror );
 
-    _RTLENTRY string( char c ) THROW_XALLOC_LENGTHERROR;
-    _RTLENTRY string( char c, size_t n ) THROW_XALLOC_LENGTHERROR;
+    _RTLENTRY string( char c ) throw (xalloc, string::lengtherror);
+    _RTLENTRY string( char c, size_t n ) throw (xalloc, string::lengtherror);
 
-    _RTLENTRY string( signed char c ) THROW_XALLOC_LENGTHERROR;
-    _RTLENTRY string( signed char c, size_t n ) THROW_XALLOC_LENGTHERROR;
+    _RTLENTRY string( signed char c ) throw (xalloc, string::lengtherror);
+    _RTLENTRY string( signed char c, size_t n ) throw (xalloc, string::lengtherror);
 
-    _RTLENTRY string( unsigned char c ) THROW_XALLOC_LENGTHERROR;
-    _RTLENTRY string( unsigned char c, size_t n ) THROW_XALLOC_LENGTHERROR;
+    _RTLENTRY string( unsigned char c ) throw (xalloc, string::lengtherror);
+    _RTLENTRY string( unsigned char c, size_t n ) throw (xalloc, string::lengtherror);
 
     // non-standard constructors
     _RTLENTRY string( const TSubString _FAR &ss ) throw( xalloc );
 
     // Special far string ctors for small & medium model
     #if (defined( __TINY__ ) || defined( __SMALL__ ) || defined( __MEDIUM__ )) && !defined( __DLL__ )
-    _RTLENTRY string( const char __far *cp ) THROW_XALLOC_LENGTHERROR;
+    _RTLENTRY string( const char __far *cp ) throw (xalloc, string::lengtherror);
     _RTLENTRY string( const char __far *cp, size_t orig, size_t n = NPOS )
         throw( xalloc, lengtherror );
     #endif
@@ -375,7 +375,7 @@ public:
     size_t _RTLENTRY length() const THROW_NONE;
     size_t _RTLENTRY copy( char _FAR *cb, size_t n ) throw( outofrange );
     size_t _RTLENTRY copy( char _FAR *cb, size_t n, size_t pos ) throw( outofrange );
-    const char _FAR * _RTLENTRY c_str() const THROW_XALLOC;
+    const char _FAR * _RTLENTRY c_str() const THROW_NONE;
     size_t _RTLENTRY reserve() const THROW_NONE;
     void _RTLENTRY reserve( size_t ic ) throw( xalloc, outofrange );
 
@@ -659,46 +659,6 @@ inline _RTLENTRY string::lengtherror::lengtherror() :
     xmsg( "String length error" )
 {
 }
-
-inline _RTLENTRY string::string( char c ) THROW_XALLOC_LENGTHERROR
-{
-    p = new TStringRef(c,1);
-}
-
-inline _RTLENTRY string::string( char c, size_t n ) THROW_XALLOC_LENGTHERROR
-{
-    p = new TStringRef(c,n);
-}
-
-inline _RTLENTRY string::string( signed char c ) THROW_XALLOC_LENGTHERROR
-{
-    p = new TStringRef(c,1);
-}
-
-inline _RTLENTRY string::string( signed char c, size_t n ) THROW_XALLOC_LENGTHERROR
-{
-    p = new TStringRef(c,n);
-}
-
-inline _RTLENTRY string::string( unsigned char c ) THROW_XALLOC_LENGTHERROR
-{
-    p = new TStringRef(c,1);
-}
-
-inline _RTLENTRY string::string( unsigned char c, size_t n ) THROW_XALLOC_LENGTHERROR
-{
-    p = new TStringRef(c,n);
-}
-
-#if (defined(__TINY__)|| defined(__SMALL__)|| defined(__MEDIUM__)) && !defined(__DLL__)
-// Far string ctors make a near string from a far string
-
-inline _RTLENTRY string::string( const char __far *cp ) THROW_XALLOC_LENGTHERROR
-{
-    p = new TStringRef(cp);
-}
-
-#endif
 
 inline string _FAR & _RTLENTRY string::operator = ( const string _FAR &s )
     THROW_NONE
@@ -1155,7 +1115,8 @@ inline const TSubString _RTLENTRY string::operator()( const TRegexp _FAR &r ) co
 #endif
 #endif
 
-#pragma option -a.      // restore default packing
+/* restore default packing */
+#pragma pack(pop)
 
 #endif  /* !RC_INVOKED */
 

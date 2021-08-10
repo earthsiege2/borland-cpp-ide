@@ -6,9 +6,9 @@
  *-----------------------------------------------------------------------*/
 
 /*
- *      C/C++ Run Time Library - Version 1.5
+ *      C/C++ Run Time Library - Version 2.0
  *
- *      Copyright (c) 1990, 1994 by Borland International
+ *      Copyright (c) 1990, 1996 by Borland International
  *      All Rights Reserved.
  *
  */
@@ -18,7 +18,7 @@
 
 typedef void _cdecl    (* consvCdecl)   (void *, int);
 typedef void _pascal   (* consvPascal)  (int, void *);
-typedef void _fastcall (* consvFastcall)(int, void *);
+typedef void _fastcall (* consvFastcall)(void *, int);
 typedef void _stdcall  (* consvStdcall) (void *, int);
 #if defined(__OS2__)
 typedef void _syscall  (* consvSyscall) (void *, int);
@@ -70,7 +70,7 @@ void * _RTLENTRY _vector_vnew_(
         *(unsigned *)ptr = count;
         ptr = ((char *)ptr + sizeof(count));
         }
-    
+
     if(!cons)
        return(ptr);
 
@@ -82,7 +82,7 @@ void * _RTLENTRY _vector_vnew_(
             {
             case 1: (*(consvCdecl)    cons)((void *) p, 0); break;
             case 2: (*(consvPascal)   cons)(0, (void *) p); break;
-            case 3: (*(consvFastcall) cons)(0, (void *) p); break;
+            case 3: (*(consvFastcall) cons)((void *) p, 0); break;
             case 5: (*(consvStdcall)  cons)((void *) p, 0); break;
 #if defined(__OS2__)
             case 6: (*(consvSyscall)  cons)((void *) p, 0); break;

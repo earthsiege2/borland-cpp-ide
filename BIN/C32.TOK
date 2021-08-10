@@ -1,6 +1,7 @@
 [Reserved Word]
 __asm
 __cdecl
+__declspec
 __export
 __far16
 __fastcall
@@ -24,6 +25,7 @@ __thread
 __try
 asm
 auto
+bool
 break
 case
 catch
@@ -41,6 +43,7 @@ dynamic_cast
 else
 enum
 extern
+false
 float
 for
 friend
@@ -49,6 +52,8 @@ if
 inline
 int
 long
+mutable
+namespace
 new
 operator
 pascal
@@ -68,11 +73,13 @@ switch
 template
 this
 throw
+true
 try
 typedef
 typeid
 union
 unsigned
+using
 virtual
 void
 volatile

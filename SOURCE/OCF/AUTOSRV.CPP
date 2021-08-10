@@ -1,13 +1,15 @@
-//
 //----------------------------------------------------------------------------
 // ObjectComponents
-// (C) Copyright 1994 by Borland International, All Rights Reserved
+// Copyright (c) 1994, 1996 by Borland International, All Rights Reserved
+//
+// $Revision:   2.9  $
 //
 // OLE Automation Server Implementation, except TServedObject (in typelib.cpp)
 //----------------------------------------------------------------------------
-#include <ocf/ocfpch.h>
+#include <ocf/pch.h>
 #include <ocf/appdesc.h>
 #include <ocf/ocreg.h>
+#include <ocf/occtrl.h>   // for DISPID_DEFAULT_EVENT
 
 TAutoType TAutoVoid       ::ClassInfo = {atVoid};
 TAutoType TAutoByte       ::ClassInfo = {atByte};
@@ -39,17 +41,16 @@ void SendObituary(const void far* obj, const typeinfo& typeInfo)
     appDesc->InvalidateObject(::MostDerived(obj, typeInfo));
 }
 
-//____________________________________________________________________________
-//
+//----------------------------------------------------------------------------
 // TAutoClass implementation
-//____________________________________________________________________________
+//
 
 TAutoClass::TClassList TAutoClass::ClassList = {0,0,0};// MUST BE MODULE GLOBAL
 
 TAutoClass::TAutoClass(TAutoSymbol* table, TAutoSymbol* classSymbol,
              const typeinfo& typeInfo, TAggregator aggregator)
            : Table(table), ClassSymbol(classSymbol), TypeInfo(typeInfo),
-             Aggregator(aggregator)
+             Aggregator(aggregator), AutoIds (TRUE)
 {
   Type = atObject | atAutoClass;
   NextClass = ClassList.List;
@@ -93,11 +94,12 @@ short TAutoClass::CountCommands()
   return CommandCount;
 }
 
-TAutoSymbol* TAutoClass::FindId(short id, ObjectPtr& obj)
+TAutoSymbol* TAutoClass::FindId(long id, ObjectPtr& obj)
 {
   TAutoSymbol* sym;
-  int cmdId;
-  if (id <= 0) {         // reserved dispatch ID if negative or zero
+  long cmdId;
+  if ((id <= 0) || !(AutoIds)) {
+    // reserved dispatch ID if negative or zero or AutoIDs is false
     for (sym = Table; !sym->IsTerminator(); sym++) {
       if (sym->TestFlag(asAnyCommand) && sym->DispId == id)
         return sym;
@@ -118,32 +120,36 @@ TAutoSymbol* TAutoClass::FindId(short id, ObjectPtr& obj)
           sym->SymCount = sym->GetClass()->CountCommands();
         if (cmdId + sym->SymCount >= id) {    // symbol in nested class
           obj = sym->Convert(obj);
-          return sym->GetClass()->FindId(short(id-cmdId), obj);
+          return sym->GetClass()->FindId(id-cmdId, obj);
         }
         cmdId += sym->SymCount;
       }
       else if (sym->TestFlag(asAnyCommand)) {
         cmdId++;
-        if (cmdId == id)
-          return sym;
+        if (cmdId == id) {
+          if (sym->DispId == -1)
+            return sym;
+          else
+            break;
+        }
       }
     }
   }
   return 0;
 }
 
-TAutoSymbol* TAutoClass::FindFunction(unsigned index, int& retId)
+TAutoSymbol* TAutoClass::FindFunction(unsigned index, MEMBERID& retId)
 {
   TAutoSymbol* sym;
   int funcCount = 0;
-  int cmdId = retId;
+  long cmdId = retId;
   for (sym = Table; !sym->IsTerminator(); sym++) {
     int attr = sym->GetFlags();
     if (attr & asAnyCommand) {
       cmdId++;
       if ((attr & asOleType) != 0 && (attr & asGetSet) != asGetSet) {
         if (funcCount++ == index) {
-          retId = sym->DispId == -1 ? cmdId : sym->DispId;
+          retId = (sym->DispId == -1L) ? cmdId : sym->DispId;
           return sym;
         }
       }
@@ -152,7 +158,7 @@ TAutoSymbol* TAutoClass::FindFunction(unsigned index, int& retId)
       if (!sym->SymCount)
         sym->SymCount = cls->CountCommands();
       if (funcCount + cls->FunctionCount > index) {
-        retId = cmdId;
+        retId = int(cmdId);
         return cls->FindFunction(index - funcCount, retId);
       }
       funcCount += cls->FunctionCount;
@@ -162,18 +168,18 @@ TAutoSymbol* TAutoClass::FindFunction(unsigned index, int& retId)
   return 0;  // should never happen unless caller overruns total count
 }
 
-TAutoSymbol* TAutoClass::FindVariable(unsigned index, int& retId)
+TAutoSymbol* TAutoClass::FindVariable(unsigned index, MEMBERID& retId)
 {
   TAutoSymbol* sym;
   int varCount = 0;
-  int cmdId = retId;
+  long cmdId = retId;
   for (sym = Table; !sym->IsTerminator(); sym++) {
     int attr = sym->GetFlags();
     if (attr & asAnyCommand) {
       cmdId++;
       if ((attr & asGetSet) == asGetSet) {
         if (varCount++ == index) {
-          retId = sym->DispId == -1 ? cmdId : sym->DispId;
+          retId = (sym->DispId == -1L) ? cmdId : sym->DispId;
           return sym;
         }
       }
@@ -182,7 +188,7 @@ TAutoSymbol* TAutoClass::FindVariable(unsigned index, int& retId)
       if (!sym->SymCount)
         sym->SymCount = cls->CountCommands();
       if (varCount + cls->VariableCount > index) {
-        retId = cmdId;
+        retId = int(cmdId);
         return cls->FindVariable(index - varCount, retId);
       }
       varCount += cls->VariableCount;
@@ -204,12 +210,12 @@ short TAutoClass::GetArgCount(TAutoSymbol& sym)
 TAutoSymbol* TAutoClass::Lookup(char far* name, TLangId lang, short symflags,
                                 long far& retid)
 {
-  int cmdId = 0;
+  long cmdId = 0;
   for (TAutoSymbol* sym = Table; !sym->IsTerminator(); sym++) {
     if (sym->TestFlag(asAnyCommand))
       cmdId++;
     if (sym->TestFlag(symflags) && sym->Name.Compare(name, lang) == 0) {
-      retid = sym->DispId == -1 ? (long)cmdId : (long)sym->DispId;
+      retid = sym->DispId == -1 ? cmdId : sym->DispId;
       return sym;
     }
     else if (sym->TestFlag(asClass)) {
@@ -257,7 +263,7 @@ TAutoCommand* AutoQuitBuild(ObjectPtr obj, int/*attr*/, TAutoStack& args)
 
   // disconnect automation from app to prevent further access
   //
-  owner.Object = 0; 
+  owner.Object = 0;
   owner.RootObject = 0;
 
   // build command object for destructor, will either delete or PostQuitMsg
@@ -332,16 +338,22 @@ TAutoClass::TExtLink::~TExtLink()
     Next->Prev = Prev;
 }
 
-//____________________________________________________________________________
-//
+//----------------------------------------------------------------------------
 // TAutoStack implementation
-//____________________________________________________________________________
+//
 
-TAutoStack::TAutoStack(VARIANT far* stack, TLocaleId locale, int argcount,
-                       int named, long far* map, TServedObject* owner)
+TAutoStack::TAutoStack(DISPID id, VARIANT far* stack, TLocaleId locale,
+                       int argcount, int named, long far* map,
+                       TServedObject* owner)
 :
-  Owner(owner), Stack((TAutoVal far*)stack), LangId(LANGIDFROMLCID(locale)),
-  ArgCount(argcount), NamedCount(named), NamedIds(map), CurrentArg(-1)
+  Owner(owner),
+  Stack((TAutoVal far*)stack),
+  LangId(LANGIDFROMLCID(locale)),
+  ArgCount(argcount),
+  NamedCount(named),
+  NamedIds(map),
+  CurrentArg(-1),
+  DispId(id)
 {
 }
 
@@ -354,9 +366,9 @@ TAutoStack::~TAutoStack()
 
 TAutoVal& TAutoStack::operator [](int index)
 {
-  if (index >= ArgSymbolCount /* && index != TAutoStack::SetValue */)
-    throw TXAuto(TXAuto::xNoArgSymbol);
-  TAutoSymbol* argSymbol = index >= 0 ? Symbol + index + 1 : Symbol;
+  TAutoSymbol* argSymbol = NULL;
+  if (index < ArgSymbolCount)
+    argSymbol = index >= 0 ? Symbol + index + 1 : Symbol;
   int vIndex = ArgCount - index - 1;        // index if not a named argument
   if (index == TAutoStack::SetValue ||      // property value to set
       index >= ArgCount-NamedCount) { // named or out of range
@@ -370,9 +382,9 @@ TAutoVal& TAutoStack::operator [](int index)
     CurrentArg = vIndex;   // save index for error return
     val = Stack[vIndex].DereferenceVariant();
     val->SetLocale(LangId);
-    if (val->GetDataType() == atString &&
-        argSymbol->IsEnum() &&
-        argSymbol->GetEnum()->Convert(*val, Default))
+    if ((val->GetDataType() == atString) &&
+        ((argSymbol) && (argSymbol->IsEnum()) &&
+         (argSymbol->GetEnum()->Convert(*val, Default))))
       return Default;
   }
   else if (index == TAutoStack::SetValue) {
@@ -381,6 +393,8 @@ TAutoVal& TAutoStack::operator [](int index)
   else {
     val = &Default;
     val->SetLocale(LangId);
+    if (!argSymbol)
+      throw TXAuto(TXAuto::xNoArgSymbol);
     const char* dfltStr = argSymbol->Doc.Translate(LangId); // load default
     if (!dfltStr)
       throw TXAuto(TXAuto::xNoDefaultValue);
@@ -389,13 +403,12 @@ TAutoVal& TAutoStack::operator [](int index)
   return *val;
 }
 
-//____________________________________________________________________________
+//----------------------------------------------------------------------------
 //
-// Dynamic casting routines implementation
-//____________________________________________________________________________
 
-// temporary defines for using typeinfo with dynamic cast
-
+//
+// Temporary defines for using typeinfo with dynamic cast
+//
 void far* __cdecl __DynamicCast(void far* object, void far* vtable,
                                 void far* srctyp, void far* dsttyp,
                                 int reference = 0);
@@ -624,17 +637,21 @@ TDispatch::Invoke(DISPID dispidMember, const IID far& /*riid*/, LCID lcid,
   ObjectPtr object = Object;  // make copy in case of this pointer adjustment
   if (!object)      // check if C++ object still exists
     return HR_DISP_MEMBERNOTFOUND;
-  TAutoStack stack(dispparams->rgvarg, lcid, dispparams->cArgs,
+  TAutoStack stack(dispidMember, dispparams->rgvarg, lcid, dispparams->cArgs,
                    dispparams->cNamedArgs, dispparams->rgdispidNamedArgs, 0);
-  stack.Symbol = Class->FindId((short)dispidMember, object);
-  if (!stack.Symbol)
-    return HR_DISP_MEMBERNOTFOUND;
+  stack.Symbol = Class->FindId(dispidMember, object);
+  if (!stack.Symbol) {
+    if ((stack.Symbol = Class->FindId(DISPID_DEFAULT_EVENT, object)) == NULL)
+      return HR_DISP_MEMBERNOTFOUND;
+  }
   if (!stack.Symbol->TestFlag(wFlags)) // check attr bits for supported type
     return HR_DISP_MEMBERNOTFOUND;
   if (wFlags & (DISPATCH_PROPERTYPUT | DISPATCH_PROPERTYPUTREF))
     varResult = 0;
-  if ((stack.ArgSymbolCount=Class->GetArgCount(*stack.Symbol)) +
-  ((wFlags&(DISPATCH_PROPERTYPUT|DISPATCH_PROPERTYPUTREF))!=0) < stack.ArgCount)
+  if (((stack.ArgSymbolCount = Class->GetArgCount(*stack.Symbol)) +
+        ((wFlags&(DISPATCH_PROPERTYPUT|DISPATCH_PROPERTYPUTREF)) != 0) <
+                                                         stack.ArgCount) &&
+      (stack.Symbol->DispId != DISPID_DEFAULT_EVENT) )
     return HR_DISP_BADPARAMCOUNT;
 
   switch(Class->Dispatch(object, TDispatchCreator(), *this, wFlags, stack,
@@ -680,5 +697,4 @@ TDispatch::Invoke(DISPID dispidMember, const IID far& /*riid*/, LCID lcid,
     return HR_DISP_OVERFLOW;  // no appropriate error for other
   }
 }
-
 

@@ -7,7 +7,7 @@
 #include <classlib/queues.h>
 #include <iostream.h>
 #include <strstrea.h>
-#include "../myclass.h" 
+#include "../myclass.h"
 
 typedef TIQueueAsDoubleList<MyClass> ContainerType;
 typedef TIQueueAsDoubleListIterator<MyClass> IteratorType;
@@ -44,12 +44,13 @@ int main()
 {
     ContainerType container;
     AddItems(container, MaxItems);
-  
+
     cout << "--- Starting ForEach" << endl;
     container.ForEach(ForEachCallBack, (void*)"FE ");
-  
+
     cout << "--- Starting Iterator" << endl;
     UseForwardIterator(container);
-  
+
+    container.Flush(TShouldDelete::Delete);
     return 0;
 }

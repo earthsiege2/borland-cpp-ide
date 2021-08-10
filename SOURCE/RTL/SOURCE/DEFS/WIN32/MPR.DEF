@@ -1,53 +1,53 @@
-LIBRARY     MPR.DLL
-
+LIBRARY MPR
 EXPORTS
-    RestoreConnectionA0            @1   
-    WNetAddConnection2A            @2   
-    WNetAddConnection2W            @3   
-    WNetAddConnection3A            @4   
-    WNetAddConnection3W            @5   
-    WNetAddConnectionA             @6   
-    WNetAddConnectionW             @7   
-    WNetCancelConnection2A         @8   
-    WNetCancelConnection2W         @9   
-    WNetCancelConnectionA          @10  
-    WNetCancelConnectionW          @11  
-    WNetClearConnections           @12  
-    WNetCloseEnum                  @13  
-    WNetConnectionDialog           @15  
-    WNetConnectionDialog2          @14  
-    WNetDirectoryNotifyA           @16  
-    WNetDirectoryNotifyW           @17  
-    WNetDisconnectDialog           @19  
-    WNetDisconnectDialog2          @18  
-    WNetEnumResourceA              @20  
-    WNetEnumResourceW              @21  
-    WNetFMXEditPerm                @22  
-    WNetFMXGetPermCaps             @23  
-    WNetFMXGetPermHelp             @24  
-    WNetGetConnection2A            @25  
-    WNetGetConnection2W            @26  
-    WNetGetConnectionA             @27  
-    WNetGetConnectionW             @28  
-    WNetGetDirectoryTypeA          @29  
-    WNetGetDirectoryTypeW          @30  
-    WNetGetFormatNameProc          @31  
-    WNetGetLastErrorA              @32  
-    WNetGetLastErrorW              @33  
-    WNetGetPropertyTextA           @34  
-    WNetGetPropertyTextW           @35  
-    WNetGetSearchDialog            @36  
-    WNetGetUniversalNameA          @37  
-    WNetGetUniversalNameW          @38  
-    WNetGetUserA                   @39  
-    WNetGetUserW                   @40  
-    WNetLogonNotify                @41  
-    WNetOpenEnumA                  @42  
-    WNetOpenEnumW                  @43  
-    WNetPasswordChangeNotify       @44  
-    WNetPropertyDialogA            @45  
-    WNetPropertyDialogW            @46  
-    WNetRestoreConnection          @47  
-    WNetSetLastErrorA              @48  
-    WNetSetLastErrorW              @49  
-    WNetSupportGlobalEnum          @50  
+
+    RestoreConnectionA0
+    WNetAddConnection2A
+    WNetAddConnection2W
+    WNetAddConnection3A
+    WNetAddConnection3W
+    WNetAddConnectionA
+    WNetAddConnectionW
+    WNetCancelConnection2A
+    WNetCancelConnection2W
+    WNetCancelConnectionA
+    WNetCancelConnectionW
+    WNetClearConnections
+    WNetCloseEnum
+    WNetConnectionDialog2
+    WNetConnectionDialog
+    WNetDirectoryNotifyA
+    WNetDirectoryNotifyW
+    WNetDisconnectDialog2
+    WNetDisconnectDialog
+    WNetEnumResourceA
+    WNetEnumResourceW
+    WNetFMXEditPerm
+    WNetFMXGetPermCaps
+    WNetFMXGetPermHelp
+    WNetGetConnection2A
+    WNetGetConnection2W
+    WNetGetConnectionA
+    WNetGetConnectionW
+    WNetGetDirectoryTypeA
+    WNetGetDirectoryTypeW
+    WNetGetFormatNameProc
+    WNetGetLastErrorA
+    WNetGetLastErrorW
+    WNetGetPropertyTextA
+    WNetGetPropertyTextW
+    WNetGetSearchDialog
+    WNetGetUniversalNameA
+    WNetGetUniversalNameW
+    WNetGetUserA
+    WNetGetUserW
+    WNetLogonNotify
+    WNetOpenEnumA
+    WNetOpenEnumW
+    WNetPasswordChangeNotify
+    WNetPropertyDialogA
+    WNetPropertyDialogW
+    WNetRestoreConnection
+    WNetSetLastErrorA
+    WNetSetLastErrorW
+    WNetSupportGlobalEnum

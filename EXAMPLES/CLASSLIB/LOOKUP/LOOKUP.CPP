@@ -9,25 +9,22 @@
 /*                                                                        */
 /*------------------------------------------------------------------------*/
 
-#if !defined( __CSTRING_H )
-#include <cstring.h>
-#endif  // __CSTRING_H
-
-#if !defined( __ASSOC_H )
-#include "classlib\assoc.h"
-#endif  // __ASSOC_H
-
-#if !defined( __DICT_H )
-#include "classlib\dict.h"
-#endif  // __DICT_H
-
-#ifndef __IOSTREAM_H
-#include <iostream.h>    
+#if !defined(SERVICES_CSTRING_H)
+# include <services/cstring.h>
+#endif
+#if !defined(CLASSLIB_ASSOC_H)
+# include <classlib/assoc.h>
+#endif
+#if !defined(CLASSLIB_DICT_H)
+# include <classlib/dict.h>
+#endif
+#if !defined(__IOSTREAM_H)
+# include <iostream.h>    
 #endif
 
 static char *Entries[] =
     {
-    "string",           "manipulates character data",
+   "string",           "manipulates character data",
 	 "TDate",            "manipulates dates",
 	 "TTime",            "manipulates times",
 	 "VectorImp",        "implements a zero-based vector",
@@ -69,5 +66,6 @@ int main( int argc, char *argv[] )
 	 else
 		  cout << definition->Key() << " : " << definition->Value() << endl;
 
+   ClassDefinitions.Flush();
 	 return 0;
 }

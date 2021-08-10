@@ -1,8 +1,10 @@
 //----------------------------------------------------------------------------
 // ObjectWindows
-// (C) Copyright 1991, 1994 by Borland International, All Rights Reserved
+// Copyright (c) 1991, 1996 by Borland International, All Rights Reserved
 //
-//   Definition of TMDIClient and TMDIFrame classes
+//$Revision:   10.3  $
+//
+// Definition of TMDIClient and TMDIFrame classes
 //----------------------------------------------------------------------------
 #if !defined(OWL_MDI_H)
 #define OWL_MDI_H
@@ -15,83 +17,83 @@
 #endif
 #include <owl/mdi.rh>
 
+// Generic definitions/compiler options (eg. alignment) preceeding the 
+// definition of classes
+#include <services/preclass.h>
+
 class _OWLCLASS TMDIFrame;
 
 //
-//  class TMDIClient
-//  ----- ----------
-//
+// class TMDIClient
+// ~~~~~ ~~~~~~~~~~
 class _OWLCLASS TMDIClient : public virtual TWindow {
   public:
-    LPCLIENTCREATESTRUCT  ClientAttr;
-
     TMDIClient(TModule* module = 0);
    ~TMDIClient();
 
     virtual bool        CloseChildren();
-
     TMDIChild*          GetActiveMDIChild();
 
-    //
-    // member functions to arrange the MDI children
+    // Member functions to arrange the MDI children
     //
     virtual void        ArrangeIcons();
     virtual void        CascadeChildren();
     virtual void        TileChildren(int tile = MDITILE_VERTICAL);
 
-    //
-    // override member functions defined by TWindow
+    // Override member functions defined by TWindow
     //
     bool                PreProcessMsg(MSG& msg);
     bool                Create();
 
     virtual TWindow*    CreateChild();
 
-    //
-    // constructs a new MDI child window object. by default, constructs an
+    // Constructs a new MDI child window object. By default, constructs an
     // instance of TWindow as an MDI child window object
     //
-    // will almost always be overriden by derived classes to construct an
-    // instance of a user-defined TWindow derived class as an MDI child window
-    // object
-    //
     virtual TMDIChild*  InitChild();
+
+    LPCLIENTCREATESTRUCT  GetClientAttr();
+    void   SetClientAttr(LPCLIENTCREATESTRUCT clientattr);
 
   protected:
     char far*           GetClassName();
 
+    // Menu command handlers & enabler
     //
-    // menu command handlers & enabler
-    //
-    void                CmCreateChild() {CreateChild();}  // CM_CREATECHILD
-    void                CmTileChildren() {TileChildren();}  // CM_TILECHILDREN
-    void                CmTileChildrenHoriz() {TileChildren(MDITILE_HORIZONTAL);}  // CM_TILECHILDREN
-    void                CmCascadeChildren() {CascadeChildren();}  // CM_CASCADECHILDREN
-    void                CmArrangeIcons() {ArrangeIcons();}  // CM_ARRANGEICONS
-    void                CmCloseChildren() {CloseChildren();}  // CM_CLOSECHILDREN
+    void                CmCreateChild();        // CM_CREATECHILD
+    void                CmTileChildren();       // CM_TILECHILDREN
+    void                CmTileChildrenHoriz();  // CM_TILECHILDREN
+    void                CmCascadeChildren();    // CM_CASCADECHILDREN
+    void                CmArrangeIcons();       // CM_ARRANGEICONS
+    void                CmCloseChildren();      // CM_CLOSECHILDREN
     void                CmChildActionEnable(TCommandEnabler& commandEnabler);
 
-    LRESULT             EvMDICreate(MDICREATESTRUCT far& createStruct);
+    TResult             EvMDICreate(MDICREATESTRUCT far& createStruct);
     void                EvMDIDestroy(HWND hWnd);
 
+    void                EvDropFiles(TDropInfo);
+
+  public_data:
+    LPCLIENTCREATESTRUCT  ClientAttr;
+
   private:
-    friend class TMDIFrame;
     TMDIClient(HWND hWnd, TModule*   module = 0);
 
-    //
-    // hidden to prevent accidental copying or assignment
+    // Hidden to prevent accidental copying or assignment
     //
     TMDIClient(const TMDIClient&);
     TMDIClient& operator =(const TMDIClient&);
 
   DECLARE_RESPONSE_TABLE(TMDIClient);
   DECLARE_STREAMABLE(_OWLCLASS, TMDIClient, 1);
+  friend class TMDIFrame;  // To allow access to private ctor
 };
 
+typedef TMDIClient TMdiClient;
+
 //
-//  class TMDIFrame
-//  ----- ---------
-//
+// class TMDIFrame
+// ~~~~~ ~~~~~~~~~
 class _OWLCLASS TMDIFrame : virtual public TFrameWindow {
   public:
     TMDIFrame(const char far* title,
@@ -100,30 +102,30 @@ class _OWLCLASS TMDIFrame : virtual public TFrameWindow {
               TModule*        module = 0);
 
 
-    TMDIFrame(HWND hWindow, HWND clientHWnd, TModule*   module = 0);
+    TMDIFrame(THandle frameHandle, HWND clientHandle, TModule* module = 0);
 
-    //
-    // override virtual functions defined by TFrameWindow or TWindow
+    // Override virtual functions defined by TFrameWindow or TWindow
     //
     bool         SetMenu(HMENU);
+#if defined(BI_NO_COVAR_RET)
+    TWindow*     GetClientWindow();
+#else
     TMDIClient*  GetClientWindow();
+#endif
     virtual HWND GetCommandTarget();
     void         PerformCreate(int menuOrId);
 
-    //
-    // find & return the child menu of an MDI frame's (or anyone's) menu bar.
+    // Find & return the child menu of an MDI frame's (or anyone's) menu bar.
     //
     static HMENU FindChildMenu(HMENU);
 
   protected:
+    // Override to call ::DefFrameProc() instead of ::DefWindowProc()
     //
-    // call ::DefFrameProc() instead of ::DefWindowProc()
-    //
-    LRESULT      DefWindowProc(uint message, WPARAM wParam, LPARAM lParam);
+    TResult      DefWindowProc(uint message, TParam1 param1, TParam2 param2);
 
   private:
-    //
-    // hidden to prevent accidental copying or assignment
+    // Hidden to prevent accidental copying or assignment
     //
     TMDIFrame(const TMDIFrame&);
     TMDIFrame& operator=(const TMDIFrame&);
@@ -131,5 +133,60 @@ class _OWLCLASS TMDIFrame : virtual public TFrameWindow {
   DECLARE_RESPONSE_TABLE(TMDIFrame);
   DECLARE_STREAMABLE(_OWLCLASS, TMDIFrame, 1);
 };
+
+typedef TMDIFrame TMdiFrame;
+
+// Generic definitions/compiler options (eg. alignment) following the 
+// definition of classes
+#include <services/posclass.h>
+
+//----------------------------------------------------------------------------
+// Inline implementations
+//
+
+//
+// Return the client create struct for the MDI client.
+//
+inline LPCLIENTCREATESTRUCT TMDIClient::GetClientAttr() {
+  return ClientAttr;
+}
+
+//
+// Set the client create struct for the MDI client.
+//
+inline void TMDIClient::SetClientAttr(LPCLIENTCREATESTRUCT clientattr) {
+  ClientAttr = clientattr;
+}
+
+//
+inline void TMDIClient::CmCreateChild() {
+  CreateChild();
+}
+
+//
+inline void TMDIClient::CmTileChildren() {
+  TileChildren();
+}
+
+//
+inline void TMDIClient::CmTileChildrenHoriz() {
+  TileChildren(MDITILE_HORIZONTAL);
+}
+
+//
+inline void TMDIClient::CmCascadeChildren() {
+  CascadeChildren();
+}
+
+//
+inline void TMDIClient::CmArrangeIcons() {
+  ArrangeIcons();
+}
+
+//
+inline void TMDIClient::CmCloseChildren() {
+  CloseChildren();
+}
+
 
 #endif  // OWL_MDI_H

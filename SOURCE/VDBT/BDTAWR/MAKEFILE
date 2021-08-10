@@ -1,0 +1,151 @@
+################################################################################
+### Makefile for Data Aware Wrapper Classes for VisualBASIC Custom Controls  ###
+### Copyright (c) 1996 by Borland International * All Rights Reserved        ###
+################################################################################
+
+.AUTODEPEND
+
+INCDIR = $(BCROOT)\include;$(VHOME)\include
+BCFLGS = -c -d -w -I$(INCDIR)
+TLFLGS = /P256
+
+!ifdef DEBUG
+  BCFLGS = -v $(BCFLGS)
+!else
+  BCFLGS = -O1gmpv $(BCFLGS)
+  TLFLGS = /0 $(TLFLGS)
+!endif
+
+!if ! $d( VFLGS )
+  VFLGS = -L
+!endif
+
+!if $d( WIN16 )
+  MODEL  = l
+  BCFLGS = -WS -k -m$(MODEL) -xc $(BCFLGS)
+  BCC    = $(BCROOT)\bin\bcc
+  EX     = 16
+!elif $d( WIN32 )
+  MODEL  = f
+  BCFLGS = -W -3 -k- $(BCFLGS)
+  BCC    = $(BCROOT)\bin\bcc32
+  EX     = 32
+!else
+  !error You must define WIN16 or WIN32
+!endif
+
+OBJDIR = $(VHOME)\object$(EX)
+TLIB = $(BCROOT)\bin\tlib
+PROJ = bdtawr$(MODEL)
+
+PFXOBJS = PFXdbcontrl.obj \
+          PFXdbmisc.obj \
+          PFXdbevent.obj \
+          PFXdbcombo.obj \
+          PFXdbchkbx.obj \
+          PFXdbedit.obj \
+          PFXdbgrid.obj \
+          PFXdbimage.obj \
+          PFXdblist.obj \
+          PFXdblkupcb.obj \
+          PFXdblkuplb.obj \
+          PFXdbmemo.obj \
+          PFXdbnvgtr.obj \
+          PFXdbradio.obj \
+          PFXdbtext.obj
+
+COBJS=$(PFXOBJS:PFX=)
+LOBJS=$(PFXOBJS:PFX=+)
+
+HEADERS = dblkupcb.h \
+          dbmemo.h \
+          dbgrid.h \
+          dbcontrl.h \
+          dbmisc.h \
+          dblkuplb.h \
+          dbnvgtr.h \
+          dbedit.h \
+          dbimage.h \
+          dbradio.h \
+          dbcombo.h \
+          dbchkbx.h \
+          dbtext.h \
+          dblist.h \
+          dbevent.h \
+          dbdefs.h \
+          dbtype.h \
+          dbpme.h
+
+# Version Control Extentions
+VSRCS = $(COBJS:.obj=.cpv)
+VHDRS = $(HEADERS:.h=.h_v)
+
+.path.obj = $(OBJDIR)
+.path.lib = $(BCROOT)\lib
+.path.cpv = $(VCSROOT)\bdbaware
+.path.h_v = $(VCSROOT)\bdbaware
+.path.__v = $(VCSROOT)\bdbaware
+.path.h   = $(BCROOT)\include\vdbt
+
+.cpp.cpv :
+  $(VCSTOOLS)\put $(VFLGS) -N $(VCSROOT)\bdbaware(.\$*.cpp)
+
+.h.h_v :
+  $(VCSTOOLS)\put $(VFLGS) -N $(VCSROOT)\bdbaware(.\$&.h)
+
+.mak.mav :
+  $(VCSTOOLS)\put $(VFLGS) -N $(VCSROOT)\bdbaware(.\$*.mak)
+
+. .__v :
+  $(VCSTOOLS)\put $(VFLGS) -N $(VCSROOT)\bdbaware(.\$*.)
+
+.cpp.obj :
+  $(BCC) $(BCFLGS) -n$(.path.obj) $*.cpp
+
+{.}.h .h :
+  @xcopy $*.h $(.path.h)
+
+all : prep $(PROJ).lib
+
+prep:
+  @if not exist $(.path.obj)\nul md $(.path.obj)
+
+$(PROJ).lib : $(HEADERS) $(COBJS)
+  @if exist $< del $<
+  cd $(.path.obj)
+  $(TLIB) $(TLFLGS) $< @&&!
+     $(LOBJS)
+!
+
+vcs : $(VSRCS) $(VHDRS) makefile.__v bdtawr.mav
+  @echo PVCS Update!
+
+clean :
+  @if exist $(.path.obj)\db*.obj del $(.path.obj)\db*.obj
+  @if exist $(.path.lib)\$(PROJ).lib del $(.path.lib)\$(PROJ).lib
+  @if exist $(.path.h)\dblkupcb.h del $(.path.h)\dblkupcb.h
+  @if exist $(.path.h)\dbmemo.h   del $(.path.h)\dbmemo.h
+  @if exist $(.path.h)\dbgrid.h   del $(.path.h)\dbgrid.h
+  @if exist $(.path.h)\dbcontrl.h del $(.path.h)\dbcontrl.h
+  @if exist $(.path.h)\dbmisc.h   del $(.path.h)\dbmisc.h
+  @if exist $(.path.h)\dblkuplb.h del $(.path.h)\dblkuplb.h
+  @if exist $(.path.h)\dbnvgtr.h  del $(.path.h)\dbnvgtr.h
+  @if exist $(.path.h)\dbedit.h   del $(.path.h)\dbedit.h
+  @if exist $(.path.h)\dbimage.h  del $(.path.h)\dbimage.h
+  @if exist $(.path.h)\dbradio.h  del $(.path.h)\dbradio.h
+  @if exist $(.path.h)\dbcombo.h  del $(.path.h)\dbcombo.h
+  @if exist $(.path.h)\dbchkbx.h  del $(.path.h)\dbchkbx.h
+  @if exist $(.path.h)\dbtext.h   del $(.path.h)\dbtext.h
+  @if exist $(.path.h)\dblist.h   del $(.path.h)\dblist.h
+  @if exist $(.path.h)\dbevent.h  del $(.path.h)\dbevent.h
+  @if exist $(.path.h)\dbdefs.h   del $(.path.h)\dbdefs.h
+  @if exist $(.path.h)\dbtype.h   del $(.path.h)\dbtype.h
+  @if exist $(.path.h)\dbpme.h    del $(.path.h)\dbpme.h
+
+backup :
+  @xcopy db*.cpp    $(BUPDIR)
+  @xcopy db*.h      $(BUPDIR)
+  @xcopy makefile   $(BUPDIR)
+  @xcopy bdtawr.mak $(BUPDIR)
+
+############################# end of Makefile ##################################

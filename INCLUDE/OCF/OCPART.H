@@ -1,15 +1,14 @@
-//
 //----------------------------------------------------------------------------
 // ObjectComponents
-// (C) Copyright 1994 by Borland International, All Rights Reserved
+// Copyright (c) 1994, 1996 by Borland International, All Rights Reserved
 //
-//   Definition of TOcPart class
+// Definition of TOcPart class
 //----------------------------------------------------------------------------
 #if !defined(OCF_OCPART_H)
 #define OCF_OCPART_H
 
-#if !defined(OCF_BOLEINTF_H)
-# include <ocf/boleintf.h>
+#if !defined(OCF_OCBOCOLE_H)
+# include <ocf/ocbocole.h>
 #endif
 #if !defined(OCF_OCOBJECT_H)
 # include <ocf/ocobject.h>
@@ -20,10 +19,11 @@
 #if !defined(CLASSLIB_VECTIMP_H)
 # include <classlib/vectimp.h>
 #endif
-#if !defined(OSL_GEOMETRY_H)
-# include <osl/geometry.h>
+#if !defined(WINSYS_GEOMETRY_H)
+# include <winsys/geometry.h>
 #endif
 
+//
 // Classes referenced
 //
 class _ICLASS TOcStorage;
@@ -31,13 +31,18 @@ class _ICLASS TOcDocument;
 class TOcVerb;
 
 //
+// class TOcPart
+// ~~~~~ ~~~~~~~
 // OC part class represents an embeded or linked part in a document
 //
-class _ICLASS TOcPart : public TUnknown, private IBSite {
+class _ICLASS TOcPart : public TUnknown, protected IBSite2 {
   public:
+    TOcPart(TOcDocument& document, int id = 0);
+    TOcPart(TOcDocument& document, const char far* name);
     TOcPart(TOcDocument& document, TOcInitInfo far& initInfo, TRect pos,
             int id = 0);
-    TOcPart(TOcDocument& document, const char far* name);
+
+    virtual bool Init(TOcInitInfo far* initInfo, TRect pos);
 
     void    Delete();
 
@@ -45,7 +50,9 @@ class _ICLASS TOcPart : public TUnknown, private IBSite {
 
     // Delegated doc functions from TOcDocument
     //
-    IBPart* GetBPartI() {return BPartI;}
+    IBPart*     GetBPartI()  {return BPartI;}
+    TOcStorage* GetStorage() {return Storage;}
+    void        SetStorage(IStorage* storage, bool remember = true);
     bool    Save(bool SameAsLoad = true, bool remember = true);
     bool    Load();
     int     Detach();
@@ -67,8 +74,7 @@ class _ICLASS TOcPart : public TUnknown, private IBSite {
     void    Select(bool select)
               {if (select) Flags |= Selected; else Flags &= ~Selected;}
     bool    IsSelected() const {return ToBool(Flags&Selected);}
-    void    SetVisible(bool visible)
-              {if (visible) Flags |= Visible; else Flags &= ~Visible;}
+    void    SetVisible(bool visible);
     bool    IsVisible() const {return ToBool(Flags&Visible);}
     bool    IsActive() const {return ToBool(Flags&Active);}
     void    SetActive() {Flags |= Active;}
@@ -111,7 +117,7 @@ class _ICLASS TOcPart : public TUnknown, private IBSite {
   protected:
    ~TOcPart();
 
-    void    Init(TOcInitInfo far& initInfo);  // ctor helper
+    virtual bool InitObj (TOcInitInfo far* initInfo);
 
     // TUnknown virtual overrides
     //
@@ -119,16 +125,20 @@ class _ICLASS TOcPart : public TUnknown, private IBSite {
 
     // IBSite implementation for BOle to use
     //
-    HRESULT   _IFUNC SiteShow(bool);
+    HRESULT   _IFUNC SiteShow(BOOL);
     HRESULT   _IFUNC DiscardUndo();
     HRESULT   _IFUNC GetSiteRect(TRect far*, TRect far*);
     HRESULT   _IFUNC SetSiteRect(const TRect far*);
     HRESULT   _IFUNC SetSiteExtent(const TSize far*);
     HRESULT   _IFUNC GetZoom(TOcScaleInfo far* scale);
     void      _IFUNC Invalidate(TOcInvalidate);
-    void      _IFUNC OnSetFocus(bool set);
-    HRESULT   _IFUNC Init(IBDataProvider far*, IBPart far*, LPCOLESTR, bool);
+    void      _IFUNC OnSetFocus(BOOL set);
+    HRESULT   _IFUNC Init(IBDataProvider far*, IBPart far*, LPCOLESTR, BOOL);
     void      _IFUNC Disconnect();
+
+    // IBSite2 implementation for BOle to use
+    //
+    HRESULT   _IFUNC GetParentWindow(HWND FAR*);
 
   protected:
     IUnknown*    BPart;      // Our corresponding helper object & interfaces
@@ -147,13 +157,16 @@ class _ICLASS TOcPart : public TUnknown, private IBSite {
     TPoint       Pos;
     TSize        Size;
 #endif
-    enum TFlag { Visible=0x01, Selected=0x02, Active=0x04, Link=0x08, Closing=0x10 };
+    enum TFlag { Visible=0x01, Selected=0x02, Active=0x04, Link=0x08,
+                 Closing=0x10, OcxDefault=0x20, OcxCancel=0x40 };
     uint16       Flags;      // Is this part Selected/Visible/Active/ALink?
 
   friend class TOcPartCollection;
 };
 
 //
+// class TOcPartCollection
+// ~~~~~ ~~~~~~~~~~~~~~~~~
 // Container of parts with iterator
 //
 class TOcPartCollection : private TCVectorImp<TOcPart*> {
@@ -177,7 +190,8 @@ class TOcPartCollection : private TCVectorImp<TOcPart*> {
 };
 
 //
-//
+// class TOcPartCollectionIter
+// ~~~~~ ~~~~~~~~~~~~~~~~~~~~~
 //
 class TOcPartCollectionIter : private TCVectorIteratorImp<TOcPart*> {
   private:
@@ -193,8 +207,8 @@ class TOcPartCollectionIter : private TCVectorIteratorImp<TOcPart*> {
 };
 
 //
-//
-//
+// class TOcVerb
+// ~~~~~ ~~~~~~~
 class TOcVerb {
   public:
     TOcVerb();
@@ -207,6 +221,8 @@ class TOcVerb {
 };
 
 //
+// class TOcPartChangeInfo
+// ~~~~~ ~~~~~~~~~~~~~~~~~
 // View/Data change info
 //
 class TOcPartChangeInfo {
@@ -229,5 +245,5 @@ class TOcPartChangeInfo {
     int         Type;  // what type of change
     TOcPart*    Part;
 };
-#endif
 
+#endif  // OCF_OCPART_H

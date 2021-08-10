@@ -2,7 +2,7 @@
 // ObjectWindows - (C) Copyright 1991, 1994 by Borland International
 //   Ole tutorial application -- owlole2.cpp
 //----------------------------------------------------------------------------
-#include <owl/owlpch.h>
+#include <owl/pch.h>
 #include <owl/applicat.h>
 #include <owl/decframe.h>
 #include <owl/dc.h>
@@ -314,9 +314,11 @@ TScribbleWindow::EvLButtonDown(uint modKeys, TPoint& point)
 }
 
 void
-TScribbleWindow::EvRButtonDown(uint, TPoint&)
+TScribbleWindow::EvRButtonDown(uint modKeys, TPoint& point)
 {
-  GetPenSize();
+  TOleWindow::EvRButtonDown(modKeys, point);
+  if (!SelectEmbedded())
+    GetPenSize();
 }
 
 void
@@ -481,7 +483,7 @@ TScribbleWindow::OpenFile()
       // figure out the size of our stream to read, & read it into a buffer
       uint64 size;
       stream.Seek(0, STREAM_SEEK_END, &size);
-      char* buff = new char[(int)size.LowPart+10]; 
+      char* buff = new char[(int)size.LowPart+10];
       stream.Seek(0, STREAM_SEEK_SET);
       stream.Read(buff, size.LowPart);
 
@@ -534,7 +536,7 @@ class TScribbleApp : public TApplication, public TOcModule {
   DECLARE_RESPONSE_TABLE(TScribbleApp);
 };
 
-DEFINE_RESPONSE_TABLE(TScribbleApp)
+DEFINE_RESPONSE_TABLE1(TScribbleApp, TApplication)
   EV_COMMAND(CM_FILENEW, CmFileNew),
   EV_COMMAND(CM_FILEOPEN, CmFileOpen),
 END_RESPONSE_TABLE;
@@ -573,9 +575,12 @@ TScribbleApp::InitMainWindow()
   frame->Insert(*sb, TDecoratedFrame::Bottom);
   frame->Insert(*cb, TDecoratedFrame::Top);
 
-  // Set the main window and its menu
+  // Set the menu & icon
+  frame->SetMenuDescr(TMenuDescr(IDM_SCRIBBLE));
+  frame->SetIcon(this, IDI_TUTORIAL);
+
+  // Set the main window
   SetMainWindow(frame);
-  GetMainWindow()->SetMenuDescr(TMenuDescr(IDM_SCRIBBLE));
 }
 
 //

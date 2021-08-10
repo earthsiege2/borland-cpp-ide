@@ -1,11 +1,12 @@
-//
 //----------------------------------------------------------------------------
 // ObjectComponents
-// (C) Copyright 1994 by Borland International, All Rights Reserved
+// Copyright (c) 1994, 1996 by Borland International, All Rights Reserved
+//
+// $Revision:   2.11  $
 //
 //   Implementation of TOcRemView Class
 //----------------------------------------------------------------------------
-#include <ocf/ocfpch.h>
+#include <ocf/pch.h>
 #include <ocf/ocremvie.h>
 #include <ocf/ocapp.h>
 #include <ocf/ocstorag.h>
@@ -15,12 +16,41 @@ DIAG_DECLARE_GROUP(OcRefCount);
 
 const char  RemViewStreamName[] = "OcRemoteView";
 
+//
+// Constructor for compatibility only
+//
 TOcRemView::TOcRemView(TOcDocument& doc, TRegList* regList, IUnknown* outer)
 :
   BSiteI(0), BContainerI(0), BLSiteI(0),
   State(Hidden),
   Kind(DontKnow),
   TOcView(doc, regList, outer)
+{
+  Init();
+  TRACEX(OcRefCount, 1, "TOcRemView() @" << (void*)this);
+}
+
+//
+// New constructor that uses host interfaces
+//
+TOcRemView::TOcRemView(TOcDocument& doc,
+                       TOcContainerHost* ch, TOcServerHost* sh,
+                       TRegList* regList, IUnknown* outer)
+:
+  BSiteI(0), BContainerI(0), BLSiteI(0),
+  State(Hidden),
+  Kind(DontKnow),
+  TOcView(doc, ch, sh, regList, outer)
+{
+  Init();
+  TRACEX(OcRefCount, 1, "TOcRemView() @" << (void*)this);
+}
+
+//
+// Do real constructor work
+//
+void
+TOcRemView::Init()
 {
   // Create a site for this remote view
   //
@@ -33,7 +63,7 @@ TOcRemView::TOcRemView(TOcDocument& doc, TRegList* regList, IUnknown* outer)
     // Connect the part and the site
     //
     if (BSiteI) {
-      const char* progid = regList->Lookup(OcApp.IsOptionSet(amDebug) ?
+      const char* progid = RegList->Lookup(OcApp.IsOptionSet(amDebug) ?
                                            "debugprogid" : "progid");
       BSiteI->Init((IBDataProvider2*)this, this, OleStr(progid), true);
     }
@@ -47,9 +77,11 @@ TOcRemView::TOcRemView(TOcDocument& doc, TRegList* regList, IUnknown* outer)
     if (SUCCEEDED(BSite->QueryInterface(IID_IBApplication, &(LPVOID)BAppI)))
       BAppI->Release();     // avoid deadlock
   }
-  TRACEX(OcRefCount, 1, "TOcRemView() @" << (void*)this);
 }
 
+//
+//
+//
 TOcRemView::~TOcRemView()
 {
   // Make sure running object is unregistered
@@ -57,9 +89,9 @@ TOcRemView::~TOcRemView()
   if (Kind == LoadFromFile && State != Closing)
     EvClose();
 
-  // Disconnect the TOleView with this
+  // Disconnect the server view host with this ocRemView
   //
-  ForwardEvent(OC_VIEWCLOSE);
+  ServerHost->EvOcViewClose();
 
   // Release all helpers, but first call base class to release helpers
   // BEFORE BSite is released
@@ -138,8 +170,18 @@ TOcRemView::DragFeedback(TPoint far* p, const TRect far* r, TOcMouseAction a,
 }
 
 //----------------------------------------------------------------------------
-// IBContainer override
+// IBContainer overrides of TOcView implementation
 //
+
+//
+// Show the container window
+//
+HRESULT _IFUNC
+TOcRemView::BringToFront()
+{
+  TOcView::BringToFront();
+  return HR_NOERROR;
+}
 
 //
 // Check option flag to see if in place activation is allowed
@@ -181,7 +223,7 @@ TOcRemView::Disconnect()
 }
 
 //
-// set focus to the inplace server
+// Set focus to the inplace server
 //
 bool
 TOcRemView::EvSetFocus(bool set)
@@ -245,11 +287,12 @@ TOcRemView::GetInitialRect(bool selection)
   //
   bool haveSite = false;
   if (BSiteI)
-    haveSite = SUCCEEDED(BSiteI->GetSiteRect(&ps.PartRect, 0)) && !ps.PartRect.IsEmpty();
+    haveSite = SUCCEEDED(BSiteI->GetSiteRect(&ps.PartRect, 0))
+               && !ps.PartRect.IsEmpty();
 
   // Let the server app provide an initial server extent if it wants to.
   //
-  if (!ForwardEvent(OC_VIEWPARTSIZE, &ps)) {
+  if (!ServerHost->EvOcViewPartSize(ps)) {
 
     // The server has not requested a specific size. If the container has
     // already provided a site size, use it. Otherwise pick an arbitrary
@@ -355,23 +398,24 @@ TOcRemView::Init(LPCOLESTR path)
 
   // Read object's data from storage
   //
-  if (!ForwardEvent(OC_VIEWOPENDOC, (const char far*)OleStr(path)))
+  if (!ContainerHost->EvOcViewOpenDoc(OleStr(path))) {
     return HR_FAIL;
+  }
 
   // Pretend we are open editing to make sure that the doc server is attached
   // to a child window in case this is a link.
   //
   State = OpenEditing;
-  ForwardEvent(OC_VIEWATTACHWINDOW, true);
+  ServerHost->EvOcViewAttachWindow(true);
 
   // If embed from file, we had to call BDocumentI->Init() to initialize
   // IBApplication, but we do not want to register the drop target, therefore,
   // we use a 0 for the window handle.
   //
-  HWND oldWin = Win;
-  Win = 0;
+  HWND oldWin = ContainerHost->EvOcGetWindow();
+  ContainerHost->SetWindow(0);
   BDocumentI->Init(this);
-  Win = oldWin;
+  ContainerHost->SetWindow(oldWin);
 
   // Register this document in running object table
   //
@@ -389,20 +433,7 @@ TOcRemView::GetPart(IBPart far* far* parti, LPCOLESTR moniker)
 }
 
 //----------------------------------------------------------------------------
-// IBContainer implementation
-
-//
-// Show the container window
-//
-HRESULT _IFUNC
-TOcRemView::BringToFront()
-{
-  TOcView::BringToFront();
-  return HR_NOERROR;
-}
-
-//----------------------------------------------------------------------------
-// IDataNegotiator implementation
+// IDataNegotiator implementation to eliminate ambiguity (IBPart & IBDropDest)
 
 uint _IFUNC
 TOcRemView::CountFormats()
@@ -413,14 +444,11 @@ TOcRemView::CountFormats()
 HRESULT _IFUNC
 TOcRemView::GetFormat(uint index, TOcFormatInfo far* fmt)
 {
-  PRECONDITION(fmt);
-
   return TOcView::GetFormat(index, fmt);
 }
 
-
 //----------------------------------------------------------------------------
-// IBDataNegotiator implementation
+// IBDataProvider2 implementation
 
 //
 // Request native data for pasting into client application.
@@ -432,14 +460,12 @@ TOcRemView::GetFormatData(TOcFormatInfo far* fmt)
   PRECONDITION(fmt);
 
   TOcFormat* format = FormatList.Find(fmt->Id);
-  if (!format)
-    return 0;
-
-  TOcFormatData formatData(*format);
-  if (ForwardEvent(OC_VIEWCLIPDATA, &formatData))
-    return formatData.Handle;
-  else
-    return 0;
+  if (format) {
+    TOcFormatData formatData(*format);
+    if (ServerHost->EvOcViewClipData(formatData))
+      return formatData.Handle;
+  }
+  return 0;
 }
 
 //
@@ -447,21 +473,22 @@ TOcRemView::GetFormatData(TOcFormatInfo far* fmt)
 // This is only called at paste time (not at copy time).
 //
 HRESULT _IFUNC
-TOcRemView::SetFormatData(TOcFormatInfo far* fmt, HANDLE data, bool /*release*/)
+TOcRemView::SetFormatData(TOcFormatInfo far* fmt, HANDLE data, BOOL /*release*/)
 {
   PRECONDITION(fmt);
   PRECONDITION(data);
 
   TOcFormat* format = FormatList.Find(fmt->Id);
-  if (!format)
-    return 0;
-
-  TOcFormatData formatData(*format, 0, data);
-  return HRFailIfZero((bool)(ForwardEvent(OC_VIEWSETDATA, &formatData)));
+  if (format) {
+    TOcFormatData formatData(*format, 0, data);
+    if (ServerHost->EvOcViewSetData(formatData))
+      return HR_NOERROR;
+  }
+  return HR_FAIL;
 }
 
 #if defined(BI_PLAT_WIN16)
-  extern "C" HRGN FAR PASCAL ::GetClipRgn(HDC);  // GDI.173
+  extern "C" HRGN FAR PASCAL GetClipRgn(HDC);  // GDI.173
 #endif
 
 //
@@ -500,7 +527,7 @@ TOcRemView::Draw(HDC dc, const RECTL far*  pos, const RECTL far* clip,
   else if (!OcApp.IsOptionSet(amExeModule)) {
     if (p.Width() != Extent.cx || p.Height() != Extent.cy) {
       TOcScaleFactor scaleFactor(p, Extent);
-      ForwardEvent(OC_VIEWSETSCALE, &scaleFactor);
+      ServerHost->EvOcViewSetScale(scaleFactor);
     }
 #if defined(BI_PLAT_WIN16)
     hRgn = ::GetClipRgn(dc);
@@ -523,7 +550,7 @@ TOcRemView::Draw(HDC dc, const RECTL far*  pos, const RECTL far* clip,
   c.Normalize();
 
   TOcViewPaint vp = { dc, &p, &c, (TOcAspect)aspect, false, 0, 0 };
-  bool result = (bool)ForwardEvent(OC_VIEWPAINT, &vp);
+  bool result = ServerHost->EvOcViewPaint(vp);
 
   // Restore the dc attributes
   //
@@ -561,11 +588,11 @@ TOcRemView::Save(IStorage* storage, BOOL sameAsLoad, BOOL remember)
   PRECONDITION(storage);
 
   TOcSaveLoad ocSave(storage, ToBool(sameAsLoad), ToBool(remember));
-  return HRFailIfZero((bool)ForwardEvent(OC_VIEWSAVEPART, &ocSave));
+  return HRFailIfZero(ServerHost->EvOcViewSavePart(ocSave));
 }
 
 //----------------------------------------------------------------------------
-// IBPart implementation
+// IBPart2 implementation
 
 //
 // Load the associated document and activate the remote view
@@ -583,7 +610,7 @@ TOcRemView::Init(IBSite far*, TOcInitInfo far* initInfo)
   //
   if (initInfo->Where == iwStorage) {
     TOcSaveLoad ocLoad(initInfo->Storage, true, true);
-    if (!ForwardEvent(OC_VIEWLOADPART, &ocLoad))
+    if (!ServerHost->EvOcViewLoadPart(ocLoad))
       return HR_FAIL;
   }
   else if (initInfo->Where == iwNew)
@@ -594,7 +621,7 @@ TOcRemView::Init(IBSite far*, TOcInitInfo far* initInfo)
   Show(true);
   Activate(true);
 
-  return HR_OK;
+  return HR_NOERROR;
 }
 
 //
@@ -605,7 +632,8 @@ HRESULT _IFUNC
 TOcRemView::Close()
 {
   TRACEX(OcRemView, 1, "Close() on " << (void*)this <<
-         " Closing:" << (State==Closing) << " Win:" << hex << (uint)Win);
+         " Closing:" << (int)ToBool(State==Closing) << " Win:" << hex <<
+         (uint)ServerHost->EvOcGetWindow());
 
   // Keep DLL server in memory until its ref count goes to 0
   //
@@ -640,8 +668,8 @@ TOcRemView::SetPartPos(TRect far* r)
 {
   Origin = *(POINT*)&r->left;
 
-  TOcScaleInfo scale;
   CHECK(BSiteI);
+  TOcScaleInfo scale;
   BSiteI->GetZoom(&scale);
   TOcScaleFactor scaleFactor(scale);
 
@@ -655,7 +683,7 @@ TOcRemView::SetPartPos(TRect far* r)
   ::MoveWindow(GetWindow(), r->left, r->top,
                scaleFactor.SiteSize.cx, scaleFactor.SiteSize.cy, true);
 
-  ForwardEvent(OC_VIEWSETSCALE, &scaleFactor);
+  ServerHost->EvOcViewSetScale(scaleFactor);
 
   return HR_NOERROR;
 }
@@ -671,7 +699,7 @@ TOcRemView::SetPartSize(TSize far* size)
 // Activate this view
 //
 HRESULT _IFUNC
-TOcRemView::Activate(bool activate)
+TOcRemView::Activate(BOOL activate)
 {
   if (activate && GetWindow())
     ::SetFocus(GetWindow());
@@ -682,7 +710,7 @@ TOcRemView::Activate(bool activate)
 // Show/Hide the server view window
 //
 HRESULT _IFUNC
-TOcRemView::Show(bool show)
+TOcRemView::Show(BOOL show)
 {
   if (GetWindow())
     ::ShowWindow(GetWindow(), show ? SW_SHOW : SW_HIDE);
@@ -694,7 +722,7 @@ TOcRemView::Show(bool show)
 // Work with the window Z-order and parenting
 //
 HRESULT _IFUNC
-TOcRemView::Open(bool open)
+TOcRemView::Open(BOOL open)
 {
   if (open) {
     // Just show the window, if it's already active
@@ -715,12 +743,12 @@ TOcRemView::Open(bool open)
       // Forward event to app to let it attach the window to an appropriate
       // frame
       //
-      ForwardEvent(OC_VIEWATTACHWINDOW, true);
+      ServerHost->EvOcViewAttachWindow(true);
       BringToFront();
 
       // Build up open edit caption in the form "<menuname> in <containername>"
       //
-      if (RegList) {
+      if (RegList && Kind != Link) {
         string newTitle = (*RegList)["menuname"];
         char in[32];
         ::LoadString(_hInstance, IDS_IN, in, sizeof in);
@@ -728,7 +756,10 @@ TOcRemView::Open(bool open)
         LPCOLESTR str = BContainerI->GetWindowTitle();
         if (str)
           newTitle += OleStr(str);
-        ForwardEvent(OC_VIEWSETTITLE, newTitle.c_str());
+        ServerHost->EvOcViewSetTitle(newTitle.c_str());
+      }
+      else {
+        ServerHost->EvOcViewSetTitle(NULL); // if link, caption is filename
       }
     }
   }
@@ -739,7 +770,7 @@ TOcRemView::Open(bool open)
 
     // Reparent back to the real parent
     //
-    ForwardEvent(OC_VIEWATTACHWINDOW, (uint32)false);
+    ServerHost->EvOcViewAttachWindow(false);
   }
   return HR_NOERROR;
 }
@@ -759,7 +790,7 @@ TOcRemView::EnumVerbs(TOcVerb far*)
 HRESULT _IFUNC
 TOcRemView::DoVerb(uint verb)
 {
-  return HRFailIfZero((bool)ForwardEvent(OC_VIEWDOVERB, verb));
+  return HRFailIfZero(ServerHost->EvOcViewDoVerb(verb));
 }
 
 //
@@ -789,7 +820,7 @@ TOcRemView::OpenInPlace(HWND hWndParent)
 
     // Set back to real parent and don't show it
     //
-    if (!ForwardEvent(OC_VIEWATTACHWINDOW, (uint32)false)) {
+    if (!ServerHost->EvOcViewAttachWindow(false)) {
       Show(false);
       ::SetParent(GetWindow(), OcApp.GetWindow());
     }
@@ -807,14 +838,16 @@ TOcRemView::InsertMenus(HMENU hMenu, TOcMenuWidths far* omw)
 
   TOcMenuDescr md;
   md.HMenu = hMenu;
-  for (int i = 0; i < 6; i++) {
+
+  int i;
+  for (i = 0; i < 6; i++) {
     md.Width[i] = (int)omw->Width[i];
     i++;
     md.Width[i] = 0;  // make sure the server's are zeroed
     omw->Width[i] = 0;
   }
 
-  if (!(bool)ForwardEvent(OC_VIEWINSMENUS, &md))
+  if (!ServerHost->EvOcViewInsMenus(md))
     return HR_FAIL;
 
   for (i = 0; i < 6; i++)
@@ -827,7 +860,7 @@ TOcRemView::InsertMenus(HMENU hMenu, TOcMenuWidths far* omw)
 // Retrieve rectangle info about the toolbars
 //
 static void
-sGetTBRects(TOcToolBarInfo far& tbi,
+getTBRects(TOcToolBarInfo far& tbi,
             TRect& ttbr, TRect& ltbr, TRect& btbr, TRect& rtbr, TRect& border)
 {
   if (tbi.HLeftTB)
@@ -857,7 +890,7 @@ sGetTBRects(TOcToolBarInfo far& tbi,
 // Assume all the toolbars have WS_BORDER style & overlaps accordingly
 //
 static void
-sAdjustTBPos(TOcToolBarInfo far& tbi, const TRect& contFrameR, bool setParent,
+adjustTBPos(TOcToolBarInfo far& tbi, const TRect& contFrameR, bool setParent,
              const TRect& ttbr, const TRect& ltbr,
              const TRect& btbr, const TRect& rtbr,
              const TRect& border)
@@ -901,7 +934,7 @@ sAdjustTBPos(TOcToolBarInfo far& tbi, const TRect& contFrameR, bool setParent,
 // Show or hide the tool windows used by our view
 //
 HRESULT _IFUNC
-TOcRemView::ShowTools(bool show)
+TOcRemView::ShowTools(BOOL show)
 {
   TOcToolBarInfo far& tbi = ToolBarInfo;
   tbi.Show = show;
@@ -914,7 +947,7 @@ TOcRemView::ShowTools(bool show)
   // Let the view create/destroy its toolbars & fill them in for us to work
   // with. View may also change the HFrame for special purposes
   //
-  if (!ForwardEvent(OC_VIEWSHOWTOOLS, &tbi))
+  if (!ServerHost->EvOcViewShowTools(tbi))
     return HR_FAIL;
 
   // Assist view in showing toobars by negotiating, parenting to the container
@@ -926,12 +959,13 @@ TOcRemView::ShowTools(bool show)
     TRect rtbr;
     TRect btbr;
     TRect border;
-    sGetTBRects(tbi, ltbr, ttbr, rtbr, btbr, border);
+    getTBRects(tbi, ltbr, ttbr, rtbr, btbr, border);
 
     // Request the desired border space from the container. Scale back requests
     // as needed if container denies requests.
     //
-    for (int i = 0; i < 3; i++) {
+    int i;
+    for (i = 0; i < 3; i++) {
       if (!SUCCEEDED(BAppI->RequestBorderSpace(&border))) {
         switch (i) {
           case 0:
@@ -955,7 +989,7 @@ TOcRemView::ShowTools(bool show)
 
     TRect contFrameR;
     BAppI->GetWindowRect(&contFrameR);
-    sAdjustTBPos(tbi, contFrameR, true, ltbr, ttbr, rtbr, btbr, border);
+    adjustTBPos(tbi, contFrameR, true, ltbr, ttbr, rtbr, btbr, border);
   }
   // Assist view in hiding toobars by reparenting them to frame (defaults to
   // this server) & hiding them
@@ -986,7 +1020,7 @@ TOcRemView::ShowTools(bool show)
 // tools.
 //
 void _IFUNC
-TOcRemView::FrameResized(const TRect far* contFrameR, bool isMainFrame)
+TOcRemView::FrameResized(const TRect far* contFrameR, BOOL isMainFrame)
 {
   if (!isMainFrame)
     return;
@@ -996,21 +1030,21 @@ TOcRemView::FrameResized(const TRect far* contFrameR, bool isMainFrame)
   TRect rtbr;
   TRect btbr;
   TRect border;
-  sGetTBRects(ToolBarInfo, ltbr, ttbr, rtbr, btbr, border);
-  sAdjustTBPos(ToolBarInfo, *contFrameR, false, ltbr, ttbr, rtbr, btbr, border);
+  getTBRects(ToolBarInfo, ltbr, ttbr, rtbr, btbr, border);
+  adjustTBPos(ToolBarInfo, *contFrameR, false, ltbr, ttbr, rtbr, btbr, border);
 }
 
 //
 // Let the server provide drag feedback
 //
 HRESULT _IFUNC
-TOcRemView::DragFeedback(TPoint far* where, bool /*nearScroll*/)
+TOcRemView::DragFeedback(TPoint far* where, BOOL /*nearScroll*/)
 {
   PRECONDITION(where);
 
   TPoint awhere(*where);
   TOcDragDrop dd = { 0, &awhere, 0 };
-  return HRFailIfZero((bool)ForwardEvent(OC_VIEWDRAG, &dd));
+  return HRFailIfZero(ServerHost->EvOcViewDrag(dd));
 }
 
 //
@@ -1021,7 +1055,7 @@ TOcRemView::GetPalette(LOGPALETTE far* far* palette)
 {
   PRECONDITION(palette);
 
-  return HRFailIfZero((bool)ForwardEvent(OC_VIEWGETPALETTE, palette));
+  return HRFailIfZero(ServerHost->EvOcViewGetPalette(palette));
 }
 
 HRESULT _IFUNC

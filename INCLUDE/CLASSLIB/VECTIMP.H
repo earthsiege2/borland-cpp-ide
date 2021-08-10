@@ -1,46 +1,42 @@
-/*------------------------------------------------------------------------*/
-/*                                                                        */
-/*  VECTIMP.H                                                             */
-/*                                                                        */
-/*  Copyright (c) 1991, 1994 Borland International                        */
-/*  All Rights Reserved                                                   */
-/*                                                                        */
-/*------------------------------------------------------------------------*/
-
+//----------------------------------------------------------------------------
+// Borland BIDS Container Library
+// Copyright (c) 1991, 1996 by Borland International, All Rights Reserved
+//
+//$Revision:   5.3  $
+//
+//----------------------------------------------------------------------------
 #if !defined( CLASSLIB_VECTIMP_H )
 #define CLASSLIB_VECTIMP_H
 
-#if !defined( __LIMITS_H )
-#include <limits.h>
+#if !defined(CLASSLIB_DEFS_H)
+# include <classlib/defs.h>
+#endif
+#if !defined(CLASSLIB_STDTEMPL_H)
+# include <classlib/stdtempl.h>
+#endif
+#if !defined(CLASSLIB_ALLOCTR_H)
+# include <classlib/alloctr.h>
+#endif
+#if !defined(CLASSLIB_MEMMGR_H)
+# include <classlib/memmgr.h>
+#endif
+#if !defined(CLASSLIB_VOIDP_H)
+# include <classlib/voidp.h>
+#endif
+#if !defined(SERVICES_CHECKS_H)
+# include <services/checks.h>
+#endif
+#if !defined(CLASSLIB_RESOURCE_H)
+# include <classlib/resource.h>
 #endif
 
-#if !defined( __CHECKS_H )
-#include <checks.h>
+#if !defined(__LIMITS_H) && !defined(_INC_LIMITS)
+# include <limits.h>
 #endif
 
-#if !defined( CLASSLIB_DEFS_H )
-#include <classlib/defs.h>
-#endif
-
-#if !defined( CLASSLIB_STDTEMPL_H )
-#include <classlib/stdtempl.h>
-#endif
-
-#if !defined( CLASSLIB_ALLOCTR_H )
-#include <classlib/alloctr.h>
-#endif
-
-#if !defined( CLASSLIB_MEMMGR_H )
-#include <classlib/memmgr.h>
-#endif
-
-#if !defined( CLASSLIB_VOIDP_H )
-#include <classlib/voidp.h>
-#endif
-
-#pragma option -Vo-
-#if defined( BI_CLASSLIB_NO_po )
-#pragma option -po-
+//#pragma option -Vo-
+#if defined(BI_CLASSLIB_NO_po)
+# pragma option -po-
 #endif
 
 /*------------------------------------------------------------------------*/
@@ -1434,16 +1430,14 @@ public:
 
 };
 
-#if defined( BI_OLDNAMES )
-#define BI_ISVectorImp TISVectorImp
-#define BI_ISVectorIteratorImp TISVectorIteratorImp
+#if defined(BI_OLDNAMES)
+# define BI_ISVectorImp TISVectorImp
+# define BI_ISVectorIteratorImp TISVectorIteratorImp
 #endif
 
-#if defined( BI_CLASSLIB_NO_po )
-#pragma option -po.
+#if defined(BI_CLASSLIB_NO_po)
+# pragma option -po.
 #endif
-
-#pragma option -Vo.
+//#pragma option -Vo.
 
 #endif  // CLASSLIB_VECTIMP_H
-

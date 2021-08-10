@@ -5,9 +5,9 @@
 */
 
 /*
- *      C/C++ Run Time Library - Version 6.5
+ *      C/C++ Run Time Library - Version 7.0
  *
- *      Copyright (c) 1991, 1994 by Borland International
+ *      Copyright (c) 1991, 1996 by Borland International
  *      All Rights Reserved.
  *
  */
@@ -27,7 +27,7 @@
 #endif
 
 #if defined(__FLAT__)
-#pragma option -a-
+#pragma pack(push, 1)
 #endif
 
 #endif  /* !RC_INVOKED */
@@ -68,7 +68,7 @@ int    _Cdecl _FARFUNC utime(const char _FAR *__path,
 #if !defined(RC_INVOKED)
 
 #if defined(__FLAT__)
-#pragma option -a.  /* restore default packing */
+#pragma pack(pop)	/* restore default packing */
 #endif
 
 #if defined(__STDC__)

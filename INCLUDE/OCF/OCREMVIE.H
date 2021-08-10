@@ -1,9 +1,8 @@
-//
 //----------------------------------------------------------------------------
 // ObjectComponents
-// (C) Copyright 1994 by Borland International, All Rights Reserved
+// Copyright (c) 1994, 1996 by Borland International, All Rights Reserved
 //
-//   Definition of TOcRemView Class
+// Definition of TOcRemView Class
 //----------------------------------------------------------------------------
 #if !defined(OCF_OCREMVIE_H)
 #define OCF_OCREMVIE_H
@@ -13,10 +12,16 @@
 #endif
 
 //
+// class TOcRemView
+// ~~~~~ ~~~~~~~~~~
 // Remote Viewer object for a server document
 //
 class _ICLASS TOcRemView : public TOcView, public IBPart2 {
   public:
+    TOcRemView(TOcDocument& doc, TOcContainerHost* cs, TOcServerHost* ss,
+               TRegList* regList=0, IUnknown* outer=0);
+
+    // Compatibility
     TOcRemView(TOcDocument& doc, TRegList* regList = 0, IUnknown* outer = 0);
 
     virtual void   ReleaseObject();
@@ -67,7 +72,6 @@ class _ICLASS TOcRemView : public TOcView, public IBPart2 {
     ulong   _IFUNC Release();
     HRESULT _IFUNC QueryInterface(const GUID far& iid, void far*far* iface);
 
-
   protected:
     // IBContains forwarding to base
     //
@@ -89,7 +93,7 @@ class _ICLASS TOcRemView : public TOcView, public IBPart2 {
 
     HRESULT _IFUNC AllowInPlace();
 
-    // IBDataNegotiator implementation
+    // IBDataNegotiator implementation to eliminate ambiguity
     //
     uint     _IFUNC CountFormats();
     HRESULT  _IFUNC GetFormat(uint index, TOcFormatInfo far* fmt);
@@ -97,35 +101,36 @@ class _ICLASS TOcRemView : public TOcView, public IBPart2 {
     // IBDataProvider2 implementation
     //
     HANDLE  _IFUNC  GetFormatData(TOcFormatInfo far*);
-    HRESULT _IFUNC  SetFormatData(TOcFormatInfo far* fmt, HANDLE data, bool release);
+    HRESULT _IFUNC  SetFormatData(TOcFormatInfo far* fmt, HANDLE data, BOOL release);
     HRESULT _IFUNC  Draw(HDC, const RECTL far*, const RECTL far*, TOcAspect, TOcDraw bd);
     HRESULT _IFUNC  GetPartSize(TSize far*);
-    HRESULT _IFUNC  Save(IStorage*, bool sameAsLoad, bool remember);
+    HRESULT _IFUNC  Save(IStorage*, BOOL sameAsLoad, BOOL remember);
 
-    // IBPart implementation
+    // IBPart(2) implementation
     //
     HRESULT _IFUNC  Init(IBSite far*, TOcInitInfo far*);
     HRESULT _IFUNC  Close();
     HRESULT _IFUNC  CanOpenInPlace();
     HRESULT _IFUNC  SetPartSize(TSize far*);
     HRESULT _IFUNC  SetPartPos(TRect far*);
-    HRESULT _IFUNC  Activate(bool);
-    HRESULT _IFUNC  Show(bool);
-    HRESULT _IFUNC  Open(bool);
+    HRESULT _IFUNC  Activate(BOOL);
+    HRESULT _IFUNC  Show(BOOL);
+    HRESULT _IFUNC  Open(BOOL);
     HRESULT _IFUNC  EnumVerbs(TOcVerb far*);
     HRESULT _IFUNC  DoVerb(uint);
     HWND    _IFUNC  OpenInPlace(HWND);
     HRESULT _IFUNC  InsertMenus(HMENU, TOcMenuWidths far*);
-    HRESULT _IFUNC  ShowTools(bool);
-    void    _IFUNC  FrameResized(const TRect far*, bool);
-    HRESULT _IFUNC  DragFeedback(TPoint far*, bool);
+    HRESULT _IFUNC  ShowTools(BOOL);
+    void    _IFUNC  FrameResized(const TRect far*, BOOL);
+    HRESULT _IFUNC  DragFeedback(TPoint far*, BOOL);
     HRESULT _IFUNC  GetPalette(LOGPALETTE far* far*);
     HRESULT _IFUNC  SetHost(IBContainer far* objContainer);
     HRESULT _IFUNC  DoQueryInterface(const IID far& iid, void far* far* pif);
     LPOLESTR _IFUNC GetName(TOcPartName);
 
   protected:
-   ~TOcRemView();
+    void            Init();          // Constructor helper
+                   ~TOcRemView();
 
     IBContainer*    BContainerI;     //
     IBLinkable*     BLSiteI;         // for site moniker
@@ -139,10 +144,14 @@ class _ICLASS TOcRemView : public TOcView, public IBPart2 {
     TKind           Kind;            // What kind of server view this is
 };
 
-inline bool TOcRemView::SetContainerStatusText(const char far* text) {
+//----------------------------------------------------------------------------
+// Inline implementations
+//
+
+//
+inline bool TOcRemView::SetContainerStatusText(const char far* text)
+{
   return HRIsOK(BAppI->SetStatusText(OleStr(text)));
 }
 
 #endif  // OCF_OCREMVIE_H
-
-

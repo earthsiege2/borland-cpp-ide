@@ -1,13 +1,25 @@
 //----------------------------------------------------------------------------
 // ObjectWindows
-// (C) Copyright 1993, 1994 by Borland International, All Rights Reserved
+// Copyright (c) 1993, 1996 by Borland International, All Rights Reserved
 //
-//   Implementation of TVSlider, vertical slider UI widget
+//$Revision:   10.4  $
+//
+// Implementation of TVSlider, vertical slider UI widget
 //----------------------------------------------------------------------------
 #pragma hdrignore SECTION
-#include <owl/owlpch.h>
-#include <owl/slider.h>
-#include <owl/dc.h>
+#include <owl/pch.h>
+#if !defined(OWL_SLIDER_H)
+# include <owl/slider.h>
+#endif
+#if !defined(OWL_DC_H)
+# include <owl/dc.h>
+#endif
+#if !defined(OWL_COMMCTRL_H)
+# include <owl/commctrl.h>
+#endif
+#if !defined(OWL_UIHELPER_H)
+# include <owl/uihelper.h>
+#endif
 
 #if !defined(SECTION) || SECTION == 1
 
@@ -22,31 +34,51 @@ TVSlider::TVSlider(TWindow*        parent,
 :
   TSlider(parent, id, x, y, w, h, thumbResId, module)
 {
-  ThumbRect = TRect(0, 0, 20, 9);
-  ThumbRect += TPoint((Attr.W-ThumbRect.Width())/2, 0);  // move past tics
-  CaretRect = TRect(3, 3, 3+14, 3+3);
-
-  // get slot size from Attr.W set by TScrollBar ?
   if (!w)
     Attr.W = 32;
-  SlotThick = 14;
+  Attr.Style |= TBS_VERT;  // In case it is Native, else we dont care
 }
 
 //
-// Calculate and return position given a thumb upper left point
-// and vice versa.
+// Constructor for a slider object created from resource
+//
+TVSlider::TVSlider(TWindow*        parent,
+                   int             resId,
+                   TResId          thumbResId,
+                   TModule*        module)
+:
+  TSlider(parent, resId, thumbResId, module)
+{
+}
+
+//----------------------------------------------------------------------------
+// Protected implementation
+
+// Leave the whole implemenation out if built with OWL_NATIVECTRL_ALWAYS
+//
+#if !defined(OWL_NATIVECTRL_ALWAYS)
+
+//
+// Calculate and return position given a thumb upper left point and vice versa.
 //
 int
-TVSlider::PointToPos(TPoint& point)
+TVSlider::PointToPos(const TPoint& point)
 {
-  return int(((long)point.y*(long)Range)/(Attr.H-ThumbRect.Height()) + Min);
+  int pixelRange = Attr.H - ThumbRect.Height() - 2; // 2 is room for focus rect
+  long scaledY = long(point.y-1) * long(Range);
+  return int(scaledY/pixelRange + Min);
 }
 
+//
+//
+//
 TPoint
 TVSlider::PosToPoint(int pos)
 {
-  return TPoint(ThumbRect.left,
-                int(((long)(pos-Min)*(Attr.H-ThumbRect.Height()))/Range));
+  int pixelRange = Attr.H - ThumbRect.Height() - 2; // 2 is room for focus rect
+  long relPos = pos - Min;
+  int left = (Attr.W-ThumbRect.Width()-2)/2+1;
+  return TPoint(left, int((relPos*pixelRange)/Range)+1);
 }
 
 //
@@ -55,11 +87,11 @@ TVSlider::PosToPoint(int pos)
 void
 TVSlider::NotifyParent(int scrollCode, int pos)
 {
-  #if defined(BI_PLAT_WIN32)
-    Parent->HandleMessage(WM_VSCROLL, MAKEWPARAM(scrollCode, pos), LPARAM(HWindow));
-  #else
-    Parent->HandleMessage(WM_VSCROLL, scrollCode, MAKELPARAM(pos, HWindow));
-  #endif
+#if defined(BI_PLAT_WIN32)
+  Parent->HandleMessage(WM_VSCROLL, MkParam1(scrollCode, pos), TParam2(GetHandle()));
+#else
+  Parent->HandleMessage(WM_VSCROLL, scrollCode, MkParam2(pos, GetHandle()));
+#endif
 }
 
 //
@@ -94,39 +126,38 @@ TVSlider::PaintRuler(TDC& dc)
 {
   int    ticW = (Attr.W-ThumbRect.Width()-2)/2;
 
-  //
-  //  Clear ruler areas to bk color
+  // Clear ruler areas to bk color
   //
   dc.SetBkColor(BkColor);
   dc.TextRect(0, 0, ticW+1, Attr.H);
   dc.TextRect(Attr.W-ticW-1, 0, Attr.W, Attr.H);
 
+  // Draw bottom tic & internal tics if any, then top tic
   //
-  //  Draw bottom tic & internal tics if any, then top tic
-  //
-  TBrush highlightbrush(::GetSysColor(COLOR_BTNHIGHLIGHT));
   int    margin = ThumbRect.Height()/2;
   int    y;
 
-  dc.SelectObject(highlightbrush);
-  dc.SetBkColor(::GetSysColor(COLOR_BTNTEXT));
+  dc.SetBkColor(TColor::SysBtnText);
 
-  for (int i = Min; i < Max; i += TicGap) {
-    y = PosToPoint(i).y + margin;
-    dc.TextRect(0, y, ticW, y+1);
-    dc.PatBlt(1, y+1, ticW, 1);
-    dc.TextRect(Attr.W-ticW-1, y, Attr.W-1, y+1);
-    dc.PatBlt(Attr.W-ticW, y+1, ticW, 1);
-    if (!TicGap)
-      break;
+  if (Tics && TicCount) {
+    for (int i = 0; i < TicCount; i++) {
+      y = PosToPoint(Tics[i]).y + margin;
+      dc.TextRect(0, y, ticW, y+1);
+      dc.TextRect(Attr.W-ticW-1, y, Attr.W-1, y+1);
+    }
+  }
+  else {
+    for (int i = Min; i < Max; i += TicGap) {
+      y = PosToPoint(i).y + margin;
+      dc.TextRect(0, y, ticW, y+1);
+      dc.TextRect(Attr.W-ticW-1, y, Attr.W-1, y+1);
+      if (!TicGap)
+        break;
+    }
   }
   y = Attr.H-margin-1;
   dc.TextRect(0, y, ticW, y+1);
-  dc.PatBlt(1, y+1, ticW, 1);
   dc.TextRect(Attr.W-ticW-1, y, Attr.W-1, y+1);
-  dc.PatBlt(Attr.W-ticW, y+1, ticW, 1);
-
-  dc.RestoreBrush();
 }
 
 //
@@ -139,46 +170,53 @@ TVSlider::PaintSlot(TDC& dc)
   int    vmargin = ThumbRect.Height()/2;             // top & bottom margins
   int    hmargin = (ThumbRect.Width()-SlotThick)/2;  // left & right margins
 
-  //
-  // draw margins in background color
+  // Draw margins around slot in background color
   //
   dc.SetBkColor(BkColor);
-  dc.TextRect(ticW+1, 0, ticW+1+ThumbRect.Width(), vmargin);              // above
-  dc.TextRect(ticW+1, vmargin, ticW+1+hmargin, Attr.H);                   // left
-  dc.TextRect(Attr.W-ticW-1-hmargin, vmargin, Attr.W-ticW-1, Attr.H);     // right
-  dc.TextRect(ticW+1, Attr.H-vmargin, ticW+1+ThumbRect.Width(), Attr.H);  // bottom
+  // Above
+  dc.TextRect(ticW+1, 0, ticW+1+ThumbRect.Width(), vmargin);
+  // Left
+  dc.TextRect(ticW+1, vmargin, ticW+1+hmargin, Attr.H);
+  // Right
+  dc.TextRect(Attr.W-ticW-1-hmargin, vmargin, Attr.W-ticW-1, Attr.H);
+  // Bottom
+  dc.TextRect(ticW+1, Attr.H-vmargin, ticW+1+ThumbRect.Width(), Attr.H);
 
-  //
   // Draw slot frame, shadow, fill & highlight to the right
   //
-  dc.FrameRect(ticW+1+hmargin, vmargin, ticW+1+hmargin+SlotThick-1,
-               Attr.H-vmargin, TBrush(::GetSysColor(COLOR_BTNTEXT)));
-  dc.FillRect(ticW+1+hmargin+1, vmargin+1, ticW+1+hmargin+2, Attr.H-vmargin-1,
-              TBrush(::GetSysColor(COLOR_BTNSHADOW)));
-  dc.TextRect(ticW+1+hmargin+2, vmargin+1,
-              ticW+1+hmargin+SlotThick-2, Attr.H-vmargin-1,
-              ::GetSysColor(COLOR_BTNFACE));
-  dc.FillRect(ticW+1+hmargin+SlotThick-1, vmargin,
-              ticW+1+hmargin+SlotThick, Attr.H-vmargin,
-              TBrush(::GetSysColor(COLOR_BTNHIGHLIGHT)));
+  TRect slotR(ticW+1+hmargin, vmargin, ticW+1+hmargin+SlotThick, Attr.H-vmargin);
+  TUIBorder b(slotR, TUIBorder::WndRecessed);
+  b.Paint(dc);
 }
+
+#endif  // !defined(OWL_NATIVECTRL_ALWAYS)
 
 #endif
 #if !defined(SECTION) || SECTION == 2
 
 IMPLEMENT_STREAMABLE1(TVSlider, TSlider);
 
+#if !defined(BI_NO_OBJ_STREAMING)
+
+//
+//
+//
 void*
-TVSlider::Streamer::Read(ipstream& is, uint32 /* version */) const
+TVSlider::Streamer::Read(ipstream& is, uint32 /*version*/) const
 {
   ReadBaseObject((TSlider*)GetObject(), is);
   return GetObject();
 }
 
+//
+//
+//
 void
 TVSlider::Streamer::Write(opstream& os) const
 {
   WriteBaseObject((TSlider*)GetObject(), os);
 }
+
+#endif  // if !defined(BI_NO_OBJ_STREAMING)
 
 #endif

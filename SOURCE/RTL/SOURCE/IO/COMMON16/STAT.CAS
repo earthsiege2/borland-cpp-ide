@@ -6,9 +6,9 @@
  *-----------------------------------------------------------------------*/
 
 /*
- *      C/C++ Run Time Library - Version 6.5
+ *      C/C++ Run Time Library - Version 7.0
  *
- *      Copyright (c) 1987, 1994 by Borland International
+ *      Copyright (c) 1987, 1996 by Borland International
  *      All Rights Reserved.
  *
  */
@@ -146,10 +146,13 @@ asm         jnc     statOK
 
 
 statOK:
-    /* A network drive gives a weird drive number.  In that case,
-     * parse the filename to figure out the drive number.
+
+
+    /* A network drive gives a weird drive number. Also NT and Win95
+     * Don't emulate the undocumented drive number field from findfirst
+     * Therefore, parse the filename to figure out the drive number.
      */
-    if ((info.ds_attrib & 0x40) == 0 && info.ds_drive > 26)
+    if ((info.ds_attrib & 0x40) == 0) /* if not a device */
     {
         if ((full = _fullpath((char *)NULL,pathP,0)) != NULL)
         {

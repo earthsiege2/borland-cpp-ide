@@ -1,109 +1,54 @@
 //----------------------------------------------------------------------------
-// (C) Copyright 1993, 1994 by Borland International, All Rights Reserved
-//   Implementation of geometry (TPoint, TSize, TRect) classes.
+// Borland WinSys Library
+// Copyright (c) 1993, 1996 by Borland International, All Rights Reserved
+//
+//$Revision:   5.3  $
+//
+// Implementation of classes for windowing system geometry
 //----------------------------------------------------------------------------
-#if !defined(_Windows)
-# define _Windows      // pretend we are in windows to get the headers we need
-#endif
-#include <osl/defs.h>
-#include <osl/geometry.h>
+#include <winsys/pch.h>
+#include <winsys/geometry.h>
 
 //
-// Calculate the integer square root of a 32bit signed long. return a 16bit
+// Calculates the integer square root of a 32bit signed long. Returns a 16bit
 // signed. Is fairly fast, esp. compared to FP versions
 //
-int _BIDSFUNC
-Sqrt(long val)
+int16 _BIDSFUNC
+Sqrt(int32 val)
 {
   if (val <= 0)
-    return 0;     // Throw a math exception?
+    return 0;     // Could throw a math exception?
 
-  unsigned mask = 1;  // Bit mask to shift left
-  int best = 0;       // Best estimate so far
+  uint mask = 0x4000;   // Bit mask to shift right
+  int best = 0;         // Best estimate so far
 
-  for (; !(mask&0x8000); mask <<= 1)
+  for (; mask; mask >>= 1)
     if (((long)best+mask)*(best+mask) <= val)
       best |= mask;
-  return best;
+
+  return int16(best);
 }
 
 //
-// Make a duplicate of a C string using new char[]
+// Return the distance between the origin and the point.
 //
-char* _BIDSFUNC
-strnewdup(const char* s, size_t allocSize)
+int TPoint::Magnitude() const
 {
-  if (!s)
-    s = "";
-  int alloc = max(strlen(s)+1, allocSize);
-  return strcpy(new char[alloc], s);
+  return Sqrt(long(x)*long(x)+long(y)*long(y));
 }
 
 //
-// Make a far duplicate of a C string using new char[] far
+// Return the distance between the origin and the point.
 //
-#if defined(BI_DATA_NEAR)
-
-char far*  _BIDSFUNC
-strnewdup(const char far* s, size_t allocSize)
+int TSize::Magnitude() const
 {
-  if (!s)
-    s = "";
-  int alloc = max(strlen(s)+1, allocSize);
-  return strcpy(new far char[alloc], s);
-}
-
-long
-atol(const char far* s)
-{
-  for (long val = 0; *s && isdigit(*s); s++)
-    val = val*10 + *s - '0';
-  return val;
-}
-
-#endif
-
-#if !defined(BI_PLAT_WIN16)
-//
-// Make a duplicate of a wide C string using new wchar_t[]
-//
-wchar_t* _BIDSFUNC
-strnewdup(const wchar_t* s, size_t allocSize)
-{
-  if (!s)
-    s = L"";
-  int alloc = max((size_t)lstrlenW(s)+1, allocSize);
-  return lstrcpyW(new wchar_t[alloc], s);
+  return Sqrt(long(cx)*long(cx)+long(cy)*long(cy));
 }
 
 //
-// Wide string copy function. 
+// Normalize the rectangle so that left is less than right and
+// top is less than bottom.
 //
-wchar_t* _BIDSFUNC
-strcpy(wchar_t* dst, const wchar_t* src)
-{
-  wchar_t* p = dst;
-  while ((*p++ = *src++) != 0)
-    ;
-  return dst;
-}
-
-//
-// Wide string length function. 
-//
-size_t _BIDSFUNC
-strlen(const wchar_t* str)
-{
-  const wchar_t* p = str;
-  for (; *p; p++)
-    ;
-  return p - str;
-}
-
-#endif
-
-//----------------------------------------------------------------------------
-
 TRect&
 TRect::Normalize()
 {
@@ -114,6 +59,10 @@ TRect::Normalize()
   return *this;
 }
 
+//
+// Move the rectangle so that the new top left point is (left+dx, top+dy) and
+// the new bottom right point is (right+dx, bottom+dy).
+//
 TRect&
 TRect::Offset(int dx, int dy)
 {
@@ -124,6 +73,10 @@ TRect::Offset(int dx, int dy)
   return *this;
 }
 
+//
+// Inflate the rectangle so that new top left point is (left-dx, top-dy) and
+// the new bottom right point is (right+dx, bottom+dy).
+//
 TRect&
 TRect::Inflate(int dx, int dy)
 {
@@ -134,6 +87,9 @@ TRect::Inflate(int dx, int dy)
   return *this;
 }
 
+//
+// Return the largest rectangle that is common to both rectangles.
+//
 TRect&
 TRect::operator &=(const TRect& other)
 {
@@ -150,6 +106,9 @@ TRect::operator &=(const TRect& other)
   return *this;
 }
 
+//
+// Return the largest rectangle that contains both rectangles.
+//
 TRect&
 TRect::operator |=(const TRect& other)
 {
@@ -166,70 +125,67 @@ TRect::operator |=(const TRect& other)
   return *this;
 }
 
-//----------------------------------------------------------------------------
-// class TCmdLine implementation
-
-const char whitespace[] = " \t";
-const char terminator[] = "=/ \t";  // remove /- to dissallow separating there
-
-TCmdLine::TCmdLine(const char far* cmdLine)
+//
+// Determines the parts of this rect that do not lie within "other"
+//
+// Resulting rectangles are placed in the "result" array.
+//
+// Returns the resulting number of rectangles which will be in the
+// range "0 .. 4" inclusive
+//
+int
+TRect::Subtract(const TRect& other, TRect result[]) const
 {
-  Buffer = new char[strlen(cmdLine)+1];
-  strcpy(Buffer, cmdLine);
-  Reset();
-}
-
-void TCmdLine::Reset()
-{
-  Token = TokenStart = Buffer;
-  TokenLen = 0;
-  Kind = Start;
-}
-
-TCmdLine::~TCmdLine()
-{
-  delete [] Buffer;
-}
-
-TCmdLine::TKind TCmdLine::NextToken(bool removeCurrent)
-{
-  // Done parsing, no more tokens
+  // Case of non-intersection, result is just this rectangle
   //
-  if (Kind == Done)
-    return Kind;
-
-  // Move Token ptr to next token, by copying over current token, or by ptr
-  // adjustment. TokenStart stays right past previous token
-  //
-  if (removeCurrent) {
-    strcpy(TokenStart, Token+TokenLen);
-    Token = TokenStart;
+  if (!Touches(other)) {
+    result[0] = *this;
+    return 1;
   }
+  // Check for up to four sub-rectangles produced
+  //
   else {
-    Token += TokenLen;
-    TokenStart = Token;
-  }
+    int  i = 0;
 
-  // Adjust token ptr to begining of token & determine kind
-  //
-  Token += strspn(Token, whitespace);  // skip leading whitespace
-  switch (*Token) {
-    case 0:
-      Kind = Done;
-      break;
-    case '=':
-      Kind = Value;
-      Token++;
-      break;
-    case '-':
-    case '/':
-      Kind = Option;
-      Token++;
-      break;
-    default:
-      Kind = Name;
+    // Top piece of this rect
+    //
+    if (other.top > top) {
+      result[i].left = left;
+      result[i].top = top;
+      result[i].right = right;
+      result[i].bottom = other.top;
+      i++;
+    }
+
+    // Bottom piece of this rect
+    //
+    if (other.bottom < bottom) {
+      result[i].left = left;
+      result[i].top = other.bottom;
+      result[i].right = right;
+      result[i].bottom = bottom;
+      i++;
+    }
+
+    // Left piece of this rect
+    //
+    if (other.left > left) {
+      result[i].left = left;
+      result[i].top = max(top, other.top);
+      result[i].right = other.left;
+      result[i].bottom = min(bottom, other.bottom);
+      i++;
+    }
+
+    // Right piece of this rect
+    //
+    if (other.right < right) {
+      result[i].left = other.right;
+      result[i].top = max(top, other.top);
+      result[i].right = right;
+      result[i].bottom = min(bottom, other.bottom);
+      i++;
+    }
+    return i;
   }
-  Token += strspn(Token, whitespace);  // skip any more whitespace
-  TokenLen = strcspn(Token, terminator);
-  return Kind;
 }

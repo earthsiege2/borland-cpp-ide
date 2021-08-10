@@ -3,7 +3,7 @@
 |	
 |	Adds 3d effects to Windows controls
 |
-|	See ctl3d.doc for info
+|	See ctl3d.hlp for info
 |		
 -----------------------------------------------------------------------*/
 #ifdef __cplusplus
@@ -28,17 +28,21 @@ BOOL WINAPI Ctl3dUnsubclassCtl(HWND);
 
 LONG WINAPI Ctl3dDlgFramePaint(HWND, UINT, WPARAM, LPARAM);
 
-BOOL WINAPI Ctl3dAutoSubclass(HANDLE);
+BOOL WINAPI Ctl3dAutoSubclass(HINSTANCE);
+BOOL WINAPI Ctl3dAutoSubclassEx(HINSTANCE, DWORD);
 BOOL WINAPI Ctl3dIsAutoSubclass(VOID);
 BOOL WINAPI Ctl3dUnAutoSubclass(VOID);
 
-BOOL WINAPI Ctl3dRegister(HANDLE);
-BOOL WINAPI Ctl3dUnregister(HANDLE);
+BOOL WINAPI Ctl3dRegister(HINSTANCE);
+BOOL WINAPI Ctl3dUnregister(HINSTANCE);
 
 //begin DBCS: far east short cut key support
 VOID WINAPI Ctl3dWinIniChange(void);
 //end DBCS
 
+/* Ctl3dAutoSubclassEx flags */
+#define CTL3D_SUBCLASS_DYNCREATE	0x0001
+#define CTL3D_NOSUBCLASS_DYNCREATE	0x0002
 
 /* Ctl3d Control ID */
 #define CTL3D_BUTTON_CTL	0

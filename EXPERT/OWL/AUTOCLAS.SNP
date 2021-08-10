@@ -3,15 +3,15 @@
 ##TRUE [[Search2]]
 ##--BEGIN-- QUERY_CLASS_NAME [[ClassName]]
 ##      ^BOF
-##      "#include <ocf\\automacr.h>" [[IncludeFile]]
+##      "#include <ocf/\automacr.h>" [[IncludeFile]]
 ##      --BEGIN-- ? IncludeFile [[Search1]]
 ##          Search1 == FALSE
 ##              :? "#include " Search2
 ##*
 ##          Search2 == FALSE
-##              :%\\"[[ClassName]] missing #include <ocf\autosrv.h> for class automation.  "
+##              :%\\"[[ClassName]] missing #include <ocf/autosrv.h> for class automation.  "
 ##*
-##          (Search1 == FALSE) && (Search2 == TRUE) 2 
+##         (Search1 == FALSE) && (Search2 == TRUE) 2 
 ##          :^BOL
 ##          :^2
 

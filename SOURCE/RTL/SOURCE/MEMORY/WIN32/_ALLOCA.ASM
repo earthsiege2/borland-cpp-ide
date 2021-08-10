@@ -3,9 +3,9 @@
 ;[]-----------------------------------------------------------------[]
 
 ;
-;       C/C++ Run Time Library - Version 1.5
+;       C/C++ Run Time Library - Version 2.0
 ; 
-;       Copyright (c) 1992, 1994 by Borland International
+;       Copyright (c) 1992, 1996 by Borland International
 ;       All Rights Reserved.
 ; 
 
@@ -24,8 +24,11 @@ REGSTACK   equ     12
 
 ; The variable _stkindex is initialized by _startup (startup.c) to contain
 ; the thread local storage index used to save each thread's stack base.
+Data_seg@
 
 ExtSym@ _stkindex, dword, cdecl
+
+Data_EndS@
 
 ;----------------------------------------------------------------------
 ; Name          _alloca - allocate temporary stack memory
@@ -88,6 +91,10 @@ Func@   _alloca, _EXPFUNC, cdecl
         push    edx             ; save return address
         push    _stkindex@      ; ecx = TlsGetValue(_stkindex)
         Call@   TlsGetValue
+        add     eax, 4096*4     ;  add four extra pages since NT will
+                                ;  fault upon any access to the guard page
+                                ;  and the RTL may use up some more stack.
+
         mov     ecx, eax        ; put stack base in ECX
         pop     edx             ; recover return address
         pop     eax             ; recover new ESP
@@ -110,7 +117,9 @@ probeloop:
         sub     ecx, 4096       ; bump down to the next page
         cmp     ecx, eax        ; any more stack left to probe?
         jb      pushregs        ; no - we're done
-        or      byte ptr [ecx], 0   ; yes - probe this page
+        sub     esp, 4096-4
+        push    LARGE 0         ; probe next page by pushing a
+                                ; dummy value
         jmp     probeloop
 
 ; Before we can return, we need to push on the new stack area the registers

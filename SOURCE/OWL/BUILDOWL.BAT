@@ -1,23 +1,13 @@
 rem
-rem ObjectWindows - (C) Copyright 1992 by Borland International
-rem   source\owl\buildowl.bat
+rem ObjectWindows - (c) Copyright 1996 by Borland International
+rem
+@echo off
 
-rem Build OWL
-
-rem build 16-bit static link libraries
-
-make -DMODEL=s %1
-make -DMODEL=m %1
-make -DMODEL=l %1
-
-rem build 16-bit DLL
-
-make -DDLL %1
-
-rem build 32-bit static link library
-
-make -DWIN32 %1
-
-rem build 32-bit DLL
-
-make -DWIN32 -DDLL %1
+make MODEL=l  WIN16=1 %1 %2 %3 %4 %5 %6
+make DLL=1    WIN16=1 %1 %2 %3 %4 %5 %6
+make DLL=1    WIN16=1 USERDLL=1 OWLVER=50 OWLNAME=OWL %1 %2 %3 %4 %5 %6
+make MODEL=f          %1 %2 %3 %4 %5 %6
+make DLL=1    WIN32=1 OWLVER=50 OWLNAME=OWL %1 %2 %3 %4 %5 %6
+make DLL=1    WIN32=1 USERDLL=1 OWLVER=50 OWLNAME=OWL %1 %2 %3 %4 %5 %6
+make MODEL=t          %1 %2 %3 %4 %5 %6
+make MODEL=t  DLL=1   %1 %2 %3 %4 %5 %6

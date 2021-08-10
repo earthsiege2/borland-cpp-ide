@@ -1,0 +1,197 @@
+:BASE STL.HLP
+1 Rogue Wave Standard C++ Library User's Guide and Tutorial
+2 About Rogue Wave Standard C++ Library
+3 Title page = STL_Title
+2 What is the Standard C++ Library?
+3 What is the Standard C++ Library? = WhatIsTheStandardC++Library?
+3 Does the Standard C++ Library differ from other libraries? = DoesTheStandardC++LibraryDifferFromOtherLibraries?
+3 What are the effects of non-object-oriented design? = WhatAreTheEffectsofNon-Object-OrientedDesign?
+3 How should I use the Standard C++ Library? = HowShouldIUseTheStandardC++Library?
+2 Reading this manual
+3 Reading this manual = ReadingThisManual
+3 Conventions = Conventions
+2 Using the Standard Library
+3 Using the Standard Library = UsingTheStandardLibrary
+3 Running the tutorial programs = RunningTheTutorialPrograms
+2 Iterators
+3 Introduction to Iterators = Iterators
+3 Varieties of iterators = VarietiesOfIterators
+3 Input iterators = InputIterators
+3 Output iterators = OutputIterators
+3 Forward iterators = ForwardIterators
+3 Bidirectional iterators = BidirectionalIterators
+3 Random access iterators = RandomAccessIterators
+3 Reverse iterators = ReverseIterators
+3 Stream iterators = StreamIterators
+3 Input stream iterators = InputStreamIterators
+3 Output stream iterators = OutputStreamIterators
+3 Insert iterators = InsertIterators
+3 Iterator operations = IteratorOperations
+2 Functions and Predicates
+3 Functions = Functions
+3 Predicates = Predicates
+3 Function objects = FunctionObjects
+3 Negators and binders = NegatorsAndBinders
+2 Container classes
+3 Container classes overview = ContainerClassesOverview
+3 Selecting a container = SelectingAContainer
+3 Memory management issues = MemoryManagementIssues
+3 Container types not found in the standard library = ContainerTypesNotFoundInTheStandardLibrary
+2 Vectors
+3 The vector data abstraction = TheVectorDataAbstraction
+3 Vector include files = VectorIncludeFiles
+3 Vector operations = VectorOperations
+3 Declaration and initialization of vectors = DeclarationAndInitializationOfVectors
+3 Type definitions = TypeDefinitions_vectors
+3 Subscripting a vector = SubscriptingAVector
+3 Extent and size-changing operations = ExtentAndSizeChangingOperations
+3 Inserting and Removing elements = RemovingElements
+3 Iteration = Iteration
+3 Vector test for inclusion = VectorTestForInclusion
+3 Sorting and sorted vector operations = SortingAndSortedVectorOperations
+3 Useful generic algorithms = UsefulGenericAlgorithms
+3 Example program: sieve of Eratosthenes = ExampleProgramSieveOfEratosthenes
+2 Lists
+3 The list data abstraction = TheListDataAbstraction
+3 List include files = ListIncludeFiles
+3 List operations = ListOperations
+3 Declaration and initialization of lists = DeclarationAndInitializationOfLists
+3 Placing elements into a list = PlacingElementsIntoAList
+3 Extent operations = ExtentOperations
+3 Access and iteration = AccessAndIteration
+3 List test for inclusion = ListTestForInclusion
+3 Sorting and sorted list operations = SortingAndSortedListOperations
+3 Searching operations = SearchingOperations
+3 In-place transformations = InPlaceTransformations_lists
+3 Other operations = OtherOperations
+3 Example program: an inventory system = ExampleProgramAnInventorySystem
+2 Deques
+3 Deque data abstraction = DequeDataAbstraction
+3 Deque include files = DequeIncludeFiles
+3 Deque operations = DequeOperations
+3 Example program: radix sort = ExampleProgramRadixSort
+2 Sets
+3 The set data abstraction = TheSetDataAbstraction
+3 Set include files = SetIncludeFiles
+3 Set and multiSet operations = SetOperations
+3 Creation and initialization = CreationAndInitialization_sets
+3 Insertion = Insertion
+3 Removal of elements from a set = RemovalOfElementsFromASet
+3 Searching and counting = SearchingAndCounting_sets
+3 Other generic algorithms = OtherGenericAlgorithms
+3 Example program: a spelling checker = ExampleProgramASpellingChecker
+3 The class bit_set = TheClassBit_Set
+2 Maps
+3 The map data abstraction = TheMapDataAbstraction
+3 Map include files = MapIncludeFiles
+3 Map and multimap operations = MapAndMultimapOperations
+3 Insertion and access = InsertionAndAccess
+3 Removal of values = RemovalOfValues
+3 Element comparisons = ElementComparisons
+3 Other map operations = OtherMapOperations
+3 Example programs
+4 About the example programs = ExamplePrograms
+4 Example program: a telephone database = ExampleProgramATelephoneDatabase
+4 Example program: graphs = ExampleProgramGraphs
+4 Example program: a concordance = ExampleProgramAConcordance
+2 Stacks and queues
+3 Stack and queue overview = StackAndQueueOverview
+3 The stack data abstraction = TheStackDataAbstraction
+3 Example program: a RPN calculator = ExampleProgramARPNCalculator
+3 Queues
+4 The queue data abstraction = TheQueueDataAbstraction
+4 Example program: bank teller simulation = ExampleProgramBankTellerSimulation
+3 Priority queues
+4 The priority queue data abstraction = ThePriorityQueueDataAbstraction
+4 The priority queue operations = ThePriorityQueueOperations
+4 Application: event-driven simulation = ApplicationEventDrivenSimulation
+4 An ice cream store simulation = AnIceCreamStoreSimulation
+2 Generic algorithms
+3 Generic algorithms overview = GenericAlgorithmsOverview
+3 Initialization algorithms = InitializationAlgorithms
+3 Fill a sequence with an initial value = FillASequenceWithAnInitialValue
+3 Copy one sequence onto another sequence = CopyOneSequenceOntoAnotherSequence
+3 Initialize a sequence with generated values = InitializeASequenceWithGeneratedValues
+3 Swap values from two parallel ranges = SwapValuesFromTwoParallelRanges
+3 Find an element satisfying a condition = FindAnElementSatisfyingACondition
+3 Find consecutive duplicate elements = FindConsecutiveDuplicateElements
+3 Find a subsequence within a sequence = FindASubsequenceWithinASequence
+3 Locate maximum or minimum element = LocateMaximumOrMinimumElement
+3 Locate the first mismatched elements in parallel sequences = LocateTheFirstMismatchedElementsInParallelSequences
+3 Reverse elements in a sequence = ReverseElementsInASequence
+3 Replace certain elements with fixed value = ReplaceCertainElementsWithFixedValue
+3 Rotate elements around a midpoint = RotateElementsAroundAMidpoint
+3 Partition a sequence into two groups = PartitionASequenceIntoTwoGroups
+3 Generate permutations in sequence = GeneratePermutationsInSequence
+3 Merge two adjacent sequences into one = MergeTwoAdjacentSequencesIntoOne
+3 Randomly rearrange elements in a sequence = RandomlyRearrangeElementsInASequence
+3 Removal algorithms
+4 About removal algorithms = RemovalAlgorithms
+4 Remove unwanted elements = RemoveUnwantedElements
+4 Remove runs of similar values = RemoveRunsOfSimilarValues
+3 Algorithms that produce a scalar result
+4 Algorithms that produce a scalar result = AlgorithmsThatProduceAScalarResult
+4 Count the number of elements that satisfy a condition = CountTheNumberOfElementsThatSatisfyACondition
+4 Reduce sequence to a single value = ReduceSequenceToASingleValue
+4 Generalized inner product = GeneralizedInnerProduct
+4 Test two sequences for pairwise equality = TestTwoSequencesForPairwiseEquality
+4 Lexical comparison = LexicalComparison
+3 Sequence generating algorithms
+4 Sequence generating algorithms = SequenceGeneratingAlgorithms
+4 Transform one or two sequences = TransformOneOrTwoSequences
+4 Partial sums = PartialSums
+4 Adjacent differences = AdjacentDifferences
+3 Miscellaneous algorithms
+4 About the miscellaneous algorithms = MiscellaneousAlgorithms
+4 Apply a function to all elements in a collection = ApplyAFunctionToAllElementsInACollection
+4 Ordered collection algorithms overview = OrderedCollectionAlgorithmsOverview
+3 Algorithm include files
+4 Algorithm include files = AlgorithmIncludeFiles
+3 Sorting algorithms
+4 About the sorting algorithms = SortingAlgorithms
+4 Partial sort = PartialSort
+4 Nth element = NthElement
+4 Binary search = BinarySearch
+4 Merge ordered sequences = MergeOrderedSequences
+2 Heap operations
+3 About heap operations = HeapOperations
+2 Exception handling
+3 Exception handling overview = ExceptionHandlingOverview
+3 The standard exception hierarchy = TheStandardExceptionHierarchy
+3 Using exceptions = UsingExceptions
+3 Example program: exception handling = ExampleProgramExceptionHandling
+2 auto_ptr
+3 auto_ptr overview = Auto_ptrOverview
+3 Creating and using auto pointers = CreatingAndUsingAutoPointers
+3 Example program: auto_ptr = ExampleProgramAuto_ptr
+2 Complex
+3 Complex overview = ComplexOverview
+3 Creating and using complex numbers = CreatingAndUsingComplexNumbers
+3 Header files = HeaderFiles
+3 Declaring complex numbers = DeclaringComplexNumbers
+3 Accessing complex number values = AccessingComplexNumberValues
+3 Arithmetic operations = ArithmeticOperations
+3 Comparing complex values = ComparingComplexValues
+3 Stream input and output = StreamInputAndOutput
+3 Norm and absolute value = NormAndAbsoluteValue
+3 Trigonometric functions = TrigonometricFunctions
+3 Transcendental functions = TranscendentalFunctions
+3 Example program: roots of a polynomial = ExampleProgramRootsOfAPolynomial
+2 Strings
+3 The string abstraction = TheStringAbstraction
+3 String include files = StringIncludeFiles
+3 String operations = StringOperations
+3 Declaring string variables = DeclaringStringVariables
+3 Resetting size and capacity = ResettingSizeAndCapacity
+3 Assignment, append, and swap = AssignmentAppendAndSwap
+3 Character access = CharacterAccess
+3 Insertion, removal, and replacement = InsertionRemovalAndReplacement
+3 Copy and substring = CopyAndSubstring
+3 String comparisons = StringComparisons
+3 Example function: split a line into words = ExampleFunctionSplitALineIntoWords
+2 Numeric limits
+3 Numeric limits overview = NumericLimitsOverview
+3 Fundamental data types = FundamentalDataTypes
+3 Numeric limit members = NumericLimitMembers
+3 Members common to all types = MembersCommonToAllTypes
+3 Members specific to floating point values = MembersSpecificToFloatingPointValues
