@@ -1,0 +1,644 @@
+##@QUERY_PRJ_NAME [[Project]]
+/*  Main [[Project]]
+##@QUERY_PRJ_COMPANY [[CompanyName]] 2
+##@QUERY_PRJ_COPYRIGHT [[Copyright]] 2
+##\\Copyright Copyright 2
+    [[CompanyName]]
+    [[Copyright]]
+
+##@QUERY_TARGET_NAME [[Target]]
+    SUBSYSTEM:    [[Target]] Application
+##QUERY_FILENAME_H [[Filename]]
+    FILE:         [[Filename]].rc
+##@QUERY_PRJ_USER [[Author]]
+    AUTHOR:       [[Author]]
+
+
+    OVERVIEW
+    ========
+    All resources defined here.      
+*/
+
+#if !defined(WORKSHOP_INVOKED)
+#include <windows.h>
+#endif
+##QUERY_FILENAME_CPP [[Filename]]
+#include "[[Filename]].rh"
+
+##0 [[HAXRes]]
+##--BEGIN-- "" [[MenuName]]
+##@QUERY_APPL_MODEL == VALUE_MDI
+##:     "MDI_MENU" MenuName
+[[MenuName]] MENU 
+##@QUERY_APPL_MODEL == VALUE_SDI
+##:     "SDI_MENU" MenuName
+[[MenuName]] MENU
+##:CreateRsrc("MENU", \\"[[MenuName]]", [[AssociatedID]])
+##:AssociatedID HAXRes
+BEGIN
+    POPUP "&File"
+    BEGIN
+##@QUERY_APPL_MODEL == VALUE_MDI 2
+##:AddRsrcItem(HAXRes, "MENUITEM", "", "CM_MDIFILENEW")
+##:AddRsrcItem(HAXRes, "MENUITEM", "", "CM_MDIFILEOPEN")
+        MENUITEM "&New", CM_MDIFILENEW
+        MENUITEM "&Open...", CM_MDIFILEOPEN
+##@QUERY_APPL_MODEL == VALUE_SDI 2
+##:AddRsrcItem(HAXRes, "MENUITEM", "", "CM_FILENEW")
+##:AddRsrcItem(HAXRes, "MENUITEM", "", "CM_FILEOPEN")
+        MENUITEM "&New", CM_FILENEW
+        MENUITEM "&Open...", CM_FILEOPEN
+##:AddRsrcItem(HAXRes, "MENUITEM", "", "CM_FILECLOSE")
+        MENUITEM "&Close", CM_FILECLOSE
+        MENUITEM SEPARATOR
+##:AddRsrcItem(HAXRes, "MENUITEM", "", "CM_FILESAVE")
+        MENUITEM "&Save", CM_FILESAVE, GRAYED
+##:AddRsrcItem(HAXRes, "MENUITEM", "", "CM_FILESAVEAS")
+        MENUITEM "Save &As...", CM_FILESAVEAS, GRAYED
+##--BEGIN-- @OPT_APPL_PRINTING
+        MENUITEM SEPARATOR
+##:AddRsrcItem(HAXRes, "MENUITEM", "", "CM_FILEPRINTPREVIEW")
+##:AddRsrcItem(HAXRes, "MENUITEM", "", "CM_FILEPRINT")
+##:AddRsrcItem(HAXRes, "MENUITEM", "", "CM_FILEPRINTERSETUP")
+        MENUITEM "Print Pre&view...", CM_FILEPRINTPREVIEW, GRAYED
+        MENUITEM "&Print...", CM_FILEPRINT, GRAYED
+        MENUITEM "P&rint Setup...", CM_FILEPRINTERSETUP, GRAYED
+##--END-- @OPT_APPL_PRINTING
+        MENUITEM SEPARATOR
+##:AddRsrcItem(HAXRes, "MENUITEM", "", "CM_EXIT")
+        MENUITEM "E&xit\tAlt+F4", CM_EXIT
+    END
+
+    POPUP "&Edit"
+    BEGIN
+##:AddRsrcItem(HAXRes, "MENUITEM", "", "CM_EDITUNDO")
+        MENUITEM "&Undo\tAlt+BkSp", CM_EDITUNDO, GRAYED
+        MENUITEM SEPARATOR
+##:AddRsrcItem(HAXRes, "MENUITEM", "", "CM_EDITCUT")
+        MENUITEM "Cu&t\tShift+Del", CM_EDITCUT, GRAYED
+##:AddRsrcItem(HAXRes, "MENUITEM", "", "CM_EDITCOPY")
+        MENUITEM "&Copy\tCtrl+Ins", CM_EDITCOPY, GRAYED
+##:AddRsrcItem(HAXRes, "MENUITEM", "", "CM_EDITPASTE")
+        MENUITEM "&Paste\tShift+Ins", CM_EDITPASTE, GRAYED
+        MENUITEM SEPARATOR
+##:AddRsrcItem(HAXRes, "MENUITEM", "", "CM_EDITCLEAR")
+        MENUITEM "Clear &All\tCtrl+Del", CM_EDITCLEAR, GRAYED
+##:AddRsrcItem(HAXRes, "MENUITEM", "", "CM_EDITDELETE")
+        MENUITEM "&Delete\tDel", CM_EDITDELETE, GRAYED
+    END
+
+    POPUP "&Search"
+    BEGIN
+##:AddRsrcItem(HAXRes, "MENUITEM", "", "CM_EDITFIND")
+        MENUITEM "&Find...", CM_EDITFIND, GRAYED
+##:AddRsrcItem(HAXRes, "MENUITEM", "", "CM_EDITREPLACE")
+        MENUITEM "&Replace...", CM_EDITREPLACE, GRAYED
+##:AddRsrcItem(HAXRes, "MENUITEM", "", "CM_EDITFINDNEXT")
+        MENUITEM "&Next\aF3", CM_EDITFINDNEXT, GRAYED
+    END
+##--BEGIN-- @QUERY_APPL_MODEL == VALUE_MDI
+
+    POPUP "&Window"
+    BEGIN
+##:AddRsrcItem(HAXRes, "MENUITEM", "", "CM_CASCADECHILDREN")
+        MENUITEM "&Cascade", CM_CASCADECHILDREN
+##:AddRsrcItem(HAXRes, "MENUITEM", "", "CM_TILECHILDREN")
+        MENUITEM "&Tile", CM_TILECHILDREN
+##:AddRsrcItem(HAXRes, "MENUITEM", "", "CM_ARRANGEICONS")
+        MENUITEM "Arrange &Icons", CM_ARRANGEICONS
+##:AddRsrcItem(HAXRes, "MENUITEM", "", "CM_CLOSECHILDREN")
+        MENUITEM "C&lose All", CM_CLOSECHILDREN
+    END
+##--END-- @QUERY_APPL_MODEL == VALUE_MDI
+
+    POPUP "&Help"
+    BEGIN
+##@OPT_APPL_HELP 3
+##:AddRsrcItem(HAXRes, "MENUITEM", "", "CM_HELPCONTENTS")
+        MENUITEM "&Contents", CM_HELPCONTENTS
+##:AddRsrcItem(HAXRes, "MENUITEM", "", "CM_HELPUSING")
+        MENUITEM "&Using help", CM_HELPUSING
+        MENUITEM SEPARATOR
+##:AddRsrcItem(HAXRes, "MENUITEM", "", "CM_HELPABOUT")
+        MENUITEM "&About...", CM_HELPABOUT
+    END
+
+END
+##--END-- "" [[MenuName]]
+
+
+// Accelerator table for short-cut to menu commands. (include\owl\editfile.rc)
+##@QUERY_APPL_MODEL == VALUE_MDI
+MDI_MENU ACCELERATORS
+##@QUERY_APPL_MODEL == VALUE_SDI
+SDI_MENU ACCELERATORS
+BEGIN
+  VK_DELETE, CM_EDITCUT, VIRTKEY, SHIFT
+  VK_INSERT, CM_EDITCOPY, VIRTKEY, CONTROL
+  VK_INSERT, CM_EDITPASTE, VIRTKEY, SHIFT
+  VK_DELETE, CM_EDITCLEAR, VIRTKEY, CONTROL
+  VK_BACK,   CM_EDITUNDO, VIRTKEY, ALT
+  VK_F3,     CM_EDITFINDNEXT, VIRTKEY
+END
+
+
+##@OPT_APPL_HELP 4
+// Context sensitive help cursor.
+IDC_HELPCURSOR CURSOR "help.cur"
+
+
+//
+// Table of help hints displayed in the status bar.
+//
+STRINGTABLE 
+BEGIN
+    -1,                         "File/document operations"
+##(@QUERY_APPL_MODEL == VALUE_MDI) 2
+    CM_MDIFILENEW,              "Creates a new document"
+    CM_MDIFILEOPEN,             "Opens an existing document"
+##--BEGIN-- @QUERY_APPL_MODEL == VALUE_SDI
+##!@OPT_APPL_DOCVIEW 2
+    CM_FILENEW,                 "Creates a new window"
+    CM_FILEOPEN,                "Opens a window"
+##@OPT_APPL_DOCVIEW 2
+    CM_FILENEW,                 "Creates a new document"
+    CM_FILEOPEN,                "Opens an existing document"
+##--END-- @QUERY_APPL_MODEL == VALUE_SDI
+##@OPT_APPL_DOCVIEW 2
+    CM_VIEWCREATE,              "Create a new view for this document"
+    CM_FILEREVERT,              "Reverts changes to last document save"
+##--END-- @OPT_APPL_DOCVIEW
+    CM_FILECLOSE,               "Close this document"
+    CM_FILESAVE,                "Saves this document"
+    CM_FILESAVEAS,              "Saves this document with a new name"
+##@OPT_APPL_PRINTING 3
+    CM_FILEPRINT,               "Print this document"
+    CM_FILEPRINTERSETUP,        "Setup this document print characteristics"
+    CM_FILEPRINTPREVIEW,        "Display full pages as read-only" 
+    CM_EXIT,                    "Quits [[TApplication]] and prompts to save the documents"
+    CM_EDITUNDO-1,              "Edit operations"
+    CM_EDITUNDO,                "Reverses the last operation"
+    CM_EDITCUT,                 "Cuts the selection and puts it on the Clipboard"
+    CM_EDITCOPY,                "Copies the selection and puts it on the Clipboard"
+    CM_EDITPASTE,               "Inserts the clipboard contents at the insertion point"
+    CM_EDITDELETE,              "Deletes the selection"
+    CM_EDITCLEAR,               "Clear the document"
+    CM_EDITFIND-1,              "Search/replace operations"
+    CM_EDITFIND,                "Finds the specified text"
+    CM_EDITREPLACE,             "Finds the specified text and changes it"
+    CM_EDITFINDNEXT,            "Finds the next match"
+##--BEGIN-- @QUERY_APPL_MODEL == VALUE_MDI
+    CM_CASCADECHILDREN-1,       "Window arrangement and selection"
+    CM_CASCADECHILDREN,         "Cascades open windows"
+    CM_TILECHILDREN,            "Tiles open windows"
+    CM_ARRANGEICONS,            "Arranges iconic windows along bottom"
+    CM_CLOSECHILDREN,           "Closes all open windows"
+##--END-- @QUERY_APPL_MODEL == VALUE_MDI
+##@OPT_APPL_HELP 3
+    CM_HELPCONTENTS-1,          "Access online help"
+    CM_HELPCONTENTS,            "Help table of contents"
+    CM_HELPUSING,               "Help on using online Help"
+##@OPT_APPL_HELP != TRUE
+    CM_HELPABOUT-1,             "Access About"
+##@QUERY_PRJ_NAME [[Project]]
+    CM_HELPABOUT,               "About the [[Project]] application"
+END
+
+
+//
+// OWL string table
+//
+
+// EditFile (include\owl\editfile.rc and include\owl\editsear.rc)
+STRINGTABLE LOADONCALL MOVEABLE DISCARDABLE
+BEGIN
+    IDS_CANNOTFIND,             "Cannot find ""%s""."
+##((!@OPT_APPL_DOCVIEW) && @QUERY_APPL_MODEL == VALUE_MDI)
+    IDS_UNTITLED,               "Untitled"
+##((!@OPT_APPL_DOCVIEW) && @QUERY_APPL_MODEL == VALUE_SDI)
+    IDS_UNTITLED,               "Untitled"
+    IDS_UNABLEREAD,             "Unable to read file %s from disk."
+    IDS_UNABLEWRITE,            "Unable to write file %s to disk."
+    IDS_FILECHANGED,            "The text in the %s file has changed.\n\nDo you want to save the changes?"
+    IDS_FILEFILTER,             "Text files (*.TXT)|*.TXT|AllFiles (*.*)|*.*|"
+END
+##--BEGIN-- @OPT_APPL_DOCVIEW
+
+
+// Doc/View (include\owl\docview.rc)
+STRINGTABLE LOADONCALL MOVEABLE DISCARDABLE
+BEGIN
+    IDS_DOCMANAGERFILE,         "&File"
+    IDS_DOCLIST,                "--Document Type--"
+    IDS_VIEWLIST,               "--View Type--"
+    IDS_UNTITLED,               "Untitled"
+    IDS_UNABLEOPEN,             "Unable to open document."
+    IDS_UNABLECLOSE,            "Unable to close document."
+    IDS_READERROR,              "Document read error."
+    IDS_WRITEERROR,             "Document write error."
+    IDS_DOCCHANGED,             "The document has been changed.\n\nDo you want to save the changes?"
+    IDS_NOTCHANGED,             "The document has not been changed."
+    IDS_NODOCMANAGER,           "Document Manager not present."
+    IDS_NOMEMORYFORVIEW,        "Insufficient memory for view."
+    IDS_DUPLICATEDOC,           "Document already loaded."
+END
+##--END-- @OPT_APPL_DOCVIEW
+##--BEGIN-- @OPT_APPL_PRINTING
+
+
+// Printer (include\owl\printer.rc)
+STRINGTABLE LOADONCALL MOVEABLE DISCARDABLE
+BEGIN
+    IDS_PRNON,                  " on "
+    IDS_PRNERRORTEMPLATE,       "'%s' not printed. %s."
+    IDS_PRNOUTOFMEMORY,         "Out of memory"
+    IDS_PRNOUTOFDISK,           "Out of disk space"
+    IDS_PRNCANCEL,              "Printing canceled"
+    IDS_PRNMGRABORT,            "Printing aborted in Print Manager"
+    IDS_PRNGENERROR,            "Error encountered during print"
+    IDS_PRNERRORCAPTION,        "Print Error"
+END
+##--END-- @OPT_APPL_PRINTING
+
+
+// Exception string resources (include\owl\except.rc)
+STRINGTABLE LOADONCALL MOVEABLE DISCARDABLE
+BEGIN
+    IDS_OWLEXCEPTION,           "ObjectWindows Exception"
+    IDS_UNHANDLEDXMSG,          "Unhandled Exception"
+    IDS_OKTORESUME,             "OK to resume?"
+    IDS_UNKNOWNEXCEPTION,       "Unknown exception"
+
+    IDS_UNKNOWNERROR,           "Unknown error"
+    IDS_NOAPP,                  "No application object"
+    IDS_OUTOFMEMORY,            "Out of memory"
+    IDS_INVALIDMODULE,          "Invalid module specified for window"
+    IDS_INVALIDMAINWINDOW,      "Invalid MainWindow"
+
+    IDS_INVALIDWINDOW,          "Invalid window %s"
+    IDS_INVALIDCHILDWINDOW,     "Invalid child window %s"
+    IDS_INVALIDCLIENTWINDOW,    "Invalid client window %s"
+
+    IDS_CLASSREGISTERFAIL,      "Class registration fail for window %s"
+    IDS_CHILDREGISTERFAIL,      "Child class registration fail for window %s"
+    IDS_WINDOWCREATEFAIL,       "Create fail for window %s"
+    IDS_WINDOWEXECUTEFAIL,      "Execute fail for window %s"
+    IDS_CHILDCREATEFAIL,        "Child create fail for window %s"
+
+    IDS_MENUFAILURE,            "Menu creation failure"
+    IDS_VALIDATORSYNTAX,        "Validator syntax error"
+    IDS_PRINTERERROR,           "Printer error"
+
+    IDS_LAYOUTINCOMPLETE,       "Incomplete layout constraints specified in window %s"
+    IDS_LAYOUTBADRELWIN,        "Invalid relative window specified in layout constraint in window %s"
+
+    IDS_GDIFAILURE,             "GDI failure"
+    IDS_GDIALLOCFAIL,           "GDI allocate failure"
+    IDS_GDICREATEFAIL,          "GDI creation failure"
+    IDS_GDIRESLOADFAIL,         "GDI resource load failure"
+    IDS_GDIFILEREADFAIL,        "GDI file read failure"
+    IDS_GDIDELETEFAIL,          "GDI object %X delete failure"
+    IDS_GDIDESTROYFAIL,         "GDI object %X destroy failure"
+    IDS_INVALIDDIBHANDLE,       "Invalid DIB handle %X"
+END
+
+
+// General Window's status bar messages. (include\owl\statusba.rc)
+STRINGTABLE
+BEGIN
+    IDS_MODES                   "EXT|CAPS|NUM|SCRL|OVR|REC"
+    SC_SIZE,                    "Changes the size of the window"
+    SC_MOVE,                    "Moves the window to another position"
+    SC_MINIMIZE,                "Reduces the window to an icon"
+    SC_MAXIMIZE,                "Enlarges the window to it maximum size"
+    SC_RESTORE,                 "Restores the window to its previous size"
+    SC_CLOSE,                   "Closes the window"
+    SC_TASKLIST,                "Opens task list"
+    SC_NEXTWINDOW,              "Switches to next window"
+END
+
+
+// Validator messages (include\owl\validate.rc)
+STRINGTABLE LOADONCALL MOVEABLE DISCARDABLE
+BEGIN
+    IDS_VALPXPCONFORM          "Input does not conform to picture:\n""%s"""
+    IDS_VALINVALIDCHAR         "Invalid character in input"
+    IDS_VALNOTINRANGE          "Value is not in the range %ld to %ld."
+    IDS_VALNOTINLIST           "Input is not in valid-list"
+END
+##--BEGIN--  @OPT_APPL_TOOLBAR
+
+
+//
+// Bitmaps used by the speedbar.  Each bitmap is associated with a
+// particular menu command.
+//
+##@QUERY_APPL_MODEL == VALUE_MDI 2
+CM_MDIFILENEW BITMAP "new.bmp"
+CM_MDIFILEOPEN BITMAP "open.bmp"
+##@QUERY_APPL_MODEL == VALUE_SDI 2
+CM_FILENEW BITMAP "new.bmp"
+CM_FILEOPEN BITMAP "open.bmp"
+CM_FILESAVE BITMAP "save.bmp"
+
+CM_EDITUNDO BITMAP "undo.bmp"
+CM_EDITCUT BITMAP "cut.bmp"
+CM_EDITCOPY BITMAP "copy.bmp"
+CM_EDITPASTE BITMAP "paste.bmp" 
+
+CM_EDITFIND BITMAP "find.bmp"
+CM_EDITFINDNEXT BITMAP "findnext.bmp"
+##@OPT_APPL_PRINTING 3
+
+CM_FILEPRINTPREVIEW  BITMAP "preview.bmp"
+CM_FILEPRINT BITMAP "print.bmp"
+##@OPT_APPL_HELP 2
+
+CM_HELPCONTENTS BITMAP "help.bmp"
+##--END--  @OPT_APPL_TOOLBAR
+##--BEGIN-- @OPT_APPL_PRINTING
+
+
+//
+// Print Preview speed bar bitmaps
+//
+APX_PPR_PREVIOUS BITMAP "previous.bmp"
+APX_PPR_NEXT BITMAP "next.bmp"
+APX_PPR_ONEUP BITMAP "preview1.bmp"
+APX_PPR_TWOUP BITMAP "preview2.bmp"
+##--END-- @OPT_APPL_PRINTING
+
+
+//
+// Misc application definitions
+//
+##--BEGIN-- @QUERY_APPL_MODEL == VALUE_MDI
+
+// MDI document ICON
+##:<<TMDIChild QUERY_WIND_ICON [[Icon]]
+IDI_DOC ICON "[[Icon]]"
+
+// Application ICON
+##<<TApplication QUERY_WIND_ICON [[Icon]]
+IDI_MDIAPPLICATION ICON "[[Icon]]"
+##--END-- @QUERY_APPL_MODEL == VALUE_MDI
+##--BEGIN-- @QUERY_APPL_MODEL == VALUE_SDI
+
+// Application ICON
+##<<TApplication QUERY_WIND_ICON [[Icon]]
+IDI_SDIAPPLICATION ICON "[[Icon]]"
+##--END-- @QUERY_APPL_MODEL == VALUE_SDI
+
+
+// About box.
+##--BEGIN-- @QUERY_APPL_CONTROL == VALUE_BWCC
+
+// BWCC bitmaps for the about box.
+#define IDB_BWCC_ABOUT_ICON     1450
+#define IDB_BWCC_ABOUT_ICON2    2450            // This definition is for EGA and related video modes.
+
+IDB_BWCC_ABOUT_ICON  BITMAP "borabout.bmp"
+IDB_BWCC_ABOUT_ICON2 BITMAP "borabout.bmp"
+
+##--END-- @QUERY_APPL_CONTROL == VALUE_BWCC
+##0 [[HAXRes]]
+##--BEGIN-- <<TDialog QUERY_DLOG [[DLogRsrc]]
+##CreateRsrc("DIALOG", \\"[[DLogRsrc]]", [[AssociatedID]])
+##AssociatedID HAXRes
+##@QUERY_APPL_CONTROL == VALUE_BWCC
+[[DLogRsrc]] DIALOG 56, 40, 199, 98
+##@QUERY_APPL_CONTROL != VALUE_BWCC
+[[DLogRsrc]] DIALOG 12, 17, 204, 65
+STYLE DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
+##@QUERY_APPL_CONTROL == VALUE_BWCC
+CLASS "bordlg_gray"
+##@QUERY_PRJ_NAME [[Project]]
+CAPTION "About [[Project]]"
+FONT 8, "MS Sans Serif"
+BEGIN
+##--BEGIN-- @QUERY_APPL_CONTROL != VALUE_BWCC
+##@QUERY_PRJ_NAME [[Project]]
+##@QUERY_APPL_VERINFO [[Version]]
+    CTEXT "Version", IDC_VERSION, 2, 14, 200, 8, SS_NOPREFIX
+##@QUERY_APPL_ABOUT [[AboutText]]
+    CTEXT "[[AboutText]]", -1, 2, 4, 200, 8, SS_NOPREFIX
+    CTEXT "", IDC_COPYRIGHT, 2, 27, 200, 17, SS_NOPREFIX
+    RTEXT "", IDC_DEBUG, 136, 55, 66, 8, SS_NOPREFIX
+##@QUERY_APPL_MODEL == VALUE_MDI
+    ICON IDI_MDIAPPLICATION, -1, 2, 2, 16, 16
+##@QUERY_APPL_MODEL == VALUE_SDI
+    ICON IDI_SDIAPPLICATION, -1, 2, 2, 16, 16
+    DEFPUSHBUTTON "OK", IDOK, 88, 48, 28, 12
+##--END-- @QUERY_APPL_CONTROL != VALUE_BWCC
+##--BEGIN-- @QUERY_APPL_CONTROL == VALUE_BWCC
+    CONTROL "", -1, "BorShade", BSS_GROUP | BSS_CAPTION | BSS_LEFT | WS_CHILD | WS_VISIBLE, 48, 6, 144, 51
+    CONTROL "Version", IDC_VERSION, "BorStatic", SS_LEFT | WS_CHILD | WS_VISIBLE | SS_NOPREFIX | WS_GROUP, 51, 18, 138, 9
+    CONTROL "Button", IDB_BWCC_ABOUT_ICON - 1000, "BorBtn", BBS_BITMAP | WS_CHILD | WS_VISIBLE | WS_TABSTOP, 6, 9, 39, 42
+##@QUERY_APPL_ABOUT [[AboutText]]
+    CONTROL "[[AboutText]]", -1, "BorStatic", SS_LEFT | WS_CHILD | WS_VISIBLE | SS_NOPREFIX | WS_GROUP, 51, 9, 138, 9
+    CONTROL "", IDC_COPYRIGHT, "BorStatic", SS_LEFT | WS_CHILD | WS_VISIBLE | SS_NOPREFIX | WS_GROUP, 51, 27, 138, 27
+    CONTROL "", IDC_DEBUG, "BorStatic", SS_RIGHT | WS_CHILD | WS_VISIBLE | SS_NOPREFIX | WS_GROUP, 131, 87, 66, 8
+    CONTROL "", IDOK, "BorBtn", BS_DEFPUSHBUTTON | WS_CHILD | WS_VISIBLE | WS_TABSTOP, 81, 66, 37, 25
+##--END-- @QUERY_APPL_CONTROL == VALUE_BWCC
+##AddRsrcItem(HAXRes, "STATIC", "TEXT", "IDC_VERSION")
+##AddRsrcItem(HAXRes, "STATIC", "TEXT", "IDC_COPYRIGHT")
+##AddRsrcItem(HAXRes, "STATIC", "TEXT", "IDC_DEBUG")
+##AddRsrcItem(HAXRes, "BUTTON", "DEFPUSHBUTTON", "IDOK")
+END
+##--END-- <<TDialog QUERY_DLOG [[DLogRsrc]]
+##--BEGIN-- @OPT_APPL_PRINTING
+
+
+// Printer abort box.
+##@QUERY_APPL_CONTROL != VALUE_BWCC
+IDD_ABORTDIALOG DIALOG 84, 51, 143, 64
+##@QUERY_APPL_CONTROL == VALUE_BWCC
+IDD_ABORTDIALOG DIALOG 70, 50, 163, 65
+STYLE DS_MODALFRAME | WS_POPUP | WS_VISIBLE | WS_CAPTION | WS_SYSMENU
+##@QUERY_APPL_CONTROL == VALUE_BWCC
+CLASS "bordlg"
+CAPTION "Print"
+BEGIN
+##@QUERY_APPL_CONTROL != VALUE_BWCC 5
+    PUSHBUTTON "Cancel", IDCANCEL, 52, 44, 40, 14, WS_CHILD | WS_VISIBLE | WS_TABSTOP
+    CTEXT "Printing", -1, 0, 4, 144, 8, SS_NOPREFIX
+    CTEXT "%s", ID_TITLE, 0, 12, 144, 8, SS_NOPREFIX
+    CTEXT "on the %s Printer", ID_DEVICE, 0, 20, 144, 8, SS_NOPREFIX
+    CTEXT "connected to %s", ID_PORT, 0, 28, 144, 8, SS_NOPREFIX
+##@QUERY_APPL_CONTROL == VALUE_BWCC 5
+    CONTROL "Button", IDCANCEL, "BorBtn", BS_DEFPUSHBUTTON | WS_CHILD | WS_VISIBLE | WS_TABSTOP, 65, 42, 32, 20
+    CTEXT "Printing", -1, 9, 4, 144, 8, SS_NOPREFIX
+    CTEXT "%s", ID_TITLE, 9, 12, 144, 8, SS_NOPREFIX
+    CTEXT "on the %s Printer", ID_DEVICE, 9, 20, 144, 8, SS_NOPREFIX
+    CTEXT "connected to %s", ID_PORT, 9, 28, 144, 8, SS_NOPREFIX
+END
+##--END-- @OPT_APPL_PRINTING
+
+
+// TInputDialog class dialog box.
+##@QUERY_APPL_CONTROL != VALUE_BWCC
+IDD_INPUTDIALOG DIALOG 20, 24, 180, 64
+##@QUERY_APPL_CONTROL == VALUE_BWCC
+IDD_INPUTDIALOG DIALOG 20, 24, 180, 70
+STYLE WS_POPUP | WS_CAPTION | DS_SETFONT
+##@QUERY_APPL_CONTROL == VALUE_BWCC
+CLASS "bordlg"
+FONT 8, "Helv"
+BEGIN
+    LTEXT "", ID_PROMPT, 10, 8, 160, 10, SS_NOPREFIX
+    CONTROL "", ID_INPUT, "EDIT", WS_CHILD | WS_VISIBLE | WS_BORDER | WS_TABSTOP | ES_AUTOHSCROLL, 10, 20, 160, 12
+##@QUERY_APPL_CONTROL != VALUE_BWCC 2
+    DEFPUSHBUTTON "&OK", IDOK, 47, 42, 40, 14
+    PUSHBUTTON "&Cancel", IDCANCEL, 93, 42, 40, 14
+##@QUERY_APPL_CONTROL == VALUE_BWCC 2
+    CONTROL "Button", IDOK, "BorBtn", BS_DEFPUSHBUTTON | WS_CHILD | WS_VISIBLE | WS_TABSTOP, 47, 42, 37, 26
+    CONTROL "Button", IDCANCEL, "BorBtn", BS_DEFPUSHBUTTON | WS_CHILD | WS_VISIBLE | WS_TABSTOP, 93, 42, 38, 25
+END
+
+
+// Horizontal slider thumb bitmap for TSlider and VSlider (include\owl\slider.rc)
+IDB_HSLIDERTHUMB BITMAP PRELOAD MOVEABLE DISCARDABLE 
+BEGIN
+    '42 4D 66 01 00 00 00 00 00 00 76 00 00 00 28 00'
+    '00 00 12 00 00 00 14 00 00 00 01 00 04 00 00 00'
+    '00 00 F0 00 00 00 00 00 00 00 00 00 00 00 00 00'
+    '00 00 10 00 00 00 00 00 00 00 00 00 C0 00 00 C0'
+    '00 00 00 C0 C0 00 C0 00 00 00 C0 00 C0 00 C0 C0'
+    '00 00 C0 C0 C0 00 80 80 80 00 00 00 FF 00 00 FF'
+    '00 00 00 FF FF 00 FF 00 00 00 FF 00 FF 00 FF FF'
+    '00 00 FF FF FF 00 BB BB 0B BB BB BB B0 BB BB 00'
+    '00 00 BB B0 80 BB BB BB 08 0B BB 00 00 00 BB 08'
+    'F8 0B BB B0 87 70 BB 00 00 00 B0 8F F8 80 BB 08'
+    '77 77 0B 00 00 00 08 F8 88 88 00 88 88 87 70 00'
+    '00 00 0F F7 77 88 00 88 77 77 70 00 00 00 0F F8'
+    '88 88 00 88 88 87 70 00 00 00 0F F7 77 88 00 88'
+    '77 77 70 00 00 00 0F F8 88 88 00 88 88 87 70 00'
+    '00 00 0F F7 77 88 00 88 77 77 70 00 00 00 0F F8'
+    '88 88 00 88 88 87 70 00 00 00 0F F7 77 88 00 88'
+    '77 77 70 00 00 00 0F F8 88 88 00 88 88 87 70 00'
+    '00 00 0F F7 77 88 00 88 77 77 70 00 00 00 0F F8'
+    '88 88 00 88 88 87 70 00 00 00 0F F7 77 88 00 88'
+    '77 77 70 00 00 00 0F F8 88 88 00 88 88 87 70 00'
+    '00 00 0F F7 77 78 00 88 77 77 70 00 00 00 0F FF'
+    'FF FF 00 88 88 88 80 00 00 00 B0 00 00 00 BB 00'
+    '00 00 0B 00 00 00'
+END
+
+
+// Vertical slider thumb bitmap for TSlider and HSlider (include\owl\slider.rc)
+IDB_VSLIDERTHUMB BITMAP PRELOAD MOVEABLE DISCARDABLE 
+BEGIN
+    '42 4D 2A 01 00 00 00 00 00 00 76 00 00 00 28 00'
+    '00 00 28 00 00 00 09 00 00 00 01 00 04 00 00 00'
+    '00 00 B4 00 00 00 00 00 00 00 00 00 00 00 00 00'
+    '00 00 10 00 00 00 00 00 00 00 00 00 C0 00 00 C0'
+    '00 00 00 C0 C0 00 C0 00 00 00 C0 00 C0 00 C0 C0'
+    '00 00 C0 C0 C0 00 80 80 80 00 00 00 FF 00 00 FF'
+    '00 00 00 FF FF 00 FF 00 00 00 FF 00 FF 00 FF FF'
+    '00 00 FF FF FF 00 B0 00 00 00 00 00 00 00 00 0B'
+    'B0 00 00 00 00 00 00 00 00 0B 0F 88 88 88 88 88'
+    '88 88 88 80 08 88 88 88 88 88 88 88 88 80 0F 77'
+    '77 77 77 77 77 77 77 80 08 77 77 77 77 77 77 77'
+    '77 80 0F 77 FF FF FF FF FF FF F7 80 08 77 FF FF'
+    'FF FF FF FF F7 80 0F 70 00 00 00 00 00 00 77 80'
+    '08 70 00 00 00 00 00 00 77 80 0F 77 77 77 77 77'
+    '77 77 77 80 08 77 77 77 77 77 77 77 77 80 0F 77'
+    '77 77 77 77 77 77 77 80 08 77 77 77 77 77 77 77'
+    '77 80 0F FF FF FF FF FF FF FF FF F0 08 88 88 88'
+    '88 88 88 88 88 80 B0 00 00 00 00 00 00 00 00 0B'
+    'B0 00 00 00 00 00 00 00 00 0B'
+END
+
+
+// Version info.
+//
+#if !defined(__DEBUG_)
+// Non-Debug VERSIONINFO
+1 VERSIONINFO LOADONCALL MOVEABLE 
+##@QUERY_RCVERSION [[RCVersion]] 2
+FILEVERSION [[RCVersion]]
+PRODUCTVERSION [[RCVersion]]
+FILEFLAGSMASK 0
+FILEFLAGS VS_FFI_FILEFLAGSMASK
+FILEOS VOS__WINDOWS16
+FILETYPE VFT_APP
+BEGIN
+    BLOCK "StringFileInfo"
+    BEGIN
+        // Language type = U.S. English (0x0409) and Character Set = Windows, Multilingual(0x04e4)
+        BLOCK "040904E4"                            // Matches VarFileInfo Translation hex value.
+        BEGIN
+##--BEGIN-- @QUERY_PRJ_COMPANY [[CompanyName]]
+##--BEGIN-- @QUERY_PRJ_NAME [[Project]]
+            VALUE "CompanyName", "[[CompanyName]]\000"
+            VALUE "FileDescription", "[[Project]] for Windows\000"
+##@QUERY_APPL_VERINFO [[Version]]
+            VALUE "FileVersion", "[[Version]]\000"
+            VALUE "InternalName", "[[Project]]\000"
+##@QUERY_PRJ_COPYRIGHT [[Copyright]]
+##\\Copyright Copyright
+            VALUE "LegalCopyright", "[[Copyright]]\000"
+            VALUE "LegalTrademarks", "Windows /231 is a trademark of Microsoft Corporation\000"
+            VALUE "OriginalFilename", "[[Project]].EXE\000"
+            VALUE "ProductName", "[[Project]]\000"
+##@QUERY_APPL_VERINFO [[Version]]
+            VALUE "ProductVersion", "[[Version]]\000"
+##--END-- @QUERY_PRJ_NAME [[Project]]
+##--END-- @QUERY_PRJ_COMPANY [[CompanyName]]
+        END
+    END
+
+    BLOCK "VarFileInfo"
+    BEGIN
+        VALUE "Translation", 0x04e4, 0x0409        // U.S. English(0x0409) & Windows Multilingual(0x04e4) 1252
+    END
+
+END
+#else
+
+// Debug VERSIONINFO
+1 VERSIONINFO LOADONCALL MOVEABLE 
+##@QUERY_RCVERSION [[RCVersion]] 2
+FILEVERSION [[RCVersion]]
+PRODUCTVERSION [[RCVersion]]
+FILEFLAGSMASK VS_FF_DEBUG | VS_FF_PRERELEASE | VS_FF_PATCHED | VS_FF_PRIVATEBUILD | VS_FF_SPECIALBUILD
+FILEFLAGS VS_FFI_FILEFLAGSMASK
+FILEOS VOS__WINDOWS16
+FILETYPE VFT_APP
+BEGIN
+    BLOCK "StringFileInfo"
+    BEGIN
+        // Language type = U.S. English (0x0409) and Character Set = Windows, Multilingual(0x04e4)
+        BLOCK "040904E4"                            // Matches VarFileInfo Translation hex value.
+        BEGIN
+##--BEGIN-- @QUERY_PRJ_COMPANY [[CompanyName]]
+##--BEGIN-- @QUERY_PRJ_NAME [[Project]]
+##--BEGIN-- @QUERY_PRJ_USER [[Author]]
+            VALUE "CompanyName", "[[CompanyName]]\000"
+            VALUE "FileDescription", "[[Project]] for Windows\000"
+##@QUERY_APPL_VERINFO [[Version]]
+            VALUE "FileVersion", "[[Version]]\000"
+            VALUE "InternalName", "[[Project]]\000"
+##@QUERY_PRJ_COPYRIGHT [[Copyright]]
+##\\Copyright Copyright
+            VALUE "LegalCopyright", "[[Copyright]]\000"
+            VALUE "LegalTrademarks", "Windows \231 is a trademark of Microsoft Corporation\000"
+            VALUE "OriginalFilename", "[[Project]].EXE\000"
+            VALUE "ProductName", "[[Project]]\000"
+##@QUERY_APPL_VERINFO [[Version]]
+            VALUE "ProductVersion", "[[Version]]\000"
+            VALUE "SpecialBuild", "Debug Version\000"
+            VALUE "PrivateBuild", "Built by [[Author]]\000"
+##--END-- @QUERY_PRJ_USER [[Author]]
+##--END-- @QUERY_PRJ_NAME [[Project]]
+##--END-- @QUERY_PRJ_COMPANY [[CompanyName]]
+        END
+    END
+
+    BLOCK "VarFileInfo"
+    BEGIN
+        VALUE "Translation", 0x04e4, 0x0409        // U.S. English(0x0409) & Windows Multilingual(0x04e4) 1252
+    END
+
+END
+#endif

@@ -1,0 +1,54 @@
+<<[H]
+##QUERY_SNP_FUNC_NAME [[FunctionName]]
+##QUERY_SNP_FUNC_RESULT [[FunctionResult]]
+##QUERY_SNP_FUNC_DEFPARAM [[FunctionDefParam]]
+##--BEGIN-- QUERY_CLASS_NAME [[ClassName]]
+##"//{{[[ClassName]]VIRTUAL_END}}" [[ClassTMarker]]
+##\\ClassTMarker [[ClassMarker]]
+##^BOF
+##--BEGIN-- ? ClassMarker [[Search]]
+##Search == FALSE
+##:     {HAddVirt.SNP}
+##:     ^BOF
+##:     ? ClassMarker [[Search]]
+##*
+##--END-- ? ClassMarker [[Search]]
+##^BOL
+    virtual [[FunctionResult]] [[FunctionName]] [[FunctionDefParam]];
+##--END-- QUERY_CLASS_NAME [[ClassName]]
+>>[H]
+
+
+<<[CPP]
+##QUERY_SNP_FUNC_NAME [[FunctionName]]
+##QUERY_SNP_FUNC_RESULT [[FunctionResult]]
+##QUERY_SNP_FUNC_DEFCPPPARAM [[FunctionDefParam]]
+##QUERY_SNP_FUNC_CALLPARAM [[FunctionCallParam]]
+##--BEGIN-- QUERY_CLASS_NAME [[ClassName]]
+##--BEGIN-- QUERY_BASE_NAME [[BaseClass]]
+##^EOF
+
+
+[[FunctionResult]] [[ClassName]]::[[FunctionName]] [[FunctionDefParam]]
+{
+##FunctionResult != "void" 3
+    [[FunctionResult]] result;
+
+    result = [[BaseClass]]::[[FunctionName]][[FunctionCallParam]];
+##FunctionResult == "void"
+    [[BaseClass]]::[[FunctionName]][[FunctionCallParam]];
+
+    // INSERT>> Your code here.
+
+##FunctionResult != "void" 2
+
+    return result;
+}
+##^-7
+##^SCROLL
+##^5
+##^EOL
+##^^
+##--END-- QUERY_BASE_NAME [[BaseClass]]
+##--END-- QUERY_CLASS_NAME [[ClassName]]
+>>[CPP]

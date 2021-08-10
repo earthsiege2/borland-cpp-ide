@@ -1,0 +1,11 @@
+//----------------------------------------------------------------------------
+// ObjectWindows - (C) Copyright 1991, 1993 by Borland International
+//   prntprev.rh
+//   Example print preview program resource ids
+//----------------------------------------------------------------------------
+#define IDM_TESTMENU        100
+#define CM_PRINTERSETUP     101
+#define CM_PRINT            102
+#define CM_PRINTPREVIEW     103
+
+#define IDB_SPACESHIP       100

@@ -1,0 +1,1193 @@
+Script  EPSILON;
+
+/***********************************************************************
+
+            Epsilon keystoke emulation for Borland C++ IDE.
+
+        This file contains a KEYMAPR script which partially emulates the
+Epsilon editor in the Borland C++ IDE. A complete description of the KEYMAPR
+language and compiler may be found in on-line help.
+
+Most of the simple Epsilon commands have been fully implemented.  Most
+of the complex command have been either partially implemented or not
+implemented at all.  The macro names correspond to the names in
+the Espilon default macro set.  Below is a list of all the default commands.
+
+IDE Binding   Epsilon Command            Comments
+-----------   ---------------            -------------------------
+Ctrl-G        abort                      not implemented
+<Esc>         alt_prefix                 built into keyboard tables
+Ctrl-Alt-W    append_next_kill
+Ctrl-U        argument                   not implemented
+Ctrl-B        backward_character
+<LfAr>        backward_character
+Ctrl-H        backward_delete_character
+<BkSp>        backward_delete_character
+Alt-<del>     backward_kill_level        point must be on ')', '}' or ']'
+Ctrl-Alt-H    backward_kill_word
+Alt-<BkSp>    backward_kill_word
+Ctrl-Alt-B    backward_level             point must be on ')', '}' or ']'
+Alt-[         backward_paragraph         not implemented
+Alt-<UpAr>    was backward_paragraph, remapped to move cursor to pane above.
+Alt-A         backward_sentence          not implemented
+Ctrl-<UpAr>   backward_sentence          not implemented
+Alt-B         backward_word
+Ctrl-<LfAr>   backward_word
+Ctrl-A        beginning_of_line
+Alt-<LfAr>    was beginning_of_line, remapped to move cursor to next pane to left
+Alt-,         beginning_of_window
+<Home>        beginning_of_window
+<F4>          bind_to_key                not implemented
+Ctrl-X+Ctrl-B bufed                      not implemented
+Alt-C         capitalize_word
+              case_indirect              built into keyboard tables
+<F7>          cd                         not implemented
+Alt-S         center_line                not implemented
+Ctrl-L        center_window
+Alt-~         change_modified            not implemented
+Ctrl-F2       compare_windows            not implemented
+Ctrl-X+C      compare_windows            not implemented
+Alt-W         copy_region
+Ctrl-F7       copy_to_file
+Ctrl-X+L      count_lines                not implemented
+Ctrl-^        ctrl-prefix                not implemented
+Ctrl-X+Ctrl-O delete_blank_lines         not implemented
+Ctrl-D        delete_character
+<Del>         delete_character
+Alt-\         delete_horizontal_space
+F1+C          describe_command           not implemented
+F1+K          describe_key               not implemented
+Ctrl-X+D      dired                      not implemented
+<Tab>         do_c_indent                inserts a TAB character
+Ctrl-N        down_line
+<DnAr>        down_line
+Ctrl-X+)      end_kbd_macro              toggles recording mode
+Ctrl-E        end_of_line
+Alt-<RgAr>    was end_of_line, remapped to move cursor to next pane to right
+Alt-.         end_of_window
+<End>         end_of_window
+Ctrl-<PgUp>   enlarge_window
+Ctrl-X+^      enlarge_window
+Alt-<PgUp>    enlarge_window_horiz
+Ctrl-X+@      enlarge_window_horiz
+Ctrl-M        enter_key
+Ctrl-X+Ctrl-X exchange_point_and_mark
+Ctrl-X+Ctrl-C exit                       not implemented
+Ctrl-X+Ctrl-Z exit_level                 not implemented
+Alt-Q         fill_paragraph             not implemented
+Alt-)         find_delimiter             same as backward_level
+Ctrl-X+Ctrl-F find_file
+Ctrl-F        forward_character
+<RgAr>        forward_character
+Ctrl-Alt-F    forward_level              point must be on '(', '{' or '['
+Alt-]         forward_paragraph          not implemented
+Alt-<DnAr>    was forward_paragraph, remapped to move cursor to pane below
+Alt-E         forward_sentence           not implemented
+Ctrl-<DnAr>   forward_sentence           not implemented
+Alt-F         forward_word
+Ctrl-<RgAr>   forward_word
+Alt-<         goto_beginning
+Ctrl-<Home>   goto_beginning
+Alt->         goto_end
+Ctrl-<End>    goto_end
+Ctrl-X+G      goto_line
+Ctrl-X+.      goto_tag                   browser menu
+<F1>          help
+Alt-?         help
+Ctrl-_        help
+Ctrl-S        incremental_search
+<Tab>         indent_previous            not implemented
+Ctrl-Alt-\    indent_region              same as indent_rigidly
+Ctrl-X+Ctrl-I indent_rigidly
+Ctrl-X+<Tab>  indent_rigidly
+Alt-<Tab>     indent_under
+Ctrl-X+I      insert_file
+Ctrl-X+K      kill_buffer                not implemented
+Ctrl-Alt-K    kill_level                 point must be on '(', '{' or '['
+Ctrl-K        kill_line
+Ctrl-W        kill_region
+Alt-K         kill_sentence              not implemented
+Ctrl-X+0      kill_window
+Alt-D         kill_word
+Ctrl-<F4>     last_kbd_macro
+Ctrl-X+E      last_kbd_macro
+<F3>          load_bytes                 not implemented
+Alt-L         lower_case_word
+Ctrl-X+M      make
+Alt-H         mark_paragraph             not implemented
+<Space>       maybe_break_line           not implemented
+Ctrl-X+Alt-N  name_kbd_macro             not implemented
+Alt-X         named_command
+<F2>          named_command
+Ctrl-X+Ctrl-N next_error
+Ctrl-V        next_page
+<PgDn>        next_page
+Ctrl-<F5>     next_video                 not implemented
+Alt-<End>     next_window
+Ctrl-X+N      next_window
+Ctrl-X+1      one_window
+Ctrl-O        open_line
+<Ins>         overwrite_mode
+Ctrl-X+,      pluck_tag                  browser menu
+Alt-V         previous_page
+<PgUp>        previous_page
+Alt-<Home>    previous_window
+Ctrl-X+P      previous_window
+Ctrl-X+Ctrl-E push
+Alt-%         query_replace
+Ctrl-Q        quoted_insert
+Ctrl-X+R      redo
+<F10>         redo
+Ctrl-<F10>    redo_changes               same as redo
+Ctrl-X+Ctrl-R redo_changes               same as redo
+Alt-*         regex_replace
+Ctrl-Alt-S    regex_search
+Alt-&         replace_string
+Ctrl-R        reverse_incremental_search
+Ctrl-Alt-R    reverse_regex_search
+Ctrl-X+S      save_all_buffers
+Alt-Z         scroll_down
+Alt-{         scroll_left                not implemented
+Alt-}         scroll_right               not implemented
+Ctrl-Z        scroll_up
+Ctrl-X+B      select_buffer
+Ctrl-X+Alt-,  select_tag_file            not implemented
+Ctrl-X+F      set_fill_column            not implemented
+Ctrl-@        set_mark
+Alt-@         set_mark
+<F8>          set_variable               not implemented
+Alt-<F5>      set_video                  not implemented
+Ctrl-X+=      show_point                 not implemented
+Ctrl-<F8>     show_variable              not implemented
+Ctrl-<PgDn>   shrink_window
+Alt-<PgDn>    shrink_window_horiz
+Ctrl-X+2      split_window
+Ctrl-X+5      split_window_vertically
+Ctrl-X+(      start_kbd_macro            toggle macro recording
+Ctrl-X+Ctrl-M start_process              not implemented
+Ctrl-C        stop_process               not implemented
+Ctrl-X+Ctrl-Alt-I
+              tabify_region              not implemented
+Ctrl-X+Ctrl-<Tab>
+              tabify_region              not implemented
+Ctrl-X+Alt-.  tag_files                  not implemented
+Alt-M         to_indentation
+Ctrl-T        transpose_characters
+Ctrl-X+Ctrl-T transpose_lines
+Alt-T         transpose_words
+Ctrl-X+U      undo
+F9            undo
+Ctrl-<F9>     undo_changes               same as undo
+Ctrl-X+Ctrl-U undo_changes               same as undo
+Ctrl_X+Alt-I  untabify_region            not implemented
+Ctrl-P        up_line
+<UpAr>        up_line
+Alt-U         upper_case_word
+Ctrl-X+Ctrl-V visit_file                 not implemented
+Ctrl-X+Ctrl-W write_file
+Ctrl-X+W      write_region
+Ctrl-<F3>     write_state                not implemented
+Ctrl-X+W      write_region
+Ctrl-Y        yank
+Alt-Y         yank_pop                   not implemented
+
+********************************************************************/
+
+/******* Compatibility Macros ********/
+MACRO WordLeft
+  CursorLeftSkipNonWord;
+  CursorLeftSkipWordStream;
+  FixScreenPos;
+END;
+
+MACRO WordRight
+  CursorRightSkipWordStream;
+  CursorRightSkipNonWord;
+  FixScreenPos;
+END;
+
+MACRO RightOfWord
+  CursorRightSkipWord;
+  CursorRightSkipNonWord;
+  FixScreenPos;
+END;
+
+MACRO EpsilonMarkKillLine
+  SetBlockBeg;
+  IF InqEmptyLine THEN
+    CursorCharRight
+  ELSE
+    RightOfLine
+  ENDIF;
+  SetBlockEnd;
+  FixScreenPos;
+END;
+
+MACRO MacMarkWord
+    SetNonInclusiveBlock;
+    HideBlock;
+    SetTempPos;
+    CursorRight;
+    WordLeft;
+    RightOfWord;
+    SetBlockEnd;
+    WordLeft;
+    SetBlockBeg;
+    HighlightBlock;
+    MoveToTempPos;
+END;
+
+/*******************************************************************
+        KBDL SCRIPTS TO EMULATE EPSILON FROM THE BORLAND C++ IDE     
+ *******************************************************************/
+
+/* MACRO abort                         not implemented */
+/* MACRO alt_prefix                 built into keyboard */
+
+MACRO append_next_kill
+    ClipAppendNextCut;
+END;
+
+/* MACRO argument                 not implemented */
+
+MACRO backward_character
+    CursorSwitchedLeft;
+    ClipReplaceNextCut;
+END;
+
+MACRO backward_delete_character
+    BackspaceDelete;
+    ClipReplaceNextCut;
+END;
+
+MACRO backward_kill_level         /* point must be on ')', '}' or ']' */
+    SetNonInclusiveBlock;
+    CursorCharRight;
+    SetBlockEnd;
+    MatchPairBackward;
+    SetBlockBeg;
+    ClipMaybeAppendCut;
+    ClipAppendNextCut;
+END;
+
+MACRO backward_kill_word
+    SetBlockEnd;
+    CursorLeftSkipNonWord;
+    CursorLeftSkipWord;
+    SetBlockBeg;
+    HighlightBlock;
+    ClipMaybeAppendCut;
+    FixScreenPos;
+    ClipAppendNextCut;
+END;
+
+MACRO backward_level                 /* point must be on ')', '}' or ']' */
+    MatchPairBackward;
+    ClipReplaceNextCut;
+END;
+
+/* MACRO backward_paragraph         not implemented */
+/* MACRO backward_sentence         not implemented */
+
+MACRO backward_word
+    WordLeft;
+    ClipReplaceNextCut;
+END;
+
+MACRO beginning_of_line
+    LeftOfLine;FixScreenPos;
+    ClipReplaceNextCut;
+END;
+
+MACRO beginning_of_window
+    TopOfScreen;
+    ClipReplaceNextCut;
+END;
+
+/* MACRO bind_to_key                 not implemented */
+/* MACRO bufed                         not implemented */
+
+MACRO capitalize_word
+    MacMarkWord;
+    LowerCaseBlock;
+    MoveToBlockBeg;
+    CursorRight;
+    SetBlockEnd;
+    UpperCaseBlock;
+    ClipReplaceNextCut;
+END;
+
+/* MACRO center_line                 not implemented */
+
+MACRO center_window
+    CenterLineInWindow
+END;
+
+/* MACRO change_modified         not implemented */
+/* MACRO compare_windows         not implemented */
+
+MACRO copy_region
+    HideBlock;
+    SwapPrevPos;
+    SetBlockBeg;
+    SwapPrevPos;
+    SetBlockEnd;
+    HighlightBlock;
+    IF InqValidBlock THEN
+      BEGIN
+        ClipCopy;
+        ClipReplaceNextCut;
+      END
+    ELSE
+      BEGIN
+        HideBlock;
+        SetBlockBeg;
+        SwapPrevPos;
+        SetBlockEnd;
+        SwapPrevPos;
+        HighlightBlock;
+        IF InqValidBlock THEN
+          BEGIN
+            ClipCopy;
+            ClipReplaceNextCut;
+          END;
+        ENDIF
+      END
+    ENDIF
+END;
+
+MACRO copy_to_file
+    SaveFileAs;
+    ClipReplaceNextCut;
+END;
+
+/* MACRO count_lines                 not implemented */
+/* MACRO ctrl-prefix                 not implemented */
+/* MACRO delete_blank_lines         not implemented */
+
+MACRO delete_character
+    DeleteChar;
+    ClipReplaceNextCut;
+END;
+
+MACRO delete_horizontal_space
+    CursorLeftSkipWhite;
+    SetTempPos;
+    CursorRightSkipWhite;
+    SetTempEndPos;
+    DeleteTempBlock;
+    FixScreenPos;
+    ClipReplaceNextCut;
+END;
+
+/* MACRO describe_command         not implemented */
+/* MACRO describe_key                 not implemented */
+/* MACRO dired                         not implemented */
+
+MACRO do_c_indent                 /* inserts a TAB character */
+    LiteralChar(9);
+    ClipReplaceNextCut;
+END;
+
+MACRO down_line
+    CursorDown;
+    ClipReplaceNextCut;
+END;
+
+MACRO end_kbd_macro                 /* toggles recording mode */
+    RecordKeyMacro;
+END;
+
+MACRO end_of_line
+    RightOfLine;FixScreenPos;
+    ClipReplaceNextCut;
+END;
+
+MACRO end_of_window
+    BottomOfScreen;
+    ClipReplaceNextCut;
+END;
+
+MACRO enlarge_window
+    MovePaneEdge(4);
+END;
+
+MACRO enlarge_window_horiz
+    MovePaneEdge(5);
+END;
+
+MACRO enter_key
+    LiteralChar(13);
+    ClipReplaceNextCut;
+END;
+
+MACRO exchange_point_and_mark
+    SwapPrevPos;
+    FixScreenPos;
+END;
+
+MACRO exit
+    Quit;
+END;
+
+MACRO exit_level                 /* Leaves editor - Enables Menus */
+    Quit;
+END;
+
+/* MACRO fill_paragraph                 not implemented */
+
+MACRO find_delimiter                 /* same as backward_level */
+    MatchPairForward;
+    ClipReplaceNextCut;
+END;
+
+MACRO find_file
+    OpenFile;
+    ClipReplaceNextCut;
+END;
+
+MACRO forward_character
+    CursorSwitchedRight;
+    ClipReplaceNextCut;
+END;
+
+MACRO forward_level                 /* point must be on '(', '{' or '[' */
+    MatchPairForward;
+    ClipReplaceNextCut;
+END;
+
+/* MACRO forward_paragraph         not implemented */
+/* MACRO forward_sentence         not implemented */
+
+MACRO forward_word
+    WordRight;
+    ClipReplaceNextCut;
+END;
+
+MACRO goto_beginning
+    HomeCursor;
+    ClipReplaceNextCut;
+END;
+
+MACRO goto_end
+    EndCursor;
+    ClipReplaceNextCut;
+END;
+
+MACRO goto_line
+    GoToLine;
+    ClipReplaceNextCut;
+END;
+
+MACRO goto_tag
+    BrowseSymbolAtCursor;
+    ClipReplaceNextCut;
+END;
+
+MACRO incremental_search
+    SetNonInclusiveBlock;HideBlock;IncrementalSearch;
+    ClipReplaceNextCut;
+END;
+
+/* MACRO indent_previous         not implemented */
+
+MACRO indent_region                 /* same as indent_rigidly */
+    IndentBlock(2);
+    ClipReplaceNextCut;
+END;
+
+MACRO indent_rigidly
+    IndentBlock(2);
+    ClipReplaceNextCut;
+END;
+
+MACRO indent_under
+    SmartTab;
+    ClipReplaceNextCut;
+END;
+
+MACRO insert_file
+    SetPrevPos;
+    HideBlock;
+    ReadBlock;
+    ClipReplaceNextCut;
+END;
+
+/* MACRO kill_buffer                 not implemented */
+
+MACRO kill_level                 /* point must be on '(', '{' or '[' */
+    SetNonInclusiveBlock;
+    SetBlockBeg;
+    MatchPairForward;
+    CursorCharRight;
+    SetBlockEnd;
+    ClipMaybeAppendCut;
+    ClipAppendNextCut;
+END;
+
+MACRO kill_line
+    SetTempPos;
+    EpsilonMarkKillLine;
+    MoveToTempPos;
+    HighlightBlock;
+    ClipMaybeAppendCut;
+    ClipAppendNextCut;
+END;
+
+MACRO kill_region
+    SwapPrevPos;
+    SetBlockBeg;
+    SwapPrevPos;
+    SetBlockEnd;
+    HighlightBlock;
+    ClipMaybeAppendCut;
+    ClipAppendNextCut;
+END;
+
+/* MACRO kill_sentence                 not implemented */
+
+MACRO kill_window
+    DeletePane(4);
+    ClipReplaceNextCut;
+END;
+
+MACRO kill_word
+    SetBlockBeg;
+    CursorRightSkipWord;
+    CursorRightSkipWhite;
+    SetBlockEnd;
+    HighlightBlock;
+    ClipMaybeAppendCut;
+    FixScreenPos;
+    ClipAppendNextCut;
+END;
+
+MACRO last_kbd_macro
+    PlaybackKeyMacro;
+END;
+
+/* MACRO load_bytes                 not implemented */
+
+MACRO lower_case_word
+    MacMarkWord;
+    LowerCaseBlock;
+    ClipReplaceNextCut;
+END;
+
+MACRO make
+    MakeProject;
+END;
+
+/* MACRO mark_paragraph                 not implemented */
+/* MACRO maybe_break_line         not implemented */
+/* MACRO name_kbd_macro                 not implemented */
+
+MACRO named_command
+    Menu;
+END;
+
+MACRO next_error
+    NextError;
+    ClipReplaceNextCut;
+END;
+
+MACRO next_page
+    FixScreenPos;
+    PageScreenDown;
+    FixCursorPos;
+    ClipReplaceNextCut;
+END;
+
+/* MACRO next_video                 not implemented */
+
+MACRO next_window
+    MoveToPane(4);
+    ClipReplaceNextCut;
+END;
+
+MACRO one_window
+    DeletePane(5);
+    ClipReplaceNextCut;
+END;
+
+MACRO open_line
+    LiteralChar(13);
+    CursorSwitchedLeft;
+    ClipReplaceNextCut;
+END;
+
+MACRO overwrite_mode
+    ToggleInsert;
+END;
+
+MACRO pluck_tag
+    BrowseSymbolAtCursor;
+END;
+
+MACRO previous_page
+    FixScreenPos;
+    PageScreenUp;
+    FixCursorPos;
+    ClipReplaceNextCut;
+END;
+
+MACRO previous_window
+    MoveToPane(5);
+    ClipReplaceNextCut;
+END;
+
+MACRO push
+    Menu;
+END;
+
+MACRO query_replace
+    Replace;
+    ClipReplaceNextCut;
+END;
+
+MACRO quoted_insert
+    LiteralChar;
+    ClipReplaceNextCut;
+END;
+
+MACRO _redo
+    ReDo;
+    ClipReplaceNextCut;
+END;
+
+MACRO redo_changes                 /* same as redo */
+    ReDo;
+    ClipReplaceNextCut;
+END;
+
+MACRO regex_replace
+    Replace;
+    ClipReplaceNextCut;
+END;
+
+MACRO regex_search
+    SearchMenu;
+    ClipReplaceNextCut;
+END;
+
+MACRO replace_string
+    Replace;
+    ClipReplaceNextCut;
+END;
+
+MACRO reverse_incremental_search
+    SearchMenu;
+    ClipReplaceNextCut;
+END;
+
+MACRO reverse_regex_search
+    SearchMenu;
+    ClipReplaceNextCut;
+END;
+
+MACRO save_all_buffers
+    SaveAll;
+    ClipReplaceNextCut;
+END;
+
+MACRO save_file
+    SaveFile;
+    ClipReplaceNextCut;
+END;
+
+MACRO scroll_down
+    ScrollScreenDown;
+    ClipReplaceNextCut;
+END;
+
+/* MACRO scroll_left                 not implemented */
+/* MACRO scroll_right                 not implemented */
+
+MACRO scroll_up
+    ScrollScreenUp;
+    ClipReplaceNextCut;
+END;
+
+/* MACRO select_buffer                 not implemented */
+/* MACRO select_tag_file         not implemented */
+/* MACRO set_fill_column         not implemented */
+
+MACRO set_mark
+    HideBlock;
+    SetPrevPos;
+END;
+
+/* MACRO set_variable                 not implemented */
+/* MACRO set_video                 not implemented */
+/* MACRO show_point                 not implemented */
+/* MACRO show_variable                 not implemented */
+
+MACRO shrink_window
+    MovePaneEdge(6);
+END;
+
+MACRO shrink_window_horiz
+    MovePaneEdge(7);
+END;
+
+MACRO split_window
+    CreatePane(0);
+END;
+
+MACRO split_window_vertically
+    CreatePane(2);
+END;
+
+MACRO start_kbd_macro                 /* toggle macro recording */
+    RecordKeyMacro;
+END;
+
+/* MACRO start_process                 not implemented */
+/* MACRO stop_process                 not implemented */
+/* MACRO tabify_region                 not implemented */
+/* MACRO tag_files                 not implemented */
+MACRO to_indentation
+    FirstNonBlank;
+    ClipReplaceNextCut;
+END;
+
+MACRO transpose_characters
+    SetBlockBeg;
+    CursorSwitchedRight;
+    SetBlockEnd;
+    HighlightBlock;
+    CursorSwitchedLeft;
+    CursorSwitchedLeft;
+    MoveBlock;
+    HideBlock;
+    ClipReplaceNextCut;
+END;
+
+MACRO transpose_lines
+    LeftOfLine;
+    SetBlockBeg;
+    RightOfLine;
+    CursorCharRight;
+    SetBlockEnd;
+    HighlightBlock;
+    CursorUp;
+    CursorUp;
+    MoveBlock;
+    HideBlock;
+    FixScreenPos;
+    ClipReplaceNextCut;
+END;
+
+MACRO transpose_words
+    CursorRightSkipNonWord;
+    SetBlockBeg;
+    CursorRightSkipWord;
+    SetBlockEnd;
+    HighlightBlock;
+    CursorLeftSkipWord;
+    CursorLeftSkipNonWord;
+    CursorLeftSkipWord;
+    MoveBlock;
+    HideBlock;
+    FixScreenPos;
+    ClipReplaceNextCut;
+END;
+
+MACRO _undo
+    Undo;
+    ClipReplaceNextCut;
+END;
+
+MACRO undo_changes                 /* same as undo */
+    Undo;
+    ClipReplaceNextCut;
+END;
+
+/* MACRO untabify_region                 not implemented */
+
+MACRO up_line
+    CursorUp;
+    ClipReplaceNextCut;
+END;
+
+MACRO upper_case_word
+    MacMarkWord;
+    UpperCaseBlock;
+    ClipReplaceNextCut;
+END;
+
+/* MACRO visit_file                 not implemented */
+
+MACRO write_file
+    SaveFile;
+END;
+
+MACRO write_region
+    HideBlock;
+    SwapPrevPos;
+    SetBlockBeg;
+    SwapPrevPos;
+    SetBlockEnd;
+    HighlightBlock;
+    WriteBlock;
+    ClipReplaceNextCut;
+END;
+
+/* MACRO write_state                 not implemented */
+
+MACRO yank
+    ClipPaste;
+    ClipReplaceNextCut;
+END;
+
+/**** key bindings ******/
+KEYBOARD System
+F1 : Help;
+F5 : ToggleBreakpoint; : ToggleBreakpoint
+F8 : Step;             : Step
+F9 : MakeProject;      : MakeProject
+
+shift-F4: WindowTileHorz;
+/* shift-F5: WinCascade */
+
+alt-F5 : InspectAtCursor; : InspectAtCursor
+alt-F7 : PrevError;    : PrevError
+alt-F8 : NextError;    : NextError
+alt-F9 : CompileFile;  : CompileFile
+alt-F10: LocalMenu;
+
+ctrl-F2       : TerminateProgram; : TerminateProgram
+ctrl-F5       : AddWatch;     : AddWatch
+Ctrl-F7       : copy_to_file; : SaveFileAs
+ctrl-F9       : RunProgram;   : RunProgram
+
+Ctrl-X+(      : start_kbd_macro;         /* toggle macro recording */
+Ctrl-X+)      : end_kbd_macro;                 /* toggles recording mode */
+/* Ctrl-F4       : last_kbd_macro; */
+Ctrl-X+e      : last_kbd_macro;
+Ctrl-X+E      : last_kbd_macro;
+
+Ctrl-X+Ctrl-S : save_file;    : SaveFile
+Ctrl-X+Ctrl-W : write_file;
+/* Ctrl-X+Ctrl-C : exit_level;   : Quit */
+
+/* ---- Pane mgmt keys ------------------ */
+Ctrl-PgUp     : enlarge_window;
+/* Ctrl-X+^      : enlarge_window; parser failure */
+Alt-PgUp      : enlarge_window_horiz;
+/* Ctrl-X+@      : enlarge_window_horiz; parser failure */
+Ctrl-X+0      : kill_window;
+Alt-End       : next_window;
+Esc+End       : next_window;
+Ctrl-X+n      : next_window;
+Ctrl-X+N      : next_window;
+Ctrl-X+1      : one_window;
+Alt-Home      : previous_window;
+Esc+Home      : previous_window;
+Ctrl-X+p      : previous_window;
+Ctrl-X+P      : previous_window;
+Ctrl-PgDn     : shrink_window;
+Alt-PgDn      : shrink_window_horiz;
+Ctrl-X+2      : split_window;
+Ctrl-X+5      : split_window_vertically;
+END;
+
+KEYBOARD Editor
+star  : LiteralChar('*');
+minus : LiteralChar('-');
+plus  : LiteralChar('+');
+enter : LiteralChar(13);
+space : LiteralChar(' ');
+
+
+/* Ctrl-G       : abort;                 not implemented */
+/* Esc          : alt_prefix;                 built into keyboard tables */
+Ctrl-Alt-w   : append_next_kill;
+Esc+Ctrl-w   : append_next_kill;
+/* Ctrl-U       : argument;                 not implemented */
+Ctrl-B        : backward_character;
+LfAr              : backward_character;
+Ctrl-H        : backward_delete_character;
+BkSp              : backward_delete_character;
+Alt-Del       : backward_kill_level;         /* point must be on ')', '}' or ']' */
+Esc+Del       : backward_kill_level;         /* point must be on ')', '}' or ']' */
+Ctrl-Alt-H    : backward_kill_word;
+Alt-BkSp      : backward_kill_word;
+Esc+BkSp      : backward_kill_word;
+Esc+Ctrl-H    : backward_kill_word;
+Ctrl-Alt-B    : backward_level;                 /* point must be on ')', '}' or ']' */
+Esc+Ctrl-B    : backward_level;                 /* point must be on ')', '}' or ']' */
+/* Alt-[         : backward_paragraph;         not implemented */
+Alt-UpAr      : MoveToPane(0);
+/* Alt-A         : backward_sentence;         not implemented */
+/* Ctrl-UpAr     : backward_sentence;         not implemented */
+Alt-b         : backward_word;
+Esc+@b         : backward_word;
+Ctrl-LfAr     : backward_word;
+Ctrl-A        : beginning_of_line;
+Alt-LfAr      : MoveToPane(2);
+Esc+LfAr      : beginning_of_line;
+Alt-,              : beginning_of_window;
+Esc+,              : beginning_of_window;
+Home          : beginning_of_window;
+/* F4            : bind_to_key;                 not implemented */
+/* Ctrl-X+Ctrl-B : bufed;                 not implemented */
+Alt-c         : capitalize_word;
+Esc+@c        : capitalize_word;
+/* Alt-S         : center_line;                 not implemented */
+Ctrl-L        : center_window;
+/* Alt-~         : change_modified;         not implemented */
+/* Ctrl-F2       : compare_windows;         not implemented */
+/* Ctrl-X+@C     : compare_windows;         not implemented */
+Alt-w        : copy_region;
+Esc+@w       : copy_region;
+/* Ctrl-X+@L     : count_lines;                 not implemented */
+/* Ctrl-^        : ctrl-prefix;                 not implemented */
+/* Ctrl-X+Ctrl-O : delete_blank_lines;         not implemented */
+Ctrl-D        : delete_character;
+Del           : delete_character;
+Alt-\              : delete_horizontal_space;
+Esc+\              : delete_horizontal_space;
+/* Ctrl-X+d   : dired;                   not implemented */
+/* Ctrl-X+D   : dired;                   not implemented */
+/* F1+C              : describe_command;         not implemented */
+/* F1+K              : describe_key;                 not implemented */
+/* Ctrl-X+@D     : dired;                 not implemented */
+Tab           : do_c_indent;                 /* inserts a TAB character */
+Ctrl-N        : down_line;
+DnAr              : down_line;
+Ctrl-X+)      : end_kbd_macro; /* N.B. must duplicate this due to quirk in keymap processor */
+Ctrl-E        : end_of_line;
+Alt-RgAr      : MoveToPane(3);
+Esc+RgAr      : end_of_line;
+Alt-.         : end_of_window;
+Esc+.         : end_of_window;
+End           : end_of_window;
+/* Ctrl-X+^      : enlarge_window; parser failure */
+/* Ctrl-X+@      : enlarge_window_horiz; parser failure */
+Ctrl-M              : enter_key;
+Ctrl-X+Ctrl-X : exchange_point_and_mark;
+/* Ctrl-X+Ctrl-C : exit; */
+/* Ctrl-X+Ctrl-Z : exit_level; */
+/* Alt-Q         : fill_paragraph;         not implemented */
+Alt-)              : find_delimiter;                 /* same as backward_level */
+Esc+)              : find_delimiter;                 /* same as backward_level */
+Ctrl-X+Ctrl-F : find_file;
+Ctrl-F        : forward_character;
+RgAr              : forward_character;
+Ctrl-Alt-F    : forward_level;                 /* point must be on '(', '{' or '[' */
+Esc+Ctrl-F    : forward_level;                 /* point must be on '(', '{' or '[' */
+/* Alt-]         : forward_paragraph;         not implemented */
+Alt-DnAr      : MoveToPane(1);
+/* Alt-E         : forward_sentence;         not implemented */
+/* Ctrl-DnAr     : forward_sentence;         not implemented */
+Alt-f        : forward_word;
+Esc+@f       : forward_word;
+Ctrl-RgAr     : forward_word;
+Alt-<         : goto_beginning;
+Esc+<         : goto_beginning;
+Ctrl-Home     : goto_beginning;
+Alt->         : goto_end;
+Esc+>         : goto_end;
+Ctrl-End      : goto_end;
+Ctrl-X+g     : goto_line;
+Ctrl-X+G     : goto_line;
+Ctrl-X+.      : goto_tag;
+Alt-?              : help;
+Esc+?              : help;
+Ctrl-_              : help;
+Ctrl-S              : incremental_search;
+/* Tab           : indent_previous;         not implemented */
+Ctrl-Alt-\    : indent_region;                 /* same as indent_rigidly */
+Esc+Ctrl-\    : indent_region;                 /* same as indent_rigidly */
+Ctrl-X+Ctrl-I : indent_rigidly;
+Ctrl-X+Tab    : indent_rigidly;
+Alt-Tab       : indent_under;
+Esc+Tab       : indent_under;
+Ctrl-X+i      : insert_file;
+Ctrl-X+I      : insert_file;
+/* Ctrl-X+@K     : kill_buffer;                 not implemented */
+Ctrl-Alt-K    : kill_level;                 /* point must be on '(', '{' or '[' */
+Esc+Ctrl-K    : kill_level;                 /* point must be on '(', '{' or '[' */
+Ctrl-K        : kill_line;
+Ctrl-W        : kill_region;
+/* Alt-K         : kill_sentence;         not implemented */
+Ctrl-X+0      : kill_window;  /* N.B. must duplicate this due to quirk in keymap processor */
+Alt-d        : kill_word;
+Esc+@d        : kill_word;
+Ctrl-X+e      : last_kbd_macro; /* N.B. must duplicate this due to quirk in keymap processor */
+Ctrl-X+E      : last_kbd_macro; /* N.B. must duplicate this due to quirk in keymap processor */
+/* F3            : load_bytes;                 not implemented */
+Alt-l              : lower_case_word;
+Esc+@l              : lower_case_word;
+Ctrl-X+m     : make;
+Ctrl-X+M     : make;
+/* Alt-H         : mark_paragraph;         not implemented */
+/* Space         : maybe_break_line;         not implemented */
+/* Ctrl-X+Alt-N  : name_kbd_macro;         not implemented */
+Alt-x        : named_command;
+Esc+@x        : named_command;
+F2              : named_command;
+Ctrl-X+Ctrl-N : next_error;
+Ctrl-V        : next_page;
+PgDn              : next_page;
+/* Ctrl-F5       : next_video;                 not implemented */
+Esc+End       : next_window;  /* N.B. must duplicate this due to quirk in keymap processor */
+Ctrl-X+n      : next_window;  /* N.B. must duplicate this due to quirk in keymap processor */
+Ctrl-X+N      : next_window;  /* N.B. must duplicate this due to quirk in keymap processor */
+Ctrl-X+1      : one_window;   /* N.B. must duplicate this due to quirk in keymap processor */
+Ctrl-O        : open_line;
+Ins              : overwrite_mode;
+Ctrl-X+,      : pluck_tag;
+Alt-v        : previous_page;
+Esc+@v        : previous_page;
+PgUp              : previous_page;
+Esc+Home      : previous_window;  /* N.B. must duplicate this due to quirk in keymap processor */
+Ctrl-X+p      : previous_window;  /* N.B. must duplicate this due to quirk in keymap processor */
+Ctrl-X+P      : previous_window;  /* N.B. must duplicate this due to quirk in keymap processor */
+Ctrl-X+Ctrl-E : push;
+Alt-%      : query_replace;
+Esc+%      : query_replace;
+Ctrl-Q        : quoted_insert;
+Ctrl-X+r     : _redo;
+Ctrl-X+R     : _redo;
+F10           : _redo;
+Ctrl-F10      : redo_changes;                 /* same as redo */
+Ctrl-X+Ctrl-R : redo_changes;                 /* same as redo */
+Alt-*              : regex_replace;
+Esc+*              : regex_replace;
+Ctrl-Alt-S    : regex_search;
+Esc+Ctrl-S    : regex_search;
+Alt-&              : replace_string; : Replace
+Esc+&              : replace_string;
+Ctrl-R              : reverse_incremental_search;
+Ctrl-Alt-R    : reverse_regex_search;
+Esc+Ctrl-R    : reverse_regex_search;
+Ctrl-X+s     : save_all_buffers;
+Ctrl-X+S     : save_all_buffers;
+Ctrl-X+Ctrl-S : save_file;  /* N.B. must duplicate this due to quirk in keymap processor */
+Alt-Z         : scroll_down;
+Esc+Z         : scroll_down;
+/* Alt-{         : scroll_left;                 not implemented */
+/* Alt-}         : scroll_right;         not implemented */
+Ctrl-Z        : scroll_up;
+Ctrl-X+B      : BufferList; : BufferList
+Ctrl-X+b      : BufferList;
+/* Ctrl-X+Alt,   : select_tag_file;         not implemented */
+/* Ctrl-X+F      : set_fill_column;         not implemented */
+Ctrl-@        : set_mark;
+Ctrl-Shift-2  : set_mark;
+Ctrl-2  : set_mark;
+Alt-@         : set_mark;
+Alt-2   : set_mark;
+Alt-Shift-2   : set_mark;
+Esc+@@        : set_mark;
+/* F8            : set_variable;         not implemented */
+/* Alt-F5        : set_video;                 not implemented */
+/* Ctrl-X+=      : show_point;                 not implemented */
+/* Ctrl-F8       : show_variable;         not implemented */
+Ctrl-X+2      : split_window;  /* N.B. must duplicate this due to quirk in keymap processor */
+Ctrl-X+5      : split_window_vertically; /* N.B. must duplicate this due to quirk in keymap processor */
+Ctrl-X+(      : start_kbd_macro; /* N.B. must duplicate this due to quirk in keymap processor */
+/* Ctrl-X+Ctrl-M : start_process;         not implemented */
+/* Ctrl-C              : stop_process;         not implemented */
+/* Ctrl-X+Ctrl-Alt-I
+              : tabify_region;                 not implemented */
+/* Ctrl-X+Alt-Tab
+              : tabify_region;                 not implemented */
+/* Ctrl-X+Alt-.  : tag_files;                 not implemented */
+Alt-m        : to_indentation;
+Esc+m        : to_indentation;
+Esc+M        : to_indentation;
+Ctrl-T              : transpose_characters;
+Ctrl-X+Ctrl-T : transpose_lines;
+Alt-t        : transpose_words;
+Esc+t        : transpose_words;
+Esc+T        : transpose_words;
+Ctrl-X+u     : _undo;
+Ctrl-X+U     : _undo;
+F9            : _undo;
+Ctrl-F9       : undo_changes;                 /* same as undo */
+Ctrl-X+Ctrl-U : undo_changes;                 /* same as undo */
+/* Ctrl_X+Alt-I  : untabify_region;         not implemented */
+Ctrl-P        : up_line;
+UpAr              : up_line;
+Alt-U              : upper_case_word;
+Esc+U              : upper_case_word;
+/* Ctrl-X+Ctrl-V : visit_file;                 not implemented */
+Ctrl-X+Ctrl-W : write_file; /* N.B. must duplicate this due to quirk in keymap processor */
+Ctrl-X+w     : write_region;
+Ctrl-X+W     : write_region;
+/* Ctrl-F3       : write_state;                 not implemented */
+Ctrl-Y        : yank;
+END;
+
+KEYBOARD MessageWindow
+space : MsgViewSrc; : MsgViewSrc
+enter : MsgEditSrc; : MsgEditSrc
+END;
+
+KEYBOARD BreakpointView
+ctrl-P : DebugDetailBreakList; : DebugDetailBreakList
+ctrl-I : DebugInspectBreakList; : DebugInspectBreakList
+ctrl-E : DebugEditBreakList; : DebugEditBreakList
+ctrl-R : DebugRemoveBreakList; : DebugRemoveBreakList
+ctrl-A : DebugAddAtLineBreakList; : DebugAddAtLineBreakList
+/*
+ctrl-W : DebugAddWinMsg; : DebugAddWinMsgBreakList
+*/
+END;
+
+KEYBOARD CallStack
+ctrl-I : DebugInspectCallStack; : DebugInspectCallStack
+ctrl-E : DebugEditCallStack; : DebugEditCallStack
+END;
+
+KEYBOARD DataInspector
+ctrl-R : DebugRangeInspect; : DebugRangeInspect
+ctrl-C : DebugChange; : DebugChange
+ctrl-I : DebugInspectData; : DebugInspectData
+ctrl-D : DebugDescend; : DebugDescend
+ctrl-N : DebugNewExpr; : DebugNewExpr
+ctrl-T : DebugTypecast; : DebugTypecast
+END;
+
+KEYBOARD DebugLog
+ctrl-C : DebugCaptureLog; : DebugCaptureLog
+ctrl-O : DebugLogOptions; : DebugLogOptions
+ctrl-A : DebugCommentLog; : DebugCommentLog
+ctrl-E : DebugEraseLog; : DebugEraseLog
+END;
+
+KEYBOARD RegisterView
+ctrl-H : DebugHexReg; : DebugHexReg
+ctrl-D : DebugDecimalReg; : DebugDecimalReg
+ctrl-W : DebugWordReg; : DebugWordReg
+ctrl-U : DebugDWordReg; : DebugDWordReg
+END;
+
+KEYBOARD WatchView
+ctrl-P : DebugDetailWatchList; : DebugDetailWatchList
+ctrl-R : DebugRemoveWatchList; : DebugRemoveWatchList
+ctrl-A : DebugAddWatchList; : DebugAddWatchList
+END;
+
+KEYBOARD ProjectWindow
+enter    : ProjectNodeAction;
+plus     : ProjectExpandNode;
+minus    : ProjectCollapseNode;
+space    : ProjectNodeToggle;
+esc      : ProjectEndNodeSearch;
+upar     : ProjectNodeUp;
+dnar     : ProjectNodeDown;
+home     : ProjectFirstNode;
+end      : ProjectLastNode;
+pgup     : ProjectPrevPage;
+pgdn     : ProjectNextPage;
+alt-lfar : ProjectPromoteNode;
+alt-rgar : ProjectDemoteNode;
+alt-upar : ProjectMoveUp;
+alt-dnar : ProjectMoveDown;
+END;
+
+

@@ -1,0 +1,33 @@
+/*------------------------------------------------------------------------*/
+/*                                                                        */
+/*  STACK.CPP                                                             */
+/*                                                                        */
+/*  Copyright Borland International 1991, 1993                            */
+/*  All Rights Reserved                                                   */
+/*                                                                        */
+/*------------------------------------------------------------------------*/
+
+#if !defined( __STACK_H )
+#include "classlib\obsolete\stack.h"
+#endif  // __STACK_H
+
+void Stack::push( Object& toPush )
+{
+    list.add( toPush );
+    itemsInContainer++;
+}
+
+Object& Stack::pop()
+{
+    Object& temp = list.peekHead();
+    list.detach( temp );
+    if( temp != NOOBJECT )
+        itemsInContainer--;
+    return temp;
+}
+
+ContainerIterator& Stack::initIterator() const
+{
+    return *( (ContainerIterator *)new ListIterator( list ) );
+}
+

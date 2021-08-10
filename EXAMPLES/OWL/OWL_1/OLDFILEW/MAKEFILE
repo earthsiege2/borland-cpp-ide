@@ -1,0 +1,8 @@
+#----------------------------------------------------------------------------
+# ObjectWindows - (C) Copyright 1991, 1993 by Borland International
+#----------------------------------------------------------------------------
+
+MODELS = mlf 
+LIBBIN = oldfilew.lib
+OBJLIB = filewnd.obj editwnd.obj filedial.obj
+!include $(BCEXAMPLEDIR)\owlmake.gen

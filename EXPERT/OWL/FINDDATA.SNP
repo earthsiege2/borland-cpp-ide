@@ -1,0 +1,26 @@
+<<[CPP]
+##QUERY_BASE_NAME != "TDialog"
+##:     QUERY_CLASS_NAME [[ClassName]]
+##:     %\\"[[ClassName]] is not a TDialog derived class, instance data not found.  "
+##*
+##"" [[ClassDefLine]]
+##"" [[ConstructorLine]]
+##"" [[StructDefLine]]
+##"" [[IncludeFile]]
+##--BEGIN-- QUERY_BASE_NAME == "TDialog"
+##{XfrState.SNP}
+##--BEGIN-- QUERY_CLASS_NAME [[ClassName]]
+##\\"//{{[[ClassName]]XFER_USE}}" [[XFerMarker]]
+##^BOF
+##--BEGIN-- ? XFerMarker [[Search]]
+##Search == FALSE
+##:     QUERY_FILE_CPP [[FileName]]
+##:     %\\"Unable to locate instance data implementation in [[FileName]].  "
+##*
+##^BOL
+##^SCROLL
+##^^
+##--END-- ? XFerMarker [[Search]]
+##--END-- QUERY_CLASS_NAME [[ClassName]]
+##--END-- QUERY_BASE_NAME == "TDialog"
+>>[CPP]

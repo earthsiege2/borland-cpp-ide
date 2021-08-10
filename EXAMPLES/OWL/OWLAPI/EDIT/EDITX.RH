@@ -1,0 +1,11 @@
+//----------------------------------------------------------------------------
+// ObjectWindows - (C) Copyright 1991, 1993 by Borland International
+//----------------------------------------------------------------------------
+
+// Menu item ids.
+//
+#define CM_INSERT_TEXT        400
+#define CM_DELETE_SUBTEXT     401
+#define CM_DELETE_LINE        402
+#define CM_SAVE_TEXT          403
+#define CM_RESTORE_TEXT       404

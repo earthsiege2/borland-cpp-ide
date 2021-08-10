@@ -1,0 +1,14 @@
+//----------------------------------------------------------------------------
+// ObjectWindows - (C) Copyright 1993 by Borland International
+//   Resources for doc/view loader document
+//----------------------------------------------------------------------------
+#define IDS_DVLOADED  25880
+
+#ifdef RC_INVOKED 
+
+STRINGTABLE 
+{
+ IDS_DVLOADED, "Document/view loaded"
+}
+
+#endif

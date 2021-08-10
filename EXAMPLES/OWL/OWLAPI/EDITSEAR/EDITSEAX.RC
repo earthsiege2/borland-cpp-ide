@@ -1,0 +1,12 @@
+//----------------------------------------------------------------------------
+// ObjectWindows - (C) Copyright 1991, 1993 by Borland International
+//----------------------------------------------------------------------------
+#ifndef WORKSHOP_INVOKED
+  #include <windows.h>
+#endif
+#include <owl\editsear.rh>
+#include <owl\inputdia.rh>
+
+#include <owl\inputdia.rc>
+#include <owl\editsear.rc>
+#include <owl\owlapp.rc>         // default owl app icon

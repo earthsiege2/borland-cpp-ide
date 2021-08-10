@@ -1,0 +1,8 @@
+#----------------------------------------------------------------------------
+# ObjectWindows - (C) Copyright 1991, 1993 by Borland International
+#----------------------------------------------------------------------------
+
+EXERES = ownerdra
+MODELS = mldf
+!include $(BCEXAMPLEDIR)\owlmake.gen
+

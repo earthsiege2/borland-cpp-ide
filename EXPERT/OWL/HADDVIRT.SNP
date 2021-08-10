@@ -1,0 +1,17 @@
+##--BEGIN-- QUERY_CLASS_NAME [[ClassName]]
+##"//{{[[ClassName]]RSP_TBL_BEGIN}}" [[RspTMarker]]
+##\\RspTMarker [[ResponseMarker]]
+##^BOF
+##--BEGIN-- ? ResponseMarker [[Search]]
+##Search == FALSE
+##:    {HAddVir2.SNP}
+##*
+##--BEGIN-- Search == TRUE
+##^BOL
+//{{[[ClassName]]VIRTUAL_BEGIN}}
+public:
+//{{[[ClassName]]VIRTUAL_END}}
+
+##--END-- ? ResponseMarker [[Search]]
+##--END-- Search == TRUE
+##--END-- QUERY_CLASS_NAME [[ClassName]]

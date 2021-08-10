@@ -1,0 +1,105 @@
+;[]-----------------------------------------------------------------[]
+;|      _COLLATE.MAC  --  Macros & Rules for collation code          |
+;|                                                                   |
+;|      C/C++ Run Time Library   Version 5.0                         |
+;|                                                                   |
+;|      Copyright (c) 1987, 1993 by Borland International Inc.       |
+;|      All Rights Reserved.                                         |
+;[]-----------------------------------------------------------------[]
+
+IFDEF __LARGE__
+     MODEL LARGE
+ENDIF
+
+IFDEF __TINY__
+  MODEL TINY
+ENDIF
+
+IFDEF __SMALL__
+  MODEL SMALL
+ENDIF
+
+IFDEF __MEDIUM__
+  MODEL MEDIUM
+ENDIF
+
+IFDEF __COMPACT__
+  MODEL COMPACT
+ENDIF
+
+IFDEF __HUGE__
+  MODEL HUGE
+ENDIF
+
+STRINGSTATUS        STRUC   
+
+; count of characters processed in the string
+CURRENT_POSITION    DW      ?
+
+; address of current/next character to be processed in the auxiliary string
+AUX_STRING_OFF      DW      ?
+AUX_STRING_SEG      DW      ?
+
+; number of characters remaining to process in the current auxiliary string
+AUX_STRING_CNT      DW      ?
+
+STRINGSTATUS        ENDS
+
+
+    LOCALS
+
+    LOCAL_VARS MACRO
+
+    LOCAL S1_STATUS           : STRINGSTATUS, \
+          S2_STATUS           : STRINGSTATUS, \
+          WEIGHT_DIFFERENCE   : WORD,         \
+          POSITION_DIFFERENCE : WORD,         \
+          pCHARCLASS          : DWORD,        \
+          LEVEL               : WORD,         \
+          LEVELOFFSET         : WORD,         \
+          MAXLEVEL            : WORD,         \
+          MAXKEYLEN           : WORD,         \
+          _pLOCALE_local      : DWORD = STACKFRAMESIZE
+
+	ENDM
+
+SET_STACKVARS MACRO
+
+	; generate stack argument and variable relative stack offsets
+	; as used by strcoll() and strxfrm()
+	; used for common collation related functions in collate.asm
+
+IFDEF   _BUILDRTLDLL
+PUBLICDLL __X
+ENDIF
+
+IFDEF _WINDOWS OR _BUILDRTLDLL
+
+    IFDEF __PAS__
+    __X  PROC WINDOWS PASCAL DIST
+
+    ELSE
+    __X  PROC WINDOWS C DIST
+
+	ENDIF
+
+ELSE
+
+    IFDEF __PAS__
+    __X  PROC PASCAL DIST
+
+    ELSE
+    __X  PROC C DIST
+
+	ENDIF
+
+ENDIF
+
+ARG __s1 : DATAPTR, __s2 : DATAPTR, __n : WORD
+
+	LOCAL_VARS
+	ret
+__X ENDP
+
+ENDM
+

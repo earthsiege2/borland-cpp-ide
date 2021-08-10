@@ -1,0 +1,10 @@
+#----------------------------------------------------------------------------
+# ObjectWindows - (C) Copyright 1991, 1993 by Borland International
+#----------------------------------------------------------------------------
+
+EXERES = gdidemo
+MODELS = mldf
+OBJEXE = gdidemo.obj arty.obj bitblt.obj fontx.obj line.obj
+RESEXE_= gdidemo.rc backgrnd.bmp ship.bmp monoship.bmp
+!include $(BCEXAMPLEDIR)\owlmake.gen
+

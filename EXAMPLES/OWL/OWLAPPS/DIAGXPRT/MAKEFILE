@@ -1,0 +1,21 @@
+#----------------------------------------------------------------------------
+# ObjectWindows - (C) Copyright 1991, 1993 by Borland International
+#----------------------------------------------------------------------------
+# This example reads and writes to OWL.INI to let you enable/disable OWL
+# diagnostics.  The diagnostic settings for an application are read from
+# OWL.INI when the application loads.  In order to allow OWL applications
+# that use the OWL DLL to re-start with new diagnostic settings, this 
+# utility should not be built as a DLL.  Doing so would cause the OWL DLL 
+# to not be reloaded when the application re-starts and would result in the
+# new diagnostic settings being ignored.
+#
+
+MODEL=l #Can't build DLL, so force it to l
+
+EXERES = diagxprt
+
+MODELS=l
+
+OBJEXE=diagxprt.obj cback.obj setup.obj toolhelp.obj
+!include $(BCEXAMPLEDIR)\owlmake.gen
+

@@ -1,0 +1,25 @@
+//----------------------------------------------------------------------------
+// ObjectWindows - (C) Copyright 1992, 1993 by Borland International
+//   include/owl/printer.rh
+//   Resource IDs to use with printer.rc and printer.h
+//----------------------------------------------------------------------------
+
+//
+// Printing error message string resource IDs
+//
+#define IDS_PRNON            32590
+#define IDS_PRNERRORTEMPLATE 32591
+#define IDS_PRNOUTOFMEMORY   32592
+#define IDS_PRNOUTOFDISK     32593
+#define IDS_PRNCANCEL        32594
+#define IDS_PRNMGRABORT      32595
+#define IDS_PRNGENERROR      32596
+#define IDS_PRNERRORCAPTION  32597
+
+//
+// Printer abort dialog & control IDs
+//
+#define IDD_ABORTDIALOG      32599 // keep different than any string IDs
+#define ID_TITLE  101
+#define ID_DEVICE 102
+#define ID_PORT   103

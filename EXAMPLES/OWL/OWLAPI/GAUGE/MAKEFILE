@@ -1,0 +1,9 @@
+#----------------------------------------------------------------------------
+# ObjectWindows - (C) Copyright 1991, 1993 by Borland International
+#----------------------------------------------------------------------------
+
+MODELS=mlfd
+EXERES=gaugex
+!include $(BCEXAMPLEDIR)\owlmake.gen
+
+

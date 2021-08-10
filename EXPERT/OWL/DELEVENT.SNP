@@ -1,0 +1,27 @@
+<<[CPP]
+##QUERY_SNP_FUNC_NAME [[FunctionName]]
+##QUERY_SNP_MACRO_NAME [[MacroName]]
+##QUERY_SNP_MACRO_CALLPARAM [[MCallParam]]
+##QUERY_SNP_RES_CONSTANT [[Constant]]
+##QUERY_SNP_VBXEVENT [[VBXEvent]]
+##QUERY_FILE_CPP [[FileName]]
+##--BEGIN-- QUERY_CLASS_NAME [[ClassName]]
+##"//{{[[ClassName]]RSP_TBL_BEGIN}}" [[ClassTMarker]]
+##\\ClassTMarker [[ClassMarker]]
+##^BOF
+##? ClassMarker [[Search]]
+##Search == FALSE
+##:     %\\"Unable to locate response table marker in [[FileName]].  "
+##*
+##^BOL
+##\\MCallParam [[MacroCallParam]]
+##\\"[[MacroName]][[MacroCallParam]]," [[ResponseEntry]]
+##? ResponseEntry [[Search]]
+##Search == FALSE
+##:     %\\"Unable to locate response table entry in [[FileName]].  "
+##*
+##^BOL
+##^DELL
+##^^
+##--END-- QUERY_CLASS_NAME [[ClassName]]
+>>[CPP]

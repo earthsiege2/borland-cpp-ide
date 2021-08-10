@@ -1,0 +1,9 @@
+##\\"class [[ClassName]] : public TDialog {" ClassDef
+##:     ? ClassDef [[Search2]]
+##Search2 == FALSE
+##:         %\\"[[ClassName]] missing class derived from TDialog.  "
+##*
+##Search2 == TRUE
+##^BOL
+##^DELL
+class [[ClassName]] : public TDialog, public TVbxEventHandler {

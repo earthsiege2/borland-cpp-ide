@@ -1,0 +1,121 @@
+This text file contains information about VBXGEN that is not included
+in the documentation. See the ObjectWindows Reference Guide for additional 
+information about VBX classes or the ObjectWindows Programmer's Guide for 
+instructions about writing applications that use VBX controls. For an
+example using VBX controls in an ObjectWindows program, see the VBXCTLX example
+in the \EXAMPLES\OWL\OWLAPI\VBXCTL directory. For an example using VBX controls
+in a C program, see the VBDIALOG example in the \EXAMPLES\WINDOWS\VBDIALOG directory.
+
+See the online text file, BIVBX.WRI, for information about using the BIVBX
+library functions.
+
+ ---------
+VBXGEN 1.0
+==========
+
+VBXGEN is a utility program which generates a header file (.h)
+from a VBX control library (.vbx). The generated header file
+can be used by C, C++, or OWL programs and simplifies the use
+of VBX controls. The header file contains a section for each
+control model supported by a VBX library.  Each model section
+contains a set of symbolic property and event names, default
+property data, and a custom C++ class for use with OWL programs.
+
+
+Symbolic Property and Event Names
+ ---------------------------------
+The use of symbolic property and event indices improves the
+performance and memory requirements of your program by
+eliminating the need to store and search for string names at
+run-time.
+
+For example, the following code sets the bar color property of
+a Gauge control and requires a string search on the property name:
+
+    VBXSetPropByName( hCtlGauge, "BarColor", RGB(0,0,0) );
+
+By using VBXGEN to generate a header file (switch.h), the above
+code can be replaced by a more efficient version which uses the
+index of the bar color property:
+
+    #include "switch.h"
+
+    VBXSetProp( hCtlGauge, Prop_BIGAUGE_BarColor, RGB(0,0,0) );
+
+Similar replacements can be performed with event-related functions.
+Event indices are particularly useful when defining switch statements
+for event processing since strings cannot be used as case labels.
+
+
+Default Property Data
+ ---------------------------------
+Some VBX controls do not operate correctly when created without
+a form file.  This occurs when a program creates a control
+dynamically rather than as part of a dialog resource.  If a
+control exhibits problems in this mode, try creating it with
+a form file created from the default property data generated
+in the header file.
+
+For C/C++ programs:
+  HFORMFILE f = VBXCreateFormFile(sizeof(BIGAUGEData), BIGAUGEData);
+  HCTL g = VBXCreate(..., f);
+  VBXDeleteFormFile(f);
+
+For OWL programs:
+  TVbxBIGAUGE* g = new TVbxBIGAUGE(..., sizeof(BIGAUGEData), BIGAUGEData);
+
+Note that the VBXGEN_DATA or BIGAUGE_DATA symbol must be defined
+in order to use the default property data.
+
+
+Custom OWL Classes
+ ------------------
+VBXGEN generates a custom OWL class, derived from TVbxControl, for
+each control class in a VBX library. The OWL class defines simplified
+constructors, event handler stubs with parameter documentation,
+inline get and set functions for each property, and a sample
+response table which lists each event.
+
+* Constructors: defines constructors which automatically fill
+  in the file and class name (i.e. GAUGE.VBX and BIGAUGE). For
+  example:
+
+    new TVbxBIGAUGE( *window, IDC_GAUGE, "", 0, 0, 200, 30 );
+
+* Event stubs: documents event arguments and can be used for
+  pasting into your own derived classes. For example:
+
+    void EvMouseMove(VBXEVENT FAR*)
+    {
+      // Button As Integer,Shift As Integer,X As Integer,Y As Integer
+    }
+
+* Get/Set functions: defines inline functions to get and set
+  each control property. For example:
+
+    BOOL GetPropBarColor(COLORREF& v);
+    BOOL SetPropBarColor(COLORREF v);
+
+* Response Table: defines a sample response table for pasting
+  into your own derived classes. For example:
+
+    DEFINE_RESPONSE_TABLE1(TVbxBIGAUGE, TVbxControl)
+      EV_VBXEVENTINDEX( IDC_BIGAUGE, Event_BIGAUGE_MouseMove, EvMouseMove ),
+      ...
+    END_RESPONSE_TABLE;
+
+
+Running VBXGEN
+ --------------
+To generate a VBX header file, perform the following steps:
+
+  1) Start VBXGEN by clicking on its icon or running it from the
+     Program or File Manager.
+
+  2) Select the name of the VBX library.
+
+  3) Select the name of the header file to be generated.
+
+  4) VBXGEN will generate the header file and display a message
+     box when finished.
+

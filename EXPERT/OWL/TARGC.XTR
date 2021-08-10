@@ -1,0 +1,106 @@
+<<[CPP]
+##--BEGIN--@QUERY_APPL_APPTYPE == VALUE_EXE
+// Include files:
+#include <windows.h>
+
+#include "[[Target]]".h
+
+
+BOOL InitApplication (HINSTANCE hInstance)
+{
+    return TRUE;
+}
+
+
+
+BOOL InitInstance (HINSTANCE hInstance, int nCmdShow)
+{
+    return TRUE;
+}
+
+
+int PASCAL WinMain (HINSTANCE hInstCurrent, HINSTANCE hinstPrevious, LPSTR lpszCmdLine, int nCmdShow)
+{
+    MSG msg;
+
+    if (hinstPrevious == NULL)
+        // Do special initialization for the first instance of
+        // the application.
+        if (!InitApplication(hinstCurrent))
+            return FALSE;
+
+    // Inialize instance specific information.
+    if (!InitInstance(hinstCurrent, nCmdShow))
+        return FALSE;
+
+    // Get and dispath messages until a WM_QUIT message.
+    while (GetMessage(&msg, NULL, 0, 0)) {
+        TranslateMessage(&msg);
+        DispatchMessage(&msg);
+    };
+
+    // Return the value of PostQuitMessage.
+    return (int)msg.wParam);
+}
+##--END--@QUERY_APPL_APPTYPE == VALUE_EXE
+##--BEGIN-- @QUERY_APPL_APPTYPE == VALUE_DLL
+// Include files:
+#include <windows.h>
+
+#include "[[Target]]".h
+
+
+// ----------------------------------------------------------------------------
+// DLL entry points:
+// ----------------------------------------------------------------------------
+
+int FAR PASCAL LibMain (HINSTANCE hInstance, WORD wDataSeg, WORD cbHeapSize, LPSTR lpszCmdLine)
+{
+    return 1;
+}
+
+
+int FAR PASCAL WEP (int nExitType)
+{
+    return 1;
+}
+##--END-- @QUERY_APPL_APPTYPE == VALUE_DLL
+##--BEGIN--@QUERY_APPL_APPTYPE == VALUE_VBXCTRL
+VBX Code goes here:
+##--END--@QUERY_APPL_APPTYPE == VALUE_VBXCTRL
+##--BEGIN-- @QUERY_APPL_APPTYPE == VALUE_LIB
+Lib Code goes here:
+##--END-- @QUERY_APPL_APPTYPE == VALUE_LIB
+>>[CPP]
+
+
+'
+' DEF file
+'
+<<[DEF]
+;-----------------------------------------------------------------------
+;   The Module Defintion File for the Linker.  This file describes the
+;   EXE header for New Executable section. The description is at the
+;   beginning of file and is therefore a good place for the copyright
+;   notice.  HeapSize is the intial size of the application's local
+;   heap.  StackSize is the maximum amount of stack space to be used
+;   by both non-static variables and the call stack (remember the
+;   stack grows down into the static area of variables, therefore if
+;   the stack size is not large enough static variables will be over-
+;   written).
+;-----------------------------------------------------------------------
+
+##@QUERY_PRJ_NAME [[Project]]
+NAME [[Project]]
+
+##@QUERY_PRJ_NAME [[Project]]
+##@QUERY_PRJ_COMPANY [[CompanyName]]
+##@QUERY_PRJ_COPYRIGHT [[Copyright]]
+##\\Copyright Copyright
+DESCRIPTION '[[Copyright]]'
+EXETYPE     WINDOWS
+CODE        PRELOAD MOVEABLE DISCARDABLE
+DATA        PRELOAD MOVEABLE MULTIPLE
+HEAPSIZE    4096
+STACKSIZE   8192
+>>[DEF]

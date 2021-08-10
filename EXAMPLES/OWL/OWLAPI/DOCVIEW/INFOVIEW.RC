@@ -1,0 +1,28 @@
+//----------------------------------------------------------------------------
+// ObjectWindows - (C) Copyright 1993 by Borland International
+//   Menu and accelerators for use with TInfoView
+//----------------------------------------------------------------------------
+
+#define CM_INFOOPEN         24521
+#define IDM_INFOVIEW        31521
+
+#if defined(RC_INVOKED)
+
+IDM_INFOVIEW MENU LOADONCALL MOVEABLE PURE DISCARDABLE
+BEGIN
+  POPUP "&Edit"
+  BEGIN
+    MenuItem  "&Open",                CM_INFOOPEN
+  END
+  POPUP "&Help"
+  BEGIN
+    MenuItem  "OWL InfoView", 0, INACTIVE
+  END
+END
+
+STRINGTABLE LOADONCALL MOVEABLE DISCARDABLE
+BEGIN
+  CM_INFOOPEN,  "Opens the file to get info"
+END
+
+#endif  // defined(RC_INVOKED)

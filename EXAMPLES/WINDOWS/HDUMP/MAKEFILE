@@ -1,0 +1,6 @@
+# Borland C++ - (C) Copyright 1993 by Borland International
+# Makefile for HDUMP program
+
+SYSTEMS= WIN16 WIN32
+EXERES = hdump
+!include $(BCEXAMPLEDIR)\makefile.gen

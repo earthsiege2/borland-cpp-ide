@@ -1,0 +1,34 @@
+<<[H]
+##--BEGIN-- QUERY_CLASS_NAME [[ClassName]]
+##TRUE [[Search2]]
+##^BOF
+##"#include <owl\vbxctl.h>" [[IncludeFile]]
+##--BEGIN-- ? IncludeFile [[Search1]]
+##Search1 == FALSE
+##:     ? "#include" Search2
+##Search2 == FALSE
+##:         %\\"[[ClassName]] missing #include <owl\vbxctl.h> for VBX control.  "
+##*
+##(Search1 == FALSE) && (Search2 == TRUE) 2 
+##:     ^BOL
+##:     ^2
+
+[[IncludeFile]]
+##--END-- ? IncludeFile [[Search1]]
+##\\"class [[ClassName]] : public TDialog, public TVbxEventHandler {" [[ClassDef]]
+##? ClassDef [[Search1]]
+##Search1 == FALSE
+##:     {hvbx.snp}
+##*
+##--END-- QUERY_CLASS_NAME [[ClassName]]
+>>[H]
+
+<<[CPP]
+##--BEGIN-- QUERY_CLASS_NAME [[ClassName]]
+##\\"DEFINE_RESPONSE_TABLE2([[ClassName]], TDialog, TVbxEventHandler)" [[VBXResponseTable]]
+##? VBXResponseTable [[Search]]
+##Search == FALSE
+##:     {cvbx.snp}
+##*
+##--END-- QUERY_CLASS_NAME [[ClassName]]
+>>[CPP]

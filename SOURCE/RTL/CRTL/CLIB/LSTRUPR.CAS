@@ -1,0 +1,115 @@
+/*-----------------------------------------------------------------------*
+ * filename - lstrupr.c
+ *
+ * function(s)
+ *        _lstrupr - converts lower-case letters in a string to upper-case
+ *-----------------------------------------------------------------------*/
+
+/*
+ *      C/C++ Run Time Library - Version 6.0
+ *
+ *      Copyright (c) 1987, 1993 by Borland International
+ *      All Rights Reserved.
+ *
+ */
+
+
+#pragma  inline
+#include <asmrules.h>
+#include <string.h>
+#include <ctype.h>
+#include <rtldata.h>
+#include <_locale.h>
+
+/*---------------------------------------------------------------------*
+
+Name            _lstrupr - converts lower-case letters in a string to upper-case
+
+Usage           char *_lstrupr(char *str);
+
+Prototype in    string.h
+
+Description     _lstrupr converts lower-case letters in string str to upper-case.
+                No other changes occur.
+
+Return value    pointer to str
+
+*---------------------------------------------------------------------*/
+#if defined(__FARFUNCS__)
+#include <_farfunc.h>
+#endif
+
+
+char _FAR * _CType _FARFUNC _lstrupr( char _FAR *_s )
+
+{
+
+#if defined( _RTLDLL )
+	struct LOCALEOBJECT _FAR *__pLocale = _RTLInstanceData( _pLocale );
+#endif
+
+#if  defined(__LARGE__) || defined(__COMPACT__)
+
+asm	push	ds
+
+#endif 
+
+	/* locale */
+asm	LES_	bx, [ DPTR_( __pLocale ) ]
+
+#if LDATA
+	/* locale upper case table */
+asm	les	di, dword ptr es:[ bx.pToUpper ]
+#else
+asm	mov	di, word ptr [ bx.pToUpper ]
+#endif
+
+
+	/* load string pointer */
+asm    	LDS_	si, [ DPTR_( _s ) ]
+
+	/* save string offset */
+asm	mov	dx, si
+
+conversion_loop:
+
+asm	xor	ah, ah
+asm 	mov	al, [ si ]
+
+	/* end of string? */
+asm	test	al, al			
+asm	jz	conversion_exit
+
+asm	mov	bx, ax
+
+	/* convert */
+asm	mov	al, byte ptr ES_ [ di + bx ]
+
+asm	mov	[ si ], al
+asm	inc	si
+
+asm	jmp	short conversion_loop
+
+conversion_exit:
+
+	/* return string address (offset) */
+asm	mov	ax, dx
+
+#if LDATA
+	/* return string address (segment) */
+asm	mov     dx, ds
+
+#endif
+
+#if  defined(__LARGE__) || defined(__COMPACT__)
+asm	pop	ds
+#endif
+
+#if LDATA
+        return( (char *)(MK_LONG) );
+#else
+        return( (char *)_AX );
+#endif
+
+
+}

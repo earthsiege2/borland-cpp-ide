@@ -1,0 +1,61 @@
+#----------------------------------------------------------------------------
+# (C) Copyright 1993 by Borland International
+#   examples\bidsmake.gen
+#----------------------------------------------------------------------------
+
+!ifndef SYSTEMS
+SYSTEMS = WIN16 DOS16 CON32
+!endif
+
+#
+# 32 bit bids examples are CON32 by default
+# This may be overridden in the local makefile
+#
+!ifndef SYSTEM
+! if $d(CON32) || "$(MODEL)"=="f"
+SYSTEM  = CON32
+! endif
+!endif
+
+!include $(BCEXAMPLEDIR)\makefile.gen
+
+!ifdef USEDLL
+CFLAGS = $(CFLAGS) -D_BIDSDLL
+!endif
+
+#----------------------------------------------------------------------------
+# additional libraries for BIDS
+#----------------------------------------------------------------------------
+
+# determine library name suffix based upon model
+#
+!if $(_32BIT_)
+! ifdef USEDLL
+_SFX_ = fi
+! else
+_SFX_ = f
+! endif
+!else #WIN16 or DOS16
+! ifdef USEDLL
+_SFX_ = i
+! else
+_SFX_ = $(MODEL)
+! endif
+!endif
+#
+# select suffix for alternate library if diagnostics enabled
+#
+!if $(DIAGS)
+! if $d(USEDLL) || $(_32BIT_)
+BIDSSFX = d$(_SFX_)
+! else # 16-bit static
+BIDSSFX = db$(_SFX_)  #use 'db' for 16 bit static for compatibility
+! endif
+!else # no diags
+BIDSSFX = $(_SFX_)
+!endif
+#
+# add BIDS library before standard runtime libraries
+#
+BIDSLIBS = $(BCLIBDIR)\bids$(BIDSSFX)
+STDLIBS = $(BIDSLIBS) $(STDLIBS)

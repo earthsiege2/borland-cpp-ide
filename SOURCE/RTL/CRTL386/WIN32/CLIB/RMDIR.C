@@ -1,0 +1,52 @@
+/*-----------------------------------------------------------------------*
+ * filename - rmdir.c
+ *
+ * function(s)
+ *        rmdir - removes directory
+ *-----------------------------------------------------------------------*/
+
+/*
+ *      C/C++ Run Time Library - Version 6.0
+ *
+ *      Copyright (c) 1991, 1993 by Borland International
+ *      All Rights Reserved.
+ *
+ */
+
+#include <ntbc.h>
+
+#include <dir.h>
+#include <_io.h>
+
+/*-----------------------------------------------------------------------*
+
+Name            rmdir - removes directory
+
+Usage           int rmdir(const char *pathname);
+
+Prototype in    dir.h
+
+Description     deletes the directory given by pathP.  The directory
+                named by pathP
+
+                        1) must be empty
+
+                        2) must not be the current working directory
+
+                        3) must not be the root directory
+
+Return value    success : 0
+                failure : -1 and errno is set to one of the following:
+
+                        EACCES  Permission denied
+                        ENOENT  Path or file name not found
+
+*------------------------------------------------------------------------*/
+
+int _RTLENTRY _EXPFUNC rmdir(const char *pathP)
+{
+    if (RemoveDirectory((char *)pathP) != TRUE)
+        return (__NTerror());
+    else
+        return(0);
+}

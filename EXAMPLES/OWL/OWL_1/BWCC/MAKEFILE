@@ -1,0 +1,9 @@
+#----------------------------------------------------------------------------
+# ObjectWindows - (C) Copyright 1991, 1993 by Borland International
+#----------------------------------------------------------------------------
+
+LIBBIN = owlbwcc.lib
+MODELS = mlf
+OBJLIB = bbutton.obj bchkbox.obj bradio.obj bdivider.obj\
+         bgrpbox.obj bstatic.obj bstatbmp.obj bwindow.obj
+!include $(BCEXAMPLEDIR)\owlmake.gen

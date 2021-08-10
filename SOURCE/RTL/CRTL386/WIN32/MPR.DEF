@@ -1,0 +1,46 @@
+LIBRARY     MPR.dll
+
+EXPORTS
+    RestoreConnectionA0            @1   
+    WNetAddConnection2A            @2   
+    WNetAddConnection2W            @3   
+    WNetAddConnectionA             @4   
+    WNetAddConnectionW             @5   
+    WNetCancelConnection2A         @6   
+    WNetCancelConnection2W         @7   
+    WNetCancelConnectionA          @8   
+    WNetCancelConnectionW          @9   
+    WNetClearConnections           @10  
+    WNetCloseEnum                  @11  
+    WNetConnectionDialog           @13  
+    WNetConnectionDialog2          @12  
+    WNetDirectoryNotifyA           @14  
+    WNetDirectoryNotifyW           @15  
+    WNetDisconnectDialog           @17  
+    WNetDisconnectDialog2          @16  
+    WNetEnumResourceA              @18  
+    WNetEnumResourceW              @19  
+    WNetGetConnection2A            @20  
+    WNetGetConnection2W            @21  
+    WNetGetConnectionA             @22  
+    WNetGetConnectionW             @23  
+    WNetGetDirectoryTypeA          @24  
+    WNetGetDirectoryTypeW          @25  
+    WNetGetFormatNameProc          @26  
+    WNetGetLastErrorA              @27  
+    WNetGetLastErrorW              @28  
+    WNetGetPropertyTextA           @29  
+    WNetGetPropertyTextW           @30  
+    WNetGetSearchDialog            @31  
+    WNetGetUserA                   @32  
+    WNetGetUserW                   @33  
+    WNetLogonNotify                @34  
+    WNetOpenEnumA                  @35  
+    WNetOpenEnumW                  @36  
+    WNetPasswordChangeNotify       @37  
+    WNetPropertyDialogA            @38  
+    WNetPropertyDialogW            @39  
+    WNetRestoreConnection          @40  
+    WNetSetLastErrorA              @41  
+    WNetSetLastErrorW              @42  
+    WNetSupportGlobalEnum          @43  

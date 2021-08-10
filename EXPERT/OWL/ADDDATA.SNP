@@ -1,0 +1,78 @@
+<<[H]
+##QUERY_BASE_NAME != "TDialog"
+##:     QUERY_CLASS_NAME [[ClassName]]
+##:     %\\"[[ClassName]] is not a TDialog derived class, instance data not added.  "
+##*
+##"" [[ClassDefLine]]
+##"" [[ConstructorLine]]
+##"" [[StructDefLine]]
+##"" [[IncludeFile]]
+##--BEGIN-- QUERY_BASE_NAME == "TDialog"
+##{XfrState.SNP}
+##--BEGIN-- QUERY_CLASS_NAME [[ClassName]]
+##TRUE [[Search2]]
+##^BOF
+##--BEGIN-- ? IncludeFile [[Search1]]
+##Search1 == FALSE
+##:     ^BOF
+##:     ? "#include" Search2
+##Search2 == FALSE
+##:         %\\"[[ClassName]] missing #include for instance data.  "
+##*
+##(Search1 == FALSE) && (Search2 == TRUE) 
+##:     ^BOL
+[[IncludeFile]]
+##--END-- ? IncludeFile [[Search1]]
+##\\"//{{[[ClassName]]XFER_DATA_END}}" [[XFerMarker]]
+##^BOF
+##--BEGIN-- ? XFerMarker [[Search]]
+##Search == FALSE
+##:     {HAddSXfr.SNP}
+##:     ^BOF
+##:     ? XFerMarker [[Search]]
+##*
+##--END-- ? XFerMarker [[Search]]
+##^BOL
+##StructDefLine != ""
+    [[StructDefLine]]
+##\\"//{{[[ClassName]]XFER_DEF_END}}" [[XFerMarker]]
+##^BOF
+##--BEGIN-- ? XFerMarker [[Search]]
+##Search == FALSE
+##:     {HAddCXfr.SNP}
+##:     ^BOF
+##:     ? XFerMarker [[Search]]
+##*
+##--END-- ? XFerMarker [[Search]]
+##^-1
+##^BOL
+    [[ClassDefLine]]
+##--END-- QUERY_CLASS_NAME [[ClassName]]
+##--END-- QUERY_BASE_NAME == "TDialog"
+>>[H]
+
+
+<<[CPP]
+##"" [[ClassDefLine]]
+##"" [[ConstructorLine]]
+##"" [[StructDefLine]]
+##"" [[IncludeFile]]
+##--BEGIN-- QUERY_BASE_NAME == "TDialog"
+##{XfrState.SNP}
+##--BEGIN-- QUERY_CLASS_NAME [[ClassName]]
+##\\"//{{[[ClassName]]XFER_USE_END}}" [[XFerMarker]]
+##^BOF
+##--BEGIN-- ? XFerMarker [[Search]]
+##Search == FALSE
+##:     {CAddCXfr.SNP}
+##:     ^BOF
+##:     ? XFerMarker [[Search]]
+##*
+##--END-- ? XFerMarker [[Search]]
+##^-2
+##^BOL
+    [[ConstructorLine]]
+##^^
+##--END-- QUERY_CLASS_NAME [[ClassName]]
+##--END-- QUERY_BASE_NAME == "TDialog"
+>>[CPP]

@@ -1,0 +1,50 @@
+/*  TrueType.rc -- resource file for TrueType program  */ 
+/*  (c) 1992 Borland International */
+
+#define STRICT
+
+#include <windows.h>
+#include "TrueType.h"
+
+STRINGTABLE
+{
+    IDS_NAME,  "TrueType"
+    IDS_TITLE, "True Type Font Demo"
+} 
+
+TrueType MENU 
+BEGIN
+    POPUP "&File"
+    BEGIN
+        MENUITEM "&About", CM_ABOUT
+        MENUITEM "E&xit", CM_EXIT
+    END
+
+    POPUP "&Options"
+    BEGIN
+        MENUITEM "&Shadows", CM_SHADOWS
+        MENUITEM "&Alignment Marks", CM_ALIGNMENTMARKS
+        MENUITEM "&Fonts", CM_FONTS
+    END
+
+END
+
+
+About DIALOG 17, 23, 142, 120
+STYLE DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "About"
+{
+ PUSHBUTTON "&OK", 1, 52, 97, 38, 15
+ CTEXT "Borland C++", 103, 13, 51, 115, 10, SS_CENTER | WS_CHILD | WS_VISIBLE
+ CTEXT "Copyright \xA9 1993", 104, 42, 72, 59, 10, SS_CENTER | WS_CHILD | WS_VISIBLE
+ CTEXT "Borland International", 108, 36, 82, 70, 9, SS_CENTER | WS_CHILD | WS_VISIBLE
+ CTEXT "TrueType Font Demo", -1, 25, 7, 92, 8
+ CTEXT "Windows 3.1 Demo Program", -1, 19, 62, 104, 8
+ ICON 1, -1, 63, 25, 16, 16, SS_ICON | WS_CHILD | WS_VISIBLE | WS_GROUP
+}
+
+
+#include "TrueType.dlg"
+
+TrueType ICON "TrueType.ico"
+

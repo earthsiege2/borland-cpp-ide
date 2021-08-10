@@ -1,0 +1,58 @@
+//----------------------------------------------------------------------------
+// ObjectWindows - (C) Copyright 1993 by Borland International
+//   Menu and accelerators for use with TDumpView
+//----------------------------------------------------------------------------
+
+#define CM_DUMPUNDO         24681
+#define CM_DUMPCUT          24682
+#define CM_DUMPCOPY         24683
+#define CM_DUMPPASTE        24684
+#define CM_DUMPEDIT         24688
+#define IDM_DUMPVIEW        32382
+#define IDA_DUMPVIEW        32382
+#define IDS_DUMPNUM         32382
+
+#if defined(RC_INVOKED)
+
+
+IDM_DUMPVIEW MENU LOADONCALL MOVEABLE PURE DISCARDABLE
+BEGIN
+  POPUP "&Edit"
+  BEGIN
+    MenuItem  "&Undo\aAlt+BkSp",      CM_DUMPUNDO
+    MenuItem  SEPARATOR
+    MenuItem  "&Cut\aShift+Del",      CM_DUMPCUT
+    MenuItem  "C&opy\aCtrl+Ins",      CM_DUMPCOPY
+    MenuItem  "&Paste\aShift+Ins",    CM_DUMPPASTE
+    MenuItem  "&Edit Item\aAlt+Enter",CM_DUMPEDIT
+  END
+  POPUP "&Help"
+  BEGIN
+    MenuItem  "OWL DumpView", 0, INACTIVE
+  END
+END
+
+IDA_DUMPVIEW ACCELERATORS
+BEGIN
+  "^x",      CM_DUMPCUT,
+  "^c",      CM_DUMPCOPY,
+  "^v",      CM_DUMPPASTE,
+  VK_DELETE, CM_DUMPCUT,   VIRTKEY, SHIFT
+  VK_INSERT, CM_DUMPCOPY,  VIRTKEY, CONTROL
+  VK_INSERT, CM_DUMPPASTE, VIRTKEY, SHIFT
+  VK_BACK,   CM_DUMPUNDO,  VIRTKEY, ALT
+  VK_RETURN, CM_DUMPEDIT,  VIRTKEY, ALT
+END
+
+STRINGTABLE LOADONCALL MOVEABLE DISCARDABLE
+BEGIN
+  CM_DUMPUNDO,  "Reverses the last operation"
+  CM_DUMPCUT,   "Cuts the selection and puts it on the Clipboard"
+  CM_DUMPCOPY,  "Copies the selection to the Clipboard"
+  CM_DUMPPASTE, "Inserts the Clipboard contents at the caret"
+  CM_DUMPEDIT,  "Edit the current line"
+
+  IDS_DUMPNUM,  "Address %d"
+END
+
+#endif  // defined(RC_INVOKED)

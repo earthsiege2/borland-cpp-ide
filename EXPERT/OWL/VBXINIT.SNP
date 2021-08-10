@@ -1,0 +1,34 @@
+<<[CPP]TApplication
+##"#include <owl\vbxctl.h>" [[BIVBXInclude]]
+##^BOF
+##? BIVBXInclude [[SearchIncl]]
+##--BEGIN-- SearchIncl == FALSE
+##^BOF
+##? "#include" SearchIncl
+##SearchIncl == TRUE 2
+##:     AddToProject("BIVBX.LIB") [[result]]
+##:     ^BOL
+##:     ^2
+
+[[BIVBXInclude]]
+##SearchIncl == FALSE
+##:     QUERY_FILE_CPP [[FileName]]
+##:     %\\"Missing #include in [[FileName]].  "
+##*
+##--END-- SearchIncl == FALSE
+##--BEGIN-- QUERY_CLASS_NAME [[ClassName]]
+##FALSE [[Search2]]
+##"TBIVbxLibrary" [[VBXInit]]
+##^BOF
+##? VBXInit [[Search]]
+##Search == FALSE
+##:     "int OwlMain (" [[InitFunction]]
+##:     ^BOF
+##:     ? InitFunction Search2
+##--BEGIN-- Search2 == TRUE
+##^BOL
+##^2
+    TBIVbxLibrary   vbxSupport;                 // This application has VBX controls.
+##--END-- Search2 == TRUE
+##--END-- QUERY_CLASS_NAME [[ClassName]]
+>>[CPP]TApplication

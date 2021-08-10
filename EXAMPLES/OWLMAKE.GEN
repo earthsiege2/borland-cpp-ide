@@ -1,0 +1,88 @@
+#----------------------------------------------------------------------------
+# ObjectWindows - (C) Copyright 1993 by Borland International
+#     Extension to makefile.gen, adding OWL definitions and libraries
+#----------------------------------------------------------------------------
+
+!ifndef MODELS
+MODELS = smldf
+!endif
+!ifndef SYSTEMS
+SYSTEMS = WIN16 WIN32
+!endif
+
+SYSLIBS = 1   # force defined, actually set after include of makefile.gen
+!include $(BCEXAMPLEDIR)\makefile.gen
+
+!ifdef USEDLL
+CFLAGS = $(CFLAGS) -D_OWLDLL -D_BIDSDLL
+!endif
+
+#----------------------------------------------------------------------------
+# dir & search paths
+#----------------------------------------------------------------------------
+
+!ifndef OWLLIBDIR
+OWLLIBDIR = $(BCLIBDIR)
+!endif
+
+!if !$d(OWLINCDIR)
+OWLINCDIR = $(BCINCDIR)
+!elif "$(OWLINCDIR)" != "$(BCINCDIR)"
+INCLUDEPATH = $(OWLINCDIR);$(BCINCDIR)
+!endif
+
+#----------------------------------------------------------------------------
+# additional libraries for OWL and BIDS
+#----------------------------------------------------------------------------
+
+# determine library name suffix based upon model
+#
+!if $(_32BIT_)
+! if $d(USEDLL)
+_SFX_ = fi
+! else
+_SFX_ = f
+! endif
+!else #WIN16
+! if $d(USEDLL)
+_SFX_ = i
+! else
+_SFX_ = $(MODEL)
+! endif
+!endif
+
+!if $(_32BIT_)
+_OWLCODE_ = w
+!else
+_OWLCODE_ = $(_SYSCODE_)
+!endif
+
+#
+# select suffix for alternate library if diagnostics enabled
+#
+!if $(DIAGS)
+OWLSFX = d$(_OWLCODE_)$(_SFX_)
+! if $d(USEDLL) || $(_32BIT_)
+BIDSSFX = d$(_SFX_)
+! else # 16-bit static
+BIDSSFX = db$(_SFX_)  #use 'db' for 16 bit static for compatibility
+! endif
+!else # no diags
+OWLSFX = $(_OWLCODE_)$(_SFX_)
+BIDSSFX = $(_SFX_)
+!endif
+
+#
+# add OWL and BIDS libraries before user and runtime libraries
+#
+SYSLIBS = $(OWLLIBDIR)\owl$(OWLSFX) $(BCLIBDIR)\bids$(BIDSSFX)
+
+
+#
+# build the cpp command line option for precompiled headers if requested
+#
+!if !$d(NOOWLPCH)
+CPCH = -H=$(OWLLIBDIR)\owl$(OWLSFX).csm -H"owl\owlpch.h" -D_OWLPCH
+!endif
+
+$(MAKEFILE) :: $(OWLLIBDIR)\owl$(OWLSFX).lib $(BCLIBDIR)\bids$(BIDSSFX).lib

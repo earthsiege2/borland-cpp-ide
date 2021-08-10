@@ -1,0 +1,27 @@
+<<[CPP]
+##QUERY_SNP_FUNC_NAME [[FunctionName]]
+##QUERY_SNP_FUNC_RESULT [[FunctionResult]]
+##QUERY_SNP_FUNC_DEFPARAM [[FunctionDefParam]]
+##FALSE [[Search2]]
+##FALSE [[Search3]]
+##--BEGIN-- QUERY_CLASS_NAME [[ClassName]]
+##\\"[[FunctionResult]] [[ClassName]]::[[FunctionName]] [[FunctionDefParam]]" [[FindFunction]]
+##^BOF
+##? FindFunction [[Search]]
+##Search == FALSE
+##:     ^BOF
+##:     \\"[[FunctionResult]] [[ClassName]]::[[FunctionName]] " [[FindFunction2]]
+##:     ? FindFunction2 Search2
+##:     Search2 == FALSE
+##:         ^BOF
+##:         \\"[[FunctionResult]] [[ClassName]]::[[FunctionName]](" [[FindFunction3]]
+##:         ? FindFunction3 Search3
+##:         Search3 == FALSE
+##:             QUERY_FILE_CPP [[FileName]]
+##:             %\\"Unable to locate function implementation in [[FileName]].  "
+##*
+##^BOL
+##^SCROLL
+##^^
+##--END-- QUERY_CLASS_NAME [[ClassName]]
+>>[CPP]

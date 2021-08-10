@@ -1,0 +1,87 @@
+//----------------------------------------------------------------------------
+// ObjectWindows - (C) Copyright 1993 by Borland International
+//   include\owl\listview.rc
+//   Menu and accelerators for use with TListView
+//----------------------------------------------------------------------------
+
+#include <owl\inputdia.rh>
+
+#define CM_LISTUNDO         24381
+#define CM_LISTCUT          24382
+#define CM_LISTCOPY         24383
+#define CM_LISTPASTE        24384
+#define CM_LISTDELETE       24385
+#define CM_LISTCLEAR        24386
+#define CM_LISTADD          24387
+#define CM_LISTEDIT         24388
+#define IDM_LISTVIEW        32582
+#define IDA_LISTVIEW        32582
+#define IDS_LISTNUM         32582
+
+#if defined(RC_INVOKED)
+
+#include <owl\inputdia.rc>
+#define NO_IDD_INPUTDIALOG
+
+#if !defined(NO_IDM_LISTVIEW) && !defined(__IDM_LISTVIEW)
+#define __IDM_LISTVIEW
+IDM_LISTVIEW MENU LOADONCALL MOVEABLE PURE DISCARDABLE
+BEGIN
+  POPUP "&Edit"
+  BEGIN
+    MenuItem  "&Undo\aAlt+BkSp",      CM_LISTUNDO
+    MenuItem  SEPARATOR
+    MenuItem  "&Cut\aShift+Del",      CM_LISTCUT
+    MenuItem  "C&opy\aCtrl+Ins",      CM_LISTCOPY
+    MenuItem  "&Paste\aShift+Ins",    CM_LISTPASTE
+    MenuItem  "&Delete\aDel",         CM_LISTDELETE
+    MenuItem  "&Add Item\aEnter",     CM_LISTADD
+    MenuItem  "&Edit Item\aAlt+Enter",CM_LISTEDIT
+    MenuItem  "C&lear All\aCtrl+Del", CM_LISTCLEAR
+  END
+  POPUP "&Help"
+  BEGIN
+    MenuItem  "OWL ListView", 0, INACTIVE
+  END
+END
+#endif
+#undef NO_IDM_LISTVIEW
+
+#if !defined(NO_IDA_LISTVIEW) && !defined(__IDA_LISTVIEW)
+#define __IDA_LISTVIEW
+IDA_LISTVIEW ACCELERATORS
+BEGIN
+  "^x",      CM_LISTCUT,
+  "^c",      CM_LISTCOPY,
+  "^v",      CM_LISTPASTE,
+  VK_DELETE, CM_LISTDELETE VIRTKEY
+  VK_DELETE, CM_LISTCUT,   VIRTKEY, SHIFT
+  VK_DELETE, CM_LISTCLEAR, VIRTKEY, CONTROL
+  VK_INSERT, CM_LISTCOPY,  VIRTKEY, CONTROL
+  VK_INSERT, CM_LISTPASTE, VIRTKEY, SHIFT
+  VK_BACK,   CM_LISTUNDO,  VIRTKEY, ALT
+  VK_RETURN, CM_LISTADD,   VIRTKEY
+  VK_RETURN, CM_LISTEDIT,  VIRTKEY, ALT
+END
+#endif
+#undef NO_IDA_LISTVIEW
+
+#if !defined(NO_IDS_LISTVIEW) && !defined(__IDS_LISTVIEW)
+#define __IDS_LISTVIEW
+STRINGTABLE LOADONCALL MOVEABLE DISCARDABLE
+BEGIN
+  CM_LISTUNDO,  "Reverses the last operation"
+  CM_LISTCUT,   "Cuts the selection and puts it on the Clipboard"
+  CM_LISTCOPY,  "Copies the selection to the Clipboard"
+  CM_LISTPASTE, "Inserts the Clipboard contents at the caret"
+  CM_LISTDELETE,"Deletes the selection"
+  CM_LISTCLEAR, "Clear the document"
+  CM_LISTADD,   "Insert a new line"
+  CM_LISTEDIT,  "Edit the current line"
+
+  IDS_LISTNUM,  "Line number %d"
+END
+#endif
+#undef NO_IDS_LISTVIEW
+
+#endif  // defined(RC_INVOKED)

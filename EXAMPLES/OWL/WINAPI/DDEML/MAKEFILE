@@ -1,0 +1,14 @@
+#----------------------------------------------------------------------------
+# ObjectWindows - (C) Copyright 1991, 1993 by Borland International
+#----------------------------------------------------------------------------
+
+EXEALL = ddecli.exe ddesvr.exe
+EXERES = ddesvr                   #use this target to generate the base rule
+DDECLI = $(EXERULE:ddesvr=ddecli) #modify to change target
+DDESVR = $(EXERULE:ddesvr.res=)   #modify to remove resource
+EXEMAKE= $(DDECLI) $(DDESVR)
+
+SYSTEMS=WIN16
+MODELS=mld
+!include $(BCEXAMPLEDIR)\owlmake.gen
+

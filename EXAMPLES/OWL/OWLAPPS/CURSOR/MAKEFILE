@@ -1,0 +1,9 @@
+#----------------------------------------------------------------------------
+# ObjectWindows - (C) Copyright 1991, 1993 by Borland International
+#----------------------------------------------------------------------------
+
+EXERES = cursor
+RESEXE_= cursor.ico
+!include $(BCEXAMPLEDIR)\owlmake.gen
+
+

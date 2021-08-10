@@ -1,0 +1,9 @@
+#----------------------------------------------------------------------------
+# ObjectWindows - (C) Copyright 1991, 1993 by Borland International
+#----------------------------------------------------------------------------
+
+EXERES=paint
+MODELS=mldf
+OBJEXE=paint.obj dibattr.obj
+!include $(BCEXAMPLEDIR)\owlmake.gen
+

@@ -1,0 +1,19 @@
+#--------------------------------------------------------------------------#
+#                                                                          #
+#   MAKEFILE for BIDS examples                                             #
+#                                                                          #
+#   Copyright (c) Borland International 1993                               #
+#   All Rights Reserved                                                    #
+#                                                                          #
+#   Usage:                                                                 #
+#                                                                          #
+#       make MODEL=f                 for 32-bit Windows                    #
+#       make MODEL={s|m|c|l}         for 16-bit Windows                    #
+#       make MODEL={s|m|c|l} -DDOS16 for 16-bit DOS                        #
+#                                                                          #
+#--------------------------------------------------------------------------#
+
+EXE     = testdir   # this target used to generate rule for making an .exe
+OBJEXE  = testdir.obj filedata.obj
+
+!include $(BCEXAMPLEDIR)\bidsmake.gen

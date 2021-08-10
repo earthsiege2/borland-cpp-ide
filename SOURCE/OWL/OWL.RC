@@ -1,0 +1,24 @@
+//----------------------------------------------------------------------------
+// ObjectWindows - (C) Copyright 1992, 1993 by Borland International
+//   source\owl.rc
+//   Resources for ObjectWindows DLLs
+//----------------------------------------------------------------------------
+
+#include "version.rc"
+
+#include "owl\docview.rc"
+#include "owl\editfile.rh"
+#include "owl\editfile.rc"
+#include "owl\editsear.rh"
+#include "owl\editsear.rc"
+#include "owl\inputdia.rh"
+#include "owl\inputdia.rc"
+#include "owl\statusba.rc"
+#include "owl\printer.rh"
+#include "owl\printer.rc"
+#include "owl\slider.rh"
+#include "owl\slider.rc"
+#include "owl\editview.rc"
+#include "owl\listview.rc"
+#include "owl\except.rc"
+#include "owl\owlapp.rc"

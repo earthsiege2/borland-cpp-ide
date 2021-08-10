@@ -1,0 +1,11 @@
+The container class library provides several different
+class templates to use when developing programs. If your program needs
+a stack, a list, or a queue you should consider using the
+corresponding template from the class library.
+Several of these data structures provide multiple implementations, so
+that you can select the appropriate implementation based on the runtime
+characteristics of your application. For example, you can choose between
+a stack implemented as a linked list and a stack implemented as a
+vector. The former is usually better when the number of items on the
+stack changes drastically during execution of the program. The latter
+makes better use of memory when the stack is small.

@@ -1,0 +1,7 @@
+#----------------------------------------------------------------------------
+# ObjectWindows - (C) Copyright 1991, 1993 by Borland International
+#   examples\owl\owlapps\hello\makefile
+#----------------------------------------------------------------------------
+
+EXE   =helloapp
+!include $(BCEXAMPLEDIR)\owlmake.gen

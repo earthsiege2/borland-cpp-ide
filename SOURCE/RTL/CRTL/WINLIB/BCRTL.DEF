@@ -1,0 +1,678 @@
+LIBRARY BC40RTL
+
+DESCRIPTION     'Runtime Library for BC++'
+
+EXETYPE WINDOWS
+
+SEGMENTS
+    _TEXT   PRELOAD
+    _TEXTA  LOADONCALL
+
+CODE LOADONCALL MOVEABLE DISCARDABLE
+
+DATA MOVEABLE SINGLE PRELOAD
+
+HEAPSIZE 4096
+
+EXPORTS
+;   WEP                            @1   
+    _RaiseException                @244 RESIDENTNAME ; KEEP THIS HERE
+    ___JumpToCatch__               @900 RESIDENTNAME ; KEEP THIS HERE
+    ___get_sys_errlist             @2   
+    ___get_sys_nerr                @3   
+    ___getErrno                    @4   
+    ___getDOSErrno                 @5   
+    ___getDaylight                 @6   
+    ___getTimezone                 @7   
+    ___getTzname                   @8   
+    ___getStream                   @9   
+    ___getpLocale                  @10  
+    __GETRTLINSTANCEDATA           @11  
+    __access                       @12  
+    __ftime                        @13  
+    __dostounix                    @14  
+    __unixtodos                    @15  
+    __fsopen                       @16  
+    __setlocalelib                 @17  
+    __setstrcoll                   @18  
+    __setlocalebuff                @19  
+    __setstrxfrm                   @20  
+    __strcoll                      @21  
+    __strxfrm                      @22  
+    _access                        @23  
+    _atoi                          @24  
+    _atol                          @25  
+    __BCD_POW10                    @26  
+    __BCD_LOG10                    @27  
+    __BCD_TOBINARY                 @28  
+    __BCD_TODECIMAL                @29  
+    @$BLSH$QM7OSTREAMM3BCD         @30  ; operator <<(ostream*,bcd*)
+    @$BRSH$QM7ISTREAMM3BCD         @31  ; operator >>(istream*,bcd*)
+    _bdos                          @32  
+    _bsearch                       @33  
+    @_cast_memptr$qnvt1uiuiui      @34  ; _cast_memptr(void*,void*,unsigned int,unsigned int,unsigned int)
+    _chmod                         @35  
+    __rtl_chmod                    @36  
+    __chmod                        @37  
+    _chsize                        @38  
+    _close                         @39  
+    __close                        @40  
+    __rtl_close                    @41  
+    _fcloseall                     @42  
+    __X                            @43  
+    @$bmul$qm7complext1            @44  ; operator *(complex*,complex*)
+    @abs$qm7complex                @45  ; abs(complex*)
+    @norm$qm7complex               @46  ; norm(complex*)
+    @complex@0$brmul$qm7complex    @47  ; complex::operator *=(complex*)
+    @arg$qm7complex                @48  ; arg(complex*)
+    @acos$qm7complex               @49  ; acos(complex*)
+    @asin$qm7complex               @50  ; asin(complex*)
+    @atan$qm7complex               @51  ; atan(complex*)
+    @cos$qm7complex                @52  ; cos(complex*)
+    @cosh$qm7complex               @53  ; cosh(complex*)
+    @exp$qm7complex                @54  ; exp(complex*)
+    @log$qm7complex                @55  ; log(complex*)
+    @log10$qm7complex              @56  ; log10(complex*)
+    @pow$qm7complexd               @57  ; pow(complex*,double)
+    @pow$qdm7complex               @58  ; pow(double,complex*)
+    @pow$qm7complext1              @59  ; pow(complex*,complex*)
+    @sin$qm7complex                @60  ; sin(complex*)
+    @sinh$qm7complex               @61  ; sinh(complex*)
+    @sqrt$qm7complex               @62  ; sqrt(complex*)
+    @tan$qm7complex                @63  ; tan(complex*)
+    @tanh$qm7complex               @64  ; tanh(complex*)
+    @$bdiv$qm7complext1            @65  ; operator /(complex*,complex*)
+    @$bdiv$qdm7complex             @66  ; operator /(double,complex*)
+    @complex@0$brdiv$qm7complex    @67  ; complex::operator /=(complex*)
+    @$blsh$qm7ostreamm7complex     @68  ; operator <<(ostream*,complex*)
+    @$brsh$qm7istreamm7complex     @69  ; operator >>(istream*,complex*)
+    _creat                         @70  
+    __creat                        @71  
+    _creatnew                      @72  
+    __rtl_creat                    @73  
+    _creattemp                     @74  
+    _asctime                       @75  
+    _ctime                         @76  
+    _gmtime                        @77  
+    _localtime                     @78  
+    _mktime                        @79  
+    _atime                         @80  
+    __lstrftime                    @81  
+    _opendir                       @82  
+    _readdir                       @83  
+    _closedir                      @84  
+    _rewinddir                     @85  
+    _dosexterr                     @86  
+    _eof                           @87  
+    _fclose                        @88  
+    _fdopen                        @89  
+    _fflush                        @90  
+    _fgets                         @91  
+    _findfirst                     @92  
+    _findnext                      @93  
+    _filelength                    @94  
+    _flushall                      @95  
+    _fnmerge                       @96  
+    _fnsplit                       @97  
+    _fopen                         @98  
+    _fprintf                       @99  
+    _fputs                         @100 
+    _fread                         @101 
+    _freopen                       @102 
+    _fscanf                        @103 
+    _fseek                         @104 
+    _ftell                         @105 
+    _fstat                         @106 
+    _ftime                         @107 
+    __fullpath                     @108 
+    _fwrite                        @109 
+    __fgetc                        @110 
+    _fgetc                         @111 
+    _fgetchar                      @112 
+    _getcwd                        @113 
+    __getdcwd                      @114 
+    _getenv                        @115 
+    _gets                          @116 
+    __llocaleconv                  @117 
+    _ldiv                          @118 
+    ___uninitialize_locale         @119 
+    _lock                          @120 
+    _unlock                        @121 
+    _locking                       @122 
+    _lfind                         @123 
+    _lsearch                       @124 
+    __lsetlocale                   @125 
+    __lstrcoll                     @126 
+    __lstrlwr                      @127 
+    __lstrupr                      @128 
+    __lstrxfrm                     @129 
+    _itoa                          @130 
+    _ltoa                          @131 
+    _ultoa                         @132 
+    __ltolower                     @133 
+    __ltoupper                     @134 
+    __makepath                     @135 
+    _mblen                         @136 
+    _wcstombs                      @137 
+    _mbstowcs                      @138 
+    _mbtowc                        @139 
+    _wctomb                        @140 
+    _memccpy                       @141 
+    _memchr                        @142 
+    _memcmp                        @143 
+    _memcpy                        @144 
+    _memicmp                       @145 
+    _setmem                        @146 
+    _memset                        @147 
+    _mktemp                        @148 
+    _movedata                      @149 
+    _movmem                        @150 
+    _memmove                       @151 
+    _open                          @152 
+    __rtl_open                     @153 
+    __open                         @154 
+    _perror                        @155 
+    _printf                        @156 
+    _fputc                         @157 
+    _fputchar                      @158 
+    __fputc                        @159 
+    _putenv                        @160 
+    _puts                          @161 
+    _putw                          @162 
+    _qsort                         @163 
+    ___read                        @164 
+    _read                          @165 
+    _rename                        @166 
+    _rewind                        @167 
+    _scanf                         @168 
+    __searchenv                    @169 
+    __searchstr                    @170 
+    _setlocale                     @171 
+    _setmode                       @172 
+    _setvbuf                       @173 
+    ___fnsplit                     @174 
+    __splitpath                    @175 
+    _sprintf                       @176 
+    _vsprintf                      @177 
+    _sscanf                        @178 
+    _vsscanf                       @179 
+    _stat                          @180 
+    _strcat                        @181 
+    _strchr                        @182 
+    _strcmp                        @183 
+    _strcpy                        @184 
+    _strcspn                       @185 
+    __strdate                      @186 
+    __strtime                      @187 
+    _strdup                        @188 
+    _strerror                      @189 
+    __strerror                     @190 
+    _strftime                      @191 
+    _stricmp                       @192 
+    _strlen                        @193 
+    _strlwr                        @194 
+    _strncat                       @195 
+    _strncmp                       @196 
+    _strncpy                       @197 
+    _strnicmp                      @198 
+    _strnset                       @199 
+    _strpbrk                       @200 
+    _strrchr                       @201 
+    _strrev                        @202 
+    _strset                        @203 
+    _strspn                        @204 
+    _strstr                        @205 
+    _strtok                        @206 
+    _strtol                        @207 
+    _strtoul                       @208 
+    _strupr                        @209 
+    _swab                          @210 
+    _tempnam                       @211 
+    _dostounix                     @212 
+    _unixtodos                     @213 
+    _tmpfile                       @214 
+    _tmpnam                        @215 
+    _tzset                         @216 
+    _ungetc                        @217 
+    _utime                         @218 
+    _vfprintf                      @219 
+    _vfscanf                       @220 
+    _vprintf                       @221 
+    _vscanf                        @222 
+    ___write                       @223 
+    __rtl_write                    @224 
+    __write                        @225 
+    _write                         @226 
+    @xalloc@0$bctr$qmx6stringui    @227 ; xalloc::xalloc(const string*,unsigned int)
+    @xalloc@0raise$qv              @228 ; xalloc::raise()
+    __xfclose                      @229 
+    __xfflush                      @230 
+    @xmsg@0$bctr$qmx6string        @231 ; xmsg::xmsg(const string*)
+    @xmsg@0$bctr$qmx4xmsg          @232 ; xmsg::xmsg(const xmsg*)
+    @xmsg@0$bdtr$qv                @233 ; xmsg::~xmsg()
+    @xmsg@0raise$qv                @234 ; xmsg::raise()
+    @xmsg@0$basg$qmx4xmsg          @235 ; xmsg::operator =(const xmsg*)
+    @__GetTypeInfo$qnvt1t1t1       @236 ; __GetTypeInfo(void*,void*,void*,void*)
+    @__DynamicCast$qnvt1t1t1i      @237 ; __DynamicCast(void*,void*,void*,void*,int)
+    @_ThrowException$qnvt1t1t1uiuiuinuc @238 ; _ThrowException(void*,void*,void*,void*,unsigned int,unsigned int,unsigned int,unsigned char*)
+    @_ReThrowException$quinuc      @239 ; _ReThrowException(unsigned int,unsigned char*)
+    @_CatchCleanup$qv              @240 ; _CatchCleanup()
+    __Local_unwind                 @241 
+    __Return_unwind                @242 
+    __ExceptionHandler             @243 
+    __Global_unwind                @245 
+    __CurrExcContext               @246 
+    @__ThrowFileName$qv            @247 ; __ThrowFileName()
+    @__ThrowLineNumber$qv          @248 ; __ThrowLineNumber()
+    @__ThrowExceptionName$qv       @249 ; __ThrowExceptionName()
+    @Type_info@0$bctr$qmx9Type_info @250 ; Type_info::Type_info(const Type_info*)
+    @Type_info@0$basg$qmx9Type_info @251 ; Type_info::operator =(const Type_info*)
+    @Type_info@0$bdtr$qv           @252 ; Type_info::~Type_info()
+    @Type_info@0$beql$xqmx9Type_info @253 ; Type_info::operator ==(const Type_info*) const
+    @Type_info@0$bneq$xqmx9Type_info @254 ; Type_info::operator !=(const Type_info*) const
+    @Type_info@0before$xqmx9Type_info @255 ; Type_info::before(const Type_info*) const
+    @Type_info@0name$xqv           @256 ; Type_info::name() const
+    @string@0append$qmx6stringuiui @257 ; string::append(const string*,unsigned int,unsigned int)
+    @string@0append$qnxc           @258 ; string::append(const char*)
+    @string@0append$qnxcuiui       @259 ; string::append(const char*,unsigned int,unsigned int)
+    @string@0assign$qmx6stringuiui @260 ; string::assign(const string*,unsigned int,unsigned int)
+    @TDiagBase@0Out                @261 ; TDiagBase::Out
+    @TDiagBase@0Trace$qnxct1t1ul   @262 ; TDiagBase::Trace(const char*,const char*,const char*,unsigned long)
+    @TDiagBase@0Warn$qnxct1t1ul    @263 ; TDiagBase::Warn(const char*,const char*,const char*,unsigned long)
+    @TDiagBase@0Message$qnxct1t1t1ul @264 ; TDiagBase::Message(const char*,const char*,const char*,const char*,unsigned long)
+    @TDiagBase@0Output$qnxc        @265 ; TDiagBase::Output(const char*)
+    @xerror@0MakeString$qnxct1t1ul @266 ; xerror::MakeString(const char*,const char*,const char*,unsigned long)
+    @TDiagGroupDef@0Trace$qucnxct2ul @267 ; TDiagGroupDef::Trace(unsigned char,const char*,const char*,unsigned long)
+    @TDiagGroupDef@0Warn$qucnxct2ul @268 ; TDiagGroupDef::Warn(unsigned char,const char*,const char*,unsigned long)
+    @TDiagGroupDef@0Flags          @269 ; TDiagGroupDef::Flags
+    @TDiagGroupDef@0Name           @270 ; TDiagGroupDef::Name
+    @string@0clone$qv              @271 ; string::clone()
+    @string@0compare$xqmx6string   @272 ; string::compare(const string*) const
+    @string@0compare$xqmx6stringuiui @273 ; string::compare(const string*,unsigned int,unsigned int) const
+    @string@0copy$qncui            @274 ; string::copy(char*,unsigned int)
+    @string@0copy$qncuiui          @275 ; string::copy(char*,unsigned int,unsigned int)
+    @string@0copy$xqv              @276 ; string::copy() const
+    @string@0$bctr$qv              @277 ; string::string()
+    @string@0$bctr$qmx6string      @278 ; string::string(const string*)
+    @string@0$bctr$qnxc            @279 ; string::string(const char*)
+    @string@0$bctr$qnxcuiui        @280 ; string::string(const char*,unsigned int,unsigned int)
+    @string@0$bctr$qmx6stringuiui  @281 ; string::string(const string*,unsigned int,unsigned int)
+    @string@0$bctr$qmx10TSubString @282 ; string::string(const TSubString*)
+    @TStringRef@0$bctr$qcui        @283 ; TStringRef::TStringRef(char,unsigned int)
+    @string@0contains$xqnxc        @284 ; string::contains(const char*) const
+    @string@0find$xqmx6stringui    @285 ; string::find(const string*,unsigned int) const
+    @string@0substring$qnxcui      @286 ; string::substring(const char*,unsigned int)
+    @string@0substring$xqnxcui     @287 ; string::substring(const char*,unsigned int) const
+    @string@0find_case_index$xqnxcuimui @288 ; string::find_case_index(const char*,unsigned int,unsigned int*) const
+    @string@0find_index$xqnxcuimui @289 ; string::find_index(const char*,unsigned int,unsigned int*) const
+    @TRegexp@0find$xqmx6stringnuiui @290 ; TRegexp::find(const string*,unsigned int*,unsigned int) const
+    @string@0find$xqmx7TRegexpui   @291 ; string::find(const TRegexp*,unsigned int) const
+    @string@0find$xqmx7TRegexpnuiui @292 ; string::find(const TRegexp*,unsigned int*,unsigned int) const
+    @string@0find_first_of$xqmx6stringui @293 ; string::find_first_of(const string*,unsigned int) const
+    @string@0find_first_not_of$xqmx6stringui @294 ; string::find_first_not_of(const string*,unsigned int) const
+    @string@0find_last_of$xqmx6stringui @295 ; string::find_last_of(const string*,unsigned int) const
+    @string@0find_last_not_of$xqmx6stringui @296 ; string::find_last_not_of(const string*,unsigned int) const
+    @string@0hash$xqv              @297 ; string::hash() const
+    @string@0hash_case$xqv         @298 ; string::hash_case() const
+    @string@0insert$quimx6string   @299 ; string::insert(unsigned int,const string*)
+    @string@0insert$quimx6stringuiui @300 ; string::insert(unsigned int,const string*,unsigned int,unsigned int)
+    @TSubString@0$basg$qmx6string  @301 ; TSubString::operator =(const string*)
+    @TRegexp@0$basg$qmx7TRegexp    @302 ; TRegexp::operator =(const TRegexp*)
+    @TRegexp@0$basg$qnxc           @303 ; TRegexp::operator =(const char*)
+    @string@0$bcall$qui            @304 ; string::operator ()(unsigned int)
+    @TSubString@0$bcall$qui        @305 ; TSubString::operator ()(unsigned int)
+    @string@0$bcall$qmx7TRegexpui  @306 ; string::operator ()(const TRegexp*,unsigned int)
+    @string@0$bcall$xqmx7TRegexpui @307 ; string::operator ()(const TRegexp*,unsigned int) const
+    @TSubString@0$beql$xqnxc       @308 ; TSubString::operator ==(const char*) const
+    @$badd$qnxcmx6string           @309 ; operator +(const char*,const string*)
+    @string@0prepend$qnxcuiui      @310 ; string::prepend(const char*,unsigned int,unsigned int)
+    @TRegexp@0$bctr$qnxc           @311 ; TRegexp::TRegexp(const char*)
+    @TRegexp@0$bctr$qmx7TRegexp    @312 ; TRegexp::TRegexp(const TRegexp*)
+    @TRegexp@0$bdtr$qv             @313 ; TRegexp::~TRegexp()
+    @TRegexp@0copy_pattern$qmx7TRegexp @314 ; TRegexp::copy_pattern(const TRegexp*)
+    @TRegexp@0gen_pattern$qnxc     @315 ; TRegexp::gen_pattern(const char*)
+    @TRegexp@0maxpat               @316 ; TRegexp::maxpat
+    @string@0remove$quiui          @317 ; string::remove(unsigned int,unsigned int)
+    @string@0replace$quiuimx6stringuiui @318 ; string::replace(unsigned int,unsigned int,const string*,unsigned int,unsigned int)
+    @string@0reserve$qui           @319 ; string::reserve(unsigned int)
+    @string@0resize$qui            @320 ; string::resize(unsigned int)
+    @string@0rfind$xqmx6stringui   @321 ; string::rfind(const string*,unsigned int) const
+    @string@0rfind_case_index$xqnxcuimui @322 ; string::rfind_case_index(const char*,unsigned int,unsigned int*) const
+    @string@0rfind_index$xqnxcuimui @323 ; string::rfind_index(const char*,unsigned int,unsigned int*) const
+    @TRegexp@0status$qv            @324 ; TRegexp::status()
+    @string@0read_file$qm7istream  @325 ; string::read_file(istream*)
+    @string@0read_string$qm7istream @326 ; string::read_string(istream*)
+    @string@0read_line$qm7istream  @327 ; string::read_line(istream*)
+    @string@0read_to_delim$qm7istreamc @328 ; string::read_to_delim(istream*,char)
+    @string@0read_token$qm7istream @329 ; string::read_token(istream*)
+    @$brsh$qm7istreamm6string      @330 ; operator >>(istream*,string*)
+    @$blsh$qm7ostreammx6string     @331 ; operator <<(ostream*,const string*)
+    @getline$qm7istreamm6string    @332 ; getline(istream*,string*)
+    @getline$qm7istreamm6stringc   @333 ; getline(istream*,string*,char)
+    @TStringRef@0read_to_delim$qm7istreamc @334 ; TStringRef::read_to_delim(istream*,char)
+    @TStringRef@0read_token$qm7istream @335 ; TStringRef::read_token(istream*)
+    @string@0$bdtr$qv              @336 ; string::~string()
+    @string@0set_case_sensitive$qi @337 ; string::set_case_sensitive(int)
+    @string@0set_paranoid_check$qi @338 ; string::set_paranoid_check(int)
+    @string@0skip_whitespace$qi    @339 ; string::skip_whitespace(int)
+    @string@0initial_capacity$qui  @340 ; string::initial_capacity(unsigned int)
+    @string@0resize_increment$qui  @341 ; string::resize_increment(unsigned int)
+    @string@0max_waste$qui         @342 ; string::max_waste(unsigned int)
+    @string@0assert_element$xqui   @343 ; string::assert_element(unsigned int) const
+    @string@0assert_index$xqui     @344 ; string::assert_index(unsigned int) const
+    @string@0case_sensitive        @345 ; string::case_sensitive
+    @string@0paranoid_check        @346 ; string::paranoid_check
+    @string@0skip_white            @347 ; string::skip_white
+    @string@0initial_capac         @348 ; string::initial_capac
+    @string@0resize_inc            @349 ; string::resize_inc
+    @string@0freeboard             @350 ; string::freeboard
+    @TStringRef@0$bctr$qnxcuit1uiui @351 ; TStringRef::TStringRef(const char*,unsigned int,const char*,unsigned int,unsigned int)
+    @TStringRef@0$bdtr$qv          @352 ; TStringRef::~TStringRef()
+    @TStringRef@0reserve$qui       @353 ; TStringRef::reserve(unsigned int)
+    @TStringRef@0check_freeboard$qv @354 ; TStringRef::check_freeboard()
+    @TStringRef@0grow_to$qui       @355 ; TStringRef::grow_to(unsigned int)
+    @TStringRef@0round_capacity$qui @356 ; TStringRef::round_capacity(unsigned int)
+    @TStringRef@0splice$quiuinxcui @357 ; TStringRef::splice(unsigned int,unsigned int,const char*,unsigned int)
+    @TSubString@0assert_element$xqui @358 ; TSubString::assert_element(unsigned int) const
+    @string@0strip$q16string@StripTypec @359 ; string::strip(string::StripType)
+    @string@0substr$xqui           @360 ; string::substr(unsigned int) const
+    @string@0substr$xquiui         @361 ; string::substr(unsigned int,unsigned int) const
+    @string@0to_lower$qv           @362 ; string::to_lower()
+    @string@0to_upper$qv           @363 ; string::to_upper()
+    @to_lower$qmx6string           @364 ; to_lower(const string*)
+    @to_upper$qmx6string           @365 ; to_upper(const string*)
+    @TSubString@0to_lower$qv       @366 ; TSubString::to_lower()
+    @TSubString@0to_upper$qv       @367 ; TSubString::to_upper()
+    __fmemccpy                     @368 
+    __fmemchr                      @369 
+    __fmemcmp                      @370 
+    __fmemcpy                      @371 
+    __fmemicmp                     @372 
+    __fmemset                      @373 
+    __fsetmem                      @374 
+    __fmemmove                     @375 
+    __fmovmem                      @376 
+    __fstrcat                      @377 
+    __fstrchr                      @378 
+    __fstrcmp                      @379 
+    __fstrcpy                      @380 
+    __fstrcspn                     @381 
+    __fstrdup                      @382 
+    __fstricmp                     @383 
+    __fstrlen                      @384 
+    __fstrlwr                      @385 
+    __fstrncat                     @386 
+    __fstrncmp                     @387 
+    __fstrncpy                     @388 
+    __fstrnicmp                    @389 
+    __fstrnset                     @390 
+    __fstrpbrk                     @391 
+    __fstrrchr                     @392 
+    __fstrrev                      @393 
+    __fstrset                      @394 
+    __fstrspn                      @395 
+    __fstrstr                      @396 
+    __fstrtok                      @397 
+    __fstrupr                      @398 
+    __hqsort                       @399 
+    @streambuf@0dbp$qv             @400 ; streambuf::dbp()
+    @fstreambase@0attach$qi        @401 ; fstreambase::attach(int)
+    @filebuf@0attach$qi            @402 ; filebuf::attach(int)
+    @filebuf@0close$qv             @403 ; filebuf::close()
+    @filebuf@0$bctr$qv             @404 ; filebuf::filebuf()
+    @filebuf@0$bctr$qi             @405 ; filebuf::filebuf(int)
+    @filebuf@0$bctr$qinci          @406 ; filebuf::filebuf(int,char*,int)
+    @filebuf@0openprot             @407 ; filebuf::openprot
+    @filebuf@0$bdtr$qv             @408 ; filebuf::~filebuf()
+    @filebuf@0overflow$qi          @409 ; filebuf::overflow(int)
+    @filebuf@0open$qnxcii          @410 ; filebuf::open(const char*,int,int)
+    @filebuf@0setbuf$qnci          @411 ; filebuf::setbuf(char*,int)
+    @filebuf@0seekoff$ql12ios@seek_diri @412 ; filebuf::seekoff(long,ios::seek_dir)
+    @filebuf@0sync$qv              @413 ; filebuf::sync()
+    @filebuf@0underflow$qv         @414 ; filebuf::underflow()
+    @fstreambase@0close$qv         @415 ; fstreambase::close()
+    @fstreambase@0$bctr$qv         @416 ; fstreambase::fstreambase()
+    @fstreambase@0$bctr$qnxcii     @417 ; fstreambase::fstreambase(const char*,int,int)
+    @fstreambase@0$bctr$qi         @418 ; fstreambase::fstreambase(int)
+    @fstreambase@0$bctr$qinci      @419 ; fstreambase::fstreambase(int,char*,int)
+    @fstreambase@0$bdtr$qv         @420 ; fstreambase::~fstreambase()
+    @fstreambase@0open$qnxcii      @421 ; fstreambase::open(const char*,int,int)
+    @fstreambase@0setbuf$qnci      @422 ; fstreambase::setbuf(char*,int)
+    @ifstream@0$bctr$qv            @423 ; ifstream::ifstream()
+    @ifstream@0$bctr$qnxcii        @424 ; ifstream::ifstream(const char*,int,int)
+    @ifstream@0$bctr$qi            @425 ; ifstream::ifstream(int)
+    @ifstream@0$bctr$qinci         @426 ; ifstream::ifstream(int,char*,int)
+    @ifstream@0$bdtr$qv            @427 ; ifstream::~ifstream()
+    @fstream@0$bctr$qv             @428 ; fstream::fstream()
+    @fstream@0$bctr$qnxcii         @429 ; fstream::fstream(const char*,int,int)
+    @fstream@0$bctr$qi             @430 ; fstream::fstream(int)
+    @fstream@0$bctr$qinci          @431 ; fstream::fstream(int,char*,int)
+    @fstream@0$bdtr$qv             @432 ; fstream::~fstream()
+    @strstream@0$bctr$qv           @433 ; strstream::strstream()
+    @strstream@0$bctr$qncii        @434 ; strstream::strstream(char*,int,int)
+    @strstream@0$bdtr$qv           @435 ; strstream::~strstream()
+    @iostream_withassign@0$basg$qm3ios @436 ; iostream_withassign::operator =(ios*)
+    @iostream_withassign@0$basg$qn9streambuf @437 ; iostream_withassign::operator =(streambuf*)
+    @iostream@0$bctr$qn9streambuf  @438 ; iostream::iostream(streambuf*)
+    @iostream@0$bctr$qv            @439 ; iostream::iostream()
+    @iostream_withassign@0$bctr$qv @440 ; iostream_withassign::iostream_withassign()
+    @iostream@0$bdtr$qv            @441 ; iostream::~iostream()
+    @iostream_withassign@0$bdtr$qv @442 ; iostream_withassign::~iostream_withassign()
+    @istrstream@0$bctr$qnc         @443 ; istrstream::istrstream(char*)
+    @istrstream@0$bctr$qnzc        @444 ; istrstream::istrstream(char*)
+    @istrstream@0$bctr$qnuc        @445 ; istrstream::istrstream(unsigned char*)
+    @istrstream@0$bctr$qnci        @446 ; istrstream::istrstream(char*,int)
+    @istrstream@0$bctr$qnzci       @447 ; istrstream::istrstream(char*,int)
+    @istrstream@0$bctr$qnuci       @448 ; istrstream::istrstream(unsigned char*,int)
+    @istrstream@0$bdtr$qv          @449 ; istrstream::~istrstream()
+    @istream_withassign@0$basg$qm7istream @450 ; istream_withassign::operator =(istream*)
+    @istream_withassign@0$basg$qn9streambuf @451 ; istream_withassign::operator =(streambuf*)
+    @istream@0$bctr$qv             @452 ; istream::istream()
+    @istream@0$bctr$qn9streambuf   @453 ; istream::istream(streambuf*)
+    @istream@0$bctr$qn9streambufin7ostream @454 ; istream::istream(streambuf*,int,ostream*)
+    @istream_withassign@0$bctr$qv  @455 ; istream_withassign::istream_withassign()
+    @istream@0do_get$qv            @456 ; istream::do_get()
+    @istream@0ipfx$qi              @457 ; istream::ipfx(int)
+    @istream@0$bdtr$qv             @458 ; istream::~istream()
+    @istream_withassign@0$bdtr$qv  @459 ; istream_withassign::~istream_withassign()
+    @istream@0eatwhite$qv          @460 ; istream::eatwhite()
+    @istream@0$brsh$qn9streambuf   @461 ; istream::operator >>(streambuf*)
+    @istream@0$brsh$qnc            @462 ; istream::operator >>(char*)
+    @istream@0$brsh$qmd            @463 ; istream::operator >>(double*)
+    @istream@0$brsh$qmf            @464 ; istream::operator >>(float*)
+    @istream@0$brsh$qmi            @465 ; istream::operator >>(int*)
+    @istream@0$brsh$qmg            @466 ; istream::operator >>(long double*)
+    @istream@0$brsh$qml            @467 ; istream::operator >>(long*)
+    @istream@0$brsh$qmc            @468 ; istream::operator >>(char*)
+    @istream@0$brsh$qmzc           @469 ; istream::operator >>(char*)
+    @istream@0$brsh$qms            @470 ; istream::operator >>(short*)
+    @istream@0$brsh$qmuc           @471 ; istream::operator >>(unsigned char*)
+    @istream@0$brsh$qmui           @472 ; istream::operator >>(unsigned int*)
+    @istream@0$brsh$qmul           @473 ; istream::operator >>(unsigned long*)
+    @istream@0$brsh$qmus           @474 ; istream::operator >>(unsigned short*)
+    @istream@0get$qm9streambufc    @475 ; istream::get(streambuf*,char)
+    @istream@0get$qv               @476 ; istream::get()
+    @istream@0getline$qncic        @477 ; istream::getline(char*,int,char)
+    @istream@0get$qmc              @478 ; istream::get(char*)
+    @istream@0get$qmzc             @479 ; istream::get(char*)
+    @istream@0get$qncic            @480 ; istream::get(char*,int,char)
+    @istream@0get$qmuc             @481 ; istream::get(unsigned char*)
+    @istream@0ignore$qii           @482 ; istream::ignore(int,int)
+    @istream@0$brsh$qnqm3ios$m3ios @483 ; istream::operator >>(ios*(*)(ios*))
+    @istream@0putback$qc           @484 ; istream::putback(char)
+    @istream@0read$qnci            @485 ; istream::read(char*,int)
+    @istream@0seekg$ql12ios@seek_dir @486 ; istream::seekg(long,ios::seek_dir)
+    @istream@0seekg$ql             @487 ; istream::seekg(long)
+    @istream@0tellg$qv             @488 ; istream::tellg()
+    @istream@0$bctr$qinci          @489 ; istream::istream(int,char*,int)
+    @istream@0$bctr$qiin7ostream   @490 ; istream::istream(int,int,ostream*)
+    @resetiosflags$ql              @491 ; resetiosflags(long)
+    @setbase$qi                    @492 ; setbase(int)
+    @setiosflags$ql                @493 ; setiosflags(long)
+    @setw$qi                       @494 ; setw(int)
+    @setfill$qi                    @495 ; setfill(int)
+    @setprecision$qi               @496 ; setprecision(int)
+    @ofstream@0$bctr$qv            @497 ; ofstream::ofstream()
+    @ofstream@0$bctr$qnxcii        @498 ; ofstream::ofstream(const char*,int,int)
+    @ofstream@0$bctr$qi            @499 ; ofstream::ofstream(int)
+    @ofstream@0$bctr$qinci         @500 ; ofstream::ofstream(int,char*,int)
+    @ofstream@0$bdtr$qv            @501 ; ofstream::~ofstream()
+    @ostrstream@0$bctr$qncii       @502 ; ostrstream::ostrstream(char*,int,int)
+    @ostrstream@0$bctr$qnzcii      @503 ; ostrstream::ostrstream(char*,int,int)
+    @ostrstream@0$bctr$qnucii      @504 ; ostrstream::ostrstream(unsigned char*,int,int)
+    @ostrstream@0$bctr$qv          @505 ; ostrstream::ostrstream()
+    @ostrstream@0$bdtr$qv          @506 ; ostrstream::~ostrstream()
+    @ostream_withassign@0$basg$qm7ostream @507 ; ostream_withassign::operator =(ostream*)
+    @ostream@0$blsh$qg             @508 ; ostream::operator <<(long double)
+    @ostream_withassign@0$basg$qn9streambuf @509 ; ostream_withassign::operator =(streambuf*)
+    @ostream@0$bctr$qv             @510 ; ostream::ostream()
+    @ostream@0$bctr$qn9streambuf   @511 ; ostream::ostream(streambuf*)
+    @ostream_withassign@0$bctr$qv  @512 ; ostream_withassign::ostream_withassign()
+    @ostream@0$bdtr$qv             @513 ; ostream::~ostream()
+    @ostream_withassign@0$bdtr$qv  @514 ; ostream_withassign::~ostream_withassign()
+    @ostream@0flush$qv             @515 ; ostream::flush()
+    @ostream@0$blsh$qn9streambuf   @516 ; ostream::operator <<(streambuf*)
+    @ostream@0$blsh$ql             @517 ; ostream::operator <<(long)
+    @ostream@0$blsh$qul            @518 ; ostream::operator <<(unsigned long)
+    @ostream@0$blsh$qc             @519 ; ostream::operator <<(char)
+    @ostream@0$blsh$qnqm3ios$m3ios @520 ; ostream::operator <<(ios*(*)(ios*))
+    @ostream@0do_opfx$qv           @521 ; ostream::do_opfx()
+    @ostream@0do_osfx$qv           @522 ; ostream::do_osfx()
+    @ostream@0outstr$qnxct1        @523 ; ostream::outstr(const char*,const char*)
+    @ostream@0$blsh$qnv            @524 ; ostream::operator <<(void*)
+    @ostream@0seekp$ql12ios@seek_dir @525 ; ostream::seekp(long,ios::seek_dir)
+    @ostream@0seekp$ql             @526 ; ostream::seekp(long)
+    @ostream@0tellp$qv             @527 ; ostream::tellp()
+    @ostream@0write$qnxci          @528 ; ostream::write(const char*,int)
+    @ostream@0$bctr$qi             @529 ; ostream::ostream(int)
+    @ostream@0$bctr$qinc           @530 ; ostream::ostream(int,char*)
+    @stdiobuf@0$bctr$qn4FILE       @531 ; stdiobuf::stdiobuf(FILE*)
+    @stdiobuf@0$bdtr$qv            @532 ; stdiobuf::~stdiobuf()
+    @stdiobuf@0overflow$qi         @533 ; stdiobuf::overflow(int)
+    @stdiobuf@0pbackfail$qi        @534 ; stdiobuf::pbackfail(int)
+    @stdiobuf@0seekoff$ql12ios@seek_diri @535 ; stdiobuf::seekoff(long,ios::seek_dir)
+    @stdiobuf@0sync$qv             @536 ; stdiobuf::sync()
+    @stdiobuf@0underflow$qv        @537 ; stdiobuf::underflow()
+    @stdiostream@0$bctr$qn4FILE    @538 ; stdiostream::stdiostream(FILE*)
+    @stdiostream@0$bdtr$qv         @539 ; stdiostream::~stdiostream()
+    @strstreambuf@0$bctr$qv        @540 ; strstreambuf::strstreambuf()
+    @strstreambuf@0$bctr$qnql$nvnqnv$v @541 ; strstreambuf::strstreambuf(void*(*)(long),void(*)(void*))
+    @strstreambuf@0$bctr$qi        @542 ; strstreambuf::strstreambuf(int)
+    @strstreambuf@0$bctr$qnzcit1   @543 ; strstreambuf::strstreambuf(char*,int,char*)
+    @strstreambuf@0$bctr$qnucit1   @544 ; strstreambuf::strstreambuf(unsigned char*,int,unsigned char*)
+    @strstreambuf@0$bctr$qncit1    @545 ; strstreambuf::strstreambuf(char*,int,char*)
+    @strstreambuf@0doallocate$qv   @546 ; strstreambuf::doallocate()
+    @strstreambuf@0$bdtr$qv        @547 ; strstreambuf::~strstreambuf()
+    @strstreambuf@0freeze$qi       @548 ; strstreambuf::freeze(int)
+    @strstreambuf@0init$qncit1     @549 ; strstreambuf::init(char*,int,char*)
+    @strstreambuf@0overflow$qi     @550 ; strstreambuf::overflow(int)
+    @strstreambuf@0setbuf$qnci     @551 ; strstreambuf::setbuf(char*,int)
+    @strstreambuf@0seekoff$ql12ios@seek_diri @552 ; strstreambuf::seekoff(long,ios::seek_dir)
+    @strstreambuf@0str$qv          @553 ; strstreambuf::str()
+    @strstreambuf@0sync$qv         @554 ; strstreambuf::sync()
+    @strstreambuf@0underflow$qv    @555 ; strstreambuf::underflow()
+    @strstreambase@0$bctr$qncit1   @556 ; strstreambase::strstreambase(char*,int,char*)
+    @strstreambase@0$bctr$qv       @557 ; strstreambase::strstreambase()
+    @strstreambase@0$bdtr$qv       @558 ; strstreambase::~strstreambase()
+    @streambuf@0doallocate$qv      @559 ; streambuf::doallocate()
+    @streambuf@0$bctr$qv           @560 ; streambuf::streambuf()
+    @streambuf@0$bctr$qnci         @561 ; streambuf::streambuf(char*,int)
+    @streambuf@0do_snextc$qv       @562 ; streambuf::do_snextc()
+    @streambuf@0do_sgetn$qnci      @563 ; streambuf::do_sgetn(char*,int)
+    @streambuf@0do_sputn$qnxci     @564 ; streambuf::do_sputn(const char*,int)
+    @streambuf@0$bdtr$qv           @565 ; streambuf::~streambuf()
+    @streambuf@0overflow$qi        @566 ; streambuf::overflow(int)
+    @streambuf@0pbackfail$qi       @567 ; streambuf::pbackfail(int)
+    @streambuf@0setbuf$qnci        @568 ; streambuf::setbuf(char*,int)
+    @streambuf@0setb$qnct1i        @569 ; streambuf::setb(char*,char*,int)
+    @streambuf@0setg$qnct1t1       @570 ; streambuf::setg(char*,char*,char*)
+    @streambuf@0setp$qnct1         @571 ; streambuf::setp(char*,char*)
+    @streambuf@0sgetn$qnci         @572 ; streambuf::sgetn(char*,int)
+    @streambuf@0seekoff$ql12ios@seek_diri @573 ; streambuf::seekoff(long,ios::seek_dir)
+    @streambuf@0seekpos$qli        @574 ; streambuf::seekpos(long,int)
+    @streambuf@0sputn$qnxci        @575 ; streambuf::sputn(const char*,int)
+    @streambuf@0setbuf$qncii       @576 ; streambuf::setbuf(char*,int,int)
+    @streambuf@0sync$qv            @577 ; streambuf::sync()
+    @ios@0bitalloc$qv              @578 ; ios::bitalloc()
+    @streambuf@0underflow$qv       @579 ; streambuf::underflow()
+    @ios@0clear$qi                 @580 ; ios::clear(int)
+    @ios@0$bctr$qv                 @581 ; ios::ios()
+    @ios@0$bctr$qn9streambuf       @582 ; ios::ios(streambuf*)
+    @ios@0basefield                @583 ; ios::basefield
+    @ios@0adjustfield              @584 ; ios::adjustfield
+    @ios@0floatfield               @585 ; ios::floatfield
+    @ios@0$bdtr$qv                 @586 ; ios::~ios()
+    @ios@0stdioflush               @587 ; ios::stdioflush
+    @ios@0nextbit                  @588 ; ios::nextbit
+    @ios@0usercount                @589 ; ios::usercount
+    @ios@0flags$ql                 @590 ; ios::flags(long)
+    @ios@0init$qn9streambuf        @591 ; ios::init(streambuf*)
+    @ios@0iword$qi                 @592 ; ios::iword(int)
+    @ios@0pword$qi                 @593 ; ios::pword(int)
+    @ios@0setf$ql                  @594 ; ios::setf(long)
+    @ios@0setf$qll                 @595 ; ios::setf(long,long)
+    @ios@0setstate$qi              @596 ; ios::setstate(int)
+    @ios@0skip$qi                  @597 ; ios::skip(int)
+    @ios@0sync_with_stdio$qv       @598 ; ios::sync_with_stdio()
+    @ios@0tie$qn7ostream           @599 ; ios::tie(ostream*)
+    @ios@0unsetf$ql                @600 ; ios::unsetf(long)
+    @ios@0usersize$qi              @601 ; ios::usersize(int)
+    @ios@0xalloc$qv                @602 ; ios::xalloc()
+    __matherrl                     @603 
+    ___matherrl                    @604 
+    _pow10                         @605 
+    _pow10l                        @606 
+    _fmod                          @607 
+    _floorl                        @608 
+    _ldexp                         @609 
+    __matherr                      @610 
+    _fmodl                         @611 
+    _atan2l                        @612 
+    _poly                          @613 
+    _sinl                          @614 
+    _sqrtl                         @615 
+    _cosl                          @616 
+    _sqrt                          @617 
+    _tanl                          @618 
+    _powl                          @619 
+    _ldexpl                        @620 
+    _tanh                          @621 
+    _tanhl                         @622 
+    _coshl                         @623 
+    _expl                          @624 
+    _logl                          @625 
+    _exp                           @626 
+    _floor                         @627 
+    _frexp                         @628 
+    _hypot                         @629 
+    _log10                         @630 
+    _modf                          @631 
+    _pow                           @632 
+    _sin                           @633 
+    _sinh                          @634 
+    _tan                           @635 
+    _log                           @636 
+    ___matherr                     @637 
+    _cos                           @638 
+    _ceil                          @639 
+    _acos                          @640 
+    _asin                          @641 
+    _cosh                          @642 
+    _atan2                         @643 
+    _frexpl                        @644 
+    _sinhl                         @645 
+    _modfl                         @646 
+    _log10l                        @647 
+    _ceill                         @648 
+    _acosl                         @649 
+    _asinl                         @650 
+    ___assertfail                  @651 
+    __farmallocf                   @652 
+    __farcallocf                   @653 
+    __farfreef                     @654 
+    __farreallocf                  @655 
+    _raise                         @656 
+    ___signalDS                    @657 
+    __FpeHandler                   @658 
+    @string@0$bctr$qpx11HINSTANCE__uii @659 ; string::string(const HINSTANCE__*,unsigned int,int)
+    @TStringRef@0$bctr$qpx11HINSTANCE__uii @660 ; TStringRef::TStringRef(const HINSTANCE__*,unsigned int,int)

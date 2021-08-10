@@ -1,0 +1,10 @@
+//----------------------------------------------------------------------------
+// ObjectWindows - (C) Copyright 1991, 1993 by Borland International
+//   include\owl\inputdia.rh
+//   Resource IDs for inputdia.rc and inputdia.h
+//----------------------------------------------------------------------------
+
+#define IDD_INPUTDIALOG     32514
+
+#define ID_PROMPT           4091
+#define ID_INPUT            4090

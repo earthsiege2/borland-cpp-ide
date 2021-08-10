@@ -1,0 +1,118 @@
+<<[H]
+##QUERY_DLOG [[Constant]]
+##\\QUERY_CONSTR_DEF [[ConstructorParam]]
+##"#if !defined(__" [[AnyClass]]
+##^BOF
+##--BEGIN-- ? AnyClass [[AnotherClass]]
+##--BEGIN-- QUERY_CLASS_NAME [[ClassName]]
+##ConstructorParam == ""
+##:     "()" ConstructorParam
+##*
+##--BEGIN-- AnotherClass == TRUE
+##:     ^EOF
+##:     ^-2
+##:     ^BOL
+
+
+##--END-- AnotherClass == TRUE
+##AnotherClass == FALSE
+##:     {hheader.snp}
+##:     ^EOF
+##*
+##--BEGIN-- QUERY_BASE_NAME [[BaseName]]
+#include <owl\owlpch.h>
+#pragma hdrstop
+
+##QUERY_INCLUDE [[IncludeFile]]
+#include <owl\[[IncludeFile]]>
+##QUERY_WIND_CLIENT [[Client]]
+##Client != ""
+##:     GetIncludeFile(\\"[[Client]]") [[ClientIncludeFile]]
+#include [[ClientIncludeFile]]
+##<<TApplication QUERY_FILENAME_CPP [[FileName]] 2
+
+#include "[[FileName]].rh"            // Definition of all resources.
+
+
+//{{[[BaseName]] = [[ClassName]]}}
+class [[ClassName]] : public [[BaseName]] {
+##--END-- QUERY_BASE_NAME [[BaseName]]
+public:
+    [[ClassName]] [[ConstructorParam]];
+    virtual ~[[ClassName]] ();
+};    //{{[[ClassName]]}}
+##--END-- QUERY_CLASS_NAME [[ClassName]]
+##AnotherClass == FALSE
+##:     {hfooter.snp}
+##*
+##--END-- ? AnyClass [[AnotherClass]]
+>>[H]
+
+
+<<[CPP]
+##^EOF
+##(YPos() != 1) 3
+
+
+
+##YPos() == 1
+##:     {cheader.snp}
+##*
+##^EOF
+##QUERY_CONSTR_DEFF [[ConstructorFParam]]
+##QUERY_DLOG [[Constant]]
+##QUERY_WIND_TITLE [[Title]]
+##QUERY_BASE_NAME [[BaseName]]
+##--BEGIN-- QUERY_CLASS_NAME [[ClassName]]
+#include <owl\owlpch.h>
+#pragma hdrstop
+
+##QUERY_FILENAME_H [[FileName]]
+#include "[[FileName]].h"
+
+
+//{{[[ClassName]] Implementation}}
+
+
+##ConstructorFParam != ""
+[[ClassName]]::[[ClassName]] [[ConstructorFParam]]:
+##ConstructorFParam == ""
+[[ClassName]]::[[ClassName]] ()
+##--BEGIN-- QUERY_WIND_CLIENT [[ClientClass]]
+##ClientClass != ""
+##:     \\QUERY_WIND_CLIENT_PARAM [[ClientParam]]
+##:     \\QUERY_CONSTR_BASE [[ConstructorList]]
+##:     ConstructorList != ""
+[[ConstructorList]]
+##--END-- QUERY_WIND_CLIENT [[ClientClass]]
+##QUERY_WIND_CLIENT == ""
+##:     \\QUERY_CONSTR_BASE [[ConstructorList]]
+##:     ConstructorList != ""
+[[ConstructorList]]
+{
+##QUERY_WIND_STYLE [[StyleAttributes]]
+##StyleAttributes != "" 3
+    // Override the default window style for [[BaseName]].
+[[StyleAttributes]]
+
+##QUERY_WIND_BACKGRND [[BackgroundColor]]
+##BackgroundColor != "" 3
+    // Change the window's background color
+    SetBkgndColor([[BackgroundColor]]);
+
+    // INSERT>> Your constructor code here.
+
+}
+
+
+[[ClassName]]::~[[ClassName]] ()
+{
+##QUERY_BASE_NAME [[BaseName]]
+##((BaseName != "TModule") && (BaseName != "TEventHandler")) 2
+    Destroy();
+
+    // INSERT>> Your destructor code here.
+
+}
+##--END-- QUERY_CLASS_NAME [[ClassName]]
+>>[CPP]

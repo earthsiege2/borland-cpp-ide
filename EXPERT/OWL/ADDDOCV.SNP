@@ -1,0 +1,23 @@
+##--BEGIN-- @OPT_APPL_DOCVIEW
+//{{DOC_VIEW}}
+##OPT_DV_RESET
+##--FOR-- IncrV = 1 TO @QUERY_DV_COUNT
+##      OPT_DV_NEXT
+##      QUERY_DV_TDOCUMENT [[TDocument]]
+##      QUERY_DV_TVIEW [[TView]]
+DEFINE_DOC_TEMPLATE_CLASS([[TDocument]], [[TView]], DocType[[IncrV]]);
+##--NEXT-- IncrV
+//{{DOC_VIEW_END}}
+
+//{{DOC_MANAGER}}
+##OPT_DV_RESET
+##--FOR-- IncrV = 1 TO @QUERY_DV_COUNT
+##      OPT_DV_NEXT
+##      QUERY_DV_DESCR [[Descr]]
+##      QUERY_DV_FILTER [[Filter]]
+##      QUERY_DV_EXT [[Ext]]
+##      QUERY_DV_STYLE [[Style]]
+DocType[[IncrV]] __dvt[[IncrV]]("[[Descr]]", "[[Filter]]", 0, "[[Ext]]", [[Style]]);
+##--NEXT-- IncrV
+//{{DOC_MANAGER_END}}
+##--END-- @OPT_APPL_DOCVIEW

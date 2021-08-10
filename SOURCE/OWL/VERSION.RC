@@ -1,0 +1,42 @@
+//----------------------------------------------------------------------------
+// ObjectWindows - (C) Copyright 1992, 1993 by Borland International
+//   source\version.rc
+//   Version resources for ObjectWindows DLLs
+//----------------------------------------------------------------------------
+
+#include <ver.h>
+
+VS_VERSION_INFO VERSIONINFO
+FILEFLAGSMASK   VS_FF_DEBUG | VS_FF_PRERELEASE
+FILEFLAGS       VS_FF_PRERELEASE | VS_FF_SPECIALBUILD
+#ifndef WIN32
+FILEOS          VOS_DOS_WINDOWS16
+#else
+FILEOS          VOS_NT_WINDOWS32
+#endif
+
+FILETYPE        VFT_DLL
+FILESUBTYPE     VS_USER_DEFINED
+
+BEGIN
+  BLOCK "StringFileInfo"
+  BEGIN
+    BLOCK "040904E4"
+    BEGIN
+      VALUE "CompanyName", "Borland International\0"
+      VALUE "FileDescription", "ObjectWindows Library\0"
+      VALUE "FileVersion", "1.00\0"
+      VALUE "InternalName", "ObjectWindows Library\0"
+      VALUE "LegalCopyright", "Copyright Borland International 1993\0"
+      VALUE "ProductName", "Borland C++ 4.0\0"
+      VALUE "ProductVersion", "$Revision:   6.1  $\0"
+      VALUE "SpecialBuild", "$Date:   13 Sep 1993 17:06:00  $\0"
+    END
+
+  END
+
+  BLOCK "VarFileInfo"
+  BEGIN                               /*  Language   |    Translation       */
+    VALUE "Translation", 0x409, 1252  /* U.S. English, Windows Multilingual */
+  END
+END

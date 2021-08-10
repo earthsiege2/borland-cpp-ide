@@ -1,0 +1,7 @@
+#----------------------------------------------------------------------------
+# ObjectWindows - (C) Copyright 1993 by Borland International
+#   examples\owl\windows\whello\makefile
+#----------------------------------------------------------------------------
+
+EXE = whello
+!include $(BCEXAMPLEDIR)\makefile.gen

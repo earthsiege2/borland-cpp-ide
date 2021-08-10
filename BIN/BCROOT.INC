@@ -1,0 +1,1 @@
+BCROOT=D:\BC4

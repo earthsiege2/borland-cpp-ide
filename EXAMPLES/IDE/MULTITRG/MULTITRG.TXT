@@ -1,0 +1,39 @@
+
+This project is an example of multi-targeting in the new project manager.
+
+The two whello.exe targets in the project are mostly similar with two major
+differences: The local options for the first target specifies output 
+directories to point to .\out16 and is tagged as Win3.x (16 bit) 
+applictation. The second target has local options specifying output
+directories to point to .\out32 and is tagged as a Win32 appliction.
+
+The targets were created by 
+1) selecting Project|New Target,
+2) typing "whello" in the 'Target Name' field, 
+3) selecting 'Standard' from the 'Target Type' list,
+4) selecting 'Ok'
+
+This leads the the standard 'Add Target' dialog where:
+5) selecting "Windows 3.x (16 bit)" from the 'Platforms' list 
+6) selecting 'Ok' 
+
+Repeating steps 1-6 for the second target with the exception of step (5) 
+where "Win32" was selected from the 'Platforms' list.
+
+To redirect output on the first target to the 'out16' directory
+6) Right click on the first target
+7) Select 'Local Options' with brings up the Multi-Page-Dialog
+8) In the 'Directories' section entering 'out16' in the 'Intermediate'
+and 'Final output' fields.
+9) Select 'Ok'
+
+Repeating steps 6-9 for the second target replacing 'out16' with 'out32'
+completes the process.
+
+You should note that the source nodes under both executables are copied 
+under each target. If you wanted to add a source module you would have to
+do so (in this project) in two places to keep you 16bit and 32bit targets
+in synch. To get relief see the example in the SrcPool directory.
+
+
+

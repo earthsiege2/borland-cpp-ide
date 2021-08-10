@@ -1,0 +1,4 @@
+Betty Johnson;99 Feather St.;Little Town;CA;91109;3/1/94
+Billy Barber;456 Sunset Dr.;Big Falls;OR;45231;2/1/94
+Lisa Smith;1 Club St.;Mason;CA;49981;12/3/93
+Tom Glover;1234 River Dr.;San Jose;CA;98721;4/1/94

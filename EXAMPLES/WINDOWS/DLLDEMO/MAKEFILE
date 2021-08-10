@@ -1,0 +1,10 @@
+# Borland C++ - (C) Copyright 1993 by Borland International
+# Makefile for DRAGDROP program
+
+MODEL  = d  #force use of DLLs
+EXERES = dlldemo
+LIBEXE = bitmap.lib
+DLLRES = bitmap
+OBJDLL = bitmap.obj dllshell.obj
+!include $(BCEXAMPLEDIR)\makefile.gen
+

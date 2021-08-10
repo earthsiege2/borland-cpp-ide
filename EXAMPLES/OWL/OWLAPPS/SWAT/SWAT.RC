@@ -1,0 +1,64 @@
+//----------------------------------------------------------------------------
+// ObjectWindows - (C) Copyright 1991, 1993 by Borland International
+//----------------------------------------------------------------------------
+#ifndef WORKSHOP_INVOKED
+  #include <windows.h>
+#endif
+#include "swat.h"
+
+SWATMENU  MENU LOADONCALL MOVEABLE PURE DISCARDABLE
+{
+  POPUP "&Game"
+  {
+    MenuItem  "&New",		IDM_RESET
+    MenuItem  "&Options...", 	IDM_OPTION
+    MenuItem  "&Stop", 		IDM_STOP
+  }
+  MenuItem  "&Pause", 		IDM_PAUSE
+  MenuItem  "&About", 		IDM_ABOUT
+}
+
+ABOUT DIALOG 10, 23, 141, 135
+STYLE DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "About "
+FONT 8, "MS Sans Serif"
+{
+ PUSHBUTTON "OK", IDOK, 46, 114, 48, 14
+ CTEXT "Swat!", -1, 6, 6, 129, 9, WS_CHILD | WS_VISIBLE | SS_CENTER
+ CTEXT "ObjectWindows for C++ Demo", -1, 6, 72, 129, 9, WS_CHILD | WS_VISIBLE | SS_CENTER
+ CTEXT "Copyright \251 1991, 1993 ", -1, 6, 84, 129, 9, WS_CHILD | WS_VISIBLE | SS_CENTER
+ ICON "Critter", -1, 62, 19, 16, 16
+ CTEXT "5 pts per hit", -1, 6, 36, 129, 9, WS_CHILD | WS_VISIBLE | SS_CENTER
+ CTEXT "-1 pts per escape", -1, 6, 48, 129, 9, WS_CHILD | WS_VISIBLE | SS_CENTER
+ CTEXT "-2 pts per miss", -1, 6, 60, 129, 9, WS_CHILD | WS_VISIBLE | SS_CENTER
+ CTEXT "Borland International", -1, 6, 96, 129, 9, WS_CHILD | WS_VISIBLE | SS_CENTER
+}
+
+OPTIONDLG DIALOG 9, 18, 150, 138
+STYLE DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "Options"
+FONT 8, "MS Sans Serif"
+{
+ CTEXT "&Speed:", -1, 6, 6, 138, 9, SS_CENTER | NOT WS_GROUP
+ SCROLLBAR IDD_LIVETIMESB, 6, 18, 138, 9, WS_CHILD | WS_VISIBLE | WS_TABSTOP | SBS_TOPALIGN
+ CTEXT "&Population:", -1, 6, 42, 138, 9, SS_CENTER | NOT WS_GROUP
+ SCROLLBAR IDD_POPSB, 6, 54, 138, 9, WS_CHILD | WS_VISIBLE | WS_TABSTOP | SBS_TOPALIGN
+ PUSHBUTTON "OK", IDOK, 22, 117, 48, 14
+ PUSHBUTTON "Cancel", IDCANCEL, 79, 117, 48, 14
+ LTEXT "Slow", -1, 6, 30, 24, 9, WS_CHILD | WS_VISIBLE
+ RTEXT "Fast", -1, 120, 30, 24, 9, SS_RIGHT | NOT WS_GROUP
+ LTEXT "Low", -1, 10, 66, 24, 9, WS_CHILD | WS_VISIBLE
+ RTEXT "High", -1, 118, 66, 24, 9, SS_RIGHT | NOT WS_GROUP
+ CTEXT "Game &Time in Seconds:", -1, 6, 79, 138, 9, SS_CENTER | NOT WS_GROUP
+ CONTROL "15", IDD_INPUTEDITBOX, "EDIT", WS_BORDER | WS_TABSTOP, 63, 90, 24, 13
+}
+
+Live		BITMAP	live.bmp
+Dead		BITMAP	dead.bmp
+GameOver	BITMAP	gameover.bmp
+Board		BITMAP	board.bmp
+
+Malet		CURSOR	malet.cur
+MaletDown	CURSOR	maletdow.cur
+
+Critter		ICON	critter.ico

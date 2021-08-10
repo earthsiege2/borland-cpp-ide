@@ -1,0 +1,10 @@
+//----------------------------------------------------------------------------
+// ObjectWindows - (C) Copyright 1992, 1993 by Borland International
+//   include\owl\validate.rh
+//   Resources to use with TValidator & derived classes
+//----------------------------------------------------------------------------
+
+#define IDS_VALPXPCONFORM       32520
+#define IDS_VALINVALIDCHAR      32521
+#define IDS_VALNOTINRANGE       32522
+#define IDS_VALNOTINLIST        32523

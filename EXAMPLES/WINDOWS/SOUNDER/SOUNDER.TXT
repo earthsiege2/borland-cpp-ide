@@ -1,0 +1,9 @@
+The Sounder example demonstrates the use of Multimedia commands in 
+a WIN32 application. This example will only run on Windows NT.
+
+Mulitmedia commands are currently not supported in WIN32S.
+If you launch this example on Windows 3.1 with WIN32S, you will
+get an error message and the application will exit.
+
+This example does require a sound card and appropriate driver to be
+installed on your NT system.

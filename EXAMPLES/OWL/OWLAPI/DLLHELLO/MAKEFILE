@@ -1,0 +1,15 @@
+#----------------------------------------------------------------------------
+# ObjectWindows - (C) Copyright 1991, 1993 by Borland International
+#----------------------------------------------------------------------------
+
+MODELS = d   #force use of DLL
+EXERES = calldll
+LIBEXE = dllhello.lib
+DLLRES = dllhello                     # use this target for generating DLLRULE
+DLLALL = dllhello.dll resource.dll
+DLLMAKE= $(DLLHELLO) $(RESOURCE)
+
+DLLHELLO = $(DLLRULE:dllhello.res=)     # no resource for this DLL
+TEMPRULE = $(DLLRULE:dllhello=resource) # change name for the other DLL
+RESOURCE = $(TEMPRULE:resource.obj=)    # no code module used for resource DLL
+!include $(BCEXAMPLEDIR)\owlmake.gen

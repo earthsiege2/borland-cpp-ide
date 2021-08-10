@@ -1,0 +1,50 @@
+//----------------------------------------------------------------------------
+// ObjectWindows - (C) Copyright 1991, 1993 by Borland International
+//----------------------------------------------------------------------------
+#ifndef WS_POPUP
+  #include <windows.h>
+#endif
+#include <owl\editfile.rh>
+#include "truetype.h"
+
+MR_TRUETYPE MENU 
+{
+  POPUP "&File"
+  {
+    MENUITEM "&Print...", CM_FILEPRINT
+    MENUITEM SEPARATOR
+    MENUITEM "E&xit\tAlt+F4", CM_EXIT
+  }
+
+  POPUP "&Options"
+  {
+    MENUITEM "&Shadows", CM_SHADOWS
+    MENUITEM "&Alignment Marks", CM_ALIGNMENTMARKS
+    MENUITEM "&Fonts...", CM_FONTS
+  }
+
+  POPUP "&Help"
+  {
+    MENUITEM "&About", CM_ABOUT
+  }
+}
+
+ABOUT DIALOG 17, 23, 142, 120
+STYLE DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "About"
+FONT 8, "MS Sans Serif"
+{
+ PUSHBUTTON "OK", 1, 52, 97, 38, 15
+ CTEXT "Borland C++ ObjectWindows", 103, 13, 51, 115, 10, SS_CENTER | WS_CHILD | WS_VISIBLE
+ CTEXT "Copyright \251 1991, 1993", 104, 35, 72, 78, 10, SS_CENTER | WS_CHILD | WS_VISIBLE
+ CTEXT "Borland International", 108, 36, 82, 70, 9, SS_CENTER | WS_CHILD | WS_VISIBLE
+ CTEXT "TrueType Font Lab", -1, 25, 7, 92, 8
+ CTEXT "Windows 3.1 Demo Program", -1, 19, 62, 104, 8
+ ICON 1, -1, 63, 25, 16, 16, SS_ICON | WS_CHILD | WS_VISIBLE | WS_GROUP
+}
+
+#include <owl\printer.rh>
+#include <owl\printer.rc>
+#include <font.rc>
+
+1 ICON "truetype.ico"

@@ -1,0 +1,10 @@
+//----------------------------------------------------------------------------
+// ObjectWindows - (C) Copyright 1991, 1993 by Borland International
+//----------------------------------------------------------------------------
+#include <owl\window.rh>
+
+#define CM_FILEOPEN       0x100
+#define CM_COLOR          0x101
+#define CM_FONT           0x102
+
+#define CM_HELPABOUT      0x200

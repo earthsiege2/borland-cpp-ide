@@ -1,0 +1,42 @@
+//----------------------------------------------------------------------------
+// ObjectWindows - (C) Copyright 1991, 1993 by Borland International
+//----------------------------------------------------------------------------
+#ifndef WORKSHOP_INVOKED
+  #include <windows.h>
+#endif
+
+#define CM_EMPINPUT 201
+
+#include <owl\validate.rh>
+#include <owl\validate.rc>
+#include <owl\owlapp.rc>         // default owl app icon
+
+200 MENU
+{
+  POPUP "&Input"
+  {
+    MENUITEM "&Employee", CM_EMPINPUT
+  }
+}
+
+EMPLOYEEINFO DIALOG 65, 36, 174, 113
+STYLE DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
+FONT 8, "MS Sans Serif"
+{
+ RTEXT "&Name:", -1, 6, 8, 29, 9, SS_RIGHT | NOT WS_GROUP
+ EDITTEXT 101, 36, 6, 129, 12
+ RTEXT "&SS#:", -1, 6, 26, 29, 9, SS_RIGHT | NOT WS_GROUP
+ EDITTEXT 102, 36, 24, 48, 12
+ RTEXT "Emp. &ID:", -1, 105, 26, 32, 9, SS_RIGHT | WS_CHILD | WS_VISIBLE
+ EDITTEXT 103, 138, 24, 27, 12
+ RTEXT "&Dept:", -1, 6, 44, 29, 9, SS_RIGHT | NOT WS_GROUP
+ EDITTEXT 104, 36, 42, 48, 12, ES_LEFT | WS_CHILD | WS_VISIBLE | WS_BORDER | WS_TABSTOP
+ RTEXT "Se&curity:", -1, 6, 62, 29, 9, SS_RIGHT | NOT WS_GROUP
+ EDITTEXT 105, 36, 60, 48, 12, ES_LEFT | WS_CHILD | WS_VISIBLE | WS_BORDER | WS_TABSTOP
+ CONTROL "", -1, "static", SS_BLACKFRAME | WS_CHILD | WS_VISIBLE, 105, 42, 60, 40
+ CONTROL "&Full Time", 106, "BUTTON", BS_AUTOCHECKBOX | WS_CHILD | WS_VISIBLE | WS_TABSTOP, 110, 45, 50, 10
+ CONTROL "&Permanent", 107, "BUTTON", BS_AUTOCHECKBOX | WS_CHILD | WS_VISIBLE | WS_TABSTOP, 110, 57, 50, 10
+ CONTROL "&Exempt", 108, "BUTTON", BS_AUTOCHECKBOX | WS_CHILD | WS_VISIBLE | WS_TABSTOP, 110, 69, 50, 10
+ DEFPUSHBUTTON "OK", IDOK, 36, 93, 48, 14
+ PUSHBUTTON "Cancel", IDCANCEL, 90, 93, 48, 14
+}

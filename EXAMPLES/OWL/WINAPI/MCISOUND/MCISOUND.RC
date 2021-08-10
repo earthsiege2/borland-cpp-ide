@@ -1,0 +1,40 @@
+//----------------------------------------------------------------------------
+// ObjectWindows - (C) Copyright 1991, 1993 by Borland International
+//----------------------------------------------------------------------------
+#ifndef WORKSHOP_INVOKED
+  #include <windows.h>
+#endif
+#include "mcisound.h"
+
+ID_MENU MENU
+BEGIN
+  POPUP "File"
+  BEGIN
+    MENUITEM "&Open Wave\tCtrl+O...", SM_OPEN
+    MENUITEM SEPARATOR
+    MENUITEM "E&xit", SM_EXIT
+  END
+ 
+  POPUP "Control"
+  BEGIN
+    MENUITEM "&Rewind\tCtrl+R", SM_REWIND, GRAYED
+    MENUITEM "&Play\tCtrl+P", SM_PLAY, GRAYED
+    MENUITEM "&Stop\tCtrl+S", SM_STOP, GRAYED
+  END
+  POPUP "Help"
+  BEGIN
+    MENUITEM "&About", SM_ABOUT
+  END
+END
+
+IDA_SOUNDPLY ACCELERATORS
+BEGIN
+  "^o", SM_OPEN
+  "^r", SM_REWIND
+  "^p", SM_PLAY
+  "^a", SM_PLAY
+  "^s", SM_STOP
+END
+
+#define NO_BR_VSLIDERTHUMB
+#include <owl\slider.rc>

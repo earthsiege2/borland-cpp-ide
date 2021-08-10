@@ -1,0 +1,10 @@
+#----------------------------------------------------------------------------
+# ObjectWindows - (C) Copyright 1991, 1993 by Borland International
+#   intldemo\makefile
+#----------------------------------------------------------------------------
+SYSTEMS = WIN16
+EXERES = intldemo
+LIBEXE = $(BCLIBDIR)\bwcc.lib
+OBJEXE = intldemo.obj fmtval.obj
+MODELS = mldf
+!include $(BCEXAMPLEDIR)\owlmake.gen

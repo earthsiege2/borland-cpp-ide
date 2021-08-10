@@ -1,0 +1,45 @@
+/*------------------------------------------------------------------------*/
+/*                                                                        */
+/*  ASSOC.CPP                                                             */
+/*                                                                        */
+/*  Copyright Borland International 1991, 1993                            */
+/*  All Rights Reserved                                                   */
+/*                                                                        */
+/*------------------------------------------------------------------------*/
+
+#if !defined( __IOSTREAM_H )
+#include <iostream.h>
+#endif	// __IOSTREAM_H
+
+#if !defined( CHECKS_H )
+#include <checks.h>
+#endif  // CHECKS_H
+
+#if !defined( __ASSOC_H )
+#include "classlib\obsolete\assoc.h"
+#endif  // __ASSOC_H
+
+Association::~Association()
+{
+    if( !ownsElements() )
+        return;
+    if( &aKey != ZERO )
+        delete &aKey;
+    if( &aValue != ZERO )
+        delete &aValue;
+}
+
+void Association::printOn( ostream& outputStream ) const
+{
+    outputStream << " " << nameOf() << " { ";
+    aKey.printOn( outputStream );
+    outputStream << ", ";
+    aValue.printOn( outputStream );
+    outputStream << " }\n";
+}
+
+int Association::isEqual( const Object& toObject ) const
+{
+    return aKey == ( (Association&)toObject ).key();
+}
+

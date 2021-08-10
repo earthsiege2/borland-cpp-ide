@@ -1,0 +1,14 @@
+<<[CPP]
+##@OPT_APPL_DOCVIEW != TRUE
+##:%"Class Manager shouldn't allow DocView to be touched if not selected at AppGen.  "
+##*
+##"//{{DOC_VIEW}}" [[DocVMarker]]
+##^BOF
+##? DocVMarker [[Search]]
+##Search == FALSE
+##:%"Unable to locate Doc/View marker.  "
+##*
+##^BOL
+##^SCROLL
+##^^
+>>[CPP]

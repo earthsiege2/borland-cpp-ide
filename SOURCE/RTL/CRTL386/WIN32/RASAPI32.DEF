@@ -1,0 +1,19 @@
+LIBRARY     RASAPI32.dll
+
+EXPORTS
+    RasDialA                       @1   
+    RasDialW                       @2   
+    RasEnumConnectionsA            @3   
+    RasEnumConnectionsW            @4   
+    RasEnumEntriesA                @5   
+    RasEnumEntriesW                @6   
+    RasGetConnectStatusA           @7   
+    RasGetConnectStatusW           @8   
+    RasGetErrorStringA             @9   
+    RasGetErrorStringW             @10  
+    RasGetExtendedError            @11  
+    RasGetExtendedErrorString      @12  
+    RasGetHport                    @13  
+    RasHangUpA                     @14  
+    RasHangUpW                     @15  
+    _RasDial                       @16  

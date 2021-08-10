@@ -1,0 +1,22 @@
+#*------------------------------------------------------------------------*/
+#*                                                                        */
+#*  MAKEFILE                                                              */
+#*                                                                        */
+#*  Copyright Borland International, 1993                                 */
+#*                                                                        */
+#*  Streaming example makefile                                            */
+#*                                                                        */
+#*------------------------------------------------------------------------*/
+
+EXE    = stream0
+RESEXE = streams.res
+RESEXE_= streams.h
+EXEALL = stream0.exe stream1.exe stream2.exe
+EXEMAKE= $(STREAM0) $(STREAM1) $(STREAM2)
+
+STREAM0 = $(EXERULE)
+STREAM1 = $(EXERULE:stream0=stream1)
+STREAM2 = $(EXERULE:stream0=stream2)
+
+!include $(BCEXAMPLEDIR)\owlmake.gen
+

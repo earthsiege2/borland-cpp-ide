@@ -1,0 +1,31 @@
+//----------------------------------------------------------------------------
+// ObjectWindows - (C) Copyright 1991, 1993 by Borland International
+//----------------------------------------------------------------------------
+#ifndef WORKSHOP_INVOKED
+  #include <windows.h>
+#endif
+#include "ddecli.rh"
+#include <owl\inputdia.rh>
+#include <owl\inputdia.rc>
+
+TDMLClWnd_MENU MENU
+BEGIN
+  POPUP "&File"
+  BEGIN
+    MENUITEM "E&xit", CM_EXIT
+  END
+
+  MENUITEM "&Connect!", CM_CONNECT
+  MENUITEM "&Request!", CM_REQUEST, GRAYED
+  MENUITEM "&Poke!", CM_POKE, GRAYED
+
+  POPUP "&Advise"
+  BEGIN
+    MENUITEM "Advise Loop", CM_ADVISE, GRAYED
+  END
+
+  POPUP "\a&Help"
+  BEGIN
+    MENUITEM "&About", CM_HELPABOUT
+  END
+END

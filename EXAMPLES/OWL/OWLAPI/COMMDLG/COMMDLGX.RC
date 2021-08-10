@@ -1,0 +1,26 @@
+//----------------------------------------------------------------------------
+// ObjectWindows - (C) Copyright 1991, 1993 by Borland International
+//----------------------------------------------------------------------------
+#ifndef WORKSHOP_INVOKED
+  #include <windows.h>
+#endif
+#include "commdlgx.rh"
+#include <owl\owlapp.rc>         // default owl app icon
+
+CMDLGAPMENU MENU
+BEGIN
+  POPUP "&File"
+  BEGIN
+    MENUITEM "E&xit", CM_EXIT
+  END
+  POPUP "&Text"
+  BEGIN
+    MENUITEM "&String...", CM_FILEOPEN
+    MENUITEM "&Color...", CM_COLOR
+    MENUITEM "&Font...", CM_FONT
+  END
+  POPUP "\a&Help"
+  BEGIN
+    MENUITEM "&About...", CM_HELPABOUT
+  END
+END

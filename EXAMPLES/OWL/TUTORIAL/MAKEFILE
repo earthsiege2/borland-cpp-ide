@@ -1,0 +1,40 @@
+#-----------------------------------------------------------------------------
+# ObjectWindows - (C) Copyright 1993 by Borland International
+#   Tutorial application -- makefile.
+#
+# The following models may be built by defines on command line or environment:
+#   16-bit OWL DLL model: make          (MODEL=d, SYSTEM=WIN16 are defaults)
+#   16-bit medium model:  make MODEL=m  (SYSTEM=WIN16 is the default)
+#   16-bit large model:   make MODEL=l  (SYSTEM=WIN16 is the default)
+#   32-bit static model:  make SYSTEM=WIN32 MODEL=f
+#   32-bit OWL DLL model: make SYSTEM=WIN32 MODEL=d
+# Additionally set DEBUG=1 to build with debug information
+# Specify TARGET=step??.exe to build only one target step, rather than all 12
+# Specify DOCVIEW=?????.obj to add more doc/view classes (must delete *.mak)
+#           (requires .cpp file with template(s) and .rc file with resources)
+#
+#-----------------------------------------------------------------------------
+
+MODELS=mldf
+EXERES = step01
+EXEALL = step01.exe step02.exe step03.exe step04.exe step05.exe step06.exe\
+         step07.exe step08.exe step09.exe step10.exe step11.exe step12.exe
+EXEMAKE= $(STEP1) $(STEP2) $(STEP3) $(STEP4)  $(STEP5)  $(STEP6)\
+         $(STEP7) $(STEP8) $(STEP9) $(STEP10) $(STEP11) $(STEP12)
+
+STEP1=$(EXERULE:step01.res=)
+STEP2 = $(STEP1:step01=step02)
+STEP3 = $(STEP1:step01=step03)
+STEP4 = $(STEP1:step01=step04)
+STEP5=$(EXERULE:step01=step05)
+STEP6 = $(STEP5:step05=step06)
+STEP7 = $(STEP5:step05=step07)
+STEP8 = $(STEP5:step05=step08)
+STEP9 = $(STEP5:step05=step09)
+STEP10= $(STEP5:step05=step10)
+STEPV=$(EXERULE:step01.obj=step01.obj step01dv.obj $(DOCVIEW))
+STEPW = $(STEPV:step01.res=step01.res step01dv.res $(DOCVIEW:.obj=.res))
+STEP11= $(STEPW:step01=step11)
+STEP12= $(STEPW:step01=step12)
+
+!include $(BCEXAMPLEDIR)\owlmake.gen

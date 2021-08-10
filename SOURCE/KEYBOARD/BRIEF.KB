@@ -1,0 +1,824 @@
+/***********************************************************************
+
+              BRIEF editor emulation for Borland C++ IDE.
+
+        This file contains a KEYMAPR script which emulates the
+default BRIEF programmer's editor in the Borland C++ IDE.  A complete
+description of the KEYMAPR language and compiler may be found in on-line help
+
+****************************************************************/
+
+Script  BRIEF;
+
+/******* Compatibility Macros ********/
+MACRO DeleteToEOL
+  IF NOT InqCursorPastEOF THEN
+    BEGIN
+      UndoGroupWithDelete;
+      SetTempPos;
+      RightOfLine;
+      SetTempEndPos;
+      DeleteTempBlock;
+      FixScreenPos;
+    END
+  ENDIF;
+END;
+
+MACRO RightOfWord
+  CursorRightSkipWord;
+  CursorRightSkipNonWord;
+  FixScreenPos;
+END;
+
+MACRO WordLeft
+  CursorLeftSkipNonWord;
+  CursorLeftSkipWordStream;
+  FixScreenPos;
+END;
+
+MACRO WordRight
+  CursorRightSkipWordStream;
+  CursorRightSkipNonWord;
+  FixScreenPos;
+END;
+
+MACRO BriefWordLeft
+  IF InqValidEmptyBlock THEN
+    BEGIN
+      ExtendBlockBeg;
+      CursorLeftSkipNonWord;
+      CursorLeftSkipWordStream;
+      ExtendBlockEnd;
+      HighlightBlock;
+    END
+  ELSE
+    BEGIN
+      CursorLeftSkipNonWord;
+      CursorLeftSkipWordStream;
+    END
+  ENDIF;
+  FixScreenPos;
+END;
+
+MACRO BriefWordRight
+  IF InqValidEmptyBlock THEN
+    BEGIN
+      ExtendBlockBeg;
+      CursorRightSkipWordStream;
+      CursorRightSkipNonWord;
+      ExtendBlockEnd;
+      HighlightBlock;
+    END
+  ELSE
+    BEGIN
+      CursorRightSkipWordStream;
+      CursorRightSkipNonWord;
+    END
+  ENDIF;
+  FixScreenPos;
+END;
+
+MACRO MacBriefHome
+  IF InqCursorAtBOL THEN
+    IF InqCursorAtBOW THEN
+      HomeCursor
+    ELSE
+      TopOfScreen
+    ENDIF
+  ELSE
+    LeftOfLine
+  ENDIF;
+END;
+
+MACRO BriefHome
+  IF InqValidEmptyBlock THEN
+    BEGIN
+      ExtendBlockBeg;
+      MacBriefHome;
+      ExtendBlockEnd;
+      HighlightBlock;
+    END
+  ELSE
+    MacBriefHome
+  ENDIF;
+  FixScreenPos;
+END;
+
+MACRO MacBriefEnd
+  IF InqCursorAtEOL THEN
+    IF InqCursorAtEOW THEN
+      EndCursor
+    ELSE
+      BEGIN
+        BottomOfScreen;
+        RightOfLine;
+      END
+    ENDIF
+  ELSE
+    RightOfLine
+  ENDIF;
+END;
+
+MACRO BriefEnd
+  IF InqValidEmptyBlock THEN
+    BEGIN
+      ExtendBlockBeg;
+      MacBriefEnd;
+      ExtendBlockEnd;
+      HighlightBlock;
+    END
+  ELSE
+    MacBriefEnd
+  ENDIF;
+  FixScreenPos;
+END;
+
+MACRO BriefBackspaceProc
+  IF InqOvertype THEN
+    BEGIN
+      CursorLeft;
+      IF NOT InqCursorOnChar('\t') THEN
+        BEGIN
+          LiteralChar(' ');
+          CursorLeft;
+          FixScreenPos;
+        END
+      ENDIF
+    END
+  ELSE
+    BEGIN
+      IF InqCursorOnChar('\t') THEN
+	IF InqCursorInTabSpace THEN
+          CursorCharRight;
+	ENDIF;
+      ENDIF;
+      CursorCharLeft;
+      DeleteChar;
+      FixScreenPos;
+    END
+  ENDIF
+END;
+
+MACRO BriefBackspace
+  UndoGroupWithDelete;
+  IF InqCursorPastEOF THEN
+    BackTab;
+  ELSE
+    IF NOT InqCursorAtBOL THEN
+      BEGIN
+        IF InqCursorPastEOL THEN
+          BEGIN
+            IF InqCursorAtEOL THEN
+              BriefBackspaceProc
+            ELSE
+              BEGIN
+                BackTab;
+                IF NOT InqCursorPastEOL THEN
+                  IF NOT InqCursorAtEOL THEN
+                    RightOfLine;
+                  ENDIF
+                ENDIF
+              END
+            ENDIF
+          END
+        ELSE
+          BriefBackspaceProc
+        ENDIF
+      END
+    ENDIF;
+  ENDIF;
+END;
+
+MACRO BriefTab
+  IF InqValidBlock THEN
+    IF InqAutoIndent THEN
+      IndentBlock
+    ELSE
+      IF InqOvertype THEN
+        ForeTab
+      ELSE
+        LiteralChar('\t')
+      ENDIF
+    ENDIF
+  ELSE
+    IF InqOvertype THEN
+      ForeTab
+    ELSE
+      LiteralChar('\t')
+    ENDIF
+  ENDIF;
+END;
+
+MACRO BriefBackTab
+  IF InqValidBlock THEN
+    IF InqAutoOutdent THEN
+      OutdentBlock
+    ELSE
+      BackTab
+    ENDIF
+  ELSE
+    BackTab
+  ENDIF
+END;
+
+MACRO BriefDelete
+  IF InqValidBlock THEN
+    DeleteBlock
+  ELSE
+    DeleteChar
+  ENDIF;
+  FixScreenPos;
+END;
+
+MACRO BriefLeft
+  IF InqValidEmptyBlock THEN
+    BEGIN
+      ExtendBlockBeg;
+      CursorSwitchedLeft;
+      ExtendBlockEnd;
+      HighlightBlock;
+    END
+  ELSE
+    CursorSwitchedLeft
+  ENDIF;
+END;
+
+MACRO BriefRight
+  IF InqValidEmptyBlock THEN
+    BEGIN
+      ExtendBlockBeg;
+      CursorSwitchedRight;
+      ExtendBlockEnd;
+      HighlightBlock;
+    END
+  ELSE
+    CursorSwitchedRight
+  ENDIF;
+END;
+
+MACRO BriefLineUp
+  IF InqValidEmptyBlock THEN
+    BEGIN
+      ExtendBlockBeg;
+      CursorUp;
+      ExtendBlockEnd;
+      HighlightBlock;
+    END
+  ELSE
+    CursorUp
+  ENDIF;
+END;
+
+MACRO BriefLineDown
+  IF InqValidEmptyBlock THEN
+    BEGIN
+      ExtendBlockBeg;
+      CursorDown;
+      ExtendBlockEnd;
+      HighlightBlock;
+    END
+  ELSE
+    CursorDown
+  ENDIF;
+END;
+
+MACRO BriefPageUp
+  IF InqValidEmptyBlock THEN
+    BEGIN
+      ExtendBlockBeg;
+      PageUp;
+      FixCursorPos;
+      ExtendBlockEnd;
+      HighlightBlock;
+    END
+  ELSE
+    BEGIN
+      PageUp;
+      FixCursorPos;
+    END
+  ENDIF;
+END;
+
+MACRO BriefPageDown
+  IF InqValidEmptyBlock THEN
+    BEGIN
+      ExtendBlockBeg;
+      PageDown;
+      FixCursorPos;
+      ExtendBlockEnd;
+      HighlightBlock;
+    END
+  ELSE
+    BEGIN
+      PageDown;
+      FixCursorPos;
+    END
+  ENDIF;
+END;
+
+MACRO BriefFileEnd
+  IF InqValidEmptyBlock THEN
+    BEGIN
+      ExtendBlockBeg;
+      EndCursor;
+      ExtendBlockEnd;
+      HighlightBlock;
+    END
+  ELSE
+    EndCursor
+  ENDIF;
+  FixScreenPos;
+END;
+
+MACRO BriefFileBeg
+  IF InqValidEmptyBlock THEN
+    BEGIN
+      ExtendBlockBeg;
+      HomeCursor;
+      ExtendBlockEnd;
+      HighlightBlock;
+    END
+  ELSE
+    HomeCursor
+  ENDIF;
+  FixScreenPos;
+END;
+
+MACRO BriefMarkLineIfNotMarked
+  IF NOT InqValidBlock THEN
+    BEGIN
+      SetBlockBeg;
+      SetBlockEnd;
+      SetLineBlock;
+      HighlightBlock;
+    END
+  ENDIF;
+END;
+
+MACRO BriefColumnMark
+  IF InqColumnBlock THEN
+    BEGIN
+      SetNonInclusiveBlock;
+      HideBlock;
+    END
+  ELSE
+    BEGIN
+      SetColumnBlock;
+      SetBlockBeg;
+      SetBlockEnd;
+      HighlightBlock;
+    END
+  ENDIF
+END;
+
+MACRO BriefInclusiveMark
+  IF InqInclusiveBlock THEN
+    BEGIN
+      SetNonInclusiveBlock;
+      HideBlock;
+    END
+  ELSE
+    BEGIN
+      SetInclusiveBlock;
+      SetBlockBeg;
+      SetBlockEnd;
+      HighlightBlock;
+    END
+  ENDIF
+END;
+
+MACRO BriefNonInclusiveMark
+  IF InqNonInclusiveBlock THEN
+    IF InqValidEmptyBlock THEN
+      HideBlock;
+    ELSE
+      BEGIN
+        SetBlockBeg;
+        SetBlockEnd;
+        HighlightBlock;
+      END
+    ENDIF
+  ELSE
+    BEGIN
+      SetNonInclusiveBlock;
+      SetBlockBeg;
+      SetBlockEnd;
+      HighlightBlock;
+    END
+  ENDIF
+END;
+
+MACRO BriefLineMark
+  IF InqLineBlock THEN
+    BEGIN
+      SetNonInclusiveBlock;
+      HideBlock;
+    END
+  ELSE
+    BEGIN
+      SetLineBlock;
+      SetBlockBeg;
+      SetBlockEnd;
+      HighlightBlock;
+    END
+  ENDIF
+END;
+
+/******* Macros ********/
+MACRO MacScrollUp
+  ScrollScreenUp;
+  FixCursorPos;
+END;
+
+MACRO MacScrollDown
+  ScrollScreenDown;
+  FixCursorPos;
+END;
+
+MACRO MacDeleteLine
+  UndoGroupWithDelete;
+  SetBlockBeg; SetBlockEnd;
+  BriefLineMark;
+  DeleteBlock;
+  SetNonInclusiveBlock;
+END;
+
+
+MACRO MacMarkWord
+  HideBlock;
+  SetTempPos;
+  CursorRight;
+  WordLeft;
+  RightOfWord;
+  SetBlockEnd;
+  WordLeft;
+  SetBlockBeg;
+  HighlightBlock;
+  MoveToTempPos;
+END;
+
+MACRO MacCopyBlock
+  BriefMarkLineIfNotMarked;
+  ClipCopy;
+  HideBlock;
+  SetNonInclusiveBlock;
+  CenterFixScreenPos;
+END;
+
+MACRO MacCutBlock
+  BriefMarkLineIfNotMarked;
+  ClipCut;
+  SetNonInclusiveBlock;
+  CenterFixScreenPos;
+END;
+
+MACRO MacDeleteNextWord
+  UndoGroupWithDelete;
+  SetTempPos;
+  CursorRightSkipWord;
+  CursorRightSkipWhite;
+  SetTempEndPos;
+  DeleteTempBlock;
+  FixScreenPos;
+END;
+
+MACRO MacDeletePrevWord
+  UndoGroupWithDelete;
+  SetTempEndPos;
+  CursorLeftSkipNonWord;
+  CursorLeftSkipWord;
+  SetTempPos;
+  DeleteTempBlock;
+  FixScreenPos;
+END;
+
+MACRO MacDeleteToBOL
+  UndoGroupWithDelete;
+  SetPrevPos;
+  LeftOfLine;
+  SetTempPos;
+  MoveToPrevPos;
+  SetTempEndPos;
+  DeleteTempBlock;
+  FixScreenPos;
+END;
+
+MACRO MacOpenLine
+  UndoGroupWithInsert;
+  SetPrevPos;
+  RightOfLine;
+  LiteralChar(13);
+END;
+
+MACRO MacEscape
+  HideBlock; SetNonInclusiveBlock;
+END;
+
+MACRO MacDeleteKey
+  BriefDelete;
+  SetNonInclusiveBlock;
+END;
+
+MACRO MacToggleCase
+  UndoGroupWithNone;
+  IF InqValidBlock THEN
+    ToggleCase;
+  ELSE
+    BEGIN
+      SetNonInclusiveBlock;
+      SetBlockBeg;
+      CursorCharRight;
+      SetBlockEnd;
+      HighlightBlock;
+      ToggleCase;
+      HideBlock;
+    END
+  ENDIF;
+END;
+
+/******* Brief Key Bindings  ******/
+
+KEYBOARD System
+F7        : RecordKeyMacro;
+F8        : PlaybackKeyMacro;
+F9        : MakeProject;  : MakeProject
+F10       : Menu;
+
+shift-F4: WindowTileHorz;
+
+Alt-F2    : ZoomWindow;   : ZoomWindow
+Alt-F3    : InspectAtCursor; : InspectAtCursor
+Alt-F7    : RunToHere;    : RunToHere
+Alt-F9    : LocalMenu;
+Alt-F10   : CompileFile;  : CompileFile
+
+ctrl-F2   : TerminateProgram;     : TerminateProgram
+ctrl-F3   : ViewCallStack;
+ctrl-F7   : Modify; : Modify
+ctrl-F8   : ToggleBreakpoint; : ToggleBreakpoint
+ctrl-F9   : RunProgram;       : RunProgram
+
+Ctrl-N    : NextError;    : PrevError
+Ctrl-P    : PrevError;    : NextError
+
+Alt-E       : OpenFile;     : OpenFile
+Alt-Shift-E : OpenFile;
+Alt-H       : Help;         : Help
+Alt-Shift-H : Help;
+Alt-O       : SaveFileAs;   : SaveFileAs
+Alt-Shift-O : SaveFileAs;
+Alt-W       : SaveFile;     : SaveFile
+Alt-Shift-W : SaveFile;
+Alt-X       : Quit;         : Quit
+Alt-Shift-X : Quit;
+Alt-Z       : FileMenu;
+Alt-Shift-Z : FileMenu;
+
+/* ---- Pane mgmt keys ------------------ */
+Shift-UpAr  : MoveToPane(0);
+Alt-UpAr    : MoveToPane(0);
+F1+UpAr     : MoveToPane(0);
+Shift-DnAr  : MoveToPane(1);
+Alt-DnAr    : MoveToPane(1);
+F1+DnAr     : MoveToPane(1);
+Shift-LfAr  : MoveToPane(2);
+Alt-LfAr    : MoveToPane(2);
+F1+LfAr     : MoveToPane(2);
+Shift-RgAr  : MoveToPane(3);
+Alt-RgAr    : MoveToPane(3);
+F1+RgAr   : MoveToPane(3);
+F2+UpAr   : MovePaneEdge(0);
+F2+DnAr   : MovePaneEdge(1);
+F2+LfAr   : MovePaneEdge(2);
+F2+RgAr   : MovePaneEdge(3);
+F3+DnAr   : CreatePane(0);
+F3+UpAr   : CreatePane(1);
+F3+LfAr   : CreatePane(3);
+F3+RgAr   : CreatePane(2);
+F4+UpAr   : DeletePane(0);
+F4+DnAr   : DeletePane(1);
+F4+LfAr   : DeletePane(2);
+F4+RgAr   : DeletePane(3);
+
+END;
+
+KEYBOARD Editor
+F5        : GetFindString; : GetFindString
+F6        : Replace;       : Replace
+
+Alt-F5    : ReverseSearch;
+/* Alt-F6    : ReverseReplace; next time */
+
+Shift-F5  : RepeatSearch;  : RepeatSearch
+/* Shift-F6  : RepeatReplace; next time */
+
+/* Ctrl-F1 is mapped to HelpKeywordSearch for backward compatibility with */
+/* the previous IDEs. It should be considered reserved by Borland and     */
+/* subject to change in future releases.                                  */
+
+Ctrl-F1   : HelpKeywordSearch;  : HelpKeywordSearch
+
+Ctrl-F5   : ToggleCaseSensitive;
+Ctrl-F6   : ToggleRegExp;
+
+Esc       : MacEscape;
+Del       : MacDeleteKey;
+PgDn      : BriefPageDown;
+PgUp      : BriefPageUp;
+UpAr      : BriefLineUp;
+DnAr      : BriefLineDown;
+Star      : Undo; : Undo
+Home      : BriefHome;
+End       : BriefEnd;
+BkSp      : BriefBackspace;
+shift-BkSp: BriefBackspace;
+Tab       : BriefTab;
+shift-Tab : BriefBackTab;
+LfAr      : BriefLeft;
+RgAr      : BriefRight;
+ctrl-LfAr : BriefWordLeft;
+ctrl-RgAr : BriefWordRight;
+ctrl-PgDn : BriefFileEnd;
+ctrl-PgUp : BriefFileBeg;
+shift-Home: LeftOfScreen;
+shift-End : RightOfScreen;
+enter     : LiteralChar(13);
+ctrl-Home : TopOfScreen;
+ctrl-End  : BottomOfScreen;
+Ins       : BEGIN ClipPaste; HideBlock END;     : ClipPaste
+Plus      : MacCopyBlock;  : ClipCopy
+Minus     : MacCutBlock;   : ClipCut
+
+Ctrl-A    : LiteralChar(1);
+Ctrl-B    : CursorLineToWindowBottom;
+Ctrl-C    : CenterLineInWindow;
+Ctrl-D    : MacScrollDown;
+Ctrl-E    : MacScrollUp;
+Ctrl-F    : LiteralChar(6);
+ctrl-G    : LiteralChar(7);
+/* Ctrl-G    : BrowserMenu;   not implemented */
+ctrl-H    : LiteralChar(8);
+ctrl-I    : LiteralChar(9);
+ctrl-J    : LiteralChar(10);
+Ctrl-K    : MacDeleteToBOL;
+ctrl-L    : LiteralChar(12);
+Ctrl-M    : LiteralChar(13);
+ctrl-R    : LiteralChar(18);
+Ctrl-S    : IncrementalSearch;
+Ctrl-T    : CursorLineToWindowTop;
+Ctrl-U    : Redo; : Redo
+ctrl-V    : LiteralChar(22);
+ctrl-W    : LiteralChar(23);
+/* Ctrl-W    : ToggleBackup;  not implemented */
+ctrl-X    : LiteralChar(24);
+ctrl-Y    : LiteralChar(25);
+ctrl-Z    : LiteralChar(26);
+Ctrl-bksp : MacDeletePrevWord;
+Ctrl-enter : MacOpenLine;
+
+Alt-A       : BriefNonInclusiveMark;
+Alt-Shift-A : BriefNonInclusiveMark;
+Alt-B       : BufferList; : BufferList
+Alt-Shift-B : BufferList;
+Alt-C       : BriefColumnMark;
+Alt-Shift-C : BriefColumnMark;
+Alt-D       : MacDeleteLine;
+Alt-Shift-D : MacDeleteLine;
+Alt-G       : GoToLine; : GoToLine
+Alt-Shift-G : GoToLine;
+Alt-I       : ToggleInsert;
+Alt-Shift-I : ToggleInsert;
+Alt-J+0       : BEGIN MoveToMark(0); FixScreenPos; END;
+Alt-Shift-J+0 : BEGIN MoveToMark(0); FixScreenPos; END;
+Alt-J+1       : BEGIN MoveToMark(1); FixScreenPos; END;
+Alt-Shift-J+1 : BEGIN MoveToMark(1); FixScreenPos; END;
+Alt-J+2       : BEGIN MoveToMark(2); FixScreenPos; END;
+Alt-Shift-J+2 : BEGIN MoveToMark(2); FixScreenPos; END;
+Alt-J+3       : BEGIN MoveToMark(3); FixScreenPos; END;
+Alt-Shift-J+3 : BEGIN MoveToMark(3); FixScreenPos; END;
+Alt-J+4       : BEGIN MoveToMark(4); FixScreenPos; END;
+Alt-Shift-J+4 : BEGIN MoveToMark(4); FixScreenPos; END;
+Alt-J+5       : BEGIN MoveToMark(5); FixScreenPos; END;
+Alt-Shift-J+5 : BEGIN MoveToMark(5); FixScreenPos; END;
+Alt-J+6       : BEGIN MoveToMark(6); FixScreenPos; END;
+Alt-Shift-J+6 : BEGIN MoveToMark(6); FixScreenPos; END;
+Alt-J+7       : BEGIN MoveToMark(7); FixScreenPos; END;
+Alt-Shift-J+7 : BEGIN MoveToMark(7); FixScreenPos; END;
+Alt-J+8       : BEGIN MoveToMark(8); FixScreenPos; END;
+Alt-Shift-J+8 : BEGIN MoveToMark(8); FixScreenPos; END;
+Alt-J+9       : BEGIN MoveToMark(9); FixScreenPos; END;
+Alt-Shift-J+9 : BEGIN MoveToMark(9); FixScreenPos; END;
+Alt-K       : DeleteToEOL;
+Alt-Shift-K : DeleteToEOL;
+Alt-L       : BriefLineMark;
+Alt-Shift-L : BriefLineMark;
+Alt-M       : BriefInclusiveMark;
+Alt-Shift-M : BriefInclusiveMark;
+Alt-N       : NextBuffer;
+Alt-Shift-N : NextBuffer;
+/* Alt-P       : PrintBlock; next time */
+/* Alt-Shift-P : PrintBlock; next time */
+Alt-Q       : LiteralChar;
+Alt-Shift-Q : LiteralChar;
+Alt-R       : ReadBlock;
+Alt-Shift-R : ReadBlock;
+Alt-S       : GetFindString;
+Alt-Shift-S : GetFindString;
+Alt-T       : Replace;
+Alt-Shift-T : Replace;
+Alt-U       : Undo;
+Alt-Shift-U : Undo;
+/*Alt-V     : ShowVersion;   not implemented */
+Alt-0       : SetMark(0);
+Alt-1       : SetMark(1);
+Alt-2       : SetMark(2);
+Alt-3       : SetMark(3);
+Alt-4       : SetMark(4);
+Alt-5       : SetMark(5);
+Alt-6       : SetMark(6);
+Alt-7       : SetMark(7);
+Alt-8       : SetMark(8);
+Alt-9       : SetMark(9);
+Alt-BkSp    : MacDeleteNextWord;
+Alt-dash    : PrevBuffer;
+
+/* ---- Control Q sequences ------------------ */
+ctrl-Q+[       : MatchPairForward;
+ctrl-Q+ctrl-[  : MatchPairForward;
+ctrl-Q+]       : MatchPairBackward;
+ctrl-Q+ctrl-]  : MatchPairBackward;
+
+/* ---- Control O sequences ------------------ */
+ctrl-O+^A   : OpenFileAtCursor; : OpenFileAtCursor
+ctrl-O+^B   : BrowseSymbolAtCursor; : BrowseSymbolAtCursor
+Ctrl-O+^O   : MacToggleCase;
+
+END;
+
+KEYBOARD MessageWindow
+space : MsgViewSrc; : MsgViewSrc
+enter : MsgEditSrc; : MsgEditSrc
+END;
+
+KEYBOARD BreakpointView
+ctrl-P : DebugDetailBreakList; : DebugDetailBreakList
+ctrl-I : DebugInspectBreakList; : DebugInspectBreakList
+ctrl-E : DebugEditBreakList; : DebugEditBreakList
+ctrl-R : DebugRemoveBreakList; : DebugRemoveBreakList
+ctrl-A : DebugAddAtLineBreakList; : DebugAddAtLineBreakList
+/*
+ctrl-W : DebugAddWinMsg; : DebugAddWinMsgBreakList
+*/
+END;
+
+KEYBOARD CallStack
+ctrl-I : DebugInspectCallStack; : DebugInspectCallStack
+ctrl-E : DebugEditCallStack; : DebugEditCallStack
+END;
+
+KEYBOARD DataInspector
+ctrl-R : DebugRangeInspect; : DebugRangeInspect
+ctrl-C : DebugChange; : DebugChange
+ctrl-I : DebugInspectData; : DebugInspectData
+ctrl-D : DebugDescend; : DebugDescend
+ctrl-N : DebugNewExpr; : DebugNewExpr
+ctrl-T : DebugTypecast; : DebugTypecast
+END;
+
+KEYBOARD DebugLog
+ctrl-C : DebugCaptureLog; : DebugCaptureLog
+ctrl-O : DebugLogOptions; : DebugLogOptions
+ctrl-A : DebugCommentLog; : DebugCommentLog
+ctrl-E : DebugEraseLog; : DebugEraseLog
+END;
+
+KEYBOARD RegisterView
+ctrl-H : DebugHexReg; : DebugHexReg
+ctrl-D : DebugDecimalReg; : DebugDecimalReg
+ctrl-W : DebugWordReg; : DebugWordReg
+ctrl-U : DebugDWordReg; : DebugDWordReg
+END;
+
+KEYBOARD WatchView
+ctrl-P : DebugDetailWatchList; : DebugDetailWatchList
+ctrl-R : DebugRemoveWatchList; : DebugRemoveWatchList
+ctrl-A : DebugAddWatchList; : DebugAddWatchList
+END;
+
+KEYBOARD ProjectWindow
+enter    : ProjectNodeAction;
+plus     : ProjectExpandNode;
+minus    : ProjectCollapseNode;
+space    : ProjectNodeToggle;
+esc      : ProjectEndNodeSearch;
+upar     : ProjectNodeUp;
+dnar     : ProjectNodeDown;
+home     : ProjectFirstNode;
+end      : ProjectLastNode;
+pgup     : ProjectPrevPage;
+pgdn     : ProjectNextPage;
+alt-lfar : ProjectPromoteNode;
+alt-rgar : ProjectDemoteNode;
+alt-upar : ProjectMoveUp;
+alt-dnar : ProjectMoveDown;
+END;

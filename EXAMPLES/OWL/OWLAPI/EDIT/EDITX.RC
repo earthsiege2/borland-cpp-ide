@@ -1,0 +1,39 @@
+//----------------------------------------------------------------------------
+// ObjectWindows - (C) Copyright 1991, 1993 by Borland International
+//----------------------------------------------------------------------------
+#include <owl\inputdia.rh>
+#include <owl\inputdia.rc>
+#include <owl\editfile.rh>
+#include <owl\editfile.rc>
+#include "editx.rh"
+
+#include <owl\owlapp.rc>         // default owl app icon
+
+IDM_EXAMPLE_EDIT MENU
+BEGIN
+  POPUP "&File"
+  BEGIN
+    MenuItem "&Open...",      CM_RESTORE_TEXT
+    MenuItem "&Save As...",   CM_SAVE_TEXT
+    MenuItem  SEPARATOR
+    MenuItem "&Exit",         CM_EXIT
+  END
+
+  POPUP "Edi&t"
+  BEGIN
+    MenuItem  "&Undo\aAlt+BkSp",      CM_EDITUNDO
+    MenuItem  SEPARATOR
+    MenuItem  "&Cut\aShift+Del",      CM_EDITCUT
+    MenuItem  "C&opy\aCtrl+Ins",      CM_EDITCOPY
+    MenuItem  "&Paste\aShift+Ins",    CM_EDITPASTE
+    MenuItem  "&Delete\aDel",         CM_EDITDELETE
+    MenuItem  "C&lear All\aCtrl+Del", CM_EDITCLEAR
+  END
+
+  POPUP "&Operations"
+  BEGIN
+    MenuItem "&Insert text...",      CM_INSERT_TEXT
+    MenuItem "Delete &Subtext...",   CM_DELETE_SUBTEXT
+    MenuItem "Delete &Line...",      CM_DELETE_LINE
+  END
+END

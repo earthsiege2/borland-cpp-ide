@@ -1,0 +1,32 @@
+<<[CPP]
+##@OPT_APPL_DOCVIEW != TRUE
+##:     %"Unable to do any document/view manipulations; document/view must be selected during AppExpert.  "
+##*
+##"//{{DOC_VIEW}}" [[DocVMarker]]
+##"//{{DOC_MANAGER_END}}" [[DocMMarker]]
+##^BOF
+##? DocVMarker,DocMMarker [[Search]]
+##Search == FALSE
+##:     %"Missing document/view markers for templates.  "
+##*
+##{AddDocV.SNP}
+##FALSE [[IncludeSearch]]
+##OPT_DV_RESET
+##--FOR-- IncrV = 1 TO @QUERY_DV_COUNT
+##OPT_DV_NEXT
+##QUERY_DV_TVIEW [[TView]]
+##\\"[[TView]]" [[ViewType]]
+##(ViewType != "TEditView") && (ViewType != "TListView") && (ViewType != "TWindowView")
+##:     GetIncludeFile(ViewType) [[ViewIncludeFile]]
+##:     \\"#include [[ViewIncludeFile]]" [[Include]]
+##:     ^BOF
+##:     ? Include IncludeSearch
+##:     IncludeSearch == FALSE
+##:         ^BOF
+##:         ?\\"#include "
+##:         ^BOL
+##:         ^1
+[[Include]]
+##--NEXT-- IncrV
+##^^
+>>[CPP]

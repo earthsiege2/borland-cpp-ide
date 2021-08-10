@@ -1,0 +1,56 @@
+<<[H]
+##QUERY_WIND_CLIENT [[Client]]
+##--BEGIN-- Client != ""
+##:     GetIncludeFile(\\"[[Client]]") [[ClientIncludeFile]]
+##^BOF
+##? \\"#include [[ClientIncludeFile]]" [[FoundInclude]]
+##--BEGIN-- FoundInclude == FALSE
+##^BOF
+## ? "#pragma hdrstop" [[PragmaFound]]
+##--BEGIN-- PragmaFound == TRUE
+##^BOL
+##^2
+#include [[ClientIncludeFile]]
+##--END-- PragmaFound == TRUE
+##--BEGIN-- PragmaFound == FALSE
+## ? "#include"
+##:     ^BOL
+##:     ^1
+#include [[ClientIncludeFile]]
+##--END-- PragmaFound == FALSE
+##--END-- FoundInclude == FALSE
+##--END-- Client != ""
+>>[H]
+
+
+<<[CPP]
+##QUERY_PASSED_PARAM [[OldClient]]
+##--BEGIN-- QUERY_CLASS_NAME [[ClassName]]
+##\\"[[ClassName]]::[[ClassName]] (" [[FindClass]]
+##^BOF
+##? FindClass [[Search]]
+##Search == FALSE
+##:     QUERY_FILE_CPP [[FileName]]
+##:     %\\"Unable to locate class constructor in [[FileName]].  "
+##*
+##^BOL
+##^1
+##YPos() [[BaseConstructorLine]]
+##--BEGIN-- ? OldClient,") :",0 [[ClientReplace]]
+##ClientReplace == FALSE
+##:     %\\"Unable to find client instantiation in base constructor.  " 
+##*
+##--BEGIN-- ClientReplace
+##YPos() != BaseConstructorLine
+##:     %\\"Unable to find client instantiation in base constructor.  " 
+##*
+##QUERY_WIND_CLIENT [[Client]]
+##\\QUERY_WIND_CLIENT_PARAM [[ClientParam]]
+##:     InsertText(\\"[[Client]][[ClientParam]]")
+##*
+##^BOL
+##^^
+##--END-- ClientReplace
+##--END-- ? OldClient,") :",0 [[ClientReplace]]
+##--END-- QUERY_CLASS_NAME [[ClassName]]
+>>[CPP]

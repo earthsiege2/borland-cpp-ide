@@ -1,0 +1,72 @@
+//----------------------------------------------------------------------------
+// ObjectWindows - (C) Copyright 1993 by Borland International
+//   include\owl\editview.rc
+//   Menu and accelerators for use with TEditView
+//----------------------------------------------------------------------------
+
+#include <owl\editsear.rh>
+#define NO_IDM_EDITSEARCH
+#define NO_IDA_EDITSEARCH
+#include <owl\editsear.rc>
+
+#define IDM_EDITVIEW   32581
+#define IDA_EDITVIEW   32581
+
+#if defined(RC_INVOKED)
+
+#if !defined(NO_IDM_EDITVIEW) && !defined(__IDM_EDITVIEW)
+#define __IDM_EDITVIEW
+IDM_EDITVIEW MENU LOADONCALL MOVEABLE PURE DISCARDABLE
+BEGIN
+  POPUP "&Edit"
+  BEGIN
+    MenuItem  "&Undo\aAlt+BkSp",      CM_EDITUNDO
+    MenuItem  SEPARATOR
+    MenuItem  "&Cut\aShift+Del",      CM_EDITCUT
+    MenuItem  "C&opy\aCtrl+Ins",      CM_EDITCOPY
+    MenuItem  "&Paste\aShift+Ins",    CM_EDITPASTE
+    MenuItem  "&Delete\aDel",         CM_EDITDELETE
+    MenuItem  "C&lear All\aCtrl+Del", CM_EDITCLEAR
+  END
+  POPUP "&Search"
+  BEGIN
+    MenuItem  "&Find...",    CM_EDITFIND
+    MenuItem  "&Replace...", CM_EDITREPLACE
+    MenuItem  "&Next\aF3",   CM_EDITFINDNEXT
+  END
+  POPUP "&Help"
+  BEGIN
+    MenuItem  "OWL EditView", 0, INACTIVE
+  END
+END
+#endif
+#undef NO_IDM_EDITVIEW
+
+#if !defined(NO_IDA_EDITVIEW) && !defined(__IDA_EDITVIEW)
+#define __IDA_EDITVIEW
+IDA_EDITVIEW ACCELERATORS
+BEGIN
+; VK_BACK,   CM_EDITUNDO, VIRTKEY, ALT
+  VK_F3,     CM_EDITFINDNEXT, VIRTKEY
+END
+#endif
+#undef NO_IDA_EDITVIEW
+
+#if !defined(NO_IDS_EDITVIEW) && !defined(__IDS_EDITVIEW)
+#define __IDS_EDITVIEW
+STRINGTABLE LOADONCALL MOVEABLE DISCARDABLE
+BEGIN
+  CM_EDITUNDO,  "Reverses the last operation"
+  CM_EDITCUT,   "Cuts the selection and puts it on the Clipboard"
+  CM_EDITCOPY,  "Copies the selection to the Clipboard"
+  CM_EDITPASTE, "Inserts the Clipboard contents at the caret"
+  CM_EDITDELETE,"Deletes the selection"
+  CM_EDITCLEAR, "Clear the document"
+  CM_EDITFIND,  "Finds the specified text"
+  CM_EDITREPLACE, "Finds the specified text and changes it"
+  CM_EDITFINDNEXT,"Finds the next match"
+END
+#endif
+#undef NO_IDS_EDITVIEW
+
+#endif  // defined(RC_INVOKED)

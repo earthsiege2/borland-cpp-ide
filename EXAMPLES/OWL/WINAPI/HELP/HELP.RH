@@ -1,0 +1,18 @@
+//----------------------------------------------------------------------------
+// ObjectWindows - (C) Copyright 1991, 1993 by Borland International
+//----------------------------------------------------------------------------
+#include <owl\window.rh>
+
+#define OWLHELPAPMENU  2
+#define OWLHELPAPACCEL 3
+
+#define HELP_MENUITEMA       0x100
+#define HELP_MENUITEMB       0x101
+#define HELP_EXIT            0x102
+
+#define CM_MENUITEMA   0x100
+#define CM_MENUITEMB   0x101
+
+#define CM_HELPINDEX   0x200
+#define CM_HELPHELP    0x201
+#define CM_HELPABOUT   0x202

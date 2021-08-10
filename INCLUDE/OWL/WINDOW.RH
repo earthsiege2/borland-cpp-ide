@@ -1,0 +1,15 @@
+//----------------------------------------------------------------------------
+// ObjectWindows - (C) Copyright 1991, 1993 by Borland International
+//   include\owl\window.rh
+//   Command IDs to use with window.h
+//----------------------------------------------------------------------------
+
+//
+// Commands
+//
+#define CM_EXIT             24310
+
+//
+// Default Owl icon ID
+//
+#define IDI_OWLAPP          32000

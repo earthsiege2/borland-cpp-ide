@@ -1,0 +1,29 @@
+//----------------------------------------------------------------------------
+// ObjectWindows - (C) Copyright 1992, 1993 by Borland International
+//   include\owl\editsear.rh
+//   Resource & command IDs to use with editsear.rc and editsear.h
+//----------------------------------------------------------------------------
+
+#include <owl\edit.rh>
+
+//
+// Commands
+//
+#define CM_EDITFIND         24351
+#define CM_EDITREPLACE      24352
+#define CM_EDITFINDNEXT     24353
+
+//
+// String IDs
+//
+#define IDS_CANNOTFIND      32540
+
+//
+// Menu IDs
+//
+#define IDM_EDITSEARCH      32540
+
+//
+// Accelerator IDs
+//
+#define IDA_EDITSEARCH      32540

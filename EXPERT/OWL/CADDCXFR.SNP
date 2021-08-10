@@ -1,0 +1,24 @@
+##--BEGIN-- QUERY_CLASS_NAME [[ClassName]]
+##\\"[[ClassName]]::[[ClassName]]" [[ClassMarker]]
+##--BEGIN-- QUERY_FILE_H [[FileName]]
+##^BOF
+##? ClassMarker [[Search]]
+##Search == FALSE
+##:     %\\"Unable to add instant data; marker for [[ClassName]] constructor to [[FileName]].  "
+##*
+##^BOL
+static [[ClassName]]Xfer [[ClassName]]Data;
+
+##? "{" [[Search]]
+##Search == FALSE
+##:     %\\"Unable to add instant data; marker for [[ClassName]] constructor body to [[FileName]].  "
+##*
+##--END-- QUERY_FILE_H [[FileName]]
+##^BOL
+##^1
+//{{[[ClassName]]XFER_USE}}
+
+    SetTransferBuffer(&[[ClassName]]Data);
+//{{[[ClassName]]XFER_USE_END}}
+
+##--END-- QUERY_CLASS_NAME [[ClassName]]

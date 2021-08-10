@@ -1,0 +1,6 @@
+##--BEGIN-- TRUE
+
+
+##QUERY_FILENAME_H [[Filename]]
+#endif                                      // __[[Filename]]_h sentry.
+##--END-- TRUE

@@ -1,0 +1,6 @@
+# Borland C++ - (C) Copyright 1993 by Borland International
+# Makefile for FFIND program
+
+SYSTEMS= WIN16 WIN32
+EXERES = ffind
+!include $(BCEXAMPLEDIR)\makefile.gen

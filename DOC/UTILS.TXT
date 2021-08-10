@@ -1,0 +1,1240 @@
+                        UTILS.TXT
+                        =========
+Borland C++ comes with many stand-alone utilities. This file
+documents the following tools and utilities:
+
+-----------------------------------------------------
+Name         Description
+-----------------------------------------------------
+Documented in this file:
+
+BGIOBJ       Borland Graphics Interface
+CPP CPP32    Stand-alone preprocessors
+MIDL         Microsoft RPC compiler
+GREP         File-search utility
+OBJXREF      Object module cross-referencer
+TRIGRAPH     Character-conversion utility
+-------------------------------------------------------
+
+============================================================
+BGIOBJ: CONVERTING GRAPHICS DRIVERS AND FONTS
+============================================================
+BGIOBJ.EXE converts graphics driver files and
+character sets (stroked font files) to object (.OBJ)
+files. Once files are converted, you can link them into
+your program, making them part of the executable file.
+
+Linking drivers and fonts directly into your program is
+advantageous because the executable file contains all
+(or most) of the drivers and/or fonts it might need,
+and doesn't need to access the driver and font files on
+disk when running. However, linking the drivers and fonts
+into your executable file increases the EXE file size.
+
+The BGIOBJ.EXE simplified syntax is:
+
+   BGIOBJ source_file
+
+where source_file is the driver or font file to be converted
+to an object file. The new object file created has the same
+file name as the source file, with the extension .OBJ.
+
+Adding the new .OBJ files to GRAPHICS.LIB
+-----------------------------------------
+You should add the driver and font object modules to
+GRAPHICS.LIB, so the linker can locate them when it
+links in the graphics routines. If you don't add these
+new object modules to GRAPHICS.LIB, you'll have to add
+them to the list of files in the project (.IDE) file,
+on the BCC command line, or on the TLINK command line.
+To add these object modules to GRAPHICS.LIB, invoke
+TLIB with the following command line:
+
+  tlib graphics + object_file_name [+ object_file_name]
+
+where object_file_name is the name of the OBJ file created
+by BGIOBJ.EXE. The .OBJ extension is implied, so you don't
+need to include it. You can add several files with one
+command line to save time.
+
+Registering the drivers and fonts
+---------------------------------
+After adding driver and font object modules to
+GRAPHICS.LIB, you have to register all the drivers and
+fonts that you want linked in; you do this by calling
+registerbgidriver and registerbgifont in your program
+(before calling initgraph). This informs the graphics
+system of the presence of those files, and ensures that they
+are linked when the linker creates the executable file.
+
+The registering routines each take one parameter; a
+symbolic name defined in graphics.h. Each registering
+routine returns a nonnegative value if the driver or
+font is registered successfully.
+
+The following table lists drivers and fonts in Borland C++
+that you use with registerbgidriver and registerbgifont.
+
+------------------------------------------------------------
+Driver file  registerbgidriver  Font file  registerbgifont
+(*.BGI)      symbolic name      (*.CHR)    symbolic name
+------------------------------------------------------------
+CGA          CGA_driver         TRIP       triplex_font
+EGAVGA       EGAVGA_driver      LITT       small_font
+HERC         Herc_driver        SANS       sansserif_font
+ATT          ATT_driver         GOTH       gothic_font
+PC3270       PC3270_driver
+IBM8514      IBM8514_driver
+------------------------------------------------------------
+
+BGIOBJ Example
+--------------
+Suppose you want to convert the files for the CGA
+graphics driver, the gothic font, and the triplex font
+to object modules, then link them into your program.
+Here's what you do:
+
+1. Convert the three binary files to object files using
+   BGIOBJ.EXE (creates files CGA.OBJ, TRIP.OBJ, GOTH.OBJ).
+
+2. You can add these object files to GRAPHICS.LIB with
+   this TLIB command line:
+
+   tlib  graphics  +cga  +trip  +goth
+
+3. If you don't add the object files to GRAPHICS.LIB,
+   you must add the object file names CGA.OBJ,
+   TRIP.OBJ, and GOTH.OBJ to your project list (if you
+   are using Borland C++'s integrated environment), or
+   to the BCC command line. For example, the BCC command
+   line would look like this:
+
+    BCC  niftgraf graphics.lib cga.obj trip.obj goth.obj
+
+4. Register these files in your graphics program:
+
+   /* Header file declares CGA_driver, triplex_font &
+      gothic_font */
+   #include <graphics.h>
+   /* Register and check for errors */
+   if (registerbgidriver(CGA_driver) < 0) exit(1);
+   if (registerbgifont(triplex_font) < 0) exit(1);
+   if (registerbgifont(gothic_font)  < 0) exit(1);
+
+    /* ... */
+
+    initgraph(....);/* initgraph should be called
+   after registering */
+
+    /* ... */
+
+The /F option
+-------------
+This section explains what steps to take if you get the
+linker error Segment exceeds 64K (or a similar error)
+after linking in several driver and/or font files
+(especially with small- and compact-model programs).
+
+By default, the files created by BGIOBJ.EXE all use the
+same segment (called _TEXT). This can cause problems if
+your program links in many drivers and/or fonts, or
+when you're using the small or compact memory model.
+
+To solve this problem, you can convert one or more of
+the drivers or fonts with the BGIOBJ /F option. This
+option directs BGIOBJ to use a segment name of the form
+filename_TEXT, so that the default segment is not
+overburdened by all the linked-in drivers and fonts
+(and, in small and compact model programs, all the program
+code). For example, the following two BGIOBJ command lines
+direct BGIOBJ to use segment names of the
+form EGAVGA_TEXT and SANS_TEXT.
+
+ bgiobj  /F  egavga
+ bgiobj  /F  sans
+
+When you select /F, BGIOBJ also appends F to the target
+object file name (EGAVGAF.OBJ, SANSF.OBJ, and so
+forth), and appends _far to the name that will be used
+with registerfarbgidriver and registerfarbgifont. (For
+example, EGAVGA_driver becomes EGAVGA_driver_far.)
+
+For files created with /F, you must use these far
+registering routines instead of the regular
+registerbgidriver and registerbgifont. For example,
+
+ if (registerfarbgidriver(EGAVGA_driver_far) < 0)
+ exit(1);
+ if (registerfarbgifont(sansserif_font_far)  < 0)
+ exit(1);
+
+Advanced features
+-----------------
+This section explains some of BGIOBJ's advanced
+features, and the routines registerfarbgidriver and
+registerfarbgifont.
+
+This is the full syntax of the BGIOBJ.EXE command line:
+
+BGIOBJ /F source destination public-name seg-name seg-class
+
+This table describes components of the BGIOBJ command line.
+------------------------------------------------------------
+Component    Description
+------------------------------------------------------------
+/F or -F     Instructs BGIOBJ.EXE to use a segment name
+             other than _TEXT (the default), and to change
+             the public name and destination file name.
+
+source       This is the driver or font file to be converted.
+             If the file is not one of the driver/font files
+             shipped with Borland C++, you should specify a 
+             full file name (including extension).
+
+destination  Names the object file produced. The default
+             destination file name is source.OBJ (sourceF.OBJ
+             if you use the /F option).
+
+public-name  This is the name used in the program in a call to
+             registerbgidriver or registerbgifont (or their
+             respective far versions) to link in the object
+             module. The public name is the external name used
+             by the linker, so it should be the name used in
+             the program, prefixed with an underscore. If your
+             program uses Pascal calling conventions, use
+             uppercase letters and don't add an underscore.
+
+seg-name     This is an optional segment name; the default is
+             _TEXT (or filename_TEXT if /F is specified)
+
+seg-class    An optional segment class; the default is CODE.
+------------------------------------------------------------
+All parameters except source are optional. However, if
+you need to specify an optional parameter, all the
+parameters preceding it must also be specified.
+
+If you choose to use your own public name(s), you have
+to add declaration(s) to your program, using one of the
+following forms:
+
+ void public_name(void);   /* if /F not used, */
+  /* default segment name
+ used */
+
+ extern int far public_name[];  /* if /F used, or */
+  /* segment name not
+ _TEXT */
+
+In these declarations, public_name matches the public-
+name you used when converting with BGIOBJ. The
+graphics.h header file contains declarations of the
+default driver and font public names; if you use those
+default public names you don't have to declare them as
+just described.
+
+After these declarations, you have to register all the
+drivers and fonts in your program. If you don't use the
+/F option and don't change the default segment name,
+you should register drivers and fonts through
+registerbgidriver and registerbgifont; otherwise, use
+registerfarbgidriver and registerfarbgifont.
+
+Here is an example of a program that loads a font file
+into memory:
+
+    /* Example of loading a font file into memory */
+
+    #include <graphics.h>
+    #include <io.h>
+    #include <fcntl.h>
+    #include <stdio.h>
+    #include <conio.h>
+    #include <stdlib.h>
+    #include <process.h>
+    #include <alloc.h>
+
+    main()
+    {
+     void  *gothic_fontp; /* points to font buffer in memory */
+     int handle;          /* file handle used for I/O */
+       unsigned fsize;    /* size of file (and buffer) */
+
+       int errorcode;
+       int graphdriver;
+       int graphmode;
+
+    /* open font file */
+       handle = open("GOTH.CHR", O_RDONLY|O_BINARY);
+       if (handle == -1)
+       {
+     printf("unable to open font file 'GOTH.CHR'\n");
+     exit(1);
+       }
+    /* find out size of the file */
+       fsize = filelength(handle);
+    /* allocate buffer */
+       gothic_fontp = malloc(fsize);
+       if (gothic_fontp == NULL)
+       {
+    printf("unable to allocate memory for font file
+    'GOTH.CHR'\n");
+    exit(1);
+       }
+    /* read font into memory */
+       if (read(handle, gothic_fontp, fsize) != fsize)
+       {
+     printf("unable to read font file 'GOTH.CHR'\n");
+     exit(1);
+       }
+    /* close font file */
+       close(handle);
+    /* register font */
+       if (registerfarbgifont(gothic_fontp) !=
+    GOTHIC_FONT)
+       {
+     printf("unable to register font file
+    'GOTH.CHR'\n");
+     exit(1);
+       }
+    /* detect and initialize graphix */
+       graphdriver = DETECT;
+       initgraph(&graphdriver, &graphmode, "..");
+       errorcode = graphresult();
+       if (errorcode != grOk)
+       {
+     printf("graphics error:
+    %s\n",grapherrormsg(errorcode));
+     exit(1);
+       }
+
+       settextjustify(CENTER_TEXT, CENTER_TEXT);
+       settextstyle(GOTHIC_FONT, HORIZ_DIR, 4);
+       outtextxy(getmaxx()/2,getmaxy()/2,
+       "Borland Graphics Interface (BGI)");
+    /* press a key to terminate */
+       getch();
+    /* shut down graphics system */
+       closegraph();
+       return(0);
+    }
+
+============================================================
+CPP and CPP32: THE PREPROCESSORS
+============================================================
+CPP and CPP32 produce a list (in a file) of a C program in
+which include files and #define macros have been expanded.
+Unless otherwise noted, CPP refers to both CPP and CPP32.
+Neither is needed for normal compilation of C programs.
+
+Often, when the compiler reports an error inside a macro or
+an include file, you can get more information about what the
+error is if you can see the include files or the results of
+the macro expansions. In many multi-pass compilers, a
+separate pass performs this work, and the results of the
+pass can be examined. Because Borland C++ uses an integrated
+single-pass compiler, use CPP to get the first-pass 
+functionality found in other compilers.
+
+CPP works similarly to BCC: it reads the same TURBOC.CFG
+file for default options and uses the same command-line
+options as BCC. CPP ignores any BCC options that don't
+pertain to CPP, and there is no special treatment for .OBJ,
+.LIB, or .ASM files. CPP32 uses the same command-line
+options that BCC32 uses.
+
+For each file processed by CPP, the output is written
+to a file in the current directory (or the output
+directory named by the -n option) with the same name as
+the source name but with an extension of .I.
+
+This output file is a text file containing each line of the
+source file and any include files. Any preprocessing 
+directive lines have been removed, along with any conditional
+text lines excluded from the compile. Unless you use a 
+command-line option to specify otherwise, text lines are
+prefixed with the file name and line number of the source or
+include file the line came from. Within a text line, any
+macros are replaced with their expansion text.
+
+IMPORTANT!  The resulting output of CPP cannot be compiled
+because of the file name and line number prefix attached to
+each source line.
+
+CPP as a macro preprocessor
+---------------------------
+The -P option tells CPP to prefix each line with the source
+file name and line number. With the -P- option, CPP can be
+used as a macro preprocessor; the resulting .I file can then
+be compiled with BCC or BCC32. (Note that you can also use the
+BCC option -P to set default file extensions.)
+
+The following simple program illustrates how CPP
+preprocesses a file, first with -P selected, then with -P-.
+
+     Source file: HELLOAJ.C
+      #define NAME "H.R. Floyd"
+      #define BEGIN {
+      #define END   }
+
+      main()
+      BEGIN
+         printf("%s\n", NAME);
+      END
+
+CPP command line:   CPP HELLOAJ.C
+Output:
+    HELLOAJ.c 1:
+    HELLOAJ.c 2:
+    HELLOAJ.c 3:
+    HELLOAJ.c 4:
+    HELLOAJ.c 5: main()
+    HELLOAJ.c 6: {
+    HELLOAJ.c 7:    printf("%s\n","H.R. Floyd");
+    HELLOAJ.c 8: }
+
+CPP command line:   CPP -P- HELLOAJ.C
+Output:
+    main()
+    {
+       printf("%s\n","H.R. Floyd");
+    }
+
+Using MIDL with CPP.EXE and CPP32.EXE
+-------------------------------------
+MIDL (Microsoft Interface Definition Language) is an RPC
+compiler. In order to use MIDL, with Borland C++'s
+preprocessors, you must use the following MIDL command:
+
+MIDL -cpp_cmd {CPP|CPP32} -cpp_opt "-P- -oCON {CPP options}"
+     {MIDL options} {.idl/.acf}
+
+-cpp_cmd {CPP|CPP32}   Tells MIDL which preprocessor to use
+                       when processing an .IDL or .ACF file.
+                       MIDL calls the preprocessor to expand
+                       macros within source files.
+
+-cpp_opt "{options}"   Specifies the preprocessor's command-
+                       line options. The -P- removes line
+                       number and file name information from
+                       each line of the preprocessed output.
+                       The -oCON indicates that preprocessed
+                       output should go to standard output,
+                       instead of to file. The preprocessor's
+                       banner and the current file that is
+                       being processed are not emitted.
+                       Including -oCON within a .CFG file
+                       processed by the preprocessor causes
+                       the banner to be emitted.
+                       {CPP options} pass options to CPP.
+
+{MIDL options}         Any MIDL command-line options.
+
+{.idl/.acf file}       The source file that MIDL processes.
+
+
+CPP and UUIDs
+-------------
+In some cases, CPP doesn't accept valid UUIDs. For example,
+a valid UUID statement is:
+   uuid(5630EAA0-CA48-1067-B320-00DD010662DB)
+
+When CPP or CPP32 encounter 5630EAA0, it is classified as a
+floating point number, and since it's an invalid floating
+point number, the preprocessor emits an error. To work
+around this problem, enclose the UUID within quotes and use
+the -ms_ext MIDL option. The UUID statement becomes:
+   uuid("5630EAA0-CA48-1067-B320-00DD010662DB")
+
+and the MIDL command line becomes:
+  MIDL -ms_ext -cpp_cmd {CPP|CPP32} -cpp_opt "-P- -oCON
+       {CPP options}" {MIDL options} {.idl/.acf file}
+
+
+=============================================================
+GREP: A TEXT-SEARCH UTILITY
+=============================================================
+GREP (Global Regular Expression Print) is a powerful
+text-search program derived from the UNIX utility of
+the same name. GREP searches for a text pattern in one
+or more files or in its standard input stream.
+
+Here's a quick example of a situation where you might
+want to use GREP. Suppose you wanted to find out which
+text files in your current directory contained the
+string "Bob". You would type:
+
+    grep Bob *.txt
+
+GREP responds with a list of the lines in each file (if any)
+that contained the string "Bob". Because GREP ignores case by
+default, the strings "bob" and "boB" also match.
+
+GREP can do a lot more than match a single, fixed string.
+In the following section, you'll see how to make GREP search
+for any string that matches a particular pattern.
+
+Command-line syntax
+-------------------
+The general command-line syntax for GREP is
+
+  grep [options] searchstring [file(s) ... ]
+
+options      consist of one or more letters, preceded by a
+             hyphen (-), that change GREP's behavior.
+searchstring gives the pattern to search for.
+file(s)      tells GREP which files to search. (If you don't
+             specify a file, GREP searches standard input;
+             this lets you use pipes and redirection.) If you
+             find that the results of your GREP are longer
+             than one screen, you can redirect the output to
+             a file. For example, you could use this command
+               GREP "Bob" *.txt > temp.txt
+             which searches all files with the TXT extension
+             in the current directory, then puts the results
+             in a file called TEMP.TXT. (You can name this
+             file anything you like.) Use any word processor
+             to read TEMP.TXT (the results of the search).
+
+The command GREP ? prints a help screen showing GREP's
+options, special characters, and defaults.
+
+GREP options
+------------
+In the command line, options are one or more single
+characters preceded by a hyphen (-). Each individual
+character is a switch that you can turn on or off: A
+plus symbol (+) after a character turns the option on;
+a hyphen (-) after the character turns the option off.
+The + sign is optional; for example, -r means the same
+thing as -r+. You can list multiple options
+individually (like this: -i -d -l), or you can combine
+them (like this: -ild or -il, -d, and so on).
+
+Here are the GREP option characters and their meanings:
+------------------------------------------------------------
+Option  Meaning
+------------------------------------------------------------
+  -c    Match Count only: Prints only a count of matching
+        lines. For each file that contains at least one
+        matching line, GREP prints the file name and a
+        count of the number of matching lines. Matching lines
+        are not printed. This option is off by default.
+
+  -d    Search subdirectories: For each file specified on the
+        command line, GREP searches for all files that match
+        the file specification, both in the directory
+        specified and in all subdirectories below the specified
+        directory. If you give a file without a path, GREP
+        assumes the files are in the current directory. This
+        option is off by default.
+
+  -i   Ignore case: GREP ignores upper/lowercase differences.
+       When this option is on, GREP treats all letters a to z
+       as identical to the corresponding letters A to Z in all
+       situations. This option is on by default.
+
+  -l   List file names only: Prints only the name of each file
+       containing a match. After GREP finds a match, it prints
+       the file name and processing immediately moves on to the
+       next file. This option is off by default.
+
+  -n   Line Numbers: Each matching line that GREP prints is
+       preceded by its line number. This option is off by default.
+
+  -o   UNIX output format: Changes the output format of
+       matching lines to support more easily the UNIX style
+       of command-line piping. All lines of output are
+       preceded by the name of the file that contained the 
+       matching line. This option is off by default.
+
+  -r   Regular expression search: The text defined by
+       searchstring is treated as a regular expression
+       instead of as a literal string. This option is on by
+       default. A regular expression is one or more occurrences
+       of one or more characters optionally enclosed in quotes.
+       The following symbols are treated specially:
+             ^  start of line        $  end of line
+             .  any character        \  quote next character
+             *  match zero or more   +  match one or more
+       [aeiou0-9]   match a, e, i, o, u, and 0-9
+       [^aeiou0-9]  match all but a, e, i, o, u, and 0-9
+
+  -u   Update options: GREP adds any options from the command
+       line to its default options in GREP.COM. This option
+       lets you to customize the default option settings.
+       To see the defaults are set in GREP.COM, type GREP ?,
+       then each option on the help screen is followed by a +
+       or a - depending on its default setting.
+
+  -v   Nonmatch: Prints only nonmatching lines. Only lines
+       that don't contain the search string are considered
+       nonmatching lines. This option is off by default.
+
+  -w   Word search: Text found that matches the regular
+       expression is considered a match only if the character
+       immediately preceding and following cannot be part of
+       a word. The default word character set includes A to Z,
+       0 to 9, and the underscore ( _ ). This option is off
+       by default. An alternate form of this option lets you
+       specify the set of legal word characters. Its form is
+       -w[set], where set is any valid regular expression.
+
+       If you define the set with alphabetic characters, it
+       is automatically defined to contain both the uppercase
+       and lowercase values for each letter in the set
+       (regardless of how it is typed), even if the search is
+       case-sensitive. If you use the -w option in combination
+       with the -u option, the new set of legal characters
+       is saved as the default set.
+
+  -z   Verbose: GREP prints the file name of every file
+       searched. Each matching line is preceded by its
+       line number. A count of matching lines in each file
+       is given, even if the count is zero. This option is
+       off by default.
+------------------------------------------------------------
+
+The search string
+-----------------
+The value of searchstring defines the pattern GREP searches
+for. A search string can be either a regular expression or
+a literal string.
+
+o In a regular expression, certain characters have special
+  meanings: They are operators that govern the search.
+
+o In a literal string, there are no operators: Each
+  character is treated literally.
+
+You can enclose the search string in quotation marks to
+prevent spaces and tabs from being treated as delimiters.
+The text matched by the search string cannot cross line
+boundaries; that is, all the text necessary to match the
+pattern must be on a single line.
+
+A regular expression is either a single character or a set
+of characters enclosed in brackets. A concatenation of
+regular expressions is a regular expression.
+
+When you use the -r option (on by default), the search
+string is treated as a regular expression (not a literal
+expression. The following characters have special meanings:
+------------------------------------------------------------
+Option   Meaning
+------------------------------------------------------------
+
+  ^      A circumflex at the start of the expression matches
+         the start of a line.
+
+  $      A dollar sign at the end of the expression matches
+         the end of a line.
+
+  .      A period matches any character.
+
+  *      An expression followed by an asterisk matches
+         zero or more occurrences of that expression. For
+         example, in to*, the * operates on the expression o;
+         it matches t, to, too, etc. (t followed by zero or
+         more os), but doesn't match ta.
+
+  +      An expression followed by a plus sign matches one
+         or more occurrences of that expression: to+ matches
+         to, too, etc., but not t.
+
+  [ ]    A string enclosed in brackets matches any character
+         in that string. If the first character in the string
+         is a circumflex (^), the expression matches any
+         character except the characters in the string.
+         For example, [xyz] matches x, y, or z, while [^xyz]
+         matches a and b, but not x, y, or z. You can specify
+         a range of characters with two characters separated
+         by a hyphen (-). These can be combined to form
+         expressions (like [a-bd-z?], which matches the ?
+         character and any lowercase letter except c).
+
+  \      The backslash escape character tells GREP to search
+         for the literal character that follows it. For
+         example, \. matches a period instead of "any
+         character." The backslash can be used to quote
+         itself; that is, you can use \\ to indicate a literal
+         backslash character in a GREP expression.
+------------------------------------------------------------
+
+Four of the "special" characters ($, ., *, and +) don't
+have any special meaning when used within a bracketed
+set. In addition, the character ^ is only treated
+specially if it immediately follows the beginning of
+the set definition (immediately after the [ delimiter).
+
+File specifications
+-------------------
+The files option tells GREP which files to search. Files
+can be an explicit file name or a generic file name 
+incorporating the DOS ? and * wildcards. In addition, you
+can type a path (drive and directory information). If you
+list files without a path, GREP searches the current directory.
+If you don't specify any files, input to GREP must come
+from redirection (<) or a vertical bar (|).
+
+Some GREP examples
+------------------
+The following examples show how to combine GREP's
+features to do different kinds of searches. They assume
+GREP's default settings are unchanged.
+
+EXAMPLE 1       grep -r [^a-z]main\ *( *.c
+matches:                           Does not match:
+  main(i,j:integer)                  mymain()
+  if (main  ()) halt;
+  if (MAIN  ()) halt;
+
+The search string tells GREP to search for the word main
+with no preceding lowercase letters ([^a-z]), followed by
+zero or more occurrences of blank spaces (\ *), then a 
+left parenthesis. Since spaces and tabs are normally 
+considered command-line delimiters, you must quote them if
+you want to include them as part of a regular expression.
+In this case, the space after main is quoted with the
+backslash escape character. You could also accomplish
+this by placing the space in double quotes.
+
+
+EXAMPLE 2       grep -ri [a-c]:\\data\.fil *.c *.inc
+Matches:    A:\data.fil            Does not match:
+  c:\Data.Fil                        d:\data.fil
+  B:\DATA.FIL                        a:data.fil
+
+Because the backslash (\) and period (.) characters
+usually have special meaning in path and file names,
+you must place the backslash escape character 
+immediately in front of them if you want to search for them.
+The -i option is used here, so the search is not case
+sensitive.
+
+
+EXAMPLE 3         grep "search string with spaces" *.doc *.c
+Matches:          This is a search string with spaces in it.
+Does not match:         This search string has spaces in it.
+
+This is an example of how to search for a string with
+embedded spaces.
+
+
+EXAMPLE 4         grep -rd "[ ,.:?'\"]"$ \*.doc
+Matches:    He said hi to me.
+  Where are you going?
+  In anticipation of a unique situation,
+  Examples include the following:
+  "Many men smoke, but fu man chu."
+
+Does not match:
+  He said "Hi" to me
+  Where are you going? I'm headed to the
+
+This example searches for any one of the characters
+" . : ? ' and , at the end of a line. The double quote
+within the range is preceded by an escape character so it is
+treated as a normal character instead of as the ending quote
+for the string. Also, the $ character appears outside of the
+quoted string. This demonstrates how regular expressions can
+be concatenated to form a longer expression.
+
+
+EXAMPLE 5         grep -w[=] = *.c
+Matches:    i = 5;             Does not match:
+  j=5;                          if (i == t) j++;
+  i += j;                       /* =================== */
+
+This example redefines the current set of legal
+characters for a word as the assignment operator (=)
+only, then does a word search. It matches C assignment
+statements, which use a single equal sign (=), but not
+equality tests, which use a double equal sign (==).
+
+
+============================================================
+OBJXREF: THE OBJECT MODULE CROSS-REFERENCE UTILITY
+============================================================
+OBJXREF examines a list of object files and library
+files and produces reports on their contents. One type
+of report lists definitions of public names and
+references to them. The other type lists the segment
+sizes defined by object modules.
+
+There are two categories of public names: global
+variables and function names. The TEST1.C and TEST2.C
+files in the section "Sample OBJXREF reports" (page 25)
+illustrate definitions of public names and external
+references to them.
+
+Object modules are object (.OBJ) files produced by BC, BCC
+or TASM. A library (.LIB) file contains multiple object
+modules. An object module generated by BC is given the same
+name as the .C source file it was compiled from. This is
+also true for BCC, unless a different output file name is
+specifically indicated with the -o BCC command-line option.
+
+The OBJXREF command line
+------------------------
+The OBJXREF command line consists of the word OBJXREF
+followed by a series of command-line options and a list
+of object and library file names, separated by a space
+or tab character. The syntax is as follows:
+
+  OBJXREF @responsefile  options   filename  filename ...
+
+The command-line options determine the kind of reports that
+OBJXREF generates and the amount of detail that OBJXREF
+provides. Each option begins with a forward slash (/)
+followed by a one- or two-character option name.
+Options are discussed in detail in the next section.
+
+Object files and library files may be specified either on
+the command line or in a response file. On the command line,
+file names are separated by a space or a tab. All object
+modules specified as .OBJ files are included in reports.
+Like TLINK, however, OBJXREF includes only those modules from
+.LIB files which contain a public name referenced by an .OBJ
+file or by a previously included module from a .LIB file.
+
+As a general rule, you should list all the .OBJ and .LIB
+files that are needed if the program is to link correctly,
+including the startup .OBJ file and one or more C libraries.
+
+File names may include a drive and directory path. The
+DOS ? and * wildcard characters may be used to identify
+more than one file. File names may refer to .OBJ object
+files or to .LIB library files. (If you don't give a
+file extension, the .OBJ extension is assumed.)
+
+Options and file names may occur in any order in the
+command line.
+
+OBJXREF reports are written to the DOS standard output.
+The default is the screen. The reports can be sent to a
+printer (as with >LPT1:) or to a file (as with
+>lstfile) with the DOS redirection character (>).
+
+Entering OBJXREF with no file names or options produces
+a summary of available options.
+
+OBJXREF command-line options fall into two categories:
+control options and report options.
+
+Control options
+---------------
+Control options modify the default behavior of OBJXREF
+(the default is that none of these options are
+enabled).
+-------------------------------------------------------
+Option   Meaning
+-------------------------------------------------------
+  /I     Ignore case differences in public names. Use
+         this option if you use TLINK without the /C
+         option (which makes case differences
+         significant).
+
+  /D     Look for .OBJ files in another directory. If you
+         want OBJXREF to look for .OBJ files in a
+         directory other than the current one, include
+         the directory name on the command line, prefixed
+         with /D:
+               OBJXREF /Ddir1 [; dir2 [; dir3]]
+                     or
+               OBJXREF /Ddir1 [/Ddir2] [/Ddir3]
+         OBJXREF searches each of the directories in the
+         specified order for all object and library files.
+
+         Important!    If you don't use a /D option, OBJXREF
+         searches only the current directory. If you do use
+         a /D option, however, the current directory isn't
+         searched unless it is included in the directory
+         list.
+
+  /F     Include full library. All object modules in
+         specified .LIB files are included even if they
+         do not contain public names that are referenced
+         by an object module being processed by OBJXREF.
+         This provides information on the entire contents
+         of a library file. (See example 4 in the section
+         "OBJXREF examples.")
+
+  /O     Lets you to specify an output file where OBJXREF
+         sends any generated reports. Its syntax is:
+         OBJXREF file.obj /report option /Ooutputfilename.ext
+         By default all output is sent to the screen.
+
+  /V     Verbose output. Lists names of files read and displays
+         totals of public names, modules, segments, and classes.
+
+  /Z     Include zero-length segment definitions. Object
+         modules may define a segment without allocating any
+         space in it. Listing these zero length segment
+         definitions normally makes the module size reports
+         harder to use but it can be valuable if you are
+         trying to remove all definitions of a segment.
+
+Report options
+--------------
+Report options govern what sort of report is generated,
+and the amount of detail that OBJXREF provides.
+-------------------------------------------------------
+Option   Report generated
+--------------------------------------------------
+  /RC    Report by class type: Module sizes ordered
+         by class type of segment.
+
+  /RM    Report by module: Public names ordered by
+         defining module.
+
+  /RP    Report by public names: Public names in
+         order with defining module name.
+
+  /RR    Report by reference: Public name definitions
+         and references ordered by name.
+
+  /RS    Report of module sizes: Module sizes ordered
+         by segment name.
+
+  /RU    Report of unreferenced symbol names:
+         Unreferenced public names ordered by defining module.
+
+  /RV    Verbose reporting: produces a report of every type.
+
+  /RX    Report by external reference: External
+         references ordered by referencing module name.
+--------------------------------------------------
+
+Public names defined in .C files appear in reports with
+a leading underscore in the reports unless the -U-
+option was specified when the file was compiled (main
+appears as _main).
+
+You can limit the modules, segments, classes, or public
+names that OBJXREF reports on by entering the
+appropriate name on the command line prefixed with the
+/N option. For example,
+
+   OBJXREF filelist /RM /NC0
+
+tells OBJXREF to generate a report listing information
+only for the module named C0.
+
+
+
+Sample OBJXREF reports
+----------------------
+Suppose you have two source files in your Borland C++
+directory, and want to generate OBJXREF reports on the
+object files compiled from them. The source files are
+called TEST1.C and TEST2.C, and they look like this:
+
+    /* test1.c */
+    int i1;   /* defines i1 */
+    extern int i2; /* refers to i2 */
+    static int i3; /* not a public name */
+    extern void look(void);  /* refers to look */
+
+    void main(void)/* defines main */
+    {
+       int i4;/* not a public name */
+
+       look();/* refers to look */
+    }
+
+    /* test2.c */
+    #include <process.h>
+    extern int i1; /* refers to i1 */
+    int i2;   /* defines i2 */
+
+    void look(void)/* defines look */
+    {
+       exit(i1);   /* refers to exit... */
+    }    /* and to i1 */
+
+The object modules compiled from these source files are
+TEST1.OBJ and TEST2.OBJ. You can tell OBJXREF what kind
+of report to generate about these .OBJ files by
+entering the file names on the command line, followed
+by a /R and a second letter denoting report type.
+
+  Note  The following examples show only useful parts of the
+output.
+
+
+Report by public names (/RP)
+----------------------------
+A report by public names lists each of the public names
+defined in the object modules being reported on,
+followed by the name of the module in which it is defined.
+
+If you enter this on the command line:
+
+    OBJXREF  /RP  test1  test2
+
+OBJXREF generates a report that looks like this:
+
+    SYMBOL DEFINED IN
+    _i1    TEST1
+    _i2    TEST2
+    _look  TEST2
+    _main  TEST1
+
+
+Report by module (/RM)
+----------------------
+A report by module lists each object module being
+reported on, followed by a list of the public names
+defined in it.
+
+If you enter this on the command line:
+
+   OBJXREF  /RM  test1  test2
+
+OBJXREF generates a report that looks like this:
+
+    MODULE: TEST1 defines the following symbols:
+        _i1
+        _main
+    MODULE: TEST2 defines the following symbols:
+        _i2
+        _look
+
+
+Report by reference (/RR)
+-------------------------
+A report by reference lists each public name with 
+the defining module in parentheses on the same line.
+Modules that refer to this public name are listed on
+following lines indented from the left margin.
+
+If you enter this on the command line:
+
+  OBJXREF  /RR  C0S  test1  test2  CS.LIB
+
+OBJXREF generates a report that looks like this:
+
+    _exit (EXIT)
+    C0
+    TEST2
+    _i1 (TEST1)
+    TEST2
+    _look (TEST2)
+    TEST1
+    _main (TEST1)
+    C0
+
+
+Report by external references (/RX)
+-----------------------------------
+A report by external references lists each module followed
+by a list of external references it contains.
+
+If you enter this on the command line:
+
+   OBJXREF  /RX  C0S  test1  test2  CS.LIB
+
+OBJXREF generates a report that looks like this:
+
+    MODULE: C0 references the following symbols:
+       _main
+    MODULE: TEST1 references the following symbols:
+       _i2
+       _look
+    MODULE: TEST2 references the following symbols:
+       _exit
+       _i1
+
+
+Report of module sizes (/RS)
+----------------------------
+A report by sizes lists segment names followed by a
+list of modules that define the segment. Sizes in bytes
+are given in decimal and hexadecimal notation. The word
+uninitialized appears where no initial values are
+assigned to any of the symbols defined in the segment.
+Segments defined at absolute addresses in a .ASM file
+are flagged Abs to the left of the segment size.
+
+If you enter this on the command line:
+
+   OBJXREF  /RS  test1  test2
+
+OBJXREF generates a report that looks like this:
+
+TEST1_TEXT, PUBLIC
+            10 (0000Ah)    TEST1
+            10 (0000Ah)    total
+
+TEST2_TEXT, PUBLIC
+            15 (0000Fh)    TEST2
+            15 (0000Fh)    total
+
+_BSS, PUBLIC
+             4 (00004h)    TEST1, uninitialized
+             2 (00002h)    TEST2, uninitialized
+             6 (00006h)    total
+
+
+Report by class type (/RC)
+--------------------------
+A report by class type lists segment size definitions
+by segment class. The CODE class contains instructions,
+DATA class contains initialized data and BSS class
+contains uninitialized data. Segments which do not have
+a class type are listed under the notation No class type.
+
+If you enter this on the command line:
+
+   OBJXREF  /RC  C0S  test1  test2  CS.LIB
+
+OBJXREF generates a report that looks like this:
+
+BSS
+             4 (00004h)    _BSS, TEST1, uninitialized
+             2 (00002h)    _BSS, TEST2, uninitialized
+             6 (00006h)    total
+
+CODE
+             8 (00008h)    _TEXT, TEST1
+            13 (0000Dh)    _TEXT, TEST2
+            21 (00015h)    total
+
+
+Report of unreferenced symbol names (/RU)
+-----------------------------------------
+A report of unreferenced symbol names lists modules that
+define public names not referenced in other modules. Such
+a symbol is either:
+
+  o referenced only from within the defining module and
+    does not need to be defined as a public symbol (in
+    that case, if the module is in C, the keyword static
+    should be added to the definition; if the module is
+    in TASM, just remove the public definition).
+
+  o never used (therefore, it can be deleted to save code
+    or data space).
+
+If you enter this on the command line:
+
+   OBJXREF  /RU  test1  test2
+
+OBJXREF generates a report that looks like this:
+
+   MODULE: TEST2 defines the unreferenced symbol _i2.
+
+
+Verbose reporting (/RV)
+-----------------------
+If you enter /RV on the command line, OBJXREF generates
+one report of each type.
+
+
+OBJXREF Examples
+----------------
+These examples assume that the application files are in
+the current directory of the default drive and that the
+Borland C++ startup files (C0x.OBJ) and the library
+files are in the \BC4\LIB directory.
+
+
+EXAMPLE 1  C>OBJXREF \BC4\lib\c0l test1 test2 \BC4\lib\cl.lib
+
+In this example, the TEST1.OBJ and TEST2.OBJ files and the
+Borland C++ startup file \BC4\LIB\C0L.OBJ and the library
+file \BC4\LIB\CL.LIB are specified. Since no report type is
+specified, the resulting report is the default report by
+reference, listing public names and the modules that
+reference them.
+
+
+EXAMPLE 2         C>OBJXREF /RV /Ltest1.arf
+
+The TLINK response file TEST1.ARF contains the same
+list of files as the command line in Example 1. The /RV
+option is specified, so a report of every type is
+generated. TEST1.ARF contains
+     \BC4\lib\c0l
+     test1 test2
+     test1.exe
+     test1.map
+     \BC4\lib\cl
+
+
+EXAMPLE 3       C>OBJXREF /F /RV \BC4\lib\cs.lib
+
+This example reports on all the modules in the Borland
+C++ library file CS.LIB; OBJXREF can produce useful
+reports even when the files specified do not make a
+complete program. The /F causes all modules in CS.LIB
+file to be included in the report.
+
+
+OBJXREF error messages and warnings
+-----------------------------------
+OBJXREF generates two types of diagnostic messages:
+error messages and warnings.
+
+Out of memory error
+OBJXREF performs its cross referencing in RAM memory and
+might run out of memory even if TLINK is able to link the
+same list of files successfully. When this happens, OBJXREF
+stops. Remove memory resident programs to get more space,
+or add more RAM.
+
+WARNING: Unable to open input file <filename>
+The input file filename could not be located or opened.
+OBJXREF proceeds to the next file.
+
+WARNING: Unknown option - <option>
+The option name option is not recognized by OBJXREF.
+OBJXREF ignores the option.
+
+WARNING: Unresolved symbol <symbol> in module <module>
+The public name symbol referenced in module module is
+not defined in any of the .OBJ or .LIB files specified.
+OBJXREF flags the symbol in any reports it generates as
+being referenced but not defined.
+
+WARNING: Invalid file specification <filename>
+Some part of the file name filename is invalid. OBJXREF
+proceeds to the next file.
+
+WARNING: No files matching <filename>
+The file named filename listed on the command line or
+in a response file could not be located or opened.
+OBJXREF skips to the next file.
+
+WARNING: Symbol <symbol> defined in <module1>
+duplicated in <module2>
+Public name symbol is defined in modules module1 and
+module2. OBJXREF ignores the second definition.
+
+
+============================================================
+TRIGRAPH: A character-conversion utility
+============================================================
+Trigraphs are three-character sequences that replace
+certain characters used in the C language that are not
+available on some keyboards. Translating trigraphs in
+the compiler would slow compilation down considerably,
+so Borland C++ provides a filter named TRIGRAPH.EXE to
+handle trigraph sequences when you need to. The syntax
+for invoking this program is as follows:
+
+TRIGRAPH [-u] file(s) [file(s) ...]
+
+The following table shows the trigraph sequences that
+TRIGRAPH.EXE recognizes:
+
+ Trigraph  Characters
+-------------------------------------------------------
+
+    ??=   #    ??(   [
+    ??/   \    ??)   ]
+    ??'   ^    ??<   {
+    ??!   |    ??>   }
+    ??-   ~
+
+=================END OF FILE UTILS.TXT======================

@@ -1,0 +1,58 @@
+//----------------------------------------------------------------------------
+// ObjectWindows - (C) Copyright 1991, 1993 by Borland International
+//   include\owl\except.rc
+//   Resources to use with owl
+//----------------------------------------------------------------------------
+
+#include <owl\except.rh>
+
+#if defined(RC_INVOKED)
+
+//
+// Exception string resources
+//
+#if !defined(NO_IDS_EXCEPT) && !defined(__IDS_EXCEPT)
+#define __IDS_EXCEPT
+STRINGTABLE LOADONCALL MOVEABLE DISCARDABLE
+BEGIN
+  IDS_OWLEXCEPTION        "ObjectWindows Exception"
+  IDS_UNHANDLEDXMSG       "Unhandled Exception"
+  IDS_OKTORESUME          "OK to resume?"
+  IDS_UNKNOWNEXCEPTION    "Unknown exception"
+
+  IDS_UNKNOWNERROR        "Unknown error"
+  IDS_NOAPP               "No application object"
+  IDS_OUTOFMEMORY         "Out of memory"
+  IDS_INVALIDMODULE       "Invalid module specified for window"
+  IDS_INVALIDMAINWINDOW   "Invalid MainWindow"
+
+  IDS_INVALIDWINDOW       "Invalid window %s"
+  IDS_INVALIDCHILDWINDOW  "Invalid child window %s"
+  IDS_INVALIDCLIENTWINDOW "Invalid client window %s"
+
+  IDS_CLASSREGISTERFAIL   "Class registration fail for window %s"
+  IDS_CHILDREGISTERFAIL   "Child class registration fail for window %s"
+  IDS_WINDOWCREATEFAIL    "Create fail for window %s"
+  IDS_WINDOWEXECUTEFAIL   "Execute fail for window %s"
+  IDS_CHILDCREATEFAIL     "Child create fail for window %s"
+
+  IDS_MENUFAILURE         "Menu creation failure"
+  IDS_VALIDATORSYNTAX     "Validator syntax error"
+  IDS_PRINTERERROR        "Printer error"
+
+  IDS_LAYOUTINCOMPLETE    "Incomplete layout constraints specified in window %s"
+  IDS_LAYOUTBADRELWIN     "Invalid relative window specified in layout constraint in window %s"
+
+  IDS_GDIFAILURE          "GDI failure"
+  IDS_GDIALLOCFAIL        "GDI allocate failure"
+  IDS_GDICREATEFAIL       "GDI creation failure"
+  IDS_GDIRESLOADFAIL      "GDI resource load failure"
+  IDS_GDIFILEREADFAIL     "GDI file read failure"
+  IDS_GDIDELETEFAIL       "GDI object %X delete failure"
+  IDS_GDIDESTROYFAIL      "GDI object %X destroy failure"
+  IDS_INVALIDDIBHANDLE    "Invalid DIB handle %X"
+END
+#endif
+#undef NO_IDS_EXCEPT
+
+#endif  // defined(RC_INVOKED)

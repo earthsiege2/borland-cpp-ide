@@ -1,0 +1,77 @@
+{\rtf1\ansi \deff0\deflang1024{\fonttbl{\f0\froman Times New Roman;}{\f1\froman Symbol;}{\f2\fswiss Arial;}{\f3\froman Tms Rmn;}{\f4\fswiss Helv;}}{\colortbl;\red0\green0\blue0;\red0\green0\blue255;\red0\green255\blue255;
+\red0\green255\blue0;\red255\green0\blue255;\red255\green0\blue0;\red255\green255\blue0;\red255\green255\blue255;\red0\green0\blue127;\red0\green127\blue127;\red0\green127\blue0;\red127\green0\blue127;\red127\green0\blue0;\red127\green127\blue0;
+\red127\green127\blue127;\red192\green192\blue192;}{\stylesheet{\fs20\lang1033 \snext0 Normal;}}{\info{\author Michael Malone}{\creatim\yr1993\mo9\dy18\hr10\min10}{\version1}{\edmins175}{\nofpages0}{\nofwords65536}{\nofchars65536}{\vern16417}}
+\paperw12240\paperh15840\margl1800\margr1800\margt1440\margb1440\gutter0 \widowctrl\ftnbj \sectd \linex0\endnhere \pard\plain \fs20\lang1033 AppLauncher Documentation
+\par 
+\par 
+\par What is AppLauncher?
+\par           AppLauncher is a floating button bar, with each button representing an application that can
+\par            be started by pressing a button.
+\par 
+\par What happens on startup?
+\par           1)  If there is a .ini file present in the AppLauncher startup directory then AppLauncher will
+\par                read the first configuration section that is not in use by another instance, determined by
+\par                the "INUSE" field.  If AppLauncher did not terminate normally the INUSE field will not be 
+\par                reset to 0, you will need to do this manually by editing the .ini file.
+\par           2)  An application remover gadget (looks like a trash can) will be appened to the button bar.
+\par                For additional details see below.
+\par           
+\par Main Menu:
+\par           To access the main menu right mouse click over the title bar.  After the menu has been brought
+\par            up you can use either the left or right mouse button to choose a menu item.
+\par 
+\par           Menu Items:
+\par                     "Add Application(s)" : Brings up a dialog to enter the path of the application and the
+\par \tab           location of the application in the button bar.  By default the location is at the end of the
+\par                           button bar.  To add new application at a different location select the existing application,
+\par                           if any, to add before (existing application and others after it will be moved down).
+\par 
+\par \tab     "Remove Application(s)" :  Brings up a pick list dialog were you can choose the 
+\par \tab           applications to remove.
+\par 
+\par \tab     "Config Options" : Brings up AppLauncher configuration dialog.  Things that can be
+\par \tab           changed include: 
+\par \tab                 * Orientation (is button bar horizontal or vertical).
+\par \tab \tab * Save settings on exit.  Location of button bar and all applications will be saved
+\par \tab \tab    to .ini file.
+\par \tab \tab * Save settings now.  Saves settings to .ini file now and close dialog.
+\par \tab \tab * Prompt user for confirmation when an application is to be removed from
+\par                                    AppLauncher.{\ul 
+\par }
+\par \tab     "Read Configuration" :  Brings up a pick list dialog with the names of the open (not in use) 
+\par                           sections in the .ini file.  If the pick list is empty then there are no sections available to be 
+\par                           loaded.
+\par 
+\par \tab     "Help" : This file.
+\par 
+\par \tab     "Exit Program" : Exit AppLauncher.  If  'save settings on exit ' was set then settings will
+\par                          be saved.  Current .ini section in use (if any) will be marked as not in use.
+\par 
+\par Adding Applications:
+\par           You can add applications to the button bar in 2 ways: 1) Use the main menu or 2) Drag and
+\par           drop the application on the button bar.  You can drop the application anywhere on AppLauncher.
+\par            If the drop point is on a button the new application will take
+\par            its place with the application at that point and all others after it moved to accommodate the
+\par            new application.  If the drop point is the window's title bar or on the margin area  the new 
+\par            application will be added to the end.
+\par           
+\par Moving and Removing Applications:
+\par            To move an application to a new location simple click and hold down the left mouse button and
+\par            drag the application to the new location.  Remember, applications on the drop point are 
+\par            moved  down to accommodate the application moved.  Thus moving the first application to 
+\par            the "second" position will not result in a move.  To remove an application move drop it onto 
+\par            the remove application gadget,  which has a bitmap of a trash can on it (and is the last item in 
+\par            the button bar).  To move application to end of button bar drop it on the margin area before or 
+\par            after any button or on the title bar.
+\par 
+\par Application Properties:
+\par            To access an application's properties right mouse click over the button that represents the 
+\par            application you want.  Here are the properties that you can change:
+\par                 * Program path:  Path to application.  Can't be left blank.
+\par                 * Program arguments:  Enter any arguments you would like.
+\par \tab * Icon path:  Path to icon to use on button face.
+\par \tab * Prompt for input: If checked will prompt the user for addition parameters.  These
+\par \tab    parameters will be appended to those in "Program arguments" field.
+\par \tab * Startup style:  Specified how the application will be startup, either normal, maximized or
+\par                    minimized.
+\par }

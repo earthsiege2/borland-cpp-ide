@@ -1,0 +1,151 @@
+
+  BORLAND C++ RUNTIME LIBRARY SOURCE CODE 4.0 DOCUMENTATION
+  _________________________________________________________
+
+  Please read this document carefully. It contains information on
+  how to install the Borland C++ Runtime Library source files, an
+  overview of what the Runtime Library contains, instructions for
+  modifying Runtime Library files, and Borland's licensing
+  agreement.
+
+
+  TABLE OF CONTENTS
+  _________________
+
+     1.  Installing Library Sources
+     2.  Runtime Library Overview
+     3.  License Agreement
+     4.  More information on the batch files
+
+
+  1. INSTALLING LIBRARY SOURCES
+  _____________________________
+
+  If you are installing from the CD-ROM version just use XCOPY /S /E.
+
+  If you are installing from the floppy version ruun the SETUP.BAT file
+  on disk one with the name of the directory where the sources will be
+  installed.  You must first log onto the floppy drive containing disk
+  one.  For example:
+
+  C:\BIN>a:
+
+  A:\>setup c:\bc4rtl
+
+
+  2. RUNTIME LIBRARY OVERVIEW
+  ___________________________
+
+  Most of the library routines require .H files from Borland C++,
+  and you'll also need TLIB, the object file librarian.
+
+  The runtime libraries are blocks of object code grouped together
+  in several library files.  These library files contain the
+  general library routines and the standard math routines.
+
+  FPINIT.ASM is provided to allow you to modify the floating-point
+  initialization and termination process.  If you used the
+  installation batch file, this file will be found in a
+  subdirectory called EMU. FPINIT.ASM is used to create two OBJ
+  files, one for the emulator (FPINIT.OBJ) and one for inline 8087
+  instructions (FP87INIT.OBJ). The following command lines will
+  create these two files from the EMU subdirectory.
+
+       TASM /MX /t /z fpinit
+       TASM /MX /t /z /DFP87 fpinit, fp87init
+
+  Most of the modules contained in the runtime libraries are object
+  files produced by compiling the library source files with the
+  Borland C++ compiler.  Some of the files contain inline assembly
+  language code; therefore you will need a TASM 2.0 (or compatible)
+  Macro Assembler to compile those source files. Finally, a few
+  modules are written entirely in assembly language.
+
+  Here is a key to some of the file extensions found in the RTL:
+
+  .C             C source file
+  .CPP           C++ source file
+  .H             C header file
+  .CAS           C source file with inline assembler
+  .ASM           Assembler source file
+  .ASI           Include file needed for .ASM files
+  .CFG           Configuration files for Borland C++ and Turbo
+                 Assembler.
+  .ZIP           Archive file
+
+
+  3. LICENSE AGREEMENT
+  ____________________
+
+  Borland C++ Runtime Library Source Code
+  Borland's No-Nonsense License Agreement
+
+  Borland International, Inc. (Borland) is offering you a license
+  to the source code to the Borland C++ Runtime Library portion of
+  Borland C++ (the Source Programs), including updates that may
+  later be supplied by Borland at additional cost, but not
+  including the source code of the 8087 emulator or the graphics
+  library.
+
+  The Source Programs are protected by both United States copyright
+  law and international treaty provisions. Therefore, you must
+  treat the Source Programs just like a book, with the following
+  single exception:  Borland authorizes you to make archival copies
+  of the Source Programs for the sole purpose of backing-up your
+  programs and protecting your investments from loss.
+
+  By "just like a book," Borland means, for example, that the
+  Source Programs may be used by any number of people and may be
+  freely moved from one computer workstation to another, so long as
+  there is no possibility of them being used at one computer
+  workstation at the same time they are being used at another. Just
+  as a book can't be read by two different people in two different
+  places at the same time, neither can the Source Programs be used
+  by two different people in two different places at the same time.
+  (Unless, of course, Borland's copyright has been violated.)
+
+  You may modify the Source Programs, but the modified source code,
+  regardless of the extent of the modifications, shall always
+  remain Borland's source code. You may not remove or modify
+  Borland's copyright and other proprietary copyright notices, and
+  you may not transport any of the Source Programs to another
+  computer operating system or environment. You are responsible for
+  all claims, liability, and damages arising from your own
+  modifications and the products which include them.
+
+  You may use the Source Programs to support your licensed copies
+  of Borland C++. This means you may include all or some of the
+  original or modified Source Programs routines in your own Borland
+  C++ based programs, but you may only distribute binary copies of
+  such routines when linked into your executable programs. You may
+  not distribute any source code for the original or modified
+  Borland C++ Runtime Library under any circumstances. You are not,
+  of course, restricted from distributing your own source code.
+
+  All rights not specifically granted in this license are reserved
+  by Borland.
+
+
+  ENVIRONMENT VARIABLES
+  _____________________
+
+  The batch files use two environment variables to determine which
+  memory models should be used, and where the error log should be
+  saved.
+
+  The environment variable MODEL specifies which memory models
+  should be used.  Set it to all the memory model letters you want
+  to use. Separate the letters with spaces, and be sure to use only
+  lower-case letters. For example, if you want to compile for all
+  memory models, use all the model letters:
+
+       set MODEL=s c m l h
+
+  If you want to compile for just one memory model, set MODEL to a
+  single letter: use the command:
+
+       set MODEL=s
+
+  If you don't set MODEL, the batch files will use all memory
+  models.
+

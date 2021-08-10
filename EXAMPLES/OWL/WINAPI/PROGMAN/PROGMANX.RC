@@ -1,0 +1,45 @@
+//----------------------------------------------------------------------------
+// ObjectWindows - (C) Copyright 1991, 1993 by Borland International
+//----------------------------------------------------------------------------
+#ifndef WORKSHOP_INVOKED
+  #include <windows.h>
+#endif
+#include "progmanx.h"
+
+#include <owl\inputdia.rh>
+#include <owl\inputdia.rc>
+
+IDD_PROGTALK DIALOG 47, 35, 170, 104
+STYLE WS_CHILD | WS_VISIBLE
+FONT 8, "MS Sans Serif"
+{
+ DEFPUSHBUTTON "&Add item", CM_ADDITEM, 99, 15, 57, 14
+ PUSHBUTTON "&Delete item", CM_DELETEITEM, 99, 33, 57, 14
+ PUSHBUTTON "C&lear items", CM_CLEARITEMS, 99, 51, 57, 14
+ PUSHBUTTON "&Create group", CM_CREATEGROUP, 99, 81, 57, 14
+ CONTROL "LISTBOX", ID_LISTBOX, "LISTBOX", WS_CHILD | WS_VISIBLE | WS_BORDER | WS_VSCROLL | WS_TABSTOP | LBS_NOTIFY | LBS_SORT, 8, 16, 80, 80
+ LTEXT "&Program group items:", -1, 8, 6, 80, 8, NOT WS_GROUP
+}
+
+#if 0
+IDD_ADDDIALOG DIALOG DISCARDABLE LOADONCALL PURE MOVEABLE 6, 16, 154, 48
+STYLE WS_POPUP | WS_CAPTION | WS_SYSMENU | 0x80L
+CAPTION "Add item"
+BEGIN
+  CONTROL "Item &name" -1, "STATIC", WS_CHILD | WS_VISIBLE, 8, 8, 36, 8
+  CONTROL "" ID_INPUT, "EDIT", WS_CHILD | WS_VISIBLE | WS_BORDER | WS_TABSTOP | 0x80L, 48, 6, 96, 12
+  CONTROL "&Add" IDOK, "BUTTON", WS_CHILD | WS_VISIBLE | WS_TABSTOP | 0x1L, 34, 26, 42, 12
+  CONTROL "Cancel" IDCANCEL, "BUTTON", WS_CHILD | WS_VISIBLE | WS_TABSTOP, 83, 26, 42, 12
+END
+
+
+IDD_CREATEDIALOG DIALOG DISCARDABLE LOADONCALL PURE MOVEABLE 6, 16, 154, 48
+STYLE WS_POPUP | WS_CAPTION | WS_SYSMENU | 0x80L
+CAPTION "Create group"
+BEGIN
+  CONTROL "Group &name" -1, "STATIC", WS_CHILD | WS_VISIBLE, 8, 8, 40, 8
+  CONTROL "" ID_INPUT, "EDIT", WS_CHILD | WS_VISIBLE | WS_BORDER | WS_TABSTOP | 0x80L, 52, 6, 92, 12
+  CONTROL "&Create" IDOK, "BUTTON", WS_CHILD | WS_VISIBLE | WS_TABSTOP | 0x1L, 34, 26, 42, 12
+  CONTROL "Cancel" IDCANCEL,  BUTTON", WS_CHILD | WS_VISIBLE | WS_TABSTOP, 83, 26, 42, 12
+END
+#endif

@@ -1,0 +1,18 @@
+#--------------------------------------------------------------------------#
+#                                                                          #
+#   MAKEFILE for BIDS XREF example                                         #
+#                                                                          #
+#   Copyright (c) 1993 Borland International                               #
+#   All Rights Reserved                                                    #
+#                                                                          #
+#   Usage:                                                                 #
+#                                                                          #
+#       make MODEL=f                 for 32-bit Windows                    #
+#       make MODEL={s|m|c|l}         for 16-bit Windows                    #
+#       make MODEL={s|m|c|l} -DDOS16 for 16-bit DOS                        #
+#                                                                          #
+#--------------------------------------------------------------------------#
+
+EXE     = xref
+
+!include $(BCEXAMPLEDIR)\bidsmake.gen

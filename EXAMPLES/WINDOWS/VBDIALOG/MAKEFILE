@@ -1,0 +1,7 @@
+# Borland C++ - (C) Copyright 1993 by Borland International
+# Makefile for VBDIALOG program
+
+EXERES  = vbdialog
+LIBEXE  = $(BCLIBDIR)\bivbx.lib
+SYSTEMS = WIN16
+!include $(BCEXAMPLEDIR)\makefile.gen

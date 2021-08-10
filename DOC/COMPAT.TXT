@@ -1,0 +1,794 @@
+Using the Paradox Engine And Database Frameworks with BC 4.0
+============================================================
+
+THE PARADOX ENGINE
+
+There is only one significant detail regarding the use of the Paradox
+Engine 3.0x with Borland C++ 4.0.  The BC 3.1 versions of setjump and
+longjump will have to be linked into your application in order to create
+DOS Paradox Engine and Database Framework applications.  The object
+module, setjmp.obj, is provided in the BC4\LIB\COMPAT directory. Linking
+this module into your application will replace the BC 4.0 version of
+these functions.  To do this, simply add the file
+\BC4\LIB\COMPAT\SETJMP.OBJ to your project file or to the link command
+in your makefile.
+
+
+REBUILDING THE DATABASE FRAMEWORKS
+
+Due to changes in the debug information format, symbol length, and
+runtime library, the Database Framework library must be recompiled with
+Borland C++ 4.0.
+
+A number of changes will have to be made to the Paradox Engine DBF v3.01
+makefile in order for it to work with BC 4.0 (this makefile is available
+from our local BBS at (408) 431-5096 as the file TI1169.ZIP and from
+TechFax at (800) 822-4269, document number 1169):
+
+1. Copy makefile.bc to make40.mak
+
+2. Make certain that a turboc.cfg file exists in the BC4\BIN directory
+   containing:
+
+      -Ic:\bc4\include
+      -Lc:\bc4\lib
+
+   Make certain that a tlink.cfg file exist in the BC4\BIN directory
+   containing:
+
+      -Lc:\bc4\lib
+
+   Adjust the above paths to reflect your systems' configuration.
+
+3. Make the following changes:
+
+   Line 83: Change the 'CCINCLUDE=' line to contain the path to the BC
+            4.0 include directory.
+   Line 168: Delete the blank space at the end of the 'DEBUGFLAG=v ' line
+   Line 172: Delete the blank space at the end of the 'DYNAMICFLAG=d ' line
+   Line 202: Add '-DWindows' after '-DWINDOWS'
+   Line 204: Add '-DWindows' after '-DWINDOWS'
+   Line 206: Add '-DWindows' after '-DWINDOWS'
+   Line 239: Replace '$D' with 'BuildDir'
+   Line 249: Replace '$D' with 'BuildDir'
+   Line 261: Replace '$D' with 'BuildDir'
+
+Then use the following command to create a Database Framework Library.
+Add one or both of the options -DDBG and -DWINDOWS to add debug info or
+build for use in WINDOWS code. (Refer to the makefile for even more
+options.)
+
+   make -fmake40.mak
+
+For example, the following command will create a large model, static
+windows DBF library with debug info:
+
+   make -DWINDOWS -DDBG -fmake40.mak
+
+The libraries will be created in the PXENG30\C\LIB directory.  These
+libraries are now ready for use in your Database Frameworks Program.
+
+
+CHANGES TO USER CODE WITH RESPECT TO DBF
+
+The only change to your source code involves the use of the 'new'
+operator. In BC++ 4.0, the new operator no longer returns NULL in case
+of failure, rather the xalloc exception is thrown.  To change this back
+so operator new returns NULL, call set_new_handler(0).
+
+The only remaining issue is with using the new operator in the
+constructor of global objects.  How do you call set_new_handler(0)
+before a global object's constructor is called?  This is accomplished by
+using a #pragma startup function with a priority higher than that of the
+startup function used to call the particular global object's
+constructor.  The following code shows an example of changing the
+behavior of new:
+
+   #include <new.h>
+
+   void old_new(void)
+   {
+      set_new_handler(0);
+   }
+
+   #pragma startup old_new 31
+
+   BEngine eng(pxWin);
+
+   int main (void)
+   {
+   .
+   .
+   .
+      return 0;
+   }
+
+Note that creating global instances of Database Framework objects is not
+recommended because it can make error checking difficult.
+
+The other option is to change the source of the Database Frameworks: Add
+the try {} catch(xalloc) clause everywhere that new is called.
+
+
+
+Using Turbo Vision 1.0x with Borland C++ 4.0
+============================================
+
+REBUILDING THE TURBO VISION LIBRARY:
+
+Due to changes in the debug information format, symbol length, and
+runtime library, the Turbo Vision library must be recompiled with
+Borland C++ 4.0.
+
+There are a few minor changes that need to be made to the source code
+before recompiling it with the new compiler.  These are due to slightly
+tightened syntax restrictions.  The makefile will require some
+modification as well, which are shown below.
+
+There are 3 steps to this process:
+
+   1. Copy the old 3.1 Turbo Vision source into the new BC4 directory
+      structure.
+   2. Make the appropriate changes according to the instructions below.
+   3. Run MAKE to build the new Turbo Vision library you need to
+      continue your work.  If you are using Turbo Vision in an overlaid
+      application, make sure you follow the instructions specific to
+      overlays.
+
+These steps are now presented in more detail:  Note that the Borland C++
+root directory is assumed to be \BC4.  Change this as necessary for your
+particular installation.  Also, if you are upgrading from Borland C++
+2.0 and have the original version of Turbo Vision, some of the line
+numbers mentioned may not accurately reflect your version.
+
+You need to copy your old Turbo Vision source and include files from
+Borland C++ 3.1 into your Borland C++ 4.0 directory hierarchy.  To do
+this, just run the following command:
+
+   XCOPY \BC31\TVISION \BC4\TVISION /S
+
+and when it asks you about creating a directory called TVISION, say yes.
+Modify the above paths according to your system configuration if
+necessary.  You are now ready to make the necessary modifications before
+rebuilding the library.
+
+The changes are as follows:
+
+1. Due to tighter syntax checking, case blocks that declare initialized
+   local variables need their own scoping block.  Make the changes below
+   in the order shown so that confusion over the correct line numbers
+   can be avoided.  In general, the '{' follows a case statement, and
+   the '}' follows a break statement.
+
+   COLORSEL.CPP
+
+      Add after line 219:  }
+      Add after line 179:  {
+      Add after line 177:  }
+      Add after line 164:  {
+
+   TBUTTON.CPP
+
+      Add after line 226:  }
+      Add after line 211:  {
+      Add after line 209:  }
+      Add after line 192:  {
+
+2. TINPUTLIN.CPP
+   Replace line 44:  if( (p = strchr( s, '~' )) != 0 )
+   With              if( (p = (char*) strchr( s, '~' )) != 0)
+
+3. TMNUVIEW.CPP
+   Replace line 348:  char *loc = strchr( p->name, '~' );
+   With               char *loc = (char*)strchr( p->name, '~' );
+
+4. MAKEFILE
+   Replace line 100:
+      CFLAGS = -c $(CCOVYFLAGS) -P -O1 -m$(MODEL) -I$(INCLUDE) -n$(OBJDIR)
+   With
+      CFLAGS = -c -x- $(CCOVYFLAGS) -P -O1 -m$(MODEL) -I$(INCLUDE) -n$(OBJDIR)
+
+   Replace line 73:
+      TLIB = $(BCROOT)\bin\tlib /0
+   With this group of 5 lines:
+      !ifdef DEBUG
+         TLIB = $(BCROOT)\bin\tlib
+      !else
+         TLIB = $(BCROOT)\bin\tlib /0
+      !endif
+
+   *** If you did NOT purchase the Turbo Assembler add-on package for
+   Borland C++ 4.0, you must make some additional changes.
+
+   Replace the group at lines 259-263:
+      !if $d(BC)
+         $(TASM) $&.asm, $(OBJDIR)\$&.obj
+      !else
+         copy $(TVLIBDIR)\$&.obj $(OBJDIR)
+      !endif
+   With this group:
+      !if !$d(NOTASM)
+         $(TASM) $&.asm, $(OBJDIR)\$&.obj
+      !else
+         copy $(LIBDIR)\COMPAT\$&.obj $(OBJDIR)
+      !endif
+
+   Add after line 49:
+      NOTASM = 1
+
+
+USE OF EXCEPTION HANDLING WITH TURBO VISION:
+
+Turbo Vision was designed with its own global new operator.  Due to this
+internal design you will not be able to use exception handling with the
+new operator. However, any other type of exception handling is
+supported. In order to enable exception handling do not make the change
+to line 88 of the makefile.
+
+
+USE OF OVERLAYS WITH TURBO VISION:
+
+** Note: All instructions in this section are in addition to the changes
+recommended above.
+
+As with Borland C++ 3.1, Turbo Vision can be used in an overlayed program
+if the library is rebuild with certain options, shown below:
+
+   All overlayed modules must be compiled with local virtual tables (-Vs).
+
+   Overlayed modules no longer need to be compiled via assembler (-B).
+
+   Overlayed modules must be compiled with exceptions disabled (-x-).
+
+Here are the steps required to build an overlayable version of TV.LIB:
+
+1. First make an additional change to file TVISION\SOURCE\MAKEFILE:
+
+   Change line 96 from : CCOVYFLAGS = -Y -Vs -B
+                    to : CCOVYFLAGS = -Y -Vs
+
+2. Change to the \BC4\TVISION\LIB directory and make a backup copy of
+   TV.LIB by typing:
+
+   COPY TV.LIB OLDTV.LIB
+
+3. Switch to the \BC4\TVISION\SOURCE directory and type:
+
+   MAKE -B -DOVERLAY
+
+4. This will create a new TV.LIB in the \BC4\TVISION\LIB directory.
+   There are seven modules in TV.LIB which cannot be overlayed.  The
+   easiest solution to this problem is to create three seperate
+   libraries.  Two libraries will be used when creating overlayed TV
+   apps, and the original TV.LIB will remain for use in non-overlayed TV
+   apps:
+
+    TV.LIB   - full TV lib for use in non-overlayed TV apps
+    TVO.LIB  - overlayable modules of TV.LIB
+    TVNO.LIB - non-overlayable modules of TV.LIB
+
+   To create these libraries, switch into the TVISION\LIB directory and
+   type the following commands:
+
+    TLIB TV.LIB -*SYSERR -*TSCREEN -*DRIVERS -*DRIVERS2 -*SWAPST -*TEVENT -*SYSINT
+    TLIB TVNO.LIB +SYSERR +TSCREEN +DRIVERS +DRIVERS2 +SWAPST +TEVENT +SYSINT
+    RENAME TV.LIB TVO.LIB
+    RENAME TVOLD.LIB TV.LIB
+    DEL *.OBJ *.BAK
+
+5. You will now have the three libraries.  To create an overlayed Turbo
+   Vision application, include both TVO.LIB and TVNO.LIB in the project
+   file or link line of the makefile.  Using the local options for each
+   item, mark TVO.LIB as overlayed and TVNO.LIB as non-overlayed.  Also,
+   go to the TargetExpert dialog box for this target and uncheck the
+   Turbo Vision Library.
+
+
+
+Using the Object Based Class Library with Borland C++ 4.0
+=========================================================
+
+The object based class library, while still included with Borland C++
+4.0, must be compiled before it can be used.  Here are instructions for
+doing so:
+
+There is a makefile in the source directory, \BC4\SOURCE\CLASSLIB which
+can be used to build all versions of the class library.  For example, to
+build a large model static version for use with Object Windows, run the
+following command:
+
+   MAKE -DDOS -DOBJECTS "-DBCC=bcc -x-" -DMODEL=l -DNAME=tclassl
+
+To build a debugging dynamic version of the class library DLL, run the
+following command:
+
+   MAKE -DDOS -DDBG -DOBJECTS "-DBCC=bcc -x-" -DDLL -DNAME=tclass
+
+Note that to successfully use the DLL version of the class library you will
+have to copy TCLASS40.DLL from the \BC4\LIB directory into the \BC4\BIN
+directory.
+
+
+
+Using OWL 1.0 with Borland C++ 4.0
+==================================
+
+REBUILDING THE OWL LIBRARY:
+
+Due to changes in the debug information format, symbol length, and
+runtime library, the Object Windows library must be recompiled with
+Borland C++ 4.0.
+
+Rebuilding Object Windows requires that you first rebuild the Object
+Based Class Library.  If you have not already done so, go to the section
+above marked "Using the Object Based Class Library with Borland C++ 4.0"
+and follow those directions before continuing here.
+
+There are 4 steps to this process:
+
+   1. Copy the old 3.1 OWL source into the new BC4 directory structure.
+   2. Extract the new makefile from the end of this file and save it.
+   3. Make a slight modification to OWLDLL.DEF.
+   4. Run MAKE to build the various OWL libraries you need to continue
+      your work.
+
+These steps are now presented in more detail:  Note that the Borland C++
+root directory is assumed to be \BC4.  Change this as necessary for your
+particular installation.
+
+First, go to the \BC4\SOURCE directory and create a new subdirectory
+called OWL1.  In OWL1, make three more subdirectories called SOURCE,
+LIB, and OBJECT.  In OBJECT, make directories called WS, WM, WL, and WD.
+Copy the entire contents of the \BC31\OWL\SOURCE directory from Borland
+C++ 3.1 into \BC4\SOURCE\OWL1\SOURCE.  The following batch text
+(modified to reflect your systems directory structure) will automate
+these tasks for you:
+
+   CD \BC4\SOURCE
+   MKDIR OWL1
+   CD OWL1
+   MKDIR OBJECT
+   MKDIR SOURCE
+   CD OBJECT
+   MKDIR WS
+   MKDIR WM
+   MKDIR WL
+   MKDIR DL
+   CD ..\SOURCE
+   XCOPY \BC31\OWL\SOURCE .
+
+You are now ready to make the necessary modifications before rebuilding
+the library.
+
+The makefile for OWL 1.0 needed some changes to be suitable for use with
+Borland C++ 4.0.  Due to the number of changes, we have enclosed a new
+makefile and the end of this document.  Extract it using your favorite
+editor (e.g. the IDE) and save it in the OWL1\SOURCE directory as
+MAKEFILE.
+
+There are now new names for the OWL 1.0 libraries to avoid conflicts
+with the OWL 2.0 libraries.  The new names are:
+
+   OWL100WS.LIB   Small model
+   OWL100WM.LIB   Medium model
+   OWL100WL.LIB   Large model
+   OWL100I.LIB    Import library for DLL
+   OWL100.DLL     OWL 1.0 DLL
+
+In order to properly rename the DLL, the file OWLDLL.DEF in the
+OWL1\SOURCE directory must be modified as well.  Change line 1 of this
+file from "LIBRARY OWL31" to "LIBRARY OWL100".
+
+The Object Window's makefile can now be invoked via MAKE.EXE to rebuild
+the entire library.  For example, to rebuild the large model static
+library with no debug information, run MAKE with this option:
+
+   MAKE -DMODEL=l
+
+To build the dynamic library with full debug info, run MAKE as follows:
+
+   MAKE -DDLL -DDEBUG
+
+*** If you did not purchase the Turbo Assembler 4.0, you can only
+rebuild the large model static library or the dynamic library.  You must
+also define NOTASM when running MAKE.  The following command will build
+the large model static library.
+
+   MAKE -DMODEL=l -DNOTASM
+
+
+
+USING THE NEW OWL 1.0 LIBRARIES
+
+To import your old OWL 1.0 projects into BC++ 4.0, only a few changes
+are needed.  First load the .PRJ file into the IDE via Project | Open
+Project. After the project file is loaded, perform the following
+changes:
+
+   1. Using TargetExpert (see the local menu for the project file
+      target) uncheck OWL and the Class Library.  Also double check that
+      the target is Windows 16-bit, and that the memory model is
+      correct.
+
+   2. If using the static versions of these libraries, add as
+      dependencies to the target node TCLASSx.LIB and OWL100Wx.LIB where
+      'x' is the letter of the memory model being used.
+
+      If using the dynamic versions, add as dependencies to the target
+      node TCLASSI.LIB and OWL100I.LIB.
+
+   3. Select the Project Notebook (via Options | Project).
+      Under Directories.  Set the Include path to:
+         \BC4\INCLUDE;\BC4\INCLUDE\CLASSLIB\OBSOLETE;\BC4\INCLUDE\OWLCVT
+      Set the Library path to:
+         \BC4\LIB
+      Under C++ Options | Exception Handling/RTTI turn off all checkboxes.
+
+      If using the dynamic versions of these libraries, go to Options |
+      Project | Compiler | Defines and add the symbol _CLASSDLL.
+
+   4. If you are using OWL.DEF from OWL 1.0, make sure you copy it from
+      the old OWL 1.0 LIB directory to a new area and modify the project
+      node for this item accordingly.
+
+*** Note that just as in Borland C++ 3.1, if you are using the dynamic
+version of OWL, you must also use the dymamic version of the class
+library and of the runtime library.
+
+
+
+TEXT FOR NEW OWL 1.0 MAKEFILE:
+==============================
+# ObjectWindows - (C) Copyright 1992 by Borland International
+
+.autodepend
+.swap
+
+!if $d(DEBUG)
+DBG = -v
+!endif
+
+VERSION = 100
+
+!if !$d(MODEL)
+!if $d(DLL)
+MODEL = l
+!else
+MODEL = l
+!endif
+!endif
+
+!if $d(DLL)
+WIN = -WDE -D_CLASSDLL
+D = d
+SWINDOBJNAME=swndobjd.obj
+OWLMATHNAME=owlmathd.obj
+VERSIONNAME=versiond.obj
+!else
+WIN = -WE
+D = w
+SWINDOBJNAME=swndobj$(MODEL).obj
+OWLMATHNAME=owlmath$(MODEL).obj
+VERSIONNAME=version$(MODEL).obj
+!endif
+
+#
+# By default, build OWL with STRICT and WIN30 and WIN31 entry points.
+#
+
+WINMODE = -DWIN30;WIN31;STRICT
+
+!if $d(STRICT)
+
+WINMODE = -DSTRICT
+!if $d(WIN31)
+WINMODE = -DWIN31 $(WINMODE)
+!endif
+!if $d(WIN30)
+WINMODE = -DWIN30 $(WINMODE)
+!endif
+
+!else # !STRICT
+
+!if $d(WIN31)
+WINMODE = -DWIN31
+!if $d(WIN30)
+WINMODE = -DWIN30 $(WINMODE)
+!endif
+
+!else # !WIN31 && !STRICT
+
+!if $d(WIN30)
+WINMODE = -DWIN30
+!endif
+
+!endif # !WIN31
+!endif # !STRICT
+
+
+!if !$d(BCROOT)
+BCROOT=..\..\..
+!endif
+
+!if !$d(OWLROOT)
+OWLROOT=$(BCROOT)\source\owl1
+!endif
+
+!if !$d(CLASSDIR)
+CLASSDIR = $(BCROOT)\source\classlib\obsolete
+!endif
+
+KEY = $(D)$(MODEL)
+OBJDIR = ..\object\$(KEY)
+
+.path.obj = $(OBJDIR)
+
+!if $d(DEBUG)
+TLIB = $(BCROOT)\bin\tlib /P128
+!else
+TLIB = $(BCROOT)\bin\tlib /0
+!endif
+
+CC = $(BCROOT)\bin\bcc
+TLINK = $(BCROOT)\bin\tlink
+ASM = $(BCROOT)\bin\tasmx
+
+INCLUDE = $(BCROOT)\include\owlcvt;$(BCROOT)\include\classlib\obsolete;$(BCROOT)\include
+LIBDIR = $(BCROOT)\lib
+
+!if $d(DLL)
+CFLAGS = -c -x- -RT- -v -vi $(WINMODE);BUILD_OWL $(WIN) -m$(MODEL) -n$(OBJDIR) -2
+!else
+CFLAGS = -c -x- -RT- $(DBG) $(WINMODE);BUILD_OWL $(WIN) -m$(MODEL) -n$(OBJDIR) -2
+!endif
+
+ASMFLAGS = /o /D__LARGE__ /D__CDECL__ /e /ml
+
+BCC = $(CC)
+!if $d(DLL)
+TBCC = $(CC) -TD_CLASSDLL
+!else
+TBCC = $(CC)
+!endif
+
+#used for linking DLL
+LFLAGS = /v /Twd /n /x /c /C
+BCLIBDIR = $(BCROOT)\lib
+DCLASSLIB = $(BCLIBDIR)\tclassi.lib
+STDLIBS = $(BCLIBDIR)\import $(BCLIBDIR)\crtldll $(BCLIBDIR)\cwl
+
+OBJS = \
+   module.obj     \
+   applicat.obj   \
+   window.obj     \
+   owl.obj        \
+   dialog.obj     \
+   scroller.obj   \
+   control.obj    \
+   button.obj     \
+   checkbox.obj   \
+   static.obj     \
+   edit.obj       \
+   groupbox.obj   \
+   radiobut.obj   \
+   listbox.obj    \
+   combobox.obj   \
+   scrollba.obj   \
+   mdiframe.obj   \
+   mdiclien.obj   \
+   inputdia.obj   \
+   filedial.obj   \
+   editwnd.obj    \
+   filewnd.obj    \
+   bbutton.obj    \
+   bchkbox.obj    \
+   bradio.obj     \
+   bdivider.obj   \
+   bgrpbox.obj    \
+   bstatic.obj    \
+   bstatbmp.obj   \
+   bwindow.obj    \
+   safepool.obj   \
+   objstrm.obj    \
+   tcollect.obj   \
+   tsortcol.obj   \
+   appdict.obj    \
+   windobj.obj    \
+   version.obj    \
+   owlmath.obj    \
+   swindobj.obj
+
+.cpp.obj:
+    $(BCC) {$. }
+
+.c.obj:
+    $(BCC) {$. }
+
+.asm.obj:
+    $(TBCC) $.
+
+!if $d(DLL)
+all: config $(LIBDIR)\owl.lib
+!else
+all: config $(LIBDIR)\owl$(VERSION)$(KEY).lib
+!endif
+
+config: makefile
+   echo -I$(INCLUDE) > turboc.cfg
+   echo $(CFLAGS) >> turboc.cfg
+
+swindobj.obj: swindobj.cpp
+!if !$d(NOTASM)
+   $(CC) $(CFLAGS) -S swindobj.cpp
+   $(ASM) $(ASMFLAGS) $(OBJDIR)\swindobj.asm,$(OBJDIR)\swindobj.obj
+!else
+    copy $(BCROOT)\LIB\COMPAT\$(SWINDOBJNAME) $(OBJDIR)\swindobj.obj
+!endif
+
+owlmath.obj: owlmath.cpp
+!if !$d(NOTASM)
+   $(CC) $(CFLAGS) -S owlmath.cpp
+   $(ASM) $(ASMFLAGS) $(OBJDIR)\owlmath.asm,$(OBJDIR)\owlmath.obj
+!else
+   copy $(BCROOT)\LIB\COMPAT\$(OWLMATHNAME) $(OBJDIR)\owlmath.obj
+!endif
+
+version.obj:
+   copy $(BCROOT)\LIB\COMPAT\$(VERSIONNAME) $(OBJDIR)\version.obj
+
+tcollect.obj: tcollect.cpp
+   $(BCC) -RT- $?
+
+tsortcol.obj: tsortcol.cpp
+   $(BCC) -RT- $?
+
+$(LIBDIR)\owl.lib: $(OBJS) $(DCLASSLIB)
+   $(TLINK) $(LFLAGS) @&&!
+$(BCLIBDIR)\c0$(KEY) +
+$(OBJDIR)\windobj    +
+$(OBJDIR)\swindobj   +
+$(OBJDIR)\applicat   +
+$(OBJDIR)\window     +
+$(OBJDIR)\owl        +
+$(OBJDIR)\dialog     +
+$(OBJDIR)\scroller   +
+$(OBJDIR)\owlmath    +
+$(OBJDIR)\inputdia   +
+$(OBJDIR)\filedial   +
+$(OBJDIR)\control    +
+$(OBJDIR)\button     +
+$(OBJDIR)\checkbox   +
+$(OBJDIR)\static     +
+$(OBJDIR)\edit       +
+$(OBJDIR)\radiobut   +
+$(OBJDIR)\groupbox   +
+$(OBJDIR)\listbox    +
+$(OBJDIR)\combobox   +
+$(OBJDIR)\mdiframe   +
+$(OBJDIR)\mdiclien   +
+$(OBJDIR)\scrollba   +
+$(OBJDIR)\editwnd    +
+$(OBJDIR)\filewnd    +
+$(OBJDIR)\module     +
+$(OBJDIR)\bbutton    +
+$(OBJDIR)\bchkbox    +
+$(OBJDIR)\bradio     +
+$(OBJDIR)\bdivider   +
+$(OBJDIR)\bgrpbox    +
+$(OBJDIR)\bstatic    +
+$(OBJDIR)\bstatbmp   +
+$(OBJDIR)\bwindow    +
+$(OBJDIR)\safepool   +
+$(OBJDIR)\objstrm    +
+$(OBJDIR)\tcollect   +
+$(OBJDIR)\tsortcol   +
+$(OBJDIR)\appdict    +
+$(OBJDIR)\version
+! $(LIBDIR)\owl$(VERSION).dll,, @&&!
+/v- $(DCLASSLIB) $(STDLIBS)
+!,owldll.def
+   implib $(LIBDIR)\owl$(VERSION)i.lib $(LIBDIR)\owl$(VERSION).dll
+   copy $(LIBDIR)\owl$(VERSION).dll $(BCROOT)\bin
+   tdstrip -s $(BCROOT)\bin\owl$(VERSION).dll
+   del $(LIBDIR)\owl$(VERSION).dll
+
+$(LIBDIR)\owl$(VERSION)$(KEY).lib: $(OBJS)
+   del $(LIBDIR)\owl$(VERSION)$(KEY).lib
+   $(TLIB) $(LIBDIR)\owl$(VERSION)$(KEY).lib @&&!
++$(OBJDIR)\windobj   &
++$(OBJDIR)\swindobj  &
++$(OBJDIR)\window    &
++$(OBJDIR)\applicat  &
++$(OBJDIR)\owl       &
++$(OBJDIR)\dialog    &
++$(OBJDIR)\scroller  &
++$(OBJDIR)\owlmath   &
++$(OBJDIR)\inputdia  &
++$(OBJDIR)\filedial  &
++$(OBJDIR)\control   &
++$(OBJDIR)\button    &
++$(OBJDIR)\checkbox  &
++$(OBJDIR)\static    &
++$(OBJDIR)\edit      &
++$(OBJDIR)\radiobut  &
++$(OBJDIR)\groupbox  &
++$(OBJDIR)\listbox   &
++$(OBJDIR)\combobox  &
++$(OBJDIR)\mdiframe  &
++$(OBJDIR)\mdiclien  &
++$(OBJDIR)\scrollba  &
++$(OBJDIR)\editwnd   &
++$(OBJDIR)\filewnd   &
++$(OBJDIR)\module    &
++$(OBJDIR)\bbutton   &
++$(OBJDIR)\bchkbox   &
++$(OBJDIR)\bradio    &
++$(OBJDIR)\bdivider  &
++$(OBJDIR)\bgrpbox   &
++$(OBJDIR)\bstatic   &
++$(OBJDIR)\bstatbmp  &
++$(OBJDIR)\bwindow   &
++$(OBJDIR)\safepool  &
++$(OBJDIR)\objstrm   &
++$(OBJDIR)\tcollect  &
++$(OBJDIR)\tsortcol  &
++$(OBJDIR)\appdict   &
++$(OBJDIR)\version
+!
+
+clean:
+   @echo Removing .OBJ's and .ASM's from $(OBJDIR)
+   @if exist .\version.cpp  \
+      if exist $(OBJDIR)\version.obj  del $(OBJDIR)\version.obj
+!if !$d(NOTASM)
+   @if exist .\owlmath.cpp  \
+      if exist $(OBJDIR)\owlmath.obj  del $(OBJDIR)\owlmath.obj
+   @if exist .\swindobj.cpp \
+      if exist $(OBJDIR)\swindobj.obj del $(OBJDIR)\swindobj.obj
+   @if exist $(OBJDIR)\swindobj.asm   del $(OBJDIR)\swindobj.asm
+!endif
+   @if exist $(OBJDIR)\module.obj     del $(OBJDIR)\module.obj
+   @if exist $(OBJDIR)\applicat.obj   del $(OBJDIR)\applicat.obj
+   @if exist $(OBJDIR)\window.obj     del $(OBJDIR)\window.obj
+   @if exist $(OBJDIR)\owl.obj        del $(OBJDIR)\owl.obj
+   @if exist $(OBJDIR)\dialog.obj     del $(OBJDIR)\dialog.obj
+   @if exist $(OBJDIR)\scroller.obj   del $(OBJDIR)\scroller.obj
+   @if exist $(OBJDIR)\control.obj    del $(OBJDIR)\control.obj
+   @if exist $(OBJDIR)\button.obj     del $(OBJDIR)\button.obj
+   @if exist $(OBJDIR)\checkbox.obj   del $(OBJDIR)\checkbox.obj
+   @if exist $(OBJDIR)\static.obj     del $(OBJDIR)\static.obj
+   @if exist $(OBJDIR)\edit.obj       del $(OBJDIR)\edit.obj
+   @if exist $(OBJDIR)\groupbox.obj   del $(OBJDIR)\groupbox.obj
+   @if exist $(OBJDIR)\radiobut.obj   del $(OBJDIR)\radiobut.obj
+   @if exist $(OBJDIR)\listbox.obj    del $(OBJDIR)\listbox.obj
+   @if exist $(OBJDIR)\combobox.obj   del $(OBJDIR)\combobox.obj
+   @if exist $(OBJDIR)\scrollba.obj   del $(OBJDIR)\scrollba.obj
+   @if exist $(OBJDIR)\mdiframe.obj   del $(OBJDIR)\mdiframe.obj
+   @if exist $(OBJDIR)\mdiclien.obj   del $(OBJDIR)\mdiclien.obj
+   @if exist $(OBJDIR)\inputdia.obj   del $(OBJDIR)\inputdia.obj
+   @if exist $(OBJDIR)\filedial.obj   del $(OBJDIR)\filedial.obj
+   @if exist $(OBJDIR)\editwnd.obj    del $(OBJDIR)\editwnd.obj
+   @if exist $(OBJDIR)\filewnd.obj    del $(OBJDIR)\filewnd.obj
+   @if exist $(OBJDIR)\bbutton.obj    del $(OBJDIR)\bbutton.obj
+   @if exist $(OBJDIR)\bchkbox.obj    del $(OBJDIR)\bchkbox.obj
+   @if exist $(OBJDIR)\bradio.obj     del $(OBJDIR)\bradio.obj
+   @if exist $(OBJDIR)\bdivider.obj   del $(OBJDIR)\bdivider.obj
+   @if exist $(OBJDIR)\bgrpbox.obj    del $(OBJDIR)\bgrpbox.obj
+   @if exist $(OBJDIR)\bstatic.obj    del $(OBJDIR)\bstatic.obj
+   @if exist $(OBJDIR)\bstatbmp.obj   del $(OBJDIR)\bstatbmp.obj
+   @if exist $(OBJDIR)\bwindow.obj    del $(OBJDIR)\bwindow.obj
+   @if exist $(OBJDIR)\safepool.obj   del $(OBJDIR)\safepool.obj
+   @if exist $(OBJDIR)\objstrm.obj    del $(OBJDIR)\objstrm.obj
+   @if exist $(OBJDIR)\tcollect.obj   del $(OBJDIR)\tcollect.obj
+   @if exist $(OBJDIR)\tsortcol.obj   del $(OBJDIR)\tsortcol.obj
+   @if exist $(OBJDIR)\appdict.obj    del $(OBJDIR)\appdict.obj
+   @if exist $(OBJDIR)\windobj.obj    del $(OBJDIR)\windobj.obj
+   @if exist $(OBJDIR)\bwindow.obj    del $(OBJDIR)\bwindow.obj
+   @if exist $(OBJDIR)\safepool.obj   del $(OBJDIR)\safepool.obj
+   @if exist $(OBJDIR)\objstrm.obj    del $(OBJDIR)\objstrm.obj
+   @if exist $(OBJDIR)\tcollect.obj   del $(OBJDIR)\tcollect.obj
+   @if exist $(OBJDIR)\tsortcol.obj   del $(OBJDIR)\tsortcol.obj
+   @if exist $(OBJDIR)\appdict.obj    del $(OBJDIR)\appdict.obj
+   @if exist $(OBJDIR)\windobj.obj    del $(OBJDIR)\windobj.obj
+
+# End of MAKEFILE for OWL 1.0

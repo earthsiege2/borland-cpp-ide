@@ -1,0 +1,189 @@
+/***********************************************************************
+
+              TDW key bindings for Borland C++ IDE.
+
+        This file contains a KEYMAPR script which emulates the TDW
+debugger in the Borland C++ IDE.  A complete description of the KEYMAPR
+language and compiler may be found in on-line help.
+
+****************************************************************/
+
+Script  TDW;
+
+MACRO MacUndo
+    Undo; CenterFixScreenPos;
+END;
+
+MACRO MacGetFindString
+                SetPrevPos;GetFindString;
+END;
+
+MACRO MacRepeatSearch
+                SetPrevPos;RepeatSearch;
+END;
+
+MACRO MacPageUp
+                SetPrevPos;FixScreenPos;PageScreenUp;FixCursorPos;
+END;
+
+MACRO MacPageDown
+                SetPrevPos;FixScreenPos;PageScreenDown;FixCursorPos;
+END;
+
+MACRO MacLeftOfLine
+                SetPrevPos;LeftOfLine;FixScreenPos;
+END;
+
+MACRO MacRightOfLine
+                SetPrevPos;RightOfLine;FixScreenPos;
+END;
+
+MACRO MacMoveToPrevPos
+        SwapPrevPos;CenterFixScreenPos;
+END;
+
+/**** key bindings ******/
+KEYBOARD System
+F1 : Help; : Help
+F2 : ToggleBreakpoint; : ToggleBreakpoint
+F4 : RunToHere;        : RunToHere
+F5 : ZoomWindow;
+/* F6 : NextWindow; next time */
+F7 : Trace;        : Trace
+F8 : Step;         : Step
+F9 : RunProgram;   : RunProgram
+F10: Menu;
+
+/* alt-F2 : ViewBreakpoint */
+alt-F3 : CloseWindow;
+/* alt-F5 : UserScreen */
+alt-F10 : LocalMenu;
+
+shift-F3: ClipCopy; : ClipCopy
+shift-F4: BEGIN ClipPaste; END; : ClipPaste
+
+ctrl-F4: Modify;   : Modify
+ctrl-F7: AddWatch; : AddWatch
+
+alt-X : TerminateProgram; : TerminateProgram
+
+/* ---- Pane mgmt keys ------------------ */
+ctrl-O+^E         : MoveToPane(0);
+ctrl-O+^X         : MoveToPane(1);
+ctrl-O+^S         : MoveToPane(2);
+ctrl-O+^D         : MoveToPane(3);
+ctrl-O+DnAr       : CreatePane(0);
+ctrl-O+UpAr       : CreatePane(1);
+ctrl-O+LfAr       : CreatePane(3);
+ctrl-O+RgAr       : CreatePane(2);
+ctrl-shift-O+^E   : MovePaneEdge(0);
+ctrl-shift-O+^X   : MovePaneEdge(1);
+ctrl-shift-O+^S   : MovePaneEdge(2);
+ctrl-shift-O+^D   : MovePaneEdge(3);
+ctrl-shift-O+UpAr : DeletePane(0);
+ctrl-shift-O+DnAr : DeletePane(1);
+ctrl-shift-O+LfAr : DeletePane(2);
+ctrl-shift-O+RgAr : DeletePane(3);
+END;
+
+KEYBOARD Editor
+Esc   : CloseWindow;
+
+alt-F6 : MacUndo;
+
+ctrl-F : BufferList;
+ctrl-I : InspectAtCursor;     : InspectAtCursor
+ctrl-L : GoToLine; : GoToLine
+ctrl-N : MacRepeatSearch; : RepeatSearch
+ctrl-P : MacMoveToPrevPos;
+ctrl-S : MacGetFindString; : GetFindString
+ctrl-W : AddWatch;     : AddWatch
+ctrl-Z : MacUndo; : Undo
+
+lfar : CursorSwitchedLeft;
+rgar : CursorSwitchedRight;
+upar : CursorUp;
+dnar : CursorDown;
+pgup : MacPageUp;
+pgdn : MacPageDown;
+end  : MacRightOfLine;
+home : MacLeftOfLine;
+ins  : ToggleInsert;
+
+END;
+
+KEYBOARD MessageWindow
+Esc   : CloseWindow;
+space : MsgViewSrc; : MsgViewSrc
+enter : MsgEditSrc; : MsgEditSrc
+END;
+
+KEYBOARD BreakpointView
+Esc   : CloseWindow;
+ctrl-P : DebugDetailBreakList; : DebugDetailBreakList
+ctrl-I : DebugInspectBreakList; : DebugInspectBreakList
+ctrl-E : DebugEditBreakList; : DebugEditBreakList
+ctrl-R : DebugRemoveBreakList; : DebugRemoveBreakList
+ctrl-A : DebugAddAtLineBreakList; : DebugAddAtLineBreakList
+/*
+ctrl-W : DebugAddWinMsg; : DebugAddWinMsgBreakList
+*/
+END;
+
+KEYBOARD CallStack
+Esc   : CloseWindow;
+ctrl-I : DebugInspectCallStack; : DebugInspectCallStack
+ctrl-E : DebugEditCallStack; : DebugEditCallStack
+END;
+
+KEYBOARD DataInspector
+Esc   : CloseWindow;
+ctrl-R : DebugRangeInspect; : DebugRangeInspect
+ctrl-C : DebugChange; : DebugChange
+ctrl-I : DebugInspectData; : DebugInspectData
+ctrl-D : DebugDescend; : DebugDescend
+ctrl-N : DebugNewExpr; : DebugNewExpr
+ctrl-T : DebugTypecast; : DebugTypecast
+END;
+
+KEYBOARD DebugLog
+Esc   : CloseWindow;
+ctrl-C : DebugCaptureLog; : DebugCaptureLog
+ctrl-O : DebugLogOptions; : DebugLogOptions
+ctrl-A : DebugCommentLog; : DebugCommentLog
+ctrl-E : DebugEraseLog; : DebugEraseLog
+END;
+
+KEYBOARD RegisterView
+Esc   : CloseWindow;
+ctrl-H : DebugHexReg; : DebugHexReg
+ctrl-D : DebugDecimalReg; : DebugDecimalReg
+ctrl-W : DebugWordReg; : DebugWordReg
+ctrl-U : DebugDWordReg; : DebugDWordReg
+END;
+
+KEYBOARD WatchView
+Esc   : CloseWindow;
+ctrl-P : DebugDetailWatchList; : DebugDetailWatchList
+ctrl-R : DebugRemoveWatchList; : DebugRemoveWatchList
+ctrl-A : DebugAddWatchList; : DebugAddWatchList
+END;
+
+KEYBOARD ProjectWindow
+enter    : ProjectNodeAction;
+plus     : ProjectExpandNode;
+minus    : ProjectCollapseNode;
+space    : ProjectNodeToggle;
+esc      : ProjectEndNodeSearch;
+upar     : ProjectNodeUp;
+dnar     : ProjectNodeDown;
+home     : ProjectFirstNode;
+end      : ProjectLastNode;
+pgup     : ProjectPrevPage;
+pgdn     : ProjectNextPage;
+alt-lfar : ProjectPromoteNode;
+alt-rgar : ProjectDemoteNode;
+alt-upar : ProjectMoveUp;
+alt-dnar : ProjectMoveDown;
+END;
+

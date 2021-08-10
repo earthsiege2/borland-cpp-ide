@@ -1,0 +1,104 @@
+//----------------------------------------------------------------------------
+// ObjectWindows - (C) Copyright 1993 by Borland International
+//   include\owl\docview.rc
+//   Resources to use with TDocManager
+//----------------------------------------------------------------------------
+
+#include <owl\window.rh> /* CM_EXIT */
+#include <owl\mdi.rh>
+
+//
+// Commands
+//
+#define CM_FILENEW          24331
+#define CM_FILEOPEN         24332
+#define CM_FILESAVE         24333
+#define CM_FILESAVEAS       24334
+#define CM_FILEREVERT       24335
+
+#define CM_FILEPRINT        24337
+#define CM_FILEPRINTERSETUP 24338
+
+#define CM_FILECLOSE        24339
+
+#define CM_VIEWCREATE       24341
+
+//
+// String IDs
+//
+#define IDS_DOCMANAGERFILE  32500
+#define IDS_DOCLIST         32501
+#define IDS_VIEWLIST        32502
+#define IDS_UNTITLED        32503
+#define IDS_UNABLEOPEN      32504
+#define IDS_UNABLECLOSE     32505
+#define IDS_READERROR       32506
+#define IDS_WRITEERROR      32507
+#define IDS_DOCCHANGED      32508
+#define IDS_NOTCHANGED      32509
+#define IDS_NODOCMANAGER    32510
+#define IDS_NOMEMORYFORVIEW 32511
+#define IDS_DUPLICATEDOC    32512
+
+//
+// Menu ID
+//
+#define IDM_DOCMANAGERFILE   4401
+
+#if defined(RC_INVOKED)
+
+#if !defined(NO_IDS_DOCVIEW) && !defined(__IDS_DOCVIEW)
+#define __IDS_DOCVIEW
+STRINGTABLE LOADONCALL MOVEABLE DISCARDABLE
+BEGIN
+  CM_FILENEW,    "Creates a new document"
+  CM_FILEOPEN,   "Opens an existing document"
+  CM_FILESAVE,   "Saves this document"
+  CM_FILESAVEAS, "Saves this document with a new name"
+  CM_FILEREVERT, "Reverts changes to last document save"
+  CM_FILECLOSE,  "Closes this document"
+  CM_FILEPRINT,  "Prints this document"
+  CM_EXIT,       "Quits the application, prompts to save documents"
+
+  CM_VIEWCREATE, "Create a new view for this document"
+
+  CM_CASCADECHILDREN, "Cascades open windows"
+  CM_TILECHILDREN,    "Tiles open windows"
+  CM_ARRANGEICONS,    "Arranges iconic windows along bottom"
+  CM_CLOSECHILDREN,   "Closes all open windows"
+
+  IDS_DOCMANAGERFILE, "&File"
+  IDS_DOCLIST,        "--Document Type--"
+  IDS_VIEWLIST,       "--View Type--"
+  IDS_UNTITLED,       "(Untitled)"
+  IDS_UNABLEOPEN,     "Unable to open document."
+  IDS_UNABLECLOSE,    "Unable to close document."
+  IDS_READERROR,      "Document read error."
+  IDS_WRITEERROR,     "Document write error."
+  IDS_DOCCHANGED,     "The document has been changed.\n\nDo you want to save the changes?"
+  IDS_NOTCHANGED,     "The document has not been changed."
+  IDS_NODOCMANAGER,   "Document Manager not present."
+  IDS_NOMEMORYFORVIEW,"Insufficient memory for view."
+  IDS_DUPLICATEDOC,   "Document already loaded."
+
+END
+#endif
+#undef NO_IDS_DOCVIEW
+
+#if !defined(NO_IDM_DOCMANAGERFILE) && !defined(__IDM_DOCMANAGERFILE)
+#define __IDM_DOCMANAGERFILE
+IDM_DOCMANAGERFILE MENU LOADONCALL MOVEABLE PURE DISCARDABLE
+BEGIN
+  MenuItem  "&New",            CM_FILENEW
+  MenuItem  "&Open...",        CM_FILEOPEN
+  MenuItem  "&Save",           CM_FILESAVE
+  MenuItem  "Save &As...",     CM_FILESAVEAS
+  MenuItem  "&Revert To Saved",CM_FILEREVERT
+  MenuItem  "&Close",          CM_FILECLOSE
+  MenuItem  SEPARATOR
+  MenuItem  "E&xit",           CM_EXIT
+END
+#endif
+#undef NO_IDM_DOCMANAGERFILE
+
+#endif  // defined(RC_INVOKED)

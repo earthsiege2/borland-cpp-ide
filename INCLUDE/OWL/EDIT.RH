@@ -1,0 +1,17 @@
+//----------------------------------------------------------------------------
+// ObjectWindows - (C) Copyright 1991, 1993 by Borland International
+//   include\owl\edit.rh
+//   Command IDs to use with edit.h
+//----------------------------------------------------------------------------
+
+#include <owl\window.rh>
+
+//
+// Commands
+//
+#define CM_EDITUNDO         24321
+#define CM_EDITCUT          24322
+#define CM_EDITCOPY         24323
+#define CM_EDITPASTE        24324
+#define CM_EDITDELETE       24325
+#define CM_EDITCLEAR        24326
